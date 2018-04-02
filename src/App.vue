@@ -2,8 +2,7 @@
   <div id="app">
     <img src="./assets/logo.png">
     <el-button type="primary" disabled>主要按钮</el-button>
-    <el-button type="primary" disabled>主要按钮</el-button>
-    <el-button type="primary" disabled>主要按钮</el-button>  
+    
     <router-view/>
   </div>
 </template>

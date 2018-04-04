@@ -8,6 +8,6 @@ export default {
     inint:false,
     inintNum:5,
     show:false,
-    showAmessage:"store测试测试",
+    showAmessage:"stor测试测试",
     initAddnum:1
 }

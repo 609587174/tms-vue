@@ -14,6 +14,7 @@ vue文件高亮插件：Vue Syntax Highlight
 
 vue文件格式化插件：HTML/CSS/JS prettify (commond + shift + H);
 
+3.请学习vue编码风格，严格按照vue官方出的[风格指南](https://cn.vuejs.org/v2/style-guide/)执行
 
 * * *
 
@@ -124,6 +125,7 @@ push代码到本地仓库
 6.项目成员互相review 代码，没有问题就合并代码。
 
 
+对git不熟悉的同学请学习一下[git简明教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000).
 * * *
 
 ## css规范
@@ -266,6 +268,9 @@ example {}   .error {}
 4.// 这是单行注释，/＊ 注释说明 ＊/用于多行注释。
 
 （待续。。。）
+
+
+
 
 
 

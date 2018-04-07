@@ -42,11 +42,11 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 测试发布
 
-｀./deploy_test.sh｀
+./deploy_test.sh
 
 正式发布
 
-｀./deploy_pro.sh｀
+./deploy_pro.sh
 
 
 
@@ -78,43 +78,48 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 如果你不在master分支
 
-｀ git check out master｀
+`git check out master`
 
 如果你在master分支
 
-｀git pull --rebase upstream master｀
+`git pull --rebase upstream master`
 
 新建分支
 
-｀git checkout -b feature-xxx-0407｀ 或者  git checkout -b bugfix-xxx-0407｀
+`git checkout -b feature-xxx-0407｀ 或者  git checkout -b bugfix-xxx-0407`
 
 注意：是新功能以feature-功能描述－日期，方式命名。如果是修改bug，以bugfix-功能描述－日期，功能描述尽量一到两个单词。
 
+
 2. coding.....
+
 
 3. 保存commit
 
-‘git status’
+`git status`
 
-‘git add .’
+`git add .`
 
-‘git commit -m "所做事情的描述"’
+`git commit -m "所做事情的描述"`
 
 注意：每个commit尽量描述清楚你在干什么，避免无意义的描述。
 
+
 4. 重复2、3。
+
 
 5.提pull request（pr）
 
 先更新主仓库最新代码
 
-｀git pull --rebase upstream master｀
+`git pull --rebase upstream master`
 
 push代码到本地仓库
 
-｀git push origin 分支名：分支名｀
+`git push origin 分支名：分支名`
 
 查看更改，没有问题就提pr。
+
 
 6.项目成员互相review 代码，没有问题就合并代码。
 
@@ -193,10 +198,10 @@ background、font等可以缩写的属性，尽量使用缩写形式 。
 2.类型选择器避免同时使用标签。
 ``` bash
 # 不推荐
-/ul#example {}div.error {}
+/ul#example {}  div.error {}
 
 # 推荐
-#example {}.error {}
+example {}   .error {}
 ```
 
 
@@ -239,13 +244,13 @@ background、font等可以缩写的属性，尽量使用缩写形式 。
 ```
 
 3.结构上如果可以并列书写，就不要嵌套。
-如果可以写成｀<div></div><div></div>｀那么就不要写成｀<div><div></div></div>｀
+如果可以写成`<div></div><div></div>`那么就不要写成`<div><div></div></div>`
 
 4.如果结构已经可以满足视觉和语义的要求，那么就不要有额外的冗余的结构。
-比如｀<div><h2></h2></div>｀已经能满足要求，那么就不要再写成｀<div><div><h2></h2></div></div>｀
+比如`<div><h2></h2></div>`已经能满足要求，那么就不要再写成`<div><div><h2></h2></div></div>`
 
 5.一个标签上引用的className不要过多，越少越好。
-比如不要出现这种情况：｀<div class="class1 class2 class3 class4"></div>｀
+比如不要出现这种情况：`<div class="class1 class2 class3 class4"></div>`
 
 
 
@@ -258,7 +263,7 @@ background、font等可以缩写的属性，尽量使用缩写形式 。
 
 3.对于逻辑复杂处，请添加注释，你不是一个人在战斗，请为队友减少维护成本。
 
-4.｀//｀ 这是单行注释，｀/＊ 注释说明 ＊/｀用于多行注释。
+4.// 这是单行注释，/＊ 注释说明 ＊/用于多行注释。
 
 （待续。。。）
 

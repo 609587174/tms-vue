@@ -1,0 +1,7 @@
+#!/bin/bash
+echo "测试发布"
+USER=root
+HOST=front.hhtdlng.com
+DIR=/home/gitlab/front_test/tms_front
+rm -rf ./dist && npm run build && rsync -avz --delete dist/ ${USER}@${HOST}:${DIR}
+echo "测试发布成功"

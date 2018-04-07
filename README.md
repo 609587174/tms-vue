@@ -2,7 +2,7 @@
 
 Vue.js ＋ vue-router ＋ vuex ＋ axios ＋ es6 + less + webpack project
 
-
+* * *
 
 ## 开发前准备
 
@@ -15,7 +15,7 @@ vue文件高亮插件：Vue Syntax Highlight
 vue文件格式化插件：HTML/CSS/JS prettify (commond + shift + H);
 
 
-
+* * *
 
 
 ## 如何启动开发环境
@@ -36,20 +36,20 @@ npm run build --report
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
-
+* * *
 
 ## 如何发布代码
 
 测试发布
 
-./deploy_test.sh
+`./deploy_test.sh`
 
 正式发布
 
-./deploy_pro.sh
+`./deploy_pro.sh`
 
 
-
+* * *
 
 ## git工作流
 
@@ -74,7 +74,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 ### 二、开发流程
 
-1.开发前本地master请更新仓库master分支最新代码，再从本地master切分支。
+1 开发前本地master请更新仓库master分支最新代码，再从本地master切分支。
 
 如果你不在master分支
 
@@ -91,10 +91,10 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 注意：是新功能以feature-功能描述－日期，方式命名。如果是修改bug，以bugfix-功能描述－日期，功能描述尽量一到两个单词。
 
 
-2. coding.....
+2.coding.....
 
 
-3. 保存commit
+3.保存commit
 
 `git status`
 
@@ -105,7 +105,7 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 注意：每个commit尽量描述清楚你在干什么，避免无意义的描述。
 
 
-4. 重复2、3。
+4.重复2、3。
 
 
 5.提pull request（pr）
@@ -124,7 +124,7 @@ push代码到本地仓库
 6.项目成员互相review 代码，没有问题就合并代码。
 
 
-
+* * *
 
 ## css规范
 
@@ -205,7 +205,7 @@ example {}   .error {}
 ```
 
 
-
+* * *
 
 ## html规范
 
@@ -253,7 +253,7 @@ example {}   .error {}
 比如不要出现这种情况：`<div class="class1 class2 class3 class4"></div>`
 
 
-
+* * *
 
 ## js规范
 

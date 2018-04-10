@@ -1,6 +1,5 @@
 <template>
   <div id="searchList" >
-
       <div>
         <div style="margin-top: 15px;">
            <div style="float:left;height: 40px;line-height: 40px;font-size: 14px;">筛选维度：</div><el-input placeholder="请输入内容" v-model="input2" class="input-with-select">

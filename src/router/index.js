@@ -1,43 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/page/HelloWorld'
-import carBaseInfo from '@/components/powermanagement/carBaseInfo'
-import exPro from '@/components/powermanagement/exPro'
-import exBuy from '@/components/powermanagement/exBuy'
-
-
 Vue.use(Router)
 
+let baseRoute = [{
+  path: '/login',
+  name: '登录',
+  component: (resolve) => require(['../page/login.vue'], resolve)
+},{
+  path: '/401',
+  name: '无权访问',
+  component: (resolve) => require(['../page/common/401.vue'], resolve)
+}, {
+  path: '/404',
+  name: '找不到页面',
+  component: (resolve) => require(['../page/common/404.vue'], resolve)
+}
+];
+let router=new Router({
+    routes:baseRoute
+});
+router.beforeEach((to, from, next) => {
+  let routeName = to.meta.name || to.name;
+  window.document.title = (routeName ? routeName : '') ;
+  next();
+});
 
-export default new Router({
-  routes: [
-    {
-      path: '/HelloWorld',
-      name: 'HelloWorld',
-      component: HelloWorld,
-      children: [
-        {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
-          path: '/carBaseInfo',
-          name: 'carBaseInfo',
-          component: carBaseInfo
-        },
-        {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
-          path: '/exPro',
-          name: 'exPro',
-          component: exPro
-        },
-        {
-          // 当 /user/:id/profile 匹配成功，
-          // UserProfile 会被渲染在 User 的 <router-view> 中
-          path: '/exBuy',
-          name: 'exBuy',
-          component: exBuy
-        }
-      ]
-    }
-  ]
-})
+export default router;
+

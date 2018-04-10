@@ -1,10 +1,7 @@
 <template>
-  <div id="app高规格">
+  <div id="searchList">
     <el-button type="primary" disabled>{{msg}}</el-button>
     <el-button type="primary" disabled>{{this.$store.state.common.showAmessage}}</el-button>
-    <el-button type="primary" disabled>{{showMessage}}</el-button>
-    <el-button type="primary" @click='clickbutton'>{{addnum}}</el-button>
-    <router-view ></router-view>
   </div>
 </template>
 

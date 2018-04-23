@@ -12,12 +12,17 @@ Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(vuex)
 axios.defaults.baseURL = 'https://xxxx.xxxx.com';
-
+Vue.directive('has', {
+  bind: function(el, binding) {
+    if (!Vue.prototype.$_has(binding.value)) {
+      el.parentNode.removeChild(el);
+    }
+  }
+});
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
-  template: '<App/>'
+  render: h => h(App)
 })

@@ -9,5 +9,7 @@ export default {
     inintNum:5,
     show:false,
     showAmessage:"stor测试测试",
-    initAddnum:1
+    initAddnum:1,
+    menuData:"",
+    userData:""
 }

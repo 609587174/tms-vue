@@ -1,13 +1,16 @@
-<style scoped>
+<style scoped lang="less">
   #app{display: table;width:100%;}
   .main-title{text-align: center;}
   .des{text-align: center;color:#999;margin-bottom: 2em;}
   .login-form{width: 400px;margin:13% auto 0;}
   .login-page{background:#fff;}
+  .margin-right (@width) {
+    margin-right: @width;
+  }
 </style>
 <template>
   <div>
-    <div class="g-center login-page" @keyup.enter="login">
+    <div class="g-center login-page font-size-12" @keyup.enter="login">
       <el-form class="login-form">
         <p class="des">胜通测试</p>
         <el-form-item>
@@ -79,7 +82,8 @@ export default {
       // requestLogin(loginParams).then(res => {
       //   vm.isBtnLoading = false;
       //   if(res.data.token){
-          
+
+
       //   }else{
       //     return Promise.reject({
       //       message: '登录异常！'

@@ -36,12 +36,13 @@ export default {
       }
       let that=this;
       let allowedRouter=[];
-      let hashMenus = {};
+      let hashMenus = {},hasOperationJur={};
       let setMenu2Hash = function(array, base) {
         array.map(key => {
           if (key.menu_permission_name) {
             let hashKey = ((base ? base + '/' : '') + key.menu_permission_name).replace(/^\//, '');
             hashMenus['/' + hashKey] = true;
+            hasOperationJur['/' + hashKey]=key.operationJur;
             if (Array.isArray(key.sms)) {
               setMenu2Hash(key.sms, key.menu_permission_name);
             }
@@ -50,11 +51,18 @@ export default {
       };
       setMenu2Hash(userInfo);
       this.$root.hashMenus = hashMenus;
+
       let findLocalRoute = function(array, base) {
         let replyResult = [];
         array.forEach(function(route) {
-          let pathKey = (base ? base + '/' : '') + route.path;
+          let pathKey = (base ? base + '/' : '/') + route.path;
           if (hashMenus[pathKey]||!route.meta.isVerificationL) {
+            if(!route.meta.isVerificationL){
+                  console.log(that.$store);
+                  route.meta['operationJur']=that.$store.state.common.defaultShow;
+                }else{
+                  route.meta['operationJur']=hasOperationJur[pathKey]
+            }
             if (Array.isArray(route.children)) {
                 route.children = findLocalRoute(route.children, route.path);
             }
@@ -67,7 +75,17 @@ export default {
           allowedRouter = allowedRouter.concat(replyResult);
         }
       }
-      findLocalRoute(util.deepcopy(userPath[0].children));
+      let redirectConfig=function(routeArr,redirectPath){
+        routeArr.forEach(function(route) {
+          if(Array.isArray(route.children)&&route.meta.needShowFir){
+              let redirectp=(redirectPath ? "" : "./")+(redirectPath?(redirectPath+"/"+route.children[0].path):(route.path+"/"+route.children[0].path));
+              route.redirect= redirectp;
+              redirectConfig(route.children,util.deepcopy(redirectp));
+          }
+        });
+      }
+      findLocalRoute(util.deepcopy(userPath[0].children));//筛选路由
+      redirectConfig(allowedRouter);
       return allowedRouter;
     },
     extendRoutes: function(allowedRouter) {
@@ -90,6 +108,9 @@ export default {
       });
       let originPath = util.deepcopy(userPath);
       originPath[0].children = actualRouter;
+      if(originPath[0].meta.needShowFir&&Array.isArray(originPath[0].children)){
+        originPath[0].redirect="./"+originPath[0].children[0].path;
+      }
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',

@@ -103,13 +103,16 @@
         </template>
       </template>
     </el-menu>
-     <template v-if="$route.path=='/'">
-      <div style="margin:60px 270px;">
-        <defaultView />
+
+    <div class="g-statues-bar p-lr">
+      <el-breadcrumb separator="/" class="bread" id="mybread">
+        <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index" :to="item">
+          {{ item.name || "" }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
-    </template>
-     <template v-else>
-      <div style="margin:60px 270px;">
+     <template>
+      <div style="margin:120px 270px;">
         <router-view ></router-view>
       </div>
     </template>
@@ -119,9 +122,6 @@
 
 
 export default {
-  components: {
-    defaultView:() => import("../components/powerManagement/carBaseInfo.vue")
-  },
   data() {
     return {
       user: {name:"aa"},

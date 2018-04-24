@@ -11,5 +11,12 @@ export default {
     showAmessage:"stor测试测试",
     initAddnum:1,
     menuData:"",
-    userData:""
+    userData:"",
+    isRoleManger:true,
+    isRole:"",
+    defaultShow:{
+        addButton:true,
+        removeButton:true,
+        queryButton:false
+    }
 }

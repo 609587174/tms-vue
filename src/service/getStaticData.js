@@ -1,13 +1,17 @@
 import instance from './index';
-const getStanderData = function(){
-    return {"StandardInfos":[{"KeyID":"1707121126062207851vs00648","CompanyID":"20170523234620531770","StandardTitle":"默认出差标准","StandardEffectType":3,"StandardEffectTypeName":"公司标准","IsDefult":1,"IsDefultName":"是","SubStandardInfoList":[{"KeyID":"1707121126083897259vs02648","CompanyID":"20170523234620531770","StandardInfoKeyID":"1707121126062207851vs00648","StandardEffectType":1,"StandardEffectTypeName":"机票标准","ConditionList":[{"KeyID":"1707121126090586091vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":3,"ConditionTypeName":"舱位限制","ControlType":2,"ControlTypeName":"需审核才能预定","ConditionValue":"7","ConditionName":"经济舱 7折及以下舱位","OverStandConditionValue":""},{"KeyID":"1707121126085324958vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":6,"ConditionTypeName":"申请单限制","ControlType":2,"ControlTypeName":"需审核才能预定","ConditionValue":"1","ConditionName":"必须有申请单","OverStandConditionValue":""},{"KeyID":"1707121126087774509vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":14,"ConditionTypeName":"金额限制","ControlType":0,"ControlTypeName":"不限制","ConditionValue":"0","ConditionName":"不限制","OverStandConditionValue":""},{"KeyID":"1707121126086112399vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":17,"ConditionTypeName":"行程限制","ControlType":2,"ControlTypeName":"需审核才能预定","ConditionValue":"1","ConditionName":"按申请单行程限制","OverStandConditionValue":""},{"KeyID":"1707121126089183227vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":18,"ConditionTypeName":"产品等级","ControlType":1,"ControlTypeName":"允许预定","ConditionValue":"1","ConditionName":"限制","OverStandConditionValue":""},{"KeyID":"1709260944531838216vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":60,"ConditionTypeName":"","ControlType":1,"ControlTypeName":"允许预定","ConditionValue":"0","ConditionName":"","OverStandConditionValue":""},{"KeyID":"1709260944532075572vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":61,"ConditionTypeName":"","ControlType":1,"ControlTypeName":"允许预定","ConditionValue":"0","ConditionName":"","OverStandConditionValue":""},{"KeyID":"1709260944532198089vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":62,"ConditionTypeName":"","ControlType":1,"ControlTypeName":"允许预定","ConditionValue":"","ConditionName":"","OverStandConditionValue":""},{"KeyID":"1709260944532355916vs03648","CompanyID":"20170523234620531770","StandardKeyID":"1707121126083897259vs02648","ConditionType":63,"ConditionTypeName":"","ControlType":1,"ControlTypeName":"允许预定","ConditionValue":"0","ConditionName":"","OverStandConditionValue":""}],"IsLimit":1,"IsMapPlan":1,"ApplyList":[],"ApplyListAfterNow":[],"MapPlanDay":0,"OverStandardApplyList":[],"UrgentApplyList":[]}],"StaffID":"20170907142533664167","TravelScene":1},null],"CurrentTime":"2017-11-15 18:43:43","IsOpen":1};
+const getPosition= function(){
+    return {
+    	depgroup:{
+
+    	}
+    };
 }
 const staticData= function(){
     return {
-        data:[{menu_permission_name:"carBaseInfo",name:"一级菜单1"},{menu_permission_name:"exPro",name:"一级菜单2"}]
+        data:[{menu_permission_name:"carBaseInfo",name:"一级菜单1",operationJur:{addButton:false,removeButton:false,queryButton:true}},{menu_permission_name:"exPro",name:"一级菜单2",operationJur:{addButton:false,removeButton:false,queryButton:true}}]
     }
 }
 export default{
-	staticData,
-	getStanderData
+	getPosition,
+	staticData
 }

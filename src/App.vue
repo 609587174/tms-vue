@@ -20,7 +20,7 @@ export default {
   methods: {
     signin:function(callback){
       let localUser = util.session('token');
-      if (!localUser || !localUser.token) {
+      if (!localUser) {
         return this.$router.push({ path: '/login', query: { from: this.$router.currentRoute.path } });
       }
       let menuData=staticData.staticData();

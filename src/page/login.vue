@@ -73,17 +73,19 @@ export default {
       }
       let loginParams = {name: vm.username, password: vm.password};
       vm.isBtnLoading = true;
-      requestLogin(loginParams).then(res => {
-        vm.isBtnLoading = false;
-        if(res.data.token){
-          util.session('token', res.data);
-          vm.$emit('login', vm.$router.currentRoute.query.from);
-        }else{
-          return Promise.reject({
-            message: '登录异常！'
-          });
-        }
-      }).catch(util.catchError);
+      vm.isBtnLoading = false;
+      util.session('token', "autostringify-liuming");
+      vm.$emit('login', vm.$router.currentRoute.query.from);
+      // requestLogin(loginParams).then(res => {
+      //   vm.isBtnLoading = false;
+      //   if(res.data.token){
+          
+      //   }else{
+      //     return Promise.reject({
+      //       message: '登录异常！'
+      //     });
+      //   }
+      // }).catch(util.catchError);
     }
   },
   created() {

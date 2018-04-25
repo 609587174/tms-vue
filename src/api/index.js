@@ -2,14 +2,15 @@ import axios from 'axios';
 import * as util from '../assets/utils.js';
 import { Message } from 'element-ui';
 const Axios = axios.create({
-  baseURL: "/", 
+  baseURL: "/",
   timeout: 10000,
   responseType: "json",
-  withCredentials: true, 
+  withCredentials: true,
   headers: {
     "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
   }
 });
+
 
 //POST传参序列化(添加请求拦截器)
 Axios.interceptors.request.use(
@@ -108,3 +109,4 @@ export default {
     Object.defineProperty(Vue.prototype, "$http", { value: Axios });
   }
 };
+

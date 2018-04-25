@@ -1,12 +1,14 @@
-<style>
-@import './assets/common.css';
+
+<style  lang="less">
+
+  @import './assets/css/common.less';
 </style>
 <template>
     <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>
 </template>
 <script>
 import Vue from 'vue';
-import staticData from './service/getStaticData.js';
+import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
 import * as util from './assets/utils.js';
 export default {

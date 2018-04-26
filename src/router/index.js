@@ -6,7 +6,7 @@ let baseRoute = [{
   path: '/login',
   name: '登录',
   component: (resolve) => require(['../page/login.vue'], resolve)
-},{
+}, {
   path: '/401',
   name: '无权访问',
   component: (resolve) => require(['../page/common/401.vue'], resolve)
@@ -16,8 +16,8 @@ let baseRoute = [{
   component: (resolve) => require(['../page/common/404.vue'], resolve)
 }
 ];
-let router=new Router({
-    routes:baseRoute
+let router = new Router({
+  routes: baseRoute
 });
 router.beforeEach((to, from, next) => {
   let routeName = to.meta.name || to.name;

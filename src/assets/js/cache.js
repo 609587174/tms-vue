@@ -1,35 +1,6 @@
 
 /* 缓存相关 */
 
-import { utf8_to_b64, b64_to_utf8 } from './format'
-import { MD5 } from './ende'
-import { sTime } from './time'
-
-/**
- * @function cacheEncode
- * @memberOf pbFunc
- * @ngdoc function
- * @description 缓存编码
- * @param  {string} data [需要编码的内容]
- * @returns {string}     [返回编码的内容]
- * @see {@link pbFunc.cacheDecode}
- */
-export const cacheEncode = function(data) {
-  return utf8_to_b64(data);
-}
-/**
- * @function cacheDecode
- * @memberOf pbFunc
- * @ngdoc function
- * @description 缓存解码
- * @param  {string} data [需要解码的内容]
- * @returns {string}     [返回解码的内容]
- * @see {@link pbFunc.cacheEncode}
- */
-export const cacheDecode = function(data) {
-  return b64_to_utf8(data);
-}
-
 /**
  * @function setLocalData
  * @memberOf pbFunc

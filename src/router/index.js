@@ -6,6 +6,10 @@ let baseRoute = [{
   path: '/login',
   name: '登录',
   component: (resolve) => require(['../page/login.vue'], resolve)
+},{
+  path: '/register',
+  name: '注册',
+  component: (resolve) => require(['../page/register.vue'], resolve)
 }, {
   path: '/forgetPassword',
   name: '找回密码',

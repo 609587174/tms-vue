@@ -113,8 +113,6 @@
 </template>
 <script>
 import axios from 'axios';
-import * as util from '../assets/utils.js';
-//登录
 export default {
   data() {
     return {
@@ -143,19 +141,8 @@ export default {
       let loginParams = { name: vm.username, password: vm.password };
       vm.isBtnLoading = true;
       vm.isBtnLoading = false;
-      util.session('token', "autostringify-liuming");
+      vm.pbFunc.setLocalData('token', "autostringify-liuming");
       vm.$emit('login', vm.$router.currentRoute.query.from);
-      // requestLogin(loginParams).then(res => {
-      //   vm.isBtnLoading = false;
-      //   if(res.data.token){
-
-
-      //   }else{
-      //     return Promise.reject({
-      //       message: '登录异常！'
-      //     });
-      //   }
-      // }).catch(util.catchError);
     },
     toForgetPassword() {
       this.$router.push({ path: '/forgetPassword' });
@@ -164,6 +151,7 @@ export default {
       this.$router.push({ path: '/register' });
     },
     refreshVaImg() {
+
 
     }
   },

@@ -527,3 +527,23 @@ export const objKeys = function(obj) {
   }
   return values;
 }
+
+/**
+ * @function deepcopy
+ * @memberOf pbFunc
+ * @ngdoc function
+ * @description 深拷贝]
+ * @param  {object}/{array}  source [目标对象]
+ * @return {object}/{array}         [目标对象]
+ */
+export const deepcopy = function(source) {
+  if (!source) {
+    return source;
+  }
+  let sourceCopy = source instanceof Array ? [] : {};
+  for (let item in source) {
+    sourceCopy[item] = typeof source[item] === 'object' ? deepcopy(source[item]) : source[item];
+  }
+  return sourceCopy;
+};
+

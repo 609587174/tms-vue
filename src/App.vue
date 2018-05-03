@@ -9,7 +9,7 @@
 import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
-import * as util from './assets/utils.js';
+
 export default {
   name: 'App',
   data() {
@@ -20,10 +20,8 @@ export default {
   },
   methods: {
     signin: function(callback) {
-      let localUser = util.session('token');
-      if (!localUser) {
-        return this.$router.push({ path: '/login', query: { from: this.$router.currentRoute.path } });
-      }
+      // let localUser = this.pbFunc.session('token'); // if (!localUser) { // return this.$router.push({ path: '/login', query: { from: this.$router.currentRoute.path } }); // }
+
       let menuData = staticData.staticData();
       let allowedRouter = this.getRoutes(menuData.data);
       this.extendRoutes(allowedRouter);
@@ -78,21 +76,23 @@ export default {
         }
       }
       let redirectConfig = function(routeArr, redirectPath) {
+
         routeArr.forEach(function(route) {
           if (Array.isArray(route.children) && route.meta.needShowFir) {
             let redirectp = (redirectPath ? "" : "./") + (redirectPath ? (redirectPath + "/" + route.children[0].path) : (route.path + "/" + route.children[0].path));
             route.redirect = redirectp;
-            redirectConfig(route.children, util.deepcopy(redirectp));
+            console.log('this', that);
+            redirectConfig(route.children, that.pbFunc.deepcopy(redirectp));
           }
         });
       }
-      findLocalRoute(util.deepcopy(userPath[0].children)); //筛选路由
+      findLocalRoute(that.pbFunc.deepcopy(userPath[0].children)); //筛选路由
       redirectConfig(allowedRouter);
       return allowedRouter;
     },
     extendRoutes: function(allowedRouter) {
       let that = this;
-      let actualRouter = util.deepcopy(allowedRouter);
+      let actualRouter = that.pbFunc.deepcopy(allowedRouter);
       actualRouter.map(e => {
         //复制子菜单信息到meta用于实现导航相关效果，非必需
         if (e.children) {
@@ -108,7 +108,7 @@ export default {
           }
         }
       });
-      let originPath = util.deepcopy(userPath);
+      let originPath = that.pbFunc.deepcopy(userPath);
       originPath[0].children = actualRouter;
       if (originPath[0].meta.needShowFir && Array.isArray(originPath[0].children)) {
         originPath[0].redirect = "./" + originPath[0].children[0].path;
@@ -126,7 +126,7 @@ export default {
     },
     logoutDirect: function() {
       //清除session
-      util.session('token', '');
+      this.pbFunc.setLocalData('token', '');
       //清除菜单权限
       this.$root.hashMenus = {};
       //回到登录页
@@ -134,6 +134,7 @@ export default {
     }
   },
   created: function(newPath) {
+    console.log('this.pbFunc', this, this.pbFunc);
     this.signin();
   }
 };

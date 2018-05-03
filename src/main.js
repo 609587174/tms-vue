@@ -7,10 +7,16 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import vuex from 'vuex'
 import store from './store/indexStore'
+import axios from 'axios';
+import * as pbFunc from './assets/utils';
+Vue.prototype.pbFunc = pbFunc;
+
+
 Vue.config.productionTip = false
 
-Vue.use(ElementUI)
-Vue.use(vuex)
+Vue.use(ElementUI);
+Vue.use(vuex);
+//Vue.use(VeeValidate);
 axios.defaults.baseURL = 'https://xxxx.xxxx.com';
 Vue.directive('has', {
   bind: function(el, binding) {

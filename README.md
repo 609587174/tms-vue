@@ -14,6 +14,14 @@ vue文件高亮插件：Vue Syntax Highlight
 
 vue文件格式化插件：HTML/CSS/JS prettify (commond + shift + H);
 
+sublime支持less：Less
+
+less格式化插件：css order
+
+js文件格式化插件：EsFormatter
+
+检查全部打开文件，相似自动补全插件：All Autocomplete
+
 3.google浏览器安装vue调试工具：vue-devtools
 
 4.请学习vue编码风格，严格按照vue官方出的[风格指南](https://cn.vuejs.org/v2/style-guide/)执行
@@ -27,13 +35,13 @@ vue文件格式化插件：HTML/CSS/JS prettify (commond + shift + H);
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动本地服务后，打开，localhost:8080
 npm run dev
 
-# build for production with minification
+# 为线上代码打包压缩，
 npm run build
 
-# build for production and view the bundle analyzer report
+# 打包，生成分析报告
 npm run build --report
 ```
 
@@ -58,32 +66,32 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 
 fork + pull request（pr)
 
-### 一、开发前准备
+### 开发前准备
 
 1.请先fork项目
 
 2.clone代码到本地
 
-`git clone xxx(项目文件名) ssh://git@git.pinbot.me:10022/hhtd/91lng-tms-vue.git`
+`git clone xxx(项目文件名) 本地仓库地址`
 
 3.添加romote
 
 添加项目仓库地址为upstream
 
-`git remote add upstream ssh://git@git.pinbot.me:10022/hhtd/91lng-tms-vue.git`
+`git remote add upstream 项目地址（ssh://git@git.pinbot.me:10022/hhtd/91lng-tms-vue.git）`
 
 添加自己私有仓库地址为origin
 
 `git remote add origin  xxx(你的仓库地址)`
 
 
-### 二、开发流程
+### 开发流程
 
 1 开发前本地master请更新仓库master分支最新代码，再从本地master切分支。
 
 如果你不在master分支
 
-`git check out master`
+`git checkout master`
 
 如果你在master分支
 
@@ -132,7 +140,7 @@ push代码到本地仓库
 对git不熟悉的同学请学习一下[git简明教程](https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000).
 * * *
 
-##91lng-tms-vue文件目录
+## 91lng-tms-vue文件目录
 
 ```
 91lng-tms-vue
@@ -186,19 +194,19 @@ push代码到本地仓库
     package.json               #npm包管理文件
 ```
 
-## 三、文件管理，分类，命名规范
+## 文件管理，分类，命名规范
 
 文件分类基本原则：
 文件分类以模块化为原则，把各类文件划分为各种小模块文件，再import进项目。
 **注意**：文件不能过大，起不到模块化的作用，但又不能过细，增加查找及管理负担。保持适中。
 
-###api文件命名及分类
+### api文件命名及分类
 
 这里还没想好。。。。。
 
-###assets文件命名及分类
+### assets文件命名及分类
 
-####css文件夹管理
+#### css文件夹管理
 
 1.fonts文件夹字体图标文件，网站所有svg图标利用[icomoon](https://icomoon.io/app/#/select)全部转成字体图标，放入icon.less。
 
@@ -208,15 +216,15 @@ push代码到本地仓库
 
 4.themeStyle.less为网站主题颜色变量，所有颜色值，定义变量放入此文件，方便网站换肤。
 
-####img文件夹管理
+#### img文件夹管理
 
 存放公用图片
 
-####js文件夹管理
+#### js文件夹管理
 
 存放公用js方法，由专人维护，如果其他人需要添加公共方法，需向维护人申请。
 
-###components文件命名及分类
+### components文件命名及分类
 
 1.components子文件夹分类及命名：
 
@@ -228,7 +236,7 @@ push代码到本地仓库
 
 3.组件是一个具有独立功能的小模块，如果组件中包含独立的无复用的图片，将**图片**与**.vue**文件放入一个文件夹
 
-###page文件命名及分类
+### page文件命名及分类
 
 存放页面根组件
 
@@ -312,10 +320,10 @@ background、font等可以缩写的属性，尽量使用缩写形式 。
 2.类型选择器避免同时使用标签。
 ``` bash
 # 不推荐
-/ul#example {}  div.error {}
+ul#example {}  div.error {}
 
 # 推荐
-example {}   .error {}
+#example {}   .error {}
 ```
 
 
@@ -382,6 +390,33 @@ example {}   .error {}
 （待续。。。）
 #菜单多级模拟数据
 var a=[{sms:[{name:"二级菜单1",sms:[{name:"三级菜单1"},{name:"三级菜单2",sms:[{name:"四级菜单1"}]}]}],fm:{name:"一级菜单1"}}]
+
+
+## 前端交互规范
+
+以一次请求为例（必须有的交互）：
+
+
+```
+点击按钮 ==> 验证 ==> 验证不通过 ==> 提示(1)
+            |
+          验证通过 ==> 发送请求 ==> 请求过程反馈 ==> 按钮loading、页面loading(2)
+                                      |
+                                     请求结束   ==> 请求失败 ==> 请求失败时反馈、超时反馈(3)
+                                      |
+                                    请求成功   ==> 请求成功后反馈（4）
+
+
+
+```
+提示1:
+如果是表单验证，使用表单验证插件统一报错。
+
+
+
+必要交互优化：
+
+
 
 
 

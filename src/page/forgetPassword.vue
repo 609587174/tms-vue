@@ -25,13 +25,13 @@
 }
 
 .login-form {
-  width: 280px;
+  width: 350px;
   margin: 13% auto 0;
   .el-form-item {
     margin-bottom: 5px;
   }
   .el-input {
-    margin: 0 0 0 20px;
+    margin: 0 0 0 5px;
     width: 201px;
     height: 32px;
   }
@@ -39,9 +39,8 @@
     width: 120px;
   }
   .inputTip {
-    width: 50px;
+    width: 80px;
     display: inline-block;
-    line-height: 32px;
   }
   img {
     line-height: 32px;
@@ -69,6 +68,16 @@
     font-size: 18px;
     border-color: white;
     margin-left: 10%;
+    line-height: 32px;
+  }
+  .getphoneBt {
+    height: 35px;
+    margin-left: 5px;
+    background-color: rgb(102, 153, 255);
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0 8px;
   }
 }
 
@@ -85,28 +94,32 @@
   <div>
     <div class="g-center login-page font-size-12" @keyup.enter="login">
       <el-form class="login-form">
-        <p class="des">登录</p>
+        <p class="des">找回密码</p>
         <el-form-item>
-          <span class="inputTip">用户名:</span>
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="username" name='userName'>
+          <span class="inputTip">手机号码:</span>
+          <el-input :autofocus="true" placeholder="请输入注册手机号" v-model="phone" name='email'>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <span class="inputTip">密码:</span>
+          <span class="inputTip">短信验证码:</span>
+          <el-input placeholder="请输入验证码" type="password" v-model="vaPassword" class="vaInput">
+          </el-input>
+          <el-button class="getphoneBt" style="" v-on:click="getPhoneVa" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
+        </el-form-item>
+        <el-form-item>
+          <span class="inputTip">新密码:</span>
           <el-input placeholder="请输入密码" type="password" v-model="password">
           </el-input>
         </el-form-item>
         <el-form-item>
-          <span class="inputTip">验证码:</span>
-          <el-input placeholder="请输入验证码" type="password" v-model="password" class="vaInput">
+          <span class="inputTip">确认密码:</span>
+          <el-input placeholder="请再次输入密码" type="password" v-model="password">
           </el-input>
-          <img src="../assets/img/va.png" v-on:click="refreshVaImg">
         </el-form-item>
-        <el-form-item class="Textline">忘记密码？<span v-on:click="toForgetPassword" class="colorblue">找回密码</span></el-form-item>
         <el-form-item>
-          <el-button style="width:80%" @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
+          <el-button style="width:80%;margin-top:25px;" v-on:click="resetPassword" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
         </el-form-item>
-        <el-form-item class="Textline">没有账号，<span v-on:click="toLogin" class="colorblue">请注册</span></el-form-item>
+        <el-form-item class="Textline">已有账号，<span v-on:click="toLoginPage" class="colorblue">请登陆</span></el-form-item>
       </el-form>
     </div>
   </div>
@@ -118,52 +131,31 @@ import * as util from '../assets/utils.js';
 export default {
   data() {
     return {
-      username: '',
-      password: '',
+      phone: '',
+      vaPassword: '',
+      paseeword: "",
+      secondPassword: "",
       isBtnLoading: false
     };
   },
   computed: {
     btnText() {
-      if (this.isBtnLoading) return '登录中...';
-      return '登录';
+      if (this.isBtnLoading) return '重制中...';
+      return '重置密码';
     }
   },
   methods: {
-    login() {
-      var vm = this;
-      if (!vm.username) {
-        vm.$message.error('请填写用户名！！！');
-        return;
-      }
-      if (!vm.password) {
-        vm.$message.error('请填写密码');
-        return;
-      }
-      let loginParams = { name: vm.username, password: vm.password };
-      vm.isBtnLoading = true;
-      vm.isBtnLoading = false;
-      util.session('token', "autostringify-liuming");
-      vm.$emit('login', vm.$router.currentRoute.query.from);
-      // requestLogin(loginParams).then(res => {
-      //   vm.isBtnLoading = false;
-      //   if(res.data.token){
+    resetPassword() {
 
 
-      //   }else{
-      //     return Promise.reject({
-      //       message: '登录异常！'
-      //     });
-      //   }
-      // }).catch(util.catchError);
     },
     toForgetPassword() {
-      this.$router.push({ path: '/forgetPassword' });
+
     },
-    toLogin() {
-      this.$router.push({ path: '/register' });
+    toLoginPage() {
+      this.$router.push({ path: '/login' });
     },
-    refreshVaImg() {
+    getPhoneVa() {
 
     }
   },

@@ -9,8 +9,11 @@ import vuex from 'vuex'
 import store from './store/indexStore'
 import axios from 'axios';
 import * as pbFunc from './assets/utils';
-Vue.prototype.pbFunc = pbFunc;
+//import api from './api/api';
+import http from './api/index';
 
+Vue.prototype.pbFunc = pbFunc;
+Vue.prototype.http = http;
 
 Vue.config.productionTip = false
 

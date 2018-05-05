@@ -12,7 +12,7 @@
 .g-statues-bar {
   position: fixed;
   z-index: 90;
-  top: 55px;
+  top: 65px;
   left: 0;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -56,7 +56,7 @@
   width: 270px;
   font-size: 1.4em;
   text-decoration: none;
-  color:#fff;
+  color: #fff;
 }
 
 .nav {
@@ -65,22 +65,24 @@
   -ms-flex: 1;
   flex: 1;
 }
+
 .usermenu {
   float: right;
   padding: 0 2em;
-  color:#fff;
+  color: #fff;
 }
+
 .usermenu a {
   text-decoration: none;
   margin: 0 0.2em 0 1em;
-  color:inherit;
+  color: inherit;
 }
 
 </style>
 <template>
   <div>
     <el-row type="flex" class="g-head">
-      <a href="" title="胜通tms" class="logo" >胜通tms</a>
+      <a href="" title="胜通tms" class="logo">胜通tms</a>
       <div class="nav">
         <div class="usermenu" v-if="user.name">
           欢迎您：{{user.name}}
@@ -89,7 +91,7 @@
         </div>
       </div>
     </el-row>
-    <el-menu :default-active="activeMenu" class="g-side" router >
+    <el-menu :default-active="activeMenu" class="g-side" router>
       <template v-for="(route, index) in menus">
         <template v-if="route.children">
           <el-submenu :key="index" :index="route.name">
@@ -103,7 +105,6 @@
         </template>
       </template>
     </el-menu>
-
     <div class="g-statues-bar p-lr">
       <el-breadcrumb separator="/" class="bread" id="mybread">
         <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index" :to="item">
@@ -111,38 +112,36 @@
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
-     <template>
-      <div style="margin:120px 270px;">
-        <router-view ></router-view>
+    <template>
+      <div style="margin:120px 0 0 220px;">
+        <router-view></router-view>
       </div>
     </template>
   </div>
 </template>
 <script>
-
-
 export default {
   data() {
     return {
-      user: {name:"aa"},
+      user: { name: "aa" },
       menus: []
     };
   },
   computed: {
-    activeMenu: function(){
+    activeMenu: function() {
       return this.$route.name
     },
-    breadcrumbs: function(){
+    breadcrumbs: function() {
       return (this.$route && this.$route.matched) || []
     }
   },
-  methods:{
+  methods: {
     logout: function() {
       this.$confirm("确定退出?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "info"
-      })
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "info"
+        })
         .then(() => {
           this.$emit("logout");
         })
@@ -162,4 +161,5 @@ export default {
     }
   }
 };
+
 </script>

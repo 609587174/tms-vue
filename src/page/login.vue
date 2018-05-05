@@ -18,33 +18,22 @@
   height: 32px;
 }
 
-.el-input /deep/ .el-input__inner {
-  height: 32px;
-  border: 1px solid rgb(102, 102, 102);
-  border-radius: 0px;
-}
+
 
 .login-form {
-  width: 280px;
+  width: 320px;
   margin: 13% auto 0;
-  .el-form-item {
-    margin-bottom: 5px;
-  }
   .el-input {
-    margin: 0 0 0 20px;
-    width: 201px;
-    height: 32px;
+    width: 220px;
   }
   .vaInput {
-    width: 120px;
+    width: 140px;
   }
   .inputTip {
     width: 50px;
     display: inline-block;
-    line-height: 32px;
   }
   img {
-    line-height: 32px;
     vertical-align: middle;
     cursor: pointer;
   }
@@ -54,6 +43,11 @@
     font-style: normal;
     color: rgb(0, 0, 0);
   }
+}
+
+.login-link {
+  width: 320px;
+  margin: auto auto;
   .colorblue {
     color: rgb(51, 153, 255);
     cursor: pointer;
@@ -68,7 +62,11 @@
     height: 46px;
     font-size: 18px;
     border-color: white;
-    margin-left: 10%;
+    margin-left: 5%;
+    width: 90%
+  }
+  .el-form-item {
+    margin-bottom: 15px;
   }
 }
 
@@ -84,29 +82,28 @@
 <template>
   <div>
     <div class="g-center login-page font-size-12" @keyup.enter="login">
-      <el-form class="login-form">
+      <el-form class="login-form" label-width="80px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon ref="loginFrom">
         <p class="des">登录</p>
-        <el-form-item>
-          <span class="inputTip">用户名:</span>
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="username" name='userName'>
+        <el-form-item label="用户名称" prop="userName">
+          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.userName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <span class="inputTip">密码:</span>
-          <el-input placeholder="请输入密码" type="password" v-model="password">
+        <el-form-item label="密码" prop="password">
+          <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item>
-          <span class="inputTip">验证码:</span>
-          <el-input placeholder="请输入验证码" type="password" v-model="password" class="vaInput">
+        <el-form-item label="验证码" prop="ValNum" validate-on-rule-change>
+          <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.ValNum" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4">
           </el-input>
           <img src="../assets/img/va.png" v-on:click="refreshVaImg">
         </el-form-item>
+      </el-form>
+      <el-form class="login-link">
         <el-form-item class="Textline">忘记密码？<span v-on:click="toForgetPassword" class="colorblue">找回密码</span></el-form-item>
         <el-form-item>
-          <el-button style="width:80%" @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
+          <el-button @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
         </el-form-item>
-        <el-form-item class="Textline">没有账号，<span v-on:click="toLogin" class="colorblue">请注册</span></el-form-item>
+        <el-form-item class="Textline">没有账号，<span v-on:click="toLogin('loginFrom')" class="colorblue">请注册</span></el-form-item>
       </el-form>
     </div>
   </div>
@@ -115,29 +112,55 @@
 import axios from 'axios';
 export default {
   data() {
+    var validatePass = (rule, value, callback) => {
+      if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
+        callback();
+      } else {
+        callback(new Error("密码不正确"));
+      }
+    };
+    var validateNum = (rule, value, callback) => {
+      if (value == "") {
+        callback(new Error("验证码不能为空"));
+      } else {
+        if (value !== this.vaImgNum) {
+          callback(new Error("验证码不正确"));
+        }
+      }
+    };
     return {
-      username: '',
-      password: '',
-      isBtnLoading: false
+      isBtnLoading: false,
+      vaImgNum: "k9s5",
+      ruleForm: {
+        userName: '',
+        password: '',
+        ValNum: ""
+      },
+      rules: {
+        userName: [
+          { required: true, message: '请输入用户名或手机号', trigger: 'blur' },
+          { min: 4, max: 20, message: '用户名或手机号不正确', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
+        ],
+        ValNum: [
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+        ]
+      }
     };
   },
   computed: {
     btnText() {
       if (this.isBtnLoading) return '登录中...';
       return '登录';
-    }
+    },
+
   },
   methods: {
     login() {
       var vm = this;
-      if (!vm.username) {
-        vm.$message.error('请填写用户名！！！');
-        return;
-      }
-      if (!vm.password) {
-        vm.$message.error('请填写密码');
-        return;
-      }
       let loginParams = { name: vm.username, password: vm.password };
       vm.isBtnLoading = true;
       vm.isBtnLoading = false;
@@ -147,8 +170,22 @@ export default {
     toForgetPassword() {
       this.$router.push({ path: '/forgetPassword' });
     },
-    toLogin() {
-      this.$router.push({ path: '/register' });
+    callbackerr(cuowu) {
+
+    },
+    toLogin(loginFrom) {
+      var vm = this;
+      this.$refs[loginFrom].validate((valid) => {
+        if (!valid) {
+          var callbackInfo = { errorField: "ValNum", errorMessage: "有错误" }
+          console.log(vm);
+          console.log(this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField)));
+          this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField))[0].error = callbackInfo.errorMessage;
+        } else {
+          return false;
+        }
+      });
+      //this.$router.push({ path: '/register' });
     },
     refreshVaImg() {
 

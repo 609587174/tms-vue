@@ -1,112 +1,184 @@
+/* axios二次封装
+ * desc:
+ * 统一捕获接口报错
+ * 统一报错弹窗提示
+ * 接入api
+ */
+
 import axios from 'axios';
-import * as util from '../assets/utils.js';
 import { Message } from 'element-ui';
-const Axios = axios.create({
-  baseURL: "/",
-  timeout: 10000,
-  responseType: "json",
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-  }
-});
+import api from './api';
 
+let domainUrl = '';
+let timeout = 15000;
 
-//POST传参序列化(添加请求拦截器)
-Axios.interceptors.request.use(
-  config => {
-    // 在发送请求之前做某件事，未写
-    if (
-      config.method === "post" ||
-      config.method === "put" ||
-      config.method === "get"
-    ) {
-      config.data = qs.stringify(config.data);
-    }
+if (document.location.href.toString().match('91lng.cn')) {
+  domainUrl = '91lng.cn';
+} else if (document.location.href.toString().match('test.hhtdlng.com')) {
+  domainUrl = 'test.hhtdlng.com';
+} else if (document.location.href.toString().match('prepare.hhtdlng.com')) {
+  domainUrl = 'prepare.hhtdlng.com';
+} else {
+  domainUrl = 'prepare.hhtdlng.com';
+}
 
-    // 若是有做鉴权token , 就给头部带上token
-    if (localStorage.token) {
-      config.headers.Authorization = localStorage.token;
-    }
-    return config;
-  },
-  error => {
-    Message({
-      showClose: true,
-      message: error,
-      type: "error.data.error.message"
-    });
-    return Promise.reject(error.data.error.message);
-  }
-);
+axios.interceptors.request.use(config => {
+  //store.commit('UPDATE_LOADING',true) //显示loading
+  console.log('requestConfig', config)
+  return config
+}, error => {
+  return Promise.reject(error)
+})
 
-//返回状态判断(添加响应拦截器)
-Axios.interceptors.response.use(
-  res => {
-    //对响应数据做些事
-    if (res.data && !res.data.success) {
-      Message({
-        showClose: true,
-        message: res.data.error.message.message
-          ? res.data.error.message.message
-          : res.data.error.message,
-        type: "error"
-      });
-      return Promise.reject(res.data.error.message);
-    }
-    return res;
-  },
-  error => {
-    // 用户登录的时候会拿到一个基础信息,比如用户名,token,过期时间戳
-    // 直接丢localStorage或者sessionStorage
-    if (!window.localStorage.getItem("loginUserBaseInfo")) {
-      // 若是接口访问的时候没有发现有鉴权的基础信息,直接返回登录页
-      router.push({
-        path: "/login"
-      });
-    } else {
-      // 若是有基础信息的情况下,判断时间戳和当前的时间,若是当前的时间大于服务器过期的时间
-      // 乖乖的返回去登录页重新登录
-      let lifeTime =
-        JSON.parse(window.localStorage.getItem("loginUserBaseInfo")).lifeTime *
-        1000;
-      let nowTime = new Date().getTime(); // 当前时间的时间戳
-      if (nowTime > lifeTime) {
-        Message({
-          showClose: true,
-          message: "登录状态信息过期,请重新登录",
-          type: "error"
-        });
-        router.push({
-          path: "/login"
-        });
-      } else {
-        if (error.response.status>500) {
-          Message({
-          	showClose: true,
-          	message: "服务器出错,请您稍后再试",
-          	type: "error"
-        });
+axios.interceptors.response.use(response => {
+  console.log('response', response);
+  return response
+}, error => {
+  if (err && err.response) {
+        switch (err.response.status) {
+            case 400: err.message = '请求错误(400)' ; break;
+            case 401: err.message = '未授权，请重新登录(401)'; break;
+            case 403: err.message = '拒绝访问(403)'; break;
+            case 404: err.message = '请求出错(404)'; break;
+            case 408: err.message = '请求超时(408)'; break;
+            case 500: err.message = '服务器错误(500)'; break;
+            case 501: err.message = '服务未实现(501)'; break;
+            case 502: err.message = '网络错误(502)'; break;
+            case 503: err.message = '服务不可用(503)'; break;
+            case 504: err.message = '网络超时(504)'; break;
+            case 505: err.message = 'HTTP版本不受支持(505)'; break;
+            default: err.message = `连接出错(${err.response.status})!`;
         }
-        if (error.response.status === 404) {
-          Message({
-          	showClose: true,
-          	message: "你访问的页面不存在，或者没有权限，请联系管理员",
-          	type: "error"
-          });
-        }
+    }else{
+      err.message = '连接服务器失败!'
+    }
+    //message.error(err.message);
+    return Promise.reject(err);
+    //return Promise.resolve(error.response)
+})
+
+const errorState = function(response) {
+
+}
+
+const successState = function(res) {
+
+}
+
+const dealApiUrlParam = function(apiName, postData){
+  let httpUrl = '';
+  if(httpUrl){
+    //设置最大循环数,以免死机
+    let maxTimes = 0;
+    while (httpUrl.match(/:([0-9a-z_]+)/i)) {
+      let tempV = RegExp.$1;
+      //console.log("tempV", tempV, postData)
+      maxTimes++;
+      //httpUrl最大支持10个变量替换
+      if (maxTimes > 10) break;
+      let reg = new RegExp(":" + tempV, "ig");
+      //console.log("tempV2", tempV, postData.hasOwnProperty(tempV))
+      if (postData.hasOwnProperty(tempV)) {
+        httpUrl = httpUrl.replace(reg, postData[tempV])
       }
     }
-    // 返回 response 里的错误信息
-    let errorInfo =  error.data.error ? error.data.error.message : error.data;
-    return Promise.reject(errorInfo);
   }
-);
+  return httpUrl;
+}
 
-// 对axios的实例重新封装成一个plugin ,方便 Vue.use(axios)
-export default {
-  install: function(Vue, Option) {
-    Object.defineProperty(Vue.prototype, "$http", { value: Axios });
+const dealConfig = function(apiName, postData) {
+
+  const httpConfig = {
+    method: '',
+    baseURL: domainUrl,
+    url: '',
+    timeout: timeout,
+    params: '',
+    data: '',
+    headers:'',
   }
-};
 
+  if(api.hasOwnProperty(apiName)){
+    let apiUrl = api[apiName].url ? api[apiName].url : '';
+    let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
+
+    httpConfig.method = method;
+
+    if(method == 'get'){
+      httpConfig.headers = {
+          'X-Requested-With': 'XMLHttpRequest',
+          "Accept": "application/json",
+          "Content-Type": "application/json; charset=UTF-8"
+        }
+    }else{
+     httpConfig.headers =  {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    }
+
+    if(apiUrl){
+      apiUrl = dealApiUrlParam(apiName, postData);
+    }else{
+      return false
+    }
+
+    if (method == 'get' || method == 'delete') {
+      delete httpConfig.data
+    }
+
+    if(method){
+      if ((method == 'get' || method == 'delete') && (postData && typeof postData === 'object')) {
+        //如果接口为 get 请求，但是参数需要用？跟随，这是需要的对应处理
+        let params = '?';
+        let existedVars = {};
+        for (let t in postData) {
+          if (!existedVars.hasOwnProperty(t)){
+            params += t + "=" + encodeURIComponent(postData[t]) + '&';
+          }
+        }
+        if (params.match(/^(.+)&$/i)){
+          params = RegExp.$1;
+          apiUrl += params;
+        }
+      }
+    }else{
+      return false
+    }
+
+  }else{
+    return false;
+  }
+
+}
+
+const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
+
+  if (!apiName) return false;
+
+  let httpConfig =  dealConfig(apiName, postData);
+
+  let promise = new Promise(function(resolve, reject) {
+    axios(httpConfig).then(
+      (res) => {
+        //默认使用successState
+        if (defaultSuccessCallback === undefined) {
+          successState(res)
+        }
+        resolve(res)
+      }
+    ).catch(
+      (response) => {
+        //默认使用errorState
+        if (defaultErrorCallback) {
+          errorState(response)
+        }
+        reject(response)
+      }
+    )
+
+  })
+  return promise
+}
+
+export default httpServer

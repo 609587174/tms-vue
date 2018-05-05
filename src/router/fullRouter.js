@@ -6,39 +6,70 @@ export default [{
     needShowFir: true
   },
   children: [{
-    path: 'carBaseInfo',
-    name: 'carBaseInfo',
+    path: 'transportPowerManage',
+    name: '动力管理',
     meta: {
       isVerificationL: true,
       needShowFir: true
     },
-    component: (resolve) => require(['../components/powermanagement/CarBaseInfo'], resolve),
+    component: (resolve) => require(['../page/transportPowerManage/transportPowerManage'], resolve),
     children: [{
-      path: 'testTitle',
-      name: "测试二级菜单",
+      path: 'carManage',
+      name: '车辆管理',
       meta: {
-        isVerificationL: false
+        isVerificationL: false,
+        needShowFir: false
       },
-      component: (resolve) => require(['../components/powermanagement/TestTitle'], resolve)
+      component: (resolve) => require(['../page/transportPowerManage/carManage'], resolve),
+      children: [{
+          path: 'carHeadManage',
+          name: "牵引车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/carHeadManage'], resolve)
+        },
+        {
+          path: 'carTailManage',
+          name: "挂车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/carTailManage'], resolve)
+        },
+        {
+          path: 'editCarHeadManage',
+          name: "编辑挂车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/editCarHeadManage'], resolve)
+        },
+        {
+          path: 'addCarHeadManage',
+          name: "新增挂车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/addCarHeadManage'], resolve)
+        },
+        {
+          path: 'showCarHeadManage',
+          name: "查看挂车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/showCarHeadManage'], resolve)
+        }
+      ]
+    }, {
+      path: 'personManage',
+      name: '人员管理',
+      meta: {
+        isVerificationL: false,
+        needShowFir: false
+      },
+      component: (resolve) => require(['../page/transportPowerManage/personManage'], resolve)
     }]
-  },
-    {
-      path: 'exPro',
-      name: 'exPro',
-      meta: {
-        isVerificationL: false,
-        needShowFir: false
-      },
-      component: (resolve) => require(['../components/powermanagement/ExPro'], resolve)
-    },
-    {
-      path: 'exBuy',
-      name: 'exBuy',
-      meta: {
-        isVerificationL: false,
-        needShowFir: false
-      },
-      component: (resolve) => require(['../components/powermanagement/ExBuy'], resolve)
-    }
-  ]
+  }]
 }];

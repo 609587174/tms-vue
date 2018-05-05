@@ -58,13 +58,12 @@ export default {
           let pathKey = (base ? base + '/' : '/') + route.path;
           if (hashMenus[pathKey] || !route.meta.isVerificationL) {
             if (!route.meta.isVerificationL) {
-              console.log(that.$store);
               route.meta['operationJur'] = that.$store.state.common.defaultShow;
             } else {
               route.meta['operationJur'] = hasOperationJur[pathKey]
             }
             if (Array.isArray(route.children)) {
-              route.children = findLocalRoute(route.children, route.path);
+              route.children = findLocalRoute(route.children, pathKey);
             }
             replyResult.push(route);
           }

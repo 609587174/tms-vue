@@ -113,7 +113,7 @@
       </el-breadcrumb>
     </div>
     <template>
-      <div style="margin:120px 0 0 220px;">
+      <div style="margin:120px 0 0 270px;">
         <router-view></router-view>
       </div>
     </template>

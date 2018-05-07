@@ -1,8 +1,5 @@
 <template>
-  <div id="searchList">
-    <el-button type="primary" disabled>{{msg}}</el-button>
-    <el-button type="primary" disabled>{{this.$store.state.common.showAmessage}}</el-button>
-  </div>
+  <router-view></router-view>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'

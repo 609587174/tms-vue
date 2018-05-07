@@ -70,6 +70,25 @@ export default [{
           component: (resolve) => require(['../components/transportPowerManage/carManage/showCarTailManage'], resolve)
         }
       ]
+
+    }, {
+      path: 'personManage',
+      name: '人员管理',
+      meta: {
+        isVerificationL: false,
+        needShowFir: false
+      },
+      component: (resolve) => require(['../page/transportPowerManage/personManager/personManager'], resolve),
+      children: [
+        {
+          path: 'personListManage',
+          name: "人员管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/personManager/personListManager'], resolve)
+        },
+      ]
     }]
   }]
 }];

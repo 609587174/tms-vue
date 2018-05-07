@@ -1,30 +1,28 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="人员管理" name="first">
-      <div class="search-box">
-      </div>
-      <div>
-        <el-button type="primary" @click="importList">导入</el-button>
-        <el-button type="primary" @click="exportList">导出</el-button>
-        <el-button type="primary" @click="addList">新增</el-button>
-      </div>
-      <el-table :data="tableData" v-loading="pageLoading" style="width: 100%">
-        <el-table-column prop="date" label="日期" width="180">
-        </el-table-column>
-        <el-table-column prop="name" label="姓名" width="180">
-        </el-table-column>
-        <el-table-column prop="address" label="地址">
-        </el-table-column>
-      </el-table>
-      <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size: "pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
-      </el-pagination>
-    </el-tab-pane>
-  </el-tabs>
+  <div>
+    <div class="search-box">
+    </div>
+    <div>
+      <el-button type="primary" @click="importList">导入1</el-button>
+      <el-button type="primary" @click="exportList">导出</el-button>
+      <el-button type="primary" @click="addList">新增</el-button>
+    </div>
+    <el-table :data="tableData" v-loading="pageLoading" style="width: 100%">
+      <el-table-column prop="date" label="日期" width="180">
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" width="180">
+      </el-table-column>
+      <el-table-column prop="address" label="地址">
+      </el-table-column>
+    </el-table>
+    <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+    </el-pagination>
+  </div>
 </template>
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
-  name: 'personListManage',
+  name: 'privateClientManage',
   computed: {
 
   },

@@ -70,6 +70,68 @@ export default [{
           component: (resolve) => require(['../components/transportPowerManage/carManage/showCarTailManage'], resolve)
         }
       ]
-    }]
+
+    }, {
+      path: 'personManage',
+      name: '人员管理',
+      meta: {
+        isVerificationL: false,
+        needShowFir: false
+      },
+      component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
+      children: [
+        {
+          path: 'personListManage',
+          name: "人员管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/personManage/personListManager'], resolve)
+        },
+        {
+          path: 'addPerson',
+          name: "新增、编辑人员",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/personManage/addPerson'], resolve)
+        },
+      ]
+    }, {
+      path: 'clientManage',
+      name: '客户管理',
+      meta: {
+        isVerificationL: false,
+        needShowFir: false
+      },
+      component: (resolve) => require(['../page/transportPowerManage/clientManage/clientManage'], resolve),
+      children: [
+        {
+          path: 'privateClientManage',
+          name: "自有客户管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/clientManage/privateClientManage'], resolve)
+        },{
+          path: 'addClient',
+          name: "新增、编辑客户",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/clientManage/addClient'], resolve)
+        },
+        {
+          path: 'platformClientManage',
+          name: "平台客户管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/clientManage/platformClientManage'], resolve)
+        },
+      ]
+    }
+
+    ]
   }]
 }];

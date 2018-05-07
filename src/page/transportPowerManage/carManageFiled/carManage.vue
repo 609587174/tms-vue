@@ -1,10 +1,14 @@
 <template>
   <div>
     <template v-if="$route.path=='/transportPowerManage/carManage'">
-      <carHeadManage></carHeadManage>
+      <div style="margin-left:5%;width:90%;">
+        <carHeadManage></carHeadManage>
+      </div>
     </template>
     <template v-else>
-      <router-view></router-view>
+      <div style="margin-left:5%;width:90%;">
+        <router-view></router-view>
+      </div>
     </template>
   </div>
 </template>
@@ -15,20 +19,18 @@ export default {
   name: 'carManage',
   components: {
     carHeadManage: () =>
-      import ("../../components/transportPowerManage/carHeadManage.vue")
+      import ("../../../components/transportPowerManage/carManage/carHeadManage.vue")
   },
   data() {
     return {
       msg: '子组件',
       showMessage: this.$store.state.common.showAmessage,
-
+      kk: $route.path
     }
   },
   methods: {
     clicktabs: function() {
-      console.log(this);
-      this.showMessage = "改变后";
-      this.$store.dispatch("ChangeinitParam", "newValues");
+
     }
   }
 

@@ -21,6 +21,18 @@
   border: 1px solid rgb(222, 222, 222);
 }
 
+.alone-insurance-form {
+  border: 1px solid rgb(222, 222, 222);
+  border-top: none;
+  padding: 30px 30px 0 20px;
+}
+
+.insurance-form-head {
+  background-color: #f1f1f1;
+  height: 41px;
+  line-height: 41px;
+}
+
 </style>
 <template>
   <div id="addeditHeadCarPage">
@@ -36,7 +48,7 @@
         </el-steps>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <el-form class="addheadcarform" label-width="100px" rel="addEditFormSetp1" :rules="rules" :model="headCarForm" status-icon :label-position="'left'">
+            <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp1" :rules="rules" :model="headCarForm" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="牵引车牌:" prop="headCarNum">
@@ -46,7 +58,7 @@
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="carAscription">
                     <el-select v-model="headCarForm.carAscription" placeholder="请选择车辆归属">
-                      <el-option v-for="item in selectData.ascriptionSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.ascriptionSelect" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -70,7 +82,7 @@
                 <el-col :span="8">
                   <el-form-item label="车辆类型:" prop="carType">
                     <el-select v-model="headCarForm.carType" placeholder="请选择车辆类型">
-                      <el-option v-for="item in selectData.carTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.carTypeSelect" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -113,14 +125,14 @@
                 <el-col :span="8">
                   <el-form-item label="运输介质:">
                     <el-select v-model="headCarForm.transportType" placeholder="请选择车辆类型">
-                      <el-option v-for="item in selectData.transportTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.transportTypeSelect" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="燃料类型:">
                     <el-select v-model="headCarForm.fuelType" placeholder="请选择车辆类型">
-                      <el-option v-for="item in selectData.fuelTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.fuelTypeSelect" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -133,7 +145,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="危险品灯号到期日期:" prop="dangerousNumDate" label-width="150px">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.dangerousNumDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.dangerousNumDate" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -155,7 +167,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="安全阀到期日期:" prop="safetyValveNumDate" label-width="150px">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.safetyValveNumDate" style="width: 100%;"></el-date-picker>
+                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.safetyValveNumDate" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -169,7 +181,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="压力表编号到期日期:" prop="pressureGaugeDate" label-width="150px">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.pressureGaugeDate" style="width: 100%;"></el-date-picker>
+                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.pressureGaugeDate" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -184,7 +196,7 @@
         </transition>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==1">
-            <el-form class="addheadcarform" label-width="100px" rel="addEditFormSetp2" :rules="rules" :model="headCarForm" status-icon :label-position="'left'">
+            <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp2" :rules="rules" :model="headCarForm" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="行驶证编号:" prop="drivingNum">
@@ -193,12 +205,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="行驶证发证日期:" prop="getDrivingDate" label-width="150px">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.getDrivingDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.getDrivingDate" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="行驶证年审日期:" prop="examineDrivingDate" label-width="150px">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.examineDrivingDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.examineDrivingDate" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -210,12 +222,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="营运证发证日期:" prop="operationDate" label-width="150px">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.operationDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" placeholder="选择日期" v-model="headCarForm.operationDate" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="营运证年审日期:" prop="examineOperationDate" label-width="150px">
-                    <el-date-picker type="date" placeholder="选择日期" v-model="headCarForm.examineOperationDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="headCarForm.examineOperationDate" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -232,13 +244,19 @@
         </transition>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==2">
-            <el-form class="addheadcarform" label-width="100px" rel="addEditFormSetp2" :rules="rules" :model="headCarForm" status-icon :label-position="'left'">
-              <div v-for="item in headCarForm.insuranceList">
+            <el-form class="addheadcarform" label-width="100px" :rules="rules" :model="headCarForm" status-icon :label-position="'left'" ref="addInsuanceFrom">
+              <el-row class="insurance-form-head">
+                <el-col :span="22" style="padding-left:10px;">保单填写</el-col>
+                <el-col :span="2" style="text-align:right;">
+                  <el-button @click="addInsuranceListForm">新增</el-button>
+                </el-col>
+              </el-row>
+              <div v-for="(item,key) in headCarForm.insuranceList" class="alone-insurance-form">
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="保险类型:" prop="insuranceType" label-width="150px">
                       <el-select v-model="item.insuranceType">
-                        <el-option v-for="insurance in selectData.insuranceTypeSelect" :label="insurance.value" :value="insurance.id"></el-option>
+                        <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :label="insurance.value" :value="insurance.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -255,14 +273,17 @@
                 </el-row>
                 <el-row :gutter="80">
                   <el-col :span="8">
-                    <el-form-item label="入保日期:" prop="buyInsuranceData" label-width="150px">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="item.buyInsuranceData" style="width: 100%;"></el-date-picker>
+                    <el-form-item label="入保日期:" prop="buyInsuranceDate" label-width="150px">
+                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.buyInsuranceDate" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="到期日期:" prop="lastInsuranceData" label-width="150px">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="item.lastInsuranceData" style="width: 100%;"></el-date-picker>
+                    <el-form-item label="到期日期:" label-width="150px">
+                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.lastInsuranceDate" style="width: 100%;" @change="changelastDate('addInsuanceFrom',key)"></el-date-picker>
                     </el-form-item>
+                  </el-col>
+                  <el-col :span="8" style="font-size:32px;text-align:right;" v-if="headCarForm.insuranceList.length>1">
+                    <i class="el-icon-delete" style="cursor:pointer;" @click="deleteInsuranceFrom(insuranceKey)"></i>
                   </el-col>
                 </el-row>
               </div>
@@ -292,8 +313,20 @@ export default {
         callback(new Error("车牌号格式为：一个汉字+6个字段，如：鲁GP8996"));
       }
     };
+    var buyInsuranceDateVa = (rule, value, callback) => {
+      if (new Date(value).getTime() > new Date().getTime()) {
+        callback(new Error("入保时间不能大于当前时间"));
+      } else {
+        callback();
+      }
+    };
     return {
       activeStep: 0,
+      pickerOptions0: {
+        disabledDate(time) {
+          return time.getTime() > Date.now() - 8.64e6
+        }
+      },
       headCarForm: {
         headCarNum: "",
         carAscription: "1",
@@ -326,8 +359,8 @@ export default {
           insuranceType: "",
           insuranceNum: "",
           insuranceCompany: "",
-          buyInsuranceData: "",
-          lastInsuranceData: ""
+          buyInsuranceDate: "",
+          lastInsuranceDate: ""
         }]
       },
       selectData: {
@@ -382,9 +415,15 @@ export default {
         ],
         gasBottleNum: [
           { required: true, message: '请填写气瓶编号', trigger: 'blur' }
+        ],
+        buyInsuranceDate: [
+          { validator: buyInsuranceDateVa, trigger: 'blur' }
         ]
       }
     }
+  },
+  created() {
+    console.log(this);
   },
   methods: {
     goOtherSetp: function(stepInfo) {
@@ -394,8 +433,26 @@ export default {
         this.activeStep -= 1;
       }
     },
-    clicktabs: function() {
-
+    addInsuranceListForm: function(addInsuanceFrom) {
+      this.headCarForm.insuranceList.push({
+        insuranceType: "",
+        insuranceNum: "",
+        insuranceCompany: "",
+        buyInsuranceData: "",
+        lastInsuranceData: ""
+      })
+    },
+    deleteInsuranceFrom: function(index) {
+      if (this.headCarForm.insuranceList.length > 1) {
+        this.headCarForm.insuranceList = this.headCarForm.insuranceList.splice(index, 1);
+      }
+    },
+    changelastDate: function(addInsuanceFrom, index) {
+      var startTime = this.headCarForm.insuranceList[index].buyInsuranceDate;
+      var endTime = this.headCarForm.insuranceList[index].lastInsuranceDate;
+      if (startTime != "" && endTime > startTime) {
+        this.$refs[addInsuanceFrom].fields[4 + index * 5].error = "到期日期不能小于入保时间";
+      }
     }
   }
 }

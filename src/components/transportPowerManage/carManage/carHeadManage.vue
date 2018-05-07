@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'carBaseInfo',
+  name: 'carHeadManage',
   data() {
     return {
       activeName: 'first'
@@ -17,10 +17,12 @@ export default {
   },
   methods: {
     addHeadCarPage: function() {
-      this.$router.push({ path: "/transportPowerManage/carManage/addCarHeadManage" });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage" });
     },
-    clicktabs: function() {
-
+    clicktabs: function(targetName) {
+      if (targetName.name == 'second') {
+        this.$router.push({ path: "/transportPowerManage/carManage/carTailManage" });
+      }
     }
   }
 }

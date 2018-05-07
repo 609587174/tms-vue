@@ -17,17 +17,17 @@ export default [{
       path: 'carManage',
       name: '车辆管理',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         needShowFir: false
       },
-      component: (resolve) => require(['../page/transportPowerManage/carManage'], resolve),
+      component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
       children: [{
           path: 'carHeadManage',
           name: "牵引车管理",
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../components/transportPowerManage/carHeadManage'], resolve)
+          component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
         },
         {
           path: 'carTailManage',
@@ -35,23 +35,31 @@ export default [{
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../components/transportPowerManage/carTailManage'], resolve)
+          component: (resolve) => require(['../components/transportPowerManage/carManage/carTailManage'], resolve)
         },
         {
-          path: 'editCarHeadManage',
-          name: "编辑挂车管理",
+          path: 'addEditCarHeadManage',
+          name: "新增编辑牵引车管理",
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../components/transportPowerManage/editCarHeadManage'], resolve)
+          component: (resolve) => require(['../components/transportPowerManage/carManage/addEditCarHeadManage'], resolve)
         },
         {
-          path: 'addCarHeadManage',
-          name: "新增挂车管理",
+          path: 'addEditCarTailManage',
+          name: "新增编辑挂车管理",
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../components/transportPowerManage/addCarHeadManage'], resolve)
+          component: (resolve) => require(['../components/transportPowerManage/carManage/addEditCarTailManage'], resolve)
+        },
+        {
+          path: 'showCarHeadManage',
+          name: "查看牵引车管理",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../components/transportPowerManage/carManage/showCarHeadManage'], resolve)
         },
         {
           path: 'showCarHeadManage',
@@ -59,17 +67,9 @@ export default [{
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../components/transportPowerManage/showCarHeadManage'], resolve)
+          component: (resolve) => require(['../components/transportPowerManage/carManage/showCarTailManage'], resolve)
         }
       ]
-    }, {
-      path: 'personManage',
-      name: '人员管理',
-      meta: {
-        isVerificationL: false,
-        needShowFir: false
-      },
-      component: (resolve) => require(['../page/transportPowerManage/personManage'], resolve)
     }]
   }]
 }];

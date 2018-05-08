@@ -1,7 +1,7 @@
 <style lang="less">
 @import './assets/css/common.less';
 @import './assets/css/reset.less';
-
+@import './assets/css/fonts/icon.less';
 
 </style>
 <template>

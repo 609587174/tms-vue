@@ -9,20 +9,41 @@
  */
 
  const api = {
-  get_trailer_list: {
-    url: ' service/location/transfor',
-    method: 'get',
-    desc:'',
-    param:{
-      page: {
-        desc: '',
+  login:{
+    url: '/backend/account/login/',
+    method: 'post',
+    desc:'登录',
+    param: {
+      username: {
+        desc: '用户名',
       },
-      page_size: {
-        desc: '',
-      },
-      trailer_no__contains: {
-        desc: '',
+      password: {
+        desc: '密码',
       }
+    }
+  },
+  register:{
+    url: '/api/user/register',
+    method: 'post',
+    desc:'注册',
+    param: {
+      username: {
+        desc: '用户名',
+      },
+      password: {
+        desc: '密码',
+      },
+      name: {
+        desc: '昵称',
+      }
+    }
+  },
+  globalData: {
+    url: '/common/global_enums/',
+    method: 'get',
+    desc:'全局数据',
+    param:{
+
     }
   }
 }

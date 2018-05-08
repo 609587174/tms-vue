@@ -1,3 +1,9 @@
+<style scoped lang="less">
+.el-tabs__item {
+  margin-left: 15px;
+}
+
+</style>
 <template>
   <el-tabs v-model="activeName" @tab-click="clicktabs" type="border-card">
     <el-tab-pane label="牵引车管理" name="first">
@@ -28,7 +34,3 @@ export default {
 }
 
 </script>
-<style>
-
-
-</style>

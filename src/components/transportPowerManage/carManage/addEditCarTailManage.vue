@@ -10,10 +10,10 @@
 .addTailcarform {
   margin: 30px 5%;
   .el-input {
-    width: 250px;
+    width: 100%;
   }
   .el-select {
-    width: 250px;
+    width: 100%;
   }
 }
 
@@ -33,9 +33,13 @@
   line-height: 41px;
 }
 
+#addeditHeadCarPage {
+  background-color: white;
+}
+
 </style>
 <template>
-  <div id="addeditHeadCarPage">
+  <div id="addeditTailCarPage">
     <el-container>
       <el-header style="margin-top:15px;">
         <p>新增挂车</p>
@@ -413,7 +417,7 @@ export default {
   },
   methods: {
     goOtherSetp: function(stepInfo) {
-      if (stepInfo == "add" && this.activeStep <= 1) {
+      if (stepInfo == "add" && this.activeStep <= 2) {
         this.activeStep += 1;
       } else if (stepInfo == "down" && this.activeStep >= 1) {
         this.activeStep -= 1;
@@ -436,7 +440,7 @@ export default {
     changelastDate: function(addInsuanceFrom, index) {
       var startTime = this.tailCarFormStep3.insuranceList[index].buyInsuranceDate;
       var endTime = this.tailCarFormStep3.insuranceList[index].lastInsuranceDate;
-      if (startTime != "" && endTime > startTime) {
+      if (startTime != "" && endTime < startTime) {
         this.$refs[addInsuanceFrom].fields[4 + index * 5].error = "到期日期不能小于入保时间";
       }
     }

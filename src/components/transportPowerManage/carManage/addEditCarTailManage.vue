@@ -63,7 +63,8 @@
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="carAscription">
                     <el-select v-model="tailCarFormStep1.carAscription" placeholder="请选择车辆归属">
-                      <el-option v-for="(item,key) in selectData.ascriptionSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for
+="(item,key) in selectData.ascriptionSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -82,7 +83,7 @@
                 <el-col :span="8">
                   <el-form-item label="车辆类型:" prop="carType">
                     <el-select v-model="tailCarFormStep1.carType" placeholder="请选择车辆类型">
-                      <el-option v-for="(item,key) in selectData.carTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.carTypeSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -125,7 +126,7 @@
                 <el-col :span="8">
                   <el-form-item label="运输介质:">
                     <el-select v-model="tailCarFormStep1.transportType" placeholder="请选择车辆类型">
-                      <el-option v-for="(item,key) in selectData.transportTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.transportTypeSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -200,12 +201,12 @@
                   <el-button @click="addInsuranceListForm">新增</el-button>
                 </el-col>
               </el-row>
-              <div v-for="(item,key) in tailCarFormStep3.insuranceList" class="alone-insurance-form">
+              <div v-for="(item,key) in tailCarFormStep3.insuranceList" :key="$index" class="alone-insurance-form">
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="保险类型:" prop="insuranceType">
                       <el-select v-model="item.insuranceType">
-                        <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :label="insurance.value" :value="insurance.id"></el-option>
+                        <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :key="$index" :label="insurance.value" :value="insurance.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>

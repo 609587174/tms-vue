@@ -75,9 +75,11 @@ export default {
     }
   },
   mounted: function() {
+
     setTimeout(() => {
       this.pageLoading = false;
-    }, 2000)
+    }, 2000);
+
   }
 
 }

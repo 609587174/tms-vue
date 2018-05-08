@@ -82,7 +82,7 @@ export default [{
       children: [
         {
           path: 'personListManage',
-          name: "人员管理",
+          name: "人员列表管理",
           meta: {
             isVerificationL: false
           },

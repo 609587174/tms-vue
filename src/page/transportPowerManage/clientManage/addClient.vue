@@ -74,7 +74,7 @@
                 <el-col :span="8">
                   <el-form-item label="客户类型:">
                     <el-select v-model="basicMsgForm.clientType" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.clientTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.clientTypeSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>

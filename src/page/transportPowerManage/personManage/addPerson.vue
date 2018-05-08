@@ -213,7 +213,6 @@
                 <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
               </el-col>
               <el-col :span="6" :offset="11">
-
               </el-col>
             </el-row>
           </div>
@@ -263,7 +262,6 @@
                 <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
               </el-col>
               <el-col :span="6" :offset="11">
-
               </el-col>
             </el-row>
           </div>
@@ -313,7 +311,6 @@
                 <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
               </el-col>
               <el-col :span="6" :offset="11">
-
               </el-col>
             </el-row>
           </div>
@@ -366,7 +363,6 @@
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
                   </el-form-item>
                 </el-col>
-
               </el-row>
             </el-form>
             <el-row>
@@ -377,7 +373,6 @@
                 <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
               </el-col>
               <el-col :span="6" :offset="11">
-
               </el-col>
             </el-row>
           </div>
@@ -423,7 +418,6 @@
                 <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
               </el-col>
               <el-col :span="6" :offset="11">
-
               </el-col>
             </el-row>
           </div>
@@ -489,24 +483,24 @@ export default {
         userName: [ //姓名
           { required: true, message: '请输入姓名', trigger: 'blur' },
         ],
-        employmentType: [//从业类型
+        employmentType: [ //从业类型
           { required: true, message: '请选择从业类型', trigger: 'blur' }
         ],
-        phone: [//手机号码
+        phone: [ //手机号码
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
         ],
-        staffs: [//人员所属
+        staffs: [ //人员所属
           { required: true, message: '请选择人员所属', trigger: 'blur' },
         ],
-        idNumber: [//身份证号码
+        idNumber: [ //身份证号码
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
           { pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '请输入15/18位身份证号码', trigger: 'blur' }
         ],
-        onTheJobStatus: [//在职状态
+        onTheJobStatus: [ //在职状态
           { required: true, message: '请选择在职状态', trigger: 'blur' },
         ],
-        familyContact: [//家属联系方式
+        familyContact: [ //家属联系方式
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
         ],

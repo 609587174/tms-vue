@@ -15,10 +15,6 @@ let baseRoute = [{
   name: '找回密码',
   component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
 }, {
-  path: '/register',
-  name: '注册',
-  component: (resolve) => require(['../page/forgetPassword.vue'], resolve)
-}, {
   path: '/401',
   name: '无权访问',
   component: (resolve) => require(['../page/common/401.vue'], resolve)

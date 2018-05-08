@@ -33,6 +33,10 @@
   line-height: 41px;
 }
 
+#addeditHeadCarPage {
+  background-color: white;
+}
+
 </style>
 <template>
   <div id="addeditHeadCarPage">
@@ -254,31 +258,31 @@
               <div v-for="(item,key) in headCarForm.insuranceList" class="alone-insurance-form">
                 <el-row :gutter="80">
                   <el-col :span="8">
-                    <el-form-item label="保险类型:" prop="insuranceType" label-width="150px">
+                    <el-form-item label="保险类型:" prop="insuranceType" label-width="120px">
                       <el-select v-model="item.insuranceType">
                         <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :label="insurance.value" :value="insurance.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="保单号:" prop="getDrivingDate" label-width="150px">
+                    <el-form-item label="保单号:" prop="getDrivingDate" label-width="120px">
                       <el-input placeholder="请输入" type="text" v-model="item.insuranceNum"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="入保公司:" prop="examineDrivingDate" label-width="150px">
+                    <el-form-item label="入保公司:" prop="examineDrivingDate" label-width="120px">
                       <el-input placeholder="请输入" type="text" v-model="item.insuranceCompany"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row :gutter="80">
                   <el-col :span="8">
-                    <el-form-item label="入保日期:" prop="buyInsuranceDate" label-width="150px">
+                    <el-form-item label="入保日期:" prop="buyInsuranceDate" label-width="120px">
                       <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.buyInsuranceDate" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="到期日期:" label-width="150px">
+                    <el-form-item label="到期日期:" label-width="120px">
                       <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.lastInsuranceDate" style="width: 100%;" @change="changelastDate('addInsuanceFrom',key)"></el-date-picker>
                     </el-form-item>
                   </el-col>

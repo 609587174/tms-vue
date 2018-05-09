@@ -28,7 +28,7 @@ el-tabs__nav @{deep} .el-tabs__item {
   <div>
     <el-tabs v-model="activeName" @tab-click="clicktabs" type="border-card">
       <el-tab-pane label="牵引车管理" name="first">
-        <el-form class="seachHeadCarListFrom" ref="seachHeadCarListFrom" :model="seachListParam" :rules="rules" label-position="'left'" label-width="80px;">
+        <el-form class="seachHeadCarListFrom" ref="seachHeadCarListFrom" :model="seachListParam" :rules="rules" label-position="'left'" label-width="80px">
           <el-row>
             <el-col :span="5">
               <el-form-item label="挂车牌:">
@@ -54,7 +54,7 @@ el-tabs__nav @{deep} .el-tabs__item {
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="1" :offset="1" style="margin-top:40px;">
+            <el-col :span="1" :offset="1">
               <el-button type="primary">搜索</el-button>
             </el-col>
           </el-row>

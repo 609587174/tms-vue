@@ -57,7 +57,7 @@
                 <el-col :span="8">
                   <el-form-item label="从业类型:" prop="employmentType">
                     <el-select v-model="userForm.employmentType" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.employmentTypeSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.employmentTypeSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -71,7 +71,7 @@
                 <el-col :span="8">
                   <el-form-item label="人员所属:" prop="staffs">
                     <el-select v-model="userForm.staffs" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.staffsSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.staffsSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -83,7 +83,7 @@
                 <el-col :span="8">
                   <el-form-item label="在职状态:" prop="onTheJobStatus">
                     <el-select v-model="userForm.onTheJobStatus" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -129,17 +129,17 @@
                     <el-row :gutter="0">
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" placeholder="请选择">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" placeholder="请选择">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" placeholder="请选择">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                     </el-row>

@@ -23,6 +23,7 @@ export const cacheKey = CACHE.cacheKey
 export const setLocalDataWithTime = CACHE.setLocalDataWithTime
 export const getLocalDataWithTime = CACHE.getLocalDataWithTime
 
+
 /* 数组对象相关 */
 export const isArray = ARROBJ.isArray
 export const inArray = ARROBJ.inArray

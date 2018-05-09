@@ -1,0 +1,69 @@
+.nav-tab {
+    .el-tabs__nav {
+        border: 0!important;
+
+        .el-tabs__item {
+            position: relative;
+            // height: 36px;
+
+            padding: 0 15px;
+            margin-right: 5px;
+
+            font-weight: 400;
+            // line-height: 36px;
+
+            color: @tms-font-stance;
+            border: 1px solid @tms-border-two-level;
+            background: @tms-white;
+
+            .font-size(16px);
+            &:first-child {
+                border-left: 1px solid @tms-border-two-level;
+            }
+            &.is-active {
+                color: @tms-font-main;
+                &:after {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+
+                    display: block;
+                    width: 100%;
+
+                    content: " ";
+
+                    border-top: 3px solid @tms-blue;
+                }
+            }
+        }
+    }
+    .el-tabs__header {
+        margin-bottom: 0;
+    }
+    .tab-screen {
+        padding: 10px 20px;
+
+        border: 1px solid @tms-border-two-level;
+        border-top: 0;
+        background: @tms-white;
+        .search-filters-form {
+            .el-row {
+                .margin-top (10px);
+            }
+            .search-filters-screen {
+                .el-select .el-input {
+                    width: 180px;
+                }
+                .el-input-group__prepend {
+                    background-color: #fff;
+                }
+            }
+            .el-input {
+                width: 100%;
+            }
+            .el-select {
+                width: 100%;
+            }
+        }
+    }
+}

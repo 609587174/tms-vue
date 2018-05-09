@@ -1,0 +1,29 @@
+.el-button {
+    font-weight: 400;
+}
+.operation-btn {
+    margin: 10px 0;
+    .el-button + .el-button {
+        margin-left: 5px;
+    }
+}
+.el-button--primary {
+    border-color: @tms-blue;
+    background-color: @tms-blue;
+    &:hover {
+        border-color: @tms-light-blue-border;
+        background-color: @tms-light-blue;
+    }
+    &.is-plain {
+        border-color: @tms-transparent-border-blue;
+        background-color: @tms-transparent-blue;
+    }
+}
+.el-button--success {
+    border-color: @tms-green;
+    background-color: @tms-green;
+    &:hover {
+        border-color: @tms-light-green;
+        background-color: @tms-light-green;
+    }
+}

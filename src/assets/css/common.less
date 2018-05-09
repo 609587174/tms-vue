@@ -1,7 +1,11 @@
 @import "./themeStyle.less";
 
 /********************************/
+body {
+    font-family: @tms-font-family-cn;
 
+    color: @tms-font-routine;
+}
 /*css为clearfix，清除浮动*/
 
 .clearfix::before,
@@ -53,6 +57,20 @@
 }
 .display-inline {
     display: inline-block;
+}
+/********************************/
+/* 字体颜色  */
+.color-main {
+    color: @tms-font-main;
+}
+.color-routine {
+    color: @tms-font-routine;
+}
+.color-secondary {
+    color: @tms-font-secondary;
+}
+.color-stance {
+    color: @tms-font-stance;
 }
 
 /********************************/
@@ -137,7 +155,13 @@
 }
 
 /********************************/
-
+//清除边距
+.margin-clear {
+    margin: 0!important;
+}
+.padding-clear {
+    padding: 0!important;
+}
 /* 左边距 */
 
 .margin-left (@width) {

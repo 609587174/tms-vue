@@ -1,8 +1,11 @@
 <style lang="less">
+@import './assets/css/themeStyle.less';
 @import './assets/css/common.less';
 @import './assets/css/reset.less';
 @import './assets/css/fonts/icon.less';
-
+@import './assets/css/tabsStyle.less';
+@import './assets/css/buttonStyle.less';
+// @import './assets/css/searachFilters.less';
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>

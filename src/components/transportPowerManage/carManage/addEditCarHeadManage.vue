@@ -42,14 +42,10 @@
   <div id="addeditHeadCarPage">
     <el-container>
       <el-header style="margin-top:15px;">
-        <p>新增牵引车</p>
+        <el>
+          <p>新增牵引车</p>
       </el-header>
       <el-main v-loading="pageLoading">
-        <el-steps :active="activeStep" align-center finish-status="success">
-          <el-step title="步骤1" description="基础信息填写"></el-step>
-          <el-step title="步骤2" description="证件信息填写"></el-step>
-          <el-step title="步骤3" description="保单信息填写"></el-step>
-        </el-steps>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
             <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp1" :rules="rules" :model="headCarFormStep1" status-icon :label-position="'left'">
@@ -67,7 +63,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="车辆所属:" prop="carrier">
+                  <el-form-item label="车辆所属:" prop="carrier" v-if="headCarFormStep1.attributes=='SELF_SUPPORT'">
+                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.carrier"></el-input>
+                  </el-form-item>
+                  <el-form-item label="车辆所属:" prop="carrier" v-if="headCarFormStep1.attributes=='THIRD_SUPPORT'">
+                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.carrier"></el-input>
+                  </el-form-item>
+                  <el-form-item label="车辆所属:" prop="carrier" v-if="headCarFormStep1.attributes=='HIRED_SUPPORT'">
                     <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.carrier"></el-input>
                   </el-form-item>
                 </el-col>
@@ -234,8 +236,11 @@
               </el-collapse-transition>
             </el-form>
             <el-row>
-              <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('add')">下一步</el-button>
+              <el-col :span="6" :offset="8">
+                <el-button type="success" @click="goOtherSetp('add','nextStep')">填写证件信息</el-button>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="primary" @click="goOtherSetp('add','out')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -280,10 +285,10 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="primary" @click="goOtherSetp('down')">上一步</el-button>
+                <el-button type="success" @click="goOtherSetp('update','nextStep')">填写保险信息</el-button>
               </el-col>
               <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('add')">下一步</el-button>
+                <el-button type="primary" @click="goOtherSetp('update','out')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -335,11 +340,8 @@
               </div>
             </el-form>
             <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="primary" @click="goOtherSetp('down')">上一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="success" @click="goOtherSetp('success')">完成</el-button>
+              <el-col :span="6" :offse="11">
+                <el-button type="primary" @click="goOtherSetp('update')">保存并且退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -383,7 +385,7 @@ export default {
         vehicle_type: '',
         brand: '',
         total_weight: '',
-        towing_weight: null,
+        towing_weight: '',
         length: '',
         width: '',
         height: '',
@@ -469,18 +471,18 @@ export default {
     console.log(this);
   },
   methods: {
-    goOtherSetp: function(stepInfo) {
+    goOtherSetp: function(stepInfo, operation) {
       if (stepInfo == "add" && this.activeStep <= 1) {
         if (this.activeStep == 0) {
-          this.createFrom();
+          this.createFrom(operation);
         } else {
-          this.activeStep += 1;
+          this.updateFrom(this.activeStep, operation);
         }
       } else if (stepInfo == "down" && this.activeStep >= 1) {
         this.activeStep -= 1;
       }
     },
-    createFrom: function() {
+    createFrom: function(operation) {
       var vm = this;
       vm.pageLoading = true;
       if (this.headCarFormStep1.fuel_type != "GAS") {
@@ -499,11 +501,32 @@ export default {
       this.$$http('creatHeadFrom', this.headCarFormStep1).then(function(result) {
         var result = result;
         vm.pageLoading = false;
-        this.activeStep += 1;
+        if (operation == 'out') {
+          //跳转查询详情页面
+        } else {
+          vm.activeStep += 1;
+        }
       });
     },
-    updateFrom: function(step) {
-
+    updateFrom: function(step, operation) {
+      vm.pageLoading = false;
+      var vm = this;
+      var sendData = "";
+      if (vm.activeStep == 1) {
+        sendData = this.headCarFormStep2;
+      } else if (vm.activeStep == 2) {
+        sendData = this.headCarFormStep3;
+      }
+      sendData.id = "a0970083-192b-40a8-baac-ea99b9b9b1b9";
+      this.$$http('upadteHeadFrom', sendData).then(function(result) {
+        var result = result;
+        vm.pageLoading = false;
+        if (operation == 'out') {
+          //跳转查询详情页面
+        } else {
+          vm.activeStep += 1;
+        }
+      });
     },
     addInsuranceListForm: function(addInsuanceFrom) {
       this.headCarFormStep3.tractor_insurances.push({

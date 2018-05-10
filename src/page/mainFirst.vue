@@ -126,12 +126,21 @@
             <template v-if="route.children">
               <el-submenu :key="index" :index="route.name">
                 <template slot="title">
-                  {{route.name||"无名字"}}</template>
-                <el-menu-item v-for="(cRoute, cIndex) in route.children" :key="cIndex" :index="cRoute.name" :route="cRoute">{{cRoute.name||"无名字"}}</el-menu-item>
+                  <i :class="[{ 'color-4a9bf8' : activeMenu.match(route.path) }, route.meta.iconName]"></i>
+                  <span>{{route.name||"无名字"}}</span>
+                </template>
+                <el-menu-item v-for="(cRoute, cIndex) in route.children" :key="cIndex" :index="cRoute.name" :route="cRoute">
+                  <span :class="{ 'color-4a9bf8' : activeMenu === cRoute.path }">{{cRoute.name||"无名字"}}</span>
+                </el-menu-item>
               </el-submenu>
             </template>
             <template v-else>
-              <el-menu-item :route="route" :index="route.name">{{route.name||"无名字"}}</el-menu-item>
+              <el-menu-item :route="route" :index="route.name">
+                <template slot="title">
+                  <i :class="[{ 'color-4a9bf8' : activeMenu === route.path }, route.meta.iconName]"></i>
+                  <span :class="{ 'color-4a9bf8' : activeMenu === route.path }">{{route.name||"无名字"}}</span>
+                </template>
+              </el-menu-item>
             </template>
           </template>
         </el-menu>
@@ -156,7 +165,7 @@ export default {
   },
   computed: {
     activeMenu: function() {
-      return this.$route.name
+      return this.$route.path;
     },
     breadcrumbs: function() {
       return (this.$route && this.$route.matched) || []
@@ -185,6 +194,7 @@ export default {
     let menus = this.$store.state.common.menuData;
     if (menus) {
       this.menus = menus;
+      console.log('this.menus', this.menus);
     }
   }
 };

@@ -10,6 +10,7 @@ export default [{
     name: '概览',
     meta: {
       isVerificationL: false,
+      iconName:'icon-lng-dashboard'
     },
     component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
   },{
@@ -17,6 +18,7 @@ export default [{
     name: '订单',
     meta: {
       isVerificationL: false,
+      iconName:'icon-lng-dashboard',
     },
     component: (resolve) => require(['../page/orders/orders'], resolve),
   },{
@@ -24,6 +26,7 @@ export default [{
     name: '物流管理',
     meta: {
       isVerificationL: false,
+      iconName:'icon-road',
     },
     component: (resolve) => require(['../page/logisticsManage/logisticsManage'], resolve),
   },{
@@ -31,6 +34,7 @@ export default [{
     name: '地图',
     meta: {
       isVerificationL: false,
+      iconName:'icon-road',
     },
     component: (resolve) => require(['../page/map/mapManage'], resolve),
   },{
@@ -38,6 +42,7 @@ export default [{
     name: '动力管理',
     meta: {
       isVerificationL: true,
+      iconName:'icon-map',
     },
     component: (resolve) => require(['../page/transportPowerManage/transportPowerManage'], resolve),
     children: [{
@@ -45,13 +50,14 @@ export default [{
       name: '车辆管理',
       meta: {
         isVerificationL: true,
+        iconName:'icon-transport',
       },
       component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
       children: [{
           path: 'carHeadManage',
           name: "牵引车管理",
           meta: {
-            isVerificationL: false
+            isVerificationL: false,
           },
           component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
         },
@@ -102,7 +108,7 @@ export default [{
       name: '人员管理',
       meta: {
         isVerificationL: false,
-        needShowFir: false
+        needShowFir: false,
       },
       component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
       children: [
@@ -129,6 +135,7 @@ export default [{
       name: '客户管理',
       meta: {
         isVerificationL: false,
+        iconName:'icon-customer',
       },
       component: (resolve) => require(['../page/clientManage/clientManage'], resolve),
       children: [
@@ -161,6 +168,7 @@ export default [{
       name: '数据统计',
       meta: {
         isVerificationL: false,
+        iconName:'icon-data',
       },
       component: (resolve) => require(['../page/statistics/statistics'], resolve),
     },{
@@ -168,6 +176,7 @@ export default [{
       name: '设置',
       meta: {
         isVerificationL: false,
+        iconName:'icon-setting',
       },
       component: (resolve) => require(['../page/setting/setting'], resolve),
     }]

@@ -52,14 +52,14 @@ el-tabs__nav @{deep} .el-tabs__item {
             <el-col :span="5" :offset="1">
               <el-form-item label="车辆所属:">
                 <el-select v-model="seachListParam.vehicle_type" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.vehicle_type_Select" :label="item.verbose" :value="item.key"></el-option>
+                  <el-option v-for="(item,key) in selectData.vehicle_type_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4" :offset="1">
               <el-form-item label="品牌型号:">
                 <el-select v-model="seachListParam.brand" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.brand_Select" :label="item.verbose" :value="item.key"></el-option>
+                  <el-option v-for="(item,key) in selectData.brand_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>

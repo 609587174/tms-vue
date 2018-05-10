@@ -6,6 +6,8 @@
 @import './assets/css/tabsStyle.less';
 @import './assets/css/buttonStyle.less';
 @import './assets/css/tableStyle.less';
+@import './assets/css/newEditorStyle.less';
+
 // @import './assets/css/searachFilters.less';
 </style>
 <template>

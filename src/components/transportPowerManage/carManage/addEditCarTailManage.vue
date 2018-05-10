@@ -44,7 +44,7 @@
       <el-header style="margin-top:15px;">
         <p>新增挂车</p>
       </el-header>
-      <el-main>
+      <el-main v-loading="pageLoading">
         <el-steps :active="activeStep" align-center finish-status="success">
           <el-step title="步骤1" description="基础信息填写"></el-step>
           <el-step title="步骤2" description="证件信息填写"></el-step>
@@ -63,8 +63,7 @@
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="carAscription">
                     <el-select v-model="tailCarFormStep1.carAscription" placeholder="请选择车辆归属">
-                      <el-option v-for
-="(item,key) in selectData.ascriptionSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.ascriptionSelect" :key="$index" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>

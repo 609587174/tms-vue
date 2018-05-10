@@ -24,7 +24,7 @@ if (currentUrl.match('91lng.cn')) {
 } else if (currentUrl.match('prepare.hhtdlng.com')) {
   domainUrl = 'http://prepare.hhtdlng.com';
 } else {
-  domainUrl = 'http://prepare.hhtdlng.com';
+  domainUrl = 'http://39.104.71.159:8001';
 }
 
 
@@ -32,7 +32,7 @@ if (currentUrl.match('91lng.cn')) {
 axios.interceptors.request.use(config => {
   return config
 }, error => {
-  console.log('request error',err);
+  console.log('request error', err);
   return Promise.reject(error)
 })
 
@@ -42,48 +42,74 @@ axios.interceptors.response.use(response => {
   console.log('response', response);
   return response
 }, error => {
-  console.log('response error',error,error.response);
+  console.log('response error', error, error.response);
   return Promise.reject(error);
 })
 
 
 /* 统一处理网络问题或者代码问题造成的错误 */
 const errorState = function(error) {
+  let errorMsg = '';
   if (error && error.response) {
-      switch (error.response.status) {
-          case 400: error.message = '参数错误' ; break;
-          case 401: error.message = '未授权，请重新登录'; break;
-          case 403: error.message = '拒绝访问'; break;
-          case 404: error.message = '请求出错(404)'; break;
-          case 405: error.message = '拒绝访问(405)'; break;
-          case 408: error.message = '请求超时，请检查网络'; break;
-          case 500: error.message = '服务器错误(500)'; break;
-          case 501: error.message = '服务未实现(501)'; break;
-          case 502: error.message = '网络错误(502)'; break;
-          case 503: error.message = '服务不可用(503)'; break;
-          case 504: error.message = '网络超时(504)'; break;
-          case 505: error.message = 'HTTP版本不受支持(505)'; break;
-          default: error.message = `连接出错(${error.response.status})!`;
-      }
-  }else{
-    error.message = '连接服务器失败!'
+    switch (error.response.status) {
+      case 400:
+        errorMsg = '参数错误';
+        break;
+      case 401:
+        errorMsg = '未授权，请重新登录';
+        break;
+      case 403:
+        errorMsg = '拒绝访问';
+        break;
+      case 404:
+        errorMsg = '请求出错(404)';
+        break;
+      case 405:
+        errorMsg = '拒绝访问(405)';
+        break;
+      case 408:
+        errorMsg = '请求超时，请检查网络';
+        break;
+      case 500:
+        errorMsg = '服务器错误(500)';
+        break;
+      case 501:
+        errorMsg = '服务未实现(501)';
+        break;
+      case 502:
+        errorMsg = '网络错误(502)';
+        break;
+      case 503:
+        errorMsg = '服务不可用(503)';
+        break;
+      case 504:
+        errorMsg = '网络超时(504)';
+        break;
+      case 505:
+        errorMsg = 'HTTP版本不受支持(505)';
+        break;
+      default:
+        errorMsg = `连接出错(${error.response.status})!`;
+    }
+  } else {
+    errorMsg = '连接服务器失败!'
   }
-  Message.error(error.message);
+  Message.error(errorMsg);
 }
 
 
 /* 根据后端接口文档统一处理错误信息 */
 const successState = function(response) {
 
-  if(response.data && response.data.code){
-    if(response.data.code == 401){
+  if (response.data && response.data.code) {
+    if (response.data.code == 401) {
       Message.error('未登录，请重新登录');
-    }else if(response.data.code == 403){
+    } else if (response.data.code == 403) {
       Message.error('无操作权限');
-    }else if(response.data.code == 0){
+    } else if (response.data.code == 0) {
 
-    }else{
-      if(response.data.msg){
+    } else {
+      if (response.data.msg) {
         Message.error(response.data.msg);
       }
     }
@@ -93,9 +119,9 @@ const successState = function(response) {
 
 
 /* 处理url */
-const dealApiUrlParam = function(apiName, postData){
+const dealApiUrlParam = function(apiName, postData) {
   let httpUrl = api[apiName].url;
-  if(httpUrl){
+  if (httpUrl) {
     //设置最大循环数,以免死机
     let maxTimes = 0;
     while (httpUrl.match(/:([0-9a-z_]+)/i)) {
@@ -125,65 +151,73 @@ const dealConfig = function(apiName, postData) {
     timeout: timeout,
     params: '',
     data: postData,
-    headers:'',
+    headers: '',
+    proxy: {
+      host: '127.0.0.1',
+      port: 8001,
+      auth: {
+        username: '',
+        password: ''　　　　
+      }　　
+    },
   }
 
-  if(api.hasOwnProperty(apiName)){
+  if (api.hasOwnProperty(apiName)) {
     let apiUrl = api[apiName].url ? api[apiName].url : '';
     let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
 
-    console.log('apiUrl',apiUrl);
+    console.log('apiUrl', apiUrl);
 
     httpConfig.method = method;
 
-    if(method == 'get'){
+    if (method == 'get') {
       httpConfig.headers = {
-          'X-Requested-With': 'XMLHttpRequest',
-          "Accept": "application/json",
-          "Content-Type": "application/json; charset=UTF-8"
-        }
-    }else{
-     httpConfig.headers =  {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
+        'X-Requested-With': 'XMLHttpRequest',
+        "Accept": "application/json",
+        "Content-Type": "application/json; charset=UTF-8"
+      }
+    } else {
+      httpConfig.headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json; charset=UTF-8'
+      }
     }
 
-    if(apiUrl){
+    if (apiUrl) {
       apiUrl = dealApiUrlParam(apiName, postData);
-    }else{
+    } else {
       return false
     }
 
-    console.log('apiUrl',apiUrl);
+    console.log('apiUrl', apiUrl);
 
     if (method == 'get' || method == 'delete') {
       delete httpConfig.data
     }
 
-    if(method){
+    if (method) {
       if ((method == 'get' || method == 'delete') && (postData && typeof postData === 'object')) {
         //如果接口为 get 请求，但是参数需要用？跟随，这是需要的对应处理
         let params = '?';
         let existedVars = {};
         for (let t in postData) {
-          if (!existedVars.hasOwnProperty(t)){
+          if (!existedVars.hasOwnProperty(t)) {
             params += t + "=" + encodeURIComponent(postData[t]) + '&';
           }
         }
-        if (params.match(/^(.+)&$/i)){
+        if (params.match(/^(.+)&$/i)) {
           params = RegExp.$1;
           apiUrl += params;
         }
       }
       httpConfig.url = apiUrl;
-      console.log('httpConfig',httpConfig);
+      console.log('httpConfig', httpConfig);
       return httpConfig;
-    }else{
+    } else {
       return false
     }
 
-  }else{
+  } else {
     return false;
   }
 
@@ -195,12 +229,12 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
 
   if (!apiName) return false;
 
-  let httpConfig =  dealConfig(apiName, postData);
+  let httpConfig = dealConfig(apiName, postData);
 
   let promise = new Promise(function(resolve, reject) {
     axios(httpConfig).then(
       (res) => {
-        console.log('xxxx',res);
+        console.log('xxxx', res);
         //默认使用successState
         if (defaultSuccessCallback === undefined) {
           successState(res)
@@ -209,7 +243,7 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
       }
     ).catch(
       (response) => {
-        console.log('xxxx111',response);
+        console.log('xxxx111', response);
         //默认使用errorState
         if (defaultErrorCallback === undefined) {
           errorState(response)

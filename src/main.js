@@ -12,9 +12,9 @@ import * as pbFunc from './assets/utils';
 import http from './api/index';
 
 Vue.prototype.pbFunc = pbFunc;
-Vue.prototype.http = http;
+Vue.prototype.$$http = http;
 
-console.log('http',http);
+console.log('http', http);
 
 Vue.config.productionTip = false
 

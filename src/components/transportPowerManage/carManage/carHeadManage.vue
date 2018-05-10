@@ -23,6 +23,15 @@ el-tabs__nav @{deep} .el-tabs__item {
   margin-top: 10px;
 }
 
+.el-table table {
+  thead {
+    background-color: rgb(242, 245, 254);
+    th {
+      text-align: center;
+    }
+  }
+}
+
 </style>
 <template>
   <div>
@@ -43,19 +52,19 @@ el-tabs__nav @{deep} .el-tabs__item {
             <el-col :span="5" :offset="1">
               <el-form-item label="车辆所属:">
                 <el-select v-model="seachListParam.vehicle_type" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.vehicle_type_Select" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in selectData.vehicle_type_Select" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="4" :offset="1">
               <el-form-item label="品牌型号:">
                 <el-select v-model="seachListParam.brand" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.brand_Select" :label="item.value" :value="item.id"></el-option>
+                  <el-option v-for="(item,key) in selectData.brand_Select" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="1" :offset="1">
-              <el-button type="primary">搜索</el-button>
+              <el-button type="primary" @click="searchList">搜索</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -71,16 +80,16 @@ el-tabs__nav @{deep} .el-tabs__item {
       </el-col>
     </el-row>
     <div style="background-color:white" class="headList">
-      <el-table border :data="tableData" v-loading="pageLoading" style="width: 100%;marigin-top:20px;">
+      <el-table stripe :data="tableData" v-loading="pageLoading" style="width: 100%;marigin-top:20px;">
         <el-table-column prop="plate_number" label="牵引车车牌号">
         </el-table-column>
         <el-table-column prop="vin_number" label="车架号">
         </el-table-column>
-        <el-table-column prop="attributes" label="车辆归属">
+        <el-table-column prop="attributes.verbose" label="车辆归属">
         </el-table-column>
-        <el-table-column prop="carrier" label="车辆所属">
+        <el-table-column prop="carrier.name" label="车辆所属">
         </el-table-column>
-        <el-table-column prop="vehicle_type" label="车辆类型">
+        <el-table-column prop="vehicle_type.verbose" label="车辆类型">
         </el-table-column>
         <el-table-column prop="brand" label="品牌型号">
         </el-table-column>
@@ -108,7 +117,8 @@ export default {
         plate_number: '',
         vin_number: '',
         vehicle_type: '',
-        brand: ''
+        brand: '',
+        page: 1
       },
       rules: {},
       activeName: 'first',
@@ -118,36 +128,14 @@ export default {
         totalPage: 100,
         pageSize: 10,
       },
-      tableData: [{
-        id: "123",
-        plate_number: '鲁FM2350',
-        vin_number: "LZZPCLSB3GJ076323",
-        attributes: "自有车辆",
-        carrier: "龙口市胜通能源有限公司",
-        vehicle_type: "重型半挂牵引车",
-        brand: "豪瀚ZZ4255N3246D1",
-      }, {
-        id: "123",
-        plate_number: '鲁FM2350',
-        vin_number: "LZZPCLSB3GJ076323",
-        attributes: "自有车辆",
-        carrier: "龙口市胜通能源有限公司",
-        vehicle_type: "重型半挂牵引车",
-        brand: "豪瀚ZZ4255N3246D1",
-      }],
       selectData: {
-        vehicle_type_Select: [
-          { id: "1", value: "自营车辆" },
-          { id: "2", value: "三方车辆" },
-          { id: "3", value: "租凭车辆" }
-        ],
-        brand_Select: [
-          { id: "1", value: "重型半挂牵引车" },
-          { id: "2", value: "轻型半挂牵引车" }
-        ],
-      }
+        vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
+        brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type
+      },
+      tableData: [],
     }
   },
+
   methods: {
     addHeadCarPage: function() {
       this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage" });
@@ -162,6 +150,18 @@ export default {
     },
     exportList: function() {
 
+    },
+    searchList: function() {
+      var vm = this;
+      this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
+        var resultData;
+        if (result.data.code == 0) {
+          vm.tableData = result.data.data.results;
+          vm.pageLoading = false;
+        }
+      }).catch(function(error) {
+        vm.pageLoading = false;
+      });
     },
     jumpPage: function(scope, type) {
       if (type = "edit") {
@@ -180,9 +180,7 @@ export default {
     }
   },
   mounted: function() {
-    setTimeout(() => {
-      this.pageLoading = false;
-    }, 2000)
+    this.searchList();
   }
 }
 

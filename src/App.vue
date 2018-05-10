@@ -138,8 +138,13 @@ export default {
     }
   },
   created: function(newPath) {
-    console.log('this.pbFunc', this, this.pbFunc);
-    this.signin();
+    var vm = this;
+    this.$$http("getSelectData", {}).then(function(reslut) {
+      if (reslut.data.code == 0)
+        vm.$store.state.common.selectData = reslut.data.data;
+      vm.signin();
+    });
+
   }
 };
 

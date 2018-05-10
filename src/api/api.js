@@ -8,11 +8,11 @@
  *     desc:参数描述（可选）
  */
 
- const api = {
-  login:{
+const api = {
+  login: {
     url: '/backend/account/login/',
     method: 'post',
-    desc:'登录',
+    desc: '登录',
     param: {
       username: {
         desc: '用户名',
@@ -22,10 +22,10 @@
       }
     }
   },
-  register:{
+  register: {
     url: '/api/user/register',
     method: 'post',
-    desc:'注册',
+    desc: '注册',
     param: {
       username: {
         desc: '用户名',
@@ -41,8 +41,32 @@
   globalData: {
     url: '/common/global_enums/',
     method: 'get',
-    desc:'全局数据',
-    param:{
+    desc: '全局数据',
+    param: {
+
+    }
+  },
+  searchHeadCarList: {
+    url: '/truck/tractors/',
+    method: 'get',
+    desc: '查询牵引车列表',
+    param: {
+
+    }
+  },
+  getSelectData: {
+    url: '/common/global_enums/',
+    method: 'get',
+    desc: '获取全部下拉数据',
+    param: {
+
+    }
+  },
+  creatHeadFrom: {
+    url: '/truck/tractors/',
+    method: 'post',
+    desc: '创建牵引车',
+    param: {
 
     }
   }

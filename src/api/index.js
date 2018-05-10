@@ -152,14 +152,6 @@ const dealConfig = function(apiName, postData) {
     params: '',
     data: postData,
     headers: '',
-    proxy: {
-      host: '127.0.0.1',
-      port: 8001,
-      auth: {
-        username: '',
-        password: ''　　　　
-      }　　
-    },
   }
 
   if (api.hasOwnProperty(apiName)) {

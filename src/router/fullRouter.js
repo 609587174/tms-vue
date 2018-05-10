@@ -6,11 +6,38 @@ export default [{
     needShowFir: true
   },
   children: [{
+    path: 'dashborad',
+    name: '概览',
+    meta: {
+      isVerificationL: false,
+    },
+    component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
+  },{
+    path: 'orders',
+    name: '订单',
+    meta: {
+      isVerificationL: false,
+    },
+    component: (resolve) => require(['../page/orders/orders'], resolve),
+  },{
+    path: 'logisticsManage',
+    name: '物流管理',
+    meta: {
+      isVerificationL: false,
+    },
+    component: (resolve) => require(['../page/logisticsManage/logisticsManage'], resolve),
+  },{
+    path: 'mapManage',
+    name: '地图',
+    meta: {
+      isVerificationL: false,
+    },
+    component: (resolve) => require(['../page/map/mapManage'], resolve),
+  },{
     path: 'transportPowerManage',
     name: '动力管理',
     meta: {
       isVerificationL: true,
-      needShowFir: true
     },
     component: (resolve) => require(['../page/transportPowerManage/transportPowerManage'], resolve),
     children: [{
@@ -18,7 +45,6 @@ export default [{
       name: '车辆管理',
       meta: {
         isVerificationL: true,
-        needShowFir: false
       },
       component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
       children: [{
@@ -97,14 +123,14 @@ export default [{
           component: (resolve) => require(['../page/transportPowerManage/personManage/addPerson'], resolve)
         },
       ]
-    }, {
+    }]
+  },{
       path: 'clientManage',
       name: '客户管理',
       meta: {
         isVerificationL: false,
-        needShowFir: false
       },
-      component: (resolve) => require(['../page/transportPowerManage/clientManage/clientManage'], resolve),
+      component: (resolve) => require(['../page/clientManage/clientManage'], resolve),
       children: [
         {
           path: 'privateClientManage',
@@ -112,14 +138,14 @@ export default [{
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/transportPowerManage/clientManage/privateClientManage'], resolve)
+          component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
         },{
           path: 'addClient',
           name: "新增、编辑客户",
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/transportPowerManage/clientManage/addClient'], resolve)
+          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
         },
         {
           path: 'platformClientManage',
@@ -127,11 +153,22 @@ export default [{
           meta: {
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/transportPowerManage/clientManage/platformClientManage'], resolve)
+          component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
         },
       ]
-    }
-
-    ]
-  }]
+    },{
+      path: 'statistics',
+      name: '数据统计',
+      meta: {
+        isVerificationL: false,
+      },
+      component: (resolve) => require(['../page/statistics/statistics'], resolve),
+    },{
+      path: 'setting',
+      name: '设置',
+      meta: {
+        isVerificationL: false,
+      },
+      component: (resolve) => require(['../page/setting/setting'], resolve),
+    }]
 }];

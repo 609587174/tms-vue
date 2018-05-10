@@ -31,6 +31,9 @@ export default {
     clicktabs: function() {
 
     }
+  },
+  mounted: function() {
+    this.http('globalData', {});
   }
 
 }

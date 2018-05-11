@@ -14,37 +14,6 @@
   margin-bottom: 2em;
 }
 
-.login-form input {
-  height: 32px;
-}
-
-
-
-.login-form {
-  width: 320px;
-  margin: 13% auto 0;
-  .el-input {
-    width: 220px;
-  }
-  .vaInput {
-    width: 140px;
-  }
-  .inputTip {
-    width: 50px;
-    display: inline-block;
-  }
-  img {
-    vertical-align: middle;
-    cursor: pointer;
-  }
-  p {
-    white-space: nowrap;
-    font-size: 32px;
-    font-style: normal;
-    color: rgb(0, 0, 0);
-  }
-}
-
 .login-link {
   width: 320px;
   margin: auto auto;
@@ -70,10 +39,6 @@
   }
 }
 
-.login-page {
-  background: #fff;
-}
-
 .margin-right (@width) {
   margin-right: @width;
 }
@@ -81,21 +46,24 @@
 </style>
 <template>
   <div>
-    <div class="g-center login-page font-size-12" @keyup.enter="login">
-      <el-form class="login-form" label-width="80px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon ref="loginFrom">
+    <div class="user-page font-size-12" @keyup.enter="login">
+      <el-form class="user-form" label-width="100px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon ref="loginFrom">
         <p class="des">登录</p>
-        <el-form-item label="用户名称" prop="userName">
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.userName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+        <el-form-item label="用户名：" prop="userName">
+          <el-input :autofocus="true" placeholder="请输入用户名／手机号" size="small" v-model="ruleForm.userName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+        <el-form-item label="密码：" prop="password">
+          <el-input placeholder="请输入密码" type="password" size="small" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item label="验证码" prop="ValNum" validate-on-rule-change>
-          <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.ValNum" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4">
-          </el-input>
-          <img src="../assets/img/va.png" v-on:click="refreshVaImg">
+        <el-form-item label="验证码：" prop="ValNum" validate-on-rule-change>
+          <el-row>
+            <el-col :span="15">
+              <el-input placeholder="请输入验证码" size="small" type="text" v-model="ruleForm.ValNum" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
+            </el-col>
+            <el-col :span="8" :offset="1"><img src="../assets/img/va.png" width="100%" v-on:click="refreshVaImg"></el-col>
+          </el-row>
         </el-form-item>
       </el-form>
       <el-form class="login-link">

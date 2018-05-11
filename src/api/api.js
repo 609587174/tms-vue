@@ -93,6 +93,31 @@ const api = {
     param: {
 
     }
+  },
+  getDriversList: {
+    url: '/carrier/carrier_drivers/',
+    method: 'get',
+    desc: '获取承运商司机列表',
+    param: {
+      id: {
+        desc: '资源id',
+      },
+      name: {
+        desc: '司机名称',
+      },
+      work_type: {
+        desc: '从业类型',
+      },
+      mobile_phone: {
+        desc: '手机号码',
+      },
+      on_job_status: {
+        desc: '在离职状态',
+      },
+      bind_tractors: {
+        desc: '绑定车辆',
+      }
+    }
   }
 }
 

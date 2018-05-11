@@ -5,7 +5,7 @@
         <el-tab-pane label="人员管理" name="userManage">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" ref="searchFiltersFormSetp" :model="searchFiltersForm" status-icon>
-              <!-- <el-row :gutter="0">
+              <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" size="mini" v-model="searchFiltersForm.search" class="search-filters-screen">
                     <el-select size="mini" v-model="searchFiltersForm.screen" slot="prepend" placeholder="请选择">
@@ -14,7 +14,7 @@
                     <el-button slot="append" icon="el-icon-search"></el-button>
                   </el-input>
                 </el-col>
-              </el-row> -->
+              </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
                   <el-form-item size="mini" label="姓名:">
@@ -29,7 +29,7 @@
                 <el-col :span="4">
                   <el-form-item size="mini" label="从业类型:">
                     <el-select v-model="searchFiltersForm.employmentType" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.employmentTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -40,7 +40,7 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-              <!--   <el-col :span="4">
+                <!--   <el-col :span="4">
                   <el-form-item size="mini" label="计划日期:">
                     <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                   </el-form-item>
@@ -58,7 +58,6 @@
                     </el-row>
                   </el-form-item>
                 </el-col> -->
-
               </el-row>
             </el-form>
           </div>
@@ -68,8 +67,8 @@
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini">
-              <el-table-column v-for="(item,key) in thTableList"  :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+              <el-table-column v-for="(item,key) in thTableList" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
@@ -93,20 +92,8 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="配置管理" name="second">
-          <div class="tab-screen">
-            66666
-          </div>
-        </el-tab-pane>
-        <el-tab-pane label="角色管理" name="third">
-          <div class="tab-screen">
-            555555
-          </div>
-        </el-tab-pane>
       </el-tabs>
     </div>
-
-
   </div>
 </template>
 <script>
@@ -114,15 +101,16 @@ import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
   name: 'personListManage',
   computed: {
-
+    employmentTypeSelect: function() {
+      return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
+    }
   },
   data() {
     return {
       pageLoading: true,
       pageData: {
         currentPage: 1,
-        totalPage: 100,
-        pageSize: 10,
+        totalPage: '',
       },
       activeName: 'userManage',
       searchFiltersForm: {
@@ -133,85 +121,65 @@ export default {
         data: ''
       },
       selectData: {
-        employmentTypeSelect: [
-          { id: '', value: '全部' },
-          { id: '1', value: '驾驶员' },
-          { id: '2', value: '押运员' },
-          { id: '3', value: '驾驶/押运员' }
-        ],
         isBindSelect: [
           { id: '', value: '全部' },
           { id: '2', value: '未绑定' },
           { id: '3', value: '已绑定' }
         ],
+        screenSelect: []
       },
-      thTableList: [
-
-        {
-          title: '姓名',
-          param: 'date',
-          width: ''
-        }, {
-          title: '从业类型',
-          param: 'name',
-          width: ''
-        }, {
-          title: '电话号码',
-          param: 'province',
-          width: ''
-        }, {
-          title: '绑定车辆',
-          param: 'city',
-          width: ''
-        }, {
-          title: '在职状态',
-          param: 'address',
-          width: '250'
-        }, {
-          title: '驾驶证号',
-          param: 'zip',
-          width: ''
-        }, {
-          title: '从业资格证号',
-          param: 'citys',
-          width: ''
-        }, {
-          title: '押运证号',
-          param: 'addresss',
-          width: '250'
-        }
-      ],
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333,
-        citys: '普陀区',
-        addresss: '上海市普陀区金沙江路 1518 弄'
+      thTableList: [{
+        title: '姓名',
+        param: 'name',
+        width: ''
       }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333,
-        citys: '普陀区',
-        addresss: '上海市普陀区金沙江路 1518 弄'
+        title: '从业类型',
+        param: 'work_type.verbose',
+        width: ''
       }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        province: '上海',
-        city: '普陀区',
-        address: '上海市普陀区金沙江路 1518 弄',
-        zip: 200333,
-        citys: '普陀区',
-        addresss: '上海市普陀区金沙江路 1518 弄'
-      }]
+        title: '电话号码',
+        param: 'mobile_phone',
+        width: ''
+      }, {
+        title: '绑定车辆',
+        param: 'bind_tractors.plate_number',
+        width: ''
+      }, {
+        title: '在职状态',
+        param: 'on_job_status.verbose',
+        width: '250'
+      }, {
+        title: '驾驶证号',
+        param: 'drive_license_number',
+        width: ''
+      }, {
+        title: '从业资格证号',
+        param: 'drive_license_number',
+        width: ''
+      }, {
+        title: '押运证号',
+        param: 'escort_license_number',
+        width: '250'
+      }],
+      tableData: []
     }
   },
   methods: {
+    getList: function() {
+      this.pageLoading = true;
+      this.$$http('getDriversList', {
+        page: this.pageData.currentPage
+      }).then((results) => {
+        console.log('results', results.data.data.results);
+        this.pageLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.tableData = results.data.data.results;
+          console.log('this.tableData', this.tableData);
+        }
+      }).catch((err) => {
+        this.pageLoading = false;
+      })
+    },
     handleClick: function(tab, event) {
       console.log('tab', tab);
     },
@@ -234,10 +202,8 @@ export default {
 
     }
   },
-  mounted: function() {
-    setTimeout(() => {
-      this.pageLoading = false;
-    }, 2000)
+  created: function() {
+    this.getList();
   }
 
 }

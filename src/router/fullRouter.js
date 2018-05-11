@@ -128,6 +128,14 @@ export default [{
           },
           component: (resolve) => require(['../page/transportPowerManage/personManage/addPerson'], resolve)
         },
+        {
+          path: 'personDetail',
+          name: "人员详情",
+          meta: {
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/personManage/personDetail'], resolve)
+        },
       ]
     }]
   },{

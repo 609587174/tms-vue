@@ -1,6 +1,7 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
 
+
 </style>
 <template>
   <div id="addPerson" class="detail-mian">
@@ -9,389 +10,345 @@
         <p>人员信息</p>
       </el-header>
       <el-main>
-
-        <!-- <transition name="el-fade-in-linear"> -->
-          <div class="detail-form-title text-center">基础人员</div>
-          <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
+        <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                基础人员
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="姓名:" prop="userName">
-                  <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
+                <el-form-item label="姓名:" prop="name">
+                  <div class="detail-form-item">{{userData.name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="从业类型:" prop="employmentType">
-                  <el-select v-model="userForm.employmentType" size="mini" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.employmentTypeSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
+                <el-form-item label="从业类型:" prop="work_type.verbose">
+                  <div class="detail-form-item">{{userData.work_type.verbose}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="手机号码:" prop="phone">
-                  <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.phone"></el-input>
+                <el-form-item label="手机号码:" prop="mobile_phone">
+                  <div class="detail-form-item">{{userData.mobile_phone}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="人员所属:" prop="staffs">
-                  <el-select v-model="userForm.staffs" size="mini" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.staffsSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
+                <el-form-item label="人员所属:" prop="staff_type">
+                  <div class="detail-form-item">{{userData.staff_type.verbose}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="身份证号:" prop="idNumber">
-                  <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.idNumber"></el-input>
+                <el-form-item label="身份证号:" prop="id_number">
+                  <div class="detail-form-item">{{userData.id_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="在职状态:" prop="onTheJobStatus">
-                  <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
+                <el-form-item label="在职状态:" prop="on_job_status">
+                  <div class="detail-form-item">{{userData.on_job_status.verbose}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="性别:">
-                  <el-radio v-model="userForm.gender" label="man">男</el-radio>
-                  <el-radio v-model="userForm.gender" label="woman">女</el-radio>
+                <el-form-item label="性别:" prop="gender.verbose">
+                  <div class="detail-form-item">{{userData.gender.verbose}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="出生日期:">
-                  <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                  <div class="detail-form-item">{{userData.birthday}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="年龄:">
-                  <el-input placeholder="请输入年龄" type="text" size="mini" v-model="userForm.age"></el-input>岁
+                  <div class="detail-form-item">{{userData.age}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="家属姓名:">
-                  <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.familyName"></el-input>
+                  <div class="detail-form-item">{{userData.family_menber_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="家属联系方式:" prop="familyContact">
-                  <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.familyContact"></el-input>
+                <el-form-item label="家属联系方式:" prop="family_menber_phone">
+                  <div class="detail-form-item">{{userData.family_menber_phone}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="准驾类型:">
-                  <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.quasiDriveType"></el-input>
+                  <div class="detail-form-item">{{userData.drive_license_allow_type}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="所在地区:">
-                  <el-row :gutter="0">
-                    <el-col :md="8">
-                      <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="省">
-                        <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                    </el-col>
-                    <el-col :md="8">
-                      <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="市">
-                        <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                    </el-col>
-                    <el-col :md="8">
-                      <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="区">
-                        <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                    </el-col>
-                  </el-row>
+                  <div class="detail-form-item">{{userData.area}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="详细地址:">
-                  <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.detailedAddress"></el-input>
+                  <div class="detail-form-item">{{userData.detail_address}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="身份证:">
-                  <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
-                  " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                    <el-button size="small" type="primary" plain>上传图片</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                  </el-upload>
+                  <div><img :src="userData.id_photo" alt="" width="150" height="80"></div>
                 </el-form-item>
               </el-col>
             </el-row>
-          </el-form>
-          <div class="detail-btn">
+          <!-- </el-form> -->
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
-                <el-button type="success" @click="nextStep()">填写驾驶证件信息</el-button>
-                <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
+                驾驶证件信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
               </el-col>
             </el-row>
           </div>
-        <!-- </transition> -->
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==1">
-            <div class="detail-form-title text-center">驾驶证件信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="驾驶证档案编号:" prop="userName">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="驾驶证初次发证时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="驾驶证到期时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="驾驶证发证机关:" prop="userName">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="驾驶证:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
-                    " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写从业资格证信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
-            </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="驾驶证档案编号:" prop="drive_license_number">
+                  <div class="detail-form-item">{{userData.drive_license_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="驾驶证初次发证时间:">
+                  <div class="detail-form-item">{{userData.drive_license_issue_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="驾驶证到期时间:">
+                  <div class="detail-form-item">{{userData.drive_license_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="驾驶证发证机关:" prop="drive_license_issue_organ">
+                  <div class="detail-form-item">{{userData.drive_license_issue_organ}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="驾驶证:">
+                  <div><img :src="userData.drive_license_photo" alt="" width="150" height="80"></div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- </el-form> -->
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                从业资格证信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(2)">编辑该条</el-button>
+              </el-col>
+            </el-row>
           </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==2">
-            <div class="detail-form-title text-center">从业资格证信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="从业资格证号:" prop="userName">
-                    <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证证初次发证时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证到期时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="从业资格证发证机关:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
-                    " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写押运证信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
-            </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="从业资格证号:" prop="qualification_certificate_number">
+                  <div class="detail-form-item">{{userData.qualification_certificate_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="从业资格证证初次发证时间:">
+                  <div class="detail-form-item">{{userData.qualification_certificate_issue_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="从业资格证到期时间:">
+                  <div class="detail-form-item">{{userData.qualification_certificate_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="从业资格证发证机关:">
+                  <div class="detail-form-item">{{userData.qualification_certificate_issue_organ}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="从业资格证:">
+                  <div><img :src="userData.qualification_certificate_photo" alt="" width="150" height="80"></div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- </el-form> -->
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                押运证信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(3)">编辑该条</el-button>
+              </el-col>
+            </el-row>
           </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==3">
-            <div class="detail-form-title text-center">押运证信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="押运证号:" prop="userName">
-                    <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="押运证初次发证时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="押运证到期时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="押运证发证机关:">
-                    <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
-                    " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写劳务信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
-            </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="押运证号:" prop="escort_license_number">
+                  <div class="detail-form-item">{{userData.escort_license_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="押运证初次发证时间:">
+                  <div class="detail-form-item">{{userData.escort_license_issue_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="押运证到期时间:">
+                  <div class="detail-form-item">{{userData.escort_license_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="押运证发证机关:">
+                  <div class="detail-form-item">{{userData.escort_license_issue_organ}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="从业资格证:">
+                  <div><img :src="userData.escort_license_photo" alt="" width="150" height="80"></div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- </el-form> -->
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                劳务信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(4)">编辑该条</el-button>
+              </el-col>
+            </el-row>
           </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==4">
-            <div class="detail-form-title text-center">劳务信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="录用日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="上岗日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="下岗日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="合同起始日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="合同截止日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="转正日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="体检日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="体检备注:">
-                    <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写培训信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
-                </el-col>
-              </el-row>
-            </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="录用日期:">
+                  <div class="detail-form-item">{{userData.labour_employ_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="上岗日期:">
+                  <div class="detail-form-item">{{userData.labour_on_work_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="下岗日期:">
+                  <div class="detail-form-item">{{userData.labour_off_work_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="合同起始日期:">
+                  <div class="detail-form-item">{{userData.contract_start_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="合同截止日期:">
+                  <div class="detail-form-item">{{userData.contract_due_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="转正日期:">
+                  <div class="detail-form-item">{{userData.contract_correct_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="体检日期:">
+                  <div class="detail-form-item">{{userData.heath_examination_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="24">
+                <el-form-item label="体检备注:">
+                  <div class="detail-form-item">{{userData.heath_examination_remark}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          <!-- </el-form> -->
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title ">
+            <el-row :gutter="40">
+              <el-col :span="12" :offset="6" class="text-center">
+                培训信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(4)">新增一条</el-button>
+              </el-col>
+            </el-row>
           </div>
-        </transition>
-        <transition name="el-fade-in-linear">
-          <div v-if="activeStep==5">
-            <div class="detail-form-title ">
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :model="userData" status-icon> -->
+            <div v-for="(item,key) in userData.carrier_driver_trainings">
               <el-row :gutter="40">
-                <el-col :span="12" :offset="6" class="text-center">
-                  培训信息
-                </el-col>
-                <el-col :span="6" class="text-right">
-                  <el-button type="success" size="mini">新增一条</el-button>
-                </el-col>
-              </el-row>
-            </div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="培训时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                    <div class="detail-form-item">{{item.entry_training_date}}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训内容:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
+                    <div class="detail-form-item">{{item.entry_training_content}}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训考核:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
+                    <div class="detail-form-item">{{item.entry_training_exam}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="考核结果:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="备注:">
-                    <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="userForm.userName"></el-input>
+                    <div class="detail-form-item">{{item.entry_training_exam_result}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
+              <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="备注:">
+                    <div class="detail-form-item">{{item.entry_training_remark}}</div>
+                  </el-form-item>
                 </el-col>
               </el-row>
             </div>
-          </div>
-        </transition>
+          <!-- </el-form> -->
+        </div>
+      </el-form>
       </el-main>
     </el-container>
   </div>
@@ -407,27 +364,65 @@ export default {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
-      userForm: {
-        userName: '', //姓名
-        employmentType: '', //从业类型
-        phone: '', //手机号码
-        staffs: '', //人员所属
-        idNumber: '', //身份证号码
-        onTheJobStatus: '', //在职状态
-        gender: 'man', //性别
-        birthDate: '', //出生日期
-        age: '', //年龄
-        familyName: '', //家属姓名
-        familyContact: '', //家属联系方式
-        quasiDriveType: '', //准驾类型
-        region: {
-          province: '',
-          city: '',
-          area: ''
-        }, //所在地区
-        detailedAddress: '', //详细地址
-        idImg: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }], //身份证照片
-
+      userData: {
+        "id": "33569f33-4319-404d-8759-41c3e834cc7c",
+        "name": "张三",
+        "work_type": {
+          "key": "DRIVER",
+          "verbose": "驾驶员"
+        },
+        "mobile_phone": "13122268566",
+        "staff_type": {
+          "key": "SELF_OWNED_TRUCK",
+          "verbose": "自有车辆人员"
+        },
+        "id_number": "511321199105107032",
+        "id_photo": null,
+        "on_job_status": {
+          "key": "ON_JOB",
+          "verbose": "在职"
+        },
+        "gender": {
+          "key": "MALE",
+          "verbose": "男"
+        },
+        "birthday": null,
+        "age": null,
+        "family_member_name": null,
+        "family_member_phone": null,
+        "family_address": null,
+        "drive_license_number": null,
+        "drive_license_issue_date": null,
+        "drive_license_due_date": null,
+        "drive_license_issue_organ": null,
+        "drive_license_allow_type": null,
+        "drive_license_photo": null,
+        "escort_license_number": null,
+        "escort_license_issue_date": null,
+        "escort_license_due_date": null,
+        "escort_license_issue_organ": null,
+        "escort_license_photo": null,
+        "qualification_certificate_number": null,
+        "qualification_certificate_issue_date": null,
+        "qualification_certificate_due_date": null,
+        "qualification_certificate_issue_organ": null,
+        "qualification_certificate_photo": null,
+        "labour_employ_date": null,
+        "labour_on_work_date": null,
+        "labour_off_work_date": null,
+        "contract_start_date": null,
+        "contract_due_date": null,
+        "contract_correct_date": null,
+        "heath_examination_date": null,
+        "heath_examination_remark": null,
+        "carrier_driver_trainings": [{
+          "id": "33569f33-4319-404d-8759-41c3e834cc7c",
+          "entry_training_date": "2018-05-08",
+          "entry_training_content": "test",
+          "entry_training_exam": "test",
+          "entry_training_exam_result": "test",
+          "entry_training_remark": "test"
+        }]
       },
 
       selectData: {
@@ -450,15 +445,16 @@ export default {
         ],
       },
       rules: {
-        userName: [ //姓名
-          { required: true, message: '请输入姓名', trigger: 'blur' },
+        name: [ //姓名
+          { required: true },
         ],
-        employmentType: [ //从业类型
-          { required: true, message: '请选择从业类型', trigger: 'blur' }
-        ],
-        phone: [ //手机号码
-          { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
+        staff_type: {
+          verbose: [ //从业类型
+            { required: true }
+          ]
+        },
+        mobile_phone: [ //手机号码
+          { required: true }
         ],
         staffs: [ //人员所属
           { required: true, message: '请选择人员所属', trigger: 'blur' },
@@ -492,30 +488,10 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    nextStep(){
-      this.activeStep += 1;
+    goEditDetail(number) {
+      this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number });
     },
-    goOtherSetp() {
-      this.nextStepBtn.isDisabled = true;
-      this.$refs['addClientFormSetpOne'].validate((valid) => {
-        if (valid) {
-          this.nextStepBtn.btnText = '正在提交';
-          this.nextStepBtn.isLoading = true;
 
-          setTimeout(() => {
-            this.$message({
-              message: '提交成功',
-              type: 'success'
-            });
-            this.nextStepBtn.btnText = '下一步';
-            this.nextStepBtn.isLoading = false;
-            this.nextStepBtn.isDisabled = false;
-          }, 1000)
-        } else {
-          this.nextStepBtn.isDisabled = false;
-        }
-      });
-    },
   }
 }
 

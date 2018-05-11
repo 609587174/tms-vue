@@ -7,7 +7,7 @@
 @import './assets/css/tableStyle.less';
 @import './assets/css/style.css';
 @import './assets/css/detailStyle.less';
-
+@import './assets/css/userStyle.less';//登录 注册 找回密码
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>

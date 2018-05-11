@@ -2,18 +2,18 @@
 .el-header p {
   font-size: 25px;
   text-align: center;
-  height: 60px;
-  line-height: 60px;
+  height: 80px;
+  line-height: 80px;
   margin: 0 0;
 }
 
 .addheadcarform {
   margin: 30px 5%;
   .el-input {
-    width: 250px;
+    width: 100%;
   }
   .el-select {
-    width: 250px;
+    width: 100%;
   }
 }
 
@@ -37,19 +37,57 @@
   background-color: white;
 }
 
+.icon-arrow-lift {
+  font-size: 35px;
+  color: rgb(222, 222, 222);
+  vertical-align: middle;
+}
+
+.right-arrow-d {
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  pointer: cursor;
+  i {
+    vertical-align: middle;
+    transform: rotate(180deg);
+    display: inline-block;
+  }
+}
+
+.left-arrow-d {
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.stepTitle {
+  background-color: rgb(235, 238, 245);
+  height: 40px;
+  text-align: center;
+  font-size: 20px;
+  line-height: 40px;
+}
+
 </style>
 <template>
   <div id="addeditHeadCarPage">
     <el-container>
-      <el-header style="margin-top:15px;">
-        <p>新增牵引车</p>
+      <el-header style="margin-top:15px;height:80px">
+        <el-row>
+          <el-col :span="1" class="left-arrow-d" @click="goDetalis('down')"><i class="icon-arrow-lift"></i></el-col>
+          <el-col :span="22">
+            <p>{{titleType}}</p>
+          </el-col>
+        </el-row>
       </el-header>
+      <el-row>
+        <el-col class="stepTitle">
+          {{stepTitle}}
+        </el-col>
+      </el-row>
       <el-main v-loading="pageLoading">
-        <el-steps :active="activeStep" align-center finish-status="success">
-          <el-step title="步骤1" description="基础信息填写"></el-step>
-          <el-step title="步骤2" description="证件信息填写"></el-step>
-          <el-step title="步骤3" description="保单信息填写"></el-step>
-        </el-steps>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
             <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp1" :rules="rules" :model="headCarFormStep1" status-icon :label-position="'left'">
@@ -61,14 +99,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="attributes">
-                    <el-select v-model="headCarFormStep1.attributes" placeholder="请选择车辆归属">
+                    <el-select v-model="headCarFormStep1.attributes.key" placeholder="请选择车辆归属">
                       <el-option v-for="(item,key) in selectData.ascriptionSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆所属:" prop="carrier">
-                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.carrier"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.carrier.name" disabled></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -85,7 +123,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆类型:" prop="vehicle_type">
-                    <el-select v-model="headCarFormStep1.vehicle_type" placeholder="请选择车辆类型">
+                    <el-select v-model="headCarFormStep1.vehicle_type.key" placeholder="请选择车辆类型">
                       <el-option v-for="(item,key) in selectData.carTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -128,14 +166,14 @@
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="运输介质:">
-                    <el-select v-model="headCarFormStep1.trans_type" placeholder="请选择车辆类型">
+                    <el-select v-model="headCarFormStep1.trans_type.key" placeholder="请选择车辆类型">
                       <el-option v-for="(item,key) in selectData.transportTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="燃料类型:">
-                    <el-select v-model="headCarFormStep1.fuel_type" placeholder="请选择车辆类型">
+                    <el-select v-model="headCarFormStep1.fuel_type.key" placeholder="请选择车辆类型">
                       <el-option v-for="(item,key) in selectData.fuelTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -154,7 +192,7 @@
                 </el-col>
               </el-row>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="气瓶编号:" prop="gas_bottle_number">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.gas_bottle_number"></el-input>
@@ -163,7 +201,7 @@
                 </el-row>
               </el-collapse-transition>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="压力表编号:" prop="pressureGaugeNum">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.pressure_gauge_number"></el-input>
@@ -177,7 +215,7 @@
                 </el-row>
               </el-collapse-transition>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="安全阀编号1:" prop="safetyValveNum">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.safety_valve_1_number"></el-input>
@@ -191,7 +229,7 @@
                 </el-row>
               </el-collapse-transition>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="安全阀编号2:" prop="safetyValveNum">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.safety_valve_2_number"></el-input>
@@ -205,7 +243,7 @@
                 </el-row>
               </el-collapse-transition>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="安全阀编号3:" prop="safetyValveNum">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.safety_valve_3_number"></el-input>
@@ -219,7 +257,7 @@
                 </el-row>
               </el-collapse-transition>
               <el-collapse-transition>
-                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type=='GAS'">
+                <el-row :gutter="80" v-if="headCarFormStep1.fuel_type.verbose=='GAS'">
                   <el-col :span="8">
                     <el-form-item label="安全阀编号4:" prop="safetyValveNum">
                       <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.safety_valve_4_number"></el-input>
@@ -234,8 +272,11 @@
               </el-collapse-transition>
             </el-form>
             <el-row>
-              <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('add')">下一步</el-button>
+              <el-col :span="6" :offset="8">
+                <el-button type="success" @click="goOtherSetp('add','nextStep')">填写证件信息</el-button>
+              </el-col>
+              <el-col :span="6">
+                <el-button type="primary" @click="goOtherSetp('add','out')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -280,10 +321,10 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="primary" @click="goOtherSetp('down')">上一步</el-button>
+                <el-button type="success" @click="goOtherSetp('update','nextStep')">填写保险信息</el-button>
               </el-col>
               <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('add')">下一步</el-button>
+                <el-button type="primary" @click="goOtherSetp('update','out')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -301,8 +342,8 @@
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="保险类型:" prop="insuranceType" label-width="120px">
-                      <el-select v-model="item.insurance_type">
-                        <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :key="key" :label="insurance.verbose" :value="insurance.key"></el-option>
+                      <el-select v-model="item.insurance_type.key">
+                        <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :key="insuranceKey" :label="insurance.verbose" :value="insurance.key"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -325,21 +366,18 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="到期日期:" label-width="120px">
-                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_due_date" style="width: 100%;" @change="changelastDate('addInsuanceFromStep3',key)"></el-date-picker>
+                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_due_date" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8" style="font-size:32px;text-align:right;" v-if="headCarFormStep3.tractor_insurances.length>1">
-                    <i class="el-icon-delete" style="cursor:pointer;" @click="deleteInsuranceFrom(insuranceKey)"></i>
+                    <i class="el-icon-delete" style="cursor:pointer;" @click="deleteInsuranceFrom(key)"></i>
                   </el-col>
                 </el-row>
               </div>
             </el-form>
             <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="primary" @click="goOtherSetp('down')">上一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="success" @click="goOtherSetp('success')">完成</el-button>
+              <el-col :span="6" :offset="11">
+                <el-button type="primary" @click="goOtherSetp('update')">保存并且退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -367,28 +405,31 @@ export default {
       }
     };
     return {
-      activeStep: 0,
+      activeStep: 2,
+      titleType: "新增牵引车",
+      headId: "",
       pageLoading: false,
+      stepTitle: '基础信息',
       pickerOptions0: {
         disabledDate(time) {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
       headCarFormStep1: {
-        plate_number: '', //车牌号
-        attributes: '', //车辆归属
-        carrier: '',
-        vin_number: '',
-        engine_number: '',
-        vehicle_type: '',
+        plate_number: '鲁GP8991', //车牌号
+        attributes: { key: '', verbose: '' }, //车辆归属
+        carrier: { name: '', id: '' },
+        vin_number: 'LZZ1CLVB6GA107016',
+        engine_number: '1231231233',
+        vehicle_type: { key: '', verbose: '' },
         brand: '',
         total_weight: '',
-        towing_weight: null,
+        towing_weight: '',
         length: '',
         width: '',
         height: '',
-        trans_type: '',
-        fuel_type: 'GAS',
+        trans_type: { key: '', verbose: '' },
+        fuel_type: { key: 'GAS', verbose: '' },
         danger_product_lamp: '',
         danger_product_due_date: '',
         gas_bottle_number: '',
@@ -414,13 +455,7 @@ export default {
 
       },
       headCarFormStep3: {
-        tractor_insurances: [{
-          insurance_type: '',
-          insurance_number: '',
-          insurance_company: '',
-          insurance_start_date: '',
-          insurance_due_date: ''
-        }]
+        tractor_insurances: []
       },
       rules: {
         plate_number: [
@@ -466,24 +501,66 @@ export default {
     }
   },
   created() {
-    console.log(this);
+    if (this.$route.query.activeStep) {
+      this.activeStep = parseInt(this.$route.query.activeStep);
+      this.stepTitle = this.activeStep == 0 ? '基本信息填写' : (this.activeStep == 1 ? '证件信息填写' : '保险信息填写');
+    }
+    if (this.$route.query.headId) {
+      this.headId = this.$route.query.headId;
+      this.getHeadDetalis(this.$route.query.headId);
+      this.titleType = "编辑牵引车";
+    } else {
+      this.addInsuranceListForm();
+    }
   },
   methods: {
-    goOtherSetp: function(stepInfo) {
-      if (stepInfo == "add" && this.activeStep <= 1) {
-        if (this.activeStep == 0) {
-          this.createFrom();
-        } else {
-          this.activeStep += 1;
-        }
-      } else if (stepInfo == "down" && this.activeStep >= 1) {
-        this.activeStep -= 1;
+    goOtherSetp: function(stepInfo, operation) {
+      if (stepInfo == "add" && !this.headId) {
+        this.createFrom(operation);
+      } else if ((stepInfo == "update" && this.activeStep >= 1) || this.headId) {
+        this.updateFrom(this.activeStep, operation);
       }
     },
-    createFrom: function() {
+    getHeadDetalis: function(headId) {
+      var sendData = {
+        id: headId
+      }
+      this.pageLoading = true;
+      var vm = this;
+      this.$$http('getHeadDetalis', sendData).then(function(result) {
+        if (result.data.code == 0) {
+          vm.headCarFormStep1 = vm.getTrueObj(vm.headCarFormStep1, result.data.data);
+          vm.headCarFormStep3 = vm.getTrueObj(vm.headCarFormStep3, result.data.data);
+          vm.headCarFormStep2 = vm.getTrueObj(vm.headCarFormStep2, result.data.data);
+          vm.pageLoading = false;
+          if (vm.headCarFormStep3.tractor_insurances.length == 0) {
+            vm.addInsuranceListForm();
+          }
+        } else {
+          vm.pageLoading = false;
+        };
+      }).catch(function() {
+        vm.pageLoading = false;
+      });
+    },
+    goDetalis: function(stepInfo) {
+
+      //跳转详情页
+    },
+    getTrueObj: function(obj, getobj) {
+      var newObj = this.pbFunc.deepcopy(obj);
+      for (var value in newObj) {
+        if (getobj[value]) {
+          newObj[value] = getobj[value];
+
+        }
+      }
+      return newObj;
+    },
+    createFrom: function(operation) {
       var vm = this;
       vm.pageLoading = true;
-      if (this.headCarFormStep1.fuel_type != "GAS") {
+      if (this.headCarFormStep1.fuel_type.verbose != "GAS") {
         this.headCarFormStep1.gas_bottle_number = '',
           this.headCarFormStep1.pressure_gauge_number = '',
           this.headCarFormStep1.pressure_gauge_due_date = '',
@@ -496,18 +573,107 @@ export default {
           this.headCarFormStep1.safety_valve_4_number = '',
           this.headCarFormStep1.safety_valve_4_due_date = ''
       };
-      this.$$http('creatHeadFrom', this.headCarFormStep1).then(function(result) {
-        var result = result;
+
+      var sendData = this.fifterObj(this.headCarFormStep1);
+      sendData.attributes = sendData.attributes.key;
+      sendData.carrier = sendData.carrier.key;
+      sendData.vehicle_type = sendData.vehicle_type.key;
+      sendData.trans_type = sendData.trans_type.key;
+      sendData.fuel_type = sendData.fuel_type.key;
+      this.$$http('creatHeadFrom', sendData).then(function(result) {
         vm.pageLoading = false;
-        this.activeStep += 1;
+        if (result.data.code == 0) {
+          vm.headCarFormStep2.id = result.data.data.id;
+          vm.headCarFormStep3.id = result.data.data.id;
+          if (operation == 'out') {
+            //跳转查询详情页面
+          } else {
+            vm.activeStep += 1;
+            vm.stepTitle = "证件信息填写";
+          }
+        } else if (result.data.code == 400) {
+          Message.error(result.data.msg);
+        };
+
+      }).catch(function() {
+        //vm.activeStep += 1;
       });
     },
-    updateFrom: function(step) {
-
+    updateFrom: function(step, operation) {
+      var vm = this;
+      var sendData = "";
+      if (vm.activeStep == 0) {
+        sendData = this.headCarFormStep1;
+      } else if (vm.activeStep == 1) {
+        sendData = this.headCarFormStep2;
+      } else if (vm.activeStep == 2) {
+        sendData = this.headCarFormStep3;
+        var tractor_insurances = [];
+        var tractor_insurances_add = [];
+        for (let i = 0; i < sendData.tractor_insurances.length; i++) {
+          sendData.tractor_insurances[i].insurance_type = sendData.tractor_insurances[i].insurance_type.key;
+          if (sendData.tractor_insurances[i].id) {
+            tractor_insurances.push(sendData.tractor_insurances[i]);
+          } else {
+            tractor_insurances_add.push(sendData.tractor_insurances[i]);
+          }
+        }
+        delete sendData.tractor_insurances;
+        sendData.tractor_insurances = tractor_insurances;
+        sendData.tractor_insurances_add = tractor_insurances_add;
+        sendData.id = vm.headId;
+      }
+      var send = this.fifterObj(sendData);
+      vm.pageLoading = true;
+      this.$$http('upadteHeadFrom', send).then(function(result) {
+        if (result.data.code == 0) {
+          vm.pageLoading = false;
+          if (operation == 'out') {
+            //跳转查询详情页面
+          } else {
+            vm.activeStep += 1;
+            vm.stepTitle = "保险信息填写";
+          }
+        } else {
+          Message.error(result.data.msg);
+        }
+      });
     },
-    addInsuranceListForm: function(addInsuanceFrom) {
+    fifterObj: function(Obj) {
+      var object = this.pbFunc.deepcopy(Obj);
+      var isEmpty = function(object) {
+        for (var name in object) {
+          return false;
+        }
+        return true;
+      }
+      for (var i in object) {
+        var value = object[i];
+        if (typeof value === 'object') {
+          if (Array.isArray(value)) {
+            if (value.length == 0) {
+              delete object[i];
+              continue;
+            }
+          }
+          this.fifterObj(value);
+          if (isEmpty(value)) {
+            delete object[i];
+          }
+        } else {
+          if (value === '' || value === null || value === undefined) {
+            value = null;
+          }
+        }
+      }
+      return object;
+    },
+    addInsuranceListForm: function() {
+      var a;
+      var c;
+      var b;
       this.headCarFormStep3.tractor_insurances.push({
-        insurance_type: "",
+        insurance_type: { key: "", verbose: "" },
         insurance_number: "",
         insurance_company: "",
         insurance_start_date: "",
@@ -515,17 +681,26 @@ export default {
       })
     },
     deleteInsuranceFrom: function(index) {
-      if (this.headCarFormStep3.tractor_insurances.length > 1) {
-        this.headCarFormStep3.tractor_insurances = this.headCarFormStep3.tractor_insurances.splice(index, 1);
+      var vm = this;
+      if (this.headCarFormStep3.tractor_insurances[index].id) {
+        vm.pageLoading = true;
+        var send = {
+          id: '121a7814-e47c-4433-ba52-cfe4054aa0d0',
+          tractor_insurance_id: this.headCarFormStep3.tractor_insurances[index].id
+        }
+        this.$$http('deleteInsuranceFrom', send).then(function(result) {
+          vm.pageLoading = false;
+          if (result.data.code == 0) {
+            vm.headCarFormStep3.tractor_insurances = vm.headCarFormStep3.tractor_insurances.splice(index, 1);
+          }
+        }).catch(function() {
+          vm.pageLoading = false;
+        });
+      } else {
+        vm.headCarFormStep3.tractor_insurances = vm.headCarFormStep3.tractor_insurances.splice(index, 1);
       }
     },
-    changelastDate: function(addInsuanceFrom, index) {
-      var startTime = this.headCarFormStep3.tractor_insurances[index].insurance_start_date;
-      var endTime = this.headCarFormStep3.tractor_insurances[index].insurance_due_date;
-      if (startTime != "" && endTime > startTime) {
-        this.$refs[addInsuanceFrom].fields[4 + index * 5].error = "到期日期不能小于入保时间";
-      }
-    }
+
   }
 }
 

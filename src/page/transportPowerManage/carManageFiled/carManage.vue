@@ -32,9 +32,7 @@ export default {
 
     }
   },
-  mounted: function() {
-    this.http('globalData', {});
-  }
+  mounted: function() {}
 
 }
 

@@ -121,6 +121,7 @@ const successState = function(response) {
 /* 处理url */
 const dealApiUrlParam = function(apiName, postData) {
   let httpUrl = api[apiName].url;
+
   if (httpUrl) {
     //设置最大循环数,以免死机
     let maxTimes = 0;
@@ -134,6 +135,7 @@ const dealApiUrlParam = function(apiName, postData) {
       //console.log("tempV2", tempV, postData.hasOwnProperty(tempV))
       if (postData.hasOwnProperty(tempV)) {
         httpUrl = httpUrl.replace(reg, postData[tempV])
+        delete postData[tempV];
       }
     }
   }

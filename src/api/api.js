@@ -69,6 +69,30 @@ const api = {
     param: {
 
     }
+  },
+  upadteHeadFrom: {
+    url: '/truck/tractors/:id/',
+    method: 'PATCH',
+    desc: '更新牵引车',
+    param: {
+
+    }
+  },
+  deleteInsuranceFrom: {
+    url: '/truck/tractors/:id/tractor_insurances/',
+    method: 'delete',
+    desc: '删除保险',
+    param: {
+
+    }
+  },
+  getHeadDetalis: {
+    url: '/truck/tractors/:id/',
+    method: 'get',
+    desc: '获取牵引车',
+    param: {
+
+    }
   }
 }
 

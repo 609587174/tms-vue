@@ -4,12 +4,12 @@
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="人员管理" name="userManage">
           <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" ref="searchFiltersFormSetp" :model="searchFiltersForm" status-icon>
+            <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="searchFiltersForm.search" class="search-filters-screen">
-                    <el-select size="mini" v-model="searchFiltersForm.screen" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.screenSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" class="search-filters-screen">
+                    <el-select size="mini" v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search"></el-button>
                   </el-input>
@@ -17,25 +17,15 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
-                  <el-form-item size="mini" label="姓名:">
-                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="searchFiltersForm.userName"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
-                  <el-form-item size="mini" label="电话号码:">
-                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="searchFiltersForm.phone"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
                   <el-form-item size="mini" label="从业类型:">
-                    <el-select v-model="searchFiltersForm.employmentType" size="mini" placeholder="请选择">
+                    <el-select v-model="searchFilters.employmentType" @change="getList" size="mini" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item size="mini" label="是否绑定:">
-                    <el-select v-model="searchFiltersForm.isBind" size="mini" placeholder="请选择">
+                    <el-select v-model="searchFilters.isBind" @change="getList" size="mini" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isBindSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -68,19 +58,18 @@
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <el-table-column v-for="(item,key) in thTableList" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary">查看</el-button>
-                  <el-dropdown trigger="click">
+                  <el-button size="mini" type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-dropdown trigger="click" @command="handleMenuClick">
                     <span class="el-dropdown-link">
                       <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>查看</el-dropdown-item>
-                      <el-dropdown-item>编辑</el-dropdown-item>
-                      <el-dropdown-item>操作日志</el-dropdown-item>
+                      <el-dropdown-item :command="{operator:'check',id:scope.row.id}">查看</el-dropdown-item>
+                      <el-dropdown-item :command="{operator:'edit',id:scope.row.id}">编辑</el-dropdown-item>
                     </el-dropdown-menu>
                   </el-dropdown>
                 </template>
@@ -113,12 +102,11 @@ export default {
         totalPage: '',
       },
       activeName: 'userManage',
-      searchFiltersForm: {
-        userName: '',
-        phone: '',
+      searchFilters: {
         employmentType: '',
         isBind: '',
-        data: ''
+        keyword: '',
+        field: 'name',
       },
       selectData: {
         isBindSelect: [
@@ -126,7 +114,10 @@ export default {
           { id: '2', value: '未绑定' },
           { id: '3', value: '已绑定' }
         ],
-        screenSelect: []
+        fieldSelect: [
+          { id: 'name', value: '姓名' },
+          { id: 'mobile_phone', value: '电话号码' },
+        ]
       },
       thTableList: [{
         title: '姓名',
@@ -154,7 +145,7 @@ export default {
         width: ''
       }, {
         title: '从业资格证号',
-        param: 'drive_license_number',
+        param: 'qualification_certificate_number',
         width: ''
       }, {
         title: '押运证号',
@@ -166,10 +157,16 @@ export default {
   },
   methods: {
     getList: function() {
+      let postData = {
+        page: this.pageData.currentPage,
+        work_type: this.searchFilters.employmentType,
+        driver_bind_status: this.searchFilters.isBind,
+      };
+      postData[this.searchFilters.field] = this.searchFilters.keyword;
+
       this.pageLoading = true;
-      this.$$http('getDriversList', {
-        page: this.pageData.currentPage
-      }).then((results) => {
+
+      this.$$http('getDriversList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -182,6 +179,10 @@ export default {
     },
     handleClick: function(tab, event) {
       console.log('tab', tab);
+    },
+    handleMenuClick: function(command) {
+      console.log('command', command);
+      this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: command.id } });
     },
     addPerson: function() {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson" });
@@ -198,6 +199,7 @@ export default {
     pageChange: function() {
       setTimeout(() => {
         console.log('currentPage', this.pageData.currentPage);
+        this.getList();
       })
 
     }
@@ -209,7 +211,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped lang="less">
 
 
 </style>

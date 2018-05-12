@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 #addClientForm {
   border: 1px solid rgb(222, 222, 222);
 }
@@ -25,7 +23,6 @@
         <p>新增人员</p>
       </el-header>
       <el-main>
-
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
             <div class="detail-form-title text-center">基础人员</div>
@@ -39,7 +36,7 @@
                 <el-col :span="8">
                   <el-form-item label="从业类型:" prop="employmentType">
                     <el-select v-model="userForm.employmentType" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.employmentTypeSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -53,7 +50,7 @@
                 <el-col :span="8">
                   <el-form-item label="人员所属:" prop="staffs">
                     <el-select v-model="userForm.staffs" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.staffsSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.staffsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -65,7 +62,7 @@
                 <el-col :span="8">
                   <el-form-item label="在职状态:" prop="onTheJobStatus">
                     <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -111,17 +108,17 @@
                     <el-row :gutter="0">
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="省">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="市">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                       <el-col :md="8">
                         <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="区">
-                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="$key" :label="item.value" :value="item.id"></el-option>
+                          <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
                     </el-row>
@@ -151,13 +148,12 @@
                 </el-col>
               </el-row>
             </div>
-
           </div>
         </transition>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==1">
             <div class="detail-form-title text-center">驾驶证件信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
+            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpTow" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="驾驶证档案编号:" prop="userName">
@@ -205,8 +201,8 @@
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==2">
             <div class="detail-form-title text-center">从业资格证信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
+            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpThree" :rules="rules" :model="userForm" status-icon>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="从业资格证号:" prop="userName">
                     <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
@@ -253,8 +249,8 @@
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==3">
             <div class="detail-form-title text-center">押运证信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
+            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpFour" :rules="rules" :model="userForm" status-icon>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="押运证号:" prop="userName">
                     <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.userName"></el-input>
@@ -301,8 +297,8 @@
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==4">
             <div class="detail-form-title text-center">劳务信息</div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
+            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpFive" :rules="rules" :model="userForm" status-icon>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="录用日期:">
                     <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
@@ -371,8 +367,8 @@
                 </el-col>
               </el-row>
             </div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userForm" status-icon>
-               <el-row :gutter="40">
+            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="培训时间:">
                     <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
@@ -418,6 +414,11 @@
 <script>
 export default {
   name: 'addPerson',
+  computed: {
+    employmentTypeSelect: function() {
+      return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
+    }
+  },
   data() {
     return {
       activeStep: 0,
@@ -454,11 +455,6 @@ export default {
           { id: '1', value: '自有车辆' },
           { id: '2', value: '平台客户' },
         ],
-        employmentTypeSelect: [
-          { id: '1', value: '驾驶员' },
-          { id: '2', value: '押运员' },
-          { id: '3', value: '驾驶/押运员' },
-        ],
         staffsSelect: [
           { id: '1', value: '自有车辆人员' },
           { id: '2', value: '三方车辆人员' }
@@ -484,7 +480,7 @@ export default {
         ],
         idNumber: [ //身份证号码
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '请输入15/18位身份证号码', trigger: 'blur' }
+          { pattern: /(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '请输入18位身份证号码', trigger: 'blur' }
         ],
         onTheJobStatus: [ //在职状态
           { required: true, message: '请选择在职状态', trigger: 'blur' },
@@ -511,7 +507,7 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    nextStep(){
+    nextStep() {
       this.activeStep += 1;
     },
     goOtherSetp() {
@@ -520,6 +516,30 @@ export default {
         if (valid) {
           this.nextStepBtn.btnText = '正在提交';
           this.nextStepBtn.isLoading = true;
+          //没有准驾类型，和省市区，还有身份证图片。
+          let postData = {
+            name: this.userForm.userName, //姓名
+            work_type: this.userForm.employmentType, //从业类型
+            mobile_phone: this.userForm.phone, //手机号码
+            staff_type: this.userForm.staffs, //人员所属
+            id_number: this.userForm.idNumber, //手机号码
+            on_job_status: this.userForm.onTheJobStatus, //在职状态
+            gender: this.userForm.gender, //性别
+            birthday: this.userForm.birthDate, //性别
+            age: this.userForm.age, //年龄
+            family_menber_name: this.userForm.family_menber_name, //家属姓名
+            family_menber_phone: this.userForm.familyContact, //家属姓名
+            quasiDriveType: this.userForm.quasiDriveType, //家属姓名
+            //area:this.userForm.region,//所在地区
+            detail_address: this.userForm.detailedAddress, //详细地址
+          }
+
+          this.$$http('addDrivers', postData).then((results) => {
+            console.log('results', results);
+            if (results.data && results.data.code == 0 && results.data.data) {
+              this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+            }
+          })
 
           setTimeout(() => {
             this.$message({

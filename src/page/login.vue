@@ -1,54 +1,12 @@
 <style scoped lang="less">
-#app {
-  display: table;
-  width: 100%;
-}
-
-.main-title {
-  text-align: center;
-}
-
-.des {
-  text-align: center;
-  color: #999;
-  margin-bottom: 2em;
-}
-
-.login-link {
-  width: 320px;
-  margin: auto auto;
-  .colorblue {
-    color: rgb(51, 153, 255);
-    cursor: pointer;
-  }
-  .Textline {
-    text-align: center;
-  }
-  button {
-    background-color: rgb(102, 204, 204);
-    border-radius: 4px;
-    color: white;
-    height: 46px;
-    font-size: 18px;
-    border-color: white;
-    margin-left: 5%;
-    width: 90%
-  }
-  .el-form-item {
-    margin-bottom: 15px;
-  }
-}
-
-.margin-right (@width) {
-  margin-right: @width;
-}
 
 </style>
 <template>
   <div>
-    <div class="user-page font-size-12" @keyup.enter="login">
+    <div class="user-page" @keyup.enter="login">
+      <div class="user-page-title">登录</div>
       <el-form class="user-form" label-width="100px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon ref="loginFrom">
-        <p class="des">登录</p>
+        <p class="des"></p>
         <el-form-item label="用户名：" prop="userName">
           <el-input :autofocus="true" placeholder="请输入用户名／手机号" size="small" v-model="ruleForm.userName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
@@ -65,13 +23,14 @@
             <el-col :span="8" :offset="1"><img src="../assets/img/va.png" width="100%" v-on:click="refreshVaImg"></el-col>
           </el-row>
         </el-form-item>
-      </el-form>
-      <el-form class="login-link">
-        <el-form-item class="Textline">忘记密码？<span v-on:click="toForgetPassword" class="colorblue">找回密码</span></el-form-item>
-        <el-form-item>
-          <el-button @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
-        </el-form-item>
-        <el-form-item class="Textline">没有账号，<span v-on:click="toLogin('loginFrom')" class="colorblue">请注册</span></el-form-item>
+        <div class="user-page-btn">
+          <el-form-item>忘记密码？<span v-on:click="toForgetPassword" class="text-blue">找回密码</span></el-form-item>
+          <el-form-item>
+            <el-button @click.native="login" type="success" :loading="isBtnLoading">{{btnText}}</el-button>
+          </el-form-item>
+          <el-form-item>没有账号，<span v-on:click="toLogin('loginFrom')" class="text-blue">请注册</span></el-form-item>
+        </div>
+        <div class="user-page-img"><img src="../assets/img/user_2.png"></div>
       </el-form>
     </div>
   </div>

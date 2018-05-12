@@ -41,7 +41,7 @@
                       <el-col :md="11">
                         <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                       </el-col>
-                      <el-col :md="1" class="text-center color-stance">-</el-col>
+                      <el-col :md="1" class="text-center text-stance">-</el-col>
                       <el-col :md="11">
                         <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                       </el-col>

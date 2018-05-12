@@ -1,109 +1,55 @@
 <style scoped lang="less">
-#app {
-  display: table;
-  width: 100%;
-}
 
-.main-title {
-  text-align: center;
-}
-
-.des {
-  text-align: center;
-  color: #999;
-  margin-bottom: 2em;
-}
-
-.login-form input {
-  height: 32px;
-}
-
-.login-form {
-  width: 360px;
-  margin: 13% auto 0;
-  .el-input {
-    width: 220px;
-    height: 32px;
-  }
-  .vaInput {
-    width: 140px;
-  }
-  .inputTip {
-    width: 80px;
-    display: inline-block;
-  }
-  img {
-    line-height: 40px;
-    vertical-align: middle;
-    cursor: pointer;
-  }
-  p {
-    white-space: nowrap;
-    font-size: 32px;
-    font-style: normal;
-    color: rgb(0, 0, 0);
-  }
-  .colorblue {
-    color: rgb(51, 153, 255);
-    cursor: pointer;
-  }
-  .Textline {
-    text-align: center;
-  }
-  button {
-    border-radius: 4px;
-    color: white;
-    height: 46px;
-    font-size: 18px;
-    border-color: white;
-    margin-left: 10%;
-  }
-  .getphoneBt {
-    height: 40px;
-    margin-left: 5px;
-    border-radius: 4px;
-    font-size: 14px;
-    padding: 0 8px;
-    min-width: 60px;
-  }
-}
-
-.login-page {
-  background: #fff;
-}
-
-.margin-right (@width) {
-  margin-right: @width;
-}
 
 </style>
 <template>
   <div>
-    <div class="g-center login-page font-size-12" @keyup.enter="login">
-      <el-form class="login-form" label-width="95px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon>
-        <p class="des">找回密码</p>
-        <el-form-item label="手机号" prop="phone">
-          <el-input :autofocus="true" placeholder="请输入注册手机号" v-model.trim="ruleForm.phone" name='email'>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="短信验证码" prop="vaPassword">
-          <el-input placeholder="请输入验证码" type="password" v-model.trim="ruleForm.vaPassword" class="vaInput">
-          </el-input>
-          <el-button class="getphoneBt" style="" v-on:click="getPhoneVa" type="primary" :disabled="sendStatus" :loading="isBtnSendLoading">{{btnSendText}}</el-button>
-        </el-form-item>
-        <el-form-item label="新密码" prop="password">
-          <el-input placeholder="请输入密码" type="password" v-model.trim="ruleForm.password">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" prop="confirmPassword">
-          <el-input placeholder="请再次输入密码" type="password" v-model.trim="ruleForm.confirmPassword">
-          </el-input>
-        </el-form-item>
-        <el-form-item label-width="0px">
-          <el-button style="width:80%;margin-top:25px;" v-on:click="resetPassword" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
-        </el-form-item>
-        <el-form-item label-width="0px" class="Textline">已有账号，<span v-on:click="toLoginPage" class="colorblue">请登陆</span></el-form-item>
-      </el-form>
+    <div class="user-page" @keyup.enter="login">
+      <div v-if="false">
+        <div class="user-page-title">找回密码</div>
+        <el-form class="user-form" label-width="95px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon>
+          <el-form-item label="手机号" prop="phone">
+            <el-input :autofocus="true" placeholder="请输入注册手机号" size="small" v-model.trim="ruleForm.phone" name='email'>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="短信验证码" prop="vaPassword">
+            <el-row>
+              <el-col :span="14">
+                <el-input placeholder="请输入验证码" size="small" type="password" v-model.trim="ruleForm.vaPassword" class="vaInput"></el-input>
+              </el-col>
+              <el-col :span="9" :offset="1">
+                <el-button size="small" class="get-code-btn" style="" v-on:click="getPhoneVa" type="primary" :disabled="sendStatus" :loading="isBtnSendLoading">{{btnSendText}}</el-button>
+              </el-col>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="新密码" prop="password">
+            <el-input placeholder="请输入密码" size="small" type="password" v-model.trim="ruleForm.password">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="确认密码" prop="confirmPassword">
+            <el-input placeholder="请再次输入密码" size="small" type="password" v-model.trim="ruleForm.confirmPassword">
+            </el-input>
+          </el-form-item>
+          <div class="user-page-btn">
+            <el-form-item>
+              <el-button v-on:click="resetPassword" type="success" :loading="isBtnLoading">{{btnText}}</el-button>
+            </el-form-item>
+            </el-form-item>
+            <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue">请登录</span></el-form-item>
+          </div>
+          <div class="user-page-img"><img src="../assets/img/user_6.png"></div>
+        </el-form>
+      </div>
+      <div>
+        <div class="user-page-title">找回密码</div>
+        <div class="user-register-notice password">
+          您的密码已重置成功，请使用新密码登录！<br>
+          <span class="text-blue time">5</span>S 后自动返回登录页面<br>
+          如没有自动跳转，请点击<span class="text-blue">登录</span><br>
+        </div>
+        <div class="btn-link"><el-button type="success" >登录</el-button></div>
+        <div class="user-page-img text-center"><img src="../assets/img/user_3.png"></div>
+      </div>
     </div>
   </div>
 </template>

@@ -118,6 +118,26 @@ const api = {
         desc: '绑定车辆',
       }
     }
+  },
+  getDriversDetail: {
+    url: '/carrier/carrier_drivers/:id/',
+    method: 'get',
+    desc: '获取承运商司机详情',
+    param: {
+      id: {
+        desc: '资源id',
+      },
+    }
+  },
+  addDrivers: {
+    url: '/carrier/carrier_drivers/',
+    method: 'post',
+    desc: '承运商司机创建',
+    param: {
+      id: {
+        desc: '资源id',
+      },
+    }
   }
 }
 

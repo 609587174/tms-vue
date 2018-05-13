@@ -1,4 +1,5 @@
 <!-- personDetail.vue -->
+
 <style scoped lang="less">
 
 

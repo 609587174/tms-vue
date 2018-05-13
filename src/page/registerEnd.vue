@@ -4,45 +4,64 @@
 <template>
   <div>
     <div class="user-page" @keyup.enter="login">
-      <div class="user-page-title">注册</div>
-      <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
-        <el-form-item label="姓名：" prop="name">
-          <el-input v-model.trim="registerForm.name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码：" prop="phone">
-          <el-input v-model.trim="registerForm.phone" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
-        </el-form-item>
-        <el-form-item label="密码：" prop="password">
-          <el-input v-model.trim="registerForm.password" size="small" type="password" placeholder="请输入密码"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码：" prop="rePassword">
-          <el-input v-model.trim="registerForm.rePassword" size="small" type="password" placeholder="请再次输入密码"></el-input>
-        </el-form-item>
-        <el-form-item label="验证码：" prop="imgVerifyCode" size="small" class="verify-code-item">
-          <el-row>
-            <el-col :span="14">
-              <el-input v-model.trim="registerForm.imgVerifyCode" type="text" placeholder="请输入验证码" @blur="showValue" class="verify-code-input"></el-input>
-            </el-col>
-            <el-col :span="9" :offset="1"><img src="../assets/img/va.png" v-on:click="refreshVaImg"></el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="短信验证码：" prop="msgVerifyCode" class="verify-code-item">
-          <el-row>
-            <el-col :span="14">
-              <el-input v-model.trim="registerForm.msgVerifyCode" size="small" type="text" placeholder="请输入验证码" class="verify-code-input"></el-input>
-            </el-col>
-            <el-col :span="9" :offset="1"><el-button size="small" class="get-code-btn" type="primary" @click="getMsgCode" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button></el-col>
-          </el-row>
-
-        </el-form-item>
-        <div class="user-page-btn">
-          <el-form-item>
-            <el-button type="success" @click="onSubmit('registerForm')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+      <div>
+        <div class="user-page-title">注册</div>
+        <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
+          <el-form-item label="企业名称：" prop="name">
+            <el-input v-model.trim="registerForm.name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
           </el-form-item>
-          <el-form-item>已有账号，请<span class="text-blue">登录</span></el-form-item>
+          <el-form-item label="联系人：" prop="phone">
+            <el-input v-model.trim="registerForm.phone" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话：" prop="password">
+            <el-input v-model.trim="registerForm.password" size="small" type="password" placeholder="请输入密码"></el-input>
+          </el-form-item>
+          <el-form-item label="公司地址：" prop="rePassword">
+            <el-row :gutter="0">
+              <el-col :md="8">
+                <el-select v-model="registerForm.password" size="small" placeholder="省">
+                  <el-option v-for="(item,key) in selectData.clientTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-col>
+              <el-col :md="8">
+                <el-select v-model="registerForm.password" size="small" placeholder="市">
+                  <el-option v-for="(item,key) in selectData.clientTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-col>
+              <el-col :md="8">
+                <el-select v-model="registerForm.password" size="small" placeholder="区">
+                  <el-option v-for="(item,key) in selectData.clientTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-input v-model.trim="registerForm.password" size="small" type="textarea" :rows="3" placeholder="请输入密码"></el-input>
+            </el-row>
+          </el-form-item>
+          <el-form-item label="企业类型：" prop="imgVerifyCode" size="small" class="verify-code-item">
+            <el-select v-model="registerForm.password" size="small" placeholder="省">
+              <el-option v-for="(item,key) in selectData.clientTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+            </el-select>
+            <div class="user-checked"><el-checkbox v-model="checked">我已同意并阅读<span>《用户协议》</span></el-checkbox></div>
+          </el-form-item>
+          <div class="user-page-btn">
+            <el-form-item>
+              <el-button type="success" @click="onSubmit('registerForm')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+            </el-form-item>
+            <el-form-item>已有账号，请<span class="text-blue">登录</span></el-form-item>
+          </div>
+          <div class="user-page-img"><img src="../assets/img/user_5.png"></div>
+        </el-form>
+      </div>
+      <div v-if="false">
+        <div class="user-page-title">审核中</div>
+        <div class="user-register-notice">您的注册信息已提交，请耐心等待系统审核，谢谢！<br>
+          审核后会给您的注册手机号发短信通知<br>
+          审核通过后您可通过用户名/手机号登录系统<br>
+          如有疑问，请联系客服QQ：<span class="text-blue">1373724944</span>
         </div>
-        <div class="user-page-img"><img src="../assets/img/user_6.png"></div>
-      </el-form>
+        <div class="user-page-img text-center"><img src="../assets/img/user_4.png"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -72,6 +91,13 @@ export default {
         rePassword: '',
         imgVerifyCode: '',
         msgVerifyCode: '',
+        checked:true
+      },
+      selectData:{
+        clientTypeSelect: [
+          { id: '1', value: '自有车辆' },
+          { id: '2', value: '平台客户' },
+        ],
       },
       rules: {
         name: [
@@ -105,7 +131,7 @@ export default {
         isDisabled: false,
       },
       submitBtn: {
-        btnText: '下一步',
+        btnText: '提交注册',
         isLoading: false,
         isDisabled: false,
       }

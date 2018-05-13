@@ -1,4 +1,5 @@
 <!-- personDetail.vue -->
+
 <style scoped lang="less">
 
 
@@ -10,7 +11,7 @@
         <p>人员信息</p>
       </el-header>
       <el-main>
-        <el-form class="addheaduserform" label-width="120px" :model="userData" status-icon>
+
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>
@@ -25,91 +26,99 @@
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="姓名:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>姓名:</label>
                   <div class="detail-form-item">{{userData.name}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="从业类型:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>从业类型:</label>
                   <div class="detail-form-item">{{userData.work_type.verbose}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="手机号码:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>手机号码:</label>
                   <div class="detail-form-item">{{userData.mobile_phone}}</div>
-                </el-form-item>
+                </div>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="人员所属:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>人员所属:</label>
                   <div class="detail-form-item">{{userData.staff_type.verbose}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="身份证号:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>身份证号:</label>
                   <div class="detail-form-item">{{userData.id_number}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="在职状态:">
+                <div class="label-list">
+                  <label><span class="text-red">* </span>在职状态:</label>
                   <div class="detail-form-item">{{userData.on_job_status.verbose}}</div>
-                </el-form-item>
+                </div>
               </el-col>
             </el-row>
-            <el-row :gutter="40">
+            <!-- <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="性别:">
+                <div label="性别:">
                   <div class="detail-form-item">{{userData.gender.verbose}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="出生日期:">
+                <div label="出生日期:">
                   <div class="detail-form-item">{{userData.birthday}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="年龄:">
+                <div label="年龄:">
                   <div class="detail-form-item">{{userData.age}}</div>
-                </el-form-item>
+                </div>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="家属姓名:">
+                <div label="家属姓名:">
                   <div class="detail-form-item">{{userData.family_menber_name}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="家属联系方式:">
+                <div label="家属联系方式:">
                   <div class="detail-form-item">{{userData.family_menber_phone}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="准驾类型:">
+                <div label="准驾类型:">
                   <div class="detail-form-item">{{userData.drive_license_allow_type}}</div>
-                </el-form-item>
+                </div>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="所在地区:">
+                <div label="所在地区:">
                   <div class="detail-form-item">{{userData.area}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="详细地址:">
+                <div label="详细地址:">
                   <div class="detail-form-item">{{userData.detail_address}}</div>
-                </el-form-item>
+                </div>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="身份证:">
+                <div label="身份证:">
                   <div><img :src="userData.id_photo" alt="" width="150" height="80"></div>
-                </el-form-item>
+                </div>
               </el-col>
-            </el-row>
+            </el-row> -->
             <!-- </el-form> -->
           </div>
+        <el-form class="addheaduserform" label-width="120px" :model="userData" status-icon v-if="false">
+
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>

@@ -23,18 +23,45 @@ const api = {
     }
   },
   register: {
-    url: '/api/user/register',
+    url: '/user/register/',
     method: 'post',
     desc: '注册',
     param: {
-      username: {
+      nick_name: {
         desc: '用户名',
       },
       password: {
         desc: '密码',
       },
-      name: {
-        desc: '昵称',
+      confirm_password: {
+        desc: '确认密码',
+      },
+      phone: {
+        desc: '手机号码',
+      },
+      verify_key: {
+        desc: '图形验证码key值',
+      },
+      message_verify_code: {
+        desc: '手机验证码'
+      }
+    }
+  },
+  imageVerifyCode: {
+    url: '/common/image_verify_code/',
+    method: 'get',
+    desc: '图形验证码',
+    param: {
+
+    }
+  },
+  messageVerifyCode: {
+    url: '/common/message_verify_code/',
+    method: 'post',
+    desc: '图形验证码',
+    param: {
+      phone: {
+        desc: '手机号码',
       }
     }
   },

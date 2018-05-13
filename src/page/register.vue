@@ -1,39 +1,41 @@
 <style scoped lang="less">
 
+
 </style>
 <template>
   <div>
     <div class="user-page" @keyup.enter="login">
       <div class="user-page-title">注册</div>
       <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
-        <el-form-item label="姓名：" prop="name">
-          <el-input v-model.trim="registerForm.name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
-        </el-form-item>
-        <el-form-item label="手机号码：" prop="phone">
-          <el-input v-model.trim="registerForm.phone" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
+        <el-form-item label="姓名：" prop="nick_name">
+          <el-input v-model.trim="registerForm.nick_name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
           <el-input v-model.trim="registerForm.password" size="small" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
-        <el-form-item label="确认密码：" prop="rePassword">
-          <el-input v-model.trim="registerForm.rePassword" size="small" type="password" placeholder="请再次输入密码"></el-input>
+        <el-form-item label="确认密码：" prop="confirm_password">
+          <el-input v-model.trim="registerForm.confirm_password" size="small" type="password" placeholder="请再次输入密码"></el-input>
         </el-form-item>
-        <el-form-item label="验证码：" prop="imgVerifyCode" size="small" class="verify-code-item">
+        <el-form-item label="手机号码：" prop="phone">
+          <el-input v-model.trim="registerForm.phone" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
+        </el-form-item>
+        <el-form-item label="验证码：" prop="verify_key" size="small" class="verify-code-item">
           <el-row>
             <el-col :span="14">
-              <el-input v-model.trim="registerForm.imgVerifyCode" type="text" placeholder="请输入验证码" @blur="showValue" class="verify-code-input"></el-input>
+              <el-input v-model.trim="registerForm.verify_key" type="text" placeholder="请输入验证码" @blur="showValue" class="verify-code-input"></el-input>
             </el-col>
             <el-col :span="9" :offset="1"><img src="../assets/img/va.png" v-on:click="refreshVaImg"></el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="短信验证码：" prop="msgVerifyCode" class="verify-code-item">
+        <el-form-item label="短信验证码：" prop="message_verify_code" class="verify-code-item">
           <el-row>
             <el-col :span="14">
-              <el-input v-model.trim="registerForm.msgVerifyCode" size="small" type="text" placeholder="请输入验证码" class="verify-code-input"></el-input>
+              <el-input v-model.trim="registerForm.message_verify_code" size="small" type="text" placeholder="请输入验证码" class="verify-code-input"></el-input>
             </el-col>
-            <el-col :span="9" :offset="1"><el-button size="small" class="get-code-btn" type="primary" @click="getMsgCode" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button></el-col>
+            <el-col :span="9" :offset="1">
+              <el-button size="small" class="get-code-btn" type="primary" @click="getMsgCode" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
+            </el-col>
           </el-row>
-
         </el-form-item>
         <div class="user-page-btn">
           <el-form-item>
@@ -66,15 +68,15 @@ export default {
     return {
 
       registerForm: {
-        name: '',
+        nick_name: '',
         phone: '',
         password: '',
-        rePassword: '',
-        imgVerifyCode: '',
-        msgVerifyCode: '',
+        confirm_password: '',
+        verify_key: '',
+        message_verify_code: '',
       },
       rules: {
-        name: [
+        nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
           { pattern: /^\w{4,20}$/, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         ],
@@ -87,15 +89,15 @@ export default {
           { required: true, message: '请设置登录密码', trigger: 'blur' },
           { pattern: /^\w{6,20}$/, message: '用户名为6-20个字符，支持中文、字母、数字', trigger: 'blur' }
         ],
-        rePassword: [
+        confirm_password: [
           { required: true, message: '请再次输入你的密码', trigger: 'blur' },
           { pattern: /^\w{6,20}$/, message: '用户名为6-20个字符，支持中文、字母、数字', trigger: 'blur' },
           { validator: checkRepassword, trigger: 'blur' },
         ],
-        imgVerifyCode: [
+        verify_key: [
           { required: true, message: '请输入图片验证码', trigger: 'blur' }
         ],
-        msgVerifyCode: [
+        message_verify_code: [
           { required: true, message: '请输入短信验证码', trigger: 'blur' }
         ]
       },
@@ -109,46 +111,65 @@ export default {
         isLoading: false,
         isDisabled: false,
       }
-
-
     };
   },
   computed: {
 
   },
+  created() {
+
+    this.refreshVaImg();
+  },
   methods: {
     refreshVaImg() {
-
+      console.log('测试')
+      this.$$http('imageVerifyCode', {}).then((results) => {
+        console.log('results图片', results.data.data.results);
+        // this.pageLoading = false;
+        // if (results.data && results.data.code == 0) {
+        //   this.tableData = results.data.data.results;
+        //   console.log('this.tableData', this.tableData);
+        // }
+      }).catch((err) => {
+        // this.pageLoading = false;
+      })
     },
     showValue() {
-      console.log(this.registerForm.imgVerifyCode)
+      console.log(this.registerForm.message_verify_code)
     },
     onSubmit(registerForm) {
+      let postData = this.registerForm;
       this.submitBtn.isDisabled = true;
       this.$refs[registerForm].validate((valid) => {
         if (valid) {
           this.submitBtn.btnText = '注册中';
           this.submitBtn.isLoading = true;
+          this.$$http('register', postData).then((results) => {
+            console.log('register注册', results.data.data.results);
+            setTimeout(() => {
+              this.$message({
+                message: '注册成功',
+                type: 'success'
+              });
+              this.submitBtn.btnText = '注册';
+              this.submitBtn.isLoading = false;
+              this.submitBtn.isDisabled = false;
+            }, 1000)
 
-          setTimeout(() => {
-            this.$message({
-              message: '注册成功',
-              type: 'success'
-            });
-            this.submitBtn.btnText = '注册';
-            this.submitBtn.isLoading = false;
-            this.submitBtn.isDisabled = false;
-          }, 1000)
+          }).catch((err) => {
+            // this.pageLoading = false;
+          })
+
         } else {
           this.submitBtn.isDisabled = false;
         }
       });
+
     },
     getMsgCode(event) {
 
       let num = 10;
       let intCountdown;
-
       const countdown = () => {
         this.msgBtn.getCodeText = num;
         if (num >= 1) {
@@ -159,26 +180,36 @@ export default {
           clearInterval(intCountdown);
         }
       }
-
       this.msgBtn.isLoading = true;
       this.msgBtn.isDisabled = true;
       this.msgBtn.getCodeText = '正在发送';
+      this.$$http('messageVerifyCode', { phone: this.registerForm.phone }).then((results) => {
+        console.log('results图片', results.data.data.results);
+        // this.pageLoading = false;
+        if (results.data && results.data.code == 0) {
+          setTimeout(() => {
+            this.msgBtn.isLoading = false;
+            this.msgBtn.getCodeText = num;
+            this.$message({
+              message: '短信发送成功，请查看',
+              type: 'success'
+            });
+            intCountdown = setInterval(countdown, 1000);
+          }, 1000)
 
-      setTimeout(() => {
-        this.msgBtn.isLoading = false;
-        this.msgBtn.getCodeText = num;
-        this.$message({
-          message: '短信发送成功，请查看',
-          type: 'success'
-        });
-        intCountdown = setInterval(countdown, 1000);
-      }, 1000)
+        }
+      }).catch((err) => {
+        // this.pageLoading = false;
+      })
+
+
+
 
     }
   },
-  created() {
+  // created() {
 
-  }
+  // }
 };
 
 </script>

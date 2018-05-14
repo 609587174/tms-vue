@@ -30,13 +30,13 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="姓名:" prop="userName">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
+                    <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="从业类型:" prop="employmentType">
                     <el-select v-model="userForm.employmentType" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -50,7 +50,7 @@
                 <el-col :span="8">
                   <el-form-item label="人员所属:" prop="staffs">
                     <el-select v-model="userForm.staffs" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.staffsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in staffsSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -60,18 +60,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="在职状态:" prop="onTheJobStatus">
-                    <el-select v-model="userForm.onTheJobStatus" size="mini" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.onTheJobStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                    </el-select>
+                  <el-form-item label="在职状态:">
+                    <el-radio v-model="userForm.onTheJobStatus" label="OFF_JOB">离职</el-radio>
+                    <el-radio v-model="userForm.onTheJobStatus" label="ON_JOB">在职</el-radio>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="性别:">
-                    <el-radio v-model="userForm.gender" label="man">男</el-radio>
-                    <el-radio v-model="userForm.gender" label="woman">女</el-radio>
+                    <el-radio v-model="userForm.gender" label="MALE">男</el-radio>
+                    <el-radio v-model="userForm.gender" label="FEMALE">女</el-radio>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -81,7 +80,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="年龄:">
-                    <el-input placeholder="请输入年龄" type="text" size="mini" v-model="userForm.age"></el-input>岁
+                    <el-input placeholder="请输入年龄" type="text" size="mini" v-model="userForm.age"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -104,6 +103,9 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <choose-address :address.sync="address"></choose-address>
+                </el-col>
+                <!--                 <el-col :span="8">
                   <el-form-item label="所在地区:">
                     <el-row :gutter="0">
                       <el-col :md="8">
@@ -123,7 +125,7 @@
                       </el-col>
                     </el-row>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
                 <el-col :span="8">
                   <el-form-item label="详细地址:">
                     <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.detailedAddress"></el-input>
@@ -143,8 +145,8 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写驾驶证件信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
+                  <el-button type="success" @click="goAddDriverLicense()" :loading="addDriverLicenseBtn.isLoading" :disabled="addDriverLicenseBtn.isDisabled">{{addDriverLicenseBtn.btnText}}</el-button>
+                  <el-button type="primary" @click="saveBasicAndReview()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -156,25 +158,25 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpTow" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="驾驶证档案编号:" prop="userName">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
+                  <el-form-item label="驾驶证档案编号:" prop="drive_license_number">
+                    <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.drive_license_number"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="驾驶证初次发证时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="驾驶证到期时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="驾驶证发证机关:" prop="userName">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.userName"></el-input>
+                  <el-form-item label="驾驶证发证机关:">
+                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -191,8 +193,8 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写从业资格证信息</el-button>
-                  <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
+                  <el-button type="success" @click="addEscort()">填写从业资格证信息</el-button>
+                  <el-button type="primary" @click="saveEscortAndReview()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -239,7 +241,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="nextStep()">填写押运证信息</el-button>
+                  <el-button type="success" @click="addEscort()">填写押运证信息</el-button>
                   <el-button type="primary" @click="goOtherSetp()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -412,56 +414,71 @@
   </div>
 </template>
 <script>
+import chooseAddress from '../../../components/chooseAddress'
 export default {
   name: 'addPerson',
+  components: {
+    chooseAddress: chooseAddress,
+  },
   computed: {
     employmentTypeSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
+      return this.$store.state.common.selectData.carrier_driver_work_type;
+    },
+    staffsSelect: function() {
+      return this.$store.state.common.selectData.carrier_driver_staff_type;
+    },
+    activeStep: function() {
+      return this.$route.query.activeStep || 0;
+    },
+    id: function() {
+      return this.$route.query.id || '';
     }
   },
   data() {
     return {
-      activeStep: 0,
+      address: {
+        province: '',
+        city: '',
+        area: '',
+      },
       pickerOptions0: {
         disabledDate(time) {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
       userForm: {
-        userName: '', //姓名
-        employmentType: '', //从业类型
-        phone: '', //手机号码
-        staffs: '', //人员所属
-        idNumber: '', //身份证号码
-        onTheJobStatus: '', //在职状态
-        gender: 'man', //性别
-        birthDate: '', //出生日期
-        age: '', //年龄
-        familyName: '', //家属姓名
-        familyContact: '', //家属联系方式
+        /* 基础信息 */
+        userName: '田小龙', //姓名
+        employmentType: 'DRIVER', //从业类型
+        phone: '13566666666', //手机号码
+        staffs: 'SELF_OWNED_TRUCK', //人员所属
+        idNumber: '511621199002074174', //身份证号码
+        onTheJobStatus: 'ON_JOB', //在职状态
+        gender: 'MALE', //性别
+        birthDate: '1990-02-02', //出生日期
+        age: '23', //年龄
+        familyName: 'ccc', //家属姓名
+        familyContact: '13567890987', //家属联系方式
         quasiDriveType: '', //准驾类型
         region: {
           province: '',
           city: '',
           area: ''
         }, //所在地区
-        detailedAddress: '', //详细地址
+        detailedAddress: '四川时间风口浪尖贷款', //详细地址
         idImg: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }], //身份证照片
-
+        /* 驾驶证件信息 */
+        drive_license_number: '',
+        drive_license_issue_date: '',
+        drive_license_due_date: '',
+        drive_license_issue_organ: '',
+        /* 驾驶证件信息 */
       },
 
       selectData: {
         clientTypeSelect: [
           { id: '1', value: '自有车辆' },
           { id: '2', value: '平台客户' },
-        ],
-        staffsSelect: [
-          { id: '1', value: '自有车辆人员' },
-          { id: '2', value: '三方车辆人员' }
-        ],
-        onTheJobStatusSelect: [
-          { id: '1', value: '在职' },
-          { id: '2', value: '离职' }
         ],
       },
       rules: {
@@ -489,10 +506,24 @@ export default {
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
         ],
+
+        drive_license_number: [ //驾驶证档案编号
+          { required: true, message: '请输入驾驶证档案编号', trigger: 'blur' },
+        ]
       },
       nextStepBtn: {
         isLoading: false,
         btnText: '保存并退出',
+        isDisabled: false,
+      },
+      addDriverLicenseBtn: {
+        isLoading: false,
+        btnText: '填写驾驶证信息',
+        isDisabled: false,
+      },
+      addEscortBtn: {
+        isLoading: false,
+        btnText: '填写培训信息',
         isDisabled: false,
       }
     }
@@ -507,16 +538,11 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    nextStep() {
-      this.activeStep += 1;
-    },
-    goOtherSetp() {
-      this.nextStepBtn.isDisabled = true;
+    goAddDriverLicense() {
+      this.addDriverLicenseBtn.isDisabled = true;
       this.$refs['addClientFormSetpOne'].validate((valid) => {
         if (valid) {
-          this.nextStepBtn.btnText = '正在提交';
-          this.nextStepBtn.isLoading = true;
-          //没有准驾类型，和省市区，还有身份证图片。
+          let apiName = 'addDrivers';
           let postData = {
             name: this.userForm.userName, //姓名
             work_type: this.userForm.employmentType, //从业类型
@@ -532,29 +558,134 @@ export default {
             quasiDriveType: this.userForm.quasiDriveType, //家属姓名
             //area:this.userForm.region,//所在地区
             detail_address: this.userForm.detailedAddress, //详细地址
+          };
+          /* 如果id存在则为编辑 */
+          if (this.id) {
+            postData.id = this.id;
+            apiName = 'patchDrivers';
           }
+
+          this.addDriverLicenseBtn.btnText = '正在提交';
+          this.addDriverLicenseBtn.isLoading = true;
 
           this.$$http('addDrivers', postData).then((results) => {
             console.log('results', results);
             if (results.data && results.data.code == 0 && results.data.data) {
-              this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+              let nextActiveStep = parseInt(this.activeStep) + 1;
+              let id = results.data.data.id;
+              this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: nextActiveStep, id: id } });
+            } else {
+              this.addDriverLicenseBtn.btnText = '填写驾驶证信息';
+              this.addDriverLicenseBtn.isLoading = false;
+              this.addDriverLicenseBtn.isDisabled = false;
             }
           })
-
-          setTimeout(() => {
-            this.$message({
-              message: '提交成功',
-              type: 'success'
-            });
-            this.nextStepBtn.btnText = '下一步';
-            this.nextStepBtn.isLoading = false;
-            this.nextStepBtn.isDisabled = false;
-          }, 1000)
         } else {
-          this.nextStepBtn.isDisabled = false;
+          this.addDriverLicenseBtn.isDisabled = false;
+        }
+      });
+
+      //this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: this.activeStep++ } });
+    },
+    nextStep(postData, formName, btnObject, isReview) {
+      let btnTextCopy = this.pbFunc.deepcopy(btnObject.btnText);
+      let apiName = 'addDrivers';
+      btnObject.isDisabled = true;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          /* 如果id存在则为编辑 */
+          if (this.id) {
+            postData.id = this.id;
+            apiName = 'patchDrivers';
+          }
+
+          btnObject.btnText = '正在提交';
+          btnObject.isLoading = true;
+
+          this.$$http(apiName, postData).then((results) => {
+            console.log('results', results);
+            if (results.data && results.data.code == 0 && results.data.data) {
+
+              if (isReview) {
+                this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+              } else {
+                let nextActiveStep = parseInt(this.activeStep) + 1;
+                let id = results.data.data.id;
+                this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: nextActiveStep, id: id } });
+              }
+
+            } else {
+              btnObject.btnText = btnTextCopy;
+              btnObject.isLoading = false;
+              btnObject.isDisabled = false;
+            }
+          })
+        } else {
+          btnObjec.isDisabled = false;
         }
       });
     },
+    saveAndReview(apiName, postData, formName, btnObject) {
+      let btnTextCopy = this.pbFunc.deepcopy(btnObject.btnText);
+      btnObject.isDisabled = true;
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          btnObject.btnText = '正在提交';
+          btnObject.isLoading = true;
+          this.$$http(apiName, postData).then((results) => {
+            console.log('results', results);
+            if (results.data && results.data.code == 0 && results.data.data) {
+              this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+            } else {
+              btnObject.btnText = btnTextCopy;
+              btnObject.isLoading = false;
+              btnObject.isDisabled = false;
+            }
+          })
+        } else {
+          btnObject.isDisabled = false;
+        }
+      });
+    },
+    saveBasicAndReview() {
+      let formName = 'addClientFormSetpOne';
+      let apiName = 'addDrivers';
+      let postData = {
+        name: this.userForm.userName, //姓名
+        work_type: this.userForm.employmentType, //从业类型
+        mobile_phone: this.userForm.phone, //手机号码
+        staff_type: this.userForm.staffs, //人员所属
+        id_number: this.userForm.idNumber, //手机号码
+        on_job_status: this.userForm.onTheJobStatus, //在职状态
+        gender: this.userForm.gender, //性别
+        birthday: this.userForm.birthDate, //性别
+        age: this.userForm.age, //年龄
+        family_menber_name: this.userForm.family_menber_name, //家属姓名
+        family_menber_phone: this.userForm.familyContact, //家属姓名
+        quasiDriveType: this.userForm.quasiDriveType, //家属姓名
+        //area:this.userForm.region,//所在地区
+        detail_address: this.userForm.detailedAddress, //详细地址
+      }
+
+      this.saveAndReview(apiName, postData, formName);
+    },
+    saveEscortAndReview() {
+      let apiName = 'patchDrivers';
+      let formName = 'addClientFormSetpTow';
+      let postData = {
+        drive_license_number: this.userForm.drive_license_number, //驾驶证编号
+        drive_license_issue_date: this.userForm.drive_license_issue_date, //驾驶证初次发证时间
+        drive_license_due_date: this.userForm.drive_license_due_date, //驾驶证到期时间
+        drive_license_issue_organ: this.userForm.drive_license_issue_organ, //驾驶证发证机关
+        id: this.id,
+        //drive_license_photo: this.userForm.drive_license_photo, //驾驶证图片
+      }
+      this.saveAndReview(apiName, postData, formName);
+    },
+
+
+
+
   }
 }
 

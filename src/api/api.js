@@ -172,7 +172,41 @@ const api = {
         desc: '资源id',
       },
     }
-  }
+  },
+  patchDrivers: {
+    url: '/carrier/carrier_drivers/:id/',
+    method: 'patch',
+    desc: '承运商司机更新',
+    param: {
+      id: {
+        desc: '资源id',
+      },
+    }
+  },
+  getProvince: {
+    url: '/common/area/provinces/',
+    method: 'get',
+    desc: '获取省列表',
+    param: {
+
+    }
+  },
+  getCity: {
+    url: '/common/area/provinces/:province_id/',
+    method: 'get',
+    desc: '获取市列表',
+    param: {
+
+    }
+  },
+  getArea: {
+    url: '/common/area/cities/:city_id/',
+    method: 'get',
+    desc: '获取区域列表',
+    param: {
+
+    }
+  },
 }
 
 export default api;

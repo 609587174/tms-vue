@@ -2,12 +2,16 @@
   <div>
     <template v-if="$route.path=='/transportPowerManage/carManage'">
       <div>
-        <carHeadManage></carHeadManage>
+        <keep-alive>
+          <carHeadManage></carHeadManage>
+        </keep-alive>
       </div>
     </template>
     <template v-else>
       <div>
-        <router-view></router-view>
+        <keep-alive>
+          <router-view></router-view>
+        </keep-alive>
       </div>
     </template>
   </div>

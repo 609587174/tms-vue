@@ -7,7 +7,8 @@
 @import './assets/css/tableStyle.less';
 @import './assets/css/style.css';
 @import './assets/css/detailStyle.less';
-@import './assets/css/userStyle.less';//登录 注册 找回密码
+@import './assets/css/userStyle.less';
+
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>
@@ -147,8 +148,9 @@ export default {
     this.$$http("getSelectData", {}).then(function(reslut) {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;
-      vm.signin();
+
     });
+    vm.signin();
 
   }
 };

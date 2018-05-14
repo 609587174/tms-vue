@@ -3,17 +3,17 @@
     <el-row :gutter="0">
       <el-col :md="8">
         <el-select v-model="address.province" @change="provinceChange" size="mini" placeholder="省">
-          <el-option v-for="(item,key) in provinceList" :key="key" :label="item.area_name" :value="item.area_code"></el-option>
+          <el-option v-for="(item,key) in provinceList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :md="8">
-        <el-select v-model="address.city" @change="getCity" size="mini" placeholder="市">
-          <el-option v-for="(item,key) in cityList" :key="key" :label="item.area_name" :value="item.area_code"></el-option>
+        <el-select v-model="address.city" @change="cityChange" size="mini" placeholder="市">
+          <el-option v-for="(item,key) in cityList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
       <el-col :md="8">
         <el-select v-model="address.area" @change="areaChange" size="mini" placeholder="区">
-          <el-option v-for="(item,key) in areaList" :key="key" :label="item.area_name" :value="item.area_code"></el-option>
+          <el-option v-for="(item,key) in areaList" :key="key" :label="item.area_name" :value="item.id"></el-option>
         </el-select>
       </el-col>
     </el-row>
@@ -43,8 +43,8 @@ export default {
         province_id: this.address.province,
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
-          this.cityList = results.data.data;
-          console.log('this.provinceList', this.provinceList);
+          this.cityList = results.data.data.cities;
+          console.log('this.cityList', this.cityList);
         }
       });
     },
@@ -53,17 +53,20 @@ export default {
         city_id: this.address.city,
       }).then((results) => {
         if (results.data && results.data.code == 0 && results.data.data) {
-          this.areaList = results.data.data;
-          console.log('this.provinceList', this.provinceList);
+          this.areaList = results.data.data.counties;
+          console.log('this.areaList', this.areaList);
         }
       });
     },
     provinceChange() {
       this.getCity();
+      this.address.city = '';
+      this.address.area = '';
       this.$emit('chooseProvince');
     },
     cityChange() {
       this.getArea();
+      this.address.area = '';
       this.$emit('chooseCity');
     },
     areaChange() {

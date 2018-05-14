@@ -555,16 +555,22 @@ export const fifterObjIsNull = function(Obj) {
     }
     return true;
   }
+
   for (var i in object) {
     var value = object[i];
-    if (typeof value === 'object') {
+    if (value && typeof value === 'object') {
       if (Array.isArray(value)) {
         if (value.length == 0) {
           delete object[i];
           continue;
+        } else {
+          for (let j = 0; j < value.length; j++) {
+            value[j] = fifterObjIsNull(value[j]);
+          }
         }
       }
-      fifterObjIsNull(value);
+
+      value = fifterObjIsNull(value);
       if (isEmpty(value)) {
         delete object[i];
       }
@@ -576,6 +582,7 @@ export const fifterObjIsNull = function(Obj) {
   }
   return object;
 };
+
 export const fifterbyArr = function(Obj, fifterArr) {
   var object = deepcopy(Obj);
   var newObj = {};

@@ -24,7 +24,7 @@
             <el-col :span="14">
               <el-input v-model.trim="registerForm.verify_key" type="text" placeholder="请输入验证码" @blur="showValue" class="verify-code-input"></el-input>
             </el-col>
-            <el-col :span="9" :offset="1"><img src="../assets/img/va.png" v-on:click="refreshVaImg"></el-col>
+            <el-col :span="9" :offset="1"><img :src="verifyCodeData.image_code_path" width="100%" height="32" v-on:click="refreshVaImg"></el-col>
           </el-row>
         </el-form-item>
         <el-form-item label="短信验证码：" prop="message_verify_code" class="verify-code-item">
@@ -75,6 +75,7 @@ export default {
         verify_key: '',
         message_verify_code: '',
       },
+      verifyCodeData:{},
       rules: {
         nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -122,14 +123,14 @@ export default {
   },
   methods: {
     refreshVaImg() {
-      console.log('测试')
       this.$$http('imageVerifyCode', {}).then((results) => {
-        console.log('results图片', results.data.data.results);
         // this.pageLoading = false;
-        // if (results.data && results.data.code == 0) {
+        if (results.data && results.data.code === 0) {
+          this.verifyCodeData= results.data.data;
+          console.log('results图片',results.data,this.verifyCodeData)
         //   this.tableData = results.data.data.results;
         //   console.log('this.tableData', this.tableData);
-        // }
+        }
       }).catch((err) => {
         // this.pageLoading = false;
       })

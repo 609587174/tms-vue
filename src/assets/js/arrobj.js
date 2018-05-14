@@ -1,4 +1,3 @@
-
 /* 数组对象相关 */
 /**
  * @function isArray
@@ -347,7 +346,7 @@ export const objPrint = function(obj, level, currentLevel, showLevel) {
         if (_currentLevel < _showLevel) objPrint(obj[t], _level - 1, _currentLevel + 1);
       } else {
         var temp = (obj && obj[t]) ? obj[t].toString().replace(/[\n\r]/gi, "") : '';
-      //console.warn("objPrint ", arrow + "[" + _level + ":" + _currentLevel + "]" + "[" + t + "]=" + temp + "; ");
+        //console.warn("objPrint ", arrow + "[" + _level + ":" + _currentLevel + "]" + "[" + t + "]=" + temp + "; ");
       }
     }
   }
@@ -477,19 +476,19 @@ export const arrFilter = function(arr, filterObj, returnedFields, defaultValues,
   };
   if (typeof arr === 'object' && arr.constructor === Array) arr.map(function(n, i) {
 
-      for (t in filterObj) {
-        if (filterObj.hasOwnProperty(t) && n.hasOwnProperty(t)) {
-          //满足filterObj中任何一个条件就返回
-          if (filterObj[t] instanceof RegExp && n[t] && n[t].toString().match(filterObj[t])) {
-            pushToNewArr(newArr, n, returnedFields, defaultValues, returnedNameMap);
-            break;
-          } else if (n[t] && n[t] === filterObj[t]) {
-            pushToNewArr(newArr, n, returnedFields, defaultValues, returnedNameMap);
-            break;
-          }
+    for (t in filterObj) {
+      if (filterObj.hasOwnProperty(t) && n.hasOwnProperty(t)) {
+        //满足filterObj中任何一个条件就返回
+        if (filterObj[t] instanceof RegExp && n[t] && n[t].toString().match(filterObj[t])) {
+          pushToNewArr(newArr, n, returnedFields, defaultValues, returnedNameMap);
+          break;
+        } else if (n[t] && n[t] === filterObj[t]) {
+          pushToNewArr(newArr, n, returnedFields, defaultValues, returnedNameMap);
+          break;
         }
       }
-    });
+    }
+  });
   return newArr;
 }
 
@@ -547,3 +546,41 @@ export const deepcopy = function(source) {
   return sourceCopy;
 };
 
+export const fifterObjIsNull = function(Obj) {
+  var object = deepcopy(Obj);
+
+  var isEmpty = function(object) {
+    for (var name in object) {
+      return false;
+    }
+    return true;
+  }
+  for (var i in object) {
+    var value = object[i];
+    if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        if (value.length == 0) {
+          delete object[i];
+          continue;
+        }
+      }
+      fifterObjIsNull(value);
+      if (isEmpty(value)) {
+        delete object[i];
+      }
+    } else {
+      if (value === '' || value === null || value === undefined) {
+        delete object[i];
+      }
+    }
+  }
+  return object;
+};
+export const fifterbyArr = function(Obj, fifterArr) {
+  var object = deepcopy(Obj);
+  var newObj = {};
+  for (let i = 0; i < fifterArr.length; i++) {
+    newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
+  }
+  return newObj;
+}

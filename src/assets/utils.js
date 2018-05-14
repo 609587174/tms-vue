@@ -43,7 +43,8 @@ export const arrFilter = ARROBJ.arrFilter
 export const objValues = ARROBJ.objValues
 export const objKeys = ARROBJ.objKeys
 export const deepcopy = ARROBJ.deepcopy
-
+export const fifterObjIsNull = ARROBJ.fifterObjIsNull
+export const fifterbyArr = ARROBJ.fifterbyArr
 
 /* 字符串相关 */
 export const paddingZero = STR.paddingZero

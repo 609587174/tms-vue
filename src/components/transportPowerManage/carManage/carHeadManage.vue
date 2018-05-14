@@ -1,108 +1,74 @@
 <style scoped lang="less">
-@deep: ~'>>>';
-el-tabs__nav @{deep} .el-tabs__item {
-  margin-left: 15px;
-}
 
-.seachHeadCarListFrom {
-  margin-top: 30px;
-  .el-input {
-    width: 100%;
-  }
-  .el-select {
-    width: 100%;
-  }
-}
-
-.operation-button {
-  margin-top: 30px;
-}
-
-.headList {
-  border: 1px solid rgb(222, 222, 222);
-  margin-top: 10px;
-}
-
-.el-table table {
-  thead {
-    background-color: rgb(242, 245, 254);
-    th {
-      text-align: center;
-    }
-  }
-}
 
 </style>
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="clicktabs" type="border-card">
-      <el-tab-pane label="牵引车管理" name="first">
-        <el-form class="seachHeadCarListFrom" ref="seachHeadCarListFrom" :model="seachListParam" :rules="rules" label-position="'left'" label-width="80px">
-          <el-row>
-            <el-col :span="5">
-              <el-form-item label="挂车牌:">
-                <el-input :autofocus="true" placeholder="请输入车牌号" type="text" v-model="seachListParam.plate_number"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5" :offset="1">
-              <el-form-item label="车架号:">
-                <el-input placeholder="请输入车架号" type="text" v-model="seachListParam.vin_number"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5" :offset="1">
-              <el-form-item label="车辆所属:">
-                <el-select v-model="seachListParam.vehicle_type" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.vehicle_type_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4" :offset="1">
-              <el-form-item label="品牌型号:">
-                <el-select v-model="seachListParam.brand" placeholder="请选择车辆类型">
-                  <el-option v-for="(item,key) in selectData.brand_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="1" :offset="1">
-              <el-button type="primary" @click="searchList">搜索</el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-      </el-tab-pane>
-      <el-tab-pane label="挂车管理" name="second">
-      </el-tab-pane>
-    </el-tabs>
-    <el-row class="operation-button">
-      <el-col :offset="20" :span="4">
+    <div class="nav-tab">
+      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+        <el-tab-pane label="牵引车管理" name="first">
+          <div class="tab-screen">
+            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" :rules="rules">
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" size="mini" v-model="fifterParam.keyword" class="search-filters-screen">
+                    <el-select size="mini" v-model="fifterParam.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="4">
+                  <el-form-item label="车辆所属:" size="mini">
+                    <el-select v-model="seachListParam.vehicle_type" placeholder="请选择车辆类型">
+                      <el-option v-for="(item,key) in selectData.vehicle_type_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
+                  <el-form-item label="品牌型号:" size="mini">
+                    <el-select v-model="seachListParam.brand" placeholder="请选择品牌型号">
+                      <el-option v-for="(item,key) in selectData.brand_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="挂车管理" name="second">
+        </el-tab-pane>
+      </el-tabs>
+      <div class="operation-btn text-right">
         <el-button type="primary" @click="importList">导入</el-button>
         <el-button type="primary" @click="exportList">导出</el-button>
         <el-button type="primary" @click="addHeadCarPage">新增</el-button>
-      </el-col>
-    </el-row>
-    <div style="background-color:white" class="headList">
-      <el-table stripe :data="tableData" v-loading="pageLoading" style="width: 100%;marigin-top:20px;">
-        <el-table-column prop="plate_number" label="牵引车车牌号">
-        </el-table-column>
-        <el-table-column prop="vin_number" label="车架号">
-        </el-table-column>
-        <el-table-column prop="attributes.verbose" label="车辆归属">
-        </el-table-column>
-        <el-table-column prop="carrier.name" label="车辆所属">
-        </el-table-column>
-        <el-table-column prop="vehicle_type.verbose" label="车辆类型">
-        </el-table-column>
-        <el-table-column prop="brand" label="品牌型号">
-        </el-table-column>
-        <el-table-column label="操作" width="160" fixed="right">
-          <template slot-scope="scope">
-            <el-button @click="jumpPage(scope.row,'show')" type="text" size="small">查看</el-button>
-            <el-button @click="jumpPage(scope.row,'edit')" type="text" size="small">编辑</el-button>
-            <el-button @click="jumpPage(scope.row,'operation')" type="text" size="small">操作日志</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div style="width:30%;margin-top:15px;margin-left:35%;">
-        <el-pagination layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+      </div>
+      <div class="table-list">
+        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="150" fixed="right">
+            <template slot-scope="scope">
+              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',id:scope.row})">查看</el-button>
+              <el-dropdown trigger="click" @command="jumpPage">
+                <span class="el-dropdown-link">
+                      <i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="{operator:'show',id:scope.row}">查看</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'edit',id:scope.row}">编辑</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'operation',id:scope.row}">操作日志</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="page-list text-center">
+        <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
     </div>
@@ -113,6 +79,10 @@ export default {
   name: 'carHeadManage',
   data() {
     return {
+      fifterParam: {
+        keyword: "",
+        field: "",
+      },
       seachListParam: {
         plate_number: '',
         vin_number: '',
@@ -128,9 +98,38 @@ export default {
         totalPage: 100,
         pageSize: 10,
       },
+      thTableList: [{
+        title: '牵引车车牌号',
+        param: 'plate_number',
+        width: ''
+      }, {
+        title: '车架号',
+        param: 'vin_number',
+        width: ''
+      }, {
+        title: '车辆归属',
+        param: 'attributes.verbose',
+        width: ''
+      }, {
+        title: '车辆所属',
+        param: 'carrier.name',
+        width: ''
+      }, {
+        title: '车辆类型',
+        param: 'vehicle_type.verbose',
+        width: '250'
+      }, {
+        title: '品牌型号',
+        param: 'brand',
+        width: ''
+      }],
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
-        brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type
+        brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
+        fieldSelect: [
+          { id: 'plate_number', value: '挂车牌' },
+          { id: 'vin_number', value: '车架号' },
+        ]
       },
       tableData: [],
     }
@@ -142,6 +141,7 @@ export default {
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
+
         this.$router.push({ path: "/transportPowerManage/carManage/carTailManage" });
       }
     },
@@ -153,6 +153,7 @@ export default {
     },
     searchList: function() {
       var vm = this;
+      this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
       this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
         var resultData;
         if (result.data.code == 0) {
@@ -178,6 +179,9 @@ export default {
       })
 
     }
+  },
+  activated: function() {
+    this.activeName = 'first';
   },
   mounted: function() {
     this.searchList();

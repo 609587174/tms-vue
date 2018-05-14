@@ -89,7 +89,41 @@ const api = {
   getHeadDetalis: {
     url: '/truck/tractors/:id/',
     method: 'get',
-    desc: '获取牵引车',
+    desc: '获取牵引车详细信息',
+    param: {
+
+    }
+  },
+  searchTailCarList: {
+    url: '/truck/semitrailers/',
+    method: 'get',
+    desc: '获取挂车列表',
+    param: {
+
+    }
+  },
+  creatTailFrom: {
+    url: '/truck/semitrailers/',
+    method: 'post',
+    desc: '创建挂车',
+    param: {
+
+    }
+  },
+
+  getTailDetalis: {
+    url: '/truck/semitrailers/:id/',
+    method: 'get',
+    desc: '获取挂车详细信息',
+    param: {
+
+    }
+  },
+
+  upadteTailFrom: {
+    url: '/truck/semitrailers/:id/',
+    method: 'PATCH',
+    desc: '更新挂车',
     param: {
 
     }

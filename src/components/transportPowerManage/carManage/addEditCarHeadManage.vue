@@ -66,7 +66,7 @@
   background-color: rgb(235, 238, 245);
   height: 40px;
   text-align: center;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 40px;
 }
 
@@ -552,7 +552,6 @@ export default {
       for (var value in newObj) {
         if (getobj[value]) {
           newObj[value] = getobj[value];
-
         }
       }
       return newObj;
@@ -574,9 +573,9 @@ export default {
           this.headCarFormStep1.safety_valve_4_due_date = ''
       };
 
-      var sendData = this.fifterObj(this.headCarFormStep1);
+      var sendData = this.pbFunc.fifterObjIsNull(this.headCarFormStep1);
       sendData.attributes = sendData.attributes.key;
-      sendData.carrier = sendData.carrier.key;
+      sendData.carrier = sendData.carrier.id;
       sendData.vehicle_type = sendData.vehicle_type.key;
       sendData.trans_type = sendData.trans_type.key;
       sendData.fuel_type = sendData.fuel_type.key;
@@ -596,7 +595,7 @@ export default {
         };
 
       }).catch(function() {
-        //vm.activeStep += 1;
+        vm.pageLoading = false;
       });
     },
     updateFrom: function(step, operation) {
@@ -623,7 +622,7 @@ export default {
         sendData.tractor_insurances_add = tractor_insurances_add;
         sendData.id = vm.headId;
       }
-      var send = this.fifterObj(sendData);
+      var send = this.pbFunc.fifterObjIsNull(sendData);
       vm.pageLoading = true;
       this.$$http('upadteHeadFrom', send).then(function(result) {
         if (result.data.code == 0) {
@@ -669,9 +668,6 @@ export default {
       return object;
     },
     addInsuranceListForm: function() {
-      var a;
-      var c;
-      var b;
       this.headCarFormStep3.tractor_insurances.push({
         insurance_type: { key: "", verbose: "" },
         insurance_number: "",

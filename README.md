@@ -1,6 +1,6 @@
 # 91lng-tms-vue
 
-Vue.js ＋ vue-router ＋ vuex ＋ axios ＋ es6 + less + webpack project
+Vue.js ＋ vue-router ＋ vuex ＋ element ＋ axios ＋ es6 + less + webpack project
 
 * * *
 

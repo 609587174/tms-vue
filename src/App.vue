@@ -7,7 +7,8 @@
 @import './assets/css/tableStyle.less';
 @import './assets/css/style.css';
 @import './assets/css/detailStyle.less';
-@import './assets/css/userStyle.less';
+
+@import './assets/css/userStyle.less'; //登录 注册 找回密码
 
 </style>
 <template>
@@ -148,10 +149,8 @@ export default {
     this.$$http("getSelectData", {}).then(function(reslut) {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;
-
     });
     vm.signin();
-
   }
 };
 

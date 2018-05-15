@@ -7,15 +7,15 @@
   <div id="addPerson" class="detail-mian">
     <el-container>
       <el-header style="margin-top:15px;">
-        <p>人员信息</p>
+        <p>查看牵引车</p>
       </el-header>
       <el-main>
-        <el-form class="addheaduserform" label-width="120px" :model="userData" status-icon>
+        <el-form class="addheaduserform" label-width="120px" :model="headData" status-icon>
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  基础人员
+                  基础信息
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
@@ -25,96 +25,103 @@
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="姓名:">
-                  <div class="detail-form-item">{{userData.name}}</div>
+                <el-form-item label="挂车牌:">
+                  <div class="detail-form-item">{{headData.plate_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="从业类型:">
-                  <div class="detail-form-item">{{userData.work_type.verbose}}</div>
+                <el-form-item label="车辆归属:">
+                  <div class="detail-form-item">{{headData.attributes.verbose}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="手机号码:">
-                  <div class="detail-form-item">{{userData.mobile_phone}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="人员所属:">
-                  <div class="detail-form-item">{{userData.staff_type.verbose}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="身份证号:">
-                  <div class="detail-form-item">{{userData.id_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="在职状态:">
-                  <div class="detail-form-item">{{userData.on_job_status.verbose}}</div>
+                <el-form-item label="车辆所属:">
+                  <div class="detail-form-item">{{headData.carrier.name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="性别:">
-                  <div class="detail-form-item">{{userData.gender.verbose}}</div>
+                <el-form-item label="车架号:">
+                  <div class="detail-form-item">{{headData.vin_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="出生日期:">
-                  <div class="detail-form-item">{{userData.birthday}}</div>
+                <el-form-item label="发动机号:">
+                  <div class="detail-form-item">{{headData.engine_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="年龄:">
-                  <div class="detail-form-item">{{userData.age}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="家属姓名:">
-                  <div class="detail-form-item">{{userData.family_menber_name}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="家属联系方式:">
-                  <div class="detail-form-item">{{userData.family_menber_phone}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="准驾类型:">
-                  <div class="detail-form-item">{{userData.drive_license_allow_type}}</div>
+                <el-form-item label="车辆类型:">
+                  <div class="detail-form-item">{{headData.vehicle_type.verbose}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="所在地区:">
-                  <div class="detail-form-item">{{userData.area}}</div>
+                <el-form-item label="品牌型号:">
+                  <div class="detail-form-item">{{headData.brand}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="详细地址:">
-                  <div class="detail-form-item">{{userData.detail_address}}</div>
+                <el-form-item label="装备质量:">
+                  <div class="detail-form-item">{{headData.total_weight}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="身份证:">
-                  <div><img :src="userData.id_photo" alt="" width="150" height="80"></div>
+                <el-form-item label="牵引车总质量:">
+                  <div class="detail-form-item">{{headData.towing_weight}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="长度:">
+                  <div class="detail-form-item">{{headData.length}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="宽度:">
+                  <div class="detail-form-item">{{headData.width}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="高度:">
+                  <div class="detail-form-item">{{headData.height}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="运输介质:">
+                  <div class="detail-form-item">{{headData.trans_type.verbose}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="燃料类型:">
+                  <div class="detail-form-item">{{headData.fuel_type.verbose}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="危险品灯号:">
+                  <div class="detail-form-item">{{headData.danger_product_lamp}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="危险品灯号到期日期:" label-width="200px">
+                  <div class="detail-form-item">{{headData.danger_product_due_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <!-- </el-form> -->
           </div>
-          <div class="detail-list detail-form">
+          <div class="detail-list detail-form" v-if="headData.fuel_type.key=='GAS'">
             <div class="detail-form-title">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  驾驶证件信息
+                  气瓶信息
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
@@ -124,30 +131,68 @@
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="驾驶证档案编号:">
-                  <div class="detail-form-item">{{userData.drive_license_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="驾驶证初次发证时间:">
-                  <div class="detail-form-item">{{userData.drive_license_issue_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="驾驶证到期时间:">
-                  <div class="detail-form-item">{{userData.drive_license_due_date}}</div>
+                <el-form-item label="气瓶编号:">
+                  <div class="detail-form-item">{{headData.gas_bottle_number}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="驾驶证发证机关:">
-                  <div class="detail-form-item">{{userData.drive_license_issue_organ}}</div>
+                <el-form-item label="压力表编号:">
+                  <div class="detail-form-item">{{headData.pressure_gauge_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="驾驶证:">
-                  <div><img :src="userData.drive_license_photo" alt="" width="150" height="80"></div>
+                <el-form-item label="压力表到期日期:">
+                  <div class="detail-form-item">{{headData.pressure_gauge_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="安全阀编号1:">
+                  <div class="detail-form-item">{{headData.safety_valve_1_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="安全阀到期日期:">
+                  <div class="detail-form-item">{{headData.safety_valve_1_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="安全阀编号2:">
+                  <div class="detail-form-item">{{headData.safety_valve_2_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="安全阀到期日期:">
+                  <div class="detail-form-item">{{headData.safety_valve_2_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="安全阀编号3:">
+                  <div class="detail-form-item">{{headData.safety_valve_3_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="安全阀到期日期:">
+                  <div class="detail-form-item">{{headData.safety_valve_3_due_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="安全阀编号4:">
+                  <div class="detail-form-item">{{headData.safety_valve_4_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="安全阀到期日期:">
+                  <div class="detail-form-item">{{headData.safety_valve_4_due_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -157,7 +202,55 @@
             <div class="detail-form-title">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  从业资格证信息
+                  证件信息
+                </el-col>
+                <el-col :span="6" class="text-right">
+                  <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                </el-col>
+              </el-row>
+            </div>
+            <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="行驶证档案编号:">
+                  <div class="detail-form-item">{{headData.license_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="行驶证发证日期:">
+                  <div class="detail-form-item">{{headData.license_register_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="运营者年审日期:">
+                  <div class="detail-form-item">{{headData.license_verify_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <el-form-item label="运营证号:">
+                  <div class="detail-form-item">{{headData.operation_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="运营证发证日期:">
+                  <div class="detail-form-item">{{headData.operation_issue_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="行驶证年审日期:">
+                  <div class="detail-form-item">{{headData.operation_verify_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- </el-form> -->
+          </div>
+          <div class="detail-list detail-form">
+            <div class="detail-form-title">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  保险信息
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <el-button type="primary" size="mini" @click="goEditDetail(2)">编辑该条</el-button>
@@ -165,189 +258,52 @@
               </el-row>
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="从业资格证号:" prop="qualification_certificate_number">
-                  <div class="detail-form-item">{{userData.qualification_certificate_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="从业资格证证初次发证时间:">
-                  <div class="detail-form-item">{{userData.qualification_certificate_issue_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="从业资格证到期时间:">
-                  <div class="detail-form-item">{{userData.qualification_certificate_due_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="从业资格证发证机关:">
-                  <div class="detail-form-item">{{userData.qualification_certificate_issue_organ}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="从业资格证:">
-                  <div><img :src="userData.qualification_certificate_photo" alt="" width="150" height="80"></div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!-- </el-form> -->
-          </div>
-          <div class="detail-list detail-form">
-            <div class="detail-form-title">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  押运证信息
-                </el-col>
-                <el-col :span="6" class="text-right">
-                  <el-button type="primary" size="mini" @click="goEditDetail(3)">编辑该条</el-button>
-                </el-col>
-              </el-row>
-            </div>
-            <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="押运证号:">
-                  <div class="detail-form-item">{{userData.escort_license_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="押运证初次发证时间:">
-                  <div class="detail-form-item">{{userData.escort_license_issue_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="押运证到期时间:">
-                  <div class="detail-form-item">{{userData.escort_license_due_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="押运证发证机关:">
-                  <div class="detail-form-item">{{userData.escort_license_issue_organ}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="从业资格证:">
-                  <div><img :src="userData.escort_license_photo" alt="" width="150" height="80"></div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!-- </el-form> -->
-          </div>
-          <div class="detail-list detail-form">
-            <div class="detail-form-title">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  劳务信息
-                </el-col>
-                <el-col :span="6" class="text-right">
-                  <el-button type="primary" size="mini" @click="goEditDetail(4)">编辑该条</el-button>
-                </el-col>
-              </el-row>
-            </div>
-            <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="录用日期:">
-                  <div class="detail-form-item">{{userData.labour_employ_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="上岗日期:">
-                  <div class="detail-form-item">{{userData.labour_on_work_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下岗日期:">
-                  <div class="detail-form-item">{{userData.labour_off_work_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="合同起始日期:">
-                  <div class="detail-form-item">{{userData.contract_start_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="合同截止日期:">
-                  <div class="detail-form-item">{{userData.contract_due_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="转正日期:">
-                  <div class="detail-form-item">{{userData.contract_correct_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="8">
-                <el-form-item label="体检日期:">
-                  <div class="detail-form-item">{{userData.heath_examination_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="40">
-              <el-col :span="24">
-                <el-form-item label="体检备注:">
-                  <div class="detail-form-item">{{userData.heath_examination_remark}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!-- </el-form> -->
-          </div>
-          <div class="detail-list detail-form">
-            <div class="detail-form-title ">
-              <el-row :gutter="40">
-                <el-col :span="12" :offset="6" class="text-center">
-                  培训信息
-                </el-col>
-                <el-col :span="6" class="text-right">
-                  <el-button type="primary" size="mini" @click="goEditDetail(4)">新增一条</el-button>
-                </el-col>
-              </el-row>
-            </div>
-            <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :model="userData" status-icon> -->
-            <div v-for="(item,key) in userData.carrier_driver_trainings">
+            <div v-for="(item,key) in headData.tractor_insurances">
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="培训时间:">
-                    <div class="detail-form-item">{{item.entry_training_date}}</div>
+                  <el-form-item label="保险类型:" prop="qualification_certificate_number">
+                    <div class="detail-form-item">{{item.insurance_type.verbose}}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="培训内容:">
-                    <div class="detail-form-item">{{item.entry_training_content}}</div>
+                  <el-form-item label="保单号:">
+                    <div class="detail-form-item">{{item.insurance_number}}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="培训考核:">
-                    <div class="detail-form-item">{{item.entry_training_exam}}</div>
+                  <el-form-item label="投保方式:">
+                    <div class="detail-form-item">{{item.insurance_method.verbose}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="考核结果:">
-                    <div class="detail-form-item">{{item.entry_training_exam_result}}</div>
+                  <el-form-item label="入保公司:">
+                    <div class="detail-form-item">{{item.insurance_company}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="保险金额:">
+                    <div class="detail-form-item">{{item.amount}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="备注:">
-                    <div class="detail-form-item">{{item.entry_training_remark}}</div>
+                  <el-form-item label="入保日期:">
+                    <div class="detail-form-item">{{item.insurance_start_date}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="到期日期:">
+                    <div class="detail-form-item">{{item.insurance_due_date}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
             </div>
             <!-- </el-form> -->
           </div>
+          <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
         </el-form>
       </el-main>
     </el-container>
@@ -355,70 +311,75 @@
 </template>
 <script>
 export default {
-  name: 'addPerson',
+  name: 'showHeadDetails',
+
   data() {
     return {
-      activeStep: 0,
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6
-        }
+      headData: {
+        plate_number: '', //车牌号
+        attributes: { key: '', verbose: '' }, //车辆归属
+        carrier: { name: '', id: '' },
+        vin_number: '',
+        engine_number: '',
+        vehicle_type: { key: '', verbose: '' },
+        brand: '',
+        total_weight: '',
+        towing_weight: '',
+        length: '',
+        width: '',
+        height: '',
+        trans_type: { key: '', verbose: '' },
+        fuel_type: { key: 'GAS', verbose: '' },
+        danger_product_lamp: '',
+        danger_product_due_date: '',
+        gas_bottle_number: '',
+        pressure_gauge_number: '',
+        pressure_gauge_due_date: '',
+        safety_valve_1_number: '',
+        safety_valve_1_due_date: '',
+        safety_valve_2_number: '',
+        safety_valve_2_due_date: '',
+        safety_valve_3_number: '',
+        safety_valve_3_due_date: '',
+        safety_valve_4_number: '',
+        safety_valve_4_due_date: '',
+        license_number: '',
+        license_register_date: '',
+        license_verify_date: '',
+        operation_number: '',
+        operation_issue_date: '',
+        operation_verify_date: '',
+        tractor_insurances: []
       },
-      userData: {
-
-      },
-      selectData: {
-        clientTypeSelect: [
-          { id: '1', value: '自有车辆' },
-          { id: '2', value: '平台客户' },
-        ],
-        employmentTypeSelect: [
-          { id: '1', value: '驾驶员' },
-          { id: '2', value: '押运员' },
-          { id: '3', value: '驾驶/押运员' },
-        ],
-        staffsSelect: [
-          { id: '1', value: '自有车辆人员' },
-          { id: '2', value: '三方车辆人员' }
-        ],
-        onTheJobStatusSelect: [
-          { id: '1', value: '在职' },
-          { id: '2', value: '离职' }
-        ],
-      },
-      nextStepBtn: {
-        isLoading: false,
-        btnText: '保存并退出',
-        isDisabled: false,
-      }
+      paddingloading: false
     }
   },
   created() {
     this.getDetail();
   },
   computed: {
-    id: function() {
-      return this.$route.query.id;
+    headId: function() {
+      return this.$route.query.headId;
     }
   },
   methods: {
     getDetail: function() {
-      this.$$http('getDriversDetail', { id: this.id }).then((results) => {
+      this.paddingloading = true;
+      this.$$http('getHeadDetalis', { id: this.headId }).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.userData = results.data.data;
-          console.log('this.userData', this.userData);
+          this.headData = results.data.data;
+          this.paddingloading = false;
+        } else {
+          this.paddingloading = false;
+          Message.error("获取数据失败");
         }
+      }).catch(() => {
+        this.paddingloading = false;
       })
 
     },
-    handleRemove: function(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview: function(file) {
-      console.log(file);
-    },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId });
     },
 
   }

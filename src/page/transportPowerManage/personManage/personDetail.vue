@@ -106,7 +106,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>所在地区:</label>
-                <div class="detail-form-item">{{userData.area}}</div>
+                <div class="detail-form-item">{{userData.address.province}}{{userData.address.city}}{{userData.address.area}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -352,19 +352,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训时间:</label>
-                  <div class="detail-form-item">{{userData.entry_training_date}}</div>
+                  <div class="detail-form-item">{{item.entry_training_date}}</div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训内容:</label>
-                  <div class="detail-form-item">{{userData.entry_training_content}}</div>
+                  <div class="detail-form-item">{{item.entry_training_content}}</div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训考核:</label>
-                  <div class="detail-form-item">{{userData.entry_training_exam}}</div>
+                  <div class="detail-form-item">{{item.entry_training_exam}}</div>
                 </div>
               </el-col>
             </el-row>
@@ -372,7 +372,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>考核结果:</label>
-                  <div class="detail-form-item">{{userData.entry_training_exam_result}}</div>
+                  <div class="detail-form-item">{{item.entry_training_exam_result}}</div>
                 </div>
               </el-col>
             </el-row>
@@ -380,7 +380,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>备注:</label>
-                  <div class="detail-form-item">{{userData.entry_training_remark}}</div>
+                  <div class="detail-form-item">{{item.entry_training_remark}}</div>
                 </div>
               </el-col>
             </el-row>
@@ -406,7 +406,12 @@ export default {
         work_type: {},
         staff_type: {},
         on_job_status: {},
-        gender: {}
+        gender: {},
+        address: {
+          province: '',
+          city: '',
+          area: '',
+        }
       },
       nextStepBtn: {
         isLoading: false,
@@ -428,7 +433,17 @@ export default {
       this.$$http('getDriversDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.userData = results.data.data;
-          console.log('this.userData', this.userData);
+          this.userData.address = {
+            province: '',
+            city: '',
+            area: '',
+          }
+
+          this.userData.address.province = this.userData.area.area_name ? this.userData.area.area_name : '';
+          this.userData.address.city = (this.userData.area.city && this.userData.area.city.area_name) ? this.userData.area.city.area_name : '';
+          this.userData.address.area = (this.userData.area.city && this.userData.area.city.county) ? this.userData.area.city.county.area_name : '';
+
+          console.log('this.userData', this.userData.address);
         }
       })
 

@@ -589,17 +589,18 @@ export default {
         entry_training_exam: '',
         entry_training_exam_result: '',
         entry_training_remark: '',
-        default: false,
+        isDefault: false,
         isLoading: false,
         isDisabled: false,
       }
       this.userForm.carrier_driver_trainings.push(newTraining);
     },
     delTraining: function(index) {
-      if (this.userForm.carrier_driver_trainings[index].default) {
+      console.log('index', index, this.userForm.carrier_driver_trainings[index]);
+      if (this.userForm.carrier_driver_trainings[index].isDefault) {
         this.userForm.carrier_driver_trainings[index].isLoading = true;
         this.userForm.carrier_driver_trainings[index].isDisabled = true;
-        this.$$http('deleteDriverTraining', { id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
+        this.$$http('deleteDriverTraining', { id: this.id, carrier_driver_training_id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
           this.userForm.carrier_driver_trainings[index].isLoading = false;
           this.userForm.carrier_driver_trainings[index].isDisabled = false;
           console.log('results', results);
@@ -654,7 +655,6 @@ export default {
 
       console.log('postData', postData);
       //postData = this.pbFunc.fifterObjIsNull(postData);
-      return false;
       this.$$http(apiName, postData).then((results) => {
         btnObject.btnText = btnTextCopy;
         btnObject.isLoading = false;

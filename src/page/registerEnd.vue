@@ -4,6 +4,7 @@
 </style>
 <template>
   <div>
+    <public-header></public-header>
     <div class="user-page" @keyup.enter="onSubmit">
       <div v-if="isRegisterSuccess">
         <div class="user-page-title">注册</div>
@@ -18,7 +19,7 @@
             <el-input v-model.trim="registerForm.contact_phone" size="small" type="text" placeholder="请输入密码"></el-input>
           </el-form-item>
           <el-form-item label="公司地址：" prop="area">
-            <!-- <choose-address :address.sync="area"></choose-address> -->
+            <choose-address :address.sync="address"></choose-address>
             <!-- <el-row :gutter="0">
               <el-col :md="8">
                 <el-select v-model="registerForm.detail_address" size="small" placeholder="省">
@@ -73,10 +74,12 @@
   </div>
 </template>
 <script>
-import chooseAddress from '../components/chooseAddress'
+import chooseAddress from '../components/chooseAddress';
+import publicHeader from '../components/publicHeader';
 export default {
   components: {
     chooseAddress: chooseAddress,
+    publicHeader: publicHeader,
   },
   data() {
 
@@ -93,7 +96,7 @@ export default {
         name: '',
         contact_name: '',
         contact_phone: '',
-        area: 426,
+        area: '',
         detail_address: '',
         carrier_type: ''
       },
@@ -147,8 +150,7 @@ export default {
     onSubmit(registerForm) {
       console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id
-
-
+      this.registerForm.area = this.address.area
       this.$refs[registerForm].validate((valid) => {
         if (valid) {
           if (this.checked) {

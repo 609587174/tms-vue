@@ -4,6 +4,7 @@
 </style>
 <template>
   <div>
+    <public-header></public-header>
     <div class="user-page" @keyup.enter="onSubmit">
       <div class="user-page-title">注册</div>
       <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
@@ -41,7 +42,7 @@
           <el-form-item>
             <el-button type="success" @click="onSubmit('registerForm')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>
-          <el-form-item>已有账号，请<span class="text-blue">登录</span></el-form-item>
+          <el-form-item>已有账号，请<span class="text-blue cursor-pointer" v-on:click="toLoginPage">登录</span></el-form-item>
         </div>
         <div class="user-page-img"><img src="../assets/img/user_6.png"></div>
       </el-form>
@@ -49,7 +50,11 @@
   </div>
 </template>
 <script>
+import publicHeader from '../components/publicHeader';
 export default {
+  components: {
+    publicHeader: publicHeader,
+  },
   data() {
     const checkPhone = (rule, value, callback) => {
       if (this.registerForm.phone) {
@@ -146,6 +151,9 @@ export default {
     },
     showValue() {
       console.log(this.registerForm.message_verify_code)
+    },
+    toLoginPage() {
+      this.$router.push({ path: '/login' });
     },
     onSubmit(registerForm) {
       let postData = this.registerForm;

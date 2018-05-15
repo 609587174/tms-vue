@@ -141,7 +141,18 @@ export default {
     }
   },
   created: function(newPath) {
-    var vm = this;
+    let vm = this;
+    let token = vm.pbFunc.getLocalData('token',true);
+    console.log('token',token)
+    if (token) {
+      this.$$http('getUser', {}).then((results) => {
+        if (results.data && results.data.code === 0) {
+          this.$store.state.common.users = results.data.data;
+        }
+      }).catch((err) => {
+        this.$message.error('获取用户信息失败');
+      })
+    }
     this.$$http("getSelectData", {}).then(function(reslut) {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;

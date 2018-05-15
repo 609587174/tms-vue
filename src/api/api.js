@@ -126,6 +126,14 @@ const api = {
 
     }
   },
+  getUser: {
+    url: '/user/users/profile/',
+    method: 'get',
+    desc: '获取用户个人信息',
+    param: {
+
+    }
+  },
   searchHeadCarList: {
     url: '/truck/tractors/',
     method: 'get',

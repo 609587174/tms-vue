@@ -4,6 +4,7 @@
 </style>
 <template>
   <div>
+    <public-header></public-header>
     <div class="user-page" @keyup.enter="login">
       <div class="user-page-title">登录</div>
       <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
@@ -31,14 +32,18 @@
           </el-form-item>
           <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item>
         </div>
-        <div class="user-page-img"><img src="../assets/img/user_2.png"></div>
+        <div class="user-page-img"><img class="img-left" src="../assets/img/user_1.png"></div>
       </el-form>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
+import publicHeader from '../components/publicHeader'
 export default {
+  components: {
+    publicHeader: publicHeader,
+  },
   data() {
     const validatePass = (rule, value, callback) => {
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
@@ -102,14 +107,16 @@ export default {
   },
   methods: {
     login(rules) {
+
       var vm = this;
+      console.log('vm.pbFunc',vm.pbFunc)
       this.ruleForm.verify_key = this.verifyCodeData.verify_key;
       vm.submitBtn.isDisabled = true;
       this.$refs[rules].validate((valid) => {
         if (valid) {
           this.submitBtn.btnText = '登录中';
           vm.submitBtn.isBtnLoading = true;
-          this.$$http('login',this.ruleForm).then((results) => {
+          this.$$http('login', this.ruleForm).then((results) => {
             this.submitBtn.btnText = '登录';
             vm.submitBtn.isDisabled = false;
             vm.submitBtn.isBtnLoading = false;
@@ -118,8 +125,10 @@ export default {
                 message: '登录成功',
                 type: 'success'
               });
+              this.getUser();
+              vm.pbFunc.setLocalData('token', results.data.data.ticket,true);
               setTimeout(() => {
-                vm.pbFunc.setLocalData('token', results.data.data.ticket);
+
                 vm.$emit('login', vm.$router.currentRoute.query.from);
               }, 1000)
             }
@@ -132,12 +141,12 @@ export default {
           vm.submitBtn.isDisabled = false;
         }
       });
-
     },
+
     toLink(type) {
-      if(type === 'register'){
+      if (type === 'register') {
         this.$router.push({ path: '/register' });
-      }else if(type === 'reset'){
+      } else if (type === 'reset') {
         this.$router.push({ path: '/forgetPassword' });
       }
     },

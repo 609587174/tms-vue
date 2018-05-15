@@ -4,6 +4,7 @@
 </style>
 <template>
   <div>
+    <public-header></public-header>
     <div class="user-page" @keyup.enter="login">
       <div v-if="isResetSuccess">
         <div class="user-page-title">找回密码</div>
@@ -35,9 +36,9 @@
               <el-button v-on:click="resetPassword('ruleForm')" type="success" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
             </el-form-item>
             </el-form-item>
-            <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue">请登录</span></el-form-item>
+            <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue cursor-pointer">请登录</span></el-form-item>
           </div>
-          <div class="user-page-img"><img src="../assets/img/user_6.png"></div>
+          <div class="user-page-img"><img class="img-left"  src="../assets/img/user_6.png"></div>
         </el-form>
       </div>
       <div v-if="!isResetSuccess">
@@ -53,16 +54,19 @@
         <div class="btn-link">
           <el-button type="success">登录</el-button>
         </div>
-        <div class="user-page-img text-center"><img src="../assets/img/user_3.png"></div>
+        <div class="user-page-img text-center"><imgsrc="../assets/img/user_3.png"></div>
       </div>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
-import * as util from '../assets/utils.js';
+import publicHeader from '../components/publicHeader'
 //登录
 export default {
+  components: {
+    publicHeader: publicHeader,
+  },
   data() {
     var validatePass = (rule, value, callback) => {
       var lv = 0;

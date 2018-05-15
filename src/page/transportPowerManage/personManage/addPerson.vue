@@ -360,7 +360,7 @@
                 <el-col :span="12" :offset="6" class="text-center">
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <el-button type="success" size="mini" @click="delTraining(key)">删除</el-button>
+                  <el-button type="success" size="mini" @click="delTraining(key)" :loading="item.isLoading" :disabled="item.isDisabled">删除</el-button>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
@@ -404,7 +404,7 @@
             <div class="detail-btn" v-show="userForm.carrier_driver_trainings.length">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="primary" @click="goOtherSetp()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
+                  <el-button type="primary" @click="saveTrainingAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -590,12 +590,89 @@ export default {
         entry_training_exam_result: '',
         entry_training_remark: '',
         default: false,
+        isLoading: false,
+        isDisabled: false,
       }
       this.userForm.carrier_driver_trainings.push(newTraining);
     },
     delTraining: function(index) {
+      if (this.userForm.carrier_driver_trainings[index].default) {
+        this.userForm.carrier_driver_trainings[index].isLoading = true;
+        this.userForm.carrier_driver_trainings[index].isDisabled = true;
+        this.$$http('deleteDriverTraining', { id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
+          this.userForm.carrier_driver_trainings[index].isLoading = false;
+          this.userForm.carrier_driver_trainings[index].isDisabled = false;
+          console.log('results', results);
+          if (results.data && results.data.code == 0 && results.data.data) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
+            this.userForm.carrier_driver_trainings.splice(index, 1);
+          }
+        }).catch((err) => {
+          this.userForm.carrier_driver_trainings[index].isLoading = false;
+          this.userForm.carrier_driver_trainings[index].isDisabled = false;
+        })
+      } else {
+        this.userForm.carrier_driver_trainings.splice(index, 1);
+      }
       console.log('index', index);
-      this.userForm.carrier_driver_trainings.splice(index, 1);
+    },
+    saveTrainingAndReview: function() {
+      let btnObject = this.saveBasicAndReviewBtn;
+      let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
+      let apiName = 'patchDrivers';
+      btnObject.isDisabled = true;
+
+      let postData = {
+        carrier_driver_trainings: [],
+        carrier_driver_trainings_add: [],
+      }
+
+      for (let i in this.userForm.carrier_driver_trainings) {
+        let keyArray = ['entry_training_content', 'entry_training_date', 'entry_training_exam', 'entry_training_exam_result', 'entry_training_remark'];
+        let carrier_driver_trainings = this.pbFunc.fifterbyArr(this.userForm.carrier_driver_trainings[i], keyArray);
+        if (this.userForm.carrier_driver_trainings[i].default) {
+          postData.carrier_driver_trainings.push(carrier_driver_trainings);
+        } else {
+          postData.carrier_driver_trainings_add.push(carrier_driver_trainings);
+        }
+      }
+      if (!postData.carrier_driver_trainings.length) {
+        delete postData.carrier_driver_trainings
+      }
+      if (!postData.carrier_driver_trainings_add.length) {
+        delete postData.carrier_driver_trainings_add
+      }
+
+      postData.id = this.id;
+
+
+      btnObject.btnText = '正在提交';
+      btnObject.isLoading = true;
+
+      console.log('postData', postData);
+      //postData = this.pbFunc.fifterObjIsNull(postData);
+      return false;
+      this.$$http(apiName, postData).then((results) => {
+        btnObject.btnText = btnTextCopy;
+        btnObject.isLoading = false;
+        btnObject.isDisabled = false;
+        console.log('results', results);
+        if (results.data && results.data.code == 0 && results.data.data) {
+          this.$message({
+            message: '提交成功',
+            type: 'success'
+          });
+          this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+        }
+      }).catch((err) => {
+        btnObject.btnText = btnTextCopy;
+        btnObject.isLoading = false;
+        btnObject.isDisabled = false;
+      })
+
     },
     getDetail: function() {
       this.pageLoading = true;
@@ -613,6 +690,13 @@ export default {
             city: '',
             area: '',
           }
+
+          for (let i in this.detailData.carrier_driver_trainings) {
+            this.detailData.carrier_driver_trainings[i].isDefault = true;
+            this.detailData.carrier_driver_trainings[i].isDisabled = false;
+            this.detailData.carrier_driver_trainings[i].isLoading = false;
+          }
+
           let areaCopy = null;
           if (this.detailData.area) {
             areaCopy = this.pbFunc.deepcopy(this.detailData.area);
@@ -621,12 +705,7 @@ export default {
           this.detailData.address.city = (areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
           this.detailData.address.area = (areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
 
-          for (let i in this.detailData.carrier_driver_trainings) {
-            this.detailData.carrier_driver_trainings.isDefault = true;
-          }
-
-
-          console.log('this.detailData', results.data.data);
+          console.log('this.detailDta', results.data.data);
         }
       })
     },

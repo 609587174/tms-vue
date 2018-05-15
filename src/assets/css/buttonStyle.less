@@ -21,10 +21,20 @@
     }
 }
 .el-button--success {
-    border-color: @tms-green;
-    background-color: @tms-green;
-    &:hover {
-        border-color: @tms-light-green;
-        background-color: @tms-light-green;
+    border-color: @tms-green!important;
+    background-color: @tms-green!important;
+    &:hover,
+    &:active {
+        border-color: @tms-light-green!important;
+        background-color: @tms-light-green!important;
     }
+    // &.is-disabled {
+    //     border-color: @tms-light-green;
+    //     background-color: @tms-light-green;
+    //     &:hover,
+    //     &:active {
+    //         border-color: @tms-light-green;
+    //         background-color: @tms-light-green;
+    //     }
+    // }
 }

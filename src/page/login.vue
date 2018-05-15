@@ -1,70 +1,83 @@
 <style scoped lang="less">
 
+
 </style>
 <template>
   <div>
+    <public-header></public-header>
     <div class="user-page" @keyup.enter="login">
       <div class="user-page-title">登录</div>
-      <el-form class="user-form" label-width="100px" :label-position="'left'" :rules="rules" :model="ruleForm" status-icon ref="loginFrom">
+      <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
         <p class="des"></p>
-        <el-form-item label="用户名：" prop="userName">
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" size="small" v-model="ruleForm.userName" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+        <el-form-item label="用户名：" prop="username">
+          <el-input :autofocus="true" placeholder="请输入用户名／手机号" size="small" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
           <el-input placeholder="请输入密码" type="password" size="small" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
-        <el-form-item label="验证码：" prop="ValNum" validate-on-rule-change>
+        <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
-              <el-input placeholder="请输入验证码" size="small" type="text" v-model="ruleForm.ValNum" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
+              <el-input placeholder="请输入验证码" size="small" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
             </el-col>
-            <el-col :span="8" :offset="1"><img src="../assets/img/va.png" width="100%" v-on:click="refreshVaImg"></el-col>
+            <el-col :span="8" :offset="1"><img :src="verifyCodeData.image_code_path" width="100%" height="32" v-on:click="refreshVaImg"></el-col>
           </el-row>
         </el-form-item>
         <div class="user-page-btn">
-          <el-form-item>忘记密码？<span v-on:click="toForgetPassword" class="text-blue">找回密码</span></el-form-item>
+          <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item>
           <el-form-item>
-            <el-button @click.native="login" type="success" :loading="isBtnLoading">{{btnText}}</el-button>
+            <el-button @click.native="login('ruleForm')" type="success" :loading="submitBtn.isBtnLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>
-          <el-form-item>没有账号，<span v-on:click="toLogin('loginFrom')" class="text-blue">请注册</span></el-form-item>
+          <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item>
         </div>
-        <div class="user-page-img"><img src="../assets/img/user_2.png"></div>
+        <div class="user-page-img"><img class="img-left" src="../assets/img/user_1.png"></div>
       </el-form>
     </div>
   </div>
 </template>
 <script>
 import axios from 'axios';
+import publicHeader from '../components/publicHeader'
 export default {
+  components: {
+    publicHeader: publicHeader,
+  },
   data() {
-    var validatePass = (rule, value, callback) => {
+    const validatePass = (rule, value, callback) => {
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
         callback();
       } else {
         callback(new Error("密码不正确"));
       }
     };
-    var validateNum = (rule, value, callback) => {
-      if (value == "") {
-        callback(new Error("验证码不能为空"));
+    // const validateNum = (rule, value, callback) => {
+    //   if (value == "") {
+    //     callback(new Error("验证码不能为空"));
+    //   } else {
+    //     if (value !== this.vaImgNum) {
+    //       callback(new Error("验证码不正确"));
+    //     }
+    //   }
+    // };
+    const checkImgCode = (rule, value, callback) => {
+      if ((value.toUpperCase()) != this.verifyCodeData.verify_code) {
+        callback(new Error('验证码错误'));
       } else {
-        if (value !== this.vaImgNum) {
-          callback(new Error("验证码不正确"));
-        }
+        callback();
       }
     };
     return {
-      isBtnLoading: false,
-      vaImgNum: "k9s5",
       ruleForm: {
-        userName: '',
+        username: '',
         password: '',
-        ValNum: ""
+        verify_key: '',
+        verify_code: ''
       },
+      verifyCodeData: {},
       rules: {
-        userName: [
+        username: [
           { required: true, message: '请输入用户名或手机号', trigger: 'blur' },
           { min: 4, max: 20, message: '用户名或手机号不正确', trigger: 'blur' }
         ],
@@ -72,9 +85,15 @@ export default {
           { required: true, message: '请输入密码', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
-        ValNum: [
+        verify_code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
+          { validator: checkImgCode, trigger: 'blur' }
         ]
+      },
+      submitBtn: {
+        btnText: '登录',
+        isLoading: false,
+        isDisabled: false,
       }
     };
   },
@@ -84,18 +103,52 @@ export default {
       return '登录';
     },
 
+
   },
   methods: {
-    login() {
+    login(rules) {
+
       var vm = this;
-      let loginParams = { name: vm.username, password: vm.password };
-      vm.isBtnLoading = true;
-      vm.isBtnLoading = false;
-      vm.pbFunc.setLocalData('token', "autostringify-liuming");
-      vm.$emit('login', vm.$router.currentRoute.query.from);
+      console.log('vm.pbFunc',vm.pbFunc)
+      this.ruleForm.verify_key = this.verifyCodeData.verify_key;
+      vm.submitBtn.isDisabled = true;
+      this.$refs[rules].validate((valid) => {
+        if (valid) {
+          this.submitBtn.btnText = '登录中';
+          vm.submitBtn.isBtnLoading = true;
+          this.$$http('login', this.ruleForm).then((results) => {
+            this.submitBtn.btnText = '登录';
+            vm.submitBtn.isDisabled = false;
+            vm.submitBtn.isBtnLoading = false;
+            if (results.data && results.data.code === 0) {
+              this.$message({
+                message: '登录成功',
+                type: 'success'
+              });
+              this.getUser();
+              vm.pbFunc.setLocalData('token', results.data.data.ticket,true);
+              setTimeout(() => {
+
+                vm.$emit('login', vm.$router.currentRoute.query.from);
+              }, 1000)
+            }
+          }).catch((err) => {
+            this.$message.error('登录失败');
+            vm.submitBtn.isDisabled = false;
+            vm.submitBtn.isBtnLoading = false;
+          })
+        } else {
+          vm.submitBtn.isDisabled = false;
+        }
+      });
     },
-    toForgetPassword() {
-      this.$router.push({ path: '/forgetPassword' });
+
+    toLink(type) {
+      if (type === 'register') {
+        this.$router.push({ path: '/register' });
+      } else if (type === 'reset') {
+        this.$router.push({ path: '/forgetPassword' });
+      }
     },
     callbackerr(cuowu) {
 
@@ -105,8 +158,8 @@ export default {
       this.$refs[loginFrom].validate((valid) => {
         if (!valid) {
           var callbackInfo = { errorField: "ValNum", errorMessage: "有错误" }
-          console.log(vm);
-          console.log(this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField)));
+          // console.log(vm);
+          // console.log(this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField)));
           this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField))[0].error = callbackInfo.errorMessage;
         } else {
           return false;
@@ -115,12 +168,18 @@ export default {
       //this.$router.push({ path: '/register' });
     },
     refreshVaImg() {
-
-
-    }
+      this.$$http('imageVerifyCode', {}).then((results) => {
+        if (results.data && results.data.code === 0) {
+          this.verifyCodeData = results.data.data;
+        }
+      }).catch((err) => {
+        // this.pageLoading = false;
+      })
+    },
   },
   created() {
     sessionStorage.clear();
+    this.refreshVaImg();
   }
 };
 

@@ -19,5 +19,6 @@ export default {
     removeButton: true,
     queryButton: false
   },
-  selectData: {}
+  selectData: {},//全局数据
+  users:{}//用户个人信息
 }

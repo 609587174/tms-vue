@@ -1,4 +1,4 @@
-<style scoped>
+<style scoped lang="less">
 .g-body {
   overflow-x: hidden;
   overflow-y: auto;
@@ -123,7 +123,7 @@
             </el-col>
           </el-row>
           <template v-for="(route, index) in menus">
-            <template v-if="route.children">
+            <template v-if="route.children && route.path !=='clientManage' && route.path !=='/clientManage'">
               <el-submenu :key="index" :index="route.name">
                 <template slot="title">
                   <i :class="[{ 'color-4a9bf8' : activeMenu.match(route.path) }, route.meta.iconName]"></i>

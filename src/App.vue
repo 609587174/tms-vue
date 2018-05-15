@@ -38,7 +38,7 @@ export default {
       this.$store.state.common.userData = { name: "测试名称" };
       typeof callback === 'function' && callback();
     },
-    getRoutes: function(userInfo) {
+    getRoutes: function(userInfo) { //根据后端返回菜单数据，动态的获取路由信息
       if (!userInfo) {
         return console.warn("菜单获取失败");
       }

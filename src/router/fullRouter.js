@@ -21,6 +21,36 @@ export default [{
       iconName: 'icon-lng-dashboard',
     },
     component: (resolve) => require(['../page/orders/orders'], resolve),
+    children: [{
+      path: 'orderDetail',
+      name: '订单详情',
+      meta: {
+        isVerificationL: false,
+      },
+      component: (resolve) => require(['../page/orders/orderDetail'], resolve),
+      children: [{
+        path: 'orderDetailTab',
+        name: '订单详情',
+        meta: {
+          isVerificationL: false,
+        },
+        component: (resolve) => require(['../page/orders/orderDetail/orderDetailTab'], resolve),
+      },{
+        path: 'arrangeCarTab',
+        name: '车辆指派',
+        meta: {
+          isVerificationL: false,
+        },
+        component: (resolve) => require(['../page/orders/orderDetail/arrangeCarTab'], resolve),
+      },{
+        path: 'orderRecordsTab',
+        name: '订单详情',
+        meta: {
+          isVerificationL: false,
+        },
+        component: (resolve) => require(['../page/orders/orderDetail/orderRecordsTab'], resolve),
+      }]
+    }]
   }, {
     path: 'logisticsManage',
     name: '物流管理',
@@ -105,6 +135,7 @@ export default [{
 
     }, {
       path: 'personManage',
+      redirect: '/transportPowerManage/personManage/personListManage',
       name: '人员管理',
       meta: {
         isVerificationL: false,
@@ -140,6 +171,7 @@ export default [{
   }, {
     path: 'clientManage',
     name: '客户管理',
+    redirect: '/clientManage/privateClientManage',
     meta: {
       isVerificationL: false,
       iconName: 'icon-customer',

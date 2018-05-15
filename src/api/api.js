@@ -295,6 +295,14 @@ const api = {
 
     }
   },
+  deleteDriverTraining: {
+    url: '/carrier/carrier_drivers/:id/carrier_driver_training/',
+    method: 'delete',
+    desc: '承运商司机培训记录删除',
+    param: {
+
+    }
+  },
 }
 
 export default api;

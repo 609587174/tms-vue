@@ -59,13 +59,13 @@ export default {
       });
     },
     provinceChange() {
-      this.getCity();
+      //this.getCity();
       this.address.city = '';
       this.address.area = '';
       this.$emit('chooseProvince');
     },
     cityChange() {
-      this.getArea();
+      //this.getArea();
       this.address.area = '';
       this.$emit('chooseCity');
     },
@@ -84,6 +84,20 @@ export default {
     chooseProvince: Function,
     chooseCity: Function,
     chooseArea: Function,
+  },
+  watch: {
+    'address.province': function(val, oldVal) {
+      if (val) {
+        this.getCity();
+      }
+      console.log('provinceval, oldVal', val, oldVal);
+    },
+    'address.city': function(val, oldVal) {
+      if (val) {
+        this.getArea();
+      }
+      console.log('provinceval, oldVal', val, oldVal);
+    }
   }
 }
 

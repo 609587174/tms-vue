@@ -174,7 +174,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="投保方式:">
-                    <div class="detail-form-item">{{item.insurance_type.verbose}}</div>
+                    <div class="detail-form-item">{{item.insurance_method.verbose}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -186,7 +186,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="保险金额:">
-                    <div><img :src="item.money" alt="" width="150" height="80"></div>
+                    <div class="detail-form-item">{{item.amount}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -253,71 +253,68 @@
 </template>
 <script>
 export default {
-  name: 'addPerson',
+  name: 'showTailDetails',
+
   data() {
     return {
-      activeStep: 0,
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6
-        }
-      },
-      userData: {
+      tailData: {
+        plate_number: "鲁GL8996", //挂车排
+        attributes: { key: '', verbose: '' }, //车辆归属
+        carrier: { name: '胜通物流公司', id: '55555c1f-1ffe-4419-9646-157c1aa0571d' }, //车辆所属
+        vin_number: "LZZ1CLVB6GA107016", //车架号
+        vehicle_type: { key: '', verbose: '' },
+        brand: "1231231233", //品牌型号
+        transport_weight: "", //质量
+        valume: "", //灌装容积
+        length: "", //长
+        width: "", //宽
+        height: "", //高
+        trans_type: { key: '', verbose: '' },
+        register_date: "", //车辆注册日期
 
+        license_number: "", //驾驶行驶证编号
+        license_register_date: "", //发证日期
+        license_register_date: "", //运营年审日期
+        operation_number: "", //运营号
+        operation_issue_date: "", //运营证发布日期
+        operation_verify_date: "", //运营证年审日期
+
+        operation_verify_date: "", //行驶证年审日期
+        semitrailer_insurances: [],
+        bottle_report_number: "", //罐体报告编号
+        bottle_verify_date: "11111", //罐体检验日期
+        pressure_bottle_number: "", //压力容器编号
+        pressure_bottle_verify_date: "", //压力容器检验日期
       },
-      selectData: {
-        clientTypeSelect: [
-          { id: '1', value: '自有车辆' },
-          { id: '2', value: '平台客户' },
-        ],
-        employmentTypeSelect: [
-          { id: '1', value: '驾驶员' },
-          { id: '2', value: '押运员' },
-          { id: '3', value: '驾驶/押运员' },
-        ],
-        staffsSelect: [
-          { id: '1', value: '自有车辆人员' },
-          { id: '2', value: '三方车辆人员' }
-        ],
-        onTheJobStatusSelect: [
-          { id: '1', value: '在职' },
-          { id: '2', value: '离职' }
-        ],
-      },
-      nextStepBtn: {
-        isLoading: false,
-        btnText: '保存并退出',
-        isDisabled: false,
-      }
+      paddingloading: false
     }
   },
   created() {
-
     this.getDetail();
   },
   computed: {
-    id: function() {
-      return this.$route.query.id;
+    tailId: function() {
+      return this.$route.query.tailId;
     }
   },
   methods: {
     getDetail: function() {
-      this.$$http('getDriversDetail', { id: this.id }).then((results) => {
+      this.paddingloading = true;
+      this.$$http('getTailDetalis', { id: this.tailId }).then((results) => {
         if (results.data && results.data.code == 0) {
-          this.userData = results.data.data;
-          console.log('this.userData', this.userData);
+          this.tailData = results.data.data;
+          this.paddingloading = false;
+        } else {
+          this.paddingloading = false;
+          Message.error("获取数据失败");
         }
+      }).catch(() => {
+        this.paddingloading = false;
       })
 
     },
-    handleRemove: function(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview: function(file) {
-      console.log(file);
-    },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage?activeStep=" + number + "&tailId=" + this.tailId });
     },
 
   }

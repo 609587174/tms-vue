@@ -21,17 +21,8 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
-                  <el-form-item label="车辆所属:" size="mini">
-                    <el-select v-model="seachListParam.vehicle_type" placeholder="请选择车辆类型">
-                      <el-option v-for="(item,key) in selectData.vehicle_type_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="4">
                   <el-form-item label="品牌型号:" size="mini">
-                    <el-select v-model="seachListParam.brand" placeholder="请选择品牌型号">
-                      <el-option v-for="(item,key) in selectData.brand_Select" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                    </el-select>
+                    <el-input placeholder="请输入" type="num" v-model="fifterParam.brand"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -52,15 +43,14 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',id:scope.row})">查看</el-button>
+              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
               <el-dropdown trigger="click" @command="jumpPage">
                 <span class="el-dropdown-link">
                       <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="{operator:'show',id:scope.row}">查看</el-dropdown-item>
-                  <el-dropdown-item :command="{operator:'edit',id:scope.row}">编辑</el-dropdown-item>
-                  <el-dropdown-item :command="{operator:'operation',id:scope.row}">操作日志</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'operation',rowData:scope.row}">操作日志</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -86,7 +76,6 @@ export default {
       seachListParam: {
         plate_number: '',
         vin_number: '',
-        vehicle_type: '',
         brand: '',
         page: 1
       },
@@ -141,7 +130,6 @@ export default {
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-
         this.$router.push({ path: "/transportPowerManage/carManage/carTailManage" });
       }
     },
@@ -153,7 +141,9 @@ export default {
     },
     searchList: function() {
       var vm = this;
-      this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
+      if (this.seachListParam[this.fifterParam.field]) {
+        this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
+      }
       this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
         var resultData;
         if (result.data.code == 0) {
@@ -164,12 +154,12 @@ export default {
         vm.pageLoading = false;
       });
     },
-    jumpPage: function(scope, type) {
-      if (type = "edit") {
+    jumpPage: function(scope) {
+      if (scope.operator == "edit") {
 
-      } else if (type = "show") {
-
-      } else if (type = "operation") {
+      } else if (scope.operator == "show") {
+        this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + scope.rowData.id });
+      } else if (scope.operator == "operation") {
 
       }
     },

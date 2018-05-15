@@ -43,7 +43,6 @@
                     </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="{operator:'show',id:scope.row}">查看</el-dropdown-item>
-                  <el-dropdown-item :command="{operator:'edit',id:scope.row}">编辑</el-dropdown-item>
                   <el-dropdown-item :command="{operator:'operation',id:scope.row}">操作日志</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>

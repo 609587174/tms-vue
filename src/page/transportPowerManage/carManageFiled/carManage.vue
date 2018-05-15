@@ -26,9 +26,7 @@ export default {
       import ("../../../components/transportPowerManage/carManage/carHeadManage.vue")
   },
   data() {
-    return {
-      msg: '子组件',
-      showMessage: this.$store.state.common.showAmessage,
+    return { in: ""
     }
   },
   methods: {

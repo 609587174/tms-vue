@@ -32,9 +32,7 @@ export default {
       // let localUser = this.pbFunc.session('token'); // if (!localUser) { // return this.$router.push({ path: '/login', query: { from: this.$router.currentRoute.path } }); // }
 
       let menuData = staticData.staticData();
-      console.log('menuData', menuData);
       let allowedRouter = this.getRoutes(menuData.data);
-      console.log('allowedRouter', allowedRouter);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
@@ -52,7 +50,6 @@ export default {
         array.map(key => {
           if (key.menu_permission_name) {
             let hashKey = ((base ? base + '/' : '') + key.menu_permission_name).replace(/^\//, '');
-            console.log('hashKey', hashKey);
             hashMenus['/' + hashKey] = true;
             hasOperationJur['/' + hashKey] = key.operationJur;
             if (Array.isArray(key.sms)) {
@@ -63,7 +60,6 @@ export default {
       };
       setMenu2Hash(userInfo);
       this.$root.hashMenus = hashMenus;
-      console.log('hashMenus', hashMenus, hasOperationJur);
       let findLocalRoute = function(array, base) {
         let replyResult = [];
         array.forEach(function(route) {

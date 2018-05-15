@@ -123,7 +123,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="品牌型号:">
+                  <el-form-item label="品牌型号:" prop="brand">
                     <el-input placeholder="请输入" type="text" v-model="tailCarFormStep.brand"></el-input>
                   </el-form-item>
                 </el-col>
@@ -420,7 +420,7 @@ export default {
           { required: true, message: '请选择车辆类型', trigger: 'blur' }
         ],
         brand: [
-          { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }
+          { min: 10, max: 20, message: '10~20个字段,如:圣达因SDY5300GDY', trigger: 'blur' }
         ],
         buyInsuranceDate: [
           { validator: buyInsuranceDateVa, trigger: 'blur' }

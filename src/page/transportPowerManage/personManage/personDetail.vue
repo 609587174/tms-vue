@@ -342,7 +342,7 @@
                 培训信息
               </el-col>
               <el-col :span="6" class="text-right">
-                <el-button type="primary" size="mini" @click="goEditDetail(4)">新增一条</el-button>
+                <el-button type="primary" size="mini" @click="goEditDetail(5)">新增一条</el-button>
               </el-col>
             </el-row>
           </div>

@@ -351,42 +351,57 @@
                   培训信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <el-button type="success" size="mini">新增一条</el-button>
+                  <el-button type="success" size="mini" @click="addNewTraining">新增一条</el-button>
                 </el-col>
               </el-row>
             </div>
-            <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
+            <el-form class="addheaduserform detail-form" v-for="(item,key) in userForm.carrier_driver_trainings" :key="key" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
+              <el-row :gutter="40">
+                <el-col :span="12" :offset="6" class="text-center">
+                </el-col>
+                <el-col :span="6" class="text-right">
+                  <el-button type="success" size="mini" @click="delTraining(key)">删除</el-button>
+                </el-col>
+              </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="培训时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.entry_training_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训内容:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.name"></el-input>
+                    <el-input size="mini" placeholder="请输入" type="text" v-model="item.entry_training_content"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训考核:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.name"></el-input>
+                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="考核结果:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.name"></el-input>
+                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam_result"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注:">
-                    <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="userForm.name"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="item.entry_training_remark"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
-            <div class="detail-btn">
+            <el-row v-show="!userForm.carrier_driver_trainings.length">
+              <el-col :span="12" :offset="6" class="text-center">
+                <br>
+                <br> 暂无数据
+                <br>
+                <br>
+              </el-col>
+            </el-row>
+            <div class="detail-btn" v-show="userForm.carrier_driver_trainings.length">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
                   <el-button type="primary" @click="goOtherSetp()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
@@ -476,7 +491,7 @@ export default {
         contract_correct_date: '', //合同转正日期
         heath_examination_date: '', //体检日期
         heath_examination_remark: '', //体检备注
-
+        carrier_driver_trainings: [], //驾驶人员培训
       },
 
       selectData: {
@@ -567,6 +582,21 @@ export default {
     console.log('this', this, typeof null, typeof undefined, typeof '', null === null);
   },
   methods: {
+    addNewTraining: function() {
+      let newTraining = {
+        entry_training_date: null,
+        entry_training_content: '',
+        entry_training_exam: '',
+        entry_training_exam_result: '',
+        entry_training_remark: '',
+        default: false,
+      }
+      this.userForm.carrier_driver_trainings.push(newTraining);
+    },
+    delTraining: function(index) {
+      console.log('index', index);
+      this.userForm.carrier_driver_trainings.splice(index, 1);
+    },
     getDetail: function() {
       this.pageLoading = true;
       this.$$http('getDriversDetail', { id: this.id }).then((results) => {
@@ -591,7 +621,10 @@ export default {
           this.detailData.address.city = (areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
           this.detailData.address.area = (areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
 
-          // if (areaCopy.id) { // this.detailData.address.province = areaCopy.id; // } // if(areaCopy.city && areaCopy.city.id){ // this.detailData.address.city = areaCopy.city.id; // } // if(areaCopy.city && areaCopy.city.county){ // this.detailData.address.area = areaCopy.city.county.id; // }
+          for (let i in this.detailData.carrier_driver_trainings) {
+            this.detailData.carrier_driver_trainings.isDefault = true;
+          }
+
 
           console.log('this.detailData', results.data.data);
         }

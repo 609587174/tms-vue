@@ -134,7 +134,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="品牌型号:">
+                  <el-form-item label="品牌型号:" prop="brand">
                     <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.brand"></el-input>
                   </el-form-item>
                 </el-col>
@@ -500,7 +500,7 @@ export default {
         vehicle_type: [
           { required: true, message: '请选择车辆类型', trigger: 'blur' }
         ],
-        brandModel: [
+        brand: [
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }
         ],
         danger_product_lamp: [

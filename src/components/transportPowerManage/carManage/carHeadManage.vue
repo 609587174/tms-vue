@@ -84,7 +84,7 @@ export default {
       pageLoading: true,
       pageData: {
         currentPage: 1,
-        totalPage: 100,
+        totalPage: 1,
         pageSize: 10,
       },
       thTableList: [{
@@ -148,6 +148,7 @@ export default {
         var resultData;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
+          vm.pageData.totalPage = Math.ceil(result.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }
       }).catch(function(error) {
@@ -164,10 +165,8 @@ export default {
       }
     },
     pageChange: function() {
-      setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
-      })
-
+      this.seachListParam.page = this.pageData.currentPage;
+      this.searchList();
     }
   },
   activated: function() {

@@ -36,14 +36,14 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',id:scope.row})">查看</el-button>
+              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
               <el-dropdown trigger="click" @command="jumpPage">
                 <span class="el-dropdown-link">
                       <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="{operator:'show',id:scope.row}">查看</el-dropdown-item>
-                  <el-dropdown-item :command="{operator:'operation',id:scope.row}">操作日志</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
+                  <el-dropdown-item :command="{operator:'operation',rowData:scope.row}">操作日志</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
             </template>
@@ -76,7 +76,7 @@ export default {
       pageLoading: true,
       pageData: {
         currentPage: 1,
-        totalPage: 100,
+        totalPage: 1,
         pageSize: 10,
       },
       thTableList: [{
@@ -137,27 +137,26 @@ export default {
         var resultData;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
+          vm.pageData.totalPage = Math.ceil(result.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }
       }).catch(function(error) {
         vm.pageLoading = false;
       });
     },
-    jumpPage: function(scope, type) {
-      if (type = "edit") {
+    jumpPage: function(scope) {
+      if (scope.operator = "edit") {
 
-      } else if (type = "show") {
-
-      } else if (type = "operation") {
+      } else if (scope.operator = "show") {
+        this.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + scope.rowData.id });
+      } else if (scope.operator = "operation") {
 
       }
     },
 
     pageChange: function() {
-      setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
-      })
-
+      this.seachListParam.page = this.pageData.currentPage;
+      this.searchList();
     }
   },
   activated: function() {

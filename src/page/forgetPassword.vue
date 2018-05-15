@@ -38,7 +38,7 @@
             </el-form-item>
             <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue cursor-pointer">请登录</span></el-form-item>
           </div>
-          <div class="user-page-img"><img class="img-left"  src="../assets/img/user_6.png"></div>
+          <div class="user-page-img"><img class="img-left" src="../assets/img/user_6.png"></div>
         </el-form>
       </div>
       <div v-if="!isResetSuccess">
@@ -46,7 +46,7 @@
         <div class="user-register-notice password">
           您的密码已重置成功，请使用新密码登录！
           <br>
-          <span class="text-blue time">5</span>S 后自动返回登录页面
+          <span class="text-blue time">{{loginTime}}</span>S 后自动返回登录页面
           <br> 如没有自动跳转，请点击
           <span class="text-blue">登录</span>
           <br>
@@ -54,7 +54,7 @@
         <div class="btn-link">
           <el-button type="success">登录</el-button>
         </div>
-        <div class="user-page-img text-center"><imgsrc="../assets/img/user_3.png"></div>
+        <div class="user-page-img text-center"><img src="../assets/img/user_3.png"></div>
       </div>
     </div>
   </div>
@@ -99,10 +99,7 @@ export default {
         password: "",
         confirm_password: "",
       },
-      sendStatus: false,
-      isBtnSendLoading: false,
-      vaPhoneNum: "4399",
-      isBtnLoading: false,
+      loginTime: 5,
       times: 10,
       isResetSuccess: true,
       rules: {
@@ -158,6 +155,20 @@ export default {
         return "发送验证码";
       }
     },
+    loginLink() {
+      let times = this.loginTime;
+      let intCountdown;
+      const countdown = () => {
+        this.loginTime = times;
+        if (times >= 1) {
+          times--;
+        } else {
+          this.$router.push({ path: '/login' });
+          clearInterval(intCountdown);
+        }
+      }
+      intCountdown = setInterval(countdown, 1000);
+    },
     resetPassword(rules) {
       this.submitBtn.isDisabled = true;
       this.$refs[rules].validate((valid) => {
@@ -175,6 +186,7 @@ export default {
                 type: 'success'
               });
               setTimeout(() => {
+                this.loginLink();
                 this.isResetSuccess = false;
               }, 3000)
             }
@@ -195,46 +207,47 @@ export default {
       this.$router.push({ path: '/login' });
     },
     getMsgCode() {
-    let times = this.times;
-    let intCountdown;
-    if (this.ruleForm.phone) {
-      const countdown = () => {
-        this.msgBtn.getCodeText = times + 's';
-        if (times >= 1) {
-          times--;
-        } else {
-          this.msgBtn.getCodeText = this.msgBtnText();
-          this.msgBtn.isDisabled = false;
-          clearInterval(intCountdown);
+      let times = this.times;
+      let intCountdown;
+      if (this.ruleForm.phone) {
+        const countdown = () => {
+          this.msgBtn.getCodeText = times + 's';
+          if (times >= 1) {
+            times--;
+          } else {
+            this.msgBtn.getCodeText = this.msgBtnText();
+            this.msgBtn.isDisabled = false;
+            clearInterval(intCountdown);
+          }
         }
-      }
-      this.msgBtn.isLoading = true;
-      this.msgBtn.isDisabled = true;
-      this.msgBtn.getCodeText = this.msgBtnText();
-      this.$$http('messageVerifyCode', { phone: this.ruleForm.phone }).then((results) => {
-        if (results.data && results.data.code == 0) {
-          setTimeout(() => {
-            this.msgBtn.isLoading = false;
-            this.msgBtn.getCodeText = times + 's';
-            this.$message({
-              message: '短信发送成功，请查看',
-              type: 'success'
-            });
-            intCountdown = setInterval(countdown, 1000);
-          }, 1000)
+        this.msgBtn.isLoading = true;
+        this.msgBtn.isDisabled = true;
+        this.msgBtn.getCodeText = this.msgBtnText();
+        this.$$http('messageVerifyCode', { phone: this.ruleForm.phone }).then((results) => {
+          if (results.data && results.data.code == 0) {
+            setTimeout(() => {
+              this.msgBtn.isLoading = false;
+              this.msgBtn.getCodeText = times + 's';
+              this.$message({
+                message: '短信发送成功，请查看',
+                type: 'success'
+              });
+              intCountdown = setInterval(countdown, 1000);
+            }, 1000)
 
-        }
-      }).catch((err) => {
-        // this.pageLoading = false;
-      })
-    } else {
-      this.$message.error('请输入手机号码');
+          }
+        }).catch((err) => {
+          // this.pageLoading = false;
+        })
+      } else {
+        this.$message.error('请输入手机号码');
+      }
     }
-  }
   },
 
   created() {
     sessionStorage.clear();
+
   }
 };
 

@@ -48,11 +48,11 @@
           <br>
           <span class="text-blue time">{{loginTime}}</span>S 后自动返回登录页面
           <br> 如没有自动跳转，请点击
-          <span class="text-blue">登录</span>
+          <span class="text-blue" v-on:click="toLoginPage">登录</span>
           <br>
         </div>
         <div class="btn-link">
-          <el-button type="success">登录</el-button>
+          <el-button type="success" @click="toLoginPage">登录</el-button>
         </div>
         <div class="user-page-img text-center"><img src="../assets/img/user_3.png"></div>
       </div>

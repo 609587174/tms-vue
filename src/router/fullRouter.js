@@ -105,6 +105,7 @@ export default [{
 
     }, {
       path: 'personManage',
+      redirect: '/transportPowerManage/personManage/personListManage',
       name: '人员管理',
       meta: {
         isVerificationL: false,
@@ -140,6 +141,7 @@ export default [{
   }, {
     path: 'clientManage',
     name: '客户管理',
+    redirect: '/clientManage/privateClientManage',
     meta: {
       isVerificationL: false,
       iconName: 'icon-customer',

@@ -102,14 +102,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="准驾类型:">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.quasiDriveType"></el-input>
+                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.drive_license_allow_type"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="所在地区:">
-                    <choose-address :address.sync="address"></choose-address>
+                    <choose-address :address.sync="userForm.address"></choose-address>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -426,11 +426,6 @@ export default {
   data() {
     return {
       pageLoading: false,
-      address: {
-        province: '',
-        city: '',
-        area: '',
-      },
       pickerOptions0: {
         disabledDate(time) {
           return time.getTime() > Date.now() - 8.64e6
@@ -443,14 +438,19 @@ export default {
         mobile_phone: '', //手机号码
         staff_type: '', //人员所属
         id_number: '', //身份证号码
-        on_job_status: '', //在职状态
-        gender: '', //性别
+        on_job_status: 'ON_JOB', //在职状态
+        gender: 'MALE', //性别
         birthDate: '', //出生日期
         age: '', //年龄
         family_member_name: '', //家属姓名
         family_member_phone: '', //家属联系方式
-        quasiDriveType: '', //准驾类型
-        detail_address: '四川时间风口浪尖贷款', //详细地址
+        drive_license_allow_type: '', //准驾类型
+        address: {
+          province: '',
+          city: '',
+          area: '',
+        },
+        detail_address: '', //详细地址
         idImg: [{ name: 'food.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }, { name: 'food2.jpeg', url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100' }], //身份证照片
         /* 驾驶证件信息 */
         drive_license_number: '',
@@ -578,6 +578,21 @@ export default {
           this.detailData.staff_type = this.detailData.staff_type ? this.detailData.staff_type.key : '';
           this.detailData.work_type = this.detailData.work_type ? this.detailData.work_type.key : '';
           this.userForm = this.detailData;
+          this.detailData.address = {
+            province: '',
+            city: '',
+            area: '',
+          }
+          let areaCopy = null;
+          if (this.detailData.area) {
+            areaCopy = this.pbFunc.deepcopy(this.detailData.area);
+          }
+          this.detailData.address.province = areaCopy.id ? areaCopy.id : '';
+          this.detailData.address.city = (areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
+          this.detailData.address.area = (areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
+
+          // if (areaCopy.id) { // this.detailData.address.province = areaCopy.id; // } // if(areaCopy.city && areaCopy.city.id){ // this.detailData.address.city = areaCopy.city.id; // } // if(areaCopy.city && areaCopy.city.county){ // this.detailData.address.area = areaCopy.city.county.id; // }
+
           console.log('this.detailData', results.data.data);
         }
       })
@@ -604,7 +619,7 @@ export default {
     addPersonAjax(postData, formName, btnObject, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
       console.log('btnTextCopy', btnTextCopy);
-
+      console.log('postData', postData);
       let apiName = 'addDrivers';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
@@ -618,10 +633,9 @@ export default {
           btnObject.btnText = '正在提交';
           btnObject.isLoading = true;
 
-          let postDataCopy = this.pbFunc.fifterObjIsNull(postData);
-          console.log('postDataCopy', postDataCopy);
+          //postData = this.pbFunc.fifterObjIsNull(postData);
 
-          this.$$http(apiName, postDataCopy).then((results) => {
+          this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
@@ -650,19 +664,21 @@ export default {
       });
     },
     goAddDriverLicense() {
+      console.log('this.userForm', this.userForm.birthDate);
+
       let formName = 'addClientFormSetpOne';
       let btnObject = this.addDriverLicenseBtn;
-      let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'quasiDriveType', 'detail_address'];
+      let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      postData.area = this.address.area || this.address.city || '';
+      postData.area = this.userForm.address.area || this.userForm.address.city || '';
       this.addPersonAjax(postData, formName, btnObject);
     },
     saveBasicAndReview() {
       let formName = 'addClientFormSetpOne';
       let btnObject = this.saveBasicAndReviewBtn;
-      let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'quasiDriveType', 'detail_address'];
+      let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      postData.area = this.address.area || this.address.city || '';
+      postData.area = this.userForm.address.area || this.userForm.address.city || '';
       this.addPersonAjax(postData, formName, btnObject, true);
     },
     addCertificate() {

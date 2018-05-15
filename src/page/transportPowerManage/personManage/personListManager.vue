@@ -63,14 +63,15 @@
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
                   <el-button size="mini" type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                  <el-dropdown trigger="click" @command="handleMenuClick">
-                    <span class="el-dropdown-link">
+<!-- <el-dropdown trigger="click" @command="handleMenuClick">
+  <span class="el-dropdown-link">
                       <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item :command="{operator:'check',id:scope.row.id}">查看</el-dropdown-item>
-                      <el-dropdown-item :command="{operator:'edit',id:scope.row.id}">编辑</el-dropdown-item>
-                    </el-dropdown-menu>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item :command="{operator:'check',id:scope.row.id}">查看</el-dropdown-item>
+    <el-dropdown-item :command="{operator:'edit',id:scope.row.id}">编辑</el-dropdown-item>
+  </el-dropdown-menu>
+ -->
                   </el-dropdown>
                 </template>
               </el-table-column>

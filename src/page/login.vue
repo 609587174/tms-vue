@@ -120,15 +120,15 @@ export default {
             this.submitBtn.btnText = '登录';
             vm.submitBtn.isDisabled = false;
             vm.submitBtn.isBtnLoading = false;
+            console.log('登录',results.data)
             if (results.data && results.data.code === 0) {
+              console.log('登录success',results.data)
               this.$message({
                 message: '登录成功',
                 type: 'success'
               });
-              this.getUser();
               vm.pbFunc.setLocalData('token', results.data.data.ticket,true);
               setTimeout(() => {
-
                 vm.$emit('login', vm.$router.currentRoute.query.from);
               }, 1000)
             }

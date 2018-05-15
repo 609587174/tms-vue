@@ -10,7 +10,7 @@
 
 const api = {
   login: {
-    url: '/backend/account/login/',
+    url: '/auth/login/',
     method: 'post',
     desc: '登录',
     param: {
@@ -19,11 +19,17 @@ const api = {
       },
       password: {
         desc: '密码',
+      },
+      verify_key:{
+        desc:'验证码key值'
+      },
+      verify_code:{
+        desc:'验证码'
       }
     }
   },
   register: {
-    url: '/user/register/',
+    url: '/user/users/register/',
     method: 'post',
     desc: '注册',
     param: {
@@ -44,6 +50,53 @@ const api = {
       },
       message_verify_code: {
         desc: '手机验证码'
+      }
+    }
+  },
+  forgetPassword: {
+    url: '/auth/reset_password/',
+    method: 'post',
+    desc: '找回密码',
+    param: {
+      phone: {
+        desc: '手机号码',
+      },
+      message_verify_code: {
+        desc: '手机号码',
+      },
+      password: {
+        desc: '新密码',
+      },
+      confirm_password: {
+        desc: '重复密码',
+      }
+    }
+  },
+  addCarrier: {
+    url: '/carrier/carriers/',
+    method: 'post',
+    desc: '创建承运商',
+    param: {
+      user_id: {
+        desc: 'user_id',
+      },
+      name: {
+        desc: '企业名称',
+      },
+      contact_name: {
+        desc: '联系姓名',
+      },
+      contact_phone: {
+        desc: '联系电话',
+      },
+      area: {
+        desc: '所在区域',
+      },
+      detail_address: {
+        desc: '详细地址'
+      },
+      carrier_type: {
+        desc: '企业类型'
       }
     }
   },

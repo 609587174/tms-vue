@@ -80,7 +80,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="出生日期:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthDate" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthday" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -455,7 +455,7 @@ export default {
         id_number: '', //身份证号码
         on_job_status: 'ON_JOB', //在职状态
         gender: 'MALE', //性别
-        birthDate: '', //出生日期
+        birthday: '', //出生日期
         age: '', //年龄
         family_member_name: '', //家属姓名
         family_member_phone: '', //家属联系方式
@@ -776,7 +776,7 @@ export default {
       });
     },
     goAddDriverLicense() {
-      console.log('this.userForm', this.userForm.birthDate);
+      console.log('this.userForm', this.userForm.birthday);
 
       let formName = 'addClientFormSetpOne';
       let btnObject = this.addDriverLicenseBtn;

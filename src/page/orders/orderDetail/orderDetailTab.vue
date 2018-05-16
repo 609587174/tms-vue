@@ -7,26 +7,149 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="订单详情" name="first">
-          <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" :rules="rules">
-              <el-row :gutter="0">
-                <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="fifterParam.keyword" class="search-filters-screen">
-                    <el-select size="mini" v-model="fifterParam.field" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                    </el-select>
-                    <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
-                  </el-input>
-                </el-col>
-              </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
-                  <el-form-item label="品牌型号:" size="mini">
-                    <el-input placeholder="请输入" type="num" v-model="fifterParam.brand"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
+          <div id="addPerson" class="detail-mian">
+            <el-container>
+              <el-main>
+                <div class="detail-list detail-form">
+                  <div class="detail-form-title">
+                    <el-row>
+                      <el-col :span="12" :offset="6" class="text-center">
+                        提货订单信息
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label><span class="text-red">* </span>订单号:</label>
+                        <div class="detail-form-item">11111111</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label><span class="text-red">* </span>订单生成时间:</label>
+                        <div class="detail-form-item">2018-12-12</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label><span class="text-red">* </span>托运方:</label>
+                        <div class="detail-form-item">xxxx</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label><span class="text-red">* </span>需求车数:</label>
+                        <div class="detail-form-item">11111</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+                <div class="detail-list detail-form">
+                  <div class="detail-form-title">
+                    <el-row>
+                      <el-col :span="12" :offset="6" class="text-center">
+                        运输信息
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <div class="table-list">
+                    <el-table :data="tableData" stripe style="width: 100%" size="mini">
+                      <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                </div>
+                <div class="detail-list detail-form">
+                  <div class="detail-form-title">
+                    <el-row>
+                      <el-col :span="12" :offset="6" class="text-center">
+                        运单信息
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>运单号:</label>
+                        <div class="detail-form-item">11111111</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>运单生成时间:</label>
+                        <div class="detail-form-item">2018-12-12</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>托运方:</label>
+                        <div class="detail-form-item">xxxx</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>承运方:</label>
+                        <div class="detail-form-item">11111</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+                <div class="detail-list detail-form">
+                  <div class="detail-form-title">
+                    <el-row>
+                      <el-col :span="12" :offset="6" class="text-center">
+                        费用约定
+                      </el-col>
+                    </el-row>
+                  </div>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>计费方式:</label>
+                        <div class="detail-form-item">11111111</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>标准运价:</label>
+                        <div class="detail-form-item">2018-12-12</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>标准里程:</label>
+                        <div class="detail-form-item">xxxx</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="40">
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>气差允许范围:</label>
+                        <div class="detail-form-item">11111111</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>待时计算标准:</label>
+                        <div class="detail-form-item">2018-12-12</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="8">
+                      <div class="label-list">
+                        <label>待时计费标准:</label>
+                        <div class="detail-form-item">xxxx</div>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-main>
+            </el-container>
           </div>
         </el-tab-pane>
         <el-tab-pane label="车辆指派" name="second">
@@ -34,35 +157,6 @@
         <el-tab-pane label="订单记录" name="third">
         </el-tab-pane>
       </el-tabs>
-      <div class="operation-btn text-right">
-        <el-button type="primary" @click="importList">导入</el-button>
-        <el-button type="primary" @click="exportList">导出</el-button>
-        <el-button type="primary" @click="addHeadCarPage">新增</el-button>
-      </div>
-      <div class="table-list">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
-          </el-table-column>
-          <el-table-column label="操作" align="center" width="150" fixed="right">
-            <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
-              <el-dropdown trigger="click" @command="jumpPage">
-                <span class="el-dropdown-link">
-                      <i class="el-icon-arrow-down el-icon--right"></i>
-                    </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
-                  <el-dropdown-item :command="{operator:'operation',rowData:scope.row}">操作日志</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-      <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
-        </el-pagination>
-      </div>
     </div>
   </div>
 </template>
@@ -71,65 +165,44 @@ export default {
   name: 'orderDetailTab',
   data() {
     return {
-      fifterParam: {
-        keyword: "",
-        field: "",
-      },
-      seachListParam: {
-        plate_number: '',
-        vin_number: '',
-        brand: '',
-        page: 1
-      },
-      rules: {},
       activeName: 'first',
-      pageLoading: true,
-      pageData: {
-        currentPage: 1,
-        totalPage: 1,
-        pageSize: 10,
-      },
-      thTableList: [{
-        title: '牵引车车牌号',
-        param: 'plate_number',
-        width: ''
+      tableData: [{
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄',
+        four: 'xxx',
       }, {
-        title: '车架号',
-        param: 'vin_number',
-        width: ''
+        date: '2016-05-04',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1517 弄',
+        four: 'xxx',
       }, {
-        title: '车辆归属',
-        param: 'attributes.verbose',
-        width: ''
+        date: '2016-05-01',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1519 弄',
+        four: 'xxx',
       }, {
-        title: '车辆所属',
-        param: 'carrier.name',
-        width: ''
-      }, {
-        title: '车辆类型',
-        param: 'vehicle_type.verbose',
-        width: '250'
-      }, {
-        title: '品牌型号',
-        param: 'brand',
-        width: ''
+        date: '2016-05-03',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1516 弄',
+        four: 'xxx',
       }],
-      selectData: {
-        vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
-        brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
-        fieldSelect: [
-          { id: 'plate_number', value: '挂车牌' },
-          { id: 'vin_number', value: '车架号' },
-        ]
-      },
-      tableData: [],
+      thTableList: [{
+        title: '装卸地',
+        param: 'name',
+      }, {
+        title: '标准里程',
+        param: 'address',
+      }, {
+        title: '计划时间',
+        param: 'date',
+      }, {
+        title: '计划吨位',
+        param: 'four',
+      }],
     }
   },
-
   methods: {
-    addHeadCarPage: function() {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage" });
-    },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
         this.$router.push({ path: "/orders/orderDetail/arrangeCarTab" });
@@ -138,47 +211,12 @@ export default {
         this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
       }
     },
-    importList: function() {
-
-    },
-    exportList: function() {
-
-    },
-    searchList: function() {
-      var vm = this;
-      if (this.seachListParam[this.fifterParam.field]) {
-        this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
-      }
-      this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
-        var resultData;
-        if (result.data.code == 0) {
-          vm.tableData = result.data.data.results;
-          vm.pageData.totalPage = Math.ceil(result.data.count / vm.pageData.pageSize);
-          vm.pageLoading = false;
-        }
-      }).catch(function(error) {
-        vm.pageLoading = false;
-      });
-    },
-    jumpPage: function(scope) {
-      if (scope.operator == "edit") {
-
-      } else if (scope.operator == "show") {
-        this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + scope.rowData.id });
-      } else if (scope.operator == "operation") {
-
-      }
-    },
-    pageChange: function() {
-      this.seachListParam.page = this.pageData.currentPage;
-      this.searchList();
-    }
   },
   activated: function() {
     this.activeName = 'first';
   },
-  mounted: function() {
-    this.searchList();
+  created: function() {
+
   }
 }
 

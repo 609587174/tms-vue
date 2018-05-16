@@ -8,7 +8,7 @@
     <div class="user-page" @keyup.enter="onSubmit">
       <div class="user-page-title">注册</div>
       <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
-        <el-form-item label="姓名：" prop="nick_name">
+        <el-form-item label="用户名：" prop="nick_name">
           <el-input v-model.trim="registerForm.nick_name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
@@ -196,7 +196,7 @@ export default {
       let intCountdown;
       if (this.registerForm.phone) {
         const countdown = () => {
-          this.msgBtn.getCodeText = times+'s';
+          this.msgBtn.getCodeText = times + 's';
           if (times >= 1) {
             times--;
           } else {
@@ -212,7 +212,7 @@ export default {
           if (results.data && results.data.code == 0) {
             setTimeout(() => {
               this.msgBtn.isLoading = false;
-              this.msgBtn.getCodeText = times+'s';
+              this.msgBtn.getCodeText = times + 's';
               this.$message({
                 message: '短信发送成功，请查看',
                 type: 'success'

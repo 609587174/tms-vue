@@ -470,6 +470,15 @@ export default [{
       title:'设置',
       iconName: 'icon-setting',
     },
-    component: (resolve) => require(['../page/setting/setting'], resolve),
+    component: (resolve) => require(['../page/setting/organizationalStructure/organizationalStructure'], resolve),
+    children: [{
+        path: 'organizationalStructureList',
+        name: "组织架构",
+        meta: {
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/setting/organizationalStructure/organizationalStructureList'], resolve)
+      }
+    ]
   }]
 }];

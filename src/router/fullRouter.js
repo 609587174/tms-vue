@@ -38,10 +38,26 @@ export default [{
       },{
         path: 'arrangeCarTab',
         name: '车辆指派',
+        redirect:'/orders/orderDetail/arrangeCarTab/arrangeCarList',
         meta: {
           isVerificationL: false,
         },
         component: (resolve) => require(['../page/orders/orderDetail/arrangeCarTab'], resolve),
+        children: [{
+          path: 'arrangeCarList',
+          name: '车辆指派列表',
+          meta: {
+            isVerificationL: false,
+          },
+          component: (resolve) => require(['../page/orders/orderDetail/arrangeCarList'], resolve),
+        },{
+          path: 'arrangeCarMap',
+          name: '地图',
+          meta: {
+            isVerificationL: false,
+          },
+          component: (resolve) => require(['../page/orders/orderDetail/arrangeCarMap'], resolve),
+        }]
       },{
         path: 'orderRecordsTab',
         name: '订单详情',

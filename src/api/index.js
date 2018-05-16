@@ -8,6 +8,8 @@
 import axios from 'axios';
 import { Message } from 'element-ui';
 import api from './api';
+import {getLocalData} from '../assets/js/cache'
+import router from '../router'
 
 /* 接口超时时长设置 */
 let timeout = 15000;
@@ -103,7 +105,8 @@ const successState = function(response) {
 
   if (response.data && response.data.code) {
     if (response.data.code == 401) {
-      Message.error('未登录，请重新登录');
+      Message.error('登录过期，请重新登录');
+      router.push({ path: "/login" });
     } else if (response.data.code == 403) {
       Message.error('无操作权限');
     } else if (response.data.code == 0) {
@@ -159,6 +162,9 @@ const dealConfig = function(apiName, postData) {
   if (api.hasOwnProperty(apiName)) {
     let apiUrl = api[apiName].url ? api[apiName].url : '';
     let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
+    console.log('getLocalData',getLocalData);
+    let token = getLocalData('token',true);
+    console.log('token',token);
 
     console.log('apiUrl', apiUrl);
 
@@ -176,6 +182,12 @@ const dealConfig = function(apiName, postData) {
         'Content-Type': 'application/json; charset=UTF-8'
       }
     }
+
+    if(!api[apiName].notNeedToken){
+      httpConfig.headers.Authorization = token;
+    }
+
+    console.log('httpConfig.headers',httpConfig.headers);
 
     if (apiUrl) {
       apiUrl = dealApiUrlParam(apiName, postData);

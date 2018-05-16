@@ -63,16 +63,6 @@
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
                   <el-button size="mini" type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-<!-- <el-dropdown trigger="click" @command="handleMenuClick">
-  <span class="el-dropdown-link">
-                      <i class="el-icon-arrow-down el-icon--right"></i>
-                    </span>
-  <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item :command="{operator:'check',id:scope.row.id}">查看</el-dropdown-item>
-    <el-dropdown-item :command="{operator:'edit',id:scope.row.id}">编辑</el-dropdown-item>
-  </el-dropdown-menu>
- -->
-                  </el-dropdown>
                 </template>
               </el-table-column>
             </el-table>
@@ -101,6 +91,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: '',
+        pageSize: 10,
       },
       activeName: 'userManage',
       searchFilters: {
@@ -112,8 +103,8 @@ export default {
       selectData: {
         isBindSelect: [
           { id: '', value: '全部' },
-          { id: '2', value: '未绑定' },
-          { id: '3', value: '已绑定' }
+          { id: false, value: '未绑定' },
+          { id: true, value: '已绑定' }
         ],
         fieldSelect: [
           { id: 'name', value: '姓名' },
@@ -163,6 +154,7 @@ export default {
         work_type: this.searchFilters.employmentType,
         driver_bind_status: this.searchFilters.isBind,
       };
+
       postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
@@ -172,11 +164,15 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
-          console.log('this.tableData', this.tableData);
+
+          this.pageData.totalPage = Math.ceill(results.data.data.count / this.pageData.pageSize);
+
+          console.log('this.tableData', this.tableData, this.pageData.totalPage);
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
+
     },
     handleClick: function(tab, event) {
       console.log('tab', tab);
@@ -202,13 +198,11 @@ export default {
         console.log('currentPage', this.pageData.currentPage);
         this.getList();
       })
-
     }
   },
   created: function() {
     this.getList();
   }
-
 }
 
 </script>

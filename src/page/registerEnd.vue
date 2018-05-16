@@ -10,29 +10,29 @@
         <div class="user-page-title">注册</div>
         <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
           <el-form-item label="企业名称：" prop="name">
-            <el-input v-model.trim="registerForm.name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
+            <el-input v-model.trim="registerForm.name" type="text" placeholder="请输入企业名称"></el-input>
           </el-form-item>
           <el-form-item label="联系人：" prop="contact_name">
-            <el-input v-model.trim="registerForm.contact_name" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
+            <el-input v-model.trim="registerForm.contact_name" type="text" placeholder="请输入联系人"></el-input>
           </el-form-item>
           <el-form-item label="联系电话：" prop="contact_phone">
-            <el-input v-model.trim="registerForm.contact_phone" size="small" type="text" placeholder="请输入密码"></el-input>
+            <el-input v-model.trim="registerForm.contact_phone" type="text" placeholder="请输入电话"></el-input>
           </el-form-item>
           <el-form-item label="公司地址：" prop="area">
             <choose-address :address.sync="address"></choose-address>
             <!-- <el-row :gutter="0">
               <el-col :md="8">
-                <el-select v-model="registerForm.detail_address" size="small" placeholder="省">
+                <el-select v-model="registerForm.detail_address" placeholder="省">
                   <el-option v-for="(item,key) in carrierType" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-col>
               <el-col :md="8">
-                <el-select v-model="registerForm.detail_address" size="small" placeholder="市">
+                <el-select v-model="registerForm.detail_address" placeholder="市">
                   <el-option v-for="(item,key) in carrierType" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-col>
               <el-col :md="8">
-                <el-select v-model="registerForm.detail_address" size="small" placeholder="区">
+                <el-select v-model="registerForm.detail_address" placeholder="区">
                   <el-option v-for="(item,key) in carrierType" :key="key" :label="item.verbose" :value="item.key"></el-option>
                 </el-select>
               </el-col>
@@ -40,15 +40,15 @@
           </el-form-item>
           <el-form-item prop="detail_address">
             <el-row>
-              <el-input v-model.trim="registerForm.detail_address" size="small" type="textarea" :rows="3" placeholder="请输入公司地址"></el-input>
+              <el-input v-model.trim="registerForm.detail_address" type="textarea" :rows="3" placeholder="请输入公司地址"></el-input>
             </el-row>
           </el-form-item>
-          <el-form-item label="企业类型：" prop="carrier_type" size="small">
-            <el-select v-model="registerForm.carrier_type" size="small" placeholder="请选择">
+          <el-form-item label="企业类型：" prop="carrier_type">
+            <el-select v-model="registerForm.carrier_type" placeholder="请选择">
               <el-option v-for="(item,key) in carrierType" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
             <div class="user-checked">
-              <el-checkbox v-model="checked">我已同意并阅读<span>《用户协议》</span></el-checkbox>
+              <el-checkbox v-model="checked">我已同意并阅读</el-checkbox><span class="text-blue cursor-pointer" v-on:click="dialogUserProtocol=true">《用户协议》</span>
             </div>
           </el-form-item>
           <div class="user-page-btn">
@@ -70,21 +70,23 @@
         </div>
         <div class="user-page-img text-center"><img src="../assets/img/user_4.png"></div>
       </div>
+      <user-protocol :dialog-user-protocol="dialogUserProtocol" v-on:agree="agreeProtocol"></user-protocol>
     </div>
   </div>
 </template>
 <script>
 import chooseAddress from '../components/chooseAddress';
 import publicHeader from '../components/publicHeader';
+import userProtocol from '../components/userProtocol';
 export default {
   components: {
     chooseAddress: chooseAddress,
     publicHeader: publicHeader,
+    userProtocol:userProtocol
   },
   data() {
-
-
     return {
+      dialogUserProtocol:false,
       address: {
         province: '',
         city: '',
@@ -103,14 +105,16 @@ export default {
       checked: true,
       rules: {
         name: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: '请输入企业名称', trigger: 'blur' },
+          { pattern: /^[\u4E00-\u9FA5A-Za-z]{4,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
         contact_name: [
-          { required: true, message: '请输入联系人', trigger: 'blur' }
+          { required: true, message: '请输入联系人', trigger: 'blur' },
+          { pattern: /^[\u4E00-\u9FA5A-Za-z]{2,20}$/gi, message: '联系人为2-20个字符，支持中文、字母', trigger: 'blur' },
         ],
         contact_phone: [
-          { required: true, message: '请输入联系人电话', trigger: 'blur' },
-          { pattern: /^1\d{10}$/, message: '手机号码格式不正确，请重新输入', trigger: 'blur' }
+          { required: true, message: '请输入联系电话', trigger: 'blur' },
+          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '联系电话格式不正确，请重新输入', trigger: 'blur' }
         ],
         area: [
           { required: true, message: '请选择区域', trigger: 'blur' }
@@ -146,7 +150,11 @@ export default {
     }
   },
   methods: {
-
+    agreeProtocol:function(){
+      console.log('this.dialogUserProtocol',this.dialogUserProtocol);
+      this.dialogUserProtocol = false;
+      this.checked = true;
+    },
     onSubmit(registerForm) {
       console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id

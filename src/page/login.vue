@@ -10,17 +10,17 @@
       <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
         <p class="des"></p>
         <el-form-item label="用户名：" prop="username">
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" size="small" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
-          <el-input placeholder="请输入密码" type="password" size="small" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
         </el-form-item>
         <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
-              <el-input placeholder="请输入验证码" size="small" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
+              <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
             </el-col>
             <el-col :span="8" :offset="1"><img :src="verifyCodeData.image_code_path" width="100%" height="32" v-on:click="refreshVaImg"></el-col>
           </el-row>
@@ -48,6 +48,8 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
         callback();
+      }else if(value.indexOf(" ") !=-1) {
+        callback(new Error('密码不能包含空格'));
       } else {
         callback(new Error("密码不正确"));
       }

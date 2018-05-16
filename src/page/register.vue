@@ -9,18 +9,18 @@
       <div class="user-page-title">注册</div>
       <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
         <el-form-item label="用户名：" prop="nick_name">
-          <el-input v-model.trim="registerForm.nick_name" size="small" type="text" placeholder="请输入你的用户名"></el-input>
+          <el-input v-model.trim="registerForm.nick_name" type="text" placeholder="请输入你的用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
-          <el-input v-model.trim="registerForm.password" size="small" type="password" placeholder="请输入密码"></el-input>
+          <el-input v-model="registerForm.password" type="text" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item label="确认密码：" prop="confirm_password">
-          <el-input v-model.trim="registerForm.confirm_password" size="small" type="password" placeholder="请再次输入密码"></el-input>
+          <el-input v-model="registerForm.confirm_password" type="password" placeholder="请再次输入密码"></el-input>
         </el-form-item>
         <el-form-item label="手机号码：" prop="phone">
-          <el-input v-model.trim="registerForm.phone" size="small" type="text" placeholder="请输入你的手机号码"></el-input>
+          <el-input v-model.trim="registerForm.phone" type="text" placeholder="请输入你的手机号码"></el-input>
         </el-form-item>
-        <el-form-item label="验证码：" prop="verify_code" size="small">
+        <el-form-item label="验证码：" prop="verify_code">
           <el-row>
             <el-col :span="14">
               <el-input v-model.trim="registerForm.verify_code" type="text" placeholder="请输入验证码" @blur="showValue"></el-input>
@@ -31,10 +31,10 @@
         <el-form-item label="短信验证码：" prop="message_verify_code">
           <el-row>
             <el-col :span="14">
-              <el-input v-model.trim="registerForm.message_verify_code" size="small" type="text" placeholder="请输入验证码" class="verify-code-input"></el-input>
+              <el-input v-model.trim="registerForm.message_verify_code" type="text" placeholder="请输入验证码" class="verify-code-input"></el-input>
             </el-col>
             <el-col :span="9" :offset="1">
-              <el-button size="small" class="get-code-btn" type="primary" @click="getMsgCode" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
+              <el-button class="get-code-btn" type="primary" @click="getMsgCode" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
             </el-col>
           </el-row>
         </el-form-item>
@@ -66,6 +66,15 @@ export default {
     const checkRepassword = (rule, value, callback) => {
       if (value !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致，请重新输入'));
+      }else if(value.indexOf(" ") !=-1) {
+        callback(new Error('密码不能包含空格'));
+      } else {
+        callback();
+      }
+    };
+    const isSpace = (rule, value, callback) => {
+      if (value.indexOf(" ") !=-1) {
+        callback(new Error('密码不能包含空格'));
       } else {
         callback();
       }
@@ -78,7 +87,7 @@ export default {
       }
     };
     return {
-      times: 10, //短信验证码时间
+      times: 60, //短信验证码时间
       registerForm: {
         nick_name: '',
         phone: '',
@@ -94,7 +103,7 @@ export default {
       rules: {
         nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { pattern: /^\w{4,20}$/, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
+          { pattern: /<!([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/gi, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
@@ -102,11 +111,12 @@ export default {
         ],
         password: [
           { required: true, message: '请设置登录密码', trigger: 'blur' },
-          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '用户名为6-20个字符，支持中文、字母、数字', trigger: 'blur' }
+          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）', trigger: 'blur' },
+          { validator: isSpace, trigger: 'blur' },
         ],
         confirm_password: [
           { required: true, message: '请再次输入你的密码', trigger: 'blur' },
-          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '用户名为6-20个字符，支持中文、字母、数字', trigger: 'blur' },
+          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）', trigger: 'blur' },
           { validator: checkRepassword, trigger: 'blur' },
         ],
         verify_code: [

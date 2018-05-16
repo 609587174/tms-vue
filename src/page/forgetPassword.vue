@@ -10,25 +10,25 @@
         <div class="user-page-title">找回密码</div>
         <el-form class="user-form" label-width="95px" :rules="rules" :model="ruleForm" ref="ruleForm" status-icon>
           <el-form-item label="手机号" prop="phone">
-            <el-input :autofocus="true" placeholder="请输入注册手机号" size="small" v-model.trim="ruleForm.phone" name='email'>
+            <el-input :autofocus="true" placeholder="请输入注册手机号" v-model.trim="ruleForm.phone" name='email'>
             </el-input>
           </el-form-item>
           <el-form-item label="短信验证码" prop="message_verify_code">
             <el-row>
               <el-col :span="14">
-                <el-input placeholder="请输入验证码" size="small" type="text" v-model.trim="ruleForm.message_verify_code" class="vaInput"></el-input>
+                <el-input placeholder="请输入验证码" type="text" v-model.trim="ruleForm.message_verify_code" class="vaInput"></el-input>
               </el-col>
               <el-col :span="9" :offset="1">
-                <el-button size="small" class="get-code-btn" style="" v-on:click="getMsgCode" type="primary" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
+                <el-button class="get-code-btn" style="" v-on:click="getMsgCode" type="primary" :loading="msgBtn.isLoading" :disabled="msgBtn.isDisabled">{{msgBtn.getCodeText}}</el-button>
               </el-col>
             </el-row>
           </el-form-item>
           <el-form-item label="新密码" prop="password">
-            <el-input placeholder="请输入密码" size="small" type="password" v-model.trim="ruleForm.password">
+            <el-input placeholder="请输入密码" type="password" v-model.trim="ruleForm.password">
             </el-input>
           </el-form-item>
           <el-form-item label="确认密码" prop="confirm_password">
-            <el-input placeholder="请再次输入密码" size="small" type="password" v-model.trim="ruleForm.confirm_password">
+            <el-input placeholder="请再次输入密码" type="password" v-model.trim="ruleForm.confirm_password">
             </el-input>
           </el-form-item>
           <div class="user-page-btn">
@@ -72,6 +72,8 @@ export default {
       var lv = 0;
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
         callback();
+      }else if(value.indexOf(" ") !=-1) {
+        callback(new Error('密码不能包含空格'));
       } else {
         callback(new Error("密码不正确"));
       }
@@ -88,6 +90,8 @@ export default {
     var validateConfirmPass = (rule, value, callback) => {
       if (value === this.ruleForm.password) {
         callback();
+      }else if(value.indexOf(" ") !=-1) {
+        callback(new Error('密码不能包含空格'));
       } else {
         callback(new Error("两次输入密码不相同"));
       }
@@ -100,7 +104,7 @@ export default {
         confirm_password: "",
       },
       loginTime: 5,
-      times: 10,
+      times: 60,
       isResetSuccess: true,
       rules: {
         phone: [

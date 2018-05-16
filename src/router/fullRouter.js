@@ -24,12 +24,13 @@ export default [{
     component: (resolve) => require(['../page/orders/orders'], resolve),
     children: [{
         path: 'ordersList',
-        name: '订单列表',
+        name: '提货订单',
         meta: {
           isVerificationL: false,
         },
         component: (resolve) => require(['../page/orders/orderList'], resolve),
       },
+
       {
         path: 'orderDetail',
         name: '订单详情',

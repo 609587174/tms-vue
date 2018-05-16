@@ -7,6 +7,29 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="列表" name="first">
+          <div class="tab-screen">
+            <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select size="mini" v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="4">
+                  <el-form-item size="mini" label="状态:">
+                    <el-select v-model="searchFilters.orderStateList" @change="startSearch" size="mini" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
@@ -19,7 +42,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -38,8 +61,29 @@ export default {
       pageLoading: true,
       pageData: {
         currentPage: 1,
-        totalPage: 1,
+        totalPage: '',
         pageSize: 10,
+      },
+      searchFilters: {
+        keyword: '',
+        field: '1',
+        orderStateList: '',
+      },
+      selectData: {
+        fieldSelect: [{
+          value: '车号',
+          id: '1',
+        }, {
+          value: '姓名',
+          id: '2',
+        }, {
+          value: '电话',
+          id: '3',
+        }],
+        orderStateListSelect: [{
+          value: '车号',
+          id: '1',
+        }]
       },
       thTableList: [{
         title: '变更',
@@ -102,33 +146,39 @@ export default {
     exportList: function() {
 
     },
-    searchList: function() {
+    startSearch: function() {
+      this.pageData.currentPage = 1;
+      this.getList();
+    },
+    getList: function() {
       let postData = {
         page: this.pageData.currentPage,
       };
-
       this.pageLoading = true;
-
       this.$$http('getDriversList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
-          console.log('this.tableData', this.tableData);
+          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+
+          console.log('this.tableData', this.tableData, this.pageData.totalPage);
         }
       }).catch((err) => {
         this.pageLoading = false;
       })
     },
     pageChange: function() {
-      this.searchList();
+      setTimeout(() => {
+        this.getList();
+      })
     }
   },
   activated: function() {
     this.activeName = 'first';
   },
   created: function() {
-    this.searchList();
+    this.getList();
   }
 }
 

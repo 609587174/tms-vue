@@ -22,7 +22,7 @@
             </el-row>
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label><span class="text-red">* </span>姓名:</label>
@@ -42,7 +42,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label><span class="text-red">* </span>人员所属:</label>
@@ -62,7 +62,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>性别:</label>
@@ -82,7 +82,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>家属姓名:</label>
@@ -102,7 +102,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>所在地区:</label>
@@ -134,7 +134,7 @@
               </el-col>
             </el-row>
           </div>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶证档案编号:</label>
@@ -143,21 +143,21 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>驾驶证初次发证时间:</label>
+                <label>初次发证时间:</label>
                 <div class="detail-form-item">{{userData.drive_license_issue_date}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>驾驶证到期时间:</label>
+                <label>到期时间:</label>
                 <div class="detail-form-item">{{userData.drive_license_due_date}}</div>
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>驾驶证发证机关:</label>
+                <label>发证机关:</label>
                 <div class="detail-form-item">{{userData.drive_license_issue_organ}}</div>
               </div>
             </el-col>
@@ -181,7 +181,7 @@
             </el-row>
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>从业资格证号:</label>
@@ -190,21 +190,21 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>从业资格证证初次发证时间:</label>
+                <label>初次发证时间:</label>
                 <div class="detail-form-item">{{userData.qualification_certificate_issue_date}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>从业资格证到期时间:</label>
+                <label>到期时间:</label>
                 <div class="detail-form-item">{{userData.qualification_certificate_due_date}}</div>
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>从业资格证发证机关:</label>
+                <label>发证机关:</label>
                 <div class="detail-form-item">{{userData.qualification_certificate_issue_organ}}</div>
               </div>
             </el-col>
@@ -229,7 +229,7 @@
             </el-row>
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>押运证号:</label>
@@ -238,21 +238,21 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>押运证初次发证时间:</label>
+                <label>初次发证时间:</label>
                 <div class="detail-form-item">{{userData.escort_license_issue_date}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>押运证到期时间:</label>
+                <label>到期时间:</label>
                 <div class="detail-form-item">{{userData.escort_license_due_date}}</div>
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>押运证发证机关:</label>
+                <label>发证机关:</label>
                 <div class="detail-form-item">{{userData.escort_license_issue_organ}}</div>
               </div>
             </el-col>
@@ -277,7 +277,7 @@
             </el-row>
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>录用日期:</label>
@@ -297,7 +297,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>合同起始日期:</label>
@@ -317,7 +317,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
                 <label>体检日期:</label>
@@ -325,7 +325,7 @@
               </div>
             </el-col>
           </el-row>
-          <el-row :gutter="40">
+          <el-row :gutter="10">
             <el-col :span="24">
               <div class="label-list">
                 <label>体检备注:</label>
@@ -337,7 +337,7 @@
         </div>
         <div class="detail-list detail-form">
           <div class="detail-form-title ">
-            <el-row :gutter="40">
+            <el-row :gutter="10">
               <el-col :span="12" :offset="6" class="text-center">
                 培训信息
               </el-col>
@@ -348,7 +348,7 @@
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :model="userData" status-icon> -->
           <div v-for="(item,key) in userData.carrier_driver_trainings">
-            <el-row :gutter="40">
+            <el-row :gutter="10">
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训时间:</label>
@@ -368,7 +368,7 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row :gutter="40">
+            <el-row :gutter="10">
               <el-col :span="8">
                 <div class="label-list">
                   <label>考核结果:</label>
@@ -376,7 +376,7 @@
                 </div>
               </el-col>
             </el-row>
-            <el-row :gutter="40">
+            <el-row :gutter="10">
               <el-col :span="8">
                 <div class="label-list">
                   <label>备注:</label>
@@ -439,9 +439,11 @@ export default {
             area: '',
           }
 
-          this.userData.address.province = this.userData.area.area_name ? this.userData.area.area_name : '';
-          this.userData.address.city = (this.userData.area.city && this.userData.area.city.area_name) ? this.userData.area.city.area_name : '';
-          this.userData.address.area = (this.userData.area.city && this.userData.area.city.county) ? this.userData.area.city.county.area_name : '';
+          this.userData.address.province = (this.userData.area && this.userData.area.area_name) ? this.userData.area.area_name : '';
+
+          this.userData.address.city = (this.userData.area && this.userData.area.city && this.userData.area.city.area_name) ? this.userData.area.city.area_name : '';
+          this.userData.address.area = (this.userData.area && this.userData.area.city && this.userData.area.city.county) ? this.userData.area.city.county.area_name : '';
+
 
           console.log('this.userData', this.userData.address);
         }

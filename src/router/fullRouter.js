@@ -94,13 +94,29 @@ export default [{
     component: (resolve) => require(['../page/map/mapManage'], resolve),
   }, {
     path: 'transportPowerManage',
-    name: '动力管理',
+    name: '运力',
     meta: {
       isVerificationL: true,
       iconName: 'icon-map',
     },
     component: (resolve) => require(['../page/transportPowerManage/transportPowerManage'], resolve),
-    children: [{
+      children: [{
+        path: 'capacityManage',
+        name: '运力管理',
+        meta: {
+          isVerificationL: true,
+          iconName: 'icon-transport',
+        },
+        component: (resolve) => require(['../page/transportPowerManage/capacityManage/capacityManage'], resolve),
+        children: [{
+          path: 'capacityList',
+          name: "运力列表",
+          meta: {
+            isVerificationL: false,
+          },
+          component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityList'], resolve)
+        }]
+      },{
       path: 'carManage',
       name: '车辆管理',
       meta: {

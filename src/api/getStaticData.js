@@ -47,7 +47,7 @@ const staticData = function() {
         }
       }, {
         menu_permission_name: 'transportPowerManage',
-        name: '运力管理',
+        name: '运力',
         iconName:'icon-map',
         operationJur: {
           addButton: false,
@@ -55,6 +55,15 @@ const staticData = function() {
           queryButton: true
         },
         sms: [{
+          menu_permission_name: 'capacityManage',
+          name: '运力管理',
+          operationJur: {
+            addButton: false,
+            removeButton: false,
+            queryButton: true
+          }
+        },
+        {
           menu_permission_name: 'carManage',
           name: '车辆管理',
           operationJur: {

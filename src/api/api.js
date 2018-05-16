@@ -140,6 +140,12 @@ const api = {
 
     }
   },
+  searchCapacityList: {
+    url: '/truck/tractor_semitrailers/',
+    method: 'get',
+    desc: '查询运力列表',
+    param: {}
+  },
   searchHeadCarList: {
     url: '/truck/tractors/',
     method: 'get',

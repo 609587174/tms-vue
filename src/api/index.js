@@ -162,12 +162,7 @@ const dealConfig = function(apiName, postData) {
   if (api.hasOwnProperty(apiName)) {
     let apiUrl = api[apiName].url ? api[apiName].url : '';
     let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
-    console.log('getLocalData',getLocalData);
     let token = getLocalData('token',true);
-    console.log('token',token);
-
-    console.log('apiUrl', apiUrl);
-
     httpConfig.method = method;
 
     if (method == 'get') {
@@ -187,15 +182,11 @@ const dealConfig = function(apiName, postData) {
       httpConfig.headers.Authorization = token;
     }
 
-    console.log('httpConfig.headers',httpConfig.headers);
-
     if (apiUrl) {
       apiUrl = dealApiUrlParam(apiName, postData);
     } else {
       return false
     }
-
-    console.log('apiUrl', apiUrl);
 
     if (method == 'get' || method == 'delete') {
       delete httpConfig.data

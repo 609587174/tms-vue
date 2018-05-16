@@ -623,23 +623,23 @@ export default {
         if (result == 'true') {
 
           vm.pageLoading = true;
-          if (this.headCarFormStep1.fuel_type != "GAS") {
-            this.headCarFormStep1.gas_bottle_number = '',
-              this.headCarFormStep1.pressure_gauge_number = '',
-              this.headCarFormStep1.pressure_gauge_due_date = '',
-              this.headCarFormStep1.safety_valve_1_number = '',
-              this.headCarFormStep1.safety_valve_1_due_date = '',
-              this.headCarFormStep1.safety_valve_2_number = '',
-              this.headCarFormStep1.safety_valve_2_due_date = '',
-              this.headCarFormStep1.safety_valve_3_number = '',
-              this.headCarFormStep1.safety_valve_3_due_date = '',
-              this.headCarFormStep1.safety_valve_4_number = '',
-              this.headCarFormStep1.safety_valve_4_due_date = ''
+          if (vm.headCarFormStep1.fuel_type != "GAS") {
+            vm.headCarFormStep1.gas_bottle_number = '',
+              vm.headCarFormStep1.pressure_gauge_number = '',
+              vm.headCarFormStep1.pressure_gauge_due_date = '',
+              vm.headCarFormStep1.safety_valve_1_number = '',
+              vm.headCarFormStep1.safety_valve_1_due_date = '',
+              vm.headCarFormStep1.safety_valve_2_number = '',
+              vm.headCarFormStep1.safety_valve_2_due_date = '',
+              vm.headCarFormStep1.safety_valve_3_number = '',
+              vm.headCarFormStep1.safety_valve_3_due_date = '',
+              vm.headCarFormStep1.safety_valve_4_number = '',
+              vm.headCarFormStep1.safety_valve_4_due_date = ''
           };
 
 
 
-          var sendData = this.pbFunc.fifterObjIsNull(this.headCarFormStep1);
+          var sendData = vm.pbFunc.fifterObjIsNull(vm.headCarFormStep1);
 
           sendData.attributes = sendData.attributes ? sendData.attributes.key : null;
           sendData.vehicle_type = sendData.vehicle_type ? sendData.vehicle_type.key : null;

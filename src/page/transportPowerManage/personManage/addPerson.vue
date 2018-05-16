@@ -15,6 +15,10 @@
   line-height: 41px;
 }
 
+.training-box {
+  border-bottom: 1px solid rgb(222, 222, 222);
+}
+
 </style>
 <template>
   <div id="addPerson" class="detail-mian">
@@ -35,33 +39,33 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="姓名:" prop="name">
-                    <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.name"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="从业类型:" prop="work_type">
-                    <el-select v-model="userForm.work_type" size="mini" placeholder="请选择">
+                    <el-select v-model="userForm.work_type" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="手机号码:" prop="mobile_phone">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.mobile_phone"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.mobile_phone"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="人员所属:" prop="staff_type">
-                    <el-select v-model="userForm.staff_type" size="mini" placeholder="请选择">
+                    <el-select v-model="userForm.staff_type" placeholder="请选择">
                       <el-option v-for="(item,key) in staffsSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="身份证号:" prop="id_number">
-                    <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.id_number"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.id_number" :disabled="notEdit"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -80,41 +84,41 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="出生日期:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthday" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthday" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="年龄:">
-                    <el-input placeholder="请输入年龄" type="text" size="mini" v-model="userForm.age"></el-input>
+                    <el-input placeholder="请输入年龄" type="text" v-model="userForm.age"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="家属姓名:">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.family_member_name"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.family_member_name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="家属联系方式:" prop="family_member_phone">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.family_member_phone"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.family_member_phone"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="准驾类型:">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.drive_license_allow_type"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.drive_license_allow_type"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="所在地区:">
-                    <choose-address :address.sync="userForm.address"></choose-address>
+                    <choose-address :address.sync="userForm.address" v-on:chooseProvince="chooseProvincecopy"></choose-address>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="详细地址:">
-                    <el-input placeholder="请输入" type="text" size="mini" v-model="userForm.detail_address"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.detail_address"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -145,24 +149,24 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="驾驶证档案编号:" prop="drive_license_number">
-                    <el-input placeholder="请输入" size="mini" type="text" v-model="userForm.drive_license_number"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.drive_license_number"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="驾驶证初次发证时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_issue_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="驾驶证到期时间:">
-                    <el-date-picker value-format="yyyy-MM-dd" size="mini" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_due_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="驾驶证发证机关:">
-                    <el-input :autofocus="true" placeholder="请输入" size="mini" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -193,24 +197,24 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="从业资格证号:" prop="qualification_certificate_number">
-                    <el-input size="mini" placeholder="请输入" type="text" v-model="userForm.qualification_certificate_number"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.qualification_certificate_number"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="从业资格证证初次发证时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_issue_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="从业资格证到期时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_due_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="从业资格证发证机关:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="userForm.qualification_certificate_issue_organ"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.qualification_certificate_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -241,24 +245,24 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="押运证号:" prop="escort_license_number">
-                    <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.escort_license_number"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.escort_license_number"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="押运证初次发证时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_issue_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="押运证到期时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_due_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="押运证发证机关:">
-                    <el-input :autofocus="true" size="mini" placeholder="请输入" type="text" v-model="userForm.escort_license_issue_organ"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.escort_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -289,41 +293,41 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="录用日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_employ_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_employ_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="上岗日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_on_work_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_on_work_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="下岗日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_off_work_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.labour_off_work_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="合同起始日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_start_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_start_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="合同截止日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_due_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="转正日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_correct_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.contract_correct_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="体检日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.heath_examination_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.heath_examination_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -351,45 +355,47 @@
                   培训信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <el-button type="success" size="mini" @click="addNewTraining">新增一条</el-button>
+                  <el-button type="success" @click="addNewTraining">新增一条</el-button>
                 </el-col>
               </el-row>
             </div>
-            <el-form class="addheaduserform detail-form" v-for="(item,key) in userForm.carrier_driver_trainings" :key="key" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
+            <el-form class="addheaduserform detail-form training-box
+" v-for="(item,key) in userForm.carrier_driver_trainings" :key="key" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="12" :offset="6" class="text-center">
-                </el-col>
-                <el-col :span="6" class="text-right">
-                  <el-button type="success" size="mini" @click="delTraining(key)" :loading="item.isLoading" :disabled="item.isDisabled">删除</el-button>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="培训时间:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.entry_training_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.entry_training_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训内容:">
-                    <el-input size="mini" placeholder="请输入" type="text" v-model="item.entry_training_content"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="item.entry_training_content"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="培训考核:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="考核结果:">
-                    <el-input size="mini" :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam_result"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="item.entry_training_exam_result"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注:">
                     <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="item.entry_training_remark"></el-input>
                   </el-form-item>
+                </el-col>
+                <el-col :span="8" style="font-size:32px;text-align:right;">
+                  <br>
+                  <el-button icon="el-icon-delete" circle type="primary" @click="delTraining(key)" :loading="item.isLoading" :disabled="item.isDisabled"></el-button>
                 </el-col>
               </el-row>
             </el-form>
@@ -436,6 +442,9 @@ export default {
     },
     titleType: function() {
       return this.$route.query.id ? '编辑人员' : '新增人员';
+    },
+    notEdit: function() {
+      return (this.$route.query.id) ? true : false;
     }
   },
   data() {
@@ -582,6 +591,9 @@ export default {
     console.log('this', this, typeof null, typeof undefined, typeof '', null === null);
   },
   methods: {
+    chooseProvincecopy: function() {
+      console.log('this.address', this.userForm.address)
+    },
     addNewTraining: function() {
       let newTraining = {
         entry_training_date: null,
@@ -600,6 +612,7 @@ export default {
       if (this.userForm.carrier_driver_trainings[index].isDefault) {
         this.userForm.carrier_driver_trainings[index].isLoading = true;
         this.userForm.carrier_driver_trainings[index].isDisabled = true;
+        return false;
         this.$$http('deleteDriverTraining', { id: this.id, carrier_driver_training_id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
           this.userForm.carrier_driver_trainings[index].isLoading = false;
           this.userForm.carrier_driver_trainings[index].isDisabled = false;
@@ -684,7 +697,7 @@ export default {
           this.detailData.on_job_status = this.detailData.on_job_status ? this.detailData.on_job_status.key : 'ON_JOB';
           this.detailData.staff_type = this.detailData.staff_type ? this.detailData.staff_type.key : '';
           this.detailData.work_type = this.detailData.work_type ? this.detailData.work_type.key : '';
-          this.userForm = this.detailData;
+
           this.detailData.address = {
             province: '',
             city: '',
@@ -701,11 +714,11 @@ export default {
           if (this.detailData.area) {
             areaCopy = this.pbFunc.deepcopy(this.detailData.area);
           }
-          this.detailData.address.province = areaCopy.id ? areaCopy.id : '';
-          this.detailData.address.city = (areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
-          this.detailData.address.area = (areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
-
-          console.log('this.detailDta', results.data.data);
+          this.detailData.address.province = (areaCopy && areaCopy.id) ? areaCopy.id : '';
+          this.detailData.address.city = (areaCopy && areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
+          this.detailData.address.area = (areaCopy && areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
+          this.userForm = this.detailData;
+          console.log('this.detailDta', results.data.data, this.detailData.address);
         }
       })
     },

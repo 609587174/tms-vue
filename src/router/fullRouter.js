@@ -14,9 +14,8 @@ export default [{
     },
     component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
   }, {
-    path: 'orders/',
+    path: 'orders',
     name: '订单',
-    redirect: '/orders/ordersList',
     meta: {
       isVerificationL: false,
       iconName: 'icon-lng-dashboard',
@@ -30,7 +29,6 @@ export default [{
         },
         component: (resolve) => require(['../page/orders/orderList'], resolve),
       },
-
       {
         path: 'orderDetail',
         name: '订单详情',

@@ -40,7 +40,7 @@
           </el-form-item>
           <el-form-item prop="detail_address">
             <el-row>
-              <el-input v-model.trim="registerForm.detail_address" type="textarea" :rows="3" placeholder="请输入公司地址"></el-input>
+              <el-input v-model.trim="registerForm.detail_address" minlength="4" maxlength="100" type="textarea" :rows="3" placeholder="请输入公司地址"></el-input>
             </el-row>
           </el-form-item>
           <el-form-item label="企业类型：" prop="carrier_type">
@@ -48,7 +48,7 @@
               <el-option v-for="(item,key) in carrierType" :key="key" :label="item.verbose" :value="item.key"></el-option>
             </el-select>
             <div class="user-checked">
-              <el-checkbox v-model="checked">我已同意并阅读</el-checkbox><span class="text-blue cursor-pointer" v-on:click="dialogUserProtocol=true">《用户协议》</span>
+              <el-checkbox v-model="checked">我已阅读并同意</el-checkbox><span class="text-blue cursor-pointer" v-on:click="dialogUserProtocol=true">《用户协议》</span>
             </div>
           </el-form-item>
           <div class="user-page-btn">

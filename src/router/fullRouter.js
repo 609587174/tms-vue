@@ -470,14 +470,30 @@ export default [{
       title:'设置',
       iconName: 'icon-setting',
     },
-    component: (resolve) => require(['../page/setting/organizationalStructure/organizationalStructure'], resolve),
+    component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
-        path: 'organizationalStructureList',
+        path: 'organizationalStructure',
         name: "组织架构",
         meta: {
           isVerificationL: false
         },
-        component: (resolve) => require(['../page/setting/organizationalStructure/organizationalStructureList'], resolve)
+        component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
+      },
+      {
+        path: 'staffsManage',
+        name: "员工管理",
+        meta: {
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/setting/staffsManage'], resolve)
+      },
+      {
+        path: 'powerManage',
+        name: "权限管理",
+        meta: {
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/setting/powerManage'], resolve)
       }
     ]
   }]

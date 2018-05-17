@@ -31,19 +31,19 @@
                   </el-form-item>
                 </el-col>
                 <!--   <el-col :span="4">
-                  <el-form-item size="mini" label="计划日期:">
-                    <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
+                  <el-form-item label="计划日期:">
+                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item size="mini" label="计划日期:">
+                  <el-form-item label="计划日期:">
                     <el-row :gutter="0" class="margin-clear">
                       <el-col :md="11">
-                        <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
+                        <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                       </el-col>
                       <el-col :md="1" class="text-center text-stance">-</el-col>
                       <el-col :md="11">
-                        <el-date-picker size="mini" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
+                        <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
                       </el-col>
                     </el-row>
                   </el-form-item>
@@ -62,7 +62,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                 </template>
               </el-table-column>
             </el-table>

@@ -1,6 +1,7 @@
 <style scoped lang="less">
 .detail-mian {
   min-height: 500px;
+  border-top: 0 none;
 }
 
 </style>
@@ -275,10 +276,10 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: "/orders/orderDetail/arrangeCarTab" });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}` });
       }
     },
     getOrderDetail: function() {
@@ -298,7 +299,7 @@ export default {
     this.activeName = 'first';
   },
   created: function() {
-    console.log('this.$route', this.$route.params.id, this.id);
+    console.log('this.$route', this.$route.params, this.id);
     //this.getOrderDetail();
   }
 }

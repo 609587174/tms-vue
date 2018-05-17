@@ -53,7 +53,7 @@ export default [{
           },
           component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/orderDetailTab'], resolve),
         }, {
-          path: 'arrangeCarTab/:id',
+          path: 'arrangeCarTab',
           name: '车辆指派',
           redirect: '/orders/pickupOrder/orderDetail/arrangeCarTab/arrangeCarList',
           meta: {

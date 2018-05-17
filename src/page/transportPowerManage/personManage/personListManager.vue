@@ -57,7 +57,7 @@
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">

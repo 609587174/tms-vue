@@ -82,11 +82,11 @@ export default {
   components: {
     chooseAddress: chooseAddress,
     publicHeader: publicHeader,
-    userProtocol:userProtocol
+    userProtocol: userProtocol
   },
   data() {
     return {
-      dialogUserProtocol:false,
+      dialogUserProtocol: false,
       address: {
         province: '',
         city: '',
@@ -151,10 +151,10 @@ export default {
     }
   },
   methods: {
-    agreeProtocol:function(){
-      console.log('this.dialogUserProtocol',this.dialogUserProtocol);
+    agreeProtocol: function() {
+      console.log('this.dialogUserProtocol', this.dialogUserProtocol);
       this.dialogUserProtocol = false;
-        this.checked = true;
+      this.checked = true;
     },
     onSubmit() {
       console.log('user_id', this.user_id);

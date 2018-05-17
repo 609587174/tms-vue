@@ -9,6 +9,16 @@
  */
 
 const api = {
+  addDepartment: {
+    url: '/carrier/departments/',
+    method: 'post',
+    desc: '新增部门',
+    param: {
+      group_name:{
+        desc:'部门名称'
+      }
+    }
+  },
   login: {
     url: '/auth/login/',
     method: 'post',

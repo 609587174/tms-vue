@@ -44,7 +44,7 @@
                   </el-menu>
                   <div class="text-center department-btn">
                     <el-button type="primary" plain size="medium">编辑部门</el-button>
-                    <el-button type="primary" size="medium">新增部门</el-button>
+                    <el-button type="primary" size="medium" @click="organizationDialog('department','add')">新增部门</el-button>
                   </div>
                 </div>
               </el-tab-pane>
@@ -78,21 +78,20 @@
               <el-tab-pane label="用户管理2" name="department1"></el-tab-pane>
               <el-tab-pane label="用户管理3" name="department2"></el-tab-pane>
               <el-tab-pane label="用户管理4" name="department3"></el-tab-pane>
-
               <el-tab-pane label="用户管理5" name="department4"></el-tab-pane>
               <el-tab-pane label="用户管理6" name="department5"></el-tab-pane>
               <el-tab-pane label="用户管理7" name="department6"></el-tab-pane>
               <el-tab-pane label="用户管理8" name="department9"></el-tab-pane>
-
             </el-tabs>
           </div>
         </el-col>
       </el-row>
     </div>
+    <department-dialog :department-dialog="departmentDialog" v-on:closeDialogBtn="closeDialog"></department-dialog>
   </div>
 </template>
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import departmentDialog from '../../components/setting/departmentDialog';
 export default {
   name: 'personListManage',
   computed: {
@@ -100,9 +99,18 @@ export default {
       return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
     }
   },
+  components: {
+    departmentDialog: departmentDialog
+  },
   data() {
     return {
-      pageLoading: false,
+      pageLoading: false, //职位列表loading
+      positionDialog: false, //职位弹窗bialog
+      departmentDialog: {
+        isShow: false,
+        type: 'add',
+        row: {}
+      }, //部门弹窗bialog
       pageData: {
         currentPage: 1,
         totalPage: '',
@@ -129,11 +137,31 @@ export default {
         param: 'work_type.verbose',
         width: ''
       }],
-      tableData:[]
+      tableData: []
     }
   },
   methods: {
+    /**
+     * organizationDialog  显示部门、职位弹窗
+     * @param  {string} typeDialog  [必填][展示弹窗类型（department部门，position职位）]
+     * @param  {string} operation   [必填][是否编辑或者新增（add新增，update编辑）]
+     * @return {[type]}
+     */
+    organizationDialog: function(typeDialog, operation) {
 
+      if (typeDialog === 'department') {
+        this.departmentDialog.isShow = true;
+        this.departmentDialog.type = operation;
+      }
+      console.log('弹窗', this.departmentDialog)
+    },
+    closeDialog: function(type) {
+      if(type === 'department'){
+        this.departmentDialog.isShow = false;
+      }
+
+      console.log('this.departmentDialog', this.departmentDialog)
+    },
     handleClick: function(tab, event) {
 
     },

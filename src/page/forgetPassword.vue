@@ -75,7 +75,7 @@ export default {
       }else if(value.indexOf(" ") !=-1) {
         callback(new Error('密码不能包含空格'));
       } else {
-        callback(new Error("密码不正确"));
+        callback(new Error("密码长度6-16位，支持数字、字母、字符（除空格）"));
       }
     };
     var validateNum = (rule, value, callback) => {
@@ -108,8 +108,8 @@ export default {
       isResetSuccess: true,
       rules: {
         phone: [
-          { required: true, message: '请输入手机号', trigger: 'blur' },
-          { min: 4, max: 20, message: '手机号不正确', trigger: 'blur' }
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+          { pattern: /^1\d{10}$/, message: '手机号码不正确', trigger: 'blur' }
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },

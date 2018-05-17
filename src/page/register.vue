@@ -103,7 +103,7 @@ export default {
       rules: {
         nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { pattern: /<!([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/gi, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
+          { pattern: /([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/gi, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },

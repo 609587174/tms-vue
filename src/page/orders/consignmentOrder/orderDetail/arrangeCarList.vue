@@ -11,8 +11,8 @@
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select size="mini" v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
@@ -21,7 +21,7 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
-                  <el-form-item size="mini" label="状态:">
+                  <el-form-item label="状态:">
                     <el-select v-model="searchFilters.orderStateList" @change="startSearch" size="mini" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>

@@ -52,7 +52,7 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain>导入</el-button>
+            <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button>
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
@@ -189,7 +189,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson" });
     },
     importList: function() {
-
+      this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });
     },
     exportList: function() {
 

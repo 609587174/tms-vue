@@ -9,11 +9,9 @@
         <el-tab-pane label="订单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="车辆指派" name="second">
-          <keep-alive>
-            <router-view></router-view>
-          </keep-alive>
         </el-tab-pane>
         <el-tab-pane label="订单记录" name="third">
+          订单记录
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -21,10 +19,16 @@
 </template>
 <script>
 export default {
-  name: 'orderDetailTab',
+  name: 'orderRecordsTab',
+  computed: {
+    id: function() {
+      console.log('params', this.$route.params)
+    }
+  },
   data() {
     return {
-      activeName: 'first',
+      activeName: 'third',
+      pageLoading: true,
     }
   },
   methods: {
@@ -32,14 +36,17 @@ export default {
       if (targetName.name == 'first') {
         this.$router.push({ path: "/orders/orderDetail/orderDetailTab" });
       }
-      if (targetName.name == 'third') {
-        this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
+      if (targetName.name == 'second') {
+        this.$router.push({ path: "/orders/orderDetail/arrangeCarTab" });
       }
     },
   },
   activated: function() {
-    this.activeName = 'second';
+    this.activeName = 'third';
   },
+  created: function() {
+
+  }
 }
 
 </script>

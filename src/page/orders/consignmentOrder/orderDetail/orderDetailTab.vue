@@ -1,5 +1,7 @@
 <style scoped lang="less">
-
+.detail-mian {
+  min-height: 500px;
+}
 
 </style>
 <template>
@@ -7,8 +9,8 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="订单详情" name="first">
-          <div id="addPerson" class="detail-mian">
-            <el-container>
+          <div class="detail-mian" v-loading="pageLoading">
+            <el-container v-show="!pageLoading">
               <el-main>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -22,19 +24,19 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label><span class="text-red">* </span>订单号:</label>
-                        <div class="detail-form-item">11111111</div>
+                        <div class="detail-form-item">{{detailData.waybill_number}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label><span class="text-red">* </span>订单生成时间:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <div class="detail-form-item">{{detailData.created_at}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>托运方:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <label>托运方:</label>
+                        <div class="detail-form-item">{{detailData.created_at}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -163,9 +165,77 @@
 <script>
 export default {
   name: 'orderDetailTab',
+  computed: {
+    id: function() {
+      return this.$route.params.id;
+    }
+  },
   data() {
     return {
       activeName: 'first',
+      pageLoading: false,
+      detailData: {
+        "id": "c2354b01-5779-4b8c-99f0-ff10af9cfaf8",
+        "supplier": {
+          "id": "b7bb9038-f983-44f4-94ea-523d2b77de22",
+          "created_at": "2017-12-27 17:35:26",
+          "is_deleted": 0,
+          "supplier_name": "诸城新奥燃气有限公司",
+          "supplier_abbreviation": "",
+          "business_type": "其它",
+          "city": "",
+          "address": "",
+          "contact_person": "",
+          "contact_phone": "",
+          "supplier_type": "0",
+          "contract_url": null,
+          "contract_date": null,
+          "contract_limit_date": null,
+          "operator_id": null
+        },
+        "fluid": {
+          "id": "90c77f10-7305-4710-8baa-e4cbbc6ab7d0",
+          "created_at": "2017-12-27 17:35:26",
+          "is_deleted": 0,
+          "supplier_id": "9db34e5a-ef65-45ca-9fb1-712422a0019c",
+          "fluid_name": "文安驿",
+          "employee_id": null,
+          "gas_type": "",
+          "province": "陕西省",
+          "city": "延安市",
+          "area": "延川县",
+          "address": "文安驿镇",
+          "actual_address": "文安驿",
+          "linkman": "",
+          "contact_phone": "",
+          "map_position": "ee66314b-a315-46b7-aa88-9657d387575f"
+        },
+        "created_at": "2018-05-16 11:18:03",
+        "updated_at": "2018-05-16 11:18:03",
+        "created_timestamp": 1526440683,
+        "is_deleted": 0,
+        "order_number": "201805160003",
+        "status": "determine",
+        "plan_time": null,
+        "require_car_number": 0,
+        "plan_tonnage": "0.000",
+        "discount_price": "0.000",
+        "business_price": "0.000",
+        "unit_price": "0.000",
+        "desc": "",
+        "unload_area": null,
+        "carry_type": "c9c159a0-1722-4cff-b896-df31f20b32e3",
+        "unload_area_info": {},
+        "carry_type_info": {
+          "id": "c9c159a0-1722-4cff-b896-df31f20b32e3",
+          "created_at": "2018-05-16 11:13:37",
+          "updated_at": "2018-05-16 11:13:39",
+          "created_timestamp": 234343,
+          "is_deleted": 0,
+          "consignment_type": "own",
+          "carrier": "['']"
+        }
+      },
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -211,12 +281,25 @@ export default {
         this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
       }
     },
+    getOrderDetail: function() {
+      this.pageLoading = true;
+      this.$$http('getOrderDetail', ).then((results) => {
+        this.pageLoading = false;
+        if (results.data && results.data.code == 0 && results.data.data) {
+
+
+        }
+      }).catch((err) => {
+
+      })
+    }
   },
   activated: function() {
     this.activeName = 'first';
   },
   created: function() {
-
+    console.log('this.$route', this.$route.params.id, this.id);
+    //this.getOrderDetail();
   }
 }
 

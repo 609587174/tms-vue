@@ -33,6 +33,7 @@ export default {
 
       let menuData = staticData.staticData();
       let allowedRouter = this.getRoutes(menuData.data);
+      console.log('allowedRouter', allowedRouter);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
@@ -116,10 +117,10 @@ export default {
         }
       });
       let originPath = that.pbFunc.deepcopy(userPath);
+
       originPath[0].children = actualRouter;
-      if (originPath[0].meta.needShowFir && Array.isArray(originPath[0].children)) {
-        originPath[0].redirect = "./" + originPath[0].children[0].path;
-      }
+
+      console.log('originPath', originPath);
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',

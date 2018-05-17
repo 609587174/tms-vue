@@ -153,7 +153,7 @@ export default {
     agreeProtocol:function(){
       console.log('this.dialogUserProtocol',this.dialogUserProtocol);
       this.dialogUserProtocol = false;
-      this.checked = true;
+        this.checked = true;
     },
     onSubmit(registerForm) {
       console.log('user_id', this.user_id);

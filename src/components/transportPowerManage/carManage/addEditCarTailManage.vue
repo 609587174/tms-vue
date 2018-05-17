@@ -117,7 +117,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆类型:" prop="vehicle_type">
-                    <el-select v-model="tailCarFormStep.vehicle_type" placeholder="请选择车辆类型" @change="changeSelect">
+                    <el-select v-model="tailCarFormStep.vehicle_type" placeholder="请选择车辆类型">
                       <el-option v-for="(item,key) in selectData.carTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -174,10 +174,10 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('add','nextStep')">填写证件信息</el-button>
+                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">填写证件信息</el-button>
               </el-col>
               <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('add','out')">保存并退出</el-button>
+                <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -222,10 +222,10 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('update','nextStep')">填写保险信息</el-button>
+                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">填写保险信息</el-button>
               </el-col>
               <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('update','out')">保存并退出</el-button>
+                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -291,17 +291,17 @@
               </div>
             </el-form>
             <el-col :span="6" :offset="8">
-              <el-button type="success" @click="goOtherSetp('update','nextStep')">填写其他信息</el-button>
+              <el-button type="success" @click="goOtherSetp('update','nextStep','addInsuanceFrom')">填写其他信息</el-button>
             </el-col>
             <el-col :span="6">
-              <el-button type="primary" @click="goOtherSetp('update','out')">保存并退出</el-button>
+              <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFrom')">保存并退出</el-button>
             </el-col>
             </el-row>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==3">
-            <el-form class="addTailcarform" label-width="160px" ref="addEditFormSetp2" :rules="rules" :model="tailCarFormStep" status-icon :label-position="'left'">
+            <el-form class="addTailcarform" label-width="160px" ref="addEditFormSetp4" :rules="rules" :model="tailCarFormStep" status-icon :label-position="'left'">
               <el-row :gutter="82">
                 <el-col :span="12">
                   <el-form-item label="罐检报告编号:" prop="bottle_report_number">
@@ -329,7 +329,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('update')">保存并且退出</el-button>
+                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp4')">保存并且退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -356,6 +356,13 @@ export default {
         callback();
       }
     };
+    var onlyNum = (rule, value, callback) => {
+      if (value.match(/^[0-9]+$/) || value == '') {
+        callback();
+      } else {
+        callback(new Error("只能是数字"));
+      }
+    };
     return {
       titleType: "新增挂车",
       stepTitle: "基本信息填写",
@@ -373,12 +380,12 @@ export default {
       tailCarFormStep3Arr: ['semitrailer_insurances', 'semitrailer_insurances_add'],
       tailCarFormStep4Arr: ['bottle_report_number', 'bottle_verify_date', 'pressure_bottle_number', 'pressure_bottle_verify_date'],
       tailCarFormStep: {
-        plate_number: "鲁GL8996", //挂车排
-        attributes: '', //车辆归属
+        plate_number: "", //挂车排
+        attributes: 'SELF_SUPPORT', //车辆归属
         carrier: { name: '胜通物流公司', id: '55555c1f-1ffe-4419-9646-157c1aa0571d' }, //车辆所属
-        vin_number: "LZZ1CLVB6GA107016", //车架号
+        vin_number: "", //车架号
         vehicle_type: '',
-        brand: "1231231233", //品牌型号
+        brand: "", //品牌型号
         transport_weight: "", //质量
         valume: "", //灌装容积
         length: "", //长
@@ -426,16 +433,16 @@ export default {
           { validator: buyInsuranceDateVa, trigger: 'blur' }
         ],
         valume: [
-          { type: 'number', message: '只能由数字组成' }
+          { validator: onlyNum, trigger: 'blur' }
         ],
         length: [
-          { type: 'number', message: '只能由数字组成' }
+          { validator: onlyNum, trigger: 'blur' }
         ],
         width: [
-          { type: 'number', message: '只能由数字组成' }
+          { validator: onlyNum, trigger: 'blur' }
         ],
         height: [
-          { type: 'number', message: '只能由数字组成' }
+          { validator: onlyNum, trigger: 'blur' }
         ],
 
       }
@@ -466,11 +473,6 @@ export default {
     }
   },
   methods: {
-    changeSelect: function(key) {
-      this.tailCarFormStep.vehicle_type.verbose = this.selectData.carTypeSelect.find((item) => {
-        return item.key === key;
-      }).verbose;
-    },
     goOtherSetp: function(stepInfo, operation, formName) {
       if (stepInfo == "add" && !this.tailId) {
         this.createFrom(operation, formName);
@@ -518,6 +520,11 @@ export default {
       sendData = this.pbFunc.fifterbyArr(sendData, this['tailCarFormStep' + (parseInt(this.activeStep) + 1) + 'Arr']);
       this.pageLoading = true;
       sendData.id = this.tailId;
+      if (sendData.carrier.id) {
+        sendData.carrier = sendData.carrier.id;
+      } else {
+        delete sendData.carrier;
+      }
       this.$$http('upadteTailFrom', sendData).then((result) => {
         if (result.data.code == 0) {
           if (operation == 'out') {
@@ -573,13 +580,18 @@ export default {
       });
     },
     createFrom: function(operation, formName) {
-      this.validatorFrom(formName, function(result) {
+      this.validatorFrom(formName, (result) => {
         if (result == 'true') {
           this.pageLoading = true;
           var sendData = this.pbFunc.deepcopy(this.tailCarFormStep);
 
           sendData = this.pbFunc.fifterObjIsNull(sendData);
           sendData = this.pbFunc.fifterbyArr(sendData, this.tailCarFormStep1Arr);
+          if (sendData.carrier.id) {
+            sendData.carrier = sendData.carrier.id;
+          } else {
+            delete sendData.carrier;
+          }
           this.$$http('creatTailFrom', sendData).then((result) => {
             this.pageLoading = false;
             if (result.data.code == 0) {

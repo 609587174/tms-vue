@@ -175,7 +175,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="燃料类型:">
+                  <el-form-item label="燃料类型:" prop="fuel_type">
                     <el-select v-model="headCarFormStep1.fuel_type" placeholder="请选择车辆类型">
                       <el-option v-for="(item,key) in selectData.fuelTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
@@ -440,11 +440,11 @@ export default {
         }
       },
       headCarFormStep1: {
-        plate_number: '鲁GP8991', //车牌号
-        attributes: '', //车辆归属
+        plate_number: '', //车牌号
+        attributes: 'SELF_SUPPORT', //车辆归属
         carrier: { name: '胜通', id: '' },
         vin_number: '',
-        engine_number: '1231231233',
+        engine_number: '',
         vehicle_type: '', //
         brand: '',
         total_weight: '',
@@ -494,11 +494,10 @@ export default {
           { min: 17, max: 17, message: '车架号为17个字段，如：LZZ1CLVB6GA107016', trigger: 'blur' }
         ],
         engine_number: [
-          { required: true, message: '发动机号不能为空', trigger: 'blur' },
           { min: 10, max: 15, message: '发动机号为10~15个字段', trigger: 'blur' }
         ],
-        vehicle_type: [
-          { required: true, message: '请选择车辆类型', trigger: 'blur' }
+        fuel_type: [
+          { required: true, message: '请选择燃料类型', trigger: 'blur' }
         ],
         brand: [
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }
@@ -641,11 +640,8 @@ export default {
 
           var sendData = vm.pbFunc.fifterObjIsNull(vm.headCarFormStep1);
 
-          sendData.attributes = sendData.attributes ? sendData.attributes.key : null;
-          sendData.vehicle_type = sendData.vehicle_type ? sendData.vehicle_type.key : null;
-          sendData.carrier = sendData.carrier ? sendData.carrier.id : null;
-          sendData.trans_type = sendData.trans_type ? sendData.trans_type.key : null;
-          sendData.fuel_type = sendData.fuel_type ? sendData.fuel_type.key : null;
+          //sendData.carrier = sendData.carrier.id ? sendData.carrier.id : null;
+          delete sendData.carrier;
 
           vm.$$http('creatHeadFrom', sendData).then(function(result) {
             vm.pageLoading = false;

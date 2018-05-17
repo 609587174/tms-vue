@@ -1,65 +1,127 @@
 <style scoped lang="less">
-.demo-table-expand {
-  font-size: 0;
+.listTableAll {
+  text-align: center;
 }
 
-.demo-table-expand label {
-  width: 90px;
-  color: #99a9bf;
+.el-table {
+  /deep/ .el-table__header-wrapper tr th .cell {
+    text-align: center;
+  }
+  /deep/ .el-table__body {
+    .el-table__row {
+      background-color: rgb(250, 250, 250);
+    }
+    .el-table__expanded-cell[class*=cell] {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .listDetalis {
+      float: left;
+      text-align: center;
+    }
+    .colinfo {
+      float: left;
+      height: 30px;
+      line-height: 30px;
+    }
+    .el-icon-location {
+      font-size: 15px;
+      margin-left: 5px;
+      color: #409eff;
+    }
+    .carList .el-col {
+      height: 25px;
+      line-height: 25px;
+    }
+    .opButton .el-row {
+      margin-top: 5px;
+    }
+  }
 }
 
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
-
-.el-table /deep/ .el-table__body .el-table__row {
-  background-color: rgb(250, 250, 250);
+.el-button--success {
+  color: #67c23a !important;
+  background: #f0f9eb !important;
+  border-color: #c2e7b0 !important;
 }
 
 </style>
 <template>
-  <el-table :data="ListData" style="width: 100%" :span-method="SpanMethod" claas="listTableAll" default-expand-all="true">
+  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus">
     <el-table-column type="expand">
       <template slot-scope="props">
-        <el-form label-position="left" inline class="demo-table-expand">
-          <el-form-item label="商品名称">
-            <span>{{ props.row.name }}</span>
-          </el-form-item>
-          <el-form-item label="所属店铺">
-            <span>{{ props.row.shop }}</span>
-          </el-form-item>
-          <el-form-item label="店铺 ID">
-            <span>{{ props.row.shopId }}</span>
-          </el-form-item>
-          <el-form-item label="商品分类">
-            <span>{{ props.row.category }}</span>
-          </el-form-item>
-          <el-form-item label="店铺地址">
-            <span>{{ props.row.address }}</span>
-          </el-form-item>
-          <el-form-item label="商品描述">
-            <span>{{ props.row.desc }}</span>
-          </el-form-item>
-        </el-form>
+        <div class="listDetalis" style="width:75%;padding-left:48px;">
+          <el-row class="loadInfo" style="width:100%">
+            <el-col :span="9" class="colinfo">装:<span>{{props.row.fluid.province}}{{props.row.fluid.city}}{{props.row.fluid.area}}{{props.row.fluid.actual_address}}</span><i class="el-icon-location primary"></i>
+            </el-col>
+            <el-col :span="3" class="colinfo">200km
+            </el-col>
+            <el-col :span="3" class="colinfo">{{props.row.plan_time}}
+            </el-col>
+            <el-col :span="3" class="colinfo">{{props.row.plan_time}}
+            </el-col>
+            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+            </el-col>
+            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+            </el-col>
+          </el-row>
+        </div>
+        <div class="listDetalis carList" style="width:15%">
+          <el-row>
+            <el-col>需求车数:20辆</el-col>
+          </el-row>
+          <el-row>
+            <el-col>提交车数:20辆</el-col>
+          </el-row>
+          <el-row>
+            <el-col>确认车数:20辆</el-col>
+          </el-row>
+        </div>
+        <div class="listDetalis opButton" style="width:10%">
+          <el-row>
+            <el-col>
+              <el-button type="primary" size="mini" plain>添加车辆</el-button>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-button type="success" size="mini" plain>修改计划</el-button>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-button type="primary" size="mini">提交计划</el-button>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col>
+              <el-button type="danger" plain size="mini">确认取消</el-button>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="clear:both"></div>
       </template>
     </el-table-column>
-    <el-table-column label="装卸地" prop="orderid" min-width="15%">
+    <el-table-column label="装卸地" prop="id" min-width="28.125%">
     </el-table-column>
-    <el-table-column label="标准里程" prop="TYcompany" min-width="10%">
+    <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">
     </el-table-column>
-    <el-table-column label="计划时间" prop="CYcompany" min-width="15%">
+    <el-table-column label="计划时间" prop="supplier.supplier_name" min-width="9.375%">
     </el-table-column>
-    <el-table-column label="实际时间" prop="JHweight" min-width="15%">
+    <el-table-column label="实际时间" prop="yunfei" min-width="9.375%">
     </el-table-column>
-    <el-table-column label="计划吨位" prop="desc" min-width="10%">
+    <el-table-column label="计划吨位" min-width="9.375%">
+      <template slot-scope="scope">
+        <el-tooltip :content="scope.row.desc" placement="top" effect="light">
+          <el-button type="text">备注<i class="el-icon-document"></i></el-button>
+        </el-tooltip>
+      </template>
     </el-table-column>
-    <el-table-column label="实际吨位" prop="" min-width="10%">
+    <el-table-column label="实际吨位" prop="" min-width="9.375%">
     </el-table-column>
-    <el-table-column label="车辆信息" prop="" min-width="10%">
+    <el-table-column label="车辆信息" prop="" min-width="15%">
     </el-table-column>
-    <el-table-column label="操作" prop="" min-width="15%">
+    <el-table-column label="操作" prop="" min-width="13%">
     </el-table-column>
   </el-table>
 </template>
@@ -68,7 +130,7 @@ export default {
   name: 'orderFifterList',
   data() {
     return {
-
+      expandStatus: true
     };
   },
   props: ['ListData'],
@@ -79,9 +141,9 @@ export default {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {
         return [1, 2];
-      } else if (columnIndex === 4) {
+      } else if (columnIndex === 2) {
         return [1, 2];
-      } else if (columnIndex === 5) {
+      } else if (columnIndex === 3) {
         return [1, 2];
       }
     }

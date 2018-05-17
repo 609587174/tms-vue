@@ -48,7 +48,7 @@ export default {
     const validatePass = (rule, value, callback) => {
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
         callback();
-      }else if(value.indexOf(" ") !=-1) {
+      } else if (value.indexOf(" ") != -1) {
         callback(new Error('密码不能包含空格'));
       } else {
         callback(new Error("密码不正确"));
@@ -129,9 +129,7 @@ export default {
                 type: 'success'
               });
               vm.pbFunc.setLocalData('token', results.data.data.ticket, true);
-              setTimeout(() => {
-                vm.$emit('login', vm.$router.currentRoute.query.from);
-              }, 1000)
+              vm.$emit('login', vm.$router.currentRoute.query.from);
             }
           }).catch((err) => {
             this.$message.error('登录失败');
@@ -143,7 +141,6 @@ export default {
         }
       });
     },
-
     toLink(type) {
       if (type === 'register') {
         this.$router.push({ path: '/register' });

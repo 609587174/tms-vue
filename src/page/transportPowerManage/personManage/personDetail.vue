@@ -98,7 +98,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>准驾类型:</label>
-                <div class="detail-form-item">{{userData.age}}</div>
+                <div class="detail-form-item">{{userData.drive_license_allow_type}}</div>
               </div>
             </el-col>
           </el-row>

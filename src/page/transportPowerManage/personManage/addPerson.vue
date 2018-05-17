@@ -65,13 +65,13 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="身份证号:" prop="id_number">
-                    <el-input placeholder="请输入" type="text" v-model="userForm.id_number" :disabled="notEdit"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.id_number" :disabled="notEdit" @blur="dealIdNumber"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="在职状态:">
-                    <el-radio v-model="userForm.on_job_status" label="OFF_JOB">离职</el-radio>
                     <el-radio v-model="userForm.on_job_status" label="ON_JOB">在职</el-radio>
+                    <el-radio v-model="userForm.on_job_status" label="OFF_JOB">离职</el-radio>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -95,7 +95,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="家属姓名:">
+                  <el-form-item label="家属姓名:" prop="family_member_name">
                     <el-input placeholder="请输入" type="text" v-model="userForm.family_member_name"></el-input>
                   </el-form-item>
                 </el-col>
@@ -135,7 +135,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="goAddDriverLicense()" :loading="addDriverLicenseBtn.isLoading" :disabled="addDriverLicenseBtn.isDisabled">{{addDriverLicenseBtn.btnText}}</el-button>
+                  <el-button type="success" @click="goAddDriverLicense()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="saveBasicAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -165,7 +165,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="驾驶证发证机关:">
+                  <el-form-item label="驾驶证发证机关:" prop="drive_license_issue_organ">
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
@@ -183,7 +183,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="addCertificate()" :loading="addCertificateBtn.isLoading" :disabled="addCertificateBtn.isDisabled">{{addCertificateBtn.btnText}}</el-button>
+                  <el-button type="success" @click="addCertificate()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="saveDriverLicenseAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -231,7 +231,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="addEscort()" :loading="addEscortBtn.isLoading" :disabled="addEscortBtn.isDisabled">{{addEscortBtn.btnText}}</el-button>
+                  <el-button type="success" @click="addEscort()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="addCertificateAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -261,7 +261,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="押运证发证机关:">
+                  <el-form-item label="押运证发证机关:" prop="escort_license_issue_organ">
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.escort_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
@@ -279,7 +279,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="addLabour()" :loading="addLabourBtn.isLoading" :disabled="addLabourBtn.isDisabled" ng-app="string">{{addLabourBtn.btnText}}</el-button>
+                  <el-button type="success" @click="addLabour()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled" ng-app="string">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="saveEscortAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -331,7 +331,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="体检备注:">
+                  <el-form-item label="体检备注:" prop="heath_examination_remark">
                     <el-input :autofocus="true" placeholder="请输入" type="textarea" :rows="4" v-model="userForm.heath_examination_remark"></el-input>
                   </el-form-item>
                 </el-col>
@@ -340,7 +340,7 @@
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" @click="addTraining()" :loading="addTrainingBtn.isLoading" :disabled="addTrainingBtn.isDisabled">{{addTrainingBtn.btnText}}</el-button>
+                  <el-button type="success" @click="addTraining()" :loading="nextStepBtn.isLoading" :disabled="nextStepBtn.isDisabled">{{nextStepBtn.btnText}}</el-button>
                   <el-button type="primary" @click="saveLabourAndReview()" :loading="saveBasicAndReviewBtn.isLoading" :disabled="saveBasicAndReviewBtn.isDisabled">{{saveBasicAndReviewBtn.btnText}}</el-button>
                 </el-col>
               </el-row>
@@ -461,7 +461,7 @@ export default {
         work_type: '', //从业类型
         mobile_phone: '', //手机号码
         staff_type: '', //人员所属
-        id_number: '', //身份证号码
+        id_number: '511621199002074174', //身份证号码
         on_job_status: 'ON_JOB', //在职状态
         gender: 'MALE', //性别
         birthday: '', //出生日期
@@ -512,27 +512,28 @@ export default {
       rules: {
         name: [ //姓名
           { required: true, message: '请输入姓名', trigger: 'blur' },
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{2,10})$/gi, message: '姓名为2～10个汉字', trigger: 'blur' }
         ],
         employmentType: [ //从业类型
           { required: true, message: '请选择从业类型', trigger: 'blur' }
         ],
         mobile_phone: [ //手机号码
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
+          { pattern: /^1\d{10}$/, message: '请输入手机号码', trigger: 'blur' }
         ],
         staffs: [ //人员所属
           { required: true, message: '请选择人员所属', trigger: 'blur' },
         ],
         id_number: [ //身份证号码
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
-          { pattern: /(^\d{18}$)|(^\d{17}(\d|X|x)$)/, message: '请输入18位身份证号码', trigger: 'blur' }
+          { pattern: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/, message: '请输入正确的身份证号码', trigger: 'blur' }
         ],
         on_job_status: [ //在职状态
           { required: true, message: '请选择在职状态', trigger: 'blur' },
         ],
         family_member_phone: [ //家属联系方式
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号码', trigger: 'blur' }
+          { pattern: /^1\d{10}$/, message: '请输入手机号码', trigger: 'blur' }
         ],
 
         drive_license_number: [ //驾驶证档案编号
@@ -549,39 +550,29 @@ export default {
           { pattern: /^[0-9a-zA-Z]{18,19}$/, message: '押运证证号为18~19位字段，支持字母、数字', trigger: 'blur' }
         ],
 
-
+        drive_license_issue_organ: [
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{1,30})$/gi, message: '驾驶证发证机关为1～30个汉字', trigger: 'blur' }
+        ], //驾驶证发证机关
+        escort_license_issue_organ: [
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{1,30})$/gi, message: '押运证发证机关为1～30个汉字', trigger: 'blur' }
+        ],
+        family_member_name: [
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{2,10})$/gi, message: '姓名为2～10个汉字', trigger: 'blur' }
+        ],
+        heath_examination_remark: [
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{0,50})$/gi, message: '备注不多于50个字符', trigger: 'blur' },
+        ]
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
         btnText: '保存并退出',
         isDisabled: false,
       },
-      addDriverLicenseBtn: {
+      nextStepBtn: {
         isLoading: false,
-        btnText: '填写驾驶证信息',
+        btnText: '保存并下一步',
         isDisabled: false,
       },
-      addCertificateBtn: {
-        isLoading: false,
-        btnText: '填写从业资格证',
-        isDisabled: false,
-      },
-      addEscortBtn: {
-        isLoading: false,
-        btnText: '填写押运员信息',
-        isDisabled: false,
-      },
-      addLabourBtn: {
-        isLoading: false,
-        btnText: '填写劳务信息',
-        isDisabled: false,
-      },
-      addTrainingBtn: {
-        isLoading: false,
-        btnText: '填写培训信息',
-        isDisabled: false,
-      },
-
     }
   },
   created() {
@@ -593,6 +584,18 @@ export default {
   methods: {
     chooseProvincecopy: function() {
       console.log('this.address', this.userForm.address)
+    },
+    dealIdNumber: function() {
+      if (this.userForm.id_number.match(/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/)) {
+        let birthdayStr = this.userForm.id_number.slice(-12, -4);
+        let birthYear = birthdayStr.slice(0, 4);
+        let birthMonth = birthdayStr.slice(4, 6);
+        let birthDay = birthdayStr.slice(6);
+        let dateObject = new Date();
+        let currentYear = dateObject.getFullYear();
+        this.userForm.birthday = birthYear + '-' + birthMonth + '-' + birthDay;
+        this.userForm.age = currentYear - birthYear;
+      }
     },
     addNewTraining: function() {
       let newTraining = {
@@ -792,7 +795,7 @@ export default {
       console.log('this.userForm', this.userForm.birthday);
 
       let formName = 'addClientFormSetpOne';
-      let btnObject = this.addDriverLicenseBtn;
+      let btnObject = this.nextStepBtn;
       let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       postData.area = this.userForm.address.area || this.userForm.address.city || '';
@@ -808,7 +811,7 @@ export default {
     },
     addCertificate() {
       let formName = 'addClientFormSetpTow';
-      let btnObject = this.addCertificateBtn;
+      let btnObject = this.nextStepBtn;
       let keyArray = ['drive_license_number', 'drive_license_issue_date', 'drive_license_due_date', 'drive_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       this.addPersonAjax(postData, formName, btnObject);
@@ -822,7 +825,7 @@ export default {
     },
     addEscort() {
       let formName = 'addClientFormSetpThree';
-      let btnObject = this.addEscortBtn;
+      let btnObject = this.nextStepBtn;
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       this.addPersonAjax(postData, formName, btnObject);
@@ -836,7 +839,7 @@ export default {
     },
     addLabour() {
       let formName = 'addClientFormSetpFour';
-      let btnObject = this.addLabourBtn;
+      let btnObject = this.nextStepBtn;
       let keyArray = ['escort_license_number', 'escort_license_issue_date', 'escort_license_due_date', 'escort_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       this.addPersonAjax(postData, formName, btnObject);
@@ -850,7 +853,7 @@ export default {
     },
     addTraining() {
       let formName = 'addClientFormSetpFive';
-      let btnObject = this.addTrainingBtn;
+      let btnObject = this.nextStepBtn;
       let keyArray = ['labour_employ_date', 'labour_on_work_date', 'labour_off_work_date', 'contract_start_date', 'contract_due_date', 'contract_correct_date', 'heath_examination_date', 'heath_examination_remark'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       this.addPersonAjax(postData, formName, btnObject);

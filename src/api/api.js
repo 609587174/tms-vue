@@ -29,6 +29,14 @@ const api = {
       }
     }
   },
+  signOut: {
+    url: '/auth/logout/',
+    method: 'post',
+    desc: '退出登录',
+    param: {
+
+    }
+  },
   register: {
     url: '/user/users/register/',
     method: 'post',

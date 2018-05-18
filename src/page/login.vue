@@ -28,7 +28,7 @@
         <div class="user-page-btn">
           <el-form-item>忘记密码？<span v-on:click="toLink('reset')" class="text-blue cursor-pointer">找回密码</span></el-form-item>
           <el-form-item>
-            <el-button @click.native="login('ruleForm')" type="success" :loading="submitBtn.isBtnLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+            <el-button @click.native="login()" type="success" :loading="submitBtn.isBtnLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>
           <el-form-item>没有账号，<span v-on:click="toLink('register')" class="text-blue cursor-pointer">请注册</span></el-form-item>
         </div>
@@ -105,15 +105,23 @@ export default {
       return '登录';
     },
 
-
   },
   methods: {
-    login(rules) {
+    getUser() {
+      this.$$http('getUser', {}).then((results) => {
+        if (results.data && results.data.code === 0) {
+          this.$store.state.common.users = results.data.data;
+        }
+      }).catch((err) => {
+        this.$message.error('获取用户信息失败');
+      })
+    },
+    login() {
       var vm = this;
-      console.log('vm.pbFunc', vm.pbFunc)
+      console.log('vm.pbFunc', this.ruleForm)
       this.ruleForm.verify_key = this.verifyCodeData.verify_key;
       vm.submitBtn.isDisabled = true;
-      this.$refs[rules].validate((valid) => {
+      this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
           this.submitBtn.btnText = '登录中';
           vm.submitBtn.isBtnLoading = true;
@@ -129,6 +137,7 @@ export default {
                 type: 'success'
               });
               vm.pbFunc.setLocalData('token', results.data.data.ticket, true);
+              this.getUser();
               vm.$emit('login', vm.$router.currentRoute.query.from);
             }
           }).catch((err) => {
@@ -178,6 +187,7 @@ export default {
   created() {
     sessionStorage.clear();
     this.refreshVaImg();
+    // this.enterLogin(event);
   }
 };
 

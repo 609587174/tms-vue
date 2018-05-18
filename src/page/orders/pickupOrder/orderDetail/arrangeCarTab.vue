@@ -24,7 +24,7 @@ export default {
   name: 'arrangeCarTab',
   computed: {
     id: function() {
-
+      return this.$route.params.id;
     }
   },
   data() {

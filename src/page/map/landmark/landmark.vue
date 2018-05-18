@@ -9,21 +9,19 @@
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'landMark',
+  computed: {
+
+  },
   data() {
     return {
 
-    };
-  },
-  computed: {
-
+    }
   },
   methods: {
 
   },
-  created() {
 
-  }
-};
+}
 
 </script>

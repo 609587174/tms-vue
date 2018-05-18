@@ -4,26 +4,23 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    轨迹回放
   </div>
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'routePlayback',
+  computed: {
+
+  },
   data() {
     return {
 
-    };
-  },
-  computed: {
-
+    }
   },
   methods: {
 
   },
-  created() {
-
-  }
-};
+}
 
 </script>

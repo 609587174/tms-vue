@@ -9,21 +9,21 @@
 </template>
 <script>
 export default {
-  name: 'mapManage',
-  data() {
-    return {
-
-    };
-  },
+  name: 'carMonitor',
   computed: {
 
+  },
+  data() {
+    return {
+      activeName: 'second',
+    }
   },
   methods: {
 
   },
-  created() {
+  activated: function() {
 
-  }
-};
+  },
+}
 
 </script>

@@ -124,21 +124,21 @@
           </el-row>
           <template v-for="(route, index) in menus">
             <template v-if="route.children && dealChildren(route.children).length">
-              <el-submenu :key="index" :index="route.path">
+              <el-submenu :key="index" :index="route.name">
                 <template slot="title">
                   <i :class="[{ 'color-4a9bf8' : activeMenu.match(route.path) }, route.meta.iconName]"></i>
-                  <span>{{route.name||"无名字"}}</span>
+                  <span>{{route.meta.title||"无名字"}}</span>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute">
-                  <span :class="{ 'color-4a9bf8' : activeMenu === cRoute.path }">{{cRoute.name}}</span>
+                  <span :class="{ 'color-4a9bf8' : activeMenu === cRoute.path }">{{cRoute.meta.title||"无名字"}}</span>
                 </el-menu-item>
               </el-submenu>
             </template>
             <template v-else>
-              <el-menu-item :route="route" :index="route.path">
+              <el-menu-item :route="route" :index="route.name">
                 <template slot="title">
                   <i :class="[{ 'color-4a9bf8' : activeMenu === route.path }, route.meta.iconName]"></i>
-                  <span :class="{ 'color-4a9bf8' : activeMenu === route.path }">{{route.name||"无名字"}}</span>
+                  <span :class="{ 'color-4a9bf8' : activeMenu === route.path }">{{route.meta.title||"无名字"}}</span>
                 </template>
               </el-menu-item>
             </template>

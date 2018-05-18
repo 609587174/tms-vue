@@ -9,7 +9,7 @@
 @import './assets/css/detailStyle.less';
 
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
-
+@import './assets/css/capacityList';
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>

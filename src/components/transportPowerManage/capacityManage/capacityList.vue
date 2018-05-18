@@ -1,26 +1,5 @@
 <style lang="less">
-.capacity-list {
-  .capacity-list-header {
-    padding: 10px 20px;
-    border: 1px solid #e4e7ed;
-    background: #fff;
-    .search-filters-form {
-      .el-row {
-        margin-top: 10px;
-      }
-    }
-    .input-with-select {
-      .el-input-group__prepend {
-        background-color: #fff;
-      }
-      .el-select .el-input {
-        width: 180px;
-      }
-    }
-  }
-  .capacity-list-content {
-  }
-}
+
 </style>
 <template>
   <div class="capacity-list">
@@ -100,13 +79,15 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
+              <el-button v-if="scope.row.truck_bind_status === '未绑定'" size="mini" type="primary" @click="bindTruck({rowData:scope.row})">绑定挂车</el-button>
+              <el-button v-if="scope.row.truck_bind_status === '已绑定' && scope.row.staff_bind_status === '未绑定'" size="mini" type="primary" @click="bindStaff({rowData:scope.row})">绑定人员</el-button>
+              <el-button v-if="scope.row.truck_bind_status === '已绑定' && scope.row.staff_bind_status === '已绑定'" size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
               <el-dropdown trigger="click" @command="jumpPage">
                 <span class="el-dropdown-link">
                       <i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
+                  <el-dropdown-item v-if="scope.row.truck_bind_status === '未绑定' || scope.row.staff_bind_status === '未绑定'" :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
                   <el-dropdown-item :command="{operator:'operation',rowData:scope.row}">操作日志</el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -118,6 +99,45 @@
         <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
+      <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center>
+        <el-form :model="truckDialog" label-width="80px">
+          <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
+          <el-form-item label="挂车号">
+            <el-input v-model="truckDialog.semitrailer" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="随车电话">
+            <el-input v-model="truckDialog.phone" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="分组">
+            <el-select v-model="truckDialog.group" placeholder="请选择">
+              <el-option label="区域一" value="shanghai"></el-option>
+              <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">绑 定</el-button>
+        </div>
+      </el-dialog>
+      <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="bindStaffFormVisible" append-to-body center label-position="left">
+        <el-form :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
+          <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
+          <el-form-item label="主驾驶" prop="master_driver">
+            <el-input v-model="staffDialog.master_driver" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="副驾驶">
+            <el-input v-model="staffDialog.phone" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="押运员">
+            <el-input v-model="staffDialog.phone" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">绑 定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -126,6 +146,16 @@ export default {
   name: "capacityList",
   data() {
     return {
+      truckDialog: {},
+      staffDialog: {},
+      staffRules: {
+        master_driver: [
+          { required: true, message: '请输入主驾驶名称', trigger: 'blur' },
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+        ]
+      },
+      bindTruckFormVisible: false,
+      bindStaffFormVisible: false,
       filterParam: {
         keyword: "",
         field: "",
@@ -268,7 +298,6 @@ export default {
       tableData: []
     };
   },
-
   methods: {
     addHeadCarPage: function() {
       this.$router.push({
@@ -297,6 +326,26 @@ export default {
             vm.pageData.totalPage = Math.ceil(
               result.data.count / vm.pageData.pageSize
             );
+            vm.tableData.map((n, i) => {
+              for(let key in n) {
+                // mock
+                if (key === 'truck_bind_status') {
+                  n[key] = true
+                }
+                if (key === 'semitrailer') {
+                  n[key] = {
+                    plate_number:'12345'
+                  };
+                }
+                // end mock
+                if (key === 'truck_bind_status' || key === 'staff_bind_status') {
+                  n[key] = n[key] ? '已绑定' : '未绑定';
+                }
+                if (key === 'complete_status') {
+                  n[key] = n[key] ? '已完善' : '未完善';
+                }
+              }
+            });
             vm.pageLoading = false;
           }
         })
@@ -318,6 +367,25 @@ export default {
     pageChange: function() {
       this.seachListParam.page = this.pageData.currentPage;
       this.searchList();
+    },
+    bindTruck: function (row) {
+      this.bindTruckFormVisible = true;
+      this.truckDialog = {
+        truckNum: row.rowData.tractor.plate_number,
+        semitrailer: '',
+        phone: '',
+        group: ''
+      }
+    },
+    bindStaff: function (row) {
+      this.bindStaffFormVisible = true;
+      this.staffDialog = {
+        truckNum: row.rowData.tractor.plate_number,
+        semiNum: row.rowData.semitrailer.plate_number,
+        master_driver: '',
+        vice_driver: '',
+        escort_staff: ''
+      }
     }
   },
   activated: function() {

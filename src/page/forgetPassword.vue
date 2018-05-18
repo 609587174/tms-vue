@@ -33,7 +33,7 @@
           </el-form-item>
           <div class="user-page-btn">
             <el-form-item>
-              <el-button v-on:click="resetPassword('ruleForm')" type="success" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+              <el-button v-on:click="resetPassword" type="success" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
             </el-form-item>
             </el-form-item>
             <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue cursor-pointer">请登录</span></el-form-item>
@@ -173,9 +173,9 @@ export default {
       }
       intCountdown = setInterval(countdown, 1000);
     },
-    resetPassword(rules) {
+    resetPassword() {
       this.submitBtn.isDisabled = true;
-      this.$refs[rules].validate((valid) => {
+      this.$refs['rules'].validate((valid) => {
         if (valid) {
           this.submitBtn.isLoading = true;
           this.submitBtn.btnText = this.resetbBtnText();

@@ -40,7 +40,7 @@
         </el-form-item>
         <div class="user-page-btn">
           <el-form-item>
-            <el-button type="success" @click="onSubmit('registerForm')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+            <el-button type="success" @click="onSubmit" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
           </el-form-item>
           <el-form-item>已有账号，请<span class="text-blue cursor-pointer" v-on:click="toLoginPage">登录</span></el-form-item>
         </div>
@@ -165,11 +165,11 @@ export default {
     toLoginPage() {
       this.$router.push({ path: '/login' });
     },
-    onSubmit(registerForm) {
+    onSubmit() {
       let postData = this.registerForm;
       this.submitBtn.isDisabled = true;
       this.registerForm.verify_key = this.verifyCodeData.verify_key;
-      this.$refs[registerForm].validate((valid) => {
+      this.$refs['registerForm'].validate((valid) => {
         if (valid) {
           this.submitBtn.btnText = '提交中';
           this.submitBtn.isLoading = true;

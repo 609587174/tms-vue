@@ -53,7 +53,7 @@
           </el-form-item>
           <div class="user-page-btn">
             <el-form-item>
-              <el-button type="success" @click="onSubmit('registerForm')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+              <el-button type="success" @click="onSubmit" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
             </el-form-item>
             <el-form-item>已有账号，请<span class="text-blue cursor-pointer" v-on:click="linkLogin()">登录</span></el-form-item>
           </div>
@@ -120,7 +120,8 @@ export default {
           { required: true, message: '请选择区域', trigger: 'blur' }
         ],
         detail_address: [
-          { required: true, message: '请输入公司地址', trigger: 'blur' }
+          { required: true, message: '请输入公司地址', trigger: 'blur' },
+          { min: 4, max: 100, message: '请输入4-100字符', trigger: 'blur' }
         ],
         carrier_type: [
           { required: true, message: '请选择企业类型', trigger: 'blur' }
@@ -155,11 +156,11 @@ export default {
       this.dialogUserProtocol = false;
         this.checked = true;
     },
-    onSubmit(registerForm) {
+    onSubmit() {
       console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id
       this.registerForm.area = this.address.area
-      this.$refs[registerForm].validate((valid) => {
+      this.$refs['registerForm'].validate((valid) => {
         if (valid) {
           if (this.checked) {
             this.submitBtn.isDisabled = true;

@@ -23,7 +23,7 @@
                 <el-col :span="4">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.checkStatus" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -45,9 +45,9 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain @click="importList">导入</el-button>
+            <el-button type="primary" plain>导入</el-button>
             <el-button type="primary">导出</el-button>
-            <el-button type="success" @click="addPerson">新增</el-button>
+            <el-button type="success">新增</el-button>
           </div>
           <div class="table-list">
             <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
@@ -79,6 +79,12 @@ export default {
   },
   data() {
     return {
+      pageData: {
+        currentPage: 1,
+        totalPage: '',
+        pageSize: 10,
+      },
+      pageLoading: false,
       activeName: 'first',
       selectData: {
         fieldSelect: [{

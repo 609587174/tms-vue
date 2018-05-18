@@ -255,6 +255,7 @@ export default [{
       meta: {
         isVerificationL: false,
         title:'地标管理',
+
       },
       component: (resolve) => require(['../page/map/landMark/landMark'], resolve),
       children:[{

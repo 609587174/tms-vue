@@ -11,7 +11,7 @@
             <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="fifterParam.keyword" class="search-filters-screen">
+                  <el-input placeholder="请输入" size="mini" v-model="fifterParam.keyword" class="search-filters-screen" @keyup.native.13="pageChange">
                     <el-select size="mini" v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
@@ -58,7 +58,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+        <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
     </div>
@@ -116,8 +116,9 @@ export default {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'plate_number', value: '挂车牌' },
+          { id: 'plate_number', value: '车牌号' },
           { id: 'vin_number', value: '车架号' },
+          { id: 'brand', value: '品牌型号' },
         ]
       },
       tableData: [],
@@ -141,14 +142,14 @@ export default {
     },
     searchList: function() {
       var vm = this;
-      if (this.seachListParam[this.fifterParam.field]) {
+      if (this.fifterParam.field) {
         this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
       }
       this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
         var resultData;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
-          vm.pageData.totalPage = Math.ceil(result.data.count / vm.pageData.pageSize);
+          vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }
       }).catch(function(error) {
@@ -165,8 +166,10 @@ export default {
       }
     },
     pageChange: function() {
-      this.seachListParam.page = this.pageData.currentPage;
-      this.searchList();
+      setTimeout(() => {
+        this.seachListParam.page = this.pageData.currentPage;
+        this.searchList();
+      });
     }
   },
   activated: function() {

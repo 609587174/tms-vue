@@ -23,20 +23,8 @@
               </el-row>
               <el-row style="margin-top:20px;">
                 <el-col :span="8">
-                  <el-form-item label="运单日期:" prop="buyInsuranceDate">
+                  <el-form-item label="计划装货时间:" prop="buyInsuranceDate">
                     <el-date-picker v-model="seachListParam.YTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="装货日期:" prop="buyInsuranceDate">
-                    <el-date-picker v-model="seachListParam.TTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="卸货时间:" prop="buyInsuranceDate">
-                    <el-date-picker v-model="seachListParam.XTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -149,7 +137,70 @@ export default {
         "created_timestamp": 1526440683,
         "is_deleted": 0,
         "order_number": "201805160003",
-        "status": "determine",
+        "status": "confirmed",
+        "plan_time": "2018-05-16",
+        "require_car_number": 0,
+        "plan_tonnage": "15吨",
+        "discount_price": "0.000",
+        "business_price": "0.000",
+        "unit_price": "0.000",
+        "desc": "111",
+        "unload_area": null,
+        "carry_type": "c9c159a0-1722-4cff-b896-df31f20b32e3",
+        "unload_area_info": [{ address: "瑞美丰润宝龙", distance: "200km" }, { address: "富海玉田祥泰", distance: "500km" }],
+        "carry_type_info": {
+          "id": "c9c159a0-1722-4cff-b896-df31f20b32e3",
+          "created_at": "2018-05-16 11:13:37",
+          "updated_at": "2018-05-16 11:13:39",
+          "created_timestamp": 234343,
+          "is_deleted": 0,
+          "consignment_type": "own",
+          "carrier": "[]",
+          "carry_name": "托运方:四川浩海"
+        }
+      }, {
+        "id": "订单号:c2354b01-5779-4b8c-99f0-ff10af9cfaf8",
+        "supplier": {
+          "id": "b7bb9038-f983-44f4-94ea-523d2b77de22",
+          "created_at": "2017-12-27 17:35:26",
+          "is_deleted": 0,
+          "supplier_name": "承运方:诸城新奥燃气有限公司",
+          "supplier_abbreviation": "",
+          "business_type": "其它",
+          "city": "",
+          "address": "",
+          "contact_person": "",
+          "contact_phone": "",
+          "supplier_type": "0",
+          "contract_url": null,
+          "contract_date": null,
+          "contract_limit_date": null,
+          "operator_id": null
+        },
+        "fluid": {
+          "id": "90c77f10-7305-4710-8baa-e4cbbc6ab7d0",
+          "created_at": "2017-12-27 17:35:26",
+          "is_deleted": 0,
+          "supplier_id": "9db34e5a-ef65-45ca-9fb1-712422a0019c",
+          "fluid_name": "文安驿",
+          "employee_id": null,
+          "gas_type": "",
+          "province": "陕西省",
+          "city": "延安市",
+          "area": "延川县",
+          "address": "文安驿镇",
+          "actual_address": "文安驿",
+          "linkman": "",
+          "contact_phone": "",
+          "map_position": "ee66314b-a315-46b7-aa88-9657d387575f"
+        },
+        "yunfei": "标准运费:15.2/吨/公里",
+        "created_at": "2018-05-16 11:18:03",
+        "updated_at": "2018-05-16 11:18:03",
+        "created_timestamp": 1526440683,
+        "is_deleted": 0,
+        "order_number": "201805160003",
+        "status": "appoint",
         "plan_time": "2018-05-16",
         "require_car_number": 0,
         "plan_tonnage": "15吨",
@@ -275,7 +326,7 @@ export default {
         "created_timestamp": 1526440683,
         "is_deleted": 0,
         "order_number": "201805160003",
-        "status": "determine",
+        "status": "loaded",
         "plan_time": "2018-05-16",
         "require_car_number": 0,
         "plan_tonnage": "15吨",
@@ -310,8 +361,10 @@ export default {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'plate_number', value: '挂车牌' },
-          { id: 'vin_number', value: '车架号' },
+          { id: 'plate_number', value: '托运商' },
+          { id: 'vin_number', value: '订单号' },
+          { id: 'vin_number', value: '液厂' }
+
         ]
       },
     };
@@ -321,10 +374,10 @@ export default {
   },
   methods: {
     clicktabs: function(targetName) {
-
+      var status = targetName.name;
     },
     searchList: function() {
-
+      this.$$http(sendData)
     },
     clickFifter: function() {
 

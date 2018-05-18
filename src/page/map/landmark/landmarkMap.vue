@@ -9,6 +9,7 @@
         <el-tab-pane label="列表" name="first">
         </el-tab-pane>
         <el-tab-pane label="地图" name="second">
+          地图1
         </el-tab-pane>
       </el-tabs>
     </div>

@@ -23,7 +23,7 @@
                 <el-col :span="4">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.checkStatus" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -50,7 +50,7 @@
             <el-button type="success">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -86,6 +86,40 @@ export default {
       },
       pageLoading: false,
       activeName: 'first',
+      tableData: [],
+      thTableList: [{
+        title: '姓名',
+        param: 'name',
+        width: ''
+      }, {
+        title: '从业类型',
+        param: 'work_type.verbose',
+        width: ''
+      }, {
+        title: '电话号码',
+        param: 'mobile_phone',
+        width: ''
+      }, {
+        title: '绑定车辆',
+        param: 'bind_tractors.plate_number',
+        width: ''
+      }, {
+        title: '在职状态',
+        param: 'on_job_status.verbose',
+        width: '250'
+      }, {
+        title: '驾驶证号',
+        param: 'drive_license_number',
+        width: ''
+      }, {
+        title: '从业资格证号',
+        param: 'qualification_certificate_number',
+        width: ''
+      }, {
+        title: '押运证号',
+        param: 'escort_license_number',
+        width: '250'
+      }],
       selectData: {
         fieldSelect: [{
           value: '卸货站',
@@ -136,9 +170,6 @@ export default {
           value: '司机端上传',
           id: '3'
         }]
-
-
-
       },
       searchFilters: {
         keyword: '',
@@ -156,6 +187,9 @@ export default {
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
+      this.getList();
+    },
+    pageChange: function() {
       this.getList();
     },
     getList: function() {
@@ -184,6 +218,9 @@ export default {
       })
 
     },
+  },
+  created: function() {
+    this.getList();
   },
   activated: function() {
     this.activeName = 'first';

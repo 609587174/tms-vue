@@ -255,6 +255,7 @@ export default [{
       meta: {
         isVerificationL: false,
         title:'地标管理',
+
       },
       component: (resolve) => require(['../page/map/landMark/landMark'], resolve),
       children:[{
@@ -274,13 +275,13 @@ export default [{
           },
           component: (resolve) => require(['../page/map/landMark/landMarkDetail'], resolve),
         },{
-          path: 'landmarkMapxx',
-          name: 'landmarkMapxx',
+          path: 'landmarkMap',
+          name: 'landmarkMap',
           meta: {
             isVerificationL: false,
             title:'地标地图',
           },
-          component: (resolve) => require(['../page/map/landMark/landmarkMapxx'], resolve),
+          component: (resolve) => require(['../page/map/landMark/landmarkMap'], resolve),
         }
       ]
     }]

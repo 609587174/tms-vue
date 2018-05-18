@@ -1,11 +1,7 @@
 <template>
   <div>
     <template>
-      <div>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
-      </div>
+      <router-view></router-view>
     </template>
   </div>
 </template>
@@ -18,8 +14,7 @@ export default {
 
   },
   data() {
-    return { in: ""
-    }
+    return {}
   },
   methods: {
     clicktabs: function() {

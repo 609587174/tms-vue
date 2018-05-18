@@ -19,7 +19,12 @@
 </template>
 <script>
 export default {
-  name: 'orderDetailTab',
+  name: 'orderRecordsTab',
+  computed: {
+    id: function() {
+      console.log('params', this.$route.params)
+    }
+  },
   data() {
     return {
       activeName: 'third',

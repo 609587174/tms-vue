@@ -4,12 +4,12 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    实时监控
   </div>
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'realTimeMonitor',
   data() {
     return {
 

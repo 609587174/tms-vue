@@ -318,6 +318,14 @@ const api = {
 
     }
   },
+  getOrderDetail: {
+    url: '/api/v1/waybills/:id/',
+    method: 'get',
+    desc: '运单详情',
+    param: {
+
+    }
+  },
 }
 
 export default api;

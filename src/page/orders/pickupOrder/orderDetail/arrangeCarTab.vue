@@ -21,19 +21,25 @@
 </template>
 <script>
 export default {
-  name: 'orderDetailTab',
+  name: 'arrangeCarTab',
+  computed: {
+    id: function() {
+
+    }
+  },
   data() {
     return {
-      activeName: 'first',
+      activeName: 'second',
     }
   },
   methods: {
     clicktabs: function(targetName) {
+      console.log('this', this.id);
       if (targetName.name == 'first') {
-        this.$router.push({ path: "/orders/orderDetail/orderDetailTab" });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${this.id}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}` });
       }
     },
   },

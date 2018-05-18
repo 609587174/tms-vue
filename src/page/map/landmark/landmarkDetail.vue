@@ -4,26 +4,23 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    地表详情
   </div>
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'landMarkDetail',
+  computed: {
+
+  },
   data() {
     return {
 
-    };
-  },
-  computed: {
-
+    }
   },
   methods: {
 
   },
-  created() {
-
-  }
-};
+}
 
 </script>

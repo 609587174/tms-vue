@@ -66,14 +66,14 @@ export default {
     const checkRepassword = (rule, value, callback) => {
       if (value !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致，请重新输入'));
-      }else if(value.indexOf(" ") !=-1) {
+      } else if (value.indexOf(" ") != -1) {
         callback(new Error('密码不能包含空格'));
       } else {
         callback();
       }
     };
     const isSpace = (rule, value, callback) => {
-      if (value.indexOf(" ") !=-1) {
+      if (value.indexOf(" ") != -1) {
         callback(new Error('密码不能包含空格'));
       } else {
         callback();

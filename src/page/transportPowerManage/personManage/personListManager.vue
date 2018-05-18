@@ -7,25 +7,25 @@
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" class="search-filters-screen" @keyup.native.13="pageChange">
+                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                     <el-select size="mini" v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
                   <el-form-item size="mini" label="从业类型:">
-                    <el-select v-model="searchFilters.employmentType" @change="getList" size="mini" placeholder="请选择">
+                    <el-select v-model="searchFilters.employmentType" @change="startSearch" size="mini" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item size="mini" label="是否绑定:">
-                    <el-select v-model="searchFilters.isBind" @change="getList" size="mini" placeholder="请选择">
+                    <el-select v-model="searchFilters.isBind" @change="startSearch" size="mini" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isBindSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -52,12 +52,12 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain>导入</el-button>
+            <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button>
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -68,7 +68,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -82,6 +82,7 @@ export default {
   name: 'personListManage',
   computed: {
     employmentTypeSelect: function() {
+      console.log('this.$store.getters.getIncludeAllSelect', this.$store.state.common.selectData.carrier_driver_work_type);
       return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
     }
   },
@@ -148,6 +149,10 @@ export default {
     }
   },
   methods: {
+    startSearch: function() {
+      this.pageData.currentPage = 1;
+      this.getList();
+    },
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
@@ -165,7 +170,7 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
-          this.pageData.totalPage = Math.ceill(results.data.data.count / this.pageData.pageSize);
+          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
 
           console.log('this.tableData', this.tableData, this.pageData.totalPage);
         }
@@ -184,7 +189,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson" });
     },
     importList: function() {
-
+      this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });
     },
     exportList: function() {
 

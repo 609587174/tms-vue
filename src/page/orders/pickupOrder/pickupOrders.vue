@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'pickupOrders',
   data() {
     return {
 

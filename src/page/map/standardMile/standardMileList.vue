@@ -4,26 +4,24 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    标准里程列表
   </div>
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'standardMileList',
+  computed: {
+
+  },
   data() {
     return {
 
-    };
-  },
-  computed: {
-
+    }
   },
   methods: {
 
   },
-  created() {
 
-  }
-};
+}
 
 </script>

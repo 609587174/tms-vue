@@ -4,26 +4,24 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    地标地图
   </div>
 </template>
 <script>
 export default {
-  name: 'mapManage',
+  name: 'landmarkMap',
+  computed: {
+
+  },
   data() {
     return {
 
-    };
-  },
-  computed: {
-
+    }
   },
   methods: {
 
   },
-  created() {
 
-  }
-};
+}
 
 </script>

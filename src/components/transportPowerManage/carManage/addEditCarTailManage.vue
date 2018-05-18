@@ -98,7 +98,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="attributes">
-                    <el-select v-model="tailCarFormStep.attributes" placeholder="请选择车辆归属">
+                    <el-select v-model="tailCarFormStep.attributes" placeholder="请选择车辆归属" :disabled="editStatus">
                       <el-option v-for="(item,key) in selectData.ascriptionSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -111,8 +111,8 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="车架号:" prop="vin_number">
-                    <el-input placeholder="请输入" type="text" v-model="tailCarFormStep.vin_number"></el-input>
+                  <el-form-item label="车架号:" prop="vin_number" x>
+                    <el-input placeholder="请输入" type="text" v-model="tailCarFormStep.vin_number" :disabled="editStatus"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -130,29 +130,29 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="核定载质量(kg):">
+                  <el-form-item label="核定载质量(kg):" prop="transport_weight">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.transport_weight"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="罐体容积(m):" prop="valume">
-                    <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.valume"></el-input>
+                  <el-form-item label="罐体容积(m):" prop="volume">
+                    <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.volume"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="外廊长(m):" prop="length">
+                  <el-form-item label="外廓长(m):" prop="length">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.length"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廊宽(m):" prop="width">
+                  <el-form-item label="外廓宽(m):" prop="width">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.width"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廊高(m):" prop="height">
+                  <el-form-item label="外廓高(m):" prop="height">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.height"></el-input>
                   </el-form-item>
                 </el-col>
@@ -243,7 +243,7 @@
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="保险类型:" prop="insurance_type">
-                      <el-select v-model="item.insurance_type.key">
+                      <el-select v-model="item.insurance_type">
                         <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :key="insuranceKey" :label="insurance.verbose" :value="insurance.key"></el-option>
                       </el-select>
                     </el-form-item>
@@ -255,7 +255,7 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="投保方式:" prop="insurance_menth">
-                      <el-select v-model="item.insurance_method.key">
+                      <el-select v-model="item.insurance_method">
                         <el-option v-for="(insurance_m,insurance_m_Key) in selectData.insurancMethodSelect" :key="insurance_m_Key" :label="insurance_m.verbose" :value="insurance_m.key"></el-option>
                       </el-select>
                     </el-form-item>
@@ -343,10 +343,10 @@ export default {
   name: 'addCarHeadManage',
   data() {
     var headCarNumVa = (rule, value, callback) => {
-      if (value.match(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/)) {
+      if (value.match(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-Z0-9]{4}[挂]{1}$/)) {
         callback();
       } else {
-        callback(new Error("车牌号为:一个汉字+6个字段，如：鲁GP8996"));
+        callback(new Error("车牌号为:一个汉字+5个字段+挂 如：鲁GP899挂"));
       }
     };
     var buyInsuranceDateVa = (rule, value, callback) => {
@@ -357,13 +357,14 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if (value.match(/^[0-9]+$/) || value == '') {
+      if ((value + "").match(/^[0-9]+$/) || value == '') {
         callback();
       } else {
         callback(new Error("只能是数字"));
       }
     };
     return {
+      editStatus: false,
       titleType: "新增挂车",
       stepTitle: "基本信息填写",
       activeStep: 0,
@@ -373,8 +374,8 @@ export default {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
-      tailCarFormStep1Arr: ['plate_number', 'attributes', 'carrier', 'vin_number', 'vin_number', 'vehicle_type', 'brand', 'transport_weight', 'valume', 'length',
-        'width', 'trans_type', 'register_date'
+      tailCarFormStep1Arr: ['plate_number', 'attributes', 'carrier', 'vin_number', 'vin_number', 'vehicle_type', 'brand', 'transport_weight', 'volume', 'length',
+        'width', 'trans_type', 'register_date', 'height'
       ],
       tailCarFormStep2Arr: ['license_number', 'license_register_date', 'license_register_date', 'operation_number', 'operation_issue_date', 'operation_verify_date'],
       tailCarFormStep3Arr: ['semitrailer_insurances', 'semitrailer_insurances_add'],
@@ -384,14 +385,14 @@ export default {
         attributes: 'SELF_SUPPORT', //车辆归属
         carrier: { name: '胜通物流公司', id: '55555c1f-1ffe-4419-9646-157c1aa0571d' }, //车辆所属
         vin_number: "", //车架号
-        vehicle_type: '',
+        vehicle_type: 'HEAVE_SEMITRAILER',
         brand: "", //品牌型号
         transport_weight: "", //质量
-        valume: "", //灌装容积
+        volume: "", //灌装容积
         length: "", //长
         width: "", //宽
         height: "", //高
-        trans_type: '',
+        trans_type: 'LNG',
         register_date: "", //车辆注册日期
 
         license_number: "", //驾驶行驶证编号
@@ -421,6 +422,7 @@ export default {
           { required: true, message: '请填写车辆所属', trigger: 'blur' }
         ],
         vin_number: [
+          { required: true, message: '车架号不能为空', trigger: 'blur' },
           { min: 17, max: 17, message: '车架号17个字段，如：LZZ1CLVB6GA107016', trigger: 'blur' }
         ],
         vehicle_type: [
@@ -432,8 +434,12 @@ export default {
         buyInsuranceDate: [
           { validator: buyInsuranceDateVa, trigger: 'blur' }
         ],
-        valume: [
-          { validator: onlyNum, trigger: 'blur' }
+        transport_weight: [
+          { required: true, message: '质量不能为空', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
+        ],
+        volume: [
+          { validator: onlyNum, trigger: 'blur' },
+          { required: true, message: '请填写容积', trigger: 'blur' }
         ],
         length: [
           { validator: onlyNum, trigger: 'blur' }
@@ -444,7 +450,13 @@ export default {
         height: [
           { validator: onlyNum, trigger: 'blur' }
         ],
-
+        license_number: [
+          { required: true, message: '行驶证编号不能为空', trigger: 'blur' }, { min: 12, max: 12, message: '行驶证为12位数字', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
+        ],
+        operation_number: [
+          { required: true, message: '运营证编号不能为空', trigger: 'blur' },
+          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
+        ],
       }
     }
   },
@@ -458,6 +470,7 @@ export default {
       this.tailId = this.$route.query.tailId;
       this.getTailDetalis(this.$route.query.tailId);
       this.titleType = "编辑挂车";
+      this.editStatus = true;
     }
   },
   computed: {
@@ -496,59 +509,77 @@ export default {
         amount: "",
       })
     },
-    updateFrom: function(operation, fromName) {
-      var sendData = this.pbFunc.deepcopy(this.tailCarFormStep);
-      if (this.activeStep == 0) {} else if (this.activeStep == 1) {} else if (this.activeStep == 2) {
-        var semitrailer_insurances = [];
-        var semitrailer_insurances_add = [];
-        for (let i = 0; i < sendData.semitrailer_insurances.length; i++) {
-          sendData.semitrailer_insurances[i].insurance_type = sendData.semitrailer_insurances[i].insurance_type.key;
-          sendData.semitrailer_insurances[i].insurance_method = sendData.semitrailer_insurances[i].insurance_method.key;
-          if (sendData.semitrailer_insurances[i].id) {
-            semitrailer_insurances.push(sendData.semitrailer_insurances[i]);
-          } else {
-            semitrailer_insurances_add.push(sendData.semitrailer_insurances[i]);
-          }
-        }
-        delete sendData.semitrailer_insurances;
-        sendData.semitrailer_insurances = semitrailer_insurances;
-        sendData.semitrailer_insurances_add = semitrailer_insurances_add;
-      } else if (this.activeStep == 3) {
-        sendData = this.pbFunc.fifterbyArr(sendData, this.tailCarFormStep4Arr);
-      }
-      sendData = this.pbFunc.fifterObjIsNull(sendData);
-      sendData = this.pbFunc.fifterbyArr(sendData, this['tailCarFormStep' + (parseInt(this.activeStep) + 1) + 'Arr']);
-      this.pageLoading = true;
-      sendData.id = this.tailId;
-      if (sendData.carrier.id) {
-        sendData.carrier = sendData.carrier.id;
-      } else {
-        delete sendData.carrier;
-      }
-      this.$$http('upadteTailFrom', sendData).then((result) => {
-        if (result.data.code == 0) {
-          if (operation == 'out') {
-            //跳转详情
-          } else {
-            this.$message({
-              message: '修改成功',
-              type: 'success'
-            });
-            this.activeStep += 1;
-            this.pageLoading = false;
-            if (this.activeStep == 2) {
-              this.addInsuranceListForm();
+    updateFrom: function(operation, formName) {
+      var vm = this;
+      this.validatorFrom(formName, (result) => {
+        if (result == 'true') {
+          var sendData = this.pbFunc.deepcopy(vm.tailCarFormStep);
+          if (vm.activeStep == 0) {} else if (vm.activeStep == 1) {} else if (vm.activeStep == 2) {
+            var semitrailer_insurances = [];
+            var semitrailer_insurances_add = [];
+            for (let i = 0; i < sendData.semitrailer_insurances.length; i++) {
+              if (sendData.semitrailer_insurances[i].id) {
+                semitrailer_insurances.push(sendData.semitrailer_insurances[i]);
+              } else {
+                semitrailer_insurances_add.push(sendData.semitrailer_insurances[i]);
+              }
             }
+            delete sendData.semitrailer_insurances;
+            sendData.semitrailer_insurances = semitrailer_insurances;
+            sendData.semitrailer_insurances_add = semitrailer_insurances_add;
+          } else if (vm.activeStep == 3) {
+            sendData = vm.pbFunc.fifterbyArr(sendData, vm.tailCarFormStep4Arr);
           }
-        } else {
-          this.pageLoading = false;
+          sendData = vm.pbFunc.fifterObjIsNull(sendData);
+          sendData = vm.pbFunc.fifterbyArr(sendData, vm['tailCarFormStep' + (parseInt(vm.activeStep) + 1) + 'Arr']);
+          vm.pageLoading = true;
+          sendData.id = vm.tailId;
+          if (sendData.carrier) {
+            sendData.carrier = sendData.carrier.id;
+          } else {
+            delete sendData.carrier;
+          }
+          this.$$http('upadteTailFrom', sendData).then((result) => {
+            if (result.data.code == 0) {
+              if (operation == 'out') {
+                //跳转详情
+                vm.$message({
+                  message: '成功',
+                  type: 'success'
+                });
+                vm.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+              } else {
+                vm.$message({
+                  message: '成功',
+                  type: 'success'
+                });
+                vm.activeStep += 1;
+                vm.pageLoading = false;
+                if (vm.activeStep == 2) {
+                  vm.addInsuranceListForm();
+                }
+                if (vm.activeStep == 1) {
+                  vm.stepTitle = tailCarFormStep.plate_number + "证件信息填写";
+                } else if (vm.activeStep == 2) {
+                  vm.stepTitle = tailCarFormStep.plate_number + "保险信息填写";
+                } else if (vm.activeStep == 3) {
+                  vm.stepTitle = tailCarFormStep.plate_number + "其他信息填写";
+                }
+
+              }
+            } else {
+              vm.pageLoading = false;
+            }
+          }).catch(() => {
+            vm.pageLoading = false;
+          });
         }
-      }).catch(() => {
-        this.pageLoading = false;
       });
+
     },
     getTailDetalis: function(tailId) {
       this.pageLoading = true;
+      var vm = this;
       var sendData = {
         id: tailId
       }
@@ -556,12 +587,18 @@ export default {
         if (result.data.code == 0) {
           this.tailCarFormStep = result.data.data;
 
-          this.tailCarFormStep.attributes = sendData.attributes.key;
-          this.tailCarFormStep.vehicle_type = sendData.vehicle_type.key;
-          this.tailCarFormStep.trans_type = sendData.trans_type.key;
+          this.tailCarFormStep.attributes = this.tailCarFormStep.attributes ? this.tailCarFormStep.attributes.key : "";
+          this.tailCarFormStep.vehicle_type = this.tailCarFormStep.vehicle_type ? this.tailCarFormStep.vehicle_type.key : "";
+          this.tailCarFormStep.trans_type = this.tailCarFormStep.trans_type ? this.tailCarFormStep.trans_type.key : "";
 
           if (this.$route.query.activeStep == 2 && !this.tailCarFormStep.semitrailer_insurances.length) {
             this.addInsuranceListForm();
+          }
+
+          var semitrailer_insurancesList = vm.tailCarFormStep.semitrailer_insurances;
+          for (let i = 0; i < semitrailer_insurancesList.length; i++) {
+            semitrailer_insurancesList[i].insurance_type = semitrailer_insurancesList[i].insurance_type ? semitrailer_insurancesList[i].insurance_type.key : "";
+            semitrailer_insurancesList[i].insurance_method = semitrailer_insurancesList[i].insurance_method ? semitrailer_insurancesList[i].insurance_method.key : "";
           }
           this.pageLoading = false;
         } else {
@@ -639,13 +676,13 @@ export default {
         this.$$http('deleteInsuranceFromTail', send).then((result) => {
           this.pageLoading = false;
           if (result.data.code == 0) {
-            this.tailCarFormStep.semitrailer_insurances = this.tailCarFormStep.semitrailer_insurances.splice(index, 1);
+            this.tailCarFormStep.semitrailer_insurances.splice(index, 1);
           }
         }).catch(() => {
           this.pageLoading = false;
         });
       } else {
-        this.tailCarFormStep.semitrailer_insurances = this.tailCarFormStep.semitrailer_insurances.splice(index, 1);
+        this.tailCarFormStep.semitrailer_insurances.splice(index, 1);
       }
     }
   }

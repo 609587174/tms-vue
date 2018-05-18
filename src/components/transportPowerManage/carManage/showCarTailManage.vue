@@ -7,7 +7,7 @@
   <div id="addPerson" class="detail-mian">
     <el-container>
       <el-header style="margin-top:15px;">
-        <p>查看</p>
+        <p>查看挂车</p>
       </el-header>
       <el-main>
         <el-form class="addheaduserform" label-width="120px" :model="tailData" status-icon>
@@ -160,7 +160,7 @@
               </el-row>
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <div v-for="(item,key) in userData.semitrailer_insurances">
+            <div v-for="(item,key) in tailData.semitrailer_insurances">
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="保险类型:" prop="qualification_certificate_number">
@@ -265,7 +265,7 @@ export default {
         vehicle_type: { key: '', verbose: '' },
         brand: "1231231233", //品牌型号
         transport_weight: "", //质量
-        valume: "", //灌装容积
+        volume: "", //灌装容积
         length: "", //长
         width: "", //宽
         height: "", //高
@@ -303,6 +303,11 @@ export default {
       this.$$http('getTailDetalis', { id: this.tailId }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.tailData = results.data.data;
+          var obj = { key: '', verbose: '' };
+          for (var i = 0; i < this.headData.semitrailer_insurances.length; i++) {
+            this.headData.semitrailer_insurances[i].insurance_type = this.headData.semitrailer_insurances[i].insurance_type ? this.headData.semitrailer_insurances[i].insurance_type : obj;
+            this.headData.semitrailer_insurances[i].insurance_method = this.headData.semitrailer_insurances[i].insurance_method ? this.headData.semitrailer_insurances[i].insurance_method : obj;
+          }
           this.paddingloading = false;
         } else {
           this.paddingloading = false;

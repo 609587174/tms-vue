@@ -25,7 +25,7 @@
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="挂车牌:">
+                <el-form-item label="车牌号:">
                   <div class="detail-form-item">{{headData.plate_number}}</div>
                 </el-form-item>
               </el-col>
@@ -124,7 +124,7 @@
                   气瓶信息
                 </el-col>
                 <el-col :span="6" class="text-right">
-                  <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                  <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -368,6 +368,11 @@ export default {
       this.$$http('getHeadDetalis', { id: this.headId }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.headData = results.data.data;
+          var obj = { key: '', verbose: '' };
+          for (var i = 0; i < this.headData.tractor_insurances.length; i++) {
+            this.headData.tractor_insurances[i].insurance_type = this.headData.tractor_insurances[i].insurance_type ? this.headData.tractor_insurances[i].insurance_type : obj;
+            this.headData.tractor_insurances[i].insurance_method = this.headData.tractor_insurances[i].insurance_method ? this.headData.tractor_insurances[i].insurance_method : obj;
+          }
           this.paddingloading = false;
         } else {
           this.paddingloading = false;

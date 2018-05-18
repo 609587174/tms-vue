@@ -2,14 +2,14 @@
   <div>
     <template v-if="$route.path=='/transportPowerManage/carManage'">
       <div>
-        <keep-alive>
+        <keep-alive :include="['carHeadManage', 'carTailManage']">
           <carHeadManage></carHeadManage>
         </keep-alive>
       </div>
     </template>
     <template v-else>
       <div>
-        <keep-alive>
+        <keep-alive :include="['carHeadManage', 'carTailManage']">
           <router-view></router-view>
         </keep-alive>
       </div>

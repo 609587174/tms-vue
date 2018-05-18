@@ -12,7 +12,7 @@ const api = {
   login: {
     url: '/auth/login/',
     method: 'post',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '登录',
     param: {
       username: {
@@ -21,18 +21,18 @@ const api = {
       password: {
         desc: '密码',
       },
-      verify_key:{
-        desc:'验证码key值'
+      verify_key: {
+        desc: '验证码key值'
       },
-      verify_code:{
-        desc:'验证码'
+      verify_code: {
+        desc: '验证码'
       }
     }
   },
   register: {
     url: '/user/users/register/',
     method: 'post',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '注册',
     param: {
       nick_name: {
@@ -58,7 +58,7 @@ const api = {
   forgetPassword: {
     url: '/auth/reset_password/',
     method: 'post',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '找回密码',
     param: {
       phone: {
@@ -106,7 +106,7 @@ const api = {
   imageVerifyCode: {
     url: '/common/image_verify_code/',
     method: 'get',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '图形验证码',
     param: {
 
@@ -115,7 +115,7 @@ const api = {
   messageVerifyCode: {
     url: '/common/message_verify_code/',
     method: 'post',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '图形验证码',
     param: {
       phone: {
@@ -126,7 +126,7 @@ const api = {
   globalData: {
     url: '/common/global_enums/',
     method: 'get',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '全局数据',
     param: {
 
@@ -286,7 +286,7 @@ const api = {
   getProvince: {
     url: '/common/area/provinces/',
     method: 'get',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '获取省列表',
     param: {
 
@@ -295,7 +295,7 @@ const api = {
   getCity: {
     url: '/common/area/provinces/:province_id/',
     method: 'get',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '获取市列表',
     param: {
 
@@ -304,7 +304,7 @@ const api = {
   getArea: {
     url: '/common/area/cities/:city_id/',
     method: 'get',
-    notNeedToken:true,
+    notNeedToken: true,
     desc: '获取区域列表',
     param: {
 

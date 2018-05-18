@@ -102,7 +102,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆归属:" prop="attributes">
-                    <el-select v-model="headCarFormStep1.attributes" placeholder="请选择车辆归属">
+                    <el-select v-model="headCarFormStep1.attributes" placeholder="请选择车辆归属" :disabled="editStatus">
                       <el-option v-for="(item,key) in selectData.ascriptionSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -116,7 +116,7 @@
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="车架号:" prop="vin_number">
-                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.vin_number"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.vin_number" :disabled="editStatus"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -151,17 +151,17 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="外廊长:" prop="length">
+                  <el-form-item label="外廓长:" prop="length">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.length"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廊宽:" prop="width">
+                  <el-form-item label="外廓宽:" prop="width">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.width"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廊高:" prop="height">
+                  <el-form-item label="外廓高:" prop="height">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.height"></el-input>
                   </el-form-item>
                 </el-col>
@@ -289,7 +289,7 @@
             <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp2" :rules="rules" :model="headCarFormStep2" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="行驶证编号:" prop="drivingNum">
+                  <el-form-item label="行驶证编号:" prop="license_number">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep2.license_number"></el-input>
                   </el-form-item>
                 </el-col>
@@ -306,7 +306,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="运营证号:" prop="operationNum">
+                  <el-form-item label="运营证号:" prop="operation_number">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep2.operation_number"></el-input>
                   </el-form-item>
                 </el-col>
@@ -345,7 +345,7 @@
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="保险类型:" prop="insuranceType" label-width="120px">
-                      <el-select v-model="item.insurance_type.key">
+                      <el-select v-model="item.insurance_type">
                         <el-option v-for="(insurance,insuranceKey) in selectData.insuranceTypeSelect" :key="insuranceKey" :label="insurance.verbose" :value="insurance.key"></el-option>
                       </el-select>
                     </el-form-item>
@@ -357,8 +357,8 @@
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="投保方式:" prop="insurance_menth">
-                      <el-select v-model="item.insurance_method.key">
-                        <el-option v-for="(insurance_m,insurance_m_Key) in selectData.insuranceMethodSelect" :key="insurance_m_Key" :label="insurance_m.verbose" :value="insurance_m.key"></el-option>
+                      <el-select v-model="item.insurance_method">
+                        <el-option v-for="(insurance_m,insurance_m_Key) in selectData.insurancMethodSelect" :key="insurance_m_Key" :label="insurance_m.verbose" :value="insurance_m.key"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -394,7 +394,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp3')">保存并且退出</el-button>
+                <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFromStep3')">保存并且退出</el-button>
               </el-col>
             </el-row>
           </div>
@@ -408,7 +408,7 @@ export default {
   name: 'addCarHeadManage',
   data() {
     var headCarNumVa = (rule, value, callback) => {
-      if (value.match(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/)) {
+      if (value.match(/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/)) {
         callback();
       } else {
         callback(new Error("车牌号格式为：一个汉字+6个字段，如：鲁GP8996"));
@@ -429,6 +429,7 @@ export default {
       }
     };
     return {
+      editStatus: false,
       activeStep: 0,
       titleType: "新增牵引车",
       headId: "",
@@ -445,14 +446,14 @@ export default {
         carrier: { name: '胜通', id: '' },
         vin_number: '',
         engine_number: '',
-        vehicle_type: '', //
+        vehicle_type: 'HEAVE_TOWING_SEMITRAILER', //
         brand: '',
         total_weight: '',
         towing_weight: '',
         length: '',
         width: '',
         height: '',
-        trans_type: '', //
+        trans_type: 'LNG', //
         fuel_type: '', //
         danger_product_lamp: '',
         danger_product_due_date: '',
@@ -490,7 +491,7 @@ export default {
           { required: true, message: '请选择车辆归属', trigger: 'blur' }
         ],
         vin_number: [
-          { required: true, message: '车架号不能', trigger: 'blur' },
+          { required: true, message: '车架号不能为空', trigger: 'blur' },
           { min: 17, max: 17, message: '车架号为17个字段，如：LZZ1CLVB6GA107016', trigger: 'blur' }
         ],
         engine_number: [
@@ -504,13 +505,16 @@ export default {
         ],
         danger_product_lamp: [
           { min: 10, max: 10, message: '危险品灯号由10个数值组成，如37060111-16', trigger: 'blur' },
-          { validator: onlyNum, trigger: 'blur' }
         ],
         gas_bottle_number: [
           { required: true, message: '请填写气瓶编号', trigger: 'blur' }
         ],
-        insurance_start_date: [
-          { validator: onlyNum, trigger: 'blur' }
+        license_number: [
+          { required: true, message: '行驶证编号不能为空', trigger: 'blur' }, { min: 12, max: 12, message: '行驶证为12位数字', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
+        ],
+        operation_number: [
+          { required: true, message: '运营证编号不能为空', trigger: 'blur' },
+          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
         ],
         total_weight: [
           { validator: onlyNum, trigger: 'blur' }
@@ -537,7 +541,7 @@ export default {
         carTypeSelect: this.$store.state.common.selectData.tractor_vehicle_type,
         transportTypeSelect: this.$store.state.common.selectData.truck_trans_type,
         fuelTypeSelect: this.$store.state.common.selectData.tractor_fuel_type,
-        insuranceTypeSelect: this.$store.state.common.selectData.tractor_insurance_typem,
+        insuranceTypeSelect: this.$store.state.common.selectData.tractor_insurance_type,
         insurancMethodSelect: this.$store.state.common.selectData.truck_insurance_method
       }
     }
@@ -551,6 +555,7 @@ export default {
       this.headId = this.$route.query.headId;
       this.getHeadDetalis(this.$route.query.headId);
       this.titleType = "编辑牵引车";
+      this.editStatus = true;
     } else {
       this.addInsuranceListForm();
     }
@@ -580,6 +585,11 @@ export default {
 
           vm.headCarFormStep3 = vm.getTrueObj(vm.headCarFormStep3, result.data.data);
           vm.headCarFormStep2 = vm.getTrueObj(vm.headCarFormStep2, result.data.data);
+          var tractor_insurancesList = vm.headCarFormStep3.tractor_insurances;
+          for (let i = 0; i < tractor_insurancesList.length; i++) {
+            tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type.key;
+            tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method.key;
+          }
           vm.pageLoading = false;
           if (vm.headCarFormStep3.tractor_insurances.length == 0) {
             vm.addInsuranceListForm();
@@ -648,8 +658,10 @@ export default {
             if (result.data.code == 0) {
               vm.headCarFormStep2.id = result.data.data.id;
               vm.headCarFormStep3.id = result.data.data.id;
+              vm.headId = result.data.data.id;
               if (operation == 'out') {
                 //跳转查询详情页面
+                vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
               } else {
                 vm.activeStep += 1;
                 vm.stepTitle = "证件信息填写";
@@ -677,12 +689,9 @@ export default {
         }
       });
       if (vm.activeStep == 0) {
+        sendData = vm.pbFunc.deepcopy(vm.headCarFormStep1);
 
-        sendData.attributes = sendData.attributes ? sendData.attributes.key : null;
-        sendData.vehicle_type = sendData.vehicle_type ? sendData.vehicle_type.key : null;
         sendData.carrier = sendData.carrier ? sendData.carrier.id : null;
-        sendData.trans_type = sendData.trans_type ? sendData.trans_type.key : null;
-        sendData.fuel_type = sendData.fuel_type ? sendData.fuel_type.key : null;
 
       } else if (vm.activeStep == 1) {
         sendData = this.headCarFormStep2;
@@ -691,8 +700,6 @@ export default {
         var tractor_insurances = [];
         var tractor_insurances_add = [];
         for (let i = 0; i < sendData.tractor_insurances.length; i++) {
-          sendData.tractor_insurances[i].insurance_method = sendData.tractor_insurances[i].insurance_method.key;
-          sendData.tractor_insurances[i].insurance_type = sendData.tractor_insurances[i].insurance_type.key;
           if (sendData.tractor_insurances[i].id) {
             tractor_insurances.push(sendData.tractor_insurances[i]);
           } else {
@@ -713,12 +720,16 @@ export default {
             vm.pageLoading = false;
             if (operation == 'out') {
               //跳转查询详情页面
-              this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + this.headId });
+              vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
             } else {
               vm.activeStep += 1;
               vm.stepTitle = "保险信息填写";
             }
+          } else {
+            vm.pageLoading = false;
           }
+        }).catch(() => {
+          vm.pageLoading = false;
         });
       }
     },
@@ -753,12 +764,12 @@ export default {
     },
     addInsuranceListForm: function() {
       this.headCarFormStep3.tractor_insurances.push({
-        insurance_type: { key: "", verbose: "" },
+        insurance_type: "",
         insurance_number: "",
         insurance_company: "",
         insurance_start_date: "",
         insurance_due_date: "",
-        insurance_method: { key: "", verbose: "" },
+        insurance_method: "",
         amount: null
       })
     },
@@ -773,13 +784,13 @@ export default {
         this.$$http('deleteInsuranceFrom', send).then(function(result) {
           vm.pageLoading = false;
           if (result.data.code == 0) {
-            vm.headCarFormStep3.tractor_insurances = vm.headCarFormStep3.tractor_insurances.splice(index, 1);
+            vm.headCarFormStep3.tractor_insurances.splice(index, 1);
           }
         }).catch(function() {
           vm.pageLoading = false;
         });
       } else {
-        vm.headCarFormStep3.tractor_insurances = vm.headCarFormStep3.tractor_insurances.splice(index, 1);
+        vm.headCarFormStep3.tractor_insurances.splice(index, 1);
       }
     },
 

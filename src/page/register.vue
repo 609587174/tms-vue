@@ -12,7 +12,7 @@
           <el-input v-model.trim="registerForm.nick_name" type="text" placeholder="请输入你的用户名"></el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
-          <el-input v-model="registerForm.password" type="text" placeholder="请输入密码"></el-input>
+          <el-input v-model="registerForm.password" type="password" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item label="确认密码：" prop="confirm_password">
           <el-input v-model="registerForm.confirm_password" type="password" placeholder="请再次输入密码"></el-input>

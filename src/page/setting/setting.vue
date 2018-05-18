@@ -1,29 +1,21 @@
-<style scoped lang="less">
-
-
-</style>
 <template>
   <div>
-    设置
+    <router-view></router-view>
   </div>
 </template>
 <script>
 export default {
-  name: 'setting',
+  name: 'carBaseInfo',
   data() {
     return {
 
-    };
-  },
-  computed: {
-
-  },
-  methods: {
-
-  },
-  created() {
-
+    }
   }
-};
+}
 
 </script>
+<style>
+
+
+</style>
+

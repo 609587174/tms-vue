@@ -1,10 +1,14 @@
-<!-- departmentDialog -->
+<!-- positionDialog.vue -->
 <template>
   <div>
     <el-dialog title="新增部门" :visible="departmentDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="departmentRules" status-icon ref="departmentRules">
-          <el-form-item label="部门名称：" prop="group_name">
+          <el-form-item label="部门名称：">
+
+            </el-input>
+          </el-form-item>
+          <el-form-item label="职位名称：" prop="group_name">
             <el-input :autofocus="true" placeholder="请输入" v-model="departmentRules.group_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
@@ -19,7 +23,7 @@
 </template>
 <script>
 export default {
-  name: 'departmentDialog',
+  name: 'positionDialog',
   props: {
     departmentDialog: {
       type: Object,

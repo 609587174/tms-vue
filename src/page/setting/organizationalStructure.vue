@@ -24,26 +24,14 @@
             <el-tabs v-model="departmentActive" @tab-click="handleClick">
               <el-tab-pane label="用户管理" name="department">
                 <div class="department-list">
-                  <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-                    <el-menu-item index="1">
+                  <el-menu :default-active="active" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" v-loading="departmentLoading">
+                    <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item,key)" :index="key.toString()" :key="key">
                       <i class="tab-icon"></i>
-                      <span slot="title">导航一</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航二导航</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航导航三</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航四导航导航导航</span>
+                      <span slot="title">{{item.group_name}}</span>
                     </el-menu-item>
                   </el-menu>
                   <div class="text-center department-btn">
-                    <el-button type="primary" plain size="medium">编辑部门</el-button>
+                    <el-button type="primary" plain size="medium" @click="organizationDialog('department','update')">编辑部门</el-button>
                     <el-button type="primary" size="medium" @click="organizationDialog('department','add')">新增部门</el-button>
                   </div>
                 </div>
@@ -52,42 +40,31 @@
           </div>
         </el-col>
         <el-col :span="19">
-          <div class="nav-tab-setting">
-            <div class="add-user-btn">
+          <div class="add-user-btn">
               <el-button type="success" size="medium">新增职位</el-button>
             </div>
-            <el-tabs v-model="departmentActive" @tab-click="handleClick">
-              <el-tab-pane label="用户管理" name="department">
-                <div class="position-list table-list">
-                  <el-table :data="tableData" stripe style="width: 100%" v-loading="pageLoading">
-                    <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
-                      <template slot-scope="scope">
-                        <el-button type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                  <div class="page-list text-center">
-                    <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
-                    </el-pagination>
-                  </div>
-                </div>
-              </el-tab-pane>
-              <el-tab-pane label="用户管理1" name="department8"></el-tab-pane>
-              <el-tab-pane label="用户管理2" name="department1"></el-tab-pane>
-              <el-tab-pane label="用户管理3" name="department2"></el-tab-pane>
-              <el-tab-pane label="用户管理4" name="department3"></el-tab-pane>
-              <el-tab-pane label="用户管理5" name="department4"></el-tab-pane>
-              <el-tab-pane label="用户管理6" name="department5"></el-tab-pane>
-              <el-tab-pane label="用户管理7" name="department6"></el-tab-pane>
-              <el-tab-pane label="用户管理8" name="department9"></el-tab-pane>
-            </el-tabs>
+          <div class="nav-tab-setting nav-tab-mt">
+            <div class="position-list table-list">
+              <el-table :data="positionTableData" stripe style="width: 100%" v-loading="positionLoading">
+                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                </el-table-column>
+                <el-table-column label="操作" align="center">
+                  <template slot-scope="scope">
+                    <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                    <el-button type="primary" size="mini" plain @click="handleMenuClick({operator:'check',id:scope.row.id})">删除</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div class="page-list text-center">
+                <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!positionLoading && pageData.totalPage>1">
+                </el-pagination>
+              </div>
+            </div>
           </div>
         </el-col>
       </el-row>
     </div>
-    <department-dialog :department-dialog="departmentDialog" v-on:closeDialogBtn="closeDialog"></department-dialog>
+    <department-dialog :department-dialog="departmentDialog" :department-row="departmentRow" v-on:closeDialogBtn="closeDialog"></department-dialog>
   </div>
 </template>
 <script>
@@ -104,7 +81,8 @@ export default {
   },
   data() {
     return {
-      pageLoading: false, //职位列表loading
+      positionLoading: true, //职位列表loading
+      departmentLoading: true, //部门列表loading
       positionDialog: false, //职位弹窗bialog
       departmentDialog: {
         isShow: false,
@@ -115,6 +93,7 @@ export default {
         currentPage: 1,
         totalPage: '',
       },
+      active: '0',
       departmentActive: 'department',
       searchFilters: {
         employmentType: '',
@@ -137,10 +116,14 @@ export default {
         param: 'work_type.verbose',
         width: ''
       }],
-      tableData: []
+      departmentTableData: [], //部门列表
+      positionTableData: [], //职位列表
+      departmentRow: {}, //当前所选部门
     }
+
   },
   methods: {
+
     /**
      * organizationDialog  显示部门、职位弹窗
      * @param  {string} typeDialog  [必填][展示弹窗类型（department部门，position职位）]
@@ -152,15 +135,61 @@ export default {
       if (typeDialog === 'department') {
         this.departmentDialog.isShow = true;
         this.departmentDialog.type = operation;
+        if (operation === 'update') {
+          console.log('修改的部门',this.active,this.departmentTableData[this.active])
+          if (this.departmentTableData.length) {
+            this.departmentRow = this.departmentTableData[this.active];
+          }
+        }
       }
       console.log('弹窗', this.departmentDialog)
     },
-    closeDialog: function(type) {
-      if(type === 'department'){
+    closeDialog: function(type, isSave) {
+      if (type === 'department') {
         this.departmentDialog.isShow = false;
+        if (isSave) {
+          this.getDepartmentList(); //部门列表
+        }
       }
 
       console.log('this.departmentDialog', this.departmentDialog)
+    },
+    // 获取部门列表
+    getDepartmentList: function() {
+      this.departmentLoading = true;
+      this.$$http('getDepartmentList', { pagination: false }).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.departmentTableData = results.data.data;
+          this.active = '0';
+          this.departmentLoading = false;
+          if(this.departmentTableData.length){
+            this.getPositionList(this.departmentTableData[0],this.active)
+          }
+
+        }
+      }).catch((err) => {
+        this.$message.error('获取部门列表失败');
+      })
+    },
+    // 获取职位列表
+    getPositionList: function(departmentInfo, index) {
+      let postData = {
+        pagination: false,
+        department: departmentInfo.id
+      }
+      this.positionLoading = true;
+      this.active = index.toString();
+      console.log('查看职位')
+      this.$$http('getPositionList', postData).then((results) => {
+        console.log('职位列表', results.data);
+
+        if (results.data && results.data.code == 0) {
+          this.positionTableData = results.data.data;
+          this.positionLoading = false;
+        }
+      }).catch((err) => {
+        this.$message.error('获取部门列表失败');
+      })
     },
     handleClick: function(tab, event) {
 
@@ -173,7 +202,9 @@ export default {
     }
 
   },
-  created: function() {}
+  created: function() {
+    this.getDepartmentList(); //部门列表
+  }
 
 }
 

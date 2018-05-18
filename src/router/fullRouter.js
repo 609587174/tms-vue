@@ -475,6 +475,7 @@ export default [{
         path: 'organizationalStructure',
         name: "组织架构",
         meta: {
+          title:'组织架构',
           isVerificationL: false
         },
         component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
@@ -483,6 +484,7 @@ export default [{
         path: 'staffsManage',
         name: "员工管理",
         meta: {
+          title:'员工管理',
           isVerificationL: false
         },
         component: (resolve) => require(['../page/setting/staffsManage'], resolve)
@@ -491,6 +493,7 @@ export default [{
         path: 'powerManage',
         name: "权限管理",
         meta: {
+          title:'权限管理',
           isVerificationL: false
         },
         component: (resolve) => require(['../page/setting/powerManage'], resolve)

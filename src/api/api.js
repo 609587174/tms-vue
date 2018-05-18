@@ -14,8 +14,50 @@ const api = {
     method: 'post',
     desc: '新增部门',
     param: {
-      group_name:{
-        desc:'部门名称'
+      group_name: {
+        desc: '部门名称'
+      }
+    }
+  },
+  updateDepartment: {
+    url: '/carrier/departments/:id/',
+    method: 'PATCH',
+    desc: '修改部门',
+    param: {
+      group_name: {
+        desc: '部门名称'
+      },
+      id: {
+        desc: '部门id'
+      }
+    }
+  },
+  getDepartmentList: {
+    url: '/carrier/departments/',
+    method: 'get',
+    desc: '部门列表',
+    param: {
+      page: {
+        desc: '分页'
+      },
+      pagination: {
+        desc: '是否分页'
+      }
+    }
+  },
+  getPositionList: {
+    url: '/carrier/roles/',
+    method: 'get',
+    desc: '职位列表',
+    param: {
+      page: {
+        desc: '分页'
+      },
+      pagination: {
+        desc: '是否分页'
+      },
+      department: {
+        desc: '部门ID'
       }
     }
   },

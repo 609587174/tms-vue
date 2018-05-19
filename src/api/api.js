@@ -475,6 +475,24 @@ const api = {
 
     }
   },
+  getLandmarkList: {
+    url: '/position/base_position/',
+    method: 'get',
+    desc: '坐标列表',
+    param: {
+
+    }
+  },
+  getLandmarkDetail: {
+    url: '/position/base_position/',
+    method: 'get',
+    desc: '坐标详情',
+    param: {
+      id: {
+        desc: '资源id',
+      },
+    }
+  },
 }
 
 export default api;

@@ -12,7 +12,7 @@
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                    <el-select v-model="searchFilters.position_type" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
@@ -23,7 +23,7 @@
                 <el-col :span="4">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.checkStatus" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -36,7 +36,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="是否同步:">
-                    <el-select v-model="searchFilters.isSynchronize" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.is_active" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isSynchronizeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -50,7 +50,7 @@
             <el-button type="success">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -86,6 +86,52 @@ export default {
       },
       pageLoading: false,
       activeName: 'first',
+      tableData: [],
+      thTableList: [{
+        title: '编号',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '地标名称',
+        param: 'position_name',
+        width: ''
+      }, {
+        title: '地标类型',
+        param: 'position_type',
+        width: ''
+      }, {
+        title: '联系人',
+        param: 'contacts',
+        width: ''
+      }, {
+        title: '联系电话',
+        param: 'tel',
+        width: ''
+      }, {
+        title: '位置',
+        param: 'address',
+        width: ''
+      }, {
+        title: '审核状态',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传人',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传时间',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传来源',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '同步',
+        param: 'is_active',
+        width: ''
+      }],
       selectData: {
         fieldSelect: [{
           value: '卸货站',
@@ -136,40 +182,42 @@ export default {
           value: '司机端上传',
           id: '3'
         }]
-
-
-
       },
       searchFilters: {
         keyword: '',
-        field: '1',
+        position_type: '1',
         checkStatus: '',
-        isSynchronize: '',
+        is_active: '',
       }
     }
   },
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: '/mapManage/landMark/landMarkMap' });
+        this.$router.push({ path: '/mapManage/landMark/landmarkMap' });
       }
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
     },
+    pageChange: function() {
+      this.getList();
+    },
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
-        work_type: this.searchFilters.checkStatus,
-        driver_bind_status: this.searchFilters.isBind,
+        page_size: this.pageData.pageSize,
+        //position_name: this.searchFilters.keyword,
+        //position_type: this.searchFilters.position_type,
+        //is_active: this.searchFilters.is_active
       };
 
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      //postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
 
-      this.$$http('getDriversList', postData).then((results) => {
+      this.$$http('getLandmarkList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -184,6 +232,14 @@ export default {
       })
 
     },
+    handleMenuClick: function(command) {
+      if (command.operator === 'check') {
+        this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
+      }
+    }
+  },
+  created: function() {
+    this.getList();
   },
   activated: function() {
     this.activeName = 'first';

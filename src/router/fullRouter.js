@@ -249,31 +249,30 @@ export default [{
         }
       ]
     },{
-      path: 'landMark',
-      name: 'landMark',
-      redirect: '/mapManage/landMark/landMarkList',
+      path: 'landmark',
+      name: 'landmark',
+      redirect: '/mapManage/landmark/landmarkList',
       meta: {
         isVerificationL: false,
         title:'地标管理',
-
       },
-      component: (resolve) => require(['../page/map/landMark/landMark'], resolve),
+      component: (resolve) => require(['../page/map/landmark/landmark'], resolve),
       children:[{
-          path: 'landMarkList',
-          name: 'landMarkList',
+          path: 'landmarkList',
+          name: 'landmarkList',
           meta: {
             isVerificationL: false,
             title:'标准里程列表',
           },
-          component: (resolve) => require(['../page/map/landMark/landMarkList'], resolve),
+          component: (resolve) => require(['../page/map/landmark/landmarkList'], resolve),
         },{
-          path: 'landMarkDetail/:id',
-          name: 'landMarkDetail',
+          path: 'landmarkDetail/:id',
+          name: 'landmarkDetail',
           meta: {
             isVerificationL: false,
             title:'标准里程详情',
           },
-          component: (resolve) => require(['../page/map/landMark/landMarkDetail'], resolve),
+          component: (resolve) => require(['../page/map/landmark/landmarkDetail'], resolve),
         },{
           path: 'landmarkMap',
           name: 'landmarkMap',
@@ -281,7 +280,7 @@ export default [{
             isVerificationL: false,
             title:'地标地图',
           },
-          component: (resolve) => require(['../page/map/landMark/landmarkMap'], resolve),
+          component: (resolve) => require(['../page/map/landmark/landmarkMap'], resolve),
         }
       ]
     }]

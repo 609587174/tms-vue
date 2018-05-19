@@ -12,7 +12,7 @@
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                    <el-select v-model="searchFilters.position_type" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
@@ -36,7 +36,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="是否同步:">
-                    <el-select v-model="searchFilters.isSynchronize" @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.is_active" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isSynchronizeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -88,37 +88,49 @@ export default {
       activeName: 'first',
       tableData: [],
       thTableList: [{
-        title: '姓名',
-        param: 'name',
+        title: '编号',
+        param: 'create_time',
         width: ''
       }, {
-        title: '从业类型',
-        param: 'work_type.verbose',
+        title: '地标名称',
+        param: 'position_name',
         width: ''
       }, {
-        title: '电话号码',
-        param: 'mobile_phone',
+        title: '地标类型',
+        param: 'position_type',
         width: ''
       }, {
-        title: '绑定车辆',
-        param: 'bind_tractors.plate_number',
+        title: '联系人',
+        param: 'contacts',
         width: ''
       }, {
-        title: '在职状态',
-        param: 'on_job_status.verbose',
-        width: '250'
-      }, {
-        title: '驾驶证号',
-        param: 'drive_license_number',
+        title: '联系电话',
+        param: 'tel',
         width: ''
       }, {
-        title: '从业资格证号',
-        param: 'qualification_certificate_number',
+        title: '位置',
+        param: 'address',
         width: ''
       }, {
-        title: '押运证号',
-        param: 'escort_license_number',
-        width: '250'
+        title: '审核状态',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传人',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传时间',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '上传来源',
+        param: 'create_time',
+        width: ''
+      }, {
+        title: '同步',
+        param: 'is_active',
+        width: ''
       }],
       selectData: {
         fieldSelect: [{
@@ -173,16 +185,16 @@ export default {
       },
       searchFilters: {
         keyword: '',
-        field: '1',
+        position_type: '1',
         checkStatus: '',
-        isSynchronize: '',
+        is_active: '',
       }
     }
   },
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: '/mapManage/landMark/landMarkMap' });
+        this.$router.push({ path: '/mapManage/landMark/landmarkMap' });
       }
     },
     startSearch: function() {
@@ -195,15 +207,17 @@ export default {
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
-        work_type: this.searchFilters.checkStatus,
-        driver_bind_status: this.searchFilters.isBind,
+        page_size: this.pageData.pageSize,
+        //position_name: this.searchFilters.keyword,
+        //position_type: this.searchFilters.position_type,
+        //is_active: this.searchFilters.is_active
       };
 
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      //postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
 
-      this.$$http('getDriversList', postData).then((results) => {
+      this.$$http('getLandmarkList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -218,6 +232,11 @@ export default {
       })
 
     },
+    handleMenuClick: function(command) {
+      if (command.operator === 'check') {
+        this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
+      }
+    }
   },
   created: function() {
     this.getList();

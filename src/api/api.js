@@ -83,8 +83,8 @@ const api = {
       role_name: {
         desc: '职位名称'
       },
-      permissions:{
-        desc:'权限列表'
+      permissions: {
+        desc: '权限列表'
       }
     }
   },
@@ -475,6 +475,7 @@ const api = {
 
     }
   },
+
   getLandmarkList: {
     url: '/position/base_position/',
     method: 'get',
@@ -483,6 +484,35 @@ const api = {
 
     }
   },
+
+  getCarriers: {
+    url: '/order/trader/carriers/',
+    method: 'get',
+    desc: '获取承运商',
+    param: {
+
+    }
+  },
+
+  getUnload: {
+    url: '/order/trader/unload_area/',
+    method: 'get',
+    desc: '获取卸货区域',
+    param: {
+
+    }
+  },
+
+  getSupplier: {
+    url: '/order/supplier/',
+    method: 'get',
+    desc: '获取供应商',
+
+    param: {
+
+    }
+  },
+
   getLandmarkDetail: {
     url: '/position/base_position/',
     method: 'get',
@@ -491,6 +521,34 @@ const api = {
       id: {
         desc: '资源id',
       },
+    }
+  },
+
+  getFulid: {
+    url: '/order/fluid/',
+    method: 'get',
+    desc: '获取液厂',
+    param: {
+
+    }
+  },
+
+  cratePickUpOrder: {
+    url: '/order/delivery-order/',
+    method: 'POST',
+    desc: '创建提货订单',
+    param: {
+
+    }
+  },
+
+  searchPickOrderList: {
+    url: '/order/delivery-order/',
+    method: 'get',
+    desc: '获取提货单列表',
+    param: {
+
+
     }
   },
 }

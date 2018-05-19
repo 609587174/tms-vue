@@ -1,6 +1,12 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
+.el-form-item {
+  margin-bottom: 0px;
+}
 
+.el-main {
+  padding-top: 0px;
+}
 
 </style>
 <template>
@@ -10,7 +16,7 @@
         <p>查看牵引车</p>
       </el-header>
       <el-main>
-        <el-form class="addheaduserform" label-width="120px" :model="headData" status-icon>
+        <el-form class="addheaduserform" label-width="145px" :model="headData" status-icon>
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>
@@ -110,7 +116,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="危险品灯号到期日期:" label-width="200px">
+                <el-form-item label="危险品灯号到期日期:">
                   <div class="detail-form-item">{{headData.danger_product_due_date}}</div>
                 </el-form-item>
               </el-col>

@@ -19,13 +19,6 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
-                  <el-form-item label="品牌型号:" size="mini">
-                    <el-input placeholder="请输入" type="num" v-model="fifterParam.brand"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
             </el-form>
           </div>
         </el-tab-pane>
@@ -37,7 +30,7 @@
         <el-button type="primary" @click="exportList">导出</el-button>
         <el-button type="success" @click="addHeadCarPage">新增</el-button>
       </div>
-      <div class="table-list">
+      <div class="table-list" v-loading="pageLoading">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
           </el-table-column>
@@ -69,6 +62,7 @@ export default {
   name: 'carHeadManage',
   data() {
     return {
+      pageStatus: false,
       fifterParam: {
         keyword: "",
         field: "",
@@ -77,7 +71,6 @@ export default {
         plate_number: '',
         vin_number: '',
         brand: '',
-        page: 1
       },
       rules: {},
       activeName: 'first',
@@ -140,13 +133,17 @@ export default {
     exportList: function() {
 
     },
-    searchList: function() {
+    searchList: function(pageNum) {
       var vm = this;
-      if (this.fifterParam.field) {
-        this.seachListParam[this.fifterParam.field] = this.fifterParam.keyword;
+      var sendData = this.pbFunc.deepcopy(this.seachListParam);
+      sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      vm.pageLoading = true;
+      if (vm.pageStatus) {
+        sendData.page = vm.pageData.currentPage;
       }
-      this.$$http('searchHeadCarList', this.seachListParam).then(function(result) {
+      this.$$http('searchHeadCarList', sendData).then(function(result) {
         var resultData;
+        vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
@@ -167,7 +164,7 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        this.seachListParam.page = this.pageData.currentPage;
+        this.pageStatus = true;
         this.searchList();
       });
     }

@@ -1,6 +1,12 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
+.el-form-item {
+  margin-bottom: 0px;
+}
 
+.el-main {
+  padding-top: 0px;
+}
 
 </style>
 <template>
@@ -10,7 +16,7 @@
         <p>查看挂车</p>
       </el-header>
       <el-main>
-        <el-form class="addheaduserform" label-width="120px" :model="tailData" status-icon>
+        <el-form class="addheaduserform" label-width="130px" :model="tailData" status-icon>
           <div class="detail-list detail-form">
             <div class="detail-form-title">
               <el-row>

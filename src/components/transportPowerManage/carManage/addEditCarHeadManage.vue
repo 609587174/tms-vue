@@ -139,7 +139,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="装备质量:" prop="total_weight">
+                  <el-form-item label="整备质量:" prop="total_weight">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.total_weight"></el-input>
                   </el-form-item>
                 </el-col>
@@ -422,10 +422,17 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if (value.match(/^[0-9a-zA-Z]+$/) || value == '') {
+      if ((value + "").match(/^[0-9]+$/) || value == '' || value == null) {
         callback();
       } else {
         callback(new Error("只能是数字"));
+      }
+    };
+    var dangerVa = (rule, value, callback) => {
+      if (value.match(/^[0-9]{8}[/-]{1}[0-9]{2}$/)) {
+        callback();
+      } else {
+        callback(new Error("危险品灯号由10个数值组成，如37060111-16"));
       }
     };
     return {
@@ -504,7 +511,7 @@ export default {
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }
         ],
         danger_product_lamp: [
-          { min: 10, max: 10, message: '危险品灯号由10个数值组成，如37060111-16', trigger: 'blur' },
+          { validator: dangerVa, trigger: 'blur' },
         ],
         gas_bottle_number: [
           { required: true, message: '请填写气瓶编号', trigger: 'blur' }
@@ -698,7 +705,7 @@ export default {
       } else if (vm.activeStep == 1) {
         sendData = this.headCarFormStep2;
       } else if (vm.activeStep == 2) {
-        sendData = this.headCarFormStep3;
+        sendData = vm.pbFunc.deepcopy(vm.headCarFormStep3);
         var tractor_insurances = [];
         var tractor_insurances_add = [];
         for (let i = 0; i < sendData.tractor_insurances.length; i++) {

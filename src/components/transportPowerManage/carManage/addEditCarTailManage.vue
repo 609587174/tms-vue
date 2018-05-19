@@ -89,7 +89,7 @@
       <el-main v-loading="pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <el-form class="addTailcarform" label-width="115px" ref="addEditFormSetp1" :rules="rules" :model="tailCarFormStep" status-icon :label-position="'left'">
+            <el-form class="addTailcarform" label-width="123px" ref="addEditFormSetp1" :rules="rules" :model="tailCarFormStep" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="挂车牌:" prop="plate_number">
@@ -357,7 +357,7 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if ((value + "").match(/^[0-9]+$/) || value == '') {
+      if ((value + "").match(/^[0-9]+$/) || value == '' || value == null) {
         callback();
       } else {
         callback(new Error("只能是数字"));
@@ -377,7 +377,7 @@ export default {
       tailCarFormStep1Arr: ['plate_number', 'attributes', 'carrier', 'vin_number', 'vin_number', 'vehicle_type', 'brand', 'transport_weight', 'volume', 'length',
         'width', 'trans_type', 'register_date', 'height'
       ],
-      tailCarFormStep2Arr: ['license_number', 'license_register_date', 'license_register_date', 'operation_number', 'operation_issue_date', 'operation_verify_date'],
+      tailCarFormStep2Arr: ['license_number', 'license_register_date', 'license_verify_date', 'operation_number', 'operation_issue_date', 'operation_verify_date'],
       tailCarFormStep3Arr: ['semitrailer_insurances', 'semitrailer_insurances_add'],
       tailCarFormStep4Arr: ['bottle_report_number', 'bottle_verify_date', 'pressure_bottle_number', 'pressure_bottle_verify_date'],
       tailCarFormStep: {
@@ -559,11 +559,11 @@ export default {
                   vm.addInsuranceListForm();
                 }
                 if (vm.activeStep == 1) {
-                  vm.stepTitle = tailCarFormStep.plate_number + "证件信息填写";
+                  vm.stepTitle = "证件信息填写";
                 } else if (vm.activeStep == 2) {
-                  vm.stepTitle = tailCarFormStep.plate_number + "保险信息填写";
+                  vm.stepTitle = "保险信息填写";
                 } else if (vm.activeStep == 3) {
-                  vm.stepTitle = tailCarFormStep.plate_number + "其他信息填写";
+                  vm.stepTitle = "其他信息填写";
                 }
 
               }
@@ -617,6 +617,7 @@ export default {
       });
     },
     createFrom: function(operation, formName) {
+      var vm = this;
       this.validatorFrom(formName, (result) => {
         if (result == 'true') {
           this.pageLoading = true;
@@ -643,11 +644,11 @@ export default {
                 });
                 this.activeStep += 1;
                 if (this.activeStep == 1) {
-                  this.stepTitle = tailCarFormStep.plate_number + "证件信息填写";
+                  this.stepTitle = "证件信息填写";
                 } else if (this.activeStep == 2) {
-                  this.stepTitle = tailCarFormStep.plate_number + "保险信息填写";
+                  this.stepTitle = "保险信息填写";
                 } else if (this.activeStep == 3) {
-                  this.stepTitle = tailCarFormStep.plate_number + "其他信息填写";
+                  this.stepTitle = "其他信息填写";
                 }
               }
             } else if (result.data.code == 400) {

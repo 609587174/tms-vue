@@ -9,6 +9,95 @@
  */
 
 const api = {
+  addStaff: {
+    url: '/carrier/users/',
+    method: 'post',
+    desc: '新增员工',
+    param: {
+      username: {
+        desc: '用户名'
+      },
+      password: {
+        desc: '密码'
+      },
+      phone: {
+        desc: '电话号码'
+      },
+      nick_name: {
+        desc: '姓名'
+      },
+      email: {
+        desc: '邮箱'
+      },
+      carrier_role: {
+        desc: '职位资源id'
+      }
+    }
+  },
+  updateStaff: {
+    url: '/carrier/users/:id/',
+    method: 'PATCH',
+    desc: '修改员工',
+    param: {
+      username: {
+        desc: '用户名'
+      },
+      is_deleted: {
+        desc: '是否删除该用户'
+      },
+      phone: {
+        desc: '电话号码'
+      },
+      nick_name: {
+        desc: '姓名'
+      },
+      email: {
+        desc: '邮箱'
+      },
+      carrier_role: {
+        desc: '职位资源id'
+      }
+    }
+  },
+  addPosition: {
+    url: '/carrier/roles/',
+    method: 'post',
+    desc: '新增职位',
+    param: {
+      department: {
+        desc: '部门ID'
+      },
+      role_name: {
+        desc: '职位名称'
+      }
+    }
+  },
+  updatePosition: {
+    url: '/carrier/roles/:carrier_role_id/',
+    method: 'PATCH',
+    desc: '修改职位',
+    param: {
+      carrier_role_id: {
+        desc: '职位ID'
+      },
+      role_name: {
+        desc: '职位名称'
+      },
+      permissions:{
+        desc:'权限列表'
+      }
+    }
+  },
+  deletePosition: {
+    url: '/carrier/roles/:carrier_role_id/',
+    method: 'DELETE',
+    desc: '修改职位',
+    param: {
+      carrier_role_id: {
+        desc: '职位ID'
+      }
+    }
+  },
   addDepartment: {
     url: '/carrier/departments/',
     method: 'post',

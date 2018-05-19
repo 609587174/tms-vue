@@ -37,7 +37,7 @@
       margin-top: 5px;
     }
     .el-col-3 {
-      width: 12%;
+      width: 11.5%;
     }
   }
 }
@@ -48,36 +48,47 @@
   border-color: #c2e7b0 !important;
 }
 
+.commh {
+  line-height: 28px;
+  margin-top: 5px;
+  height: 28px;
+}
+
 </style>
 <template>
   <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
-          <el-row class="loadInfo" style="width:100%">
-            <el-col :span="9" class="colinfo">装:<span>{{props.row.fluid.province}}{{props.row.fluid.city}}{{props.row.fluid.area}}{{props.row.fluid.actual_address}}</span><i class="el-icon-location primary"></i>
+          <el-row class="loadInfo commh" style="width:100%;">
+            <el-col :span="7" class="colinfo">装:<span>{{props.row.fluid_name}}</span><i class="el-icon-location primary"></i>
             </el-col>
-            <el-col :span="3" class="colinfo">200km
+            <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
             </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.plan_time}}
+            <el-col :span="4" class="colinfo">{{props.row.plan_time}}
             </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.plan_time}}
+            <el-col :span="4" class="colinfo">{{props.row.plan_time}}
+            </el-col>
+            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
             </el-col>
             <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
             </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+          </el-row>
+          <el-row class="loadInfo commh" style="width:100%;" v-for="(item,key) in props.row.destination">
+            <el-col :span="7" class="colinfo">
+              卸:<span>{{item}}</span><i class="el-icon-location primary"></i>
             </el-col>
           </el-row>
         </div>
         <div class="listDetalis carList" style="width:15%">
-          <el-row style="width:80%">
-            <el-col>需求车数:20辆</el-col>
+          <el-row style="width:80%;" class="commh">
+            <el-col>需求车数:{{props.row.require_car_number}}辆</el-col>
           </el-row>
-          <el-row style="width:80%">
-            <el-col>提交车数:20辆</el-col>
+          <el-row style="width:80%;" class="commh">
+            <el-col>提交车数:{{props.row.require_car_number}}辆</el-col>
           </el-row>
-          <el-row style="width:80%">
-            <el-col>确认车数:20辆</el-col>
+          <el-row style="width:80%;" class="commh">
+            <el-col>确认车数:{{props.row.require_car_number}}辆</el-col>
           </el-row>
         </div>
         <div class="listDetalis opButton" style="width:9%">
@@ -110,13 +121,13 @@
         <div style="clear:both"></div>
       </template>
     </el-table-column>
-    <el-table-column label="装卸地" prop="id" min-width="28.125%" type>
+    <el-table-column label="装卸地" prop="id" min-width="21.875%" type>
     </el-table-column>
     <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">
     </el-table-column>
-    <el-table-column label="计划时间" prop="supplier.supplier_name" min-width="9.375%">
+    <el-table-column label="计划时间" prop="carriers.supplier_name" min-width="12.5%">
     </el-table-column>
-    <el-table-column label="实际时间" prop="yunfei" min-width="9.375%">
+    <el-table-column label="实际时间" prop="discount_price" min-width="12.5%">
     </el-table-column>
     <el-table-column label="计划吨位" min-width="9.375%">
       <template slot-scope="scope" v-if="scope.row.desc=='111'">

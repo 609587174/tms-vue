@@ -1,22 +1,21 @@
 <!-- positionDialog.vue -->
 <template>
   <div>
-    <el-dialog title="新增部门" :visible="departmentDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="positionDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
-        <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="departmentRules" status-icon ref="departmentRules">
+        <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="positionRules" status-icon ref="positionRules">
           <el-form-item label="部门名称：">
-
-            </el-input>
+            <div>{{departmentRow.group_name}}</div>
           </el-form-item>
-          <el-form-item label="职位名称：" prop="group_name">
-            <el-input :autofocus="true" placeholder="请输入" v-model="departmentRules.group_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-form-item label="职位名称：" prop="role_name">
+            <el-input placeholder="请输入" v-model="positionRules.role_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeBtn">取 消</el-button>
-        <el-button type="primary" @click="editDepartment('departmentRules')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+        <el-button type="primary" @click="editposition('positionRules')" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -25,13 +24,17 @@
 export default {
   name: 'positionDialog',
   props: {
-    departmentDialog: {
+    positionDialog: {
       type: Object,
       required: true
     },
-    departmentRow: {
+    positionRow: {
       type: Object,
       required: false
+    },
+    departmentRow: {
+      type: Object,
+      required: true
     },
     closeDialogBtn: Function,
   },
@@ -39,14 +42,15 @@ export default {
   data: function() {
 
     return {
-      type: 'department', //弹窗类型
-      operation: this.departmentDialog.type,
-      departmentRules: {
-        group_name: ''
+      type: 'position', //弹窗类型
+      operation: this.positionDialog.type,
+      positionRules: {
+        department: '',
+        role_name: ''
       },
       rules: {
-        group_name: [
-          { required: true, message: '请输入部门名称', trigger: 'blur' },
+        role_name: [
+          { required: true, message: '请输入职位名称', trigger: 'blur' },
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
       },
@@ -54,7 +58,8 @@ export default {
         btnText: '确 定',
         isDisabled: false,
         isLoading: false
-      }
+      },
+      title:'新增职位'
     }
   },
   computed: {
@@ -64,22 +69,24 @@ export default {
     closeBtn: function() {
       this.$emit('closeDialogBtn', this.type);
     },
-    editDepartment: function(departmentRules) {
-      this.$refs[departmentRules].validate((valid) => {
+    editposition: function(positionRules) {
+      this.$refs[positionRules].validate((valid) => {
         if (valid) {
           this.submitBtn.isDisabled = true;
           this.submitBtn.btnText = '提交中';
           this.submitBtn.isLoading = true;
           let apiName = '';
           let postData = {};
-          if (this.departmentDialog.type === 'add') {
-            apiName = 'addDepartment';
-            postData = this.departmentRules;
-          } else if (this.departmentDialog.type === 'update') {
-            apiName = 'updateDepartment';
+          if (this.positionDialog.type === 'add') {
+            apiName = 'addPosition';
+            this.positionRules.department = this.departmentRow.id;
+            postData = this.positionRules;
+          } else if (this.positionDialog.type === 'update') {
+            apiName = 'updatePosition';
+            console.log('修改职位')
             postData = {
-              group_name: this.departmentRules.group_name,
-              id: this.departmentRow.id
+              role_name: this.positionRules.role_name,
+              carrier_role_id: this.positionRow.id
             }
           }
 
@@ -91,7 +98,7 @@ export default {
             this.submitBtn.isDisabled = false;
             if (results.data && results.data.code == 0) {
               this.$message({
-                message: this.departmentDialog.type === 'add' ? '新增部门成功' : '修改部门成功',
+                message: this.positionDialog.type === 'add' ? '新增职位成功' : '修改职位成功',
                 type: 'success'
               });
               this.$emit('closeDialogBtn', this.type, true);
@@ -101,7 +108,7 @@ export default {
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
             this.submitBtn.isDisabled = false;
-            this.$message.error(this.departmentDialog.type === 'add' ? '新增部门失败' : '修改部门失败');
+            this.$message.error(this.positionDialog.type === 'add' ? '新增职位失败' : '修改职位失败');
           })
 
         } else {
@@ -111,16 +118,19 @@ export default {
     }
   },
   watch: {
-    departmentDialog: {
+    positionDialog: {
       handler(val, oldVal) {　　　　　　
-        console.log('编辑', val, oldVal)
+        console.log('编辑', val, oldVal);
+        console.log('部门', this.departmentRow)
         if (val.isShow && val.type === 'update') {
-
-          this.departmentRules.group_name = this.departmentRow.group_name;
+          this.positionRules.role_name = this.positionRow.role_name;
+          this.title = '修改职位';
         } else {
-          this.departmentRules.group_name = '';
+          this.positionRules.role_name = '';
+          this.title = '新增职位';
         }　　　　
-      }, 　　　　deep: true
+      },
+      　　　　deep: true
 
     }
   },

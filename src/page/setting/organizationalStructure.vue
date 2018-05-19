@@ -22,7 +22,7 @@
         <el-col :span="5">
           <div class="nav-tab-setting">
             <el-tabs v-model="departmentActive" @tab-click="handleClick">
-              <el-tab-pane label="用户管理" name="department">
+              <el-tab-pane label="部门" name="department">
                 <div class="department-list">
                   <el-menu :default-active="active" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" v-loading="departmentLoading">
                     <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item,key)" :index="key.toString()" :key="key">
@@ -41,8 +41,8 @@
         </el-col>
         <el-col :span="19">
           <div class="add-user-btn">
-              <el-button type="success" size="medium">新增职位</el-button>
-            </div>
+            <el-button type="success" size="medium" @click="organizationDialog('position','add')">新增职位</el-button>
+          </div>
           <div class="nav-tab-setting nav-tab-mt">
             <div class="position-list table-list">
               <el-table :data="positionTableData" stripe style="width: 100%" v-loading="positionLoading">
@@ -50,8 +50,8 @@
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                    <el-button type="primary" size="mini" plain @click="handleMenuClick({operator:'check',id:scope.row.id})">删除</el-button>
+                    <el-button type="primary" size="mini" @click="organizationDialog('position','update',scope.row)">修改</el-button>
+                    <el-button type="primary" size="mini" plain @click="deletePosition(scope.row.id)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -65,10 +65,12 @@
       </el-row>
     </div>
     <department-dialog :department-dialog="departmentDialog" :department-row="departmentRow" v-on:closeDialogBtn="closeDialog"></department-dialog>
+    <position-dialog :position-dialog="positionDialog" :department-row="departmentRow" :position-row="positionRow" v-on:closeDialogBtn="closeDialog"></position-dialog>
   </div>
 </template>
 <script>
 import departmentDialog from '../../components/setting/departmentDialog';
+import positionDialog from '../../components/setting/positionDialog';
 export default {
   name: 'personListManage',
   computed: {
@@ -77,17 +79,20 @@ export default {
     }
   },
   components: {
-    departmentDialog: departmentDialog
+    departmentDialog: departmentDialog,
+    positionDialog: positionDialog
   },
   data() {
     return {
       positionLoading: true, //职位列表loading
       departmentLoading: true, //部门列表loading
-      positionDialog: false, //职位弹窗bialog
+      positionDialog: {
+        isShow: false,
+        type: 'add'
+      }, //职位弹窗bialog
       departmentDialog: {
         isShow: false,
-        type: 'add',
-        row: {}
+        type: 'add'
       }, //部门弹窗bialog
       pageData: {
         currentPage: 1,
@@ -119,6 +124,7 @@ export default {
       departmentTableData: [], //部门列表
       positionTableData: [], //职位列表
       departmentRow: {}, //当前所选部门
+      positionRow: {}, //当前所选部门
     }
 
   },
@@ -128,27 +134,43 @@ export default {
      * organizationDialog  显示部门、职位弹窗
      * @param  {string} typeDialog  [必填][展示弹窗类型（department部门，position职位）]
      * @param  {string} operation   [必填][是否编辑或者新增（add新增，update编辑）]
+     * @param  {string} row   [非必填][修改的职位信息]
      * @return {[type]}
      */
-    organizationDialog: function(typeDialog, operation) {
+    organizationDialog: function(typeDialog, operation, row) {
 
       if (typeDialog === 'department') {
         this.departmentDialog.isShow = true;
         this.departmentDialog.type = operation;
         if (operation === 'update') {
-          console.log('修改的部门',this.active,this.departmentTableData[this.active])
+          console.log('修改的部门', this.active, this.departmentTableData[this.active])
           if (this.departmentTableData.length) {
             this.departmentRow = this.departmentTableData[this.active];
           }
         }
+      } else if (typeDialog === 'position') {
+        this.positionDialog.isShow = true;
+        this.positionDialog.type = operation;
+        this.departmentRow = this.departmentTableData[this.active];
+        if (operation === 'update') {
+          this.positionRow = row
+          console.log('职位info', row)
+          // if (this.positionTableData.length) {
+          //   this.positionRow = this.positionTableData[this.active];
+          // }
+        }
       }
-      console.log('弹窗', this.departmentDialog)
     },
     closeDialog: function(type, isSave) {
       if (type === 'department') {
         this.departmentDialog.isShow = false;
         if (isSave) {
           this.getDepartmentList(); //部门列表
+        }
+      } else if (type === 'position') {
+        this.positionDialog.isShow = false;
+        if (isSave) {
+          this.getPositionList(this.departmentRow, this.active); //职位列表
         }
       }
 
@@ -162,19 +184,20 @@ export default {
           this.departmentTableData = results.data.data;
           this.active = '0';
           this.departmentLoading = false;
-          if(this.departmentTableData.length){
-            this.getPositionList(this.departmentTableData[0],this.active)
+          if (this.departmentTableData.length) {
+            this.getPositionList(this.departmentTableData[0], this.active)
           }
 
         }
       }).catch((err) => {
+        this.departmentLoading = false;
         this.$message.error('获取部门列表失败');
       })
     },
     // 获取职位列表
     getPositionList: function(departmentInfo, index) {
       let postData = {
-        pagination: false,
+        page: this.pageData.currentPage,
         department: departmentInfo.id
       }
       this.positionLoading = true;
@@ -184,12 +207,41 @@ export default {
         console.log('职位列表', results.data);
 
         if (results.data && results.data.code == 0) {
-          this.positionTableData = results.data.data;
+          this.positionTableData = results.data.data.results;
           this.positionLoading = false;
+          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
         }
       }).catch((err) => {
+        this.departmentLoading = false;
         this.$message.error('获取部门列表失败');
       })
+    },
+    deletePosition: function(id) {
+      this.$confirm("确定删除该职位?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+        .then(() => {
+          this.$$http('deletePosition', { carrier_role_id: id }).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.$message({
+                message: '删除职位成功',
+                type: 'success'
+              });
+              this.getPositionList(this.departmentRow, this.active); //职位列表
+            }
+          }).catch((err) => {
+            this.$message.error('删除职位失败');
+          })
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+
     },
     handleClick: function(tab, event) {
 

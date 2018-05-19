@@ -1,7 +1,7 @@
 <!-- departmentDialog -->
 <template>
   <div>
-    <el-dialog title="新增部门" :visible="departmentDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="departmentDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="departmentRules" status-icon ref="departmentRules">
           <el-form-item label="部门名称：" prop="group_name">
@@ -50,7 +50,8 @@ export default {
         btnText: '确 定',
         isDisabled: false,
         isLoading: false
-      }
+      },
+      title:'新增部门'
     }
   },
   computed: {
@@ -113,7 +114,9 @@ export default {
         if (val.isShow && val.type === 'update') {
 
           this.departmentRules.group_name = this.departmentRow.group_name;
+          this.title = '修改部门';
         } else {
+          this.title = '新增部门';
           this.departmentRules.group_name = '';
         }　　　　
       }, 　　　　deep: true

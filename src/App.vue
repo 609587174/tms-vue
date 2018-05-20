@@ -34,7 +34,7 @@ export default {
 
       let menuData = staticData.staticData();
       let allowedRouter = this.getRoutes(menuData.data);
-      console.log('allowedRouter', allowedRouter);
+      // console.log('allowedRouter', allowedRouter);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
@@ -90,7 +90,7 @@ export default {
           if (Array.isArray(route.children) && route.meta.needShowFir) {
             let redirectp = (redirectPath ? "" : "./") + (redirectPath ? (redirectPath + "/" + route.children[0].path) : (route.path + "/" + route.children[0].path));
             route.redirect = redirectp;
-            console.log('this', that);
+            // console.log('this', that);
             redirectConfig(route.children, that.pbFunc.deepcopy(redirectp));
           }
         });
@@ -121,7 +121,7 @@ export default {
 
       originPath[0].children = actualRouter;
 
-      console.log('originPath', originPath);
+      // console.log('originPath', originPath);
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',
@@ -145,7 +145,7 @@ export default {
   created: function(newPath) {
     let vm = this;
     let token = vm.pbFunc.getLocalData('token', true);
-    console.log('token', token)
+    // console.log('token', token)
     if (token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {

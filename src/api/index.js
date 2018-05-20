@@ -41,7 +41,7 @@ axios.interceptors.request.use(config => {
 
 /* http请求拦截 */
 axios.interceptors.response.use(response => {
-  console.log('response', response);
+  // console.log('response', response);
   return response
 }, error => {
   console.log('response error', error, error.response);
@@ -208,7 +208,7 @@ const dealConfig = function(apiName, postData) {
         }
       }
       httpConfig.url = apiUrl;
-      console.log('httpConfig', httpConfig);
+      // console.log('httpConfig', httpConfig);
       return httpConfig;
     } else {
       return false
@@ -231,7 +231,7 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
   let promise = new Promise(function(resolve, reject) {
     axios(httpConfig).then(
       (res) => {
-        console.log('xxxx', res);
+        // console.log('xxxx', res);
         //默认使用successState
         if (defaultSuccessCallback === undefined) {
           successState(res)

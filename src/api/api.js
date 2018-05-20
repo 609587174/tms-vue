@@ -295,6 +295,24 @@ const api = {
     desc: '查询运力列表',
     param: {}
   },
+  getGroups: {
+    url: '/carrier/carrier_groups/',
+    method: 'get',
+    desc: '获取运力管理分组数据',
+    param: {}
+  },
+  bindTruck: {
+    url: '/truck/tractor_semitrailers/:id/bind_semitrailer/',
+    method: 'PATCH',
+    desc: '绑定挂车',
+    param: {}
+  },
+  bindStaff: {
+    url: '/truck/tractor_semitrailers/:id/bind_driver_staff/',
+    method: 'PATCH',
+    desc: '绑定人员',
+    param: {}
+  },
   searchHeadCarList: {
     url: '/truck/tractors/',
     method: 'get',

@@ -220,7 +220,7 @@ export default {
     let menus = this.$store.state.common.menuData;
     if (menus) {
       this.menus = menus;
-      console.log('this.menus', this.menus);
+      // console.log('this.menus', this.menus);
     }
   }
 };

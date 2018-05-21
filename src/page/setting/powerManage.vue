@@ -1,4 +1,4 @@
- <!-- powerManage.vue -->
+<!-- powerManage.vue -->
 <template>
   <div class="setting">
     <div class="nav-tab">
@@ -24,28 +24,12 @@
             <el-tabs v-model="departmentActive" @tab-click="handleClick">
               <el-tab-pane label="用户管理" name="department">
                 <div class="department-list">
-                  <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
-                    <el-menu-item index="1">
+                  <el-menu :default-active="active" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+                    <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item.id,key)" :index="key.toString()" :key="key">
                       <i class="tab-icon"></i>
-                      <span slot="title">导航一</span>
-                    </el-menu-item>
-                    <el-menu-item index="2">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航二导航</span>
-                    </el-menu-item>
-                    <el-menu-item index="3">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航导航三</span>
-                    </el-menu-item>
-                    <el-menu-item index="4">
-                      <i class="tab-icon"></i>
-                      <span slot="title">导航四导航导航导航</span>
+                      <span slot="title">{{item.group_name}}</span>
                     </el-menu-item>
                   </el-menu>
-                  <div class="text-center department-btn">
-                    <el-button type="primary" plain size="medium">编辑部门</el-button>
-                    <el-button type="primary" size="medium">新增部门</el-button>
-                  </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
@@ -53,18 +37,37 @@
         </el-col>
         <el-col :span="19">
           <div class="nav-tab-setting">
-            <div class="add-user-btn">
-              <el-button type="success" size="medium">新增职位</el-button>
-            </div>
-            <el-tabs v-model="departmentActive" @tab-click="handleClick">
-              <el-tab-pane label="用户管理" name="department">
+            <el-tabs v-model="staffsActive" @tab-click="staffClick">
+              <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
                 <div class="position-list table-list">
-                  <el-table :data="tableData" stripe style="width: 100%" v-loading="pageLoading">
+                  <div class="staff-radio">
+                    <!-- <el-radio v-model="isValid" label="1" @change="getStaffsList(currentDepartmentId,currentPositionId,false)">有效</el-radio>
+                    <el-radio v-model="isValid" label="2" @change="getStaffsList(currentDepartmentId,currentPositionId,true)">已注销</el-radio> -->
+                  </div>
+                  <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading">
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
                       <template slot-scope="scope">
-                        <el-button type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                        <div v-if="item.param ==='menu_name'">{{scope.row.menu_name}}</div>
+                        <div v-if="item.param ==='menu'">
+                          <dl>
+                            <dt v-for="(item,key) in scope.row.second_menus">
+                              {{item.menu_name}}
+                            </dt>
+                          </dl>
+                        </div>
+                        <div v-if="item.param==='desc'">{{}}</div>
+                        <div v-if="item.param==='desc'">{{}}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="操作">
+                      <template slot-scope="scope">
+                        <dl>
+                          <dt v-for="(item,key) in scope.row.second_menus">
+                            <el-checkbox-group v-model="selectMenus">
+                              <el-checkbox v-for="(itemThird,index) in item.third_menus" :label="itemThird.menu_name" :key="index">{{itemThird.menu_name}}</el-checkbox>
+                            </el-checkbox-group>
+                          </dt>
+                        </dl>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -74,16 +77,6 @@
                   </div>
                 </div>
               </el-tab-pane>
-              <el-tab-pane label="用户管理1" name="department8"></el-tab-pane>
-              <el-tab-pane label="用户管理2" name="department1"></el-tab-pane>
-              <el-tab-pane label="用户管理3" name="department2"></el-tab-pane>
-              <el-tab-pane label="用户管理4" name="department3"></el-tab-pane>
-
-              <el-tab-pane label="用户管理5" name="department4"></el-tab-pane>
-              <el-tab-pane label="用户管理6" name="department5"></el-tab-pane>
-              <el-tab-pane label="用户管理7" name="department6"></el-tab-pane>
-              <el-tab-pane label="用户管理8" name="department9"></el-tab-pane>
-
             </el-tabs>
           </div>
         </el-col>
@@ -102,12 +95,21 @@ export default {
   },
   data() {
     return {
+      departmentLoading: true, //部门列表loading
+      permissionsLoading: false, //权限列表loading
       pageLoading: false,
       pageData: {
         currentPage: 1,
         totalPage: '',
+        pageSize: 10
       },
+      staffDialog: {
+        isShow: false,
+        type: 'add'
+      }, //员工弹窗bialog
+      isValid: '1',
       departmentActive: 'department',
+      staffsActive: '',
       searchFilters: {
         employmentType: '',
         isBind: '',
@@ -121,19 +123,90 @@ export default {
         ]
       },
       thTableList: [{
-        title: '姓名',
-        param: 'role_name',
+        title: '功能模块',
+        param: 'menu_name',
         width: ''
       }, {
-        title: '职位权限',
-        param: 'work_type.verbose',
+        title: '子功能',
+        param: 'menu',
+        width: ''
+      }, {
+        title: '说明',
+        param: 'department',
         width: ''
       }],
-      tableData:[]
+      departmentTableData: [], //部门列表
+      positionTableData: [], //职位列表
+      permissionsTableData: [], //员工列表
+      active: '0',
+      currentDepartmentId: '',
+      currentPositionId: '',
+      staffRow: {}, //编辑信息
+      selectMenus:{}
     }
   },
   methods: {
+    // 获取部门列表
+    getDepartmentList: function() {
+      this.departmentLoading = true;
+      this.$$http('getDepartmentList', { pagination: false }).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.departmentTableData = results.data.data;
+          this.active = '0';
+          this.departmentLoading = false;
+          if (this.departmentTableData.length) {
+            this.getPositionList(this.departmentTableData[0].id, this.active)
+          }
+        }
+      }).catch((err) => {
+        this.departmentLoading = false;
+        this.$message.error('获取部门列表失败');
+      })
+    },
+    // 获取职位列表
+    getPositionList: function(departmentId, index) {
+      let postData = {
+        pagination: false,
+        department: departmentId
+      }
+      this.currentDepartmentId = departmentId;
+      this.positionLoading = true;
+      this.isValid = '1',
+        this.active = index.toString();
+      this.$$http('getPositionList', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.positionTableData = results.data.data;
+          this.positionLoading = false;
+          if (this.positionTableData.length) {
+            this.staffsActive = this.positionTableData[0].id;
+            this.currentPositionId = this.positionTableData[0].id;
+          }
+        }
+      }).catch((err) => {
+        this.positionLoading = false;
+        this.$message.error('获取职位列表失败');
+      })
+    },
+    // 获取权限列表
+    getPermissionsList: function() {
+      this.positionLoading = true;
+      this.$$http('getPermissionsList', {}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.permissionsTableData = results.data.data;
+          this.positionLoading = false;
 
+        }
+      }).catch((err) => {
+        this.positionLoading = false;
+        this.$message.error('获取职位列表失败');
+      })
+    },
+    staffClick: function(tab, event) {
+      console.log('职位', tab, event);
+      this.currentPositionId = tab.name;
+      this.isValid = '1',
+        this.getStaffsList(this.currentDepartmentId, tab.name, false)
+    },
     handleClick: function(tab, event) {
 
     },
@@ -145,7 +218,10 @@ export default {
     }
 
   },
-  created: function() {}
+  created: function() {
+    this.getDepartmentList(); //部门列表
+    this.getPermissionsList();
+  }
 
 }
 

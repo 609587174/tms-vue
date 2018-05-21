@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getPermissionsList: {
+    url: '/permissions/menus/',
+    method: 'get',
+    desc: '系统可分配菜单 权限列表',
+    param: {
+
+    }
+  },
   addStaff: {
     url: '/carrier/users/',
     method: 'post',
@@ -48,11 +56,33 @@ const api = {
       phone: {
         desc: '电话号码'
       },
+      password: {
+        desc: '密码'
+      },
       nick_name: {
         desc: '姓名'
       },
       email: {
         desc: '邮箱'
+      },
+      carrier_role: {
+        desc: '职位资源id'
+      }
+    }
+  },
+   getStaffs: {
+    url: '/carrier/users/',
+    method: 'get',
+    desc: '员工列表',
+    param: {
+      pagination: {
+        desc: '是否分页'
+      },
+      is_deleted: {
+        desc: '是否删除该用户'
+      },
+      department: {
+        desc: '部门资源id'
       },
       carrier_role: {
         desc: '职位资源id'

@@ -26,13 +26,13 @@
             </el-input>
           </el-form-item>
           <el-form-item label="部门：" prop="department">
-            <el-select v-model="staffRules.department" placeholder="请选择">
-              <el-option v-for="(item,key) in departmentList" :key="key" :label="item.verbose" :value="item.key"></el-option>
+            <el-select v-model="staffRules.department" filterable placeholder="请选择" @change="getPositionList">
+              <el-option v-for="(item,key) in departmentList" :key="key" :label="item.group_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="职位：" prop="carrier_role">
-            <el-select v-model="staffRules.carrier_role" placeholder="请选择">
-              <el-option v-for="(item,key) in positionList" :key="key" :label="item.verbose" :value="item.key"></el-option>
+            <el-select v-model="staffRules.carrier_role" filterable placeholder="请选择">
+              <el-option v-for="(item,key) in positionList" :key="key" :label="item.role_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
         </el-form>
@@ -54,13 +54,15 @@ export default {
     },
     departmentList: {
       type: Array,
+      required: true
+    },
+    staffRow: {
+      type: Object,
       required: false
     },
     closeDialogBtn: Function,
   },
-
   data: function() {
-
     return {
       operation: this.staffDialog.type,
       staffRules: {
@@ -68,16 +70,34 @@ export default {
         password: '',
         nick_name: '',
         phone: '',
-        email:'',
+        email: '',
         department: '',
         carrier_role: ''
       },
-      positionList:[],//职位列表
+      positionList: [], //职位列表
       rules: {
-        group_name: [
-          { required: true, message: '请输入部门名称', trigger: 'blur' },
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+        ],
+        nick_name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+        ],
+        phone: [
+          { required: true, message: '请输入手机号码', trigger: 'blur' },
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+        ],
+        department: [
+          { required: true, message: '请选择部门', trigger: 'blur' },
+        ],
+        carrier_role: [
+          { required: true, message: '请选择职位', trigger: 'blur' },
+        ]
       },
       submitBtn: {
         btnText: '确 定',
@@ -102,15 +122,14 @@ export default {
           this.submitBtn.isLoading = true;
           let apiName = '';
           let postData = {};
+          postData = this.staffRules;
           if (this.staffDialog.type === 'add') {
             apiName = 'addStaff';
-            postData = this.staffRules;
+
           } else if (this.staffDialog.type === 'update') {
             apiName = 'updateStaff';
-            postData = {
-              group_name: this.staffRules.group_name,
-              id: this.departmentRow.id
-            }
+            postData.is_deleted = this.staffRow.is_deleted;
+            postData.id = this.staffRow.id;
           }
 
           this.$$http(apiName, postData).then((results) => {
@@ -138,14 +157,39 @@ export default {
           this.submitBtn.isDisabled = false;
         }
       });
-    }
+    },
+    // 获取职位列表
+    getPositionList: function() {
+      let postData = {
+        pagination: false,
+        department: this.staffRules.department
+      }
+      this.$$http('getPositionList', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.positionList = results.data.data;
+
+        }
+      }).catch((err) => {
+        this.$message.error('获取部门列表失败');
+      })
+    },
   },
   watch: {
     staffDialog: {
       handler(val, oldVal) {　　　　　　
         console.log('编辑', val, oldVal)
         if (val.isShow && val.type === 'update') {
-
+          console.log('staffRow', this.staffRow)
+          this.staffRules = {
+            username: this.staffRow.username,
+            password: '',
+            nick_name: this.staffRow.nick_name,
+            phone: this.staffRow.phone,
+            email: this.staffRow.email,
+            department: this.staffRow.department.id,
+            carrier_role: this.staffRow.carrier_role.id
+          }
+          this.getPositionList();
           // this.staffRules.group_name = this.departmentRow.group_name;
           this.title = '修改员工';
         } else {

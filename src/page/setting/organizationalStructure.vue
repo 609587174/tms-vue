@@ -202,18 +202,15 @@ export default {
       }
       this.positionLoading = true;
       this.active = index.toString();
-      console.log('查看职位')
       this.$$http('getPositionList', postData).then((results) => {
-        console.log('职位列表', results.data);
-
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data.results;
           this.positionLoading = false;
           this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
         }
       }).catch((err) => {
-        this.departmentLoading = false;
-        this.$message.error('获取部门列表失败');
+        this.positionLoading = false;
+        this.$message.error('获取职位列表失败');
       })
     },
     deletePosition: function(id) {

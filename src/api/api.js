@@ -676,6 +676,86 @@ const api = {
     desc: '获取托运单数据',
     param: {
 
+    }
+  },
+  getSiteList: {
+    url: '/map/fluid_sites/',
+    method: 'get',
+    desc: '获取LNG站点列表',
+    param: {
+      position_name: {
+        desc: '站点名称',
+      },
+      page: {
+        desc: '当前页数',
+      },
+      page_size: {
+        desc: '每页数量',
+      },
+    }
+  },
+  getSiteDetail: {
+    url: '/map/fuild_sites/:id/',
+    method: 'get',
+    desc: '获取LNG站点详情',
+    param: {
+
+    }
+  },
+  getStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'get',
+    desc: '获取标准里程列表',
+    param: {
+
+    }
+  },
+  addStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'post',
+    desc: '新增标准里程',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+    }
+  },
+  getStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'get',
+    desc: '标准里程详情',
+    param: {
+
+    }
+  },
+  getStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'PATCH',
+    desc: '标准里程更新',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+    }
+  },
+  delStandardMile: {
+    url: '/map/standard_mileages/:id/',
+    method: 'DELETE',
+    desc: '删除标准里程',
+    param: {
+
 
     }
   },

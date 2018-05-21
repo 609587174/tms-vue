@@ -1,6 +1,6 @@
 <template>
-  <div class="review-background" v-if="imgObject.showPreview" v-on:click.self="imgObject.showPreview = false">
-    <div class="img-review-out-box">
+  <div class="review-background" v-if="imgObject.showPreview">
+    <div class="img-review-out-box" v-on:click.self="imgObject.showPreview = false">
       <div class="clearfix img-review-box">
         <div class="img-review-in-box">
           <ul>
@@ -10,8 +10,8 @@
           </ul>
         </div>
         <div class="preview-operator-btn">
-          <a href="javascript:void(0)" v-on:click="previousImg">上一张</a>
-          <a href="javascript:void(0)" v-on:click="nextImg">下一张</a>
+          <a href="javascript:void(0)" v-on:click="previousImg" v-show="imgList.length">上一张</a>
+          <a href="javascript:void(0)" v-on:click="nextImg" v-show="imgList.length">下一张</a>
           <a href="javascript:void(0)" v-on:click="rotateImg()">旋转</a>
           <a href="javascript:void(0)" v-on:click="closePreview()">关闭</a>
         </div>

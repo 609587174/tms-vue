@@ -1,86 +1,11 @@
-<style scoped lang="less">
-.el-header p {
-  font-size: 25px;
-  text-align: center;
-  height: 80px;
-  line-height: 80px;
-  margin: 0 0;
-}
-
-.addheadcarform {
-  margin: 30px 5%;
-  .el-input {
-    width: 100%;
-  }
-  .el-select {
-    width: 100%;
-  }
-}
-
-#addeditHeadCarPage {
-  border: 1px solid rgb(222, 222, 222);
-}
-
-.alone-insurance-form {
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  padding: 30px 30px 0 20px;
-}
-
-.insurance-form-head {
-  background-color: #f1f1f1;
-  height: 41px;
-  line-height: 41px;
-}
-
-#addeditHeadCarPage {
-  background-color: white;
-}
-
-.icon-arrow-lift {
-  font-size: 35px;
-  color: rgb(222, 222, 222);
-  vertical-align: middle;
-}
-
-.right-arrow-d {
-  height: 80px;
-  line-height: 80px;
-  text-align: center;
-  pointer: cursor;
-}
-
-.icon-down-arrow {
-  font-size: 35px;
-  color: rgb(222, 222, 222);
-  vertical-align: middle;
-  transform: rotate(90deg);
-  display: inline-block;
-}
-
-.left-arrow-d {
-  height: 80px;
-  line-height: 80px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.stepTitle {
-  background-color: rgb(235, 238, 245);
-  height: 40px;
-  text-align: center;
-  font-size: 18px;
-  line-height: 40px;
-}
-
-</style>
 <template>
   <div id="addeditHeadCarPage">
     <el-container>
       <el-header style="margin-top:15px;height:80px">
         <el-row>
-          <el-col :span="1" class="left-arrow-d"><i class="icon-down-arrow" v-on:click="goDetalis"></i></el-col>
-          <el-col :span="22">
+          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          </el-col>
+          <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
@@ -554,7 +479,10 @@ export default {
         insuranceTypeSelect: this.$store.state.common.selectData.tractor_insurance_type,
         insurancMethodSelect: this.$store.state.common.selectData.truck_insurance_method
       }
-    }
+    },
+    returnPage: function() {
+      return this.$route.query.headId ? '详情页' : '列表页';
+    },
   },
   created() {
     if (this.$route.query.activeStep) {
@@ -611,11 +539,12 @@ export default {
         vm.pageLoading = false;
       });
     },
-    goDetalis: function(stepInfo) {
-      if (this.headId) {
-        this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + this.headId });
+    returnToPage: function() {
+      if (this.$route.query.headId) {
+        this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage", query: { headId: this.$route.query.headId } });
+      } else {
+        this.$router.push({ path: "/transportPowerManage/carManage/carHeadManage" });
       }
-      //跳转详情页
     },
     getTrueObj: function(obj, getobj) {
       var newObj = this.pbFunc.deepcopy(obj);
@@ -810,3 +739,57 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+.el-header p {
+  font-size: 25px;
+  text-align: center;
+  height: 80px;
+  line-height: 80px;
+  margin: 0 0;
+}
+
+.addheadcarform {
+  margin: 30px 5%;
+  .el-input {
+    width: 100%;
+  }
+  .el-select {
+    width: 100%;
+  }
+}
+
+#addeditHeadCarPage {
+  border: 1px solid rgb(222, 222, 222);
+}
+
+.alone-insurance-form {
+  border: 1px solid rgb(222, 222, 222);
+  border-top: none;
+  padding: 30px 30px 0 20px;
+}
+
+.insurance-form-head {
+  background-color: #f1f1f1;
+  height: 41px;
+  line-height: 41px;
+}
+
+#addeditHeadCarPage {
+  background-color: white;
+}
+
+.icon-arrow-lift {
+  font-size: 35px;
+  color: rgb(222, 222, 222);
+  vertical-align: middle;
+}
+
+.stepTitle {
+  background-color: rgb(235, 238, 245);
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+</style>

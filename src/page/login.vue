@@ -8,7 +8,7 @@
     <div class="user-page" @keyup.enter="login">
       <div class="user-page-title">登录</div>
       <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
-        <p class="des"></p>
+        <p class="des">请您<a class="cursor-pointer text-blue" v-on:click="toLink('company')">填写企业信息</a>并提交注册审核！</p>
         <el-form-item label="用户名：" prop="username">
           <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
@@ -107,6 +107,7 @@ export default {
 
   },
   methods: {
+
     getUser() {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {
@@ -155,6 +156,8 @@ export default {
         this.$router.push({ path: '/register' });
       } else if (type === 'reset') {
         this.$router.push({ path: '/forgetPassword' });
+      }else if(type === 'company'){
+        this.$router.push({ path: "registerCompany", query: { user_id: results.data.data.id } });
       }
     },
     callbackerr(cuowu) {

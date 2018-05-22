@@ -49,7 +49,7 @@ export default {
       this.$confirm("确定退出?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
-          type: "info"
+          type: "warning"
         })
         .then(() => {
           this.signOut();

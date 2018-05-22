@@ -11,9 +11,13 @@ let baseRoute = [{
   name: '注册',
   component: (resolve) => require(['../page/register.vue'], resolve)
 },{
-  path: '/registerEnd',
-  name: '注册End',
-  component: (resolve) => require(['../page/registerEnd.vue'], resolve)
+  path: '/registerCompany',
+  name: '企业信息',
+  component: (resolve) => require(['../page/registerCompany.vue'], resolve)
+},{
+  path: '/registerSuccess',
+  name: '待审核',
+  component: (resolve) => require(['../page/registerSuccess.vue'], resolve)
 }, {
   path: '/forgetPassword',
   name: '找回密码',

@@ -90,7 +90,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）', trigger: 'blur' },
+          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
           { validator: isSpace, trigger: 'blur' },
         ],
         nick_name: [

@@ -24,6 +24,19 @@
 .capacity-list-dialog {
   .el-dialog__body {
     padding-top: 6px;
+    .notice-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .el-icon-warning {
+        font-size: 30px;
+        color: #e6a23c;
+        margin: 24px 0 16px;
+      }
+      .notice-msg {
+      }
+    }
     .el-form {
       width: 340px;
       margin: 0 auto;
@@ -41,26 +54,6 @@
         }
         .el-select {
           width: 100%;
-        }
-      }
-    }
-    .content-container {
-      width: 320px;
-      margin: 0 auto;
-      .group-field {
-        .group-item {
-          margin-top: 10px;
-          .el-input__suffix-inner {
-            line-height: 40px;
-            .el-input__icon {
-              height: 15px;
-              line-height: 0;
-            }
-          }
-          .el-icon-delete:hover {
-            cursor: pointer;
-            color: #409EFF;
-          }
         }
       }
     }

@@ -313,6 +313,18 @@ const api = {
     desc: '绑定人员',
     param: {}
   },
+  forceBindTruck: {
+    url: '/truck/tractor_semitrailers/:id/force_bind_semitrailer/',
+    method: 'PATCH',
+    desc: '强制绑定挂车',
+    param: {}
+  },
+  forceBindStaff: {
+    url: '/truck/tractor_semitrailers/:id/force_bind_driver_staff/',
+    method: 'PATCH',
+    desc: '强制绑定人员',
+    param: {}
+  },
   searchHeadCarList: {
     url: '/truck/tractors/',
     method: 'get',

@@ -114,7 +114,7 @@ export default {
         ],
         contact_phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
-          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '联系电话格式不正确，请重新输入', trigger: 'blur' }
+          { pattern: /^((0\d{2,3}-\d{7,8})|(1\d{10}$))$/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' }///^\d{3,4}-?\d{7,8}$/
         ],
         area: [
           { required: true, message: '请选择区域', trigger: 'blur' }

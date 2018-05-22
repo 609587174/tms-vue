@@ -24,7 +24,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="液厂名称:" prop="fluid_factory">
-                    <el-select v-model="userForm.fluid_factory" placeholder="请选择">
+                    <el-select filterable remote :remote-method="searchFluid" :loading="searchFluidLoading" v-model="userForm.fluid_factory" placeholder="请输入搜索">
                       <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>

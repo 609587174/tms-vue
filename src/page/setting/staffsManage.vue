@@ -1,6 +1,6 @@
 <template>
   <div class="setting">
-    <div class="nav-tab">
+    <div class="nav-tab" v-if="false">
       <div class="tab-screen">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row>
@@ -23,7 +23,7 @@
             <div class="add-user-btn">
               <el-button type="success" size="medium" @click="staffsDialog('add')">新增员工</el-button>
             </div>
-            <el-tabs v-model="departmentActive" @tab-click="departmentClick">
+            <el-tabs v-model="departmentActive">
               <el-tab-pane label="部门" name="department">
                 <div class="department-list">
                   <el-menu :default-active="active" class="el-menu-vertical-demo" v-loading="departmentLoading">
@@ -62,12 +62,15 @@
                     </el-table-column>
                   </el-table>
                   <div class="page-list text-center">
-                    <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+                    <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
                     </el-pagination>
                   </div>
                 </div>
               </el-tab-pane>
             </el-tabs>
+            <div class="user-no-data text-center text-stance" v-if="!positionTableData.length&&!staffLoading">
+              暂无数据
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -89,7 +92,7 @@ export default {
       pageLoading: false,
       pageData: {
         currentPage: 1,
-        totalPage: '',
+        totalCount: '',
         pageSize: 10
       },
       staffDialog: {
@@ -121,11 +124,13 @@ export default {
         width: ''
       }, {
         title: '部门',
-        param: 'department',
+        param: 'department.group_name',
+        param_two: '',
         width: ''
       }, {
         title: '职位',
-        param: 'carrier_role',
+        param: 'carrier_role.role_name',
+        param_two: '',
         width: ''
       }, {
         title: '电话',
@@ -188,7 +193,7 @@ export default {
       this.currentDepartmentId = departmentId;
       this.positionLoading = true;
       this.isValid = '1',
-      this.active = index.toString();
+        this.active = index.toString();
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data;
@@ -217,7 +222,7 @@ export default {
         if (results.data && results.data.code == 0) {
           this.staffsTableData = results.data.data.results;
           this.staffLoading = false;
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+          this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
         this.staffLoading = false;
@@ -263,11 +268,11 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '注销员工失败'
+              message: '取消注销员工'
             });
           });
       } else {
-        this.$confirm("定启用该员工？启用后该员工回到启用前的职位中，并可获得原有系统操作权限", "启用员工", {
+        this.$confirm("确定启用该员工？启用后该员工回到启用前的职位中，并可获得原有系统操作权限", "启用员工", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
@@ -278,27 +283,19 @@ export default {
           .catch(() => {
             this.$message({
               type: 'info',
-              message: '启用员工失败'
+              message: '取消启用员工'
             });
           });
       }
-
-    },
-    departmentClick: function(tab, event) {
 
     },
     staffClick: function(tab, event) {
       console.log('职位', tab, event);
       this.currentPositionId = tab.name;
       this.isValid = '1',
-      this.getStaffsList(this.currentDepartmentId, tab.name, false)
+        this.getStaffsList(this.currentDepartmentId, tab.name, false)
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    }
+
 
   },
   created: function() {

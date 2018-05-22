@@ -17,6 +17,14 @@ const api = {
 
     }
   },
+  getPositionDetail: {
+    url: '/carrier/roles/:id/',
+    method: 'get',
+    desc: '获取职位详情',
+    param: {
+      id:'职位ID'
+    }
+  },
   addStaff: {
     url: '/carrier/users/',
     method: 'post',

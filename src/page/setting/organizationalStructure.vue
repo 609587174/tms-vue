@@ -1,7 +1,7 @@
 <!-- organizationalStructureList.vue -->
 <template>
   <div class="setting">
-    <div class="nav-tab">
+    <div class="nav-tab" v-if="false">
       <div class="tab-screen">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row>
@@ -45,18 +45,24 @@
           </div>
           <div class="nav-tab-setting nav-tab-mt">
             <div class="position-list table-list">
-              <el-table :data="positionTableData" stripe style="width: 100%" v-loading="positionLoading">
+              <el-table :data="positionTableData" stripe style="width: 100%" size="mini" v-loading="positionLoading">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                  <template slot-scope="scope">
+                    <div v-if="item.param==='role_name'">{{scope.row.role_name}}</div>
+                    <div v-if="item.param==='work_type'">
+                      <router-link class="text-blur" :to="{path: '/setting/powerManage', query: { departmentId: scope.row.department.id, positionId:scope.row.id}}">权限设置</router-link>
+                    </div>
+                  </template>
                 </el-table-column>
                 <el-table-column label="操作" align="center">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="organizationDialog('position','update',scope.row)">修改</el-button>
+                    <el-button type="primary" size="mini" @click="organizationDialog('position','update',scope.row)">编辑</el-button>
                     <el-button type="primary" size="mini" plain @click="deletePosition(scope.row.id)">删除</el-button>
                   </template>
                 </el-table-column>
               </el-table>
               <div class="page-list text-center">
-                <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!positionLoading && pageData.totalPage>1">
+                <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" @size-change="pageChange" v-if="!positionLoading && pageData.totalCount>10">
                 </el-pagination>
               </div>
             </div>
@@ -96,7 +102,8 @@ export default {
       }, //部门弹窗bialog
       pageData: {
         currentPage: 1,
-        totalPage: '',
+        totalCount: '',
+        pageSize: 10
       },
       active: '0',
       departmentActive: 'department',
@@ -113,12 +120,12 @@ export default {
         ]
       },
       thTableList: [{
-        title: '姓名',
+        title: '职位名称',
         param: 'role_name',
         width: ''
       }, {
         title: '职位权限',
-        param: 'work_type.verbose',
+        param: 'work_type',
         width: ''
       }],
       departmentTableData: [], //部门列表
@@ -196,6 +203,9 @@ export default {
     },
     // 获取职位列表
     getPositionList: function(departmentInfo, index) {
+      if (index != this.active) {
+        this.pageData.currentPage = 1;
+      }
       let postData = {
         page: this.pageData.currentPage,
         department: departmentInfo.id
@@ -206,7 +216,8 @@ export default {
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data.results;
           this.positionLoading = false;
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+          this.pageData.totalCount = results.data.data.count;
+          console.log('分页', this.pageData.totalCount)
         }
       }).catch((err) => {
         this.positionLoading = false;
@@ -214,7 +225,7 @@ export default {
       })
     },
     deletePosition: function(id) {
-      this.$confirm("确定删除该职位?", "提示", {
+      this.$confirm("确定删除该职位?", "删除职位", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
@@ -248,6 +259,12 @@ export default {
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    pageChange: function() {
+      setTimeout(() => {
+        console.log('currentPage', this.pageData.currentPage);
+        this.getPositionList(this.departmentRow, this.active);
+      })
     }
 
   },

@@ -4,21 +4,21 @@
 <template>
   <div class="capacity-list">
     <div class="capacity-list-header">
-      <el-form class="search-filters-form" label-width="80px" :model="seachListParam" status-icon ref="seachHeadCarListFrom" :rules="rules" label-position="left">
+      <el-form class="search-filters-form" label-width="80px" :model="filterParam" status-icon label-position="left">
         <el-row :gutter="0">
           <el-col :span="12">
-            <el-input placeholder="请输入内容" size="mini" v-model="filterParam.keyword" class="input-with-select">
+            <el-input placeholder="请输入内容" size="mini" v-model="filterParam.keyword" class="input-with-select" @keyup.native.13="filterSearch">
               <el-select v-model="filterParam.field" size="mini" slot="prepend" placeholder="请选择">
                 <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
               </el-select>
-              <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
             </el-input>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="完善状态:" size="mini">
-              <el-select v-model="filterParam.completeStatus" placeholder="请选择">
+              <el-select v-model="filterParam.complete_status" placeholder="请选择" @change="filterSearch">
                 <el-option
                   v-for="item in selectData.completeStatusOptions"
                   :key="item.value"
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="挂车绑定状态:" size="mini" label-width="100px">
-              <el-select v-model="filterParam.truckBindStatus" placeholder="请选择">
+              <el-select v-model="filterParam.truck_bind_status" placeholder="请选择" @change="filterSearch">
                 <el-option
                   v-for="item in selectData.truckBindStatusOptions"
                   :key="item.value"
@@ -42,7 +42,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="人员绑定状态:" size="mini" label-width="100px">
-              <el-select v-model="filterParam.staffBindStatus" placeholder="请选择">
+              <el-select v-model="filterParam.staff_bind_status" placeholder="请选择" @change="filterSearch">
                 <el-option
                   v-for="item in selectData.staffBindStatusOptions"
                   :key="item.value"
@@ -54,7 +54,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="分组:" size="mini" label-width="50px">
-              <el-select v-model="filterParam.group" placeholder="请选择">
+              <el-select v-model="filterParam.group" placeholder="请选择" @change="filterSearch">
                 <el-option
                   v-for="item in selectData.groupOptions"
                   :key="item.id"
@@ -68,9 +68,8 @@
       </el-form>
     </div>
     <div class="operation-btn text-right">
-      <el-button type="primary" @click="importList">导入</el-button>
+      <el-button type="primary" plain @click="importList">导入</el-button>
       <el-button type="primary" @click="exportList">导出</el-button>
-      <el-button type="primary" @click="groupListVisible = true">分组设置</el-button>
     </div>
     <div class="capacity-list-content">
       <div class="table-list">
@@ -84,8 +83,8 @@
               <el-button v-if="scope.row.truck_bind_status === '已绑定' && scope.row.staff_bind_status === '已绑定'" size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
               <el-dropdown trigger="click" @command="jumpPage">
                 <span class="el-dropdown-link">
-                      <i class="el-icon-arrow-down el-icon--right"></i>
-                    </span>
+                  <i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item v-if="scope.row.truck_bind_status === '未绑定' || scope.row.staff_bind_status === '未绑定'" :command="{operator:'show',rowData:scope.row}">查看</el-dropdown-item>
                   <el-dropdown-item :command="{operator:'operation',rowData:scope.row}">操作日志</el-dropdown-item>
@@ -96,11 +95,15 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+        <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
-      <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')">
-        <el-form :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
+      <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
+        <div class="notice-msg" v-show="truckNotice">
+          <i class="el-icon-warning"></i>
+          <div class="notice-msg">{{truckDialog.noticeMsg}}</div>
+        </div>
+        <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
             <el-autocomplete
@@ -110,7 +113,7 @@
             ></el-autocomplete>
           </el-form-item>
           <el-form-item label="随车电话">
-            <el-input v-model="truckDialog.phone" auto-complete="off"></el-input>
+            <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="分组">
             <el-select v-model="truckDialog.group" placeholder="请选择">
@@ -123,61 +126,51 @@
             </el-select>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
+        <div v-show="!truckNotice" slot="footer" class="dialog-footer">
           <el-button @click="bindTruckFormVisible = false">取 消</el-button>
           <el-button type="primary" @click="submitTruckForm">绑 定</el-button>
         </div>
-      </el-dialog>
-      <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="bindStaffFormVisible" append-to-body center @close="closeFormDialog('staffDialog')" @open="openFormDialog(staffDialog)">
-        <div class="el-dialog__body" v-if="staffNotice">
-          请注意
+        <div v-show="truckNotice" slot="footer" class="dialog-footer">
+          <el-button @click="backTruckForm">上一步</el-button>
+          <el-button type="primary" @click="forceSubmitTruckForm">确定</el-button>
         </div>
-          <el-form v-if="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
-            <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
-            <el-form-item label="主驾驶" prop="master_driver">
-              <el-autocomplete
-                v-model="staffDialog.master_driver"
-                :fetch-suggestions="driverListSearch"
-                @select="handleMasterDriverSelect"
-              ></el-autocomplete>
-            </el-form-item>
-            <el-form-item label="副驾驶">
-              <el-autocomplete
-                v-model="staffDialog.vice_driver"
-                :fetch-suggestions="driverListSearch"
-                @select="handleViceDriverSelect"
-              ></el-autocomplete>
-            </el-form-item>
-            <el-form-item label="押运员">
-              <el-autocomplete
-                v-model="staffDialog.escort_staff"
-                :fetch-suggestions="escortListSearch"
-                @select="handleEscortSelect"
-              ></el-autocomplete>
-            </el-form-item>
-          </el-form>
-          <div v-if="!staffNotice" slot="footer" class="dialog-footer">
-            <el-button @click="bindStaffFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="submitStaffForm">绑 定</el-button>
-          </div>
       </el-dialog>
-      <el-dialog custom-class="capacity-list-dialog" title="分组设置" :visible.sync="groupListVisible" append-to-body center width="400px" @open="backupGroupList" @close="resetGroupList">
-        <div class="content-container">
-          <div class="opt-field">
-            <el-button @click="addGroupItem">新增分组</el-button>
-          </div>
-          <div class="group-field">
-            <div class="group-item" v-for="(group, index) in groupList" :key="group.id">
-              <el-input v-model="group.group_name" placeholder="请输入">
-                <el-tooltip slot="suffix" class="item" effect="dark" content="保存设置后生效" placement="top">
-                  <i class="el-input__icon el-icon-delete" @click="deleteGroupItem(index)"></i>
-                </el-tooltip>
-              </el-input>
-            </div>
-          </div>
+      <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="bindStaffFormVisible" append-to-body center @close="closeFormDialog('staffDialog')" @open="openFormDialog('staffDialog')">
+        <div class="notice-msg" v-show="staffNotice">
+          <i class="el-icon-warning"></i>
+          <div class="notice-msg">{{staffDialog.noticeMsg}}</div>
         </div>
-        <div slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitStaffForm">保存设置</el-button>
+        <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
+          <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
+          <el-form-item label="主驾驶" prop="master_driver">
+            <el-autocomplete
+              v-model="staffDialog.master_driver"
+              :fetch-suggestions="driverListSearch"
+              @select="handleMasterDriverSelect"
+            ></el-autocomplete>
+          </el-form-item>
+          <el-form-item label="副驾驶">
+            <el-autocomplete
+              v-model="staffDialog.vice_driver"
+              :fetch-suggestions="driverListSearch"
+              @select="handleViceDriverSelect"
+            ></el-autocomplete>
+          </el-form-item>
+          <el-form-item label="押运员">
+            <el-autocomplete
+              v-model="staffDialog.escort_staff"
+              :fetch-suggestions="escortListSearch"
+              @select="handleEscortSelect"
+            ></el-autocomplete>
+          </el-form-item>
+        </el-form>
+        <div v-show="!staffNotice" slot="footer" class="dialog-footer">
+          <el-button @click="bindStaffFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="submitStaffForm">绑 定</el-button>
+        </div>
+        <div v-show="staffNotice" slot="footer" class="dialog-footer">
+          <el-button @click="backStaffForm">上一步</el-button>
+          <el-button type="primary" @click="forceSubmitStaffForm">确定</el-button>
         </div>
       </el-dialog>
     </div>
@@ -190,14 +183,7 @@ export default {
     return {
       groupListDialog: {},
       truckDialog: {},
-      staffDialog: {
-        // capacityId: '',
-        // truckNum: '',
-        // semiNum: '',
-        // master_driver: '',
-        // vice_driver: '',
-        // escort_staff: ''
-      },
+      staffDialog: {},
       truckNotice: false,
       staffNotice: false,
       truckRules: {
@@ -216,23 +202,13 @@ export default {
       bindTruckFormVisible: false,
       bindStaffFormVisible: false,
       filterParam: {
+        page: 1,
         keyword: "",
         field: "",
-        completeStatus: '',
-        truckBindStatus: '',
-        staffBindStatus: '',
-        group: ''
-      },
-      seachListParam: {
-        tractor_plate_number: '',
-        semitrailer_plate_number: '',
-        car_belong_phone: '',
         complete_status: '',
         truck_bind_status: '',
         staff_bind_status: '',
-        group: '',
-        driver_staff_name: '',
-        page: 1
+        group: ''
       },
       rules: {},
       activeName: "first",
@@ -307,38 +283,48 @@ export default {
         ],
         completeStatusOptions: [
           {
-            value: true,
-            label: "已完善"
+            value: '',
+            label: '全部'
           },
           {
             value: false,
             label: "未完善"
+          },
+          {
+            value: true,
+            label: "已完善"
           }
         ],
         truckBindStatusOptions: [
           {
-            value: true,
-            label: "未绑定"
+            value: '',
+            label: '全部'
           },
           {
             value: false,
+            label: "未绑定"
+          },
+          {
+            value: true,
             label: "已绑定"
           }
         ],
         staffBindStatusOptions: [
           {
-            value: true,
-            label: "未绑定"
+            value: '',
+            label: '全部'
           },
           {
             value: false,
+            label: "未绑定"
+          },
+          {
+            value: true,
             label: "已绑定"
           }
         ],
         groupOptions: []
       },
-      groupList: [],
-      groupListBak: [],
       semiList: [],
       driverList: [],
       escortList: [],
@@ -358,6 +344,10 @@ export default {
     getGroups: function() {
       this.$$http('getGroups').then(results => {
         if (results.data.code === 0) {
+          this.selectData.groupOptions = [{
+            id: '',
+            group_name: '全部'
+          }];
           this.groupList = results.data.data.results;
           results.data.data.results.map((n, i) => {
             this.selectData.groupOptions.push(n);
@@ -459,29 +449,34 @@ export default {
     },
     searchList: function() {
       var vm = this;
-      if (this.seachListParam[this.filterParam.field]) {
-        this.seachListParam[this.filterParam.field] = this.filterParam.keyword;
+      if (this.filterParam.field) {
+        this.filterParam[this.filterParam.field] = this.filterParam.keyword;
+      } else {
+        this.filterParam.tractor_plate_number = '';
+        this.filterParam.semitrailer_plate_number = '';
+        this.filterParam.car_belong_phone = '';
+        this.filterParam.driver_staff_name = '';
       }
-      this.$$http("searchCapacityList", this.seachListParam)
+      this.$$http("searchCapacityList", this.filterParam)
         .then(function(result) {
           var resultData;
           if (result.data.code == 0) {
             vm.tableData = result.data.data.results;
             vm.pageData.totalPage = Math.ceil(
-              result.data.count / vm.pageData.pageSize
+              result.data.data.count / vm.pageData.pageSize
             );
             vm.tableData.map((n, i) => {
               for(let key in n) {
                 // mock
-                if (key === 'truck_bind_status') {
-                  n[key] = true
-                }
-                if (key === 'semitrailer') {
-                  n[key] = {
-                    plate_number:'川D1234挂',
-                    id: 'c0be58e1-0902-483a-a62f-cceba993a5ab'
-                  };
-                }
+                // if (key === 'truck_bind_status') {
+                //   n[key] = true
+                // }
+                // if (key === 'semitrailer') {
+                //   n[key] = {
+                //     plate_number:'川D1234挂',
+                //     id: 'c0be58e1-0902-483a-a62f-cceba993a5ab'
+                //   };
+                // }
                 // end mock
                 if (key === 'truck_bind_status' || key === 'staff_bind_status') {
                   n[key] = n[key] ? '已绑定' : '未绑定';
@@ -498,20 +493,26 @@ export default {
           vm.pageLoading = false;
         });
     },
+    filterSearch: function () {
+      this.filterParam.page = 1;
+      this.searchList();
+    },
     jumpPage: function(scope) {
       if (scope.operator == "edit") {
       } else if (scope.operator == "show") {
         this.$router.push({
           path:
-            "/transportPowerManage/carManage/showCarHeadManage?headId=" +
+            "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
             scope.rowData.id
         });
       } else if (scope.operator == "operation") {
       }
     },
     pageChange: function() {
-      this.seachListParam.page = this.pageData.currentPage;
-      this.searchList();
+      setTimeout(() => {
+        this.filterParam.page = this.pageData.currentPage;
+        this.searchList();
+      });
     },
     bindTruck: function (row) {
       this.bindTruckFormVisible = true;
@@ -519,7 +520,7 @@ export default {
         capacityId: row.rowData.id,
         truckNum: row.rowData.tractor.plate_number,
         semitrailer: '',
-        phone: '',
+        car_belong_phone: '',
         group: ''
       }
     },
@@ -529,20 +530,20 @@ export default {
         capacityId: row.rowData.id,
         truckNum: row.rowData.tractor.plate_number,
         semiNum: row.rowData.semitrailer.plate_number,
-        master_driver: row.rowData.master_driver ? row.rowData.master_driver.name : '',
-        vice_driver: row.rowData.vice_driver ? row.rowData.vice_driver.name : '',
-        escort_staff: row.rowData.escort_staff ? row.rowData.escort_staff.name : ''
+        master_driver: '',
+        vice_driver: '',
+        escort_staff: ''
       }
     },
     openFormDialog: function (dialog) {
-      // this[dialog] = {};
+      // setTimeout(() => {
+      //   this.$refs[dialog].resetFields();
+      // }, 500);
     },
     closeFormDialog: function (dialog) {
       this.truckNotice = false;
       this.staffNotice = false;
       this.$refs[dialog].resetFields();
-      this.$refs[dialog].clearValidate();
-      this[dialog] = {};
     },
     submitTruckForm: function () {
       this.$refs.truckDialog.validate((isValid, unvailidField) => {
@@ -550,11 +551,23 @@ export default {
           let send = {
             id: this.truckDialog.capacityId,
             semitrailer: this.truckDialog.semiId,
-            phone: this.truckDialog.phone,
+            car_belong_phone: this.truckDialog.car_belong_phone,
             group: this.truckDialog.group
           }
           this.$$http('bindTruck', send).then((results) => {
+            if(results.data.code === 0) {
+              this.$message({
+                message: '绑定成功',
+                type: 'success'
+              });
+              this.bindTruckFormVisible = false;
+              this.searchList();
+            } else if (results.data.code === 600) {
+              this.truckNotice = true;
+              this.truckDialog.noticeMsg = results.data.msg.split(',')[1];
+            }
           }).catch((err) => {
+            console.log(err);
           });
         }
       });
@@ -570,38 +583,69 @@ export default {
           }
           this.$$http('bindStaff', send).then((results) => {
             if(results.data.code === 0) {
+              this.$message({
+                message: '绑定成功',
+                type: 'success'
+              });
               this.bindStaffFormVisible = false;
+              this.searchList();
             } else if (results.data.code === 600) {
               this.staffNotice = true;
+              this.staffDialog.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
+            console.log(err);
           });
         }
       });
     },
-    backupGroupList: function () {
-      this.groupListBak = JSON.parse(JSON.stringify(this.groupList));
-    },
-    resetGroupList: function () {
-      setTimeout(() => {
-        this.groupList = JSON.parse(JSON.stringify(this.groupListBak));
-      }, 1000);
-    },
-    addGroupItem: function () {
-      // if(this.groupList.length === 10) {
-      //   this.$message({
-      //     message: '最多添加10个分组',
-      //     type: 'warning'
-      //   });
-      // } else {
-
-      // }
-      this.groupList.unshift({
-        group_name: ''
+    forceSubmitTruckForm: function () {
+      let send = {
+        id: this.truckDialog.capacityId,
+        semitrailer: this.truckDialog.semiId,
+        car_belong_phone: this.truckDialog.car_belong_phone,
+        group: this.truckDialog.group
+      }
+      this.$$http('forceBindTruck', send).then((results) => {
+        if(results.data.code === 0) {
+          this.$message({
+            message: '绑定成功',
+            type: 'success'
+          });
+          this.bindTruckFormVisible = false;
+          this.truckNotice = false;
+          this.searchList();
+        }
+      }).catch((err) => {
+        console.log(err);
       });
     },
-    deleteGroupItem: function (itemIndex) {
-     this.groupList.splice(itemIndex, 1);
+    forceSubmitStaffForm: function () {
+      let send = {
+        id: this.staffDialog.capacityId,
+        master_driver: this.staffDialog.master_driver_id,
+        vice_driver: this.staffDialog.vice_driver_id,
+        escort_staff: this.staffDialog.escort_staff_id
+      }
+      this.$$http('forceBindStaff', send).then((results) => {
+        if(results.data.code === 0) {
+          this.$message({
+            message: '绑定成功',
+            type: 'success'
+          });
+          this.bindStaffFormVisible = false;
+          this.staffNotice = false;
+          this.searchList();
+        }
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+    backTruckForm: function () {
+      this.truckNotice = false;
+    },
+    backStaffForm: function () {
+      this.staffNotice = false;
     }
   },
   mounted: function() {

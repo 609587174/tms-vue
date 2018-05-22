@@ -3,13 +3,6 @@
     <template>
       <div>
         <keep-alive>
-          <capacity-list></capacity-list>
-        </keep-alive>
-      </div>
-    </template>
-    <template>
-      <div>
-        <keep-alive>
           <router-view></router-view>
         </keep-alive>
       </div>
@@ -17,11 +10,11 @@
   </div>
 </template>
 <script>
-import CapacityList from '../../../components/transportPowerManage/capacityManage/capacityList';
+// import CapacityList from '../../../components/transportPowerManage/capacityManage/capacityList';
 export default {
   name: 'capacityManage',
   components: {
-    CapacityList
+    // CapacityList
   },
   data() {
     return {}

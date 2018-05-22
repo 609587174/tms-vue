@@ -302,6 +302,7 @@ export default [{
     children: [{
       path: 'capacityManage',
       name: 'capacityManage',
+      redirect: '/transportPowerManage/capacityManage/capacityList',
       meta: {
         isVerificationL: true,
         title: '运力管理',
@@ -315,6 +316,14 @@ export default [{
           title: '运力列表',
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityList'], resolve)
+      },{
+        path: 'capacityDetail',
+        name: 'capacityDetail',
+        meta: {
+          isVerificationL: false,
+          title: '运力详情',
+        },
+        component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
       }]
     }, {
       path: 'carManage',

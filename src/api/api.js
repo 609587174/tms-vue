@@ -759,6 +759,14 @@ const api = {
 
     }
   },
+  getMenusList: {
+    url: '/permissions/menus/user_menus/',
+    method: 'get',
+    desc: '获取当前登录用户可访问菜单',
+    param: {
+
+    }
+  },
 }
 
 export default api;

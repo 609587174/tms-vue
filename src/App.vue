@@ -7,10 +7,11 @@
 @import './assets/css/tableStyle.less';
 @import './assets/css/style.css';
 @import './assets/css/detailStyle.less';
-@import './assets/css/settingStyle.less';//个人设置
-@import './assets/css/dialogStyle.less';//弹窗样式
+@import './assets/css/settingStyle.less'; //个人设置
+@import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/capacityList';
+
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>
@@ -52,6 +53,7 @@ export default {
         array.map(key => {
           if (key.menu_permission_name) {
             let hashKey = ((base ? base + '/' : '') + key.menu_permission_name).replace(/^\//, '');
+            console.log('hashKey', hashKey);
             hashMenus['/' + hashKey] = true;
             hasOperationJur['/' + hashKey] = key.operationJur;
             if (Array.isArray(key.sms)) {
@@ -60,6 +62,7 @@ export default {
           }
         });
       };
+      console.log('hashMenus', hashMenus);
       setMenu2Hash(userInfo);
       this.$root.hashMenus = hashMenus;
       let findLocalRoute = function(array, base) {
@@ -129,9 +132,91 @@ export default {
       }]));
     },
     loginDirect: function(newPath) {
-      this.signin(() => {
-        this.$router.replace({ path: newPath || '/' });
-      });
+      // this.signin(() => {
+      //   this.$router.replace({ path: newPath || '/' });
+      // });
+      this.pathIn(true);
+    },
+    isHasTokenAndMenu: function(menuList, token) {
+      if (!menuList.length || !token) {
+        this.$message.error('验证信息缺失，请重新登录');
+        this.$router.replace({ path: '/login' });
+      }
+    },
+    addRoutes: function(menuList) {
+      let originPath = that.pbFunc.deepcopy(userPath);
+      if (menuList && menuList.length) {
+        for (let i in menuList) {
+          if (menuList[i].menu_key === 'SETTINGS') {
+
+          }
+        }
+      }
+    },
+    pathIn: function(isGoFirstPath) {
+      let routesList = [];
+      let menuList = this.pbFunc.getLocalData('menuList', true);
+      let token = this.pbFunc.getLocalData('token', true);
+      console.log('this.$router', this.$route.path, menuList);
+      this.isHasTokenAndMenu(menuList, token);
+      routesList = this.getRoutesList(menuList);
+
+      let allowedRouter = this.getRoutes(routesList);
+      console.log('allowedRouter', allowedRouter);
+      this.extendRoutes(allowedRouter);
+      this.$store.state.common.menuData = allowedRouter;
+      this.$store.state.common.userData = { name: "测试名称" };
+      console.log('this.$router', allowedRouter[0]);
+      if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
+
+    },
+    getRoutesList: function(menuList) {
+      let staticDataCopy = this.pbFunc.deepcopy(staticData.staticData().data);
+      console.log('staticDataCopy', staticDataCopy);
+      let newRoute = [];
+      if (menuList && menuList.length) {
+        for (let i in staticDataCopy) {
+          for (let j in menuList) {
+
+            if (menuList[j].menu_key === staticDataCopy[i].menu_key) { //判断是否有一级菜单
+              if (menuList[j].second_menus && menuList[j].second_menus.length) {
+                let routesHasChild = {
+                  menu_permission_name: staticDataCopy[i].menu_permission_name,
+                  menu_key: staticDataCopy[i].menu_key,
+                  name: staticDataCopy[i].name,
+                  sms: []
+                }
+                for (let m in menuList[j].second_menus) { //寻找二级菜单
+
+                  for (let n in staticDataCopy[i].sms) {
+                    //console.log('xxxxx')
+                    if (menuList[j].second_menus[m].menu_key === staticDataCopy[i].sms[n].menu_key) {
+                      routesHasChild.sms.push({
+                        menu_permission_name: staticDataCopy[i].sms[n].menu_permission_name,
+                        menu_key: staticDataCopy[i].sms[n].menu_key,
+                        name: staticDataCopy[i].sms[n].name,
+                      })
+                    }
+                  }
+                }
+                newRoute.push(routesHasChild);
+              } else {
+                newRoute.push({
+                  menu_permission_name: staticDataCopy[i].menu_permission_name,
+                  menu_key: staticDataCopy[i].menu_key,
+                  name: staticDataCopy[i].name,
+                });
+              }
+            }
+
+          }
+        }
+      }
+      console.log('newRoute', newRoute);
+      return newRoute;
+
+
+
     },
     logoutDirect: function() {
       //清除session
@@ -159,7 +244,7 @@ export default {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;
     });
-    vm.signin();
+    vm.pathIn();
   }
 };
 

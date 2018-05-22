@@ -103,6 +103,7 @@ export default {
       pageLoading: false,
       fluidAddress: '',
       siteAddress: '',
+      searchFluidLoading: false,
       saveAndReviewBtn: {
         isLoading: false,
         btnText: '保存并退出',
@@ -142,13 +143,31 @@ export default {
         page: 1,
         page_size: 100,
       }
+      this.searchFluidLoading = true;
       this.$$http('getFulid', postData).then((results) => {
         console.log('results', results);
+        this.searchFluidLoading = false;
         if (results.data && results.data.code == 0) {
           this.fuildList = results.data.data;
         }
       }).catch((err) => {
-
+        this.searchFluidLoading = false;
+      })
+    },
+    searchFluid: function() {
+      let postData = {
+        page: 1,
+        page_size: 100,
+      }
+      this.searchFluidLoading = true;
+      this.$$http('getFulid', postData).then((results) => {
+        console.log('results', results);
+        this.searchFluidLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.fuildList = results.data.data;
+        }
+      }).catch((err) => {
+        this.searchFluidLoading = false;
       })
     },
   },

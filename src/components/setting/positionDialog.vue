@@ -1,14 +1,14 @@
 <!-- positionDialog.vue -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="positionDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="positionDialog.isShow"  width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="positionRules" status-icon ref="positionRules">
           <el-form-item label="部门名称：">
             <div>{{departmentRow.group_name}}</div>
           </el-form-item>
           <el-form-item label="职位名称：" prop="role_name">
-            <el-input placeholder="请输入" v-model="positionRules.role_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+            <el-input placeholder="请输入" :autofocus="true" v-model="positionRules.role_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
         </el-form>
@@ -51,7 +51,7 @@ export default {
       rules: {
         role_name: [
           { required: true, message: '请输入职位名称', trigger: 'blur' },
-          // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
+          { min: 1, max: 20, message: '职位名称字数为1-20字', trigger: 'blur' }
         ],
       },
       submitBtn: {
@@ -98,7 +98,7 @@ export default {
             this.submitBtn.isDisabled = false;
             if (results.data && results.data.code == 0) {
               this.$message({
-                message: this.positionDialog.type === 'add' ? '新增职位成功' : '修改职位成功',
+                message: this.positionDialog.type === 'add' ? '新增职位成功！请设置该职位操作的权限' : '编辑职位信息成功！',
                 type: 'success'
               });
               this.$emit('closeDialogBtn', this.type, true);
@@ -108,7 +108,7 @@ export default {
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
             this.submitBtn.isDisabled = false;
-            this.$message.error(this.positionDialog.type === 'add' ? '新增职位失败' : '修改职位失败');
+            this.$message.error(this.positionDialog.type === 'add' ? '新增职位失败' : '编辑职位信息失败');
           })
 
         } else {
@@ -124,7 +124,7 @@ export default {
         console.log('部门', this.departmentRow)
         if (val.isShow && val.type === 'update') {
           this.positionRules.role_name = this.positionRow.role_name;
-          this.title = '修改职位';
+          this.title = '编辑职位';
         } else {
           this.positionRules.role_name = '';
           this.title = '新增职位';

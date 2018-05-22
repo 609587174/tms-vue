@@ -1,7 +1,7 @@
 <!-- departmentDialog -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="departmentDialog.isShow" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="departmentDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="departmentRules" status-icon ref="departmentRules">
           <el-form-item label="部门名称：" prop="group_name">
@@ -43,6 +43,7 @@ export default {
       rules: {
         group_name: [
           { required: true, message: '请输入部门名称', trigger: 'blur' },
+          { min: 1, max: 20, message: '部门名称字数为1-20字', trigger: 'blur' }
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
       },
@@ -88,7 +89,7 @@ export default {
             this.submitBtn.isDisabled = false;
             if (results.data && results.data.code == 0) {
               this.$message({
-                message: this.departmentDialog.type === 'add' ? '新增部门成功' : '修改部门成功',
+                message: this.departmentDialog.type === 'add' ? '新增部门成功！请在该部门下添加职位' : '编辑部门信息成功！',
                 type: 'success'
               });
               this.$emit('closeDialogBtn', this.type, true);
@@ -98,7 +99,7 @@ export default {
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
             this.submitBtn.isDisabled = false;
-            this.$message.error(this.departmentDialog.type === 'add' ? '新增部门失败' : '修改部门失败');
+            this.$message.error(this.departmentDialog.type === 'add' ? '新增部门失败' : '编辑部门信息失败');
           })
 
         } else {
@@ -114,7 +115,7 @@ export default {
         if (val.isShow && val.type === 'update') {
 
           this.departmentRules.group_name = this.departmentRow.group_name;
-          this.title = '修改部门';
+          this.title = '编辑部门';
         } else {
           this.title = '新增部门';
           this.departmentRules.group_name = '';

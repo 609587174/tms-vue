@@ -81,7 +81,7 @@ export default {
     };
     const checkImgCode = (rule, value, callback) => {
       if ((value.toUpperCase()) != this.verifyCodeData.verify_code) {
-        callback(new Error('验证码错误'));
+        callback(new Error('验证码错误，请重新输入'));
       } else {
         callback();
       }
@@ -103,7 +103,7 @@ export default {
       rules: {
         nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { pattern: /([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/gi, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/,message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
@@ -111,7 +111,7 @@ export default {
         ],
         password: [
           { required: true, message: '请设置登录密码', trigger: 'blur' },
-          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）', trigger: 'blur' },
+          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
           { validator: isSpace, trigger: 'blur' },
         ],
         confirm_password: [
@@ -184,7 +184,7 @@ export default {
               });
               setTimeout(() => {
                 this.linkEnd()
-                this.$router.push({ path: "registerEnd", query: { user_id: results.data.data.id } });
+                this.$router.push({ path: "registerCompany", query: { user_id: results.data.data.id } });
               }, 1000)
             }
 

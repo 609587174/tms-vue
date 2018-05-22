@@ -8,7 +8,7 @@
     <div class="user-page" @keyup.enter="login">
       <div v-if="isResetSuccess">
         <div class="user-page-title">找回密码</div>
-        <el-form class="user-form" label-width="95px" :rules="rules" :model="ruleForm" ref="ruleForm" status-icon>
+        <el-form class="user-form" label-width="95px" :rules="resetRules" :model="ruleForm" ref="ruleForm" status-icon>
           <el-form-item label="手机号" prop="phone">
             <el-input :autofocus="true" placeholder="请输入注册手机号" v-model.trim="ruleForm.phone" name='email'>
             </el-input>
@@ -33,10 +33,10 @@
           </el-form-item>
           <div class="user-page-btn">
             <el-form-item>
-              <el-button v-on:click="resetPassword" type="success" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+              <el-button @click="resetPassword" type="success" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
             </el-form-item>
             </el-form-item>
-            <el-form-item>已有账号，<span v-on:click="toLoginPage" class="text-blue cursor-pointer">请登录</span></el-form-item>
+            <el-form-item>已有账号，请<span v-on:click="toLoginPage" class="text-blue cursor-pointer">登录</span></el-form-item>
           </div>
           <div class="user-page-img"><img class="img-left" src="../assets/img/user_6.png"></div>
         </el-form>
@@ -72,10 +72,10 @@ export default {
       var lv = 0;
       if (value.match(/(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/)) {
         callback();
-      }else if(value.indexOf(" ") !=-1) {
+      } else if (value.indexOf(" ") != -1) {
         callback(new Error('密码不能包含空格'));
       } else {
-        callback(new Error("密码长度6-16位，支持数字、字母、字符（除空格）"));
+        callback(new Error("密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种"));
       }
     };
     var validateNum = (rule, value, callback) => {
@@ -83,17 +83,17 @@ export default {
         callback(new Error("验证码不能为空"));
       } else {
         if (value != this.vaPhoneNum) {
-          callback(new Error("验证码不正确"));
+          callback(new Error("验证码错误，请重新输入"));
         }
       }
     };
     var validateConfirmPass = (rule, value, callback) => {
       if (value === this.ruleForm.password) {
         callback();
-      }else if(value.indexOf(" ") !=-1) {
+      } else if (value.indexOf(" ") != -1) {
         callback(new Error('密码不能包含空格'));
       } else {
-        callback(new Error("两次输入密码不相同"));
+        callback(new Error("两次输入的密码不一致，请重新输入"));
       }
     };
     return {
@@ -106,17 +106,17 @@ export default {
       loginTime: 5,
       times: 60,
       isResetSuccess: true,
-      rules: {
+      resetRules: {
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^1\d{10}$/, message: '手机号码不正确', trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
+          { required: true, message: '请设置新登录密码', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
         ],
         confirm_password: [
-          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { required: true, message: '请再次输入你的密码', trigger: 'blur' },
           { validator: validateConfirmPass, trigger: 'blur' }
         ],
         message_verify_code: [
@@ -175,7 +175,7 @@ export default {
     },
     resetPassword() {
       this.submitBtn.isDisabled = true;
-      this.$refs['rules'].validate((valid) => {
+      this.$refs['ruleForm'].validate((valid) => {
         if (valid) {
           this.submitBtn.isLoading = true;
           this.submitBtn.btnText = this.resetbBtnText();
@@ -227,10 +227,12 @@ export default {
         this.msgBtn.isLoading = true;
         this.msgBtn.isDisabled = true;
         this.msgBtn.getCodeText = this.msgBtnText();
-        this.$$http('messageVerifyCode', { phone: this.ruleForm.phone }).then((results) => {
+        this.$$http('messageVerifyCode', {
+          phone: this.ruleForm.phone,
+          method_type: 'reset_password'
+        }).then((results) => {
           if (results.data && results.data.code == 0) {
             setTimeout(() => {
-              this.msgBtn.isLoading = false;
               this.msgBtn.getCodeText = times + 's';
               this.$message({
                 message: '短信发送成功，请查看',
@@ -240,8 +242,12 @@ export default {
             }, 1000)
 
           }
+          this.msgBtn.isLoading = false;
+          this.msgBtn.isDisabled = false;
+
         }).catch((err) => {
-          // this.pageLoading = false;
+          this.msgBtn.isLoading = false;
+          this.msgBtn.isDisabled = false;
         })
       } else {
         this.$message.error('请输入手机号码');

@@ -6,9 +6,9 @@
   <div>
     <public-header></public-header>
     <div class="user-page" @keyup.enter="onSubmit">
-      <div v-if="isRegisterSuccess">
-        <div class="user-page-title">注册</div>
-        <el-form :model="registerForm" ref="registerForm" status-icon :rules="rules" label-width="120px" class="user-form">
+      <div>
+        <div class="user-page-title">企业信息</div>
+        <el-form :model="registerForm" ref="registerForm" :rules="rules" label-width="120px" class="user-form">
           <el-form-item label="企业名称：" prop="name">
             <el-input v-model.trim="registerForm.name" type="text" placeholder="请输入企业名称"></el-input>
           </el-form-item>
@@ -60,16 +60,6 @@
           <div class="user-page-img"><img src="../assets/img/user_5.png"></div>
         </el-form>
       </div>
-      <div v-if="!isRegisterSuccess">
-        <div class="user-page-title">审核中</div>
-        <div class="user-register-notice">您的注册信息已提交，请耐心等待系统审核，谢谢！
-          <br> 审核后会给您的注册手机号发短信通知
-          <br> 审核通过后您可通过用户名/手机号登录系统
-          <br> 如有疑问，请联系客服QQ：
-          <span class="text-blue">1373724944</span>
-        </div>
-        <div class="user-page-img text-center"><img src="../assets/img/user_4.png"></div>
-      </div>
       <user-protocol :dialog-user-protocol="dialogUserProtocol" v-on:agree="agreeProtocol"></user-protocol>
     </div>
   </div>
@@ -92,7 +82,6 @@ export default {
         city: '',
         area: '',
       },
-      isRegisterSuccess: true,
       registerForm: {
         user_id: '',
         name: '',
@@ -106,7 +95,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入企业名称', trigger: 'blur' },
-          { pattern: /^[\u4E00-\u9FA5A-Za-z]{4,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
+          { pattern: /^[\u4E00-\u9FA5A-Za-z]{4,30}$/, message: '企业名称为中文、英文，不能输入数字、标点符号，4-30个字符', trigger: 'blur' },
         ],
         contact_name: [
           { required: true, message: '请输入联系人', trigger: 'blur' },
@@ -114,7 +103,7 @@ export default {
         ],
         contact_phone: [
           { required: true, message: '请输入联系电话', trigger: 'blur' },
-          { pattern: /^\d{3,4}-?\d{7,8}$/, message: '联系电话格式不正确，请重新输入', trigger: 'blur' }
+          { pattern: /(^(\(0\d{2}\)|0\d{2}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' } ///^\d{3,4}-?\d{7,8}$/=====/^((0\d{2,3}-\d{7,8})|(1\d{10}$))$/
         ],
         area: [
           { required: true, message: '请选择区域', trigger: 'blur' }
@@ -178,8 +167,7 @@ export default {
                   type: 'success'
                 });
                 setTimeout(() => {
-
-                  this.isRegisterSuccess = false;
+                  this.$router.push({ path: "registerSuccess"});
                 }, 3000)
 
               }

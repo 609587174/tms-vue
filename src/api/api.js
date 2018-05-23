@@ -559,10 +559,10 @@ const api = {
 
     }
   },
-  getOrderDetail: {
-    url: '/api/v1/waybills/:id/',
+  getPickOrderDetail: {
+    url: '/order/delivery-order/:id/',
     method: 'get',
-    desc: '运单详情',
+    desc: '托运单详情',
     param: {
 
     }
@@ -638,6 +638,42 @@ const api = {
     url: '/order/delivery-order/',
     method: 'get',
     desc: '获取提货单列表',
+    param: {
+
+
+    }
+  },
+  searchConOrderList: {
+    url: '/order/waybill/',
+    method: 'get',
+    desc: '获取运单列表',
+    param: {
+
+
+    }
+  },
+  getTransPowerInfo: {
+    url: '/truck/tractor_semitrailers/:id/',
+    method: 'get',
+    desc: '获取运力详情',
+    param: {
+
+
+    }
+  },
+  searchNoUse: {
+    url: '/order/delivery-order/check_capacity/',
+    method: 'get',
+    desc: '获取3天没用的运力id',
+    param: {
+
+
+    }
+  },
+  searchDeliveryOrder: {
+    url: '/order/delivery-order/list_capacity/',
+    method: 'get',
+    desc: '获取托运单数据',
     param: {
 
 

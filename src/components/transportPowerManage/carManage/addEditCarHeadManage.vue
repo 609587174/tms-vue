@@ -370,7 +370,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="保险金额:" prop="examineDrivingDate" label-width="120px">
+                    <el-form-item label="保险金额:" prop="insuranceAmout" label-width="120px">
                       <el-input placeholder="请输入" type="text" v-model="item.amount"></el-input>
                     </el-form-item>
                   </el-col>
@@ -422,14 +422,14 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if ((value + "").match(/^[0-9]+$/) || value == '' || value == null) {
+      if ((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null) {
         callback();
       } else {
         callback(new Error("只能是数字"));
       }
     };
     var dangerVa = (rule, value, callback) => {
-      if (value.match(/^[0-9]{8}[/-]{1}[0-9]{2}$/)) {
+      if (value.match(/^[0-9]{8}[/-]{1}[0-9]{2}$/) || value == "") {
         callback();
       } else {
         callback(new Error("危险品灯号由10个数值组成，如37060111-16"));
@@ -450,7 +450,7 @@ export default {
       headCarFormStep1: {
         plate_number: '', //车牌号
         attributes: 'SELF_SUPPORT', //车辆归属
-        carrier: { name: '胜通', id: '' },
+        carrier: this.$store.state.common.users.carrier,
         vin_number: '',
         engine_number: '',
         vehicle_type: 'HEAVE_TOWING_SEMITRAILER', //
@@ -538,6 +538,9 @@ export default {
         height: [
           { validator: onlyNum, trigger: 'blur' }
         ],
+        insuranceAmout: [
+          { validator: onlyNum, trigger: 'blur' }
+        ]
       }
     }
   },

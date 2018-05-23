@@ -359,8 +359,7 @@
                 </el-col>
               </el-row>
             </div>
-            <el-form class="addheaduserform detail-form training-box
-" v-for="(item,key) in userForm.carrier_driver_trainings" :key="key" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
+            <el-form class="addheaduserform detail-form training-box" v-for="(item,key) in userForm.carrier_driver_trainings" :key="key" label-width="120px" ref="addClientFormSetpSix" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="12" :offset="6" class="text-center">
                 </el-col>

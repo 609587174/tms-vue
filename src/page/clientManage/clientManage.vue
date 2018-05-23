@@ -1,11 +1,11 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <!-- <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="自有客户" name="first">
       </el-tab-pane>
       <el-tab-pane label="平台客户" name="tow">
       </el-tab-pane>
-    </el-tabs>
+    </el-tabs> -->
     <template>
       <router-view></router-view>
     </template>

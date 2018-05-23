@@ -430,7 +430,6 @@ export default [{
   }, {
     path: 'clientManage',
     name: 'clientManage',
-    redirect: '/clientManage/privateClientManage',
     meta: {
       isVerificationL: false,
       title: '客户管理',
@@ -442,8 +441,7 @@ export default [{
         name: 'privateClientManage',
         meta: {
           isVerificationL: false,
-          title: '自有客户管理',
-          notRenderMenu: true,
+          title: '客户管理',
         },
         component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
       }, {

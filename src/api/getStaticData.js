@@ -14,7 +14,7 @@ const staticData = function() {
         menu_key:'xxxx',
         name: '概览',
       },{
-        menu_permission_name: 'Orders',
+        menu_permission_name: 'orders',
         menu_key:'ORDER',
         name: '订单',
         sms: [{

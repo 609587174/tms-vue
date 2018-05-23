@@ -324,15 +324,15 @@ export default [{
           title: '运力详情',
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
-        }, {
-          path: 'edit',
-          name: 'edit',
-          meta: {
-            isVerificationL: false,
-            title: '编辑绑定信息',
-          },
-          component: (resolve) => require(['../components/transportPowerManage/capacityManage/editCapacity'], resolve)
-        }]
+      }, {
+        path: 'editCapacity',
+        name: 'editCapacity',
+        meta: {
+          isVerificationL: false,
+          title: '编辑绑定信息',
+        },
+        component: (resolve) => require(['../components/transportPowerManage/capacityManage/editCapacity'], resolve)
+      }]
     }, {
       path: 'carManage',
       name: 'carManage',

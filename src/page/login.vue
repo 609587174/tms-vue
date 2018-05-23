@@ -1,5 +1,8 @@
 <style scoped lang="less">
-
+  .des{
+    width: 300px;
+    margin-bottom: 15px;
+  }
 
 </style>
 <template>
@@ -8,7 +11,7 @@
     <div class="user-page" @keyup.enter="login">
       <div class="user-page-title">登录</div>
       <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
-        <p class="des">请您<a class="cursor-pointer text-blue" v-on:click="toLink('company')">填写企业信息</a>并提交注册审核！</p>
+        <div class="des" v-if="isLogin">请您<a class="cursor-pointer text-blue" v-on:click="toLink('company')">填写企业信息</a>并提交注册审核！</div>
         <el-form-item label="用户名：" prop="username">
           <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
           </el-input>
@@ -77,6 +80,8 @@ export default {
         verify_key: '',
         verify_code: ''
       },
+      isLogin:false,
+      userId:'',
       verifyCodeData: {},
       rules: {
         username: [
@@ -140,6 +145,10 @@ export default {
               vm.pbFunc.setLocalData('token', results.data.data.ticket, true);
               this.getUser();
               vm.$emit('login', vm.$router.currentRoute.query.from);
+            }else if(results.data && results.data.code === 600){
+              this.isLogin = true;
+              this.userId = results.data.data.id;
+
             }
           }).catch((err) => {
             this.$message.error('登录失败');
@@ -157,7 +166,7 @@ export default {
       } else if (type === 'reset') {
         this.$router.push({ path: '/forgetPassword' });
       }else if(type === 'company'){
-        this.$router.push({ path: "registerCompany", query: { user_id: results.data.data.id } });
+        this.$router.push({ path: "registerCompany", query: { user_id: this.userId } });
       }
     },
     callbackerr(cuowu) {

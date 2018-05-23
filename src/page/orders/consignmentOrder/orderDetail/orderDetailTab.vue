@@ -5,7 +5,7 @@
 
 </style>
 <template>
-  <div>
+  <div class="detail-main">
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="订单详情" name="first">

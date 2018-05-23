@@ -123,7 +123,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-show="userData.work_type.key === 'DRIVER' || userData.work_type.key === 'DRIVER_ESCORT'">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -169,7 +169,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-show="userData.work_type.key === 'DRIVER' || userData.work_type.key === 'DRIVER_ESCORT'">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -217,7 +217,7 @@
           </el-row>
           <!-- </el-form> -->
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-show="userData.work_type.key === 'ESCORT' || userData.work_type.key === 'DRIVER_ESCORT'">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -386,6 +386,7 @@
             </el-row>
             <!-- </el-form> -->
           </div>
+          <div v-show="!userData.carrier_driver_trainings.length" class="text-center">无数据</div>
         </div>
       </el-main>
     </el-container>
@@ -407,6 +408,7 @@ export default {
         staff_type: {},
         on_job_status: {},
         gender: {},
+        carrier_driver_trainings: [],
         address: {
           province: '',
           city: '',

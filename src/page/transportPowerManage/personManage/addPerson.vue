@@ -1,32 +1,11 @@
-<style scoped lang="less">
-#addClientForm {
-  border: 1px solid rgb(222, 222, 222);
-}
-
-.alone-insurance-form {
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  padding: 30px 30px 0 20px;
-}
-
-.insurance-form-head {
-  background-color: #f1f1f1;
-  height: 41px;
-  line-height: 41px;
-}
-
-.training-box {
-  border-bottom: 1px solid rgb(222, 222, 222);
-}
-
-</style>
 <template>
   <div id="addPerson" class="detail-main">
     <el-container v-loading="pageLoading">
       <el-header style="margin-top:15px;">
         <el-row>
-          <el-col :span="1" class="left-arrow-d" @click="goDetalis()"><i class="icon-down-arrow"></i></el-col>
-          <el-col :span="22">
+          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          </el-col>
+          <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
@@ -430,6 +409,9 @@ export default {
     employmentTypeSelect: function() {
       return this.$store.state.common.selectData.carrier_driver_work_type;
     },
+    returnPage: function() {
+      return this.$route.query.id ? '详情页' : '列表页';
+    },
     staffsSelect: function() {
       return this.$store.state.common.selectData.carrier_driver_staff_type;
     },
@@ -449,18 +431,13 @@ export default {
   data() {
     return {
       pageLoading: false,
-      pickerOptions0: {
-        disabledDate(time) {
-          return time.getTime() > Date.now() - 8.64e6
-        }
-      },
       userForm: {
         /* 基础信息 */
         name: '', //姓名
         work_type: '', //从业类型
         mobile_phone: '', //手机号码
         staff_type: '', //人员所属
-        id_number: '511621199002074174', //身份证号码
+        id_number: '', //身份证号码
         on_job_status: 'ON_JOB', //在职状态
         gender: 'MALE', //性别
         birthday: '', //出生日期
@@ -513,14 +490,17 @@ export default {
           { required: true, message: '请输入姓名', trigger: 'blur' },
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{2,10})$/gi, message: '姓名为2～10个汉字', trigger: 'blur' }
         ],
+        work_type: [
+          { required: true, message: '选择从业类型', trigger: 'blur' },
+        ],
         employmentType: [ //从业类型
           { required: true, message: '请选择从业类型', trigger: 'blur' }
         ],
         mobile_phone: [ //手机号码
           { required: true, message: '请输入手机号码', trigger: 'blur' },
-          { pattern: /^1\d{10}$/, message: '请输入手机号码', trigger: 'blur' }
+          { pattern: /^1\d{10}$/, message: '请输入正确的手机号码', trigger: 'blur' }
         ],
-        staffs: [ //人员所属
+        staff_type: [ //人员所属
           { required: true, message: '请选择人员所属', trigger: 'blur' },
         ],
         id_number: [ //身份证号码
@@ -581,6 +561,13 @@ export default {
     console.log('this', this, typeof null, typeof undefined, typeof '', null === null);
   },
   methods: {
+    returnToPage: function() {
+      if (this.$route.query.id) {
+        this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: this.$route.query.id } });
+      } else {
+        this.$router.push({ path: "/transportPowerManage/personManage/personListManage" });
+      }
+    },
     chooseProvincecopy: function() {
       console.log('this.address', this.userForm.address)
     },
@@ -614,7 +601,6 @@ export default {
       if (this.userForm.carrier_driver_trainings[index].isDefault) {
         this.userForm.carrier_driver_trainings[index].isLoading = true;
         this.userForm.carrier_driver_trainings[index].isDisabled = true;
-        return false;
         this.$$http('deleteDriverTraining', { id: this.id, carrier_driver_training_id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
           this.userForm.carrier_driver_trainings[index].isLoading = false;
           this.userForm.carrier_driver_trainings[index].isDisabled = false;
@@ -646,10 +632,11 @@ export default {
         carrier_driver_trainings_add: [],
       }
 
+      console.log('this.userForm.carrier_driver_trainings', this.userForm.carrier_driver_trainings)
       for (let i in this.userForm.carrier_driver_trainings) {
         let keyArray = ['entry_training_content', 'entry_training_date', 'entry_training_exam', 'entry_training_exam_result', 'entry_training_remark'];
         let carrier_driver_trainings = this.pbFunc.fifterbyArr(this.userForm.carrier_driver_trainings[i], keyArray);
-        if (this.userForm.carrier_driver_trainings[i].default) {
+        if (this.userForm.carrier_driver_trainings[i].isDefault) {
           postData.carrier_driver_trainings.push(carrier_driver_trainings);
         } else {
           postData.carrier_driver_trainings_add.push(carrier_driver_trainings);
@@ -743,7 +730,7 @@ export default {
     handlePreview(file) {
       console.log(file);
     },
-    addPersonAjax(postData, formName, btnObject, isReview) {
+    addPersonAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
       console.log('btnTextCopy', btnTextCopy);
       console.log('postData', postData);
@@ -775,9 +762,8 @@ export default {
               if (isReview) {
                 this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
               } else {
-                let nextActiveStep = parseInt(this.activeStep) + 1;
                 let id = results.data.data.id;
-                this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: nextActiveStep, id: id } });
+                this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {
@@ -795,10 +781,14 @@ export default {
 
       let formName = 'addClientFormSetpOne';
       let btnObject = this.nextStepBtn;
+      let stepNum = 2;
       let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       postData.area = this.userForm.address.area || this.userForm.address.city || '';
-      this.addPersonAjax(postData, formName, btnObject);
+      if (this.userForm.work_type.key === 'ESCORT') {
+        stepNum = 4;
+      }
+      this.addPersonAjax(postData, formName, btnObject, stepNum);
     },
     saveBasicAndReview() {
       let formName = 'addClientFormSetpOne';
@@ -806,56 +796,65 @@ export default {
       let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       postData.area = this.userForm.address.area || this.userForm.address.city || '';
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     },
     addCertificate() {
       let formName = 'addClientFormSetpTow';
       let btnObject = this.nextStepBtn;
+      let stepNum = 3;
       let keyArray = ['drive_license_number', 'drive_license_issue_date', 'drive_license_due_date', 'drive_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject);
+
+      this.addPersonAjax(postData, formName, btnObject, stepNum);
     },
     saveDriverLicenseAndReview() {
       let formName = 'addClientFormSetpTow';
       let btnObject = this.saveBasicAndReviewBtn;
       let keyArray = ['drive_license_number', 'drive_license_issue_date', 'drive_license_due_date', 'drive_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     },
     addEscort() {
       let formName = 'addClientFormSetpThree';
       let btnObject = this.nextStepBtn;
+      let stepNum = 4;
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject);
+      console.log('this.detailData.work_type.key', this.detailData.work_type.key);
+      if (this.detailData.work_type === 'DRIVER') {
+        stepNum = 5;
+      }
+      this.addPersonAjax(postData, formName, btnObject, stepNum);
     },
     addCertificateAndReview() {
       let formName = 'addClientFormSetpThree';
       let btnObject = this.saveBasicAndReviewBtn;
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     },
     addLabour() {
       let formName = 'addClientFormSetpFour';
       let btnObject = this.nextStepBtn;
+      let stepNum = 5;
       let keyArray = ['escort_license_number', 'escort_license_issue_date', 'escort_license_due_date', 'escort_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject);
+      this.addPersonAjax(postData, formName, btnObject, stepNum);
     },
     saveEscortAndReview() {
       let formName = 'addClientFormSetpFour';
       let btnObject = this.saveBasicAndReviewBtn;
       let keyArray = ['escort_license_number', 'escort_license_issue_date', 'escort_license_due_date', 'escort_license_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     },
     addTraining() {
       let formName = 'addClientFormSetpFive';
       let btnObject = this.nextStepBtn;
+      let stepNum = 6;
       let keyArray = ['labour_employ_date', 'labour_on_work_date', 'labour_off_work_date', 'contract_start_date', 'contract_due_date', 'contract_correct_date', 'heath_examination_date', 'heath_examination_remark'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject);
+      this.addPersonAjax(postData, formName, btnObject, stepNum);
     },
     saveLabourAndReview() {
       let formName = 'addClientFormSetpFive';
@@ -869,3 +868,25 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+#addClientForm {
+  border: 1px solid rgb(222, 222, 222);
+}
+
+.alone-insurance-form {
+  border: 1px solid rgb(222, 222, 222);
+  border-top: none;
+  padding: 30px 30px 0 20px;
+}
+
+.insurance-form-head {
+  background-color: #f1f1f1;
+  height: 41px;
+  line-height: 41px;
+}
+
+.training-box {
+  border-bottom: 1px solid rgb(222, 222, 222);
+}
+
+</style>

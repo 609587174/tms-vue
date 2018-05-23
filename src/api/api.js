@@ -559,19 +559,10 @@ const api = {
 
     }
   },
-  getOrderDetail: {
-    url: '/api/v1/waybills/:id/',
+  getPickOrderDetail: {
+    url: '/order/delivery-order/:id/',
     method: 'get',
-    desc: '运单详情',
-    param: {
-
-    }
-  },
-
-  getLandmarkList: {
-    url: '/position/base_position/',
-    method: 'get',
-    desc: '坐标列表',
+    desc: '托运单详情',
     param: {
 
     }
@@ -640,6 +631,149 @@ const api = {
     desc: '获取提货单列表',
     param: {
 
+
+    }
+  },
+  searchConOrderList: {
+    url: '/order/waybill/',
+    method: 'get',
+    desc: '获取运单列表',
+    param: {
+
+
+    }
+  },
+  getTransPowerInfo: {
+    url: '/truck/tractor_semitrailers/:id/',
+    method: 'get',
+    desc: '获取运力详情',
+    param: {
+
+
+    }
+  },
+  searchNoUse: {
+    url: '/order/delivery-order/check_capacity/',
+    method: 'get',
+    desc: '获取3天没用的运力id',
+    param: {
+
+
+    }
+  },
+  searchDeliveryOrder: {
+    url: '/order/delivery-order/list_capacity/',
+    method: 'get',
+    desc: '获取托运单数据',
+    param: {
+
+    }
+  },
+  getSiteList: {
+    url: '/map/fluid_sites/',
+    method: 'get',
+    desc: '获取LNG站点列表',
+    param: {
+      position_name: {
+        desc: '站点名称',
+      },
+      page: {
+        desc: '当前页数',
+      },
+      page_size: {
+        desc: '每页数量',
+      },
+    }
+  },
+  getSiteDetail: {
+    url: '/map/fuild_sites/:id/',
+    method: 'get',
+    desc: '获取LNG站点详情',
+    param: {
+
+    }
+  },
+  getStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'get',
+    desc: '获取标准里程列表',
+    param: {
+
+    }
+  },
+  addStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'post',
+    desc: '新增标准里程',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+      is_active:{
+        desc:'是否启用',
+      }
+    }
+  },
+  getStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'get',
+    desc: '标准里程详情',
+    param: {
+
+    }
+  },
+  patchStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'PATCH',
+    desc: '标准里程更新',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+    }
+  },
+  delStandardMile: {
+    url: '/map/standard_mileages/:id/',
+    method: 'DELETE',
+    desc: '删除标准里程',
+    param: {
+
+
+    }
+  },
+  getMenusList: {
+    url: '/permissions/menus/user_menus/',
+    method: 'get',
+    desc: '获取当前登录用户可访问菜单',
+    param: {
+
+    }
+  },
+  getLandMarkList:{
+    url: '/map/land_marks/',
+    method: 'get',
+    desc: '地标列表',
+    param: {
+
+    }
+  },
+  getLandMarkDetail:{
+    url: '/map/land_marks/:id/',
+    method: 'get',
+    desc: '地标详情',
+    param: {
 
     }
   },

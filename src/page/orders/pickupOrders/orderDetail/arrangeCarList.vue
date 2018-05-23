@@ -9,7 +9,7 @@
         <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
           <el-tab-pane label="列表" name="first">
             <div class="tab-screen">
-              <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+              <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
                 <el-row :gutter="0">
                   <el-col :span="12">
                     <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
@@ -98,7 +98,7 @@ export default {
         param: 'vin_number',
         width: ''
       }, {
-        title: '提货单号',
+        title: '运单号',
         param: 'attributes.verbose',
         width: ''
       }, {
@@ -135,11 +135,18 @@ export default {
         width: ''
       }],
       tableData: [],
+      tractor_semitrailers_List: [], //运力
+      render_list: [],
+      upTo_list: [],
+      delivery_list: []
     }
   },
   computed: {
     id: function() {
       return this.$route.params.id;
+    },
+    operationStatus: function() {
+      return this.$route.params.type;
     }
   },
   methods: {
@@ -159,22 +166,96 @@ export default {
       this.getList();
     },
     getList: function() {
+      var vm = this;
       let postData = {
-        page: this.pageData.currentPage,
+        pagination: false,
+        complete_status: true
       };
       this.pageLoading = true;
-      this.$$http('getDriversList', postData).then((results) => {
-        console.log('results', results.data.data.results);
-        this.pageLoading = false;
+      var getDataNum = 0;
+      this.$$http('searchCapacityList', postData).then((results) => {
+        getDataNum++;
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+          this.sortData(true);
+        }
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.results;
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
-
-          console.log('this.tableData', this.tableData, this.pageData.totalPage);
+          console.log("运力列表", results.data.data);
+          this.tractor_semitrailers_list = results.data.data;
         }
       }).catch((err) => {
-        this.pageLoading = false;
-      })
+        getDataNum++;
+        this.sortData(false);
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+        }
+      });
+      let postData1 = {
+        id: this.id
+      };
+      this.$$http('getPickOrderDetail', postData1).then((results) => {
+        getDataNum++;
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+          this.sortData(true);
+        }
+        if (results.data && results.data.code == 0) {
+          console.log("当前订单数据", results.data.data);
+          this.tractor_semitrailers_list = results.data.data;
+          if (!this.tractor_semitrailers_list.waybills) {
+            this.tractor_semitrailers_list.waybills = [];
+          }
+        }
+      }).catch((err) => {
+        getDataNum++;
+        this.sortData(false);
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+        }
+      });
+      let postData3 = {
+
+      };
+      this.$$http('searchNoUse', postData).then((results) => {
+        getDataNum++;
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+          this.sortData(true);
+        }
+        if (results.data && results.data.code == 0) {
+          console.log("最近未指派的车辆数据", results.data.data);
+          this.upTo_list = results.data.data;
+        }
+      }).catch((err) => {
+        getDataNum++;
+        this.sortData(false);
+        if (getDataNum == 3) {
+          this.pageLoading = false;
+        }
+      });
+    },
+    sortData: function(status) {
+      if (status) {
+        let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
+        let newArr = [];
+        for (let i = 0; i < this.operationArr.length; i++) {
+          for (let j = 0; j < delivery_list.waybills.length; j++) {
+            //筛选
+            if (operationArr[i].id == delivery_list[j].waybills.waybill_number) {
+              newArr.push(operationArr[i]);
+            }
+          }
+          for (let j = 0; j < this.upTo_list.length; j++) {
+            if (operationArr[i].id == upTo_list[j]) {
+              newArr.push(operationArr[i]);
+            }
+          }
+
+        }
+
+      } else {
+        console.log("获取数据失败,请刷新页面重试或联系管理员");
+      }
     },
     pageChange: function() {
       setTimeout(() => {

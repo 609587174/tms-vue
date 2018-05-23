@@ -8,7 +8,7 @@
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="订单详情" name="first">
         </el-tab-pane>
-        <el-tab-pane label="车辆指派" name="second">
+        <el-tab-pane label="车辆" name="second">
           <keep-alive>
             <router-view></router-view>
           </keep-alive>
@@ -36,10 +36,10 @@ export default {
         this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
       }
     },
-  },
-  activated: function() {
-    this.activeName = 'second';
-  },
+    activated: function() {
+      this.activeName = 'second';
+    }
+  }
 }
 
 </script>

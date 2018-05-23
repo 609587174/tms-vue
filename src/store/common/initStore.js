@@ -20,5 +20,6 @@ export default {
     queryButton: false
   },
   selectData: {},//全局数据
-  users:{}//用户个人信息
+  users:{},//用户个人信息
+  menuList:[],
 }

@@ -1,82 +1,11 @@
-<style scoped lang="less">
-.el-header p {
-  font-size: 25px;
-  text-align: center;
-  height: 80px;
-  line-height: 80px;
-  margin: 0 0;
-}
-
-.addTailcarform {
-  margin: 30px 5%;
-  .el-input {
-    width: 100%;
-  }
-  .el-select {
-    width: 100%;
-  }
-}
-
-#addeditTailCarPage {
-  border: 1px solid rgb(222, 222, 222);
-}
-
-.alone-insurance-form {
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  padding: 30px 30px 0 20px;
-}
-
-.insurance-form-head {
-  background-color: #f1f1f1;
-  height: 41px;
-  line-height: 41px;
-}
-
-#addeditTailCarPage {
-  background-color: white;
-}
-
-.left-arrow-d {
-  height: 80px;
-  line-height: 80px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.stepTitle {
-  background-color: rgb(235, 238, 245);
-  height: 40px;
-  text-align: center;
-  font-size: 18px;
-  line-height: 40px;
-}
-
-.icon-down-arrow {
-  font-size: 35px;
-  color: rgb(222, 222, 222);
-  vertical-align: middle;
-  transform: rotate(90deg);
-  display: inline-block;
-}
-
-
-
-.right-arrow-d {
-  height: 80px;
-  line-height: 80px;
-  text-align: center;
-  pointer: cursor;
-}
-
-</style>
 <template>
   <div id="addeditTailCarPage">
     <el-container>
-      <el-header style="height:80px">
+      <el-header style="margin-top:15px;height:80px">
         <el-row>
-          <el-col :span="1" class="left-arrow-d"><i class="icon-down-arrow" v-on:click="goDetalis"></i></el-col>
-          <el-col :span="22">
+          <el-col :span="2" class="left-arrow-d"><span @click="goDetalis"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          </el-col>
+          <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
@@ -135,7 +64,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="罐体容积(m):" prop="volume">
+                  <el-form-item label="罐体容积(m³):" prop="volume">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.volume"></el-input>
                   </el-form-item>
                 </el-col>
@@ -275,7 +204,7 @@
                 </el-row>
                 <el-row :gutter="80">
                   <el-col :span="8">
-                    <el-form-item label="入保日期:" prop="buyInsuranceDate">
+                    <el-form-item label="入保日期:" prop="insuranceAmout">
                       <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_start_date" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -357,7 +286,7 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if ((value + "").match(/^[0-9]+$/) || value == '' || value == null) {
+      if ((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null) {
         callback();
       } else {
         callback(new Error("只能是数字"));
@@ -457,6 +386,9 @@ export default {
           { required: true, message: '运营证编号不能为空', trigger: 'blur' },
           { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
         ],
+        insuranceAmout: [
+          { validator: onlyNum, trigger: 'blur' }
+        ]
       }
     }
   },
@@ -483,7 +415,10 @@ export default {
         insuranceTypeSelect: this.$store.state.common.selectData.tractor_insurance_type,
         insurancMethodSelect: this.$store.state.common.selectData.truck_insurance_method
       }
-    }
+    },
+    returnPage: function() {
+      return this.$route.query.tailId ? '详情页' : '列表页';
+    },
   },
   methods: {
     goOtherSetp: function(stepInfo, operation, formName) {
@@ -495,7 +430,11 @@ export default {
     },
     goDetalis: function() {
       if (this.tailId) {
-        this.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+        this.$router.push({
+          path: `/transportPowerManage/carManage/showCarTailManage?tailId=${ this.tailId }`
+        });
+      } else {
+        this.$router.push({ path: "/transportPowerManage/carManage/carTailManage" });
       }
     },
     addInsuranceListForm: function(addInsuanceFrom) {
@@ -690,3 +629,58 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+.el-header p {
+  font-size: 25px;
+  text-align: center;
+  height: 80px;
+  line-height: 80px;
+  margin: 0 0;
+}
+
+.addTailcarform {
+  margin: 30px 5%;
+  .el-input {
+    width: 100%;
+  }
+  .el-select {
+    width: 100%;
+  }
+}
+
+#addeditTailCarPage {
+  border: 1px solid rgb(222, 222, 222);
+}
+
+.alone-insurance-form {
+  border: 1px solid rgb(222, 222, 222);
+  border-top: none;
+  padding: 30px 30px 0 20px;
+}
+
+.insurance-form-head {
+  background-color: #f1f1f1;
+  height: 41px;
+  line-height: 41px;
+}
+
+#addeditTailCarPage {
+  background-color: white;
+}
+
+.stepTitle {
+  background-color: rgb(235, 238, 245);
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  line-height: 40px;
+}
+
+.right-arrow-d {
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  pointer: cursor;
+}
+
+</style>

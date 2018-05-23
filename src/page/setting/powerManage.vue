@@ -22,7 +22,7 @@
         <el-col :span="5">
           <div class="nav-tab-setting">
             <el-tabs v-model="departmentActive">
-              <el-tab-pane label="用户管理" name="department">
+              <el-tab-pane label="部门" name="department">
                 <div class="department-list">
                   <el-menu :default-active="active" class="el-menu-vertical-demo" v-loading="departmentLoading">
                     <el-menu-item v-for="(item,key) in departmentTableData" v-on:click="getPositionList(item.id,key)" :index="key.toString()" :key="key">
@@ -255,50 +255,19 @@ export default {
       }).catch((err) => {})
     },
     cancel: function() {
-      this.$confirm("确认后将取消本次针对“" + this.currentPositionName + "”的权限修改内容", "取消修改", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.selectMenus = this.selectMenusCopy;
-          this.$message({
-            message: '取消成功，本次修改内容没有保存',
-            type: 'success'
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消修改权限'
-          });
-        });
-
-    },
-    setPower: function() {
-      if (this.selectMenus.length) {
-        this.$confirm("确定要保存针对“" + this.currentPositionName + "”的权限修改内容？通过后该职位下的员工将拥有所选权限", "保存权限设置", {
+      let iSidentical = this.selectMenus.concat(this.selectMenusCopy).filter(v => !this.selectMenus.includes(v) || !this.selectMenusCopy.includes(v))
+      if (iSidentical.length) {
+        this.$confirm("确认后将取消本次针对“" + this.currentPositionName + "”的权限修改内容", "取消修改", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning"
           })
           .then(() => {
-            let postData = {
-              carrier_role_id: this.currentPositionId,
-              menus: this.selectMenus
-            }
-            this.$$http('updatePosition', postData).then((results) => {
-              if (results.data && results.data.code == 0) {
-
-                this.$message({
-                  message: '更改权限设置成功',
-                  type: 'success'
-                });
-              }
-            }).catch((err) => {
-
-              this.$message.error('修改权限失败');
-            })
+            this.selectMenus = this.selectMenusCopy;
+            this.$message({
+              message: '取消成功，本次修改内容没有保存',
+              type: 'success'
+            });
           })
           .catch(() => {
             this.$message({
@@ -306,14 +275,62 @@ export default {
               message: '取消修改权限'
             });
           });
-
       } else {
         this.$message({
-          message: '请勾选权限',
+          message: '没有可以取消的修改内容',
+          type: 'warning'
+        });
+
+      }
+    },
+    setPower: function() {
+      let iSidentical = this.selectMenus.concat(this.selectMenusCopy).filter(v => !this.selectMenus.includes(v) || !this.selectMenusCopy.includes(v))
+      if (iSidentical.length) {
+
+
+        if (this.selectMenus.length) {
+          this.$confirm("确定要保存针对“" + this.currentPositionName + "”的权限修改内容？通过后该职位下的员工将拥有所选权限", "保存权限设置", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            })
+            .then(() => {
+              let postData = {
+                carrier_role_id: this.currentPositionId,
+                menus: this.selectMenus
+              }
+              this.$$http('updatePosition', postData).then((results) => {
+                if (results.data && results.data.code == 0) {
+                  this.selectMenusCopy = this.selectMenus;
+                  this.$message({
+                    message: '更改权限设置成功',
+                    type: 'success'
+                  });
+                }
+              }).catch((err) => {
+
+                this.$message.error('修改权限失败');
+              })
+            })
+            .catch(() => {
+              this.$message({
+                type: 'info',
+                message: '取消修改权限'
+              });
+            });
+
+        } else {
+          this.$message({
+            message: '请勾选权限',
+            type: 'warning'
+          });
+        }
+      } else {
+        this.$message({
+          message: '没有新增可以修改的权限',
           type: 'warning'
         });
       }
-
     },
 
   },

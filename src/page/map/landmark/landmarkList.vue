@@ -13,7 +13,7 @@
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                     <el-select v-model="searchFilters.position_type" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
@@ -22,22 +22,22 @@
               <el-row :gutter="10">
                 <el-col :span="4">
                   <el-form-item label="审核状态:">
-                    <el-select v-model="searchFilters.checkStatus" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.checkStatusSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-select v-model="searchFilters.confirm_status" @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="地标来源:">
                     <el-select v-model="searchFilters.landmarkFrom" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.landmarkFromSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
                   <el-form-item label="是否同步:">
-                    <el-select v-model="searchFilters.is_active" @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.isSynchronizeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-select v-model="searchFilters.async_status" @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -61,7 +61,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+            <el-pagination background layout="prev, pager, next" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>1">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -75,13 +75,25 @@
 export default {
   name: 'landMarkList',
   computed: {
-
+    landmarkFromSelect: function() {
+      console.log('this.$store.state.common.selectData', this.$store.state.common.selectData);
+      return this.$store.getters.getIncludeAllSelect.landmark_source_type;
+    },
+    checkStatusSelect: function() {
+      return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
+    },
+    fieldSelect: function() {
+      return this.$store.state.common.selectData.landmark_position_type;
+    },
+    isSynchronizeSelect: function() {
+      return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
+    }
   },
   data() {
     return {
       pageData: {
         currentPage: 1,
-        totalPage: '',
+        totalCount: '',
         pageSize: 10,
       },
       pageLoading: false,
@@ -89,19 +101,19 @@ export default {
       tableData: [],
       thTableList: [{
         title: '编号',
-        param: 'create_time',
+        param: 'position_name',
         width: ''
       }, {
         title: '地标名称',
         param: 'position_name',
-        width: ''
+        width: '250'
       }, {
         title: '地标类型',
-        param: 'position_type',
+        param: 'position_type.verbose',
         width: ''
       }, {
         title: '联系人',
-        param: 'contacts',
+        param: 'contact',
         width: ''
       }, {
         title: '联系电话',
@@ -110,84 +122,34 @@ export default {
       }, {
         title: '位置',
         param: 'address',
-        width: ''
+        width: '260'
       }, {
         title: '审核状态',
-        param: 'create_time',
+        param: 'confirm_status.verbose',
         width: ''
       }, {
         title: '上传人',
-        param: 'create_time',
+        param: 'upload_user.nick_name',
         width: ''
       }, {
         title: '上传时间',
-        param: 'create_time',
-        width: ''
+        param: 'created_time',
+        width: '200'
       }, {
         title: '上传来源',
-        param: 'create_time',
+        param: 'source_type.verbose',
         width: ''
       }, {
         title: '同步',
-        param: 'is_active',
+        param: 'async_status.verbose',
         width: ''
       }],
-      selectData: {
-        fieldSelect: [{
-          value: '卸货站',
-          id: '1'
-        }, {
-          value: '气源液厂',
-          id: '2'
-        }, {
-          value: '加油站',
-          id: '3'
-        }, {
-          value: '加气站',
-          id: '4'
-        }, {
-          value: '停车场',
-          id: '5'
-        }],
-        checkStatusSelect: [{
-          value: '全部',
-          id: ''
-        }, {
-          value: '待审核',
-          id: '2'
-        }, {
-          value: '审核通过',
-          id: '3'
-        }, {
-          value: '审核失败',
-          id: '4'
-        }],
-        isSynchronizeSelect: [{
-          value: '全部',
-          id: ''
-        }, {
-          value: '已同步',
-          id: true
-        }, {
-          value: '未同步',
-          id: false
-        }],
-        landmarkFromSelect: [{
-          value: '全部',
-          id: ''
-        }, {
-          value: '轨迹停留点',
-          id: '2'
-        }, {
-          value: '司机端上传',
-          id: '3'
-        }]
-      },
       searchFilters: {
         keyword: '',
-        position_type: '1',
-        checkStatus: '',
-        is_active: '',
+        landmarkFrom: '',
+        position_type: 'DELIVER_POSITION',
+        confirm_status: '',
+        async_status: '',
       }
     }
   },
@@ -202,30 +164,36 @@ export default {
       this.getList();
     },
     pageChange: function() {
-      this.getList();
+      setTimeout(() => {
+        this.getList();
+      })
     },
     getList: function() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        //position_name: this.searchFilters.keyword,
-        //position_type: this.searchFilters.position_type,
-        //is_active: this.searchFilters.is_active
+        source_type: this.searchFilters.landmarkFrom,
+        confirm_status: this.searchFilters.confirm_status,
+        async_status: this.searchFilters.async_status
       };
 
-      //postData[this.searchFilters.field] = this.searchFilters.keyword;
+      if (this.searchFilters.keyword.length) {
+        postData.position_type = this.searchFilters.position_type;
+        postData.position_name = this.searchFilters.keyword;
+      }
+
+      postData = this.pbFunc.fifterObjIsNull(postData);
 
       this.pageLoading = true;
 
-      this.$$http('getLandmarkList', postData).then((results) => {
+      this.$$http('getLandMarkList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+          this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalPage);
         }
       }).catch((err) => {
         this.pageLoading = false;

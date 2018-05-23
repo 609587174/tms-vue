@@ -92,29 +92,24 @@
           </el-row>
         </div>
         <div class="listDetalis opButton" style="width:9%">
-          <el-row>
+          <el-row v-if="props.row.status.key=='appoint'">
             <el-col>
               <el-button type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
             </el-col>
           </el-row>
           <el-row>
-            <el-col>
+            <el-col v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
               <el-button type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="props.row.status.key=='appoint'">
             <el-col>
               <el-button type="primary" size="mini" @click="operation('upPlan',props.row)">提交计划</el-button>
             </el-col>
           </el-row>
           <el-row>
-            <el-col>
+            <el-col v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
               <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-button type="danger" plain size="mini" @click="operation('cancle',props.row)">确认取消</el-button>
             </el-col>
           </el-row>
         </div>
@@ -169,12 +164,13 @@ export default {
     operation: function(type, rowData) {
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
-      } else if (type == 'upPlan') {
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}` });
         this.upPlanMethod();
       } else if (type == 'changePlan') {
         //传入一个订单号跳转订单详情-车辆指派页面
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}` });
       }
     },
     upPlanMethod: function() {

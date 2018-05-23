@@ -9,7 +9,7 @@ export default [{
     path: 'dashborad',
     name: 'dashborad',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '概览',
       iconName: 'icon-lng-dashboard'
     },
@@ -18,7 +18,7 @@ export default [{
     path: 'orders',
     name: 'orders',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '订单',
       iconName: 'icon-lng-dashboard',
     },
@@ -28,11 +28,11 @@ export default [{
       name: 'pickupOrders',
       redirect: '/orders/pickupOrders/ordersList',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '提货订单',
         iconName: 'icon-lng-dashboard',
       },
-      component: (resolve) => require(['../page/orders/pickupOrder/pickupOrders'], resolve),
+      component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
           path: 'ordersList',
           name: 'pickupOrdersList',
@@ -40,7 +40,7 @@ export default [{
             isVerificationL: false,
             title: '提货订单列表',
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/orderList'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
         },
         {
           path: 'addNewPickUpOrder',
@@ -49,7 +49,7 @@ export default [{
             isVerificationL: false,
             title: '新增提货订单',
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/addNewPickUpOrder'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/addNewPickUpOrder'], resolve),
         },
         {
           path: 'orderDetail',
@@ -58,7 +58,7 @@ export default [{
             isVerificationL: false,
             title: '订单详情'
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/orderDetail'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/orderDetail'], resolve),
           children: [{
             path: 'orderDetailTab/:id',
             name: 'pickupOrderDetailTab',
@@ -66,16 +66,16 @@ export default [{
               isVerificationL: false,
               title: '订单详情',
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/orderDetailTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/orderDetailTab'], resolve),
           }, {
             path: 'arrangeCarTab',
             name: 'pickupArrangeCarTab',
-            redirect: '/orders/pickupOrder/orderDetail/arrangeCarTab/arrangeCarList',
+            redirect: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList',
             meta: {
               isVerificationL: false,
               title: '车辆指派'
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarTab'], resolve),
             children: [{
               path: 'arrangeCarList/:id',
               name: 'pickArrangeCarList',
@@ -83,7 +83,7 @@ export default [{
                 isVerificationL: false,
                 title: '车辆指派列表'
               },
-              component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarList'], resolve),
+              component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarList'], resolve),
             }, {
               path: 'arrangeCarMap/:id',
               name: 'pickupArrangeCarMap',
@@ -91,7 +91,7 @@ export default [{
                 isVerificationL: false,
                 title: '地图'
               },
-              component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarMap'], resolve),
+              component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarMap'], resolve),
             }]
           }, {
             path: 'orderRecordsTab/:id',
@@ -100,7 +100,7 @@ export default [{
               isVerificationL: false,
               title: '订单记录'
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/orderRecordsTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/orderRecordsTab'], resolve),
           }]
         }
       ]
@@ -109,7 +109,7 @@ export default [{
       name: 'consignmentOrders',
       redirect: '/orders/consignmentOrders/ordersList',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '托运订单'
       },
       component: (resolve) => require(['../page/orders/consignmentOrder/consignmentOrders'], resolve),
@@ -181,7 +181,7 @@ export default [{
     path: 'logisticsManage',
     name: 'logisticsManage',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '物流管理',
       iconName: 'icon-road',
     },
@@ -190,7 +190,7 @@ export default [{
     path: 'mapManage',
     name: 'mapManage',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '地图',
       iconName: 'icon-road',
     },
@@ -200,7 +200,7 @@ export default [{
       name: 'carMonitor',
       redirect: '/mapManage/carMonitor/realTimeMonitor',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '地图监控',
       },
       component: (resolve) => require(['../page/map/carMonitor/carMonitor'], resolve),
@@ -226,7 +226,7 @@ export default [{
       name: 'standardMile',
       redirect: '/mapManage/standardMile/standardMileList',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '标准里程管理',
       },
       component: (resolve) => require(['../page/map/standardMile/standardMile'], resolve),
@@ -260,7 +260,7 @@ export default [{
       name: 'landmark',
       redirect: '/mapManage/landmark/landmarkList',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '地标管理',
       },
       component: (resolve) => require(['../page/map/landmark/landmark'], resolve),
@@ -402,7 +402,7 @@ export default [{
       redirect: '/transportPowerManage/personManage/personListManage',
       name: 'personManage',
       meta: {
-        isVerificationL: false,
+        isVerificationL: true,
         title: '人员管理',
       },
       component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
@@ -439,7 +439,7 @@ export default [{
     path: 'clientManage',
     name: 'clientManage',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '客户管理',
       iconName: 'icon-customer',
     },
@@ -477,7 +477,7 @@ export default [{
     path: 'statistics',
     name: 'statistics',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '数据统计',
       iconName: 'icon-data',
     },
@@ -486,7 +486,7 @@ export default [{
     path: 'setting',
     name: 'setting',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '设置',
       iconName: 'icon-setting',
     },
@@ -496,7 +496,7 @@ export default [{
         name: "组织架构",
         meta: {
           title: '组织架构',
-          isVerificationL: false
+          isVerificationL: true
         },
         component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
       },
@@ -505,7 +505,7 @@ export default [{
         name: "员工管理",
         meta: {
           title: '员工管理',
-          isVerificationL: false
+          isVerificationL: true
         },
         component: (resolve) => require(['../page/setting/staffsManage'], resolve)
       },
@@ -514,7 +514,7 @@ export default [{
         name: "权限管理",
         meta: {
           title: '权限管理',
-          isVerificationL: false
+          isVerificationL: true
         },
         component: (resolve) => require(['../page/setting/powerManage'], resolve)
       }

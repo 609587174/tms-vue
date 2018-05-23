@@ -24,13 +24,13 @@
                   <el-row :gutter="40">
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>订单号:</label>
-                        <div class="detail-form-item">{{detailData.waybill_number}}</div>
+                        <label>订单号:</label>
+                        <div class="detail-form-item">{{detailData.id}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>订单生成时间:</label>
+                        <label>订单生成时间:</label>
                         <div class="detail-form-item">{{detailData.created_at}}</div>
                       </div>
                     </el-col>
@@ -44,8 +44,8 @@
                   <el-row :gutter="40">
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>需求车数:</label>
-                        <div class="detail-form-item">11111</div>
+                        <label>需求车数:</label>
+                        <div class="detail-form-item">{{detailData.require_car_number}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -58,46 +58,56 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <div class="table-list">
-                    <el-table :data="tableData" stripe style="width: 100%" size="mini">
-                      <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                      </el-table-column>
-                    </el-table>
-                  </div>
-                </div>
-                <div class="detail-list detail-form">
-                  <div class="detail-form-title">
-                    <el-row>
-                      <el-col :span="12" :offset="6" class="text-center">
-                        运单信息
-                      </el-col>
-                    </el-row>
-                  </div>
                   <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
-                        <label>运单号:</label>
-                        <div class="detail-form-item">11111111</div>
+                        <label>装货地:</label>
+                        <div class="detail-form-item">{{detailData.fluid_name}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
-                        <label>运单生成时间:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <label>标准里程:</label>
+                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
-                        <label>托运方:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <label>计划时间:</label>
+                        <div class="detail-form-item">{{detailData.created_at}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>计划吨位:</label>
+                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
                   </el-row>
                   <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
-                        <label>承运方:</label>
-                        <div class="detail-form-item">11111</div>
+                        <label>
+                          <卸货地:</label>
+                            <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>标准里程:</label>
+                        <div class="detail-form-item"></div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>计划时间:</label>
+                        <div class="detail-form-item"></div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>计划吨位:</label>
+                        <div class="detail-form-item"></div>
                       </div>
                     </el-col>
                   </el-row>
@@ -126,7 +136,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>标准里程:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -175,68 +185,7 @@ export default {
     return {
       activeName: 'first',
       pageLoading: false,
-      detailData: {
-        "id": "c2354b01-5779-4b8c-99f0-ff10af9cfaf8",
-        "supplier": {
-          "id": "b7bb9038-f983-44f4-94ea-523d2b77de22",
-          "created_at": "2017-12-27 17:35:26",
-          "is_deleted": 0,
-          "supplier_name": "诸城新奥燃气有限公司",
-          "supplier_abbreviation": "",
-          "business_type": "其它",
-          "city": "",
-          "address": "",
-          "contact_person": "",
-          "contact_phone": "",
-          "supplier_type": "0",
-          "contract_url": null,
-          "contract_date": null,
-          "contract_limit_date": null,
-          "operator_id": null
-        },
-        "fluid": {
-          "id": "90c77f10-7305-4710-8baa-e4cbbc6ab7d0",
-          "created_at": "2017-12-27 17:35:26",
-          "is_deleted": 0,
-          "supplier_id": "9db34e5a-ef65-45ca-9fb1-712422a0019c",
-          "fluid_name": "文安驿",
-          "employee_id": null,
-          "gas_type": "",
-          "province": "陕西省",
-          "city": "延安市",
-          "area": "延川县",
-          "address": "文安驿镇",
-          "actual_address": "文安驿",
-          "linkman": "",
-          "contact_phone": "",
-          "map_position": "ee66314b-a315-46b7-aa88-9657d387575f"
-        },
-        "created_at": "2018-05-16 11:18:03",
-        "updated_at": "2018-05-16 11:18:03",
-        "created_timestamp": 1526440683,
-        "is_deleted": 0,
-        "order_number": "201805160003",
-        "status": "determine",
-        "plan_time": null,
-        "require_car_number": 0,
-        "plan_tonnage": "0.000",
-        "discount_price": "0.000",
-        "business_price": "0.000",
-        "unit_price": "0.000",
-        "desc": "",
-        "unload_area": null,
-        "carry_type": "c9c159a0-1722-4cff-b896-df31f20b32e3",
-        "unload_area_info": {},
-        "carry_type_info": {
-          "id": "c9c159a0-1722-4cff-b896-df31f20b32e3",
-          "created_at": "2018-05-16 11:13:37",
-          "updated_at": "2018-05-16 11:13:39",
-          "created_timestamp": 234343,
-          "is_deleted": 0,
-          "consignment_type": "own",
-          "carrier": "['']"
-        }
-      },
+      detailData: {},
       tableData: [{
         date: '2016-05-02',
         name: '王小虎',
@@ -284,14 +233,15 @@ export default {
     },
     getOrderDetail: function() {
       this.pageLoading = true;
-      this.$$http('getOrderDetail', ).then((results) => {
+      var sendData = {};
+      sendData.id = this.$route.params.id;
+      this.$$http('getPickOrderDetail', sendData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0 && results.data.data) {
-
-
+          this.detailData = results.data.data;
         }
       }).catch((err) => {
-
+        this.pageLoading = false;
       })
     }
   },
@@ -299,8 +249,7 @@ export default {
     this.activeName = 'first';
   },
   created: function() {
-    console.log('this.$route', this.$route.params, this.id);
-    //this.getOrderDetail();
+    this.getOrderDetail();
   }
 }
 

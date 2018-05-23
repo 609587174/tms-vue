@@ -10,7 +10,7 @@
 
 </style>
 <template>
-  <div id="addPerson" class="detail-mian">
+  <div id="addPerson" class="detail-main">
     <el-container>
       <el-header style="margin-top:15px;">
         <p>查看牵引车</p>

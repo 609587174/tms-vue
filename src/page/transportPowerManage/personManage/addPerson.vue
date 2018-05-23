@@ -21,7 +21,7 @@
 
 </style>
 <template>
-  <div id="addPerson" class="detail-mian">
+  <div id="addPerson" class="detail-main">
     <el-container v-loading="pageLoading">
       <el-header style="margin-top:15px;">
         <el-row>

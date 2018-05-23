@@ -117,7 +117,7 @@
 
 </style>
 <template>
-  <div class="detail-mian">
+  <div class="detail-main">
     <el-container>
       <el-header style="margin-top:15px;">
         <p>地标详情</p>

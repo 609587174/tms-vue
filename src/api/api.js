@@ -357,6 +357,12 @@ const api = {
     desc: '获取运力管理分组数据',
     param: {}
   },
+  getCapacityDetail: {
+    url: '/truck/tractor_semitrailers/:id/',
+    method: 'GET',
+    desc: '获取运力详情',
+    param: {}
+  },
   bindTruck: {
     url: '/truck/tractor_semitrailers/:id/bind_semitrailer/',
     method: 'PATCH',

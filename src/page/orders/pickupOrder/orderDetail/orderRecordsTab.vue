@@ -4,7 +4,7 @@
   font-weight: normal;
 }
 
-.detail-mian {
+.detail-main {
   border-top: 0 none;
 }
 
@@ -18,7 +18,7 @@
         <el-tab-pane label="车辆指派" name="second">
         </el-tab-pane>
         <el-tab-pane label="订单记录" name="third">
-          <div class="detail-mian" v-loading="pageLoading">
+          <div class="detail-main" v-loading="pageLoading">
             <el-container>
               <el-main>
                 <h3 class="text-center record-detail-title">订单记录</h3>

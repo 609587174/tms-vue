@@ -43,7 +43,7 @@
   padding-top: 0;
 }
 
-.detail-mian {
+.detail-main {
   margin: 30px 5%;
   .el-input {
     width: 100%;
@@ -55,7 +55,7 @@
 
 </style>
 <template>
-  <div class="detail-mian">
+  <div class="detail-main">
     <el-container>
       <el-header style="height:80px">
         <el-row>

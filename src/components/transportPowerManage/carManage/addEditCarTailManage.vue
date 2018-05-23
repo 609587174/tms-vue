@@ -135,7 +135,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="罐体容积(m):" prop="volume">
+                  <el-form-item label="罐体容积(m³):" prop="volume">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.volume"></el-input>
                   </el-form-item>
                 </el-col>
@@ -275,7 +275,7 @@
                 </el-row>
                 <el-row :gutter="80">
                   <el-col :span="8">
-                    <el-form-item label="入保日期:" prop="buyInsuranceDate">
+                    <el-form-item label="入保日期:" prop="insuranceAmout">
                       <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_start_date" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -357,7 +357,7 @@ export default {
       }
     };
     var onlyNum = (rule, value, callback) => {
-      if ((value + "").match(/^[0-9]+$/) || value == '' || value == null) {
+      if ((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null) {
         callback();
       } else {
         callback(new Error("只能是数字"));
@@ -457,6 +457,9 @@ export default {
           { required: true, message: '运营证编号不能为空', trigger: 'blur' },
           { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
         ],
+        insuranceAmout: [
+          { validator: onlyNum, trigger: 'blur' }
+        ]
       }
     }
   },

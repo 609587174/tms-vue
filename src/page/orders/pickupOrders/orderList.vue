@@ -3,11 +3,15 @@
   margin-top: 35px;
 }
 
+.nav-tab {
+  background: white;
+}
+
 </style>
 <template>
   <div>
     <div class="nav-tab">
-      <el-row>
+      <el-row v-if="false">
         <el-col :span="2" :offset="22">
           <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
         </el-col>
@@ -78,6 +82,10 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+      </el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -89,19 +97,21 @@ export default {
   },
   data() {
     return {
+      pageStatus: false,
       pageLoading: false,
       fifterParam: {
         keyword: "",
         field: "",
       },
+
       timeParam: [],
       listFifterData: [],
       rules: {},
       activeName: 'first',
       fifterName: 'all',
       pageData: {
-        currentPage: 1,
-        totalPage: 1,
+        currentPage: 100,
+        totalPage: 2,
         pageSize: 10,
       },
       selectData: {
@@ -136,7 +146,10 @@ export default {
         sendData.plan_time_end = this.timeParam[1];
       }
       if (this.fifterName != "all") {
-        sendData.status = status;
+        sendData.status = this.fifterName;
+      }
+      if (this.pageStatus) {
+        sendData.page = this.pageData.currentPage;
       }
       this.pageLoading = true;
       this.$$http("searchPickOrderList", sendData).then((results) => {
@@ -152,11 +165,13 @@ export default {
     clickFifter: function(targetName) {
       var status = targetName.name;
       //重新查询一次数据
-      if (status == "all") {
-        this.listFifterData = this.listData;
-      } else {
-        this.listFifterData = [this.listData[0]];
-      }
+      this.searchList();
+    },
+    pageChange: function() {
+      setTimeout(() => {
+        this.pageStatus = true;
+        this.searchList();
+      });
     }
   },
   created() {

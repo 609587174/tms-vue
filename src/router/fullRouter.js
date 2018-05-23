@@ -32,7 +32,7 @@ export default [{
         title: '提货订单',
         iconName: 'icon-lng-dashboard',
       },
-      component: (resolve) => require(['../page/orders/pickupOrder/pickupOrders'], resolve),
+      component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
           path: 'ordersList',
           name: 'pickupOrdersList',
@@ -40,7 +40,7 @@ export default [{
             isVerificationL: false,
             title: '提货订单列表',
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/orderList'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
         },
         {
           path: 'addNewPickUpOrder',
@@ -49,7 +49,7 @@ export default [{
             isVerificationL: false,
             title: '新增提货订单',
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/addNewPickUpOrder'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/addNewPickUpOrder'], resolve),
         },
         {
           path: 'orderDetail',
@@ -58,7 +58,7 @@ export default [{
             isVerificationL: false,
             title: '订单详情'
           },
-          component: (resolve) => require(['../page/orders/pickupOrder/orderDetail'], resolve),
+          component: (resolve) => require(['../page/orders/pickupOrders/orderDetail'], resolve),
           children: [{
             path: 'orderDetailTab/:id',
             name: 'pickupOrderDetailTab',
@@ -66,16 +66,16 @@ export default [{
               isVerificationL: false,
               title: '订单详情',
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/orderDetailTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/orderDetailTab'], resolve),
           }, {
             path: 'arrangeCarTab',
             name: 'pickupArrangeCarTab',
-            redirect: '/orders/pickupOrder/orderDetail/arrangeCarTab/arrangeCarList',
+            redirect: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList',
             meta: {
               isVerificationL: false,
               title: '车辆指派'
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarTab'], resolve),
             children: [{
               path: 'arrangeCarList/:id',
               name: 'pickArrangeCarList',
@@ -83,7 +83,7 @@ export default [{
                 isVerificationL: false,
                 title: '车辆指派列表'
               },
-              component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarList'], resolve),
+              component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarList'], resolve),
             }, {
               path: 'arrangeCarMap/:id',
               name: 'pickupArrangeCarMap',
@@ -91,7 +91,7 @@ export default [{
                 isVerificationL: false,
                 title: '地图'
               },
-              component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/arrangeCarMap'], resolve),
+              component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarMap'], resolve),
             }]
           }, {
             path: 'orderRecordsTab/:id',
@@ -100,7 +100,7 @@ export default [{
               isVerificationL: false,
               title: '订单记录'
             },
-            component: (resolve) => require(['../page/orders/pickupOrder/orderDetail/orderRecordsTab'], resolve),
+            component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/orderRecordsTab'], resolve),
           }]
         }
       ]

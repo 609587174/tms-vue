@@ -166,7 +166,7 @@ export default {
 
     },
     getMunusList() {
-
+      console.log('5555555')
       this.$$http('getMenusList').then((results) => {
         if (results.data && results.data.code === 0) {
           if (results.data.data.length) {

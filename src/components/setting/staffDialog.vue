@@ -2,10 +2,9 @@
 <!-- staffDialog -->
 <template>
   <div>
-    <el-dialog :title="title" :visible="staffDialog.isShow"  width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="staffDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="staffRules" status-icon ref="staffRules">
-
           <el-form-item label="电话：" prop="phone">
             <el-input placeholder="请输入" v-model="staffRules.phone" :disabled="staffDialog.type==='update'?true:false" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
@@ -14,8 +13,12 @@
             <el-input placeholder="请输入" v-model="staffRules.nick_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
-          <el-form-item label="初始密码：" prop="password">
-            <el-input placeholder="请输入" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-form-item label="初始密码：" prop="password" v-if="staffDialog.type==='add'">
+            <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+            </el-input>
+          </el-form-item>
+          <el-form-item label="初始密码修改：" v-else>
+            <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
           <el-form-item label="用户名：" prop="username">
@@ -83,6 +86,11 @@ export default {
         carrier_role: ''
       },
       positionList: [], //职位列表
+      passwordInfo: [
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
+        { validator: isSpace, trigger: 'blur' },
+      ],
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -143,6 +151,9 @@ export default {
             apiName = 'updateStaff';
             postData.is_deleted = this.staffRow.is_deleted;
             postData.id = this.staffRow.id;
+            if (postData.password === '') {
+              delete postData.password;
+            }
           }
 
           this.$$http(apiName, postData).then((results) => {
@@ -156,7 +167,7 @@ export default {
                 message: this.staffDialog.type === 'add' ? '新增员工成功，该员工操作权限为所属职位权限' : '修改员工信息成功',
                 type: 'success'
               });
-              this.$emit('closeDialogBtn', this.type, true);
+              this.$emit('closeDialogBtn', true);
             }
 
           }).catch((err) => {
@@ -202,11 +213,22 @@ export default {
             department: this.staffRow.department.id,
             carrier_role: this.staffRow.carrier_role.id
           }
+          delete this.rules.password;
           this.getPositionList();
           // this.staffRules.group_name = this.departmentRow.group_name;
           this.title = '修改员工';
         } else {
           this.title = '新增员工';
+          this.staffRules = {
+            username: '',
+            password: '',
+            nick_name: '',
+            phone: '',
+            email: '',
+            department: '',
+            carrier_role: ''
+          }
+          this.rules.password = this.passwordInfo;
           // this.staffRules.group_name = '';
         }　　　　
       },

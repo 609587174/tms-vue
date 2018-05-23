@@ -86,7 +86,7 @@ export default {
       return this.$store.state.common.selectData.landmark_position_type;
     },
     isSynchronizeSelect: function() {
-      return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
+      return this.$store.getters.getIncludeAllSelect.landmark_async_status;
     }
   },
   data() {

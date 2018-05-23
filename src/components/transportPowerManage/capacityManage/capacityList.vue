@@ -91,7 +91,14 @@
         <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
-            <el-autocomplete v-model="truckDialog.semitrailer" :fetch-suggestions="semiListSearch" @select="handleSemiListSelect"></el-autocomplete>
+            <el-select v-model="truckDialog.semitrailer" filterable placeholder="请选择">
+              <el-option
+                v-for="item in semiList"
+                :key="item.id"
+                :label="item.value"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="随车电话">
             <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
@@ -120,13 +127,34 @@
         <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
           <el-form-item label="主驾驶" prop="master_driver">
-            <el-autocomplete v-model="staffDialog.master_driver" :fetch-suggestions="driverListSearch" @select="handleMasterDriverSelect"></el-autocomplete>
+            <el-select v-model="staffDialog.master_driver" filterable placeholder="请选择">
+              <el-option
+                v-for="item in driverList"
+                :key="item.id"
+                :label="item.value"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="副驾驶">
-            <el-autocomplete v-model="staffDialog.vice_driver" :fetch-suggestions="driverListSearch" @select="handleViceDriverSelect"></el-autocomplete>
+            <el-select v-model="staffDialog.vice_driver" filterable placeholder="请选择">
+              <el-option
+                v-for="item in driverList"
+                :key="item.id"
+                :label="item.value"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="押运员">
-            <el-autocomplete v-model="staffDialog.escort_staff" :fetch-suggestions="escortListSearch" @select="handleEscortSelect"></el-autocomplete>
+            <el-select v-model="staffDialog.escort_staff" filterable placeholder="请选择">
+              <el-option
+                v-for="item in escortList"
+                :key="item.id"
+                :label="item.value"
+                :value="item.id">
+              </el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <div v-show="!staffNotice" slot="footer" class="dialog-footer">
@@ -146,21 +174,18 @@ export default {
   name: "capacityList",
   data() {
     return {
-      groupListDialog: {},
       truckDialog: {},
       staffDialog: {},
       truckNotice: false,
       staffNotice: false,
       truckRules: {
         semitrailer: [
-          { required: true, message: '请输入挂车号', trigger: 'change' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'change' }
+          { required: true, message: '请输入挂车号', trigger: 'change' }
         ]
       },
       staffRules: {
         master_driver: [
-          { required: true, message: '请输入主驾驶名称', trigger: 'change' },
-          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'change' }
+          { required: true, message: '请输入主驾驶名称', trigger: 'change' }
         ]
       },
       groupListVisible: false,
@@ -293,9 +318,9 @@ export default {
     };
   },
   methods: {
-    init: function() {
-      this.getGroups();
+    init: function () {
       this.searchList();
+      this.getGroups();
       this.getSemiList();
       this.getDriverList();
       this.getEscortList();
@@ -373,41 +398,6 @@ export default {
         console.log(error);
       });
     },
-    semiListSearch(queryString, cb) {
-      let semiList = this.semiList;
-      let results = queryString ? semiList.filter(this.createFilter(queryString)) : semiList;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    driverListSearch(queryString, cb) {
-      let driverList = this.driverList;
-      let results = queryString ? driverList.filter(this.createFilter(queryString)) : driverList;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    escortListSearch(queryString, cb) {
-      let escortList = this.escortList;
-      let results = queryString ? escortList.filter(this.createFilter(queryString)) : escortList;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    handleSemiListSelect(item) {
-      this.truckDialog.semiId = item.id;
-    },
-    handleMasterDriverSelect(item) {
-      this.staffDialog.master_driver_id = item.id;
-    },
-    handleViceDriverSelect(item) {
-      this.staffDialog.vice_driver_id = item.id;
-    },
-    handleEscortSelect(item) {
-      this.staffDialog.escort_staff_id = item.id;
-    },
-    createFilter(queryString) {
-      return item => {
-        return (item.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-      };
-    },
     searchList: function() {
       var vm = this;
       if (this.filterParam.field) {
@@ -427,18 +417,7 @@ export default {
               result.data.data.count / vm.pageData.pageSize
             );
             vm.tableData.map((n, i) => {
-              for (let key in n) {
-                // mock
-                // if (key === 'truck_bind_status') {
-                //   n[key] = true
-                // }
-                // if (key === 'semitrailer') {
-                //   n[key] = {
-                //     plate_number:'川D1234挂',
-                //     id: 'c0be58e1-0902-483a-a62f-cceba993a5ab'
-                //   };
-                // }
-                // end mock
+              for(let key in n) {
                 if (key === 'truck_bind_status' || key === 'staff_bind_status') {
                   n[key] = n[key] ? '已绑定' : '未绑定';
                 }
@@ -508,7 +487,7 @@ export default {
         if (isValid) {
           let send = {
             id: this.truckDialog.capacityId,
-            semitrailer: this.truckDialog.semiId,
+            semitrailer: this.truckDialog.semitrailer,
             car_belong_phone: this.truckDialog.car_belong_phone,
             group: this.truckDialog.group
           }
@@ -535,9 +514,9 @@ export default {
         if (isValid) {
           let send = {
             id: this.staffDialog.capacityId,
-            master_driver: this.staffDialog.master_driver_id,
-            vice_driver: this.staffDialog.vice_driver_id,
-            escort_staff: this.staffDialog.escort_staff_id
+            master_driver: this.staffDialog.master_driver,
+            vice_driver: this.staffDialog.vice_driver,
+            escort_staff: this.staffDialog.escort_staff
           }
           this.$$http('bindStaff', send).then((results) => {
             if (results.data.code === 0) {
@@ -560,7 +539,7 @@ export default {
     forceSubmitTruckForm: function() {
       let send = {
         id: this.truckDialog.capacityId,
-        semitrailer: this.truckDialog.semiId,
+        semitrailer: this.truckDialog.semitrailer,
         car_belong_phone: this.truckDialog.car_belong_phone,
         group: this.truckDialog.group
       }
@@ -581,9 +560,9 @@ export default {
     forceSubmitStaffForm: function() {
       let send = {
         id: this.staffDialog.capacityId,
-        master_driver: this.staffDialog.master_driver_id,
-        vice_driver: this.staffDialog.vice_driver_id,
-        escort_staff: this.staffDialog.escort_staff_id
+        master_driver: this.staffDialog.master_driver,
+        vice_driver: this.staffDialog.vice_driver,
+        escort_staff: this.staffDialog.escort_staff
       }
       this.$$http('forceBindStaff', send).then((results) => {
         if (results.data.code === 0) {
@@ -606,7 +585,7 @@ export default {
       this.staffNotice = false;
     }
   },
-  mounted: function() {
+  activated: function() {
     this.init();
   }
 };

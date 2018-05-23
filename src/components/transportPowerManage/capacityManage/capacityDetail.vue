@@ -62,7 +62,7 @@
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <el-button type="primary" size="mini" plain @click="unbindTruck()">解绑挂车</el-button>
-                  <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                  <el-button type="primary" size="mini" @click="goEditDetail(0, headData)">编辑该条</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -104,7 +104,7 @@
                 </el-col>
                 <el-col :span="6" class="text-right">
                   <el-button type="primary" size="mini" plain @click="unbindStaff()">解绑人员</el-button>
-                  <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                  <el-button type="primary" size="mini" @click="goEditDetail(1, headData)">编辑该条</el-button>
                 </el-col>
               </el-row>
             </div>
@@ -209,7 +209,7 @@ export default {
       paddingloading: false
     }
   },
-  created() {
+  activated() {
     this.getDetail();
   },
   computed: {
@@ -247,8 +247,8 @@ export default {
     unbindStaff: function () {
       console.log('解绑人员')
     },
-    goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/capacityManage/edit?activeStep=" + number + "&capacityId=" + this.id });
+    goEditDetail: function(number, data) {
+      this.$router.push({ name: 'editCapacity', params: {capacityInfo: data, activeStep: number} });
     },
   }
 }

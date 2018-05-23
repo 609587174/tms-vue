@@ -53,7 +53,7 @@ export default {
         array.map(key => {
           if (key.menu_permission_name) {
             let hashKey = ((base ? base + '/' : '') + key.menu_permission_name).replace(/^\//, '');
-            console.log('hashKey', hashKey);
+            //console.log('hashKey', hashKey);
             hashMenus['/' + hashKey] = true;
             hasOperationJur['/' + hashKey] = key.operationJur;
             if (Array.isArray(key.sms)) {
@@ -132,10 +132,10 @@ export default {
       }]));
     },
     loginDirect: function(newPath) {
-      // this.signin(() => {
-      //   this.$router.replace({ path: newPath || '/' });
-      // });
-      this.pathIn(true);
+      this.signin(() => {
+        this.$router.replace({ path: newPath || '/' });
+      });
+      //this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
       if (!menuList.length || !token) {
@@ -244,7 +244,7 @@ export default {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;
     });
-    vm.pathIn();
+    vm.signin();
   }
 };
 

@@ -43,7 +43,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+            <el-pagination background layout="prev, pager, next" :total="totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -61,7 +61,7 @@ export default {
     return {
       pageData: {
         currentPage: 1,
-        totalPage: '',
+        totalCount: '',
         pageSize: 10,
       },
       pageLoading: false,
@@ -115,18 +115,15 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
       };
-
       //postData[this.searchFilters.field] = this.searchFilters.keyword;
-
       this.pageLoading = true;
-
       this.$$http('getStandardMileList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+          this.pageData.totalCount = results.data.data.count;
 
         }
       }).catch((err) => {
@@ -139,7 +136,7 @@ export default {
     },
     handleMenuClick: function(command) {
       if (command.operator === 'check') {
-        this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
+        this.$router.push({ path: `/mapManage/standardMile/standardMileDetail/${command.id}` });
       }
     }
   },

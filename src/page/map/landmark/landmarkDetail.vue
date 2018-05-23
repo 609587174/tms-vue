@@ -14,7 +14,7 @@
       <el-header style="margin-top:15px;">
         <p>地标详情</p>
       </el-header>
-      <el-main>
+      <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">
             <el-row>
@@ -118,6 +118,7 @@ export default {
   data() {
     return {
       activeName: 'first',
+      pageLoading: 'pageLoading',
       previewIndex: 0,
       dialogTableVisible: false,
       imgObject: {
@@ -140,8 +141,26 @@ export default {
     toShowPreview: function(index) {
       this.imgObject.showPreview = true;
       this.imgObject.previewIndex = index;
+    },
+    getDetail: function() {
+      let postData = {
+        id: this.id,
+      };
+      this.pageLoading = true;
+      this.$$http('getLandMarkDetail', postData).then((results) => {
+        console.log('results', results.data.data.results);
+        this.pageLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.detailData = results.data.data;
+        }
+      }).catch((err) => {
+        this.pageLoading = false;
+      })
     }
   },
+  created: function() {
+    this.getDetail();
+  }
 }
 
 </script>

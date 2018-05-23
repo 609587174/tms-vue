@@ -568,15 +568,6 @@ const api = {
     }
   },
 
-  getLandmarkList: {
-    url: '/position/base_position/',
-    method: 'get',
-    desc: '坐标列表',
-    param: {
-
-    }
-  },
-
   getCarriers: {
     url: '/order/trader/carriers/',
     method: 'get',
@@ -724,6 +715,9 @@ const api = {
       standard_mileage:{
         desc:'标准里程',
       },
+      is_active:{
+        desc:'是否启用',
+      }
     }
   },
   getStandardMileDetail: {
@@ -734,7 +728,7 @@ const api = {
 
     }
   },
-  getStandardMileDetail: {
+  patchStandardMileDetail: {
     url: '/map/standard_mileages/:id/',
     method: 'PATCH',
     desc: '标准里程更新',
@@ -763,6 +757,22 @@ const api = {
     url: '/permissions/menus/user_menus/',
     method: 'get',
     desc: '获取当前登录用户可访问菜单',
+    param: {
+
+    }
+  },
+  getLandMarkList:{
+    url: '/map/land_marks/',
+    method: 'get',
+    desc: '地标列表',
+    param: {
+
+    }
+  },
+  getLandMarkDetail:{
+    url: '/map/land_marks/:id/',
+    method: 'get',
+    desc: '地标详情',
     param: {
 
     }

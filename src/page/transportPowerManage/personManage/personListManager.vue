@@ -68,7 +68,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+            <el-pagination background layout="prev, pager, next" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -91,7 +91,7 @@ export default {
       pageLoading: true,
       pageData: {
         currentPage: 1,
-        totalPage: '',
+        totalCount: '',
         pageSize: 10,
       },
       activeName: 'userManage',
@@ -170,9 +170,9 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
-          this.pageData.totalPage = Math.ceil(parseInt(results.data.data.count) / this.pageData.pageSize);
+          this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalPage);
+          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

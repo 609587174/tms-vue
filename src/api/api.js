@@ -9,6 +9,22 @@
  */
 
 const api = {
+  getCustomerList: {
+    url: '/carrier/customer/',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+      name: {
+        desc: '客户名称'
+      },
+      contact_name: {
+        desc: '联系人'
+      },
+      contact_phone: {
+        desc: '联系电话'
+      }
+    }
+  },
   getPermissionsList: {
     url: '/permissions/menus/',
     method: 'get',
@@ -22,7 +38,9 @@ const api = {
     method: 'get',
     desc: '获取职位详情',
     param: {
-      id:'职位ID'
+      id: {
+        desc: '职位ID'
+      }
     }
   },
   addStaff: {
@@ -78,7 +96,7 @@ const api = {
       }
     }
   },
-   getStaffs: {
+  getStaffs: {
     url: '/carrier/users/',
     method: 'get',
     desc: '员工列表',

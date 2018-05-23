@@ -209,6 +209,9 @@
                 </el-col>
               </el-row>
             </div>
+            <div v-show="!tailData.semitrailer_insurances.length" class="text-center">
+              无数据
+            </div>
             <!-- </el-form> -->
           </div>
           <div class="detail-list detail-form">

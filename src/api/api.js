@@ -568,15 +568,6 @@ const api = {
     }
   },
 
-  getLandmarkList: {
-    url: '/position/base_position/',
-    method: 'get',
-    desc: '坐标列表',
-    param: {
-
-    }
-  },
-
   getCarriers: {
     url: '/order/trader/carriers/',
     method: 'get',
@@ -676,6 +667,113 @@ const api = {
     desc: '获取托运单数据',
     param: {
 
+    }
+  },
+  getSiteList: {
+    url: '/map/fluid_sites/',
+    method: 'get',
+    desc: '获取LNG站点列表',
+    param: {
+      position_name: {
+        desc: '站点名称',
+      },
+      page: {
+        desc: '当前页数',
+      },
+      page_size: {
+        desc: '每页数量',
+      },
+    }
+  },
+  getSiteDetail: {
+    url: '/map/fuild_sites/:id/',
+    method: 'get',
+    desc: '获取LNG站点详情',
+    param: {
+
+    }
+  },
+  getStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'get',
+    desc: '获取标准里程列表',
+    param: {
+
+    }
+  },
+  addStandardMileList: {
+    url: '/map/standard_mileages/',
+    method: 'post',
+    desc: '新增标准里程',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+      is_active:{
+        desc:'是否启用',
+      }
+    }
+  },
+  getStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'get',
+    desc: '标准里程详情',
+    param: {
+
+    }
+  },
+  patchStandardMileDetail: {
+    url: '/map/standard_mileages/:id/',
+    method: 'PATCH',
+    desc: '标准里程更新',
+    param: {
+      fluid_site_id:{
+        desc:'站点资源id',
+      },
+      fluid_factory_id:{
+        desc:'液厂资源id',
+      },
+      standard_mileage:{
+        desc:'标准里程',
+      },
+    }
+  },
+  delStandardMile: {
+    url: '/map/standard_mileages/:id/',
+    method: 'DELETE',
+    desc: '删除标准里程',
+    param: {
+
+
+    }
+  },
+  getMenusList: {
+    url: '/permissions/menus/user_menus/',
+    method: 'get',
+    desc: '获取当前登录用户可访问菜单',
+    param: {
+
+    }
+  },
+  getLandMarkList:{
+    url: '/map/land_marks/',
+    method: 'get',
+    desc: '地标列表',
+    param: {
+
+    }
+  },
+  getLandMarkDetail:{
+    url: '/map/land_marks/:id/',
+    method: 'get',
+    desc: '地标详情',
+    param: {
 
     }
   },

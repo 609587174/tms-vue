@@ -1,5 +1,6 @@
 <style lang="less">
 
+
 </style>
 <template>
   <div class="capacity-list">
@@ -19,11 +20,7 @@
           <el-col :span="6">
             <el-form-item label="完善状态:" size="mini">
               <el-select v-model="filterParam.complete_status" placeholder="请选择" @change="filterSearch">
-                <el-option
-                  v-for="item in selectData.completeStatusOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                <el-option v-for="item in selectData.completeStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -31,11 +28,7 @@
           <el-col :span="6">
             <el-form-item label="挂车绑定状态:" size="mini" label-width="100px">
               <el-select v-model="filterParam.truck_bind_status" placeholder="请选择" @change="filterSearch">
-                <el-option
-                  v-for="item in selectData.truckBindStatusOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                <el-option v-for="item in selectData.truckBindStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -43,11 +36,7 @@
           <el-col :span="6">
             <el-form-item label="人员绑定状态:" size="mini" label-width="100px">
               <el-select v-model="filterParam.staff_bind_status" placeholder="请选择" @change="filterSearch">
-                <el-option
-                  v-for="item in selectData.staffBindStatusOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                <el-option v-for="item in selectData.staffBindStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -55,11 +44,7 @@
           <el-col :span="6">
             <el-form-item label="分组:" size="mini" label-width="50px">
               <el-select v-model="filterParam.group" placeholder="请选择" @change="filterSearch">
-                <el-option
-                  v-for="item in selectData.groupOptions"
-                  :key="item.id"
-                  :label="item.group_name"
-                  :value="item.id">
+                <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -106,22 +91,14 @@
         <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
-            <el-autocomplete
-              v-model="truckDialog.semitrailer"
-              :fetch-suggestions="semiListSearch"
-              @select="handleSemiListSelect"
-            ></el-autocomplete>
+            <el-autocomplete v-model="truckDialog.semitrailer" :fetch-suggestions="semiListSearch" @select="handleSemiListSelect"></el-autocomplete>
           </el-form-item>
           <el-form-item label="随车电话">
             <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="分组">
             <el-select v-model="truckDialog.group" placeholder="请选择">
-              <el-option
-                v-for="item in selectData.groupOptions"
-                :key="item.id"
-                :label="item.group_name"
-                :value="item.id">
+              <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -143,25 +120,13 @@
         <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
           <el-form-item label="主驾驶" prop="master_driver">
-            <el-autocomplete
-              v-model="staffDialog.master_driver"
-              :fetch-suggestions="driverListSearch"
-              @select="handleMasterDriverSelect"
-            ></el-autocomplete>
+            <el-autocomplete v-model="staffDialog.master_driver" :fetch-suggestions="driverListSearch" @select="handleMasterDriverSelect"></el-autocomplete>
           </el-form-item>
           <el-form-item label="副驾驶">
-            <el-autocomplete
-              v-model="staffDialog.vice_driver"
-              :fetch-suggestions="driverListSearch"
-              @select="handleViceDriverSelect"
-            ></el-autocomplete>
+            <el-autocomplete v-model="staffDialog.vice_driver" :fetch-suggestions="driverListSearch" @select="handleViceDriverSelect"></el-autocomplete>
           </el-form-item>
           <el-form-item label="押运员">
-            <el-autocomplete
-              v-model="staffDialog.escort_staff"
-              :fetch-suggestions="escortListSearch"
-              @select="handleEscortSelect"
-            ></el-autocomplete>
+            <el-autocomplete v-model="staffDialog.escort_staff" :fetch-suggestions="escortListSearch" @select="handleEscortSelect"></el-autocomplete>
           </el-form-item>
         </el-form>
         <div v-show="!staffNotice" slot="footer" class="dialog-footer">
@@ -218,8 +183,7 @@ export default {
         totalPage: 1,
         pageSize: 10
       },
-      thTableList: [
-        {
+      thTableList: [{
           title: "牵引车车牌号",
           param: "tractor.plate_number",
           width: ""
@@ -281,8 +245,7 @@ export default {
           { id: "driver_staff_name", value: "人员" },
           { id: "car_belong_phone", value: "号码" }
         ],
-        completeStatusOptions: [
-          {
+        completeStatusOptions: [{
             value: '',
             label: '全部'
           },
@@ -295,8 +258,7 @@ export default {
             label: "已完善"
           }
         ],
-        truckBindStatusOptions: [
-          {
+        truckBindStatusOptions: [{
             value: '',
             label: '全部'
           },
@@ -309,8 +271,7 @@ export default {
             label: "已绑定"
           }
         ],
-        staffBindStatusOptions: [
-          {
+        staffBindStatusOptions: [{
             value: '',
             label: '全部'
           },
@@ -332,7 +293,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function() {
       this.getGroups();
       this.searchList();
       this.getSemiList();
@@ -357,8 +318,8 @@ export default {
         console.log(error);
       });
     },
-    getSemiList: function () {
-      this.$$http('searchTailCarList', {pagination: false}).then((result) => {
+    getSemiList: function() {
+      this.$$http('searchTailCarList', { pagination: false }).then((result) => {
         if (result.data.code == 0) {
           // this.semiList = result.data.data.results;
           result.data.data.map(((n, i) => {
@@ -372,7 +333,7 @@ export default {
         console.log(error);
       });
     },
-    getDriverList: function () {
+    getDriverList: function() {
       let param1 = {
         work_type: 'DRIVER',
         pagination: false
@@ -399,7 +360,7 @@ export default {
       })
     },
     getEscortList: function() {
-      this.$$http('getDriversList', {work_type: 'ESCORT', pagination: false}).then(result => {
+      this.$$http('getDriversList', { work_type: 'ESCORT', pagination: false }).then(result => {
         if (result.data.code == 0) {
           result.data.data.map((n, i) => {
             this.escortList.push({
@@ -466,7 +427,7 @@ export default {
               result.data.data.count / vm.pageData.pageSize
             );
             vm.tableData.map((n, i) => {
-              for(let key in n) {
+              for (let key in n) {
                 // mock
                 // if (key === 'truck_bind_status') {
                 //   n[key] = true
@@ -493,20 +454,17 @@ export default {
           vm.pageLoading = false;
         });
     },
-    filterSearch: function () {
+    filterSearch: function() {
       this.filterParam.page = 1;
       this.searchList();
     },
     jumpPage: function(scope) {
-      if (scope.operator == "edit") {
-      } else if (scope.operator == "show") {
+      if (scope.operator == "edit") {} else if (scope.operator == "show") {
         this.$router.push({
-          path:
-            "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
+          path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
             scope.rowData.id
         });
-      } else if (scope.operator == "operation") {
-      }
+      } else if (scope.operator == "operation") {}
     },
     pageChange: function() {
       setTimeout(() => {
@@ -514,7 +472,7 @@ export default {
         this.searchList();
       });
     },
-    bindTruck: function (row) {
+    bindTruck: function(row) {
       this.bindTruckFormVisible = true;
       this.truckDialog = {
         capacityId: row.rowData.id,
@@ -524,7 +482,7 @@ export default {
         group: ''
       }
     },
-    bindStaff: function (row) {
+    bindStaff: function(row) {
       this.bindStaffFormVisible = true;
       this.staffDialog = {
         capacityId: row.rowData.id,
@@ -535,17 +493,17 @@ export default {
         escort_staff: ''
       }
     },
-    openFormDialog: function (dialog) {
+    openFormDialog: function(dialog) {
       // setTimeout(() => {
       //   this.$refs[dialog].resetFields();
       // }, 500);
     },
-    closeFormDialog: function (dialog) {
+    closeFormDialog: function(dialog) {
       this.truckNotice = false;
       this.staffNotice = false;
       this.$refs[dialog].resetFields();
     },
-    submitTruckForm: function () {
+    submitTruckForm: function() {
       this.$refs.truckDialog.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -555,7 +513,7 @@ export default {
             group: this.truckDialog.group
           }
           this.$$http('bindTruck', send).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -572,7 +530,7 @@ export default {
         }
       });
     },
-    submitStaffForm: function () {
+    submitStaffForm: function() {
       this.$refs.staffDialog.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -582,7 +540,7 @@ export default {
             escort_staff: this.staffDialog.escort_staff_id
           }
           this.$$http('bindStaff', send).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -599,7 +557,7 @@ export default {
         }
       });
     },
-    forceSubmitTruckForm: function () {
+    forceSubmitTruckForm: function() {
       let send = {
         id: this.truckDialog.capacityId,
         semitrailer: this.truckDialog.semiId,
@@ -607,7 +565,7 @@ export default {
         group: this.truckDialog.group
       }
       this.$$http('forceBindTruck', send).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'
@@ -620,7 +578,7 @@ export default {
         console.log(err);
       });
     },
-    forceSubmitStaffForm: function () {
+    forceSubmitStaffForm: function() {
       let send = {
         id: this.staffDialog.capacityId,
         master_driver: this.staffDialog.master_driver_id,
@@ -628,7 +586,7 @@ export default {
         escort_staff: this.staffDialog.escort_staff_id
       }
       this.$$http('forceBindStaff', send).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'
@@ -641,10 +599,10 @@ export default {
         console.log(err);
       });
     },
-    backTruckForm: function () {
+    backTruckForm: function() {
       this.truckNotice = false;
     },
-    backStaffForm: function () {
+    backStaffForm: function() {
       this.staffNotice = false;
     }
   },
@@ -652,4 +610,5 @@ export default {
     this.init();
   }
 };
+
 </script>

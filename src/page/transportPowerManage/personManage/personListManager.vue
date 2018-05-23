@@ -7,8 +7,8 @@
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" size="mini" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select size="mini" v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
@@ -17,15 +17,15 @@
               </el-row>
               <el-row :gutter="10">
                 <el-col :span="4">
-                  <el-form-item size="mini" label="从业类型:">
-                    <el-select v-model="searchFilters.employmentType" @change="startSearch" size="mini" placeholder="请选择">
+                  <el-form-item label="从业类型:">
+                    <el-select v-model="searchFilters.employmentType" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
-                  <el-form-item size="mini" label="是否绑定:">
-                    <el-select v-model="searchFilters.isBind" @change="startSearch" size="mini" placeholder="请选择">
+                  <el-form-item label="是否绑定:">
+                    <el-select v-model="searchFilters.isBind" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isBindSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -57,12 +57,12 @@
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" border stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                 </template>
               </el-table-column>
             </el-table>

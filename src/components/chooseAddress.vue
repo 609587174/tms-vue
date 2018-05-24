@@ -62,6 +62,22 @@ export default {
       //this.getCity();
       this.address.city = '';
       this.address.area = '';
+      if (this.addressName) {
+        for (let i in this.provinceList) {
+          if (this.address.province === this.provinceList[i].id) {
+            this.addressName.province = this.provinceList[i].area_name;
+            break;
+          }
+        }
+      }
+      if (this.addressCode) {
+        for (let i in this.provinceList) {
+          if (this.address.province === this.provinceList[i].id) {
+            this.addressCode.province = this.provinceList[i].area_name;
+            break;
+          }
+        }
+      }
       console.log('this.address', this.address.province)
       this.$emit('chooseProvince');
     },
@@ -69,8 +85,40 @@ export default {
       //this.getArea();
       this.address.area = '';
       this.$emit('chooseCity');
+      if (this.addressName) {
+        for (let i in this.areaList) {
+          if (this.address.area === this.areaList[i].id) {
+            this.addressName.area = this.areaList[i].area_name;
+            break;
+          }
+        }
+      }
+      if (this.addressCode) {
+        for (let i in this.areaList) {
+          if (this.address.area === this.areaList[i].id) {
+            this.addressCode.area = this.areaList[i].area_name;
+            break;
+          }
+        }
+      }
     },
     areaChange() {
+      if (this.addressName) {
+        for (let i in this.cityList) {
+          if (this.address.city === this.cityList[i].id) {
+            this.addressName.city = this.cityList[i].area_name;
+            break;
+          }
+        }
+      }
+      if (this.addressCode) {
+        for (let i in this.cityList) {
+          if (this.address.city === this.cityList[i].id) {
+            this.addressCode.city = this.cityList[i].area_name;
+            break;
+          }
+        }
+      }
       this.$emit('chooseArea');
     }
   },
@@ -78,7 +126,9 @@ export default {
     this.getProvince();
   },
   props: {
-    address: Object,
+    address: Object, //返回id
+    addressName: Object, //返回area_name
+    addressCode: Object, //返回area_code
     chooseProvince: Function,
     chooseCity: Function,
     chooseArea: Function,

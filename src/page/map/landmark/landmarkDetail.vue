@@ -30,7 +30,10 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核操作:</label>
-                <div class="detail-form-item">{{detailData.confirm_status.verbose}}</div>
+                <div class="detail-form-item check-button">
+                  <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
+                  <el-button type="danger" :disabled="isFailure" @click="checkConfirm(false)" size="mini">拒绝</el-button>
+                </div>
               </div>
             </el-col>
           </el-row>
@@ -38,24 +41,24 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item">{{detailData.confirm_status.verbose}}</div>
+                <div class="detail-form-item">{{detailData.confirm_info.operate_remark}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item">{{detailData.confirm_status.verbose}}</div>
+                <div class="detail-form-item">{{detailData.confirm_info.user.username}}</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>审核时间:</label>
-                <div class="detail-form-item">{{detailData.confirm_status.verbose}}</div>
+                <label>审核时间:</label>
+                <div class="detail-form-item">{{detailData.confirm_info.operate_datetime}}</div>
               </div>
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form">
+        <div class="detail-list detail-form" v-if="false">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -120,7 +123,13 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
-    }
+    },
+    isSucess: function() {
+      return this.detailData.confirm_status.key !== 'SUCCESS' ? false : true;
+    },
+    isFailure: function() {
+      return this.detailData.confirm_status.key !== 'FAILURE' ? false : true;
+    },
   },
   data() {
     return {
@@ -129,7 +138,8 @@ export default {
       dialogTableVisible: false,
       detailData: {
         source_type: {},
-        confirm_status: {}
+        confirm_status: {},
+        confirm_info: { user: {} },
       },
       imgObject: {
         imgList: [{
@@ -173,15 +183,37 @@ export default {
         })
       })
 
+    },
+    passCheckAjax: function(isSucess) {
+      let postData = {
+        id: this.id,
+      }
+      postData.confirm_status = isSucess ? 'SUCCESS' : 'FAILURE';
+      this.$$http('patchLandMarkDetail', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.$message({
+            type: 'success',
+            message: '操作成功!'
+          });
+          this.getDetail();
+        }
+      }).catch((err) => {
+
+      })
+    },
+    checkConfirm: function(isSucess) {
+      let message = isSucess ? '是否审核通过?' : '是否审核拒绝?';
+      this.$confirm(message, '请确认', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'info'
+      }).then(() => {
+        this.passCheckAjax(isSucess);
+      }).catch(() => {});
     }
   },
   created: function() {
-    this.getDetail().then((results) => {
-      let lnglat = [results.data.data.longitude, results.data.data.latitude];
 
-      landmarkMap.setCenter(lnglat);
-      positionMark.setPosition(lnglat);
-    });
   },
   mounted: function() {
     /*生成地图*/
@@ -191,6 +223,12 @@ export default {
     /*创建点标记*/
     positionMark = new AMap.Marker({
       map: landmarkMap,
+    });
+    this.getDetail().then((results) => {
+      let lnglat = [results.data.data.location.longitude, results.data.data.location.latitude];
+
+      landmarkMap.setCenter(lnglat);
+      positionMark.setPosition(lnglat);
     });
   }
 }
@@ -206,12 +244,17 @@ export default {
 }
 
 #map-container {
-  height: 500px;
+  height: 400px;
   width: 100%;
 }
 
 .landmark-address {
   margin-bottom: 20px;
+}
+
+.check-button {
+  position: relative;
+  top: -8px;
 }
 
 </style>

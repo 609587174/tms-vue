@@ -28,7 +28,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
-                  <el-button type="primary" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看详情</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -101,7 +101,7 @@ export default {
         width: '250'
       }, {
         title: '添加时间',
-        param: 'create_time',
+        param: 'created_at',
         width: ''
       }],
       tableData: []
@@ -140,7 +140,7 @@ export default {
       console.log('tab', tab);
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: command.id } });
+      this.$router.push({ path: "/clientManage/clientDetail", query: { id: command.id } });
     },
     addPerson: function() {
       this.$router.push({ path: "/clientManage/addClient" });

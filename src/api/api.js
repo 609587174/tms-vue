@@ -9,6 +9,96 @@
  */
 
 const api = {
+  addCustomer: {
+    url: '/carrier/customer/',
+    method: 'post',
+    desc: '新增客户',
+    param: {
+      name: {
+        desc: '客户名称'
+      },
+      contact_name: {
+        desc: '联系人'
+      },
+      contact_phone: {
+        desc: '联系电话'
+      },
+      detail_address: {
+        desc: '详细地址'
+      },
+      deficiency_standard: {
+        desc: '亏吨标准'
+      },
+      customer_type: {
+        desc: '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
+      },
+      free_hour: {
+        desc: '免费等待时长(小时)'
+      },
+      overtime_price: {
+        desc: '超时计算单价(元/小时)'
+      },
+      license3in1_code: {
+        desc: '社会机构代码（三合一）'
+      },
+      license_code: {
+        desc: '组织机构代码（非三合一）'
+      },
+      license_pic: {
+        desc: '营业执照图片'
+      }
+    }
+  },
+  updateCustomer: {
+    url: '/carrier/customer/:customer_id/',
+    method: 'patch',
+    desc: '更新客户',
+    param: {
+      name: {
+        desc: '客户名称'
+      },
+      contact_name: {
+        desc: '联系人'
+      },
+      contact_phone: {
+        desc: '联系电话'
+      },
+      detail_address: {
+        desc: '详细地址'
+      },
+      deficiency_standard: {
+        desc: '亏吨标准'
+      },
+      customer_type: {
+        desc: '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
+      },
+      free_hour: {
+        desc: '免费等待时长(小时)'
+      },
+      overtime_price: {
+        desc: '超时计算单价(元/小时)'
+      },
+      license3in1_code: {
+        desc: '社会机构代码（三合一）'
+      },
+      license_code: {
+        desc: '组织机构代码（非三合一）'
+      },
+      license_pic: {
+        desc: '营业执照图片'
+      }
+    }
+  },
+  getCustomerDetail: {
+    url: '/carrier/customer/:customer_id/',
+    method: 'get',
+    desc: '客户管理',
+    param: {
+      customer_id: {
+        desc: '客户ID'
+      }
+    }
+  },
   getCustomerList: {
     url: '/carrier/customer/',
     method: 'get',

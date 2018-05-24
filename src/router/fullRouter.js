@@ -463,6 +463,16 @@ export default [{
         component: (resolve) => require(['../page/clientManage/addClient'], resolve)
       },
       {
+        path: 'clientDetail',
+        name: 'clientDetail',
+        meta: {
+          isVerificationL: false,
+          title: '客户详情',
+          notRenderMenu: true,
+        },
+        component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
+      },
+      {
         path: 'platformClientManage',
         name: 'platformClientManage',
         meta: {

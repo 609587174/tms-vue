@@ -164,13 +164,16 @@ export default {
     operation: function(type, rowData) {
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}` });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
         this.upPlanMethod();
       } else if (type == 'changePlan') {
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
         //传入一个订单号跳转订单详情-车辆指派页面
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}` });
+      } else if (type == 'upPlan') {
+
       }
     },
     upPlanMethod: function() {

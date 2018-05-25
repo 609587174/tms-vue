@@ -39,8 +39,8 @@
     <el-container v-loading="pageLoading">
       <el-header style="margin-top:15px;">
         <el-row>
-          <!-- <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
-          </el-col> -->
+          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
@@ -52,9 +52,10 @@
             <div class="detail-form-title text-center">基础人员</div>
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="customerMsgForm" status-icon>
               <el-row :gutter="40">
-                <el-col :span="16">
+                <el-col :span="8">
                   <el-form-item label="客户名称:" prop="name">
-                    <el-row>
+                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.name"></el-input>
+                    <!-- <el-row>
                       <el-col :span="8">
                         <el-select v-model="addType" placeholder="请选择" @change="selectAddType">
                           <el-option v-for="(item,key) in selectData.addTypeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
@@ -62,18 +63,17 @@
                       </el-col>
                       <el-col :span="16">
                         <el-row>
-                          <!-- :offset="1" -->
                           <el-col :span="12" v-if="addType==='PLAT'">
                             <el-select v-model="selectCustomer" @change="getSelectInfo" filterable placeholder="请选择">
                               <el-option v-for="(item,key) in customerList" :key="key" :label="item.name" :value="item.id"></el-option>
                             </el-select>
                           </el-col>
                           <el-col :span="12">
-                            <el-input placeholder="请输入" type="text" v-model="customerMsgForm.name"></el-input>
+
                           </el-col>
                         </el-row>
                       </el-col>
-                    </el-row>
+                    </el-row> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -81,13 +81,13 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.contact_name"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="联系方式:" prop="contact_phone">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.contact_phone"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="地址:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.detail_address"></el-input>
@@ -98,22 +98,6 @@
                     <el-input placeholder="请输入" type="text" v-model="customerMsgForm.deficiency_standard"></el-input>KG
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
-                <el-col :span="16">
-                  <el-form-item label="代码:">
-                    <el-row>
-                      <el-col :span="8">
-                        <el-select v-model="customerMsgForm.code" placeholder="请选择">
-                          <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                        </el-select>
-                      </el-col>
-                      <el-col :span="10">
-                        <el-input placeholder="请输入" type="text" v-model="customerMsgForm.codeMsg"></el-input>
-                      </el-col>
-                    </el-row>
-                  </el-form-item>
-                </el-col>
                 <el-col :span="8">
                   <el-form-item label="营业执照:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
@@ -121,6 +105,22 @@
                       <el-button size="small" type="primary" plain>上传图片</el-button>
                       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="40">
+                <el-col :span="12">
+                  <el-form-item label="代码:" prop="codeMsg">
+                    <el-row>
+                      <el-col :span="10">
+                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择">
+                          <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                        </el-select>
+                      </el-col>
+                      <el-col :span="14">
+                        <el-input placeholder="请输入" type="text" v-model="customerMsgForm.codeMsg"></el-input>
+                      </el-col>
+                    </el-row>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -178,6 +178,9 @@ export default {
     id: function() {
       return this.$route.query.id || '';
     },
+    returnPage: function() {
+      return this.$route.query.id ? '详情页' : '列表页';
+    },
   },
   data() {
     return {
@@ -187,7 +190,7 @@ export default {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
-      addType: '默认新增',
+      addType: 'OWN',
       selectCustomer: '',
       customerMsgForm: {
         name: '',
@@ -201,6 +204,12 @@ export default {
         codeMsg: '',
         license_pic: [],
       },
+      sociology: [
+        { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
+      ],
+      structure: [
+        { pattern: /^([A-Z0-9]{8})$/, message: '由8位数字和大写字母组成', trigger: 'blur' }
+      ],
       selectData: {
         codeSelect: [
           { id: 'license3in1_code', value: '社会机构代码（三合一）' },
@@ -220,19 +229,25 @@ export default {
           { required: true, message: '请输入联系人姓名', trigger: 'blur' },
           { min: 2, max: 20, message: '联系人为2~10个字符', trigger: 'blur' }
         ],
-        deficiency_standard:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '亏吨标准仅支持数字输入', trigger: 'blur' }
+        deficiency_standard: [
+          { required: true, message: '请输入亏吨标准', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        free_hour:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        free_hour: [
+          { required: true, message: '请输入免费等待时长', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        overtime_price:[
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/ , message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        overtime_price: [
+          { required: true, message: '请输入超时计算单价', trigger: 'blur' },
+          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         contact_phone: [
           { required: true, message: '请输入联系方式', trigger: 'blur' },
           { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '请输入座机号或者手机号', trigger: 'blur' }
         ],
+        codeMsg:[
+        { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
+      ]
 
       },
       saveBasicAndReviewBtn: {
@@ -258,6 +273,21 @@ export default {
 
   },
   methods: {
+    codeTab(){
+      this.customerMsgForm.codeMsg = '';
+      if(this.customerMsgForm.code === 'license3in1_code'){
+        this.rules.codeMsg = this.sociology;
+      }else{
+        this.rules.codeMsg = this.structure;
+      }
+    },
+    returnToPage: function() {
+      if (this.$route.query.id) {
+        this.$router.push({ path: "/clientManage/clientDetail", query: { id: this.$route.query.id } });
+      } else {
+        this.$router.push({ path: "/clientManage/privateClientManage" });
+      }
+    },
     handleRemove(file, fileList) {
       console.log(file, fileList);
     },
@@ -321,6 +351,11 @@ export default {
       this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
+          // this.addType = this.detail.customer_type;
+          // if(this.addType === 'PLAT'){
+          //   this.isDisabled = true;
+
+          // }
           this.customerMsgForm = {
             name: this.detail.name,
             contact_name: this.detail.contact_name,
@@ -348,7 +383,7 @@ export default {
           /* 如果id存在则为编辑 */
           if (this.id) {
             postData.customer_id = this.id;
-            postData.customer_type = this.detail.customer_type;
+            // postData.customer_type = this.detail.customer_type;
 
             apiName = 'updateCustomer';
           }
@@ -372,7 +407,7 @@ export default {
                 this.$router.push({ path: "/clientManage/clientDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
-                this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum-1, id: id } });
+                this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {
@@ -399,11 +434,11 @@ export default {
         postData.license_code = postData.codeMsg;
       }
 
-      if (this.addType === "PLAT") {
-        postData.customer_type = 'PLAT'
-      } else {
-        postData.customer_type = 'OWN'
-      }
+      // if (this.addType === "PLAT") {
+      //   postData.customer_type = 'PLAT'
+      // } else {
+      postData.customer_type = 'OWN'
+      // }
       console.log('postDataNew', postData);
       if (btnType === 'next') {
         this.editAjax(postData, formName, btnObject, 2);

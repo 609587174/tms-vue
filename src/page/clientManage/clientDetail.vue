@@ -53,7 +53,7 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>地址:</label>
+                      <label>地址:</label>
                       <div class="detail-form-item">{{clientData.detail_address}}</div>
                     </div>
                   </el-col>
@@ -79,7 +79,7 @@
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>营业执照:</label>
+                      <label>营业执照:</label>
                       <div class="detail-form-item"></div>
                     </div>
                   </el-col>

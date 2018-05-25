@@ -75,6 +75,12 @@
   float: right;
   padding: 0 2em;
   color: black;
+  i {
+    font-size: 24px;
+    margin-right: 6px;
+    position: relative;
+    top: 4px;
+  }
 }
 
 .usermenu a {
@@ -107,10 +113,16 @@
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
-          <div class="usermenu" v-if="user.name">
-            欢迎您：{{user.name}}
-            <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
-            <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
+          <div class="usermenu" v-if="user.nick_name">
+            <i class="icon-user"></i><span></span>
+            <el-dropdown trigger="click"  @command="logout">
+              <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>退出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
+
           </div>
         </div>
       </el-row>
@@ -163,6 +175,9 @@ export default {
       menus: []
     };
   },
+  components: {
+    mainHeader: 'mainHeader'
+  },
   computed: {
     activeMenu: function() {
       return this.$route.path;
@@ -211,7 +226,7 @@ export default {
     }
   },
   created: function() {
-    let user = this.$store.state.common.userData;
+    let user = this.$store.state.common.users;
     if (user) {
       this.user = user;
     } else {

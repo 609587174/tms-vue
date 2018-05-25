@@ -241,9 +241,10 @@ export default {
               intCountdown = setInterval(countdown, 1000);
             }, 1000)
 
+          } else {
+            this.msgBtn.isDisabled = false;
           }
           this.msgBtn.isLoading = false;
-          this.msgBtn.isDisabled = false;
 
         }).catch((err) => {
           this.msgBtn.isLoading = false;

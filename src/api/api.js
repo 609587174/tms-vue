@@ -883,7 +883,15 @@ const api = {
     param: {
 
     }
-  }
+  },
+  patchLandMarkDetail:{
+    url: '/map/land_marks/:id/',
+    method: 'patch',
+    desc: '地标详情',
+    param: {
+
+    }
+  },
 }
 
 

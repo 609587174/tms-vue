@@ -267,12 +267,12 @@ export default {
   data() {
     return {
       tailData: {
-        plate_number: "鲁GL8996", //挂车排
+        plate_number: "", //挂车排
         attributes: { key: '', verbose: '' }, //车辆归属
-        carrier: { name: '胜通物流公司', id: '55555c1f-1ffe-4419-9646-157c1aa0571d' }, //车辆所属
-        vin_number: "LZZ1CLVB6GA107016", //车架号
+        carrier: { name: '', id: '5' }, //车辆所属
+        vin_number: "", //车架号
         vehicle_type: { key: '', verbose: '' },
-        brand: "1231231233", //品牌型号
+        brand: "", //品牌型号
         transport_weight: "", //质量
         volume: "", //灌装容积
         length: "", //长
@@ -309,21 +309,23 @@ export default {
   methods: {
     getDetail: function() {
       this.paddingloading = true;
+      var vm = this;
       this.$$http('getTailDetalis', { id: this.tailId }).then((results) => {
+
         if (results.data && results.data.code == 0) {
-          this.tailData = results.data.data;
+          vm.tailData = results.data.data;
           var obj = { key: '', verbose: '' };
-          for (var i = 0; i < this.headData.semitrailer_insurances.length; i++) {
-            this.headData.semitrailer_insurances[i].insurance_type = this.headData.semitrailer_insurances[i].insurance_type ? this.headData.semitrailer_insurances[i].insurance_type : obj;
-            this.headData.semitrailer_insurances[i].insurance_method = this.headData.semitrailer_insurances[i].insurance_method ? this.headData.semitrailer_insurances[i].insurance_method : obj;
+          for (var i = 0; i < vm.tailData.semitrailer_insurances.length; i++) {
+            vm.tailData.semitrailer_insurances[i].insurance_type = vm.tailData.semitrailer_insurances[i].insurance_type ? vm.tailData.semitrailer_insurances[i].insurance_type : obj;
+            vm.tailData.semitrailer_insurances[i].insurance_method = vm.tailData.semitrailer_insurances[i].insurance_method ? vm.tailData.semitrailer_insurances[i].insurance_method : obj;
           }
-          this.paddingloading = false;
+          vm.paddingloading = false;
         } else {
-          this.paddingloading = false;
+          vm.paddingloading = false;
           Message.error("获取数据失败");
         }
       }).catch(() => {
-        this.paddingloading = false;
+        vm.paddingloading = false;
       })
 
     },

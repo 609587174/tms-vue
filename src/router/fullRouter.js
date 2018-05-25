@@ -77,7 +77,7 @@ export default [{
             },
             component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarTab'], resolve),
             children: [{
-              path: 'arrangeCarList/:id',
+              path: 'arrangeCarList/:id/:type',
               name: 'pickArrangeCarList',
               meta: {
                 isVerificationL: false,
@@ -316,7 +316,7 @@ export default [{
           title: '运力列表',
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityList'], resolve)
-      },{
+      }, {
         path: 'capacityDetail',
         name: 'capacityDetail',
         meta: {
@@ -325,8 +325,8 @@ export default [{
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
       }, {
-        path: 'editCapacity',
-        name: 'editCapacity',
+        path: 'edit',
+        name: 'edit',
         meta: {
           isVerificationL: false,
           title: '编辑绑定信息',

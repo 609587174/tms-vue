@@ -796,17 +796,17 @@ const api = {
     method: 'post',
     desc: '新增标准里程',
     param: {
-      fluid_site_id:{
-        desc:'站点资源id',
+      fluid_site_id: {
+        desc: '站点资源id',
       },
-      fluid_factory_id:{
-        desc:'液厂资源id',
+      fluid_factory_id: {
+        desc: '液厂资源id',
       },
-      standard_mileage:{
-        desc:'标准里程',
+      standard_mileage: {
+        desc: '标准里程',
       },
-      is_active:{
-        desc:'是否启用',
+      is_active: {
+        desc: '是否启用',
       }
     }
   },
@@ -823,14 +823,14 @@ const api = {
     method: 'PATCH',
     desc: '标准里程更新',
     param: {
-      fluid_site_id:{
-        desc:'站点资源id',
+      fluid_site_id: {
+        desc: '站点资源id',
       },
-      fluid_factory_id:{
-        desc:'液厂资源id',
+      fluid_factory_id: {
+        desc: '液厂资源id',
       },
-      standard_mileage:{
-        desc:'标准里程',
+      standard_mileage: {
+        desc: '标准里程',
       },
     }
   },
@@ -851,7 +851,7 @@ const api = {
 
     }
   },
-  getLandMarkList:{
+  getLandMarkList: {
     url: '/map/land_marks/',
     method: 'get',
     desc: '地标列表',
@@ -859,7 +859,7 @@ const api = {
 
     }
   },
-  getLandMarkDetail:{
+  getLandMarkDetail: {
     url: '/map/land_marks/:id/',
     method: 'get',
     desc: '地标详情',
@@ -867,6 +867,24 @@ const api = {
 
     }
   },
+  editCarPower: {
+    url: '/order/delivery-order/:yid/patch_capacity/',
+    method: 'PATCH',
+    desc: '修改运力',
+    param: {
+
+    }
+
+  },
+  addCarPower: {
+    url: '/order/delivery-order/add_capacity/',
+    method: 'POST',
+    desc: '添加运力',
+    param: {
+
+    }
+  }
 }
+
 
 export default api;

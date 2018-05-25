@@ -13,14 +13,14 @@
             <el-input placeholder="请输入" v-model="staffRules.nick_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
-          <el-form-item label="初始密码：" prop="password" v-if="staffDialog.type==='add'">
+          <el-form-item label="初始密码：" prop="password">
             <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
-          <el-form-item label="初始密码修改：" v-else>
+          <!-- <el-form-item label="初始密码：" v-else>
             <el-input placeholder="请输入" type="password" v-model="staffRules.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="用户名：" prop="username">
             <el-input placeholder="请输入" v-model="staffRules.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
@@ -30,7 +30,7 @@
             </el-input>
           </el-form-item>
           <el-form-item label="部门：" prop="department">
-            <el-select v-model="staffRules.department" filterable placeholder="请选择" @change="getPositionList">
+            <el-select v-model="staffRules.department" filterable placeholder="请选择" @change="getPositionList(true)">
               <el-option v-for="(item,key) in departmentList" :key="key" :label="item.group_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -66,6 +66,7 @@ export default {
     },
     closeDialogBtn: Function,
   },
+
   data: function() {
     const isSpace = (rule, value, callback) => {
       if (value.indexOf(" ") != -1) {
@@ -86,11 +87,6 @@ export default {
         carrier_role: ''
       },
       positionList: [], //职位列表
-      passwordInfo: [
-        { required: true, message: '请输入密码', trigger: 'blur' },
-        { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
-        { validator: isSpace, trigger: 'blur' },
-      ],
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -98,7 +94,7 @@ export default {
         ],
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
+          { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符(除空格),至少包含2种', trigger: 'blur' },
           { validator: isSpace, trigger: 'blur' },
         ],
         nick_name: [
@@ -183,11 +179,15 @@ export default {
       });
     },
     // 获取职位列表
-    getPositionList: function() {
+    getPositionList: function(isSelect) {
       let postData = {
         pagination: false,
         department: this.staffRules.department
       }
+      if (isSelect) {
+        this.staffRules.carrier_role = '';
+      }
+
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.positionList = results.data.data;
@@ -202,6 +202,13 @@ export default {
     staffDialog: {
       handler(val, oldVal) {　　　　　　
         console.log('编辑', val, oldVal)
+        const isSpace = (rule, value, callback) => {
+          if (value.indexOf(" ") != -1) {
+            callback(new Error('密码不能包含空格'));
+          } else {
+            callback();
+          }
+        };
         if (val.isShow && val.type === 'update') {
           console.log('staffRow', this.staffRow)
           this.staffRules = {
@@ -213,7 +220,7 @@ export default {
             department: this.staffRow.department.id,
             carrier_role: this.staffRow.carrier_role.id
           }
-          delete this.rules.password;
+          this.rules.password[0].required = false;
           this.getPositionList();
           // this.staffRules.group_name = this.departmentRow.group_name;
           this.title = '修改员工';
@@ -228,7 +235,11 @@ export default {
             department: '',
             carrier_role: ''
           }
-          this.rules.password = this.passwordInfo;
+          this.rules.password = [
+            { required: true, message: '请输入密码', trigger: 'blur' },
+            { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符（除空格）,至少包含2种', trigger: 'blur' },
+            { validator: isSpace, trigger: 'blur' },
+          ];
           // this.staffRules.group_name = '';
         }　　　　
       },

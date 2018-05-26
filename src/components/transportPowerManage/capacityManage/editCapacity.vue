@@ -74,6 +74,43 @@
   line-height: 40px;
 }
 
+.force-submit-dialog {
+  .el-dialog__body {
+    padding-top: 6px;
+    .notice-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .el-icon-warning {
+        font-size: 30px;
+        color: #e6a23c;
+        margin: 24px 0 16px;
+      }
+    }
+    .el-form {
+      width: 340px;
+      margin: 0 auto;
+      h2 {
+        text-align: center;
+        font-weight: normal;
+        padding-bottom: 46px;
+        span {
+          color: #4a9bf8;
+        }
+      }
+      .el-form-item {
+        .el-autocomplete {
+          display: block;
+        }
+        .el-select {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
 </style>
 <template>
   <div id="addeditHeadCarPage">
@@ -157,29 +194,29 @@
                 </el-select>
               </el-form-item>
             </el-form>
-            <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="forceTruckFormVisible" append-to-body center>
-              <div class="notice-msg">
-                <i class="el-icon-warning"></i>
-                <div class="notice-msg">{{truckDialog.noticeMsg}}</div>
-              </div>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="forceTruckFormVisible=false">取消</el-button>
-                <el-button type="primary" @click="forceSubmitTruckForm">确定</el-button>
-              </div>
-            </el-dialog>
-            <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="forceStaffFormVisible" append-to-body center>
-              <div class="notice-msg">
-                <i class="el-icon-warning"></i>
-                <div class="notice-msg">{{staffDialog.noticeMsg}}</div>
-              </div>
-              <div slot="footer" class="dialog-footer">
-                <el-button @click="forceStaffFormVisible=false">取消</el-button>
-                <el-button type="primary" @click="forceSubmitStaffForm">确定</el-button>
-              </div>
-            </el-dialog>
             <el-button type="primary" @click="submitStaffForm">保存</el-button>
           </div>
         </transition>
+        <el-dialog custom-class="force-submit-dialog" title="强制绑定挂车" :visible.sync="forceTruckFormVisible" append-to-body center>
+          <div class="notice-msg">
+            <i class="el-icon-warning"></i>
+            <div class="notice-msg">{{truckForm.noticeMsg}}</div>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="forceTruckFormVisible=false">取消</el-button>
+            <el-button type="primary" @click="forceSubmitTruckForm">确定</el-button>
+          </div>
+        </el-dialog>
+        <el-dialog custom-class="force-submit-dialog" title="强制绑定人员" :visible.sync="forceStaffFormVisible" append-to-body center>
+          <div class="notice-msg">
+            <i class="el-icon-warning"></i>
+            <div class="notice-msg">{{staffForm.noticeMsg}}</div>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="forceStaffFormVisible=false">取消</el-button>
+            <el-button type="primary" @click="forceSubmitStaffForm">确定</el-button>
+          </div>
+        </el-dialog>
       </el-main>
     </el-container>
   </div>
@@ -337,8 +374,6 @@ export default {
                 message: '绑定成功',
                 type: 'success'
               });
-              // this.bindTruckFormVisible = false;
-              // this.searchList();
             } else if (results.data.code === 600) {
               this.forceTruckFormVisible = true;
               this.truckForm.noticeMsg = results.data.msg.split(',')[1];

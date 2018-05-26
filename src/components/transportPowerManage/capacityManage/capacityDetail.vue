@@ -242,10 +242,40 @@ export default {
 
     },
     unbindTruck: function () {
-      console.log('解绑挂车')
+      this.$confirm('此操作将一键解绑挂车, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        this.$$http('unbindTruck', {id: this.id}).then(results => {
+          this.$message({
+            type: 'success',
+            message: '解绑挂车成功!'
+          });
+          this.getDetail();
+        }).catch(error => {
+          console.log(error);
+        });
+      });
     },
     unbindStaff: function () {
-      console.log('解绑人员')
+      this.$confirm('此操作将一键解绑人员, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        this.$$http('unbindStaff', {id: this.id}).then(results => {
+          this.$message({
+            type: 'success',
+            message: '解绑人员成功!'
+          });
+          this.getDetail();
+        }).catch(error => {
+          console.log(error);
+        });
+      });
     },
     goEditDetail: function(number, data) {
       this.$router.push({ name: 'editCapacity', params: {capacityInfo: data, activeStep: number} });

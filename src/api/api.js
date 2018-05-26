@@ -453,6 +453,18 @@ const api = {
     desc: '获取运力详情',
     param: {}
   },
+  unbindTruck: {
+    url: '/truck/tractor_semitrailers/:id/cancel_bind_semitrailer/',
+    method: 'PATCH',
+    desc: '解绑挂车',
+    param: {}
+  },
+  unbindStaff: {
+    url: '/truck/tractor_semitrailers/:id/cancel_driver_staff/',
+    method: 'PATCH',
+    desc: '解绑人员',
+    param: {}
+  },
   bindTruck: {
     url: '/truck/tractor_semitrailers/:id/bind_semitrailer/',
     method: 'PATCH',

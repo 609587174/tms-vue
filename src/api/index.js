@@ -235,6 +235,8 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
         //默认使用successState
         if (defaultSuccessCallback === undefined) {
           successState(res)
+        } else if (typeof defaultSuccessCallback === 'function') {
+          defaultSuccessCallback(res);
         }
         resolve(res)
       }
@@ -244,6 +246,8 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
         //默认使用errorState
         if (defaultErrorCallback === undefined) {
           errorState(response)
+        } else if (typeof defaultErrorCallback === 'function') {
+          defaultErrorCallback(response);
         }
         reject(response)
       }

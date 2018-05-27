@@ -375,7 +375,7 @@ export default {
             car_belong_phone: this.truckForm.car_belong_phone,
             group: this.truckForm.group
           }
-          this.$$http('bindTruck', send).then((results) => {
+          this.$$http('bindTruck', send, this.validteClientCallback).then((results) => {
             if(results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -400,7 +400,7 @@ export default {
             vice_driver: this.staffForm.vice_driver,
             escort_staff: this.staffForm.escort_staff
           }
-          this.$$http('bindStaff', send).then((results) => {
+          this.$$http('bindStaff', send, this.validteClientCallback).then((results) => {
             if(results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -423,7 +423,7 @@ export default {
         car_belong_phone: this.truckForm.car_belong_phone,
         group: this.truckForm.group
       }
-      this.$$http('forceBindTruck', send).then((results) => {
+      this.$$http('forceBindTruck', send, this.validteClientCallback).then((results) => {
         if(results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -442,7 +442,7 @@ export default {
         vice_driver: this.staffForm.vice_driver,
         escort_staff: this.staffForm.escort_staff
       }
-      this.$$http('forceBindStaff', send).then((results) => {
+      this.$$http('forceBindStaff', send, this.validteClientCallback).then((results) => {
         if(results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -462,6 +462,15 @@ export default {
       }
       if (this.capacityId) {
         this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId });
+      }
+    },
+    validteClientCallback: function (res) {
+      let reg = new RegExp('^(4[0-9]*)$')
+      if (reg.test(res.data.code)) {
+        this.$message({
+          message: res.data.msg,
+          type: 'error'
+        });
       }
     }
   }

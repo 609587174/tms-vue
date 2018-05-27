@@ -325,8 +325,8 @@ export default [{
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
       }, {
-        path: 'edit',
-        name: 'edit',
+        path: 'editCapacity',
+        name: 'editCapacity',
         meta: {
           isVerificationL: false,
           title: '编辑绑定信息',

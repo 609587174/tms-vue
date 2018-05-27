@@ -241,7 +241,10 @@ export default {
             { validator: isSpace, trigger: 'blur' },
           ];
           // this.staffRules.group_name = '';
-        }　　　　
+        }　　
+        if(this.$refs['staffRules']){
+          this.$refs['staffRules'].clearValidate();　　　　
+        }　
       },
       　　　　deep: true
 

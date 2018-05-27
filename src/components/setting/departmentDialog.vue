@@ -119,7 +119,11 @@ export default {
         } else {
           this.title = '新增部门';
           this.departmentRules.group_name = '';
-        }　　　　
+        }
+        if(this.$refs['departmentRules']){
+          this.$refs['departmentRules'].clearValidate();　　　　
+        }
+
       }, 　　　　deep: true
 
     }

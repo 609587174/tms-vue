@@ -110,7 +110,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="12">
-                  <el-form-item label="代码:" prop="codeMsg">
+                  <el-form-item label="社会机构代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="10">
                         <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择">
@@ -142,12 +142,12 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="免费等待时长:" prop="free_hour">
-                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="customerMsgForm.free_hour"></el-input>
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="customerMsgForm.free_hour"></el-input>小时
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="超时计算单价:" prop="overtime_price">
-                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.overtime_price"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.overtime_price"></el-input>元/小时
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -245,9 +245,9 @@ export default {
           { required: true, message: '请输入联系方式', trigger: 'blur' },
           { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '请输入座机号或者手机号', trigger: 'blur' }
         ],
-        codeMsg:[
-        { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
-      ]
+        codeMsg: [
+          { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
+        ]
 
       },
       saveBasicAndReviewBtn: {
@@ -269,15 +269,14 @@ export default {
     if (this.id) {
       this.getDetail();
     }
-    this.getList();
-
   },
   methods: {
-    codeTab(){
+    codeTab() {
       this.customerMsgForm.codeMsg = '';
-      if(this.customerMsgForm.code === 'license3in1_code'){
+      this.$refs['addFormSetpOne'].clearValidate();
+      if (this.customerMsgForm.code === 'license3in1_code') {
         this.rules.codeMsg = this.sociology;
-      }else{
+      } else {
         this.rules.codeMsg = this.structure;
       }
     },
@@ -334,19 +333,6 @@ export default {
       }
 
     },
-    getList: function() {
-      let postData = {
-        page: 1
-      };
-      this.$$http('getCustomerList', postData).then((results) => {
-        console.log('results', results.data.data.results);
-        if (results.data && results.data.code == 0) {
-          this.customerList = results.data.data.results;
-
-        }
-      }).catch((err) => {})
-
-    },
     getDetail: function() {
       this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -367,6 +353,11 @@ export default {
             code: this.detail.license3in1_code ? 'license3in1_code' : 'license_code',
             codeMsg: this.detail.license3in1_code ? this.detail.license3in1_code : this.detail.license_code,
             license_pic: this.detail.license_pic ? this.detail.license_pic : [],
+          }
+          if (this.customerMsgForm.code === 'license3in1_code') {
+            this.rules.codeMsg = this.sociology;
+          } else {
+            this.rules.codeMsg = this.structure;
           }
         }
       })

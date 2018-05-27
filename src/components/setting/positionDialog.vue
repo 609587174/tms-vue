@@ -128,7 +128,10 @@ export default {
         } else {
           this.positionRules.role_name = '';
           this.title = '新增职位';
-        }　　　　
+        }　　
+        if(this.$refs['positionRules']){
+          this.$refs['positionRules'].clearValidate();　　　　
+        }　　　
       },
       　　　　deep: true
 

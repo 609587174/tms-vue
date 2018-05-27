@@ -65,7 +65,7 @@
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>社会机构代码:</label>
+                      <label>社会机构代码:</label>
                       <div class="detail-form-item">{{clientData.license_code?clientData.license_code:clientData.license3in1_code}}</div>
                     </div>
                   </el-col>
@@ -74,7 +74,7 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label><span class="text-red">* </span>亏吨标准:</label>
-                      <div class="detail-form-item">{{clientData.deficiency_standard}}</div>
+                      <div class="detail-form-item">{{clientData.deficiency_standard}}<span v-if="clientData.deficiency_standard">KG</span></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
@@ -138,13 +138,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label><span class="text-red">* </span>到站免费等待时长:</label>
-                      <div class="detail-form-item">{{clientData.free_hour}}</div>
+                      <div class="detail-form-item">{{clientData.free_hour}}<span v-if="clientData.free_hour">小时</span></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label><span class="text-red">* </span>超时计算单价:</label>
-                      <div class="detail-form-item">{{clientData.overtime_price}}元/小时</div>
+                      <div class="detail-form-item">{{clientData.overtime_price}}<span v-if="clientData.overtime_price">元/小时</span></div>
                     </div>
                   </el-col>
                 </el-row>

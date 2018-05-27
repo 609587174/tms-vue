@@ -18,7 +18,7 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <el-button type="primary" plain @click="importList">导入</el-button>
+            <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
             <el-button type="primary">导出</el-button>
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
@@ -34,7 +34,8 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next, jumper" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -92,12 +93,12 @@ export default {
         param: 'contact_phone',
         width: ''
       }, {
-        title: '亏吨标准',
-        param: 'detail_address',
+        title: '亏吨标准（KG）',
+        param: 'deficiency_standard',
         width: ''
       }, {
         title: '地址',
-        param: 'deficiency_standard',
+        param: 'detail_address',
         width: '250'
       }, {
         title: '添加时间',

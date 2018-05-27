@@ -31,11 +31,9 @@ export default {
   },
   methods: {
     signin: function(callback) {
-      // let localUser = this.pbFunc.session('token'); // if (!localUser) { // return this.$router.push({ path: '/login', query: { from: this.$router.currentRoute.path } }); // }
-
       let menuData = staticData.staticData();
       let allowedRouter = this.getRoutes(menuData.data);
-      // console.log('allowedRouter', allowedRouter);
+      console.log('allowedRouter', allowedRouter);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
@@ -64,6 +62,7 @@ export default {
       };
       console.log('hashMenus', hashMenus);
       setMenu2Hash(userInfo);
+      console.log("userInfo", userInfo);
       this.$root.hashMenus = hashMenus;
       let findLocalRoute = function(array, base) {
         let replyResult = [];
@@ -102,10 +101,63 @@ export default {
       redirectConfig(allowedRouter);
       return allowedRouter;
     },
+    buildDictionary: function() {
+      let dictionaryObject = {
+        dashborad: 'OVERVIEW', //概览
+        orders: 'ORDER', //订单
+        pickupOrders: 'DELIVERY_ORDER', //提货订单
+        consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
+        logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
+        dispatch: 'LOGISTICS_DISPATCH', //物流调度
+        mapManage: 'MAP', //地图
+        carMonitor: 'MAP_MONITOR', //地图监控
+        standardMile: 'STANDARD_MILEAGE_MANAGEMENT', //标准里程
+        landmark: 'LANDMARK_INFO', //地标管理
+        routeManage: 'ROUTE_MANAGEMENT', //路线管理
+        transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
+        capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理 (这里没有)
+        carManage: 'TRUCK_MANAGEMENT', //车辆管理(这里没有)
+        personManage: 'STAFF_MANAGEMENT', //人员管理
+        deviceManage: 'DEVICE_MANAGEMENT', //设备管理
+        clientManage: 'CUSTOMER_MANAGEMENT', //客户管理有问题
+        statistics: 'DATA_STATISTICS', //数据统计
+        businessStatistics: 'BUSINESS_STATISTICS', //业务统计
+        dataAnalysis: 'DATA_ANALYSIS', //数据分析
+        setting: 'SETTINGS', //设置
+        organizationalStructure: 'ORGANIZE_STRUCTURE_SETTINGS', //组织架构
+        staffsManage: 'CARRIER_STAFFS_MANAGEMENT', //员工管理
+        powerManage: 'PERMISSION_MANAGEMENT', //权限管理
+        userSetting: 'PERSONAL_SETTINGS', //个人设置
+      }
+      return dictionaryObject;
+    },
+
+    findDictionary: function(menuList) {
+      let findDictionaryObject = {};
+      let dictionaryObject = this.buildDictionary();
+      for (let i in dictionaryObject) {
+        for (let j in menuList) {
+          if (menuList[j].menu_key === dictionaryObject[i]) { //寻找一级菜单
+            findDictionaryObject[i] = dictionaryObject[i];
+          };
+          if (menuList[j].second_menus && menuList[j].second_menus.length) { //寻找二级菜单
+            for (let k in menuList[j].second_menus) {
+              if (menuList[j].second_menus[k].menu_key === dictionaryObject[i]) {
+                console.log('dictionaryObject[i]', i);
+                findDictionaryObject[i] = dictionaryObject[i];
+              }
+            }
+          };
+        }
+      }
+      return findDictionaryObject;
+    },
+
+
     extendRoutes: function(allowedRouter) {
       let that = this;
       let actualRouter = that.pbFunc.deepcopy(allowedRouter);
-      actualRouter.map(e => {
+      /*actualRouter.map(e => {
         //复制子菜单信息到meta用于实现导航相关效果，非必需
         if (e.children) {
           if (!e.meta) e.meta = {};
@@ -119,12 +171,12 @@ export default {
             next('/401')
           }
         }
-      });
+      });*/
       let originPath = that.pbFunc.deepcopy(userPath);
 
       originPath[0].children = actualRouter;
 
-      // console.log('originPath', originPath);
+      console.log('originPath', originPath);
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',
@@ -143,26 +195,14 @@ export default {
         this.$router.replace({ path: '/login' });
       }
     },
-    addRoutes: function(menuList) {
-      let originPath = that.pbFunc.deepcopy(userPath);
-      if (menuList && menuList.length) {
-        for (let i in menuList) {
-          if (menuList[i].menu_key === 'SETTINGS') {
-
-          }
-        }
-      }
-    },
     pathIn: function(isGoFirstPath) {
-      let routesList = [];
+      let allowedRouter = [];
       let menuList = this.pbFunc.getLocalData('menuList', true);
+      let menuDictionaryObject = this.findDictionary(menuList);
       let token = this.pbFunc.getLocalData('token', true);
-      console.log('this.$router', this.$route.path, menuList);
+      console.log('this.$router', this.$route.path, menuList, menuDictionaryObject);
       this.isHasTokenAndMenu(menuList, token);
-      routesList = this.getRoutesList(menuList);
-
-      let allowedRouter = this.getRoutes(routesList);
-      console.log('allowedRouter', allowedRouter);
+      allowedRouter = this.getRoutesList(menuDictionaryObject);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
@@ -170,53 +210,34 @@ export default {
       if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
 
     },
-    getRoutesList: function(menuList) {
-      let staticDataCopy = this.pbFunc.deepcopy(staticData.staticData().data);
-      console.log('staticDataCopy', staticDataCopy);
-      let newRoute = [];
-      if (menuList && menuList.length) {
-        for (let i in staticDataCopy) {
-          for (let j in menuList) {
+    getRoutesList: function(menuDictionaryObject) {
 
-            if (menuList[j].menu_key === staticDataCopy[i].menu_key) { //判断是否有一级菜单
-              if (menuList[j].second_menus && menuList[j].second_menus.length) {
-                let routesHasChild = {
-                  menu_permission_name: staticDataCopy[i].menu_permission_name,
-                  menu_key: staticDataCopy[i].menu_key,
-                  name: staticDataCopy[i].name,
-                  sms: []
-                }
-                for (let m in menuList[j].second_menus) { //寻找二级菜单
+      let newRoute = []
+      let userPathChild = this.pbFunc.deepcopy(userPath[0].children);
 
-                  for (let n in staticDataCopy[i].sms) {
-                    //console.log('xxxxx')
-                    if (menuList[j].second_menus[m].menu_key === staticDataCopy[i].sms[n].menu_key) {
-                      routesHasChild.sms.push({
-                        menu_permission_name: staticDataCopy[i].sms[n].menu_permission_name,
-                        menu_key: staticDataCopy[i].sms[n].menu_key,
-                        name: staticDataCopy[i].sms[n].name,
-                      })
-                    }
+      for (let i in menuDictionaryObject) {
+        for (let j in userPathChild) {
+          if (userPathChild[j].name === i) {
+
+            if (userPathChild[j].children && userPathChild[j].children.length) { //如果有二级菜单，必定有一级菜单只需要循环二级菜单
+              let pathCopy = this.pbFunc.deepcopy(userPathChild[j]);
+              pathCopy.children = []; //保留一级菜单，去除二级菜单
+              for (let m in menuDictionaryObject) {
+                for (let k in userPathChild[j].children) {
+                  if (userPathChild[j].children[k].name === m) {
+                    pathCopy.children.push(userPathChild[j].children[k]);
                   }
                 }
-                newRoute.push(routesHasChild);
-              } else {
-                newRoute.push({
-                  menu_permission_name: staticDataCopy[i].menu_permission_name,
-                  menu_key: staticDataCopy[i].menu_key,
-                  name: staticDataCopy[i].name,
-                });
               }
+              newRoute.push(pathCopy);
+            } else {
+              newRoute.push(userPathChild[j]);
             }
 
           }
         }
       }
-      console.log('newRoute', newRoute);
       return newRoute;
-
-
-
     },
     logoutDirect: function() {
       //清除session
@@ -244,7 +265,7 @@ export default {
       if (reslut.data.code == 0)
         vm.$store.state.common.selectData = reslut.data.data;
     });
-    vm.signin();
+    vm.pathIn();
   }
 };
 

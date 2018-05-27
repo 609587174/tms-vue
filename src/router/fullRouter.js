@@ -1,9 +1,10 @@
 export default [{
-  path: '/',
+  path: '',
   name: 'index',
+  redirect:'/',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
-    title: '首页'
+    title: '头部边栏'
   },
   children: [{
     path: 'dashborad',
@@ -30,7 +31,6 @@ export default [{
       meta: {
         isVerificationL: true,
         title: '提货订单',
-        iconName: 'icon-lng-dashboard',
       },
       component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
@@ -503,7 +503,7 @@ export default [{
     component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
         path: 'organizationalStructure',
-        name: "组织架构",
+        name: "organizationalStructure",
         meta: {
           title: '组织架构',
           isVerificationL: true
@@ -512,7 +512,7 @@ export default [{
       },
       {
         path: 'staffsManage',
-        name: "员工管理",
+        name: "staffsManage",
         meta: {
           title: '员工管理',
           isVerificationL: true
@@ -521,7 +521,7 @@ export default [{
       },
       {
         path: 'powerManage',
-        name: "权限管理",
+        name: "powerManage",
         meta: {
           title: '权限管理',
           isVerificationL: true

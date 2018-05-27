@@ -441,6 +441,7 @@ export default {
     },
     filterSearch: function() {
       this.filterParam.page = 1;
+      this.pageData.currentPage = 1;
       this.searchList();
     },
     jumpPage: function(scope) {

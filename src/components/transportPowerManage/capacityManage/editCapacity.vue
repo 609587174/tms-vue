@@ -315,11 +315,18 @@ export default {
         // 驾驶员数据
         if (results[2][0].data.code === 0 && results[2][1].data.code === 0) {
           results[2].map((res, i) => {
-            res.data.data.map((n, i) => {
+            res.data.data.map((n, j) => {
               this.driverList.push({
                 id: n.id,
                 value: n.name
               });
+              // 驾驶员/押运员添加进押运员数组
+              if (i === 1) {
+                this.escortList.push({
+                  id: n.id,
+                  value: n.name
+                });
+              }
             });
           });
         }

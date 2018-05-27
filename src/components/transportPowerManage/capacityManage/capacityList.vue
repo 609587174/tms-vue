@@ -104,8 +104,8 @@
             <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="分组">
-            <el-select v-model="truckDialog.group" placeholder="请选择">
-              <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
+            <el-select v-model="truckDialog.group" placeholder="请选择分组">
+              <el-option v-if="item.id" v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -346,7 +346,6 @@ export default {
     getSemiList: function() {
       this.$$http('searchTailCarList', { pagination: false }).then((result) => {
         if (result.data.code == 0) {
-          // this.semiList = result.data.data.results;
           result.data.data.map(((n, i) => {
             this.semiList.push({
               id: n.id,
@@ -372,11 +371,18 @@ export default {
       Promise.all([req1, req2]).then(results => {
         if (results[0].data.code === 0 && results[1].data.code === 0) {
           results.map((res, i) => {
-            res.data.data.map((n, i) => {
+            res.data.data.map((n, j) => {
               this.driverList.push({
                 id: n.id,
                 value: n.name
               });
+              // 驾驶员/押运员添加进押运员数组
+              if (i === 1) {
+                this.escortList.push({
+                  id: n.id,
+                  value: n.name
+                });
+              }
             });
           });
         }

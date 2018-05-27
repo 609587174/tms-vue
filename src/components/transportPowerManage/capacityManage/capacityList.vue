@@ -59,7 +59,7 @@
     <div class="capacity-list-content">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          <el-table-column v-for="(item,key,) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -93,8 +93,8 @@
           <el-form-item label="挂车号" prop="semitrailer">
             <el-select v-model="truckDialog.semitrailer" filterable placeholder="请选择">
               <el-option
-                v-for="item in semiList"
-                :key="item.id"
+                v-for="(item, index) in semiList"
+                :key="index"
                 :label="item.value"
                 :value="item.id">
               </el-option>
@@ -105,7 +105,7 @@
           </el-form-item>
           <el-form-item label="分组">
             <el-select v-model="truckDialog.group" placeholder="请选择分组">
-              <el-option v-if="item.id" v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
+              <el-option v-if="item.id" v-for="(item, index) in selectData.groupOptions" :key="index" :label="item.group_name" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -129,8 +129,8 @@
           <el-form-item label="主驾驶" prop="master_driver">
             <el-select v-model="staffDialog.master_driver" filterable placeholder="请选择">
               <el-option
-                v-for="item in driverList"
-                :key="item.id"
+                v-for="(item, index) in driverList"
+                :key="index"
                 :label="item.value"
                 :value="item.id">
               </el-option>
@@ -139,8 +139,8 @@
           <el-form-item label="副驾驶">
             <el-select v-model="staffDialog.vice_driver" filterable placeholder="请选择">
               <el-option
-                v-for="item in driverList"
-                :key="item.id"
+                v-for="(item, index) in driverList"
+                :key="index"
                 :label="item.value"
                 :value="item.id">
               </el-option>
@@ -149,8 +149,8 @@
           <el-form-item label="押运员">
             <el-select v-model="staffDialog.escort_staff" filterable placeholder="请选择">
               <el-option
-                v-for="item in escortList"
-                :key="item.id"
+                v-for="(item, index) in escortList"
+                :key="index"
                 :label="item.value"
                 :value="item.id">
               </el-option>
@@ -498,7 +498,7 @@ export default {
             car_belong_phone: this.truckDialog.car_belong_phone,
             group: this.truckDialog.group
           }
-          this.$$http('bindTruck', send).then((results) => {
+          this.$$http('bindTruck', send, this.validteClientCallback).then((results) => {
             if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -525,7 +525,7 @@ export default {
             vice_driver: this.staffDialog.vice_driver,
             escort_staff: this.staffDialog.escort_staff
           }
-          this.$$http('bindStaff', send).then((results) => {
+          this.$$http('bindStaff', send, this.validteClientCallback).then((results) => {
             if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -550,7 +550,7 @@ export default {
         car_belong_phone: this.truckDialog.car_belong_phone,
         group: this.truckDialog.group
       }
-      this.$$http('forceBindTruck', send).then((results) => {
+      this.$$http('forceBindTruck', send, this.validteClientCallback).then((results) => {
         if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -571,7 +571,7 @@ export default {
         vice_driver: this.staffDialog.vice_driver,
         escort_staff: this.staffDialog.escort_staff
       }
-      this.$$http('forceBindStaff', send).then((results) => {
+      this.$$http('forceBindStaff', send, this.validteClientCallback).then((results) => {
         if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -590,6 +590,15 @@ export default {
     },
     backStaffForm: function() {
       this.staffNotice = false;
+    },
+    validteClientCallback: function (res) {
+      let reg = new RegExp('^(4[0-9]*)$')
+      if (reg.test(res.data.code)) {
+        this.$message({
+          message: res.data.msg,
+          type: 'error'
+        });
+      }
     }
   },
   activated: function() {

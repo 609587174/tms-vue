@@ -91,7 +91,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="车辆分组:">
-                  <div class="detail-form-item">{{headData.group.group_name}}</div>
+                  <div class="detail-form-item">{{headData.group && headData.group.group_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>

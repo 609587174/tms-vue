@@ -200,7 +200,7 @@
         <el-dialog custom-class="force-submit-dialog" title="强制绑定挂车" :visible.sync="forceTruckFormVisible" append-to-body center>
           <div class="notice-msg">
             <i class="el-icon-warning"></i>
-            <div class="notice-msg">{{truckForm.noticeMsg}}</div>
+            <pre class="notice-msg">{{truckForm.noticeMsg}}</pre>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="forceTruckFormVisible=false">取消</el-button>
@@ -210,7 +210,7 @@
         <el-dialog custom-class="force-submit-dialog" title="强制绑定人员" :visible.sync="forceStaffFormVisible" append-to-body center>
           <div class="notice-msg">
             <i class="el-icon-warning"></i>
-            <div class="notice-msg">{{staffForm.noticeMsg}}</div>
+            <pre class="notice-msg">{{staffForm.noticeMsg}}</pre>
           </div>
           <div slot="footer" class="dialog-footer">
             <el-button @click="forceStaffFormVisible=false">取消</el-button>
@@ -269,7 +269,7 @@ export default {
         capacityId: this.capacityId,
         truckNum: this.capacityInfo.tractor.plate_number,
         semitrailer: this.capacityInfo.semitrailer.id,
-        car_belong_phone: this.capacityInfo.car_belong_phone || '',
+        car_belong_phone: this.capacityInfo.car_belong_phone || null,
         group: this.capacityInfo.group && this.capacityInfo.group.id
       }
     } else if (this.activeStep === 1) {
@@ -375,7 +375,7 @@ export default {
             car_belong_phone: this.truckForm.car_belong_phone,
             group: this.truckForm.group
           }
-          this.$$http('bindTruck', send, this.validteClientCallback).then((results) => {
+          this.$$http('bindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
             if(results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -400,7 +400,7 @@ export default {
             vice_driver: this.staffForm.vice_driver,
             escort_staff: this.staffForm.escort_staff
           }
-          this.$$http('bindStaff', send, this.validteClientCallback).then((results) => {
+          this.$$http('bindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
             if(results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -423,7 +423,7 @@ export default {
         car_belong_phone: this.truckForm.car_belong_phone,
         group: this.truckForm.group
       }
-      this.$$http('forceBindTruck', send, this.validteClientCallback).then((results) => {
+      this.$$http('forceBindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
         if(results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -442,7 +442,7 @@ export default {
         vice_driver: this.staffForm.vice_driver,
         escort_staff: this.staffForm.escort_staff
       }
-      this.$$http('forceBindStaff', send, this.validteClientCallback).then((results) => {
+      this.$$http('forceBindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
         if(results.data.code === 0) {
           this.$message({
             message: '绑定成功',

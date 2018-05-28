@@ -86,7 +86,7 @@
       <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
         <div class="notice-msg" v-show="truckNotice">
           <i class="el-icon-warning"></i>
-          <div class="notice-msg">{{truckDialog.noticeMsg}}</div>
+          <pre class="notice-msg">{{truckDialog.noticeMsg}}</pre>
         </div>
         <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
@@ -122,7 +122,7 @@
       <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="bindStaffFormVisible" append-to-body center @close="closeFormDialog('staffDialog')" @open="openFormDialog('staffDialog')">
         <div class="notice-msg" v-show="staffNotice">
           <i class="el-icon-warning"></i>
-          <div class="notice-msg">{{staffDialog.noticeMsg}}</div>
+          <pre class="notice-msg">{{staffDialog.noticeMsg}}</pre>
         </div>
         <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
@@ -193,12 +193,12 @@ export default {
       bindStaffFormVisible: false,
       filterParam: {
         page: 1,
-        keyword: "",
-        field: "",
-        complete_status: '',
-        truck_bind_status: '',
-        staff_bind_status: '',
-        group: ''
+        keyword: null,
+        field: null,
+        complete_status: null,
+        truck_bind_status: null,
+        staff_bind_status: null,
+        group: null
       },
       rules: {},
       activeName: "first",
@@ -211,56 +211,57 @@ export default {
       thTableList: [{
           title: "牵引车车牌号",
           param: "tractor.plate_number",
-          width: ""
+          width: ''
         },
         {
           title: "当前绑定挂车",
           param: "semitrailer.plate_number",
-          width: ""
+          width: ''
         },
         {
           title: "随车电话",
           param: "car_belong_phone",
-          width: ""
+          width: ''
         },
         {
           title: "车辆所属",
           param: "tractor.attributes.verbose",
-          width: ""
+          width: ''
         },
         {
           title: "分组",
-          param: "group.group_name"
+          param: "group.group_name",
+          width: ''
         },
         {
           title: "主驾驶",
           param: "master_driver.name",
-          width: ""
+          width: ''
         },
         {
           title: "副驾驶",
           param: "vice_driver.name",
-          width: ""
+          width: ''
         },
         {
           title: "押运员",
           param: "escort_staff.name",
-          width: ""
+          width: ''
         },
         {
           title: "挂车绑定状态",
           param: "truck_bind_status",
-          width: ""
+          width: ''
         },
         {
           title: "人员绑定状态",
           param: "staff_bind_status",
-          width: ""
+          width: ''
         },
         {
           title: "完善状态",
           param: "complete_status",
-          width: ""
+          width: ''
         }
       ],
       selectData: {
@@ -271,7 +272,7 @@ export default {
           { id: "car_belong_phone", value: "号码" }
         ],
         completeStatusOptions: [{
-            value: '',
+            value: null,
             label: '全部'
           },
           {
@@ -284,7 +285,7 @@ export default {
           }
         ],
         truckBindStatusOptions: [{
-            value: '',
+            value: null,
             label: '全部'
           },
           {
@@ -297,7 +298,7 @@ export default {
           }
         ],
         staffBindStatusOptions: [{
-            value: '',
+            value: null,
             label: '全部'
           },
           {
@@ -331,7 +332,7 @@ export default {
       this.$$http('getGroups').then(results => {
         if (results.data.code === 0) {
           this.selectData.groupOptions = [{
-            id: '',
+            id: null,
             group_name: '全部'
           }];
           this.groupList = results.data.data.results;
@@ -409,12 +410,12 @@ export default {
       if (this.filterParam.field) {
         this.filterParam[this.filterParam.field] = this.filterParam.keyword;
       } else {
-        this.filterParam.tractor_plate_number = '';
-        this.filterParam.semitrailer_plate_number = '';
-        this.filterParam.car_belong_phone = '';
-        this.filterParam.driver_staff_name = '';
+        this.filterParam.tractor_plate_number = null;
+        this.filterParam.semitrailer_plate_number = null;
+        this.filterParam.car_belong_phone = null;
+        this.filterParam.driver_staff_name = null;
       }
-      this.$$http("searchCapacityList", this.filterParam)
+      this.$$http("searchCapacityList", dealObjectValue(this.filterParam))
         .then(function(result) {
           var resultData;
           if (result.data.code == 0) {
@@ -463,9 +464,9 @@ export default {
       this.truckDialog = {
         capacityId: row.rowData.id,
         truckNum: row.rowData.tractor.plate_number,
-        semitrailer: '',
-        car_belong_phone: '',
-        group: ''
+        semitrailer: null,
+        car_belong_phone: row.rowData.car_belong_phone,
+        group: row.rowData.group && row.rowData.group.id
       }
     },
     bindStaff: function(row) {
@@ -474,9 +475,9 @@ export default {
         capacityId: row.rowData.id,
         truckNum: row.rowData.tractor.plate_number,
         semiNum: row.rowData.semitrailer.plate_number,
-        master_driver: '',
-        vice_driver: '',
-        escort_staff: ''
+        master_driver: null,
+        vice_driver: null,
+        escort_staff: null
       }
     },
     openFormDialog: function(dialog) {
@@ -498,7 +499,7 @@ export default {
             car_belong_phone: this.truckDialog.car_belong_phone,
             group: this.truckDialog.group
           }
-          this.$$http('bindTruck', send, this.validteClientCallback).then((results) => {
+          this.$$http('bindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
             if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -508,7 +509,7 @@ export default {
               this.searchList();
             } else if (results.data.code === 600) {
               this.truckNotice = true;
-              this.truckDialog.noticeMsg = results.data.msg.split(',')[1];
+              this.truckDialog.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
             console.log(err);
@@ -525,7 +526,7 @@ export default {
             vice_driver: this.staffDialog.vice_driver,
             escort_staff: this.staffDialog.escort_staff
           }
-          this.$$http('bindStaff', send, this.validteClientCallback).then((results) => {
+          this.$$http('bindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
             if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
@@ -550,7 +551,7 @@ export default {
         car_belong_phone: this.truckDialog.car_belong_phone,
         group: this.truckDialog.group
       }
-      this.$$http('forceBindTruck', send, this.validteClientCallback).then((results) => {
+      this.$$http('forceBindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
         if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
@@ -571,7 +572,7 @@ export default {
         vice_driver: this.staffDialog.vice_driver,
         escort_staff: this.staffDialog.escort_staff
       }
-      this.$$http('forceBindStaff', send, this.validteClientCallback).then((results) => {
+      this.$$http('forceBindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
         if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',

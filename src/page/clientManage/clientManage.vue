@@ -28,11 +28,11 @@ export default {
     handleClick: function(tab, event) {
       if (tab.paneName === 'first') {
         this.$router.push({
-          path: '/clientManage/privateClientManage'
+          path: '/clientManage/clientManageSecond/privateClientManage'
         });
       } else if (tab.paneName === 'tow') {
         this.$router.push({
-          path: '/clientManage/platformClientManage'
+          path: '/clientManage/clientManageSecond/platformClientManage'
         });
       }
     }

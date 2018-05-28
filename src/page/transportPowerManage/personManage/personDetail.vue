@@ -25,40 +25,40 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>姓名:</label>
-                <div class="detail-form-item">{{userData.name}}</div>
+                <label>姓名:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>从业类型:</label>
-                <div class="detail-form-item">{{userData.work_type.verbose}}</div>
+                <label>从业类型:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.work_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>手机号码:</label>
-                <div class="detail-form-item">{{userData.mobile_phone}}</div>
+                <label>手机号码:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.mobile_phone)"></div>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>人员所属:</label>
-                <div class="detail-form-item">{{userData.staff_type.verbose}}</div>
+                <label>人员所属:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.staff_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>身份证号:</label>
-                <div class="detail-form-item">{{userData.id_number}}</div>
+                <label>身份证号:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.id_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>在职状态:</label>
-                <div class="detail-form-item">{{userData.on_job_status.verbose}}</div>
+                <label>在职状态:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.on_job_status.verbose)"></div>
               </div>
             </el-col>
           </el-row>
@@ -66,19 +66,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>性别:</label>
-                <div class="detail-form-item">{{userData.gender.verbose}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.gender.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>出生日期:</label>
-                <div class="detail-form-item">{{userData.birthday}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.birthday)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>年龄:</label>
-                <div class="detail-form-item">{{userData.age}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.age)"></div>
               </div>
             </el-col>
           </el-row>
@@ -86,19 +86,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>家属姓名:</label>
-                <div class="detail-form-item">{{userData.family_member_name}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.family_member_name)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>家属联系方式:</label>
-                <div class="detail-form-item">{{userData.family_member_phone}}</div>
+                <label>家属联系方式:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.family_member_phone)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>准驾类型:</label>
-                <div class="detail-form-item">{{userData.drive_license_allow_type}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_allow_type)"></div>
               </div>
             </el-col>
           </el-row>
@@ -111,14 +111,14 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label><span class="text-red">* </span>详细地址:</label>
-                <div class="detail-form-item">{{userData.detail_address}}</div>
+                <label>详细地址:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.detail_address)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>身份证:</label>
-                <div class="detail-form-item">{{userData.drive_license_photo}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_photo)"></div>
               </div>
             </el-col>
           </el-row>
@@ -138,19 +138,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶证档案编号:</label>
-                <div class="detail-form-item">{{userData.drive_license_number}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>初次发证时间:</label>
-                <div class="detail-form-item">{{userData.drive_license_issue_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_issue_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>到期时间:</label>
-                <div class="detail-form-item">{{userData.drive_license_due_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_due_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -158,13 +158,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>发证机关:</label>
-                <div class="detail-form-item">{{userData.drive_license_issue_organ}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_issue_organ)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>驾驶证:</label>
-                <div class="detail-form-item">{{userData.drive_license_photo}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_photo)"></div>
               </div>
             </el-col>
           </el-row>
@@ -185,19 +185,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>从业资格证号:</label>
-                <div class="detail-form-item"><span class="text-red">* </span>{{userData.qualification_certificate_number}}</div>
+                <div class="detail-form-item"><span v-html="pbFunc.dealNullData(userData.qualification_certificate_number)"></span></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>初次发证时间:</label>
-                <div class="detail-form-item">{{userData.qualification_certificate_issue_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_issue_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>到期时间:</label>
-                <div class="detail-form-item">{{userData.qualification_certificate_due_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_due_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -205,13 +205,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>发证机关:</label>
-                <div class="detail-form-item">{{userData.qualification_certificate_issue_organ}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_issue_organ)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>从业资格证:</label>
-                <div class="detail-form-item">{{userData.qualification_certificate_photo}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_photo)"></div>
               </div>
             </el-col>
           </el-row>
@@ -233,19 +233,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>押运证号:</label>
-                <div class="detail-form-item">{{userData.escort_license_number}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>初次发证时间:</label>
-                <div class="detail-form-item">{{userData.escort_license_issue_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_issue_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>到期时间:</label>
-                <div class="detail-form-item">{{userData.escort_license_due_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_due_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -253,13 +253,13 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>发证机关:</label>
-                <div class="detail-form-item">{{userData.escort_license_issue_organ}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_issue_organ)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>从业资格证:</label>
-                <div class="detail-form-item">{{userData.escort_license_photo}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_photo)"></div>
               </div>
             </el-col>
           </el-row>
@@ -281,19 +281,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>录用日期:</label>
-                <div class="detail-form-item">{{userData.labour_employ_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.labour_employ_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>上岗日期:</label>
-                <div class="detail-form-item">{{userData.labour_on_work_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.labour_on_work_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>下岗日期:</label>
-                <div class="detail-form-item">{{userData.labour_off_work_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.labour_off_work_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -301,19 +301,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>合同起始日期:</label>
-                <div class="detail-form-item">{{userData.contract_start_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.contract_start_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>合同截止日期:</label>
-                <div class="detail-form-item">{{userData.contract_due_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.contract_due_date)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>转正日期:</label>
-                <div class="detail-form-item">{{userData.contract_correct_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.contract_correct_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -321,7 +321,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>体检日期:</label>
-                <div class="detail-form-item">{{userData.heath_examination_date}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.heath_examination_date)"></div>
               </div>
             </el-col>
           </el-row>
@@ -329,7 +329,7 @@
             <el-col :span="24">
               <div class="label-list">
                 <label>体检备注:</label>
-                <div class="detail-form-item">{{userData.heath_examination_remark}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.heath_examination_remark)"></div>
               </div>
             </el-col>
           </el-row>
@@ -342,7 +342,8 @@
                 培训信息
               </el-col>
               <el-col :span="6" class="text-right">
-                <el-button type="primary" size="mini" @click="goEditDetail(5)">新增一条</el-button>
+                <el-button type="primary" size="mini" @click="goEditDetail(5)" v-if="!userData.carrier_driver_trainings.length">新增一条</el-button>
+                <el-button type="primary" size="mini" @click="goEditDetail(5)" v-if="userData.carrier_driver_trainings.length">编辑该条</el-button>
               </el-col>
             </el-row>
           </div>
@@ -352,19 +353,19 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训时间:</label>
-                  <div class="detail-form-item">{{item.entry_training_date}}</div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.entry_training_date)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训内容:</label>
-                  <div class="detail-form-item">{{item.entry_training_content}}</div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.entry_training_content)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
                 <div class="label-list">
                   <label>培训考核:</label>
-                  <div class="detail-form-item">{{item.entry_training_exam}}</div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.entry_training_exam)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -372,7 +373,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>考核结果:</label>
-                  <div class="detail-form-item">{{item.entry_training_exam_result}}</div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.entry_training_exam_result)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -380,13 +381,13 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>备注:</label>
-                  <div class="detail-form-item">{{item.entry_training_remark}}</div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.entry_training_remark)"></div>
                 </div>
               </el-col>
             </el-row>
             <!-- </el-form> -->
           </div>
-          <div v-show="!userData.carrier_driver_trainings.length" class="text-center">无数据</div>
+          <div v-show="!userData.carrier_driver_trainings.length" class="text-center text-stance">无数据</div>
         </div>
       </el-main>
     </el-container>

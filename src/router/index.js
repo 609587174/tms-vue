@@ -3,7 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 let baseRoute = [{
-  path: '/index',
+  path: '/',
   name: '首页',
   component: (resolve) => require(['../page/index.vue'], resolve)
 },{

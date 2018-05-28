@@ -180,7 +180,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="从业资格证证初次发证时间:">
+                  <el-form-item label="从业资格证初次发证时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -763,6 +763,7 @@ export default {
                 this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
+                this.detailData = results.data.data;
                 this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: stepNum - 1, id: id } });
               }
             }
@@ -785,7 +786,7 @@ export default {
       let keyArray = ['name', 'work_type', 'mobile_phone', 'staff_type', 'id_number', 'on_job_status', 'gender', 'birthday', 'age', 'family_member_name', 'family_member_phone', 'drive_license_allow_type', 'detail_address'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       postData.area = this.userForm.address.area || this.userForm.address.city || '';
-      if (this.userForm.work_type.key === 'ESCORT') {
+      if (this.userForm.work_type === 'ESCORT') {
         stepNum = 4;
       }
       this.addPersonAjax(postData, formName, btnObject, stepNum);

@@ -1,9 +1,10 @@
 export default [{
-  path: '/',
+  path: '',
   name: 'index',
+  redirect:'/',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
-    title: '首页'
+    title: '头部边栏'
   },
   children: [{
     path: 'dashborad',
@@ -30,7 +31,6 @@ export default [{
       meta: {
         isVerificationL: true,
         title: '提货订单',
-        iconName: 'icon-lng-dashboard',
       },
       component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
@@ -444,45 +444,54 @@ export default [{
       iconName: 'icon-customer',
     },
     component: (resolve) => require(['../page/clientManage/clientManage'], resolve),
-    children: [{
-        path: 'privateClientManage',
-        name: 'privateClientManage',
-        meta: {
+    children:[{
+      path: 'clientManageSecond',
+      name: 'clientManageSecond',
+      redirect:'/clientManage/clientManageSecond/privateClientManage',
+      meta: {
           isVerificationL: false,
           title: '客户管理',
         },
-        component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
-      }, {
-        path: 'addClient',
-        name: 'addClient',
-        meta: {
-          isVerificationL: false,
-          title: '新增、编辑客户',
-          notRenderMenu: true,
+      component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
+      children: [{
+          path: 'privateClientManage',
+          name: 'privateClientManage',
+          meta: {
+            isVerificationL: false,
+            title: '客户管理',
+          },
+          component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
+        }, {
+          path: 'addClient',
+          name: 'addClient',
+          meta: {
+            isVerificationL: false,
+            title: '新增、编辑客户',
+          },
+          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/addClient'], resolve)
-      },
-      {
-        path: 'clientDetail',
-        name: 'clientDetail',
-        meta: {
-          isVerificationL: false,
-          title: '客户详情',
-          notRenderMenu: true,
+        {
+          path: 'clientDetail',
+          name: 'clientDetail',
+          meta: {
+            isVerificationL: false,
+            title: '客户详情',
+          },
+          component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
-      },
-      {
-        path: 'platformClientManage',
-        name: 'platformClientManage',
-        meta: {
-          isVerificationL: false,
-          title: '平台客户管理',
-          notRenderMenu: true,
+        {
+          path: 'platformClientManage',
+          name: 'platformClientManage',
+          meta: {
+            isVerificationL: false,
+            title: '平台客户管理',
+          },
+          component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
-      },
-    ]
+      ]
+      }
+    ],
+
   }, {
     path: 'statistics',
     name: 'statistics',
@@ -503,7 +512,7 @@ export default [{
     component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
         path: 'organizationalStructure',
-        name: "组织架构",
+        name: "organizationalStructure",
         meta: {
           title: '组织架构',
           isVerificationL: true
@@ -512,7 +521,7 @@ export default [{
       },
       {
         path: 'staffsManage',
-        name: "员工管理",
+        name: "staffsManage",
         meta: {
           title: '员工管理',
           isVerificationL: true
@@ -521,7 +530,7 @@ export default [{
       },
       {
         path: 'powerManage',
-        name: "权限管理",
+        name: "powerManage",
         meta: {
           title: '权限管理',
           isVerificationL: true

@@ -35,7 +35,6 @@
           </div>
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -141,10 +140,10 @@ export default {
       console.log('tab', tab);
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/clientManage/clientDetail", query: { id: command.id } });
+      this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: command.id } });
     },
     addPerson: function() {
-      this.$router.push({ path: "/clientManage/addClient" });
+      this.$router.push({ path: "/clientManage/clientManageSecond/addClient" });
     },
     importList: function() {
       this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });

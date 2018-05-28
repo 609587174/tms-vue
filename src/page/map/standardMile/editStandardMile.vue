@@ -35,8 +35,8 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="站点名称:" prop="fluid_site">
-                    <el-select filterable remote :loading="searchSiteLoading" :remote-method="searchSite" v-model="userForm.fluid_site" placeholder="请选择" @change="chooseSite">
+                  <el-form-item label="站点名称:" prop="fluid_site_id">
+                    <el-select filterable remote :loading="searchSiteLoading" :remote-method="searchSite" v-model="userForm.fluid_site_id" placeholder="请选择" @change="chooseSite">
                       <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -102,7 +102,7 @@ export default {
       },
       userForm: {
         fluid_factory_id: '',
-        fluid_site: '',
+        fluid_site_id: '',
         standard_mileage: '',
         is_active: true,
       },
@@ -110,7 +110,7 @@ export default {
         fluid_factory_id: [ //姓名
           { required: true, message: '请选择液厂', trigger: 'blur' },
         ],
-        fluid_site: [
+        fluid_site_id: [
           { required: true, message: '请选择站点', trigger: 'blur' },
         ],
         standard_mileage: [ //从业类型
@@ -177,7 +177,7 @@ export default {
     },
     chooseSite: function() {
       for (let i in this.fluidSiteSelect) {
-        if (this.userForm.fluid_site === this.fluidSiteSelect[i].id) {
+        if (this.userForm.fluid_site_id === this.fluidSiteSelect[i].id) {
           this.siteAddress = this.fluidSiteSelect[i].address;
           break;
         }
@@ -232,7 +232,7 @@ export default {
 
           this.userForm.fluid_factory_id = results.data.data.fluid_factory.id;
           this.fluidAddress = results.data.data.fluid_factory.address;
-          this.userForm.fluid_site = results.data.data.fluid_site.id;
+          this.userForm.fluid_site_id = results.data.data.fluid_site.id;
           this.siteAddress = results.data.data.fluid_site.address;
           this.userForm.standard_mileage = results.data.data.standard_mileage;
           this.userForm.is_active = results.data.data.is_active;

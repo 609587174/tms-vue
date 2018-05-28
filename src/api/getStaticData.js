@@ -10,8 +10,8 @@ const staticData = function() {
   return {
     data: [
       {
-        menu_permission_name: 'dashborad',//缺失menu_key
-        menu_key:'xxxx',
+        menu_permission_name: 'dashborad',
+        menu_key:'OVERVIEW',
         name: '概览',
       },{
         menu_permission_name: 'orders',
@@ -23,8 +23,8 @@ const staticData = function() {
           name: '提货订单列表',
         },
         {
-          menu_permission_name: 'consignmentOrders',//缺失menu_key
-          menu_key:'xxxx',
+          menu_permission_name: 'consignmentOrders',
+          menu_key:'CONSIGNMENT_ORDER',
           name: '托运订单',
         }]
       },{
@@ -45,16 +45,16 @@ const staticData = function() {
           name: '地图监控',
           menu_key:'MAP_MONITOR',
         },{
-          menu_permission_name: 'standardMile',//缺失menu_key
-          menu_key:'xxxx',
+          menu_permission_name: 'standardMile',
+          menu_key:'STANDARD_MILEAGE_MANAGEMENT',
           name: '标准里程',
         },{
           menu_permission_name: 'landmark',
-          menu_key:'MAP_TAGGING',
+          menu_key:'LANDMARK_INFO',
           name: '地标管理',
         },{
-          menu_permission_name: 'routeManage',//缺失menu_key
-          menu_key:'xxxx',
+          menu_permission_name: 'routeManage',
+          menu_key:'ROUTE_MANAGEMENT',
           name: '路线管理',
         }]
       }, {
@@ -83,20 +83,25 @@ const staticData = function() {
           }
         ]
       }, {
-        menu_permission_name: 'clientManage',//缺失menu_key
-        menu_key:'xxxx',
+        menu_permission_name: 'clientManage',//客户管理有问题
+        menu_key:'CUSTOMER_MANAGEMENT',
         name: '客户管理',
+        sms:[{
+          menu_permission_name: 'clientManageSecond',//客户管理有问题
+          menu_key:'CUSTOMER_MANAGEMENT_SECOND',
+          name: '客户管理',
+        }]
       }, {
         menu_permission_name: 'statistics',
         menu_key:'DATA_STATISTICS',
         name: '数据统计',
         sms: [{
-          menu_permission_name: 'capacityManage',
+          menu_permission_name: 'businessStatistics',
           menu_key:'BUSINESS_STATISTICS',
           name: '业务统计',
         },
         {
-          menu_permission_name: 'carManage',
+          menu_permission_name: 'dataAnalysis',
           menu_key:'DATA_ANALYSIS',
           name: '数据分析',
         }]
@@ -111,7 +116,7 @@ const staticData = function() {
         },
         {
           menu_permission_name: 'staffsManage',
-          menu_key:'ORGANIZE_STRUCTURE_SETTINGS',
+          menu_key:'CARRIER_STAFFS_MANAGEMENT',
           name: '员工管理',
 
         },
@@ -119,6 +124,11 @@ const staticData = function() {
           menu_permission_name: 'powerManage',
           menu_key:'PERMISSION_MANAGEMENT',
           name: '权限管理',
+        },
+        {
+          menu_permission_name: 'userSetting',
+          menu_key:'PERSONAL_SETTINGS',
+          name: '个人设置',
         }]
       }
     ]

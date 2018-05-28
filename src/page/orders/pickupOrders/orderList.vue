@@ -48,35 +48,35 @@
         <el-tab-pane label="全部" name="all">
           <div v-if="fifterName=='all'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="待指派" name="appoint">
           <div v-if="fifterName=='appoint'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="待确认" name="determine">
           <div v-if="fifterName=='determine'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="已确认" name="confirmed">
           <div v-if="fifterName=='confirmed'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="历史" name="loaded">
           <div v-if="fifterName=='loaded'">
             <keep-alive>
-              <orderFifterList :ListData="listFifterData"></orderFifterList>
+              <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -97,7 +97,7 @@ export default {
   },
   data() {
     return {
-      pageStatus: false,
+      searchStatus: false,
       pageLoading: false,
       fifterParam: {
         keyword: "",
@@ -110,8 +110,8 @@ export default {
       activeName: 'first',
       fifterName: 'all',
       pageData: {
-        currentPage: 100,
-        totalPage: 2,
+        currentPage: 1,
+        totalPage: 1,
         pageSize: 10,
       },
       selectData: {
@@ -138,6 +138,7 @@ export default {
     },
     searchList: function() {
       var sendData = {};
+      var vm = this;
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
@@ -148,14 +149,20 @@ export default {
       if (this.fifterName != "all") {
         sendData.status = this.fifterName;
       }
-      if (this.pageStatus) {
-        sendData.page = this.pageData.currentPage;
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
       }
+      sendData.page = this.pageData.currentPage;
+      sendData.page_size = this.pageData.pageSize;
       this.pageLoading = true;
+
       this.$$http("searchPickOrderList", sendData).then((results) => {
         this.pageLoading = false;
         if (results.data.code == 0) {
+          vm.saveSendData = sendData;
+          vm.searchStatus = false;
           var dataBody = results.data.data.data;
+          vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           this.listFifterData = dataBody;
         }
       }).catch(() => {
@@ -169,7 +176,7 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        this.pageStatus = true;
+        this.searchStatus = true;
         this.searchList();
       });
     }

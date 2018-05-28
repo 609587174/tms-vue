@@ -28,14 +28,17 @@
                   </el-col>
                 </el-row>
                 <el-row :gutter="10">
-                  <el-col :span="4">
+                  <!-- <el-col :span="4">
                     <el-form-item label="状态:">
                       <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
                         <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                       </el-select>
                     </el-form-item>
+                  </el-col> -->
+                  <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
+                    需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
                   </el-col>
-                  <el-col :span="3" :offset="16">
+                  <el-col :span="2">
                     <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
                     <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
                   </el-col>
@@ -71,24 +74,24 @@ export default {
       pageLoading: false,
       pageData: {
         currentPage: 1,
-        totalPage: '',
-        pageSize: 10,
+        totalPage: 1,
+        pageSize: 3,
       },
       searchFilters: {
         keyword: '',
-        field: '1',
+        field: '',
         orderStateList: '',
       },
       selectData: {
         fieldSelect: [{
           value: '车号',
-          id: '1',
+          id: 'tractor.plate_number',
         }, {
           value: '姓名',
-          id: '2',
+          id: 'master_driver.name',
         }, {
           value: '电话',
-          id: '3',
+          id: 'master_driver.mobile_phone',
         }],
         orderStateListSelect: [{
           value: '车号',
@@ -142,13 +145,14 @@ export default {
       }],
       tableData: [],
       tractor_semitrailers_List: [], //运力列表
-      renderAll_list: [], //筛选后的所有渲染列表
+      renderAll_list: [], //查询筛选后的所有需要渲染列表
+      trueAll_list: [], //查询筛选后的所有数据
       upTo_list: [], //最近三天已经被使用的运力
       delivery_list: [], //提货单拥有的运单，审核后
       haveTranspower_list: [], //提货单所拥有的运力,未审核
       renderPage_list: [], //当前页渲染的数据
 
-
+      lastSearch_list: [],
       add_capacities: [], //增加的运力表
       del_capacities: [], //取消的运力表
       start_capacities: [],
@@ -173,7 +177,20 @@ export default {
       var vm = this;
       console.log("selection", selection);
       console.log("row", row);
-      this.now_capacities = selection;
+
+      var addArr = [];
+      selection.forEach((sItem) => {
+        var addflag = true;
+        vm.now_capacities.forEach((item) => {
+          if (item.id == sItem.id) {
+            addflag = false;
+          }
+        });
+        if (addflag) {
+          addArr.push(sItem);
+        }
+      });
+      this.now_capacities = this.now_capacities.concat(addArr);
       if (row.id) {
         var sendJudge = false;
         selection.forEach(item => {
@@ -182,83 +199,171 @@ export default {
           }
         });
         if (sendJudge) {
+          //如果是勾选,那么判断是否在别的订单。
           let postData3 = {
             transport_id: row.id
           };
           this.$$http('searchNoUse', postData3).then((results) => {
+
             if (results.data && results.data.code == 0) {
               console.log("绑定的订单", results.data.data);
               vm.pageLoading = false;
-              if (results.data.data.length > 0) {
+              if (results.data.data.data.length > 0) {
                 var orderListText = "";
-                results.data.data.forEach((item) => {
+                results.data.data.data.forEach((item) => {
                   orderListText += item + ",";
                 });
                 const h = this.$createElement;
-                vm.$msgbox({
-                  title: '请注意',
-                  message: h('p', null, [
-                    h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
-                    h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
-                  ]),
-                  showCancelButton: true,
+                // vm.$confirm({
+                //   title: '请注意',
+                //   message: h('p', null, [
+                //     h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
+                //     h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
+                //   ]),
+                //   showCancelButton: true,
+                //   confirmButtonText: '继续添加',
+                //   cancelButtonText: '返回',
+                //   beforeClose: (action, instance, done) => {
+                //     if (action === 'confirm') {
+                //       done();
+
+                //     } else {
+
+                //       done();
+                //     }
+                //   }
+                // })
+                vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
                   confirmButtonText: '继续添加',
                   cancelButtonText: '返回',
-                  beforeClose: (action, instance, done) => {
-                    if (action === 'confirm') {
-                      done();
-
-                    } else {
-                      vm.$refs.multipleTable.toggleRowSelection(row, false);
-                      done();
+                  type: 'warning',
+                  center: true,
+                  showClose: false,
+                  closeOnClickModal: false
+                }).then(() => {
+                  row.bindCheckBox = !row.bindCheckBox;
+                  vm.trueAll_list.forEach((Titem) => {
+                    if (Titem.id == row.id) {
+                      Titem.bindCheckBox = true;
                     }
-                  }
-                })
+
+                  });
+                }).catch(() => {
+                  vm.$refs.multipleTable.toggleRowSelection(row, false);
+                });
               }
             }
           }).catch((err) => {
             vm.pageLoading = false;
           });
+        } else {
+          //如果是取消勾选,判断当前车辆是否能取消勾选
+          if (row.waybill.waybill) {
+            vm.pageLoading = true;
+            vm.$$http("judgeCanCancle", { waybill_id: row.waybill.waybill_id }).then((results) => {
+              vm.pageLoading = false;
+              if (results.data.code == 0) {
+                if (results.data.data.status) {
+                  row.bindCheckBox = !row.bindCheckBox;
+                  vm.trueAll_list.forEach((Titem) => {
+                    if (Titem.id == row.id) {
+                      Titem.bindCheckBox = false;
+                    }
+
+                  });
+                  var new_now_capacities1 = [];
+                  vm.now_capacities.forEach((item, index) => {
+                    if (item.id != row.id) {
+                      new_now_capacities1.push(item);
+                    }
+                  });
+                  vm.now_capacities = new_now_capacities1;
+                } else {
+                  vm.$confirm('当前运单不能被取消', '请注意', {
+                    confirmButtonText: '确认',
+                    type: 'warning',
+                    showCancelButton: false,
+                    center: true,
+                    closeOnClickModal: false,
+                    showClose: false
+                  }).then(() => {
+                    vm.$refs.multipleTable.toggleRowSelection(row, true);
+                  })
+                }
+              }
+            }).catch(() => {
+              vm.pageLoading = false;
+              vm.$refs.multipleTable.toggleRowSelection(row, true);
+            });
+          } else {
+            row.bindCheckBox = !row.bindCheckBox;
+            vm.trueAll_list.forEach((Titem) => {
+              if (Titem.id == row.id) {
+                Titem.bindCheckBox = true;
+              }
+
+            });
+            var new_now_capacities = [];
+            vm.now_capacities.forEach((item, index) => {
+              if (item.id != row.id) {
+                new_now_capacities.push(item);
+              }
+            });
+            vm.now_capacities = new_now_capacities;
+          }
         }
       }
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
-      this.getList();
+      this.searchThisByData();
     },
     operation: function(type) {
       var vm = this;
       if (type == 'addCar') {
-        var sendData = {
-          delivery_order_id: "",
-          add_capacities: []
-        };
-        this.now_capacities.forEach(item => {
-          sendData.add_capacities.push(item.id);
-        });
-        sendData.delivery_order_id = this.delivery_list.id;
-        this.pageLoading = true;
-        this.$$http("addCarPower", sendData).then((results) => {
-          this.pageLoading = false;
-          if (results.data.code == 0) {
-            vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
-          }
-        }).catch(() => {
-          this.pageLoading = false;
-        });
+        if (this.now_capacities.length > 0) {
+          var sendData = {
+            delivery_order_id: "",
+            add_capacities: []
+          };
+          this.now_capacities.forEach(item => {
+            sendData.add_capacities.push(item.id);
+          });
+          sendData.delivery_order_id = this.delivery_list.id;
+          this.pageLoading = true;
+          this.$$http("addCarPower", sendData).then((results) => {
+            this.pageLoading = false;
+            if (results.data.code == 0) {
+              vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
+            }
+          }).catch(() => {
+            this.pageLoading = false;
+          });
+        } else {
+          vm.$confirm('提交车辆不能为零哦', '请注意', {
+            confirmButtonText: '确认',
+            showCancelButton: false,
+            type: 'warning',
+            center: true,
+            closeOnClickModal: false,
+            showClose: false
+          }).then(() => {
 
+          })
+        }
       } else if (type == 'changeCar') {
         var sendData = {
           delivery_order_id: "",
           add_capacities: [],
           del_capacities: [],
           id: this.delivery_list.id,
-          yid: this.delivery_list.id
+          yid: this.delivery_list.id,
+          delivery_order_id: this.delivery_list.id
         };
         this.now_capacities.forEach(item => {
           var addFalg = true;
           vm.start_capacities.forEach(startItem => {
-            if (item.id == startItem.id) {
+            if (item.id == startItem) {
               addFalg = false;
             }
           });
@@ -270,24 +375,46 @@ export default {
         this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
-            if (item.id == nowItem.id) {
+            if (item == nowItem.id) {
               cancleFalg = false;
             }
           });
           if (cancleFalg) {
-            sendData.del_capacities.push(item.id);
+            sendData.del_capacities.push(item);
           }
         });
+        if (vm.now_capacities.length > 0) {
+          this.pageLoading = true;
+          this.$$http("editCarPower", sendData).then((results) => {
+            this.pageLoading = false;
+            if (results.data.code == 0) {
+              vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
+            }
+          }).catch(() => {
+            this.pageLoading = false;
+          });
+        } else {
+          vm.$confirm('修改后车辆为零,状态会置为带指派', '请注意', {
+            confirmButtonText: '确认提交',
+            cancelButtonText: '返回',
+            type: 'warning',
+            center: true,
+            closeOnClickModal: false,
+            showClose: false
 
-        this.pageLoading = true;
-        this.$$http("editCarPower", sendData).then((results) => {
-          this.pageLoading = false;
-          if (results.data.code == 0) {
-            vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
-          }
-        }).catch(() => {
-          this.pageLoading = false;
-        });
+          }).then(() => {
+            vm.$$http("editCarPower", sendData).then((results) => {
+              vm.pageLoading = false;
+              if (results.data.code == 0) {
+                vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
+              }
+            }).catch(() => {
+              this.pageLoading = false;
+            });
+          }).catch(() => {
+
+          });
+        }
       }
     },
     getList: function() {
@@ -357,61 +484,103 @@ export default {
           vm.pageLoading = false;
         }
       });
-
     },
     sortData: function(status) {
       if (status) {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
+        let fifterArr = [];
         for (let i = 0; i < operationArr.length; i++) {
+          var addflag = false;
           for (let j = 0; j < this.delivery_list.trips.length; j++) {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
               operationArr[i].bindCheckBox = true;
-              newArr.push(operationArr[i]);
-            }
-          }
-          for (let o = 0; o < this.upTo_list.length; o++) {
-            if (operationArr[i].id == this.upTo_list[o]) {
-              break;
-            } else {
-              operationArr[i].waybill = {};
-              newArr.push(operationArr[i]);
-            }
-          }
-        }
-        var newArr1 = [];
-        for (let m = 0; m < operationArr.length; m++) {
-          var addflag = true;
-          for (let n = 0; n < newArr.length; n++) {
-            if (newArr[n].id == operationArr[m].id) {
-              addflag = false;
+              this.now_capacities.push(operationArr[i]);
+              addflag = true;
             }
           }
           if (addflag) {
-            operationArr[m].waybill = {};
-            operationArr[m].ccccc = [];
-            newArr1.push(operationArr[m]);
+            newArr.push(operationArr[i]);
+          } else {
+            fifterArr.push(operationArr[i]);
           }
         }
-        newArr = newArr.concat(newArr1);
+        var fifterArr2 = [];
+        for (var findex = 0; findex < fifterArr.length; findex++) {
+          var upaddfalg = false;
+          for (let o = 0; o < this.upTo_list.length; o++) {
+            if (fifterArr[findex].id == this.upTo_list[o]) {
+              upaddfalg = true;
+              break;
+            }
+          }
+          if (!upaddfalg) {
+            fifterArr[findex].waybill = {};
+            newArr.push(fifterArr[findex]);
+          } else {
+            fifterArr2.push(fifterArr[findex]);
+          }
+        }
+        // var newArr1 = [];
+        // for (let m = 0; m < operationArr.length; m++) {
+        //   var addflag = true;
+        //   for (let n = 0; n < newArr.length; n++) {
+        //     if (newArr[n].id == operationArr[m].id) {
+        //       addflag = false;
+        //     }
+        //   }
+        //   if (addflag) {
+        //     operationArr[m].waybill = {};
+        //     newArr1.push(operationArr[m]);
+        //   }
+        // }
+        newArr = newArr.concat(fifterArr2);
+        this.trueAll_list = newArr;
         this.renderAll_list = newArr;
+
         this.bindChekboxFunction(0, this.renderAll_list);
       } else {
         console.log("获取数据失败,请刷新页面重试或联系管理员");
       }
     },
+    searchThisByData: function(searchPage, type) {
+      var keyArr = this.searchFilters.field == '' ? [] : this.searchFilters.field.split(".");
+      var value = this.searchFilters.keyword;
+      var newArr = [];
+      if (keyArr.length == 0) {
+        newArr = this.trueAll_list;
+      } else {
+        for (let i = 0; i < this.trueAll_list.length; i++) {
+          var searchParam = this.pbFunc.deepcopy(this.trueAll_list[i]);
+          for (let j = 0; j < keyArr.length; j++) {
+            searchParam = searchParam[keyArr[j]];
+          }
+          if (searchParam.indexOf(value) > -1) {
+            newArr.push(this.trueAll_list[i]);
+          }
+        }
+      }
+      if (type == 'pageChange') {
+        newArr = this.lastSearch_list;
+      }
+      this.renderAll_list = newArr;
+      this.bindChekboxFunction(searchPage, newArr);
+    },
     bindChekboxFunction: function(page, list) {
-      var list = this.pbFunc.deepcopy(list).splice(page * 10, 10);
-      this.renderPage_list = list;
+      this.pageData.totalPage = Math.ceil(list.length / this.pageData.pageSize);
+      this.lastSearch_list = list;
+      var vm = this;
+      var page_list = this.pbFunc.deepcopy(list).splice(page * this.pageData.pageSize, this.pageData.pageSize);
+
+      this.renderPage_list = page_list;
       var rowsArr = [];
-      list.forEach((item, index) => {
+      page_list.forEach((item, index) => {
         if (item.bindCheckBox) {
           rowsArr.push(item);
         }
       });
-
       var vm = this;
       setTimeout(function() {
         rowsArr.forEach(row => {
@@ -419,11 +588,10 @@ export default {
           vm.start_capacities.push(row.waybill.capacity);
         });
       });
-
     },
     pageChange: function() {
       setTimeout(() => {
-        this.getList();
+        this.searchThisByData(this.pageData.currentPage - 1, 'pageChange');
       })
     }
   },

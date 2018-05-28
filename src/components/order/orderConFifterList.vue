@@ -72,9 +72,9 @@
               </el-col>
               <el-col :span="3" class="colinfo">{{item.standard_mile}}km
               </el-col>
-              <el-col :span="4" class="colinfo">{{item.plan_time}}
+              <el-col :span="4" class="colinfo">{{item.plan_time.split(" ")[0]}}</br>{{item.plan_time.split(" ")[1]}}
               </el-col>
-              <el-col :span="4" class="colinfo">{{item.plan_time}}
+              <el-col :span="4" class="colinfo">{{item.plan_time.split(" ")[0]}}</br>{{item.plan_time.split(" ")[1]}}
               </el-col>
               <el-col :span="3" class="colinfo">{{item.plan_tonnage}}
               </el-col>
@@ -160,22 +160,80 @@ export default {
     return {
       buttonAll: {
         driver_pending_confirmation: [{
-          text: "",
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
         }],
-        to_fluid: {},
-        reach_fluid: {},
-        loading_waiting_audit: {},
-        loading_audit_failed: {},
-        waiting_match: {},
-        already_match: {},
-        to_site: {},
-        reach_site: {},
-        unloading_waiting_audit: {},
-        unloading_audit_failed: {},
-        waiting_settlement: {},
-        in_settlement: {},
-        finished: {},
-        canceled: {},
+        to_fluid: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        reach_fluid: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        loading_waiting_audit: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }, {
+          text: "装车审核",
+          color_type: "",
+          methods_type: "loadingEX"
+        }],
+        loading_audit_failed: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        waiting_match: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        already_match: [{
+          text: "确认卸货单",
+          color_type: "",
+          methods_type: "sureDownOrder"
+        }],
+        to_site: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        reach_site: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        unloading_waiting_audit: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }, {
+          text: "卸车审核",
+          color_type: "",
+          methods_type: "downEx"
+        }],
+        unloading_audit_failed: [{
+          text: "变更",
+          color_type: "",
+          methods_type: "changeSatus"
+        }],
+        waiting_settlement: [{
+          text: "调整数据",
+          color_type: "",
+          methods_type: "changeData"
+        }, {
+          text: "提交结算",
+          color_type: "",
+          methods_type: "upSettlement"
+        }],
+        in_settlement: [],
+        finished: [],
+        canceled: [],
       }
     };
   },

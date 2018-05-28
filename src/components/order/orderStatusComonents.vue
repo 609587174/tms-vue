@@ -4,7 +4,7 @@
     width: 80px;
   }
   /deep/ .el-range-editor.el-input__inner {
-    width: 90%;
+    width: 100%;
   }
 }
 
@@ -14,7 +14,7 @@
     <div class="tab-screen">
       <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom">
         <el-row :gutter="0">
-          <el-col :span="12">
+          <el-col :span="14">
             <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
               <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                 <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
@@ -22,27 +22,27 @@
               <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
             </el-input>
           </el-col>
-        </el-row>
-        <el-row style="margin-top:10px;" class="searchSection">
-          <el-col :span="6">
+          <el-col :span="6" :offset="2" class="searchSection">
             <el-form-item label="计划装货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.load_plan_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row style="margin-top:10px;" class="searchSection">
           <el-col :span="6">
             <el-form-item label="时间装货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="6" :offset="2">
             <el-form-item label="计划卸货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.unload_plan_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="6" :offset="2">
             <el-form-item label="时间卸货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.unload_active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>

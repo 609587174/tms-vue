@@ -39,6 +39,9 @@
     .el-col-3 {
       width: 11.5%;
     }
+    .expanded td {
+      text-align: center
+    }
   }
 }
 
@@ -56,7 +59,7 @@
 
 </style>
 <template>
-  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus">
+  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" v-loading="pageLoading">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
@@ -65,13 +68,13 @@
             </el-col>
             <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
             </el-col>
-            <el-col :span="4" class="colinfo">{{props.row.plan_time}}
+            <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
             </el-col>
-            <el-col :span="4" class="colinfo">{{props.row.plan_time}}
-            </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+            <el-col :span="4" class="colinfo">无
             </el-col>
             <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+            </el-col>
+            <el-col :span="3" class="colinfo">无
             </el-col>
           </el-row>
           <el-row class="loadInfo commh" style="width:100%;" v-for="(item,key) in props.row.destination">
@@ -85,10 +88,10 @@
             <el-col>需求车数:{{props.row.require_car_number}}辆</el-col>
           </el-row>
           <el-row style="width:80%;" class="commh">
-            <el-col>提交车数:{{props.row.require_car_number}}辆</el-col>
+            <el-col>提交车数:{{props.row.submit_car_number}}辆</el-col>
           </el-row>
           <el-row style="width:80%;" class="commh">
-            <el-col>确认车数:{{props.row.require_car_number}}辆</el-col>
+            <el-col>确认车数:{{props.row.sure_car_number}}辆</el-col>
           </el-row>
         </div>
         <div class="listDetalis opButton" style="width:9%">
@@ -117,21 +120,35 @@
       </template>
     </el-table-column>
     <el-table-column label="装卸地" prop="id" min-width="21.875%" type>
+      <template slot-scope="props">
+        订单号:{{props.row.order_number}}
+      </template>
     </el-table-column>
     <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">
+      <template slot-scope="props">
+      </template>
     </el-table-column>
     <el-table-column label="计划时间" prop="carriers.supplier_name" min-width="12.5%">
+      <template slot-scope="props">
+        托运方:{{props.row.trader}}
+      </template>
     </el-table-column>
     <el-table-column label="实际时间" prop="discount_price" min-width="12.5%">
+      <template slot-scope="props">
+        标准运费:{{props.row.yunfei}}
+      </template>
     </el-table-column>
     <el-table-column label="计划吨位" min-width="9.375%">
-      <template slot-scope="scope" v-if="scope.row.desc=='111'">
-        <el-tooltip :content="scope.row.desc" placement="top" effect="light">
+      <template slot-scope="props">
+        <el-tooltip :content="props.row.desc" placement="top" effect="light">
           <el-button type="text">备注<i class="el-icon-document"></i></el-button>
         </el-tooltip>
       </template>
     </el-table-column>
     <el-table-column label="实际吨位" prop="" min-width="9.375%">
+      <template slot-scope="props">
+        状态:{{props.row.status.verbose}}
+      </template>
     </el-table-column>
     <el-table-column label="车辆信息" prop="" min-width="15%">
     </el-table-column>
@@ -144,24 +161,36 @@ export default {
   name: 'orderFifterList',
   data() {
     return {
-      expandStatus: true
+      expandStatus: true,
+      pageLoading: false
     };
   },
-  props: ['ListData'],
+  props: {
+    ListData: {
+      type: Array,
+      default: []
+    }
+  },
   computed: {
-
+    expandArr: function() {
+      var returnId = [];
+      if (this.ListData[0]) {
+        returnId.push(this.ListData[0].id);
+      }
+      return returnId;
+    }
   },
   methods: {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 1) {
-        return [1, 2];
-      } else if (columnIndex === 2) {
-        return [1, 2];
-      } else if (columnIndex === 3) {
-        return [1, 2];
+      if (columnIndex === 3) {
+        return [1, 3];
       }
     },
+    getRowKeys: function(row) {
+      return row.id;
+    },
     operation: function(type, rowData) {
+      var vm = this;
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
@@ -173,6 +202,33 @@ export default {
         //传入一个订单号跳转订单详情-车辆指派页面
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}` });
       } else if (type == 'upPlan') {
+        var sendData = {
+          delivery_order_id: rowData.id
+        }
+        if (rowData.submit_car_number == 0) {
+          vm.$confirm('提交车辆不能为零哦,请你先添加车辆', '请注意', {
+            confirmButtonText: '确认',
+            showCancelButton: false,
+            type: 'warning',
+            center: true,
+          }).then(() => {
+
+          })
+        } else {
+          vm.pageLoading = true;
+          this.$$http("upOrderPlan", sendData).then((results) => {
+            vm.pageLoading = false;
+            if (results.data.code == 0) {
+              this.$message({
+                message: '提交计划成功',
+                type: 'success'
+              });
+            }
+            vm.$emit("refreshList");
+          }).catch(() => {
+            vm.pageLoading = false;
+          });
+        }
 
       }
     },

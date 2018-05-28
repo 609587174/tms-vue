@@ -896,7 +896,7 @@ const api = {
 
     }
   },
-  patchLandMarkDetail:{
+  patchLandMarkDetail: {
     url: '/map/land_marks/:id/',
     method: 'patch',
     desc: '地标详情',
@@ -904,6 +904,30 @@ const api = {
 
     }
   },
+  getRecordsData: {
+    url: '/order/delivery-order/record/',
+    method: 'get',
+    desc: '获取订单记录列表',
+    param: {
+
+    }
+  },
+  upOrderPlan: {
+    url: '/order/delivery-order/status/',
+    method: 'PUT',
+    desc: "提交修改计划",
+    param: {
+
+    }
+  },
+  judgeCanCancle: {
+    url: '/order/waybill/cancel/',
+    method: 'post',
+    desc: "判断运单是否可以被取消勾选",
+    param: {
+
+    }
+  }
 }
 
 

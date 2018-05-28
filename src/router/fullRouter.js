@@ -444,45 +444,54 @@ export default [{
       iconName: 'icon-customer',
     },
     component: (resolve) => require(['../page/clientManage/clientManage'], resolve),
-    children: [{
-        path: 'privateClientManage',
-        name: 'privateClientManage',
-        meta: {
+    children:[{
+      path: 'clientManageSecond',
+      name: 'clientManageSecond',
+      redirect:'/clientManage/clientManageSecond/privateClientManage',
+      meta: {
           isVerificationL: false,
           title: '客户管理',
         },
-        component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
-      }, {
-        path: 'addClient',
-        name: 'addClient',
-        meta: {
-          isVerificationL: false,
-          title: '新增、编辑客户',
-          notRenderMenu: true,
+      component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
+      children: [{
+          path: 'privateClientManage',
+          name: 'privateClientManage',
+          meta: {
+            isVerificationL: false,
+            title: '客户管理',
+          },
+          component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
+        }, {
+          path: 'addClient',
+          name: 'addClient',
+          meta: {
+            isVerificationL: false,
+            title: '新增、编辑客户',
+          },
+          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/addClient'], resolve)
-      },
-      {
-        path: 'clientDetail',
-        name: 'clientDetail',
-        meta: {
-          isVerificationL: false,
-          title: '客户详情',
-          notRenderMenu: true,
+        {
+          path: 'clientDetail',
+          name: 'clientDetail',
+          meta: {
+            isVerificationL: false,
+            title: '客户详情',
+          },
+          component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
-      },
-      {
-        path: 'platformClientManage',
-        name: 'platformClientManage',
-        meta: {
-          isVerificationL: false,
-          title: '平台客户管理',
-          notRenderMenu: true,
+        {
+          path: 'platformClientManage',
+          name: 'platformClientManage',
+          meta: {
+            isVerificationL: false,
+            title: '平台客户管理',
+          },
+          component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
         },
-        component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
-      },
-    ]
+      ]
+      }
+    ],
+
   }, {
     path: 'statistics',
     name: 'statistics',

@@ -30,77 +30,6 @@ export default {
     }
   },
   methods: {
-    signin: function(callback) {
-      let menuData = staticData.staticData();
-      let allowedRouter = this.getRoutes(menuData.data);
-      console.log('allowedRouter', allowedRouter);
-      this.extendRoutes(allowedRouter);
-      this.$store.state.common.menuData = allowedRouter;
-      this.$store.state.common.userData = { name: "测试名称" };
-      typeof callback === 'function' && callback();
-    },
-    getRoutes: function(userInfo) { //根据后端返回菜单数据，动态的获取路由信息
-      if (!userInfo) {
-        return console.warn("菜单获取失败");
-      }
-      let that = this;
-      let allowedRouter = [];
-      let hashMenus = {},
-        hasOperationJur = {};
-      let setMenu2Hash = function(array, base) {
-        array.map(key => {
-          if (key.menu_permission_name) {
-            let hashKey = ((base ? base + '/' : '') + key.menu_permission_name).replace(/^\//, '');
-            //console.log('hashKey', hashKey);
-            hashMenus['/' + hashKey] = true;
-            hasOperationJur['/' + hashKey] = key.operationJur;
-            if (Array.isArray(key.sms)) {
-              setMenu2Hash(key.sms, key.menu_permission_name);
-            }
-          }
-        });
-      };
-      console.log('hashMenus', hashMenus);
-      setMenu2Hash(userInfo);
-      console.log("userInfo", userInfo);
-      this.$root.hashMenus = hashMenus;
-      let findLocalRoute = function(array, base) {
-        let replyResult = [];
-        array.forEach(function(route) {
-          let pathKey = (base ? base + '/' : '/') + route.path;
-          if (hashMenus[pathKey] || !route.meta.isVerificationL) {
-            if (!route.meta.isVerificationL) {
-              route.meta['operationJur'] = that.$store.state.common.defaultShow;
-            } else {
-              route.meta['operationJur'] = hasOperationJur[pathKey]
-            }
-            if (Array.isArray(route.children)) {
-              route.children = findLocalRoute(route.children, pathKey);
-            }
-            replyResult.push(route);
-          }
-        });
-        if (base) {
-          return replyResult;
-        } else {
-          allowedRouter = allowedRouter.concat(replyResult);
-        }
-      }
-      let redirectConfig = function(routeArr, redirectPath) {
-
-        routeArr.forEach(function(route) {
-          if (Array.isArray(route.children) && route.meta.needShowFir) {
-            let redirectp = (redirectPath ? "" : "./") + (redirectPath ? (redirectPath + "/" + route.children[0].path) : (route.path + "/" + route.children[0].path));
-            route.redirect = redirectp;
-            // console.log('this', that);
-            redirectConfig(route.children, that.pbFunc.deepcopy(redirectp));
-          }
-        });
-      }
-      findLocalRoute(that.pbFunc.deepcopy(userPath[0].children)); //筛选路由
-      redirectConfig(allowedRouter);
-      return allowedRouter;
-    },
     buildDictionary: function() {
       let dictionaryObject = {
         dashborad: 'OVERVIEW', //概览
@@ -115,11 +44,12 @@ export default {
         landmark: 'LANDMARK_INFO', //地标管理
         routeManage: 'ROUTE_MANAGEMENT', //路线管理
         transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
-        capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理 (这里没有)
-        carManage: 'TRUCK_MANAGEMENT', //车辆管理(这里没有)
+        capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
+        carManage: 'TRUCK_MANAGEMENT', //车辆管理
         personManage: 'STAFF_MANAGEMENT', //人员管理
         deviceManage: 'DEVICE_MANAGEMENT', //设备管理
-        clientManage: 'CUSTOMER_MANAGEMENT', //客户管理有问题
+        clientManage: 'CUSTOMER_MANAGEMENT', //客户管理
+        clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
         businessStatistics: 'BUSINESS_STATISTICS', //业务统计
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
@@ -153,30 +83,14 @@ export default {
       return findDictionaryObject;
     },
 
-
     extendRoutes: function(allowedRouter) {
       let that = this;
       let actualRouter = that.pbFunc.deepcopy(allowedRouter);
-      /*actualRouter.map(e => {
-        //复制子菜单信息到meta用于实现导航相关效果，非必需
-        if (e.children) {
-          if (!e.meta) e.meta = {};
-          e.meta.children = e.children;
-        }
-        //为动态路由添加独享守卫
-        return e.beforeEnter = function(to, from, next) {
-          if (that.$root.hashMenus[to.path] || !to.meta.isVerificationL) {
-            next()
-          } else {
-            next('/401')
-          }
-        }
-      });*/
+
       let originPath = that.pbFunc.deepcopy(userPath);
 
       originPath[0].children = actualRouter;
 
-      console.log('originPath', originPath);
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',
@@ -184,10 +98,7 @@ export default {
       }]));
     },
     loginDirect: function(newPath) {
-      this.signin(() => {
-        this.$router.replace({ path: newPath || '/' });
-      });
-      //this.pathIn(true);
+      this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
       if (!menuList.length || !token) {
@@ -219,7 +130,7 @@ export default {
         for (let j in userPathChild) {
           if (userPathChild[j].name === i) {
 
-            if (userPathChild[j].children && userPathChild[j].children.length) { //如果有二级菜单，必定有一级菜单只需要循环二级菜单
+            if (userPathChild[j].children && userPathChild[j].children.length) {
               let pathCopy = this.pbFunc.deepcopy(userPathChild[j]);
               pathCopy.children = []; //保留一级菜单，去除二级菜单
               for (let m in menuDictionaryObject) {
@@ -242,8 +153,8 @@ export default {
     logoutDirect: function() {
       //清除session
       this.pbFunc.setLocalData('token', '');
-      //清除菜单权限
-      this.$root.hashMenus = {};
+      //清除菜单
+      this.pbFunc.setLocalData('menuList', '');
       //回到登录页
       this.$router.replace({ path: '/login' });
     }

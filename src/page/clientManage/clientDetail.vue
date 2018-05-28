@@ -5,9 +5,11 @@
     margin-bottom: 20px;
   }
 }
-.detail-main{
+
+.detail-main {
   border-top: 0;
 }
+
 </style>
 <template>
   <div class="nav-tab">
@@ -222,7 +224,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/clientManage/addClient?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
+      this.$router.push({ path: "/clientManage/clientManageSecond/addClient?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
     },
 
   }

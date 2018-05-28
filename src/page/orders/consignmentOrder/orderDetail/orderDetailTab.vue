@@ -1,8 +1,3 @@
-<style scoped lang="less">
-.detail-main {
-  min-height: 500px;
-}
-
 </style>
 <template>
   <div class="detail-main">
@@ -304,3 +299,7 @@ export default {
 }
 
 </script>
+<style scoped lang="less">
+.detail-main {
+  min-height: 500px;
+}

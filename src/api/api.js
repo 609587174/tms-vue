@@ -745,6 +745,15 @@ const api = {
 
     }
   },
+  getConOrderDetail: {
+    url: '/order/waybill/:id/',
+    method: 'get',
+    desc: '获取运单详情',
+    param: {
+
+
+    }
+  },
   getTransPowerInfo: {
     url: '/truck/tractor_semitrailers/:id/',
     method: 'get',

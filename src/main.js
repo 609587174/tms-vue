@@ -10,6 +10,11 @@ import store from './store/indexStore'
 import axios from 'axios';
 import * as pbFunc from './assets/utils';
 import http from './api/index';
+import * as filters from '@/assets/js/filter';
+/* 全局注册公用filter */
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
+})
 
 Vue.prototype.pbFunc = pbFunc;
 Vue.prototype.$$http = http;

@@ -282,9 +282,9 @@ export default {
     },
     returnToPage: function() {
       if (this.$route.query.id) {
-        this.$router.push({ path: "/clientManage/clientDetail", query: { id: this.$route.query.id } });
+        this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: this.$route.query.id } });
       } else {
-        this.$router.push({ path: "/clientManage/privateClientManage" });
+        this.$router.push({ path: "/clientManage/clientManageSecond/privateClientManage" });
       }
     },
     handleRemove(file, fileList) {
@@ -395,10 +395,10 @@ export default {
                 type: 'success'
               });
               if (isReview) {
-                this.$router.push({ path: "/clientManage/clientDetail", query: { id: results.data.data.id } });
+                this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
-                this.$router.push({ path: "/clientManage/addClient", query: { activeStep: stepNum - 1, id: id } });
+                this.$router.push({ path: "/clientManage/clientManageSecond/addClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {

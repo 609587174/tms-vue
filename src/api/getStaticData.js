@@ -86,6 +86,11 @@ const staticData = function() {
         menu_permission_name: 'clientManage',//客户管理有问题
         menu_key:'CUSTOMER_MANAGEMENT',
         name: '客户管理',
+        sms:[{
+          menu_permission_name: 'clientManageSecond',//客户管理有问题
+          menu_key:'CUSTOMER_MANAGEMENT_SECOND',
+          name: '客户管理',
+        }]
       }, {
         menu_permission_name: 'statistics',
         menu_key:'DATA_STATISTICS',

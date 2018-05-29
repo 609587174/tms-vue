@@ -54,7 +54,7 @@
               </el-col>
             </el-row>
           </div>
-          <div class="detail-list detail-form" v-if="headData.truck_bind_status">
+          <div class="detail-list detail-form" v-if="headData.semitrailer || headData.car_belong_phone || headData.group">
             <div class="detail-form-title">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
@@ -69,7 +69,7 @@
              <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="挂车牌:">
-                  <div class="detail-form-item">{{headData.semitrailer.plate_number}}</div>
+                  <div class="detail-form-item">{{headData.semitrailer && headData.semitrailer.plate_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -96,7 +96,7 @@
               </el-col>
             </el-row>
           </div>
-          <div class="detail-list detail-form" v-if="headData.staff_bind_status">
+          <div class="detail-list detail-form" v-if="headData.master_driver || headData.vice_driver || headData.escort_staff">
             <div class="detail-form-title">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">

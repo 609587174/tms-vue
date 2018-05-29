@@ -129,7 +129,7 @@
             <el-form label-width="80px" :model="truckForm" ref="truckForm" :rules="truckRules">
               <el-row :gutter="80">
                 <el-form-item label="挂车号">
-                  <el-select v-model="truckForm.semitrailer" filterable placeholder="请选择">
+                  <el-select v-model="truckForm.semitrailer" filterable clearable placeholder="请选择">
                     <el-option
                       v-for="item in semiList"
                       :key="item.id"
@@ -164,7 +164,7 @@
           <div v-if="activeStep==1">
             <el-form :model="staffForm" ref="staffForm" label-width="70px" :rules="staffRules">
               <el-form-item label="主驾驶" prop="master_driver">
-                <el-select v-model="staffForm.master_driver" filterable placeholder="请选择">
+                <el-select v-model="staffForm.master_driver" filterable clearable placeholder="请选择">
                   <el-option
                     v-for="item in driverList"
                     :key="item.id"
@@ -174,7 +174,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="副驾驶">
-                <el-select v-model="staffForm.vice_driver" filterable placeholder="请选择">
+                <el-select v-model="staffForm.vice_driver" filterable clearable placeholder="请选择">
                   <el-option
                     v-for="item in driverList"
                     :key="item.id"
@@ -184,7 +184,7 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="押运员">
-                <el-select v-model="staffForm.escort_staff" filterable placeholder="请选择">
+                <el-select v-model="staffForm.escort_staff" filterable clearable placeholder="请选择">
                   <el-option
                     v-for="item in escortList"
                     :key="item.id"
@@ -381,9 +381,10 @@ export default {
                 message: '绑定成功',
                 type: 'success'
               });
+              this.goDetail();
             } else if (results.data.code === 600) {
               this.forceTruckFormVisible = true;
-              this.truckForm.noticeMsg = results.data.msg.split(',')[1];
+              this.truckForm.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
             console.log(err);
@@ -406,6 +407,7 @@ export default {
                 message: '绑定成功',
                 type: 'success'
               });
+              this.goDetail();
             } else if (results.data.code === 600) {
               this.forceTruckFormVisible = true;
               this.staffForm.noticeMsg = results.data.msg;
@@ -430,6 +432,7 @@ export default {
             type: 'success'
           });
           this.forceTruckFormVisible = false;
+          this.goDetail();
         }
       }).catch((err) => {
         console.log(err);
@@ -449,6 +452,7 @@ export default {
             type: 'success'
           });
           this.forceStaffFormVisible = false;
+          this.goDetail();
         }
       }).catch((err) => {
         console.log(err);

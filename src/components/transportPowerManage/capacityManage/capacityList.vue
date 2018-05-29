@@ -91,7 +91,7 @@
         <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
-            <el-select v-model="truckDialog.semitrailer" filterable placeholder="请选择">
+            <el-select v-model="truckDialog.semitrailer" filterable clearable placeholder="请选择">
               <el-option
                 v-for="(item, index) in semiList"
                 :key="index"
@@ -127,7 +127,7 @@
         <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
           <el-form-item label="主驾驶" prop="master_driver">
-            <el-select v-model="staffDialog.master_driver" filterable placeholder="请选择">
+            <el-select v-model="staffDialog.master_driver" filterable clearable placeholder="请选择">
               <el-option
                 v-for="(item, index) in driverList"
                 :key="index"
@@ -137,7 +137,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="副驾驶">
-            <el-select v-model="staffDialog.vice_driver" filterable placeholder="请选择">
+            <el-select v-model="staffDialog.vice_driver" filterable clearable placeholder="请选择">
               <el-option
                 v-for="(item, index) in driverList"
                 :key="index"
@@ -147,7 +147,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="押运员">
-            <el-select v-model="staffDialog.escort_staff" filterable placeholder="请选择">
+            <el-select v-model="staffDialog.escort_staff" filterable clearable placeholder="请选择">
               <el-option
                 v-for="(item, index) in escortList"
                 :key="index"
@@ -194,7 +194,7 @@ export default {
       filterParam: {
         page: 1,
         keyword: null,
-        field: null,
+        field: 'tractor_plate_number',
         complete_status: null,
         truck_bind_status: null,
         staff_bind_status: null,
@@ -321,10 +321,6 @@ export default {
   methods: {
     init: function () {
       this.searchList();
-      this.getGroups();
-      this.getSemiList();
-      this.getDriverList();
-      this.getEscortList();
     },
     importList: function() {},
     exportList: function() {},
@@ -463,7 +459,7 @@ export default {
       this.bindTruckFormVisible = true;
       this.truckDialog = {
         capacityId: row.rowData.id,
-        truckNum: row.rowData.tractor.plate_number,
+        truckNum: row.rowData.tractor && row.rowData.tractor.plate_number,
         semitrailer: null,
         car_belong_phone: row.rowData.car_belong_phone,
         group: row.rowData.group && row.rowData.group.id
@@ -474,10 +470,10 @@ export default {
       this.staffDialog = {
         capacityId: row.rowData.id,
         truckNum: row.rowData.tractor.plate_number,
-        semiNum: row.rowData.semitrailer.plate_number,
-        master_driver: null,
-        vice_driver: null,
-        escort_staff: null
+        semiNum: row.rowData.semitrailer && row.rowData.semitrailer.plate_number,
+        master_driver: row.rowData.master_driver && row.rowData.master_driver.id,
+        vice_driver: row.rowData.vice_driver && row.rowData.vice_driver.id,
+        escort_staff: row.rowData.escort_staff && row.rowData.escort_staff.id
       }
     },
     openFormDialog: function(dialog) {
@@ -601,6 +597,12 @@ export default {
         });
       }
     }
+  },
+  mounted: function () {
+    this.getGroups();
+    this.getSemiList();
+    this.getDriverList();
+    this.getEscortList();
   },
   activated: function() {
     this.init();

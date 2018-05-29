@@ -944,6 +944,14 @@ const api = {
     param: {
 
     }
+  },
+  realTimeMonitor: {
+    url: '/map/vehicle_monitors/map_init/',
+    method: 'get',
+    desc: "实时监控",
+    param: {
+
+    }
   }
 }
 

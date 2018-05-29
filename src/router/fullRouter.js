@@ -139,7 +139,7 @@ export default [{
             },
             component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/orderDetailTab'], resolve),
           }, {
-            path: 'arrangeCarTab/:id',
+            path: 'arrangeCarTab',
             name: 'consignmentArrangeCarTab',
             redirect: '/orders/consignmentOrder/orderDetail/arrangeCarTab/arrangeCarList',
             meta: {

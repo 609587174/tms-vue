@@ -113,7 +113,7 @@
                   <el-form-item label="社会机构代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="10">
-                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择">
+                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
@@ -212,7 +212,7 @@ export default {
       ],
       selectData: {
         codeSelect: [
-          { id: 'license3in1_code', value: '社会机构代码（三合一）' },
+          { id: 'license3in1_code', value: '统一社会机构代码（三合一）' },
           { id: 'license_code', value: '组织机构代码（非三合一）' },
         ],
         addTypeSelect: [
@@ -350,8 +350,8 @@ export default {
             deficiency_standard: this.detail.deficiency_standard,
             free_hour: this.detail.free_hour,
             overtime_price: this.detail.overtime_price,
-            code: this.detail.license3in1_code ? 'license3in1_code' : 'license_code',
-            codeMsg: this.detail.license3in1_code ? this.detail.license3in1_code : this.detail.license_code,
+            code: this.detail.license_code ? 'license_code' : 'license3in1_code',
+            codeMsg: this.detail.license_code ? this.detail.license_code : this.detail.license3in1_code,
             license_pic: this.detail.license_pic ? this.detail.license_pic : [],
           }
           if (this.customerMsgForm.code === 'license3in1_code') {

@@ -12,7 +12,7 @@ import {getLocalData} from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 1000;
+let timeout = 20000;
 
 
 /* 配置访问url */
@@ -33,7 +33,21 @@ if (currentUrl.match('91lng.cn')) {
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let unCancelAjax = [];//设定可以重复请求的ajax请求的apiname(str)。
 let cancelToken = axios.CancelToken;
-let cancelLimitTime = 100;//设置需要cancel的间隔时限
+let cancelLimitTime = 500;//设置需要cancel的间隔时限
+
+//切换路由时，cancel请求
+router.beforeEach((to, from, next) => {
+
+  if(pending.length){
+    for(let i in pending){
+      pending[i].cancel();
+    }
+  }
+  next();
+
+})
+
+
 let removePending = (config,isCancel) => {
 
     for(let i in pending){
@@ -74,11 +88,11 @@ axios.interceptors.request.use(config=>{
       }
      }
      if(isNeedCancel){
-      // config.cancelToken = new cancelToken((c)=>{
-      //     // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
-      //     pending.push({ u:(config.url + '&' + config.method), cancel: c ,time:new Date()});
-      //     //console.log('config,xxx',config,config.url,config.baseURL,config.baseURL + config.url + '&' + config.method,pending);
-      // });
+      config.cancelToken = new cancelToken((c)=>{
+          // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
+          pending.push({ u:(config.url + '&' + config.method), cancel: c ,time:new Date()});
+          //console.log('config,xxx',config,config.url,config.baseURL,config.baseURL + config.url + '&' + config.method,pending);
+      });
      }
      return config;
    },error => {
@@ -91,7 +105,7 @@ axios.interceptors.response.use(response=>{
       removePending(response.config);  //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
       return response;
    },error =>{
-      return { data: { } }; //返回一个空对象，主要是防止控制台报错
+    return error; //返回一个空对象，主要是防止控制台报错
    });
 
 

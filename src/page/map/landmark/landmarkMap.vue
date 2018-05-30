@@ -391,36 +391,38 @@ export default {
         });
     },
     renderMarker: function() {
-      console.log('markerList', this.markerList);
-      if (this.markerList) {
-        this.markerList.render(this.landmarkList);
-        this.map.plugin(["AMap.MarkerClusterer"], function() {
-          this.allMakers = this.markerList.getAllMarkers();
-          if (this.cluster) {
-            this.cluster.clearMarkers();
+      let _this = this;
+      console.log('markerList', _this.markerList);
+      if (_this.markerList) {
+        _this.markerList.render(_this.landmarkList);
+        _this.map.plugin(["AMap.MarkerClusterer"], function() {
+          _this.allMakers = _this.markerList.getAllMarkers();
+          if (_this.cluster) {
+            _this.cluster.clearMarkers();
           }
-          this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+          _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
             minClusterSize: 5,
           });
         });
       } else {
 
         setTimeout(() => {
-          this.markerList.render(this.landmarkList);
-          this.map.plugin(["AMap.MarkerClusterer"], function() {
-            this.allMakers = this.markerList.getAllMarkers();
-            if (this.cluster) {
-              this.cluster.clearMarkers();
+          _this.markerList.render(_this.landmarkList);
+          _this.map.plugin(["AMap.MarkerClusterer"], function() {
+            _this.allMakers = _this.markerList.getAllMarkers();
+            if (_this.cluster) {
+              _this.cluster.clearMarkers();
             }
-            this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
-              minClusterSize: 5,
+            console.log('_this.map', _this.map, _this.allMakers);
+            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
+              minClusterSize: 3,
             });
           });
         }, 1000)
 
       }
 
-      this.map.setFitView(this.allMakers);
+      _this.map.setFitView(_this.allMakers);
 
     }
   },

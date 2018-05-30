@@ -2,6 +2,16 @@
     .detail-main {
       border: 1px solid @tms-border-two-level;
       background: @tms-white;
+      &.nav-tab {
+        border: 0;
+        border-top: 1px solid @tms-border-two-level;
+        position: relative;
+        top: 40px;
+        .el-tabs__header {
+            position: absolute;
+            top: -40px;
+        }
+      }
       .el-main {
         overflow: visible;
       }

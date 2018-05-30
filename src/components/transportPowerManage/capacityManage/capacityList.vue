@@ -53,7 +53,7 @@
       </el-form>
     </div>
     <div class="operation-btn text-right">
-      <el-button type="primary" plain @click="importList">导入</el-button>
+      <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
       <el-button type="primary" @click="exportList">导出</el-button>
     </div>
     <div class="capacity-list-content">
@@ -104,7 +104,7 @@
             <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="分组">
-            <el-select v-model="truckDialog.group" placeholder="请选择分组">
+            <el-select v-model="truckDialog.group" clearable placeholder="请选择分组">
               <el-option v-if="item.id" v-for="(item, index) in selectData.groupOptions" :key="index" :label="item.group_name" :value="item.id">
               </el-option>
             </el-select>
@@ -136,8 +136,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="副驾驶">
-            <el-select v-model="staffDialog.vice_driver" filterable clearable placeholder="请选择">
+          <el-form-item label="副驾驶" prop="vice_driver">
+            <el-select v-model="staffDialog.vice_driver" filterable clearable placeholder="请选择" @change="validateStaff">
               <el-option
                 v-for="(item, index) in driverList"
                 :key="index"
@@ -146,8 +146,8 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="押运员">
-            <el-select v-model="staffDialog.escort_staff" filterable clearable placeholder="请选择">
+          <el-form-item label="押运员" prop="escort_staff">
+            <el-select v-model="staffDialog.escort_staff" filterable clearable placeholder="请选择" @change="validateStaff">
               <el-option
                 v-for="(item, index) in escortList"
                 :key="index"
@@ -173,6 +173,20 @@
 export default {
   name: "capacityList",
   data() {
+    let validateViceDriver = (rule, value, callback) => {
+      if (!value && !this.staffDialog.escort_staff) {
+        callback(new Error('副驾驶和押运员必填一个'))
+      } else {
+        callback();
+      }
+    };
+    let validateEscortStaff = (rule, value, callback) => {
+      if (!value && !this.staffDialog.vice_driver) {
+        callback(new Error('副驾驶和押运员必填一个'))
+      } else {
+        callback();
+      }
+    };
     return {
       truckDialog: {},
       staffDialog: {},
@@ -186,6 +200,12 @@ export default {
       staffRules: {
         master_driver: [
           { required: true, message: '请输入主驾驶名称', trigger: 'change' }
+        ],
+        vice_driver: [
+          { validator: validateViceDriver, trigger: 'change' }
+        ],
+        escort_staff: [
+          { validator: validateEscortStaff, trigger: 'change' }
         ]
       },
       groupListVisible: false,
@@ -403,7 +423,7 @@ export default {
     },
     searchList: function() {
       var vm = this;
-      if (this.filterParam.field) {
+      if (this.filterParam.field && this.filterParam.keyword && this.pageData.currentPage === 1) {
         this.filterParam[this.filterParam.field] = this.filterParam.keyword;
       } else {
         this.filterParam.tractor_plate_number = null;
@@ -411,7 +431,10 @@ export default {
         this.filterParam.car_belong_phone = null;
         this.filterParam.driver_staff_name = null;
       }
-      this.$$http("searchCapacityList", dealObjectValue(this.filterParam))
+      let param = dealObjectValue(this.filterParam);
+      param.keyword = null;
+      param.field = null;
+      this.$$http("searchCapacityList", dealObjectValue(param))
         .then(function(result) {
           var resultData;
           if (result.data.code == 0) {
@@ -587,6 +610,10 @@ export default {
     },
     backStaffForm: function() {
       this.staffNotice = false;
+    },
+    validateStaff: function () {
+      this.$refs.staffDialog.validateField('vice_driver');
+      this.$refs.staffDialog.validateField('escort_staff');
     },
     validteClientCallback: function (res) {
       let reg = new RegExp('^(4[0-9]*)$')

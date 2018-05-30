@@ -110,7 +110,7 @@
 <script>
 import chooseAddress from '@/components/chooseAddress';
 //创建地图
-let map, markerList, allMakers, districtSearch, cluster;
+let map, markerList, allMakers, cluster;
 export default {
   name: 'landMarkMap',
   components: {
@@ -132,6 +132,10 @@ export default {
   },
   data() {
     return {
+      map: '',
+      markerList: '',
+      allMakers: '',
+      cluster: '',
       pageLoading: true,
       activeName: 'second',
       landmarkList: [],
@@ -302,16 +306,16 @@ export default {
       AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
         function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
-          map.addControl(new BasicControl.Zoom({
+          _this.map.addControl(new BasicControl.Zoom({
             position: 'lt', //left top，左上角
             showZoomNum: true //显示zoom值
           }));
 
           let $ = MarkerList.utils.$; //即jQuery/Zepto
 
-          markerList = new MarkerList({
+          _this.markerList = new MarkerList({
 
-            map: map,
+            map: _this.map,
 
             //从数据中读取位置, 返回lngLat
             getPosition: function(item) {
@@ -371,7 +375,7 @@ export default {
 
           });
 
-          markerList.on('selectedChanged', function(event, info) {
+          _this.markerList.on('selectedChanged', function(event, info) {
             if (info.selected) {
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
               if (!info.sourceEventInfo.isListElementEvent) {
@@ -387,44 +391,42 @@ export default {
         });
     },
     renderMarker: function() {
-      console.log('markerList', markerList);
-      if (markerList) {
-        markerList.render(this.landmarkList);
-        map.plugin(["AMap.MarkerClusterer"], function() {
-          allMakers = markerList.getAllMarkers();
-          if (cluster) {
-            cluster.clearMarkers();
+      console.log('markerList', this.markerList);
+      if (this.markerList) {
+        this.markerList.render(this.landmarkList);
+        this.map.plugin(["AMap.MarkerClusterer"], function() {
+          this.allMakers = this.markerList.getAllMarkers();
+          if (this.cluster) {
+            this.cluster.clearMarkers();
           }
-          cluster = new AMap.MarkerClusterer(map, allMakers, {
-            gridSize: 60,
-            minClusterSize: 3,
+          this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+            minClusterSize: 5,
           });
         });
       } else {
 
         setTimeout(() => {
-          markerList.render(this.landmarkList);
-          map.plugin(["AMap.MarkerClusterer"], function() {
-            allMakers = markerList.getAllMarkers();
-            if (cluster) {
-              cluster.clearMarkers();
+          this.markerList.render(this.landmarkList);
+          this.map.plugin(["AMap.MarkerClusterer"], function() {
+            this.allMakers = this.markerList.getAllMarkers();
+            if (this.cluster) {
+              this.cluster.clearMarkers();
             }
-            cluster = new AMap.MarkerClusterer(map, allMakers, {
-              gridSize: 60,
-              minClusterSize: 3,
+            this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+              minClusterSize: 5,
             });
           });
         }, 1000)
 
       }
 
-      map.setFitView();
+      this.map.setFitView(this.allMakers);
 
     }
   },
   mounted: function() {
     let _this = this;
-    map = new AMap.Map('map-container', {
+    this.map = new AMap.Map('map-container', {
       zoom: 5
     });
     this.initMarkList();

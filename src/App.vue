@@ -73,7 +73,6 @@ export default {
           if (menuList[j].second_menus && menuList[j].second_menus.length) { //寻找二级菜单
             for (let k in menuList[j].second_menus) {
               if (menuList[j].second_menus[k].menu_key === dictionaryObject[i]) {
-                console.log('dictionaryObject[i]', i);
                 findDictionaryObject[i] = dictionaryObject[i];
               }
             }
@@ -85,12 +84,13 @@ export default {
 
     extendRoutes: function(allowedRouter) {
       let that = this;
-      let actualRouter = that.pbFunc.deepcopy(allowedRouter);
 
       let originPath = that.pbFunc.deepcopy(userPath);
-
-      originPath[0].children = actualRouter;
-
+      /*
+       ** 这里注入相应权限的路由，暂时不做。
+       ** let actualRouter = that.pbFunc.deepcopy(allowedRouter);
+       **  originPath[0].children = actualRouter;
+       */
       //注入路由
       that.$router.addRoutes(originPath.concat([{
         path: '*',

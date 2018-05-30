@@ -31,7 +31,7 @@
         </el-row>
         <el-row style="margin-top:10px;" class="searchSection">
           <el-col :span="6">
-            <el-form-item label="时间装货时间:" label-width="105px">
+            <el-form-item label="实际装货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
@@ -43,7 +43,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6" :offset="2">
-            <el-form-item label="时间卸货时间:" label-width="105px">
+            <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker v-model="timeParam.unload_active_time" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
               </el-date-picker>
             </el-form-item>
@@ -56,7 +56,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
           <div v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :status="fifterName"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -88,27 +88,29 @@ export default {
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
       },
       timeParam: {
-        unload_active_time: '',
-        unload_plan_time: '',
-        active_time: '',
-        load_plan_time: ''
+        unload_active_time: [],
+        unload_plan_time: [],
+        active_time: [],
+        load_plan_time: []
       },
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
         fieldSelect: [
-          { id: 'trader_name', value: '托运商' },
+          { id: 'station_name', value: '供应商' },
           { id: 'order_number', value: '订单号' },
           { id: 'fluid_name', value: '液厂名' },
           { id: 'waybill_number', value: '运单号' },
         ]
       },
+      searchStatus: false,
       pageData: {
-        currentPage: 100,
-        totalPage: 2,
+        currentPage: 1,
+        totalPage: 1,
         pageSize: 10,
       },
       listFifterData: [],
+      saveSendData: {},
       fifterParam: {
         keyword: "",
         field: "",
@@ -120,14 +122,61 @@ export default {
 
   },
   methods: {
+    changeTabs: function(name) {
+      this.$emit("changeTab", name);
+    },
     searchList: function() {
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
+      if (this.fifterName == 'all') {
+        if (this.status == 'first') {
+          sendData.search = 'all_truck_loaded';
+        } else if (this.status == 'second') {
+          sendData.search = 'all_match';
+        } else if (this.status == 'third') {
+          sendData.search = 'all_unload';
+        } else if (this.status == 'fourth') {
+          sendData.search = 'all_settle';
+        } else if (this.status == 'fifth') {
+          sendData.search = 'all_change';
+        } else if (this.status == 'sxith') {
+          sendData.search = 'all_finish';
+        }
+      } else {
+        sendData.status = this.fifterName;
+      }
+
+      if (this.timeParam.unload_active_time.length > 0) {
+        sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
+        sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
+      }
+      if (this.timeParam.unload_plan_time.length > 0) {
+        sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
+        sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
+      }
+      if (this.timeParam.active_time.length > 0) {
+        sendData.active_time_start = this.timeParam.active_time[0]; //实际装车
+        sendData.active_time_end = this.timeParam.active_time[1];
+      }
+      if (this.timeParam.load_plan_time.length > 0) {
+        sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
+        sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
+      }
+      if (this.fifterParam.field) {
+        sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      }
+
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
+      }
       this.$$http("searchConOrderList", sendData).then((results) => {
-        this.pageLoading = false;
+        vm.pageLoading = false;
+        vm.saveSendData = sendData;
+        vm.searchStatus = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
+          vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           for (let i = 0; i < dataBody.length; i++) {
             dataBody[i].transPowerInfo = {
               tractor: { plate_number: "", carrier: { name: "" } },
@@ -137,9 +186,9 @@ export default {
             }
           }
           var sendData = {};
-          this.listFifterData = dataBody;
-          sendData.id = dataBody[0].section_trips[0].capacity;
-          this.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+          vm.listFifterData = dataBody;
+          sendData.id = dataBody[0].capacity;
+          vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
             if (transPowerInfo.data.code == 0) {
               vm.listFifterData[0].transPowerInfo = transPowerInfo.data.data;
             }
@@ -148,7 +197,7 @@ export default {
           });
         }
       }).catch(() => {
-        this.pageLoading = false;
+        vm.pageLoading = false;
       });
     },
     clickFifter: function(targetName) {
@@ -156,9 +205,12 @@ export default {
       //重新查询一次数据
       this.searchList();
     },
+    fifterData: function(listData) {
+      this.listFifterData = listData;
+    },
     pageChange: function() {
       setTimeout(() => {
-        this.pageStatus = true;
+        this.searchStatus = true;
         this.searchList();
       });
     }

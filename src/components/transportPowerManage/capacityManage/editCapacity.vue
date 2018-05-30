@@ -146,7 +146,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-form-item label="分组">
-                  <el-select v-model="truckForm.group" placeholder="请选择">
+                  <el-select v-model="truckForm.group" clearable placeholder="请选择">
                     <el-option
                       v-for="item in selectData.groupOptions"
                       :key="item.id"
@@ -277,7 +277,7 @@ export default {
         capacityId: this.capacityId,
         truckNum: this.capacityInfo.tractor.plate_number,
         semiNum: this.capacityInfo.semitrailer.plate_number,
-        master_driver: this.capacityInfo.master_driver.id,
+        master_driver: this.capacityInfo.master_driver && this.capacityInfo.master_driver.id,
         vice_driver: this.capacityInfo.vice_driver && this.capacityInfo.vice_driver.id,
         escort_staff: this.capacityInfo.escort_staff && this.capacityInfo.escort_staff.id
       }
@@ -409,7 +409,7 @@ export default {
               });
               this.goDetail();
             } else if (results.data.code === 600) {
-              this.forceTruckFormVisible = true;
+              this.forceStaffFormVisible = true;
               this.staffForm.noticeMsg = results.data.msg;
             }
           }).catch((err) => {

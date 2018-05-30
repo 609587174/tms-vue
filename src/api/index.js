@@ -50,27 +50,6 @@ router.beforeEach((to, from, next) => {
 
 let removePending = (config,isCancel) => {
 
-    for(let i in pending){
-        if(!isCancel){
-          //console.log('config.baseURL + pending[i].u',pending[i].u,config.url + '&' + config.method,)
-          if((config.baseURL + pending[i].u) === config.url + '&' + config.method) { //当当前请求在数组中存在时执行函数体
-            pending.splice(i, 1); //把这条记录从数组中移除
-          }
-        }else{
-          if(pending[i].u === config.url + '&' + config.method) { //当当前请求在数组中存在时执行函数体
-            let nowTime = new Date();
-            console.log('(new Date() - pending[i].time) < cancelLimitTime',new Date() - pending[i].time,(new Date() - pending[i].time) < cancelLimitTime);
-            if((new Date() - pending[i].time) < cancelLimitTime){//如果小于最小间隔时限
-              Message.error('请勿频繁操作！');
-              pending[i].cancel(); //执行取消操作
-            }
-            pending.splice(i, 1); //把这条记录从数组中移除
-            break;
-          }
-        }
-
-    }
-    console.log('pending',pending,isCancel,config,config.url);
 
 }
 
@@ -114,8 +93,6 @@ const errorState = function(error) {
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {
-      case 0:
-        errorMsg = '请求超时，请检查网络';
       case 400:
         errorMsg = '参数错误';
         break;

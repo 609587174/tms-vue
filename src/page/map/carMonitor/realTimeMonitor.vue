@@ -1,10 +1,31 @@
-<style scoped lang="less">
-
-
-</style>
 <template>
-  <div>
-    实时监控
+  <div class="nav-tab">
+    <div class="tab-screen">
+      <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+        <el-row :gutter="0">
+          <el-col :span="12">
+            <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+              <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+            </el-input>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item>
+              <el-button type="primary" @click="startSearch">搜索</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="4">
+            <el-form-item label="任务状态:">
+              <el-select v-model="searchFilters.position_type" placeholder="请选择">
+                <el-option v-for="(item,key) in typeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    <div id="map-container"></div>
   </div>
 </template>
 <script>
@@ -17,6 +38,13 @@ export default {
       allMakers: '',
       cluster: '',
       pageLoading: true,
+      searchFilters: {
+        keyword: '',
+        field: '',
+        position_type: '',
+      },
+      typeSelect: [],
+
     };
   },
   computed: {
@@ -43,17 +71,21 @@ export default {
 
       })
     },
+    startSearch: function() {
+
+    },
     getIconSrc: function(item) {
       let src = ''
-      switch (item.device_status.key) {
-        case 'OFF_LINE':
-          src = 'lng_2.png'
-          break;
-        case 'ON_LINE':
-          src = 'lng_3.png'
-          break;
-        default:
-          src = 'lng_4.png'
+      if (item.speed) {
+        src = 'direction_1.png'
+      } else {
+        if (item.device_status && item.device_status.key) {
+          if (item.device_status.key === 'OFF_LINE') {
+            src = 'direction_4.png'
+          } else {
+            src = 'direction_2.png'
+          }
+        }
       }
       return src;
     },
@@ -86,13 +118,8 @@ export default {
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
 
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">地标名称：' + data.position_name + '</span>';
-              let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-                '</div><div class="fs-13">地标位置：' + data.address +
-                '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-                '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-                '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-                '</div></div>';
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">设备号：' + data.position_name + '</span>';
+              let infoBodyStr = '<div class="fs-13">地标类型：</div><div class="fs-13">地标位置：</div>';
 
               return new SimpleInfoWindow({
                 infoTitle: infoTitleStr,
@@ -198,3 +225,10 @@ export default {
 };
 
 </script>
+<style scoped lang="less">
+#map-container {
+  width: 100%;
+  height: 700px;
+}
+
+</style>

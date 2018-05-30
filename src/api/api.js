@@ -737,7 +737,7 @@ const api = {
     }
   },
   searchConOrderList: {
-    url: '/order/waybill/',
+    url: '/order/section-trips/',
     method: 'get',
     desc: '获取运单列表',
     param: {
@@ -933,6 +933,14 @@ const api = {
     url: '/order/waybill/cancel/',
     method: 'post',
     desc: "判断运单是否可以被取消勾选",
+    param: {
+
+    }
+  },
+  upStatus: {
+    url: '/order/interrupt-record/',
+    method: 'post',
+    desc: "运单变更",
     param: {
 
     }

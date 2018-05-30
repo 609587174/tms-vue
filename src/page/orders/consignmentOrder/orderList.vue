@@ -15,42 +15,42 @@
         <el-tab-pane label="装车" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="匹配卸车" name="second">
           <div v-if="activeName=='second'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="卸车" name="third">
           <div v-if="activeName=='third'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="结算" name="fourth">
           <div v-if="activeName=='fourth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="变更中" name="fifth">
           <div v-if="activeName=='fifth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane label="历史" name="sxith">
           <div v-if="activeName=='sxith'">
             <keep-alive>
-              <orderStatusComonents :status="activeName"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -102,6 +102,9 @@ export default {
   methods: {
     clicktabs: function(targetName) {
 
+    },
+    changeTabs: function(fifterName) {
+      this.activeName = fifterName;
     },
     goAddNewOder: function() {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });

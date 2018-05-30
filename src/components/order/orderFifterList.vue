@@ -59,7 +59,7 @@
 
 </style>
 <template>
-  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" v-loading="pageLoading">
+  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" v-loading="pageLoading" size="small">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">

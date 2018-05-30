@@ -37,7 +37,7 @@ export default {
       markerList: '',
       allMakers: '',
       cluster: '',
-      pageLoading: true,
+      pageLoading: false,
       searchFilters: {
         keyword: '',
         field: '',
@@ -72,7 +72,7 @@ export default {
       })
     },
     startSearch: function() {
-
+      this.getMonitorList();
     },
     getIconSrc: function(item) {
       let src = ''
@@ -221,6 +221,16 @@ export default {
     _this.getMonitorList().then((data) => { //展示该数据
       _this.renderMarker();
     })
+
+
+    let unwatch = this.$watch('pageLoading', function(value, oldvalue) {
+      console.log('value, oldvalue', value, oldvalue);
+      if (value) {
+        unwatch();
+      }
+      console.log('pageLoading发生了变化')
+    })
+
   }
 };
 

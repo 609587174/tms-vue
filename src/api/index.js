@@ -12,7 +12,7 @@ import {getLocalData} from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 15000;
+let timeout = 1000;
 
 
 /* 配置访问url */
@@ -30,23 +30,69 @@ if (currentUrl.match('91lng.cn')) {
 }
 
 
-/* http请求拦截 */
-axios.interceptors.request.use(config => {
-  return config
-}, error => {
-  console.log('request error', err);
-  return Promise.reject(error)
-})
+let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
+let unCancelAjax = [];//设定可以重复请求的ajax请求的apiname(str)。
+let cancelToken = axios.CancelToken;
+let cancelLimitTime = 100;//设置需要cancel的间隔时限
+let removePending = (config,isCancel) => {
 
+    for(let i in pending){
+        if(!isCancel){
+          //console.log('config.baseURL + pending[i].u',pending[i].u,config.url + '&' + config.method,)
+          if((config.baseURL + pending[i].u) === config.url + '&' + config.method) { //当当前请求在数组中存在时执行函数体
+            pending.splice(i, 1); //把这条记录从数组中移除
+          }
+        }else{
+          if(pending[i].u === config.url + '&' + config.method) { //当当前请求在数组中存在时执行函数体
+            let nowTime = new Date();
+            console.log('(new Date() - pending[i].time) < cancelLimitTime',new Date() - pending[i].time,(new Date() - pending[i].time) < cancelLimitTime);
+            if((new Date() - pending[i].time) < cancelLimitTime){//如果小于最小间隔时限
+              Message.error('请勿频繁操作！');
+              pending[i].cancel(); //执行取消操作
+            }
+            pending.splice(i, 1); //把这条记录从数组中移除
+            break;
+          }
+        }
 
-/* http请求拦截 */
-axios.interceptors.response.use(response => {
-  // console.log('response', response);
-  return response
-}, error => {
-  console.log('response error', error, error.response);
-  return Promise.reject(error);
-})
+    }
+    console.log('pending',pending,isCancel,config,config.url);
+
+}
+
+//添加请求拦截器
+axios.interceptors.request.use(config=>{
+      //console.log('axios.interceptors',config,config.url);
+     removePending(config,true); //在一个ajax发送前执行一下取消操作
+     let isNeedCancel = true;
+     if(unCancelAjax.length){
+      for(let i in unCancelAjax){
+        if(api[unCancelAjax[i]].url == config.url){
+          isNeedCancel = false;
+          break;
+        }
+      }
+     }
+     if(isNeedCancel){
+      // config.cancelToken = new cancelToken((c)=>{
+      //     // 这里的ajax标识我是用请求地址&请求方式拼接的字符串，当然你可以选择其他的一些方式
+      //     pending.push({ u:(config.url + '&' + config.method), cancel: c ,time:new Date()});
+      //     //console.log('config,xxx',config,config.url,config.baseURL,config.baseURL + config.url + '&' + config.method,pending);
+      // });
+     }
+     return config;
+   },error => {
+     return Promise.reject(error);
+   });
+
+//添加响应拦截器
+axios.interceptors.response.use(response=>{
+      //console.log('axios.interceptors',response,response.config);
+      removePending(response.config);  //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
+      return response;
+   },error =>{
+      return { data: { } }; //返回一个空对象，主要是防止控制台报错
+   });
 
 
 /* 统一处理网络问题或者代码问题造成的错误 */
@@ -54,6 +100,8 @@ const errorState = function(error) {
   let errorMsg = '';
   if (error && error.response) {
     switch (error.response.status) {
+      case 0:
+        errorMsg = '请求超时，请检查网络';
       case 400:
         errorMsg = '参数错误';
         break;

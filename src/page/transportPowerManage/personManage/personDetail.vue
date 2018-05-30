@@ -424,7 +424,13 @@ export default {
     }
   },
   created() {
-    this.getDetail();
+    setTimeout(() => {
+      this.getDetail();
+      this.getDetail();
+      this.getDetail();
+      this.getDetail();
+    }, 5000)
+
   },
   computed: {
     id: function() {

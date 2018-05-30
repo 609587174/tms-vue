@@ -2,11 +2,12 @@
   <el-header>
     <el-row>
       <el-col :span="12">
-        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div>
+        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div></router-link>
+
       </el-col>
       <el-col :span="12">
-        <div class="usermenu text-right" v-if="users.nick_name">欢迎您：{{users.nick_name}}，
-          <router-link :to="{path: '/'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
+        <div class="usermenu text-right" v-if="users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
+          <router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
           <!-- <router-link :to="{path: '/'}">退出</router-link> -->
           <a v-on:click="logout" class="cursor-pointer">退出</a>
         </div>
@@ -29,7 +30,7 @@
 <script>
 export default {
   name: 'publicHeader',
-  props: {},
+  props: ['isFind'],
 
   data: function() {
 

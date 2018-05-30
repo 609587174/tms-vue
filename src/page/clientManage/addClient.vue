@@ -113,7 +113,7 @@
                   <el-form-item label="社会机构代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="10">
-                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'?true:false">
+                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'&&customerMsgForm.codeMsg?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>

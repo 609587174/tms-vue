@@ -4,7 +4,7 @@
 </style>
 <template>
   <div class="error">
-    <public-header></public-header>
+    <public-header :is-find="true"></public-header>
     <div class="error-content">
       <div class="error-left">
         <div class="font">404</div>

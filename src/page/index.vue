@@ -124,6 +124,12 @@
   margin-left: 50px;
   color: #606266;
 }
+.head-user-no{
+  color: #fff;
+  a{
+    color: #fff;
+  }
+}
 
 </style>
 <template>
@@ -135,14 +141,14 @@
             <div class="st-company-name float-left"><a href="/"><img src="../assets/img/91LNG.jpg"></a> </div>
             <div class="float-right head-user">
               <div v-if="users.nick_name">
-                欢迎您：<span>{{users.nick_name}}，</span><router-link :to="{path: '/'}" class="text-blue">进入91LNG</router-link>
+                欢迎您：<span>{{users.nick_name}}，</span><router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link>
                 <a href="javascript:void(0);">｜</a>
                 <a href="javascript:void(0);" v-on:click="logout">退出</a>
               </div>
-              <div v-else>
-                <a href="javascript:void(0);">注册</a>
+              <div v-else class="head-user-no">
+                <router-link :to="{path: '/register'}" class="text-blue">注册</router-link>
                 <a href="javascript:void(0);">｜</a>
-                <a href="javascript:void(0);">登录</a>
+                <router-link :to="{path: '/login'}" class="text-blue">登录</router-link>
               </div>
             </div>
             <div class="float-right head-nav">
@@ -201,7 +207,7 @@
       </div>
     </div>
     <div class="footer">
-      <span class="company">Copyright © 2017 成都浩海通达科技有限公司</span>
+      <span class="company">Copyright © 2018 成都浩海通达科技有限公司</span>
       <span class="company"> - 蜀ICP备17041791号-1 </span>
       <br>
       <span class="contact"> QQ：963819358(联系客服)</span>

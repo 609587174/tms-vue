@@ -104,7 +104,7 @@
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
-        <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div>
+        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div></router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">

@@ -264,24 +264,24 @@ export default {
     }
   },
   activated() {
+    console.log(this.capacityId)
+    console.log(this.capacityInfo)
     if (this.activeStep === 0) {
       this.truckForm = {
         capacityId: this.capacityId,
-        truckNum: this.capacityInfo.tractor.plate_number,
-        semitrailer: this.capacityInfo.semitrailer.id,
+        semitrailer: this.capacityInfo.semitrailer && this.capacityInfo.semitrailer.id,
         car_belong_phone: this.capacityInfo.car_belong_phone || null,
         group: this.capacityInfo.group && this.capacityInfo.group.id
       }
     } else if (this.activeStep === 1) {
       this.staffForm = {
         capacityId: this.capacityId,
-        truckNum: this.capacityInfo.tractor.plate_number,
-        semiNum: this.capacityInfo.semitrailer.plate_number,
         master_driver: this.capacityInfo.master_driver && this.capacityInfo.master_driver.id,
         vice_driver: this.capacityInfo.vice_driver && this.capacityInfo.vice_driver.id,
         escort_staff: this.capacityInfo.escort_staff && this.capacityInfo.escort_staff.id
       }
     }
+    console.log(this.staffForm);
   },
   mounted() {
     this.init();

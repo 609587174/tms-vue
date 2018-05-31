@@ -118,8 +118,8 @@ export default {
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
 
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">设备号：' + data.position_name + '</span>';
-              let infoBodyStr = '<div class="fs-13">地标类型：</div><div class="fs-13">地标位置：</div>';
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">车牌号：' + data.device_id + '</span>';
+              let infoBodyStr = '<div class="fs-13">地标类型：</div><div class="fs-13">地标位置：' + data.platform + '</div>';
 
               return new SimpleInfoWindow({
                 infoTitle: infoTitleStr,
@@ -160,7 +160,10 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
+            console.log('info', info.selected);
             if (info.selected) {
+              //info.selected.infoWindow.setInfoTitle('<div>车牌号：111</div>');
+              info.selected.marker.setIconLabel('<div>车牌号：222</div>')
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
               if (!info.sourceEventInfo.isListElementEvent) {
 
@@ -176,14 +179,15 @@ export default {
     },
     renderMarker: function() {
       console.log('markerList', this.markerList);
-      if (this.markerList) {
-        this.markerList.render(this.landmarkList);
-        this.map.plugin(["AMap.MarkerClusterer"], function() {
-          this.allMakers = this.markerList.getAllMarkers();
-          if (this.cluster) {
-            this.cluster.clearMarkers();
+      let _this = this;
+      if (_this.markerList) {
+        _this.markerList.render(_this.landmarkList);
+        _this.map.plugin(["AMap.MarkerClusterer"], function() {
+          _this.allMakers = _this.markerList.getAllMarkers();
+          if (_this.cluster) {
+            _this.cluster.clearMarkers();
           }
-          this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+          _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
             gridSize: 60,
             minClusterSize: 3,
           });
@@ -191,13 +195,13 @@ export default {
       } else {
 
         setTimeout(() => {
-          this.markerList.render(this.landmarkList);
-          this.map.plugin(["AMap.MarkerClusterer"], function() {
-            this.allMakers = this.markerList.getAllMarkers();
-            if (this.cluster) {
-              this.cluster.clearMarkers();
+          _this.markerList.render(_this.landmarkList);
+          _this.map.plugin(["AMap.MarkerClusterer"], function() {
+            _this.allMakers = _this.markerList.getAllMarkers();
+            if (_this.cluster) {
+              _this.cluster.clearMarkers();
             }
-            this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
               minClusterSize: 5,
             });
           });
@@ -205,7 +209,7 @@ export default {
 
       }
 
-      this.map.setFitView(this.allMakers);
+      _this.map.setFitView(_this.allMakers);
 
     }
   },
@@ -214,21 +218,12 @@ export default {
   },
   mounted() {
     let _this = this;
-    this.map = new AMap.Map('map-container', {
+    _this.map = new AMap.Map('map-container', {
       zoom: 5
     });
     this.initMarkList();
     _this.getMonitorList().then((data) => { //展示该数据
       _this.renderMarker();
-    })
-
-
-    let unwatch = this.$watch('pageLoading', function(value, oldvalue) {
-      console.log('value, oldvalue', value, oldvalue);
-      if (value) {
-        unwatch();
-      }
-      console.log('pageLoading发生了变化')
     })
 
   }

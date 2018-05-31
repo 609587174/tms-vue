@@ -401,7 +401,8 @@ export default {
             _this.cluster.clearMarkers();
           }
           _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-            minClusterSize: 5,
+            minClusterSize: 4,
+            maxZoom: 17,
           });
         });
       } else {
@@ -415,7 +416,8 @@ export default {
             }
             console.log('_this.map', _this.map, _this.allMakers);
             _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 3,
+              minClusterSize: 4,
+              maxZoom: 17,
             });
           });
         }, 1000)

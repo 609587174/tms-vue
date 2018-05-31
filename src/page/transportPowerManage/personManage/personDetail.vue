@@ -424,13 +424,7 @@ export default {
     }
   },
   created() {
-    setTimeout(() => {
-      this.getDetail();
-      this.getDetail();
-      this.getDetail();
-      this.getDetail();
-    }, 5000)
-
+    this.getDetail();
   },
   computed: {
     id: function() {

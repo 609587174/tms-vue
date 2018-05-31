@@ -952,6 +952,14 @@ const api = {
     param: {
 
     }
+  },
+  changeOrderStatus: {
+    url: '/order/section-trips/:id/change-status/',
+    method: 'PUT',
+    desc: "变更运单状态",
+    param: {
+
+    }
   }
 }
 

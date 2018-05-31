@@ -310,7 +310,7 @@ export default {
   methods: {
     gotoDetalis: function(rowData) {
       console.log('rowData', rowData);
-      this.$router.push({ path: `/orders/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}` });
+      this.$router.push({ path: `/orders/consignmentOrders/orderDetail/orderDetailTab/${rowData.waybill.id}` });
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {
@@ -348,18 +348,35 @@ export default {
       } else if (type == 'changeData') {
 
       } else if (type == 'upSettlement') {
-
+        this.upSettlement(rowData);
       } else if (type == 'sureCancle') {
 
       } else if (type == 'solveFault') {
 
       }
     },
+    upSettlement: function(rowData) {
+      var sendData = {};
+      var vm = this;
+      sendData.id = rowData.id;
+
+      sendData.status = "in_settlement";
+      this.$$http('changeOrderStatus', sendData).then((results) => {
+        if (results.data.code == 0) {
+          this.$message({
+            message: '提交结算成功',
+            type: 'success'
+          });
+          vm.$emit('searchList');
+        }
+      }).catch(() => {
+
+      });
+    },
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
       console.log('rowData', rowData);
       this.changeSatusShow = true;
-
     }
   },
   created() {

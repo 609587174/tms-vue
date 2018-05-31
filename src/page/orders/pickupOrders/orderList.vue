@@ -22,7 +22,7 @@
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" size="medium">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
@@ -30,10 +30,10 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row style="margin-top:20px;">
+              <el-row style="margin-top:10px;">
                 <el-col :span="8">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" size="medium">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>

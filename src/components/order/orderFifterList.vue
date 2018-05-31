@@ -9,11 +9,14 @@
   }
   /deep/ .el-table__body {
     .el-table__row {
-      background-color: rgb(250, 250, 250);
+      background-color: #f5f6fa;
     }
     .el-table__expanded-cell[class*=cell] {
       padding-left: 0;
       padding-right: 0;
+    }
+    td {
+      border-bottom: 0px solid #ebeef5;
     }
     .listDetalis {
       float: left;
@@ -42,6 +45,15 @@
     .expanded td {
       text-align: center
     }
+    .el-table__row {
+      position: relative;
+    }
+    .el-table__row td:nth-child(1) .cell {
+      padding-left: 40px;
+    }
+    .el-table__expanded-cell[class*=cell] {
+      padding: 16px 0;
+    }
   }
 }
 
@@ -59,7 +71,7 @@
 
 </style>
 <template>
-  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" v-loading="pageLoading" size="small">
+  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="small" height="540">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
@@ -121,7 +133,23 @@
     </el-table-column>
     <el-table-column label="装卸地" prop="id" min-width="21.875%" type>
       <template slot-scope="props">
-        订单号:{{props.row.order_number}}
+        <div>
+          <el-row justify="space-between" type="flex">
+            <el-col :span="5">订单号:{{props.row.order_number}}
+            </el-col>
+            <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
+            <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
+            <el-col :span="5">
+              <el-tooltip :content="props.row.desc" placement="top" effect="light">
+                <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
+              </el-tooltip>
+            </el-col>
+            <el-col :span="4"> 状态:{{props.row.status.verbose}}
+            </el-col>
+          </el-row>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div>
+        </div>
       </template>
     </el-table-column>
     <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">
@@ -130,24 +158,18 @@
     </el-table-column>
     <el-table-column label="计划时间" prop="carriers.supplier_name" min-width="12.5%">
       <template slot-scope="props">
-        托运方:{{props.row.trader}}
       </template>
     </el-table-column>
     <el-table-column label="实际时间" prop="discount_price" min-width="12.5%">
       <template slot-scope="props">
-        标准运费:{{props.row.yunfei}}
       </template>
     </el-table-column>
     <el-table-column label="计划吨位" min-width="9.375%">
       <template slot-scope="props">
-        <el-tooltip :content="props.row.desc" placement="top" effect="light">
-          <el-button type="text">备注<i class="el-icon-document"></i></el-button>
-        </el-tooltip>
       </template>
     </el-table-column>
     <el-table-column label="实际吨位" prop="" min-width="9.375%">
       <template slot-scope="props">
-        状态:{{props.row.status.verbose}}
       </template>
     </el-table-column>
     <el-table-column label="车辆信息" prop="" min-width="15%">
@@ -162,7 +184,8 @@ export default {
   data() {
     return {
       expandStatus: true,
-      pageLoading: false
+      pageLoading: false,
+      expandFalg: true
     };
   },
   props: {
@@ -182,8 +205,8 @@ export default {
   },
   methods: {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 3) {
-        return [1, 3];
+      if (columnIndex === 1) {
+        return [1, 8];
       }
     },
     getRowKeys: function(row) {

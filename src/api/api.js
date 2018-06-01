@@ -996,6 +996,19 @@ const api = {
       },
     }
   },
+  getCarList: {
+    url: '/map/vehicle_monitors/',
+    method: 'get',
+    desc: "车辆相关信息列表",
+    param: {
+      plate_number: {
+        desc: '车牌号',
+      },
+      waybill_vehicle_status: {
+        desc: '车辆运单状态',
+      },
+    }
+  },
 }
 
 

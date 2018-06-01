@@ -57,7 +57,7 @@
   font-size: 1.4em;
   text-decoration: none;
   color: #fff;
-  line-height: 65px;
+  line-height: 59px;
   border: 1px solid rgb(222, 222, 222);
   border-top: none;
 }
@@ -104,7 +104,7 @@
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
-        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.jpg"></div></router-link>
+        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div></router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">

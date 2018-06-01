@@ -230,7 +230,7 @@ export default {
           { min: 2, max: 20, message: '联系人为2~10个字符', trigger: 'blur' }
         ],
         deficiency_standard: [
-          { required: true, message: '请输入亏吨标准', trigger: 'blur' },
+          // { required: true, message: '请输入亏吨标准', trigger: 'blur' },
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         free_hour: [

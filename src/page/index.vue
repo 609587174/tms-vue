@@ -138,7 +138,7 @@
       <div class="st-head-wraper">
         <div class="st-head-middle">
           <div class="head-nav-wraper clearfix">
-            <div class="st-company-name float-left"><a href="/"><img src="../assets/img/91LNG.jpg"></a> </div>
+            <div class="st-company-name float-left"><a href="/"><img src="../assets/img/91LNG.png"></a> </div>
             <div class="float-right head-user">
               <div v-if="users.nick_name">
                 欢迎您：<span>{{users.nick_name}}，</span><router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link>

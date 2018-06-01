@@ -173,21 +173,21 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="副驾驶">
-                <el-select v-model="staffForm.vice_driver" filterable clearable placeholder="请选择">
+              <el-form-item label="副驾驶" prop="vice_driver">
+                <el-select v-model="staffForm.vice_driver" filterable clearable placeholder="请选择" @change="validateStaff">
                   <el-option
-                    v-for="item in driverList"
-                    :key="item.id"
+                    v-for="(item, index) in driverList"
+                    :key="index"
                     :label="item.value"
                     :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="押运员">
-                <el-select v-model="staffForm.escort_staff" filterable clearable placeholder="请选择">
+              <el-form-item label="押运员" prop="escort_staff">
+                <el-select v-model="staffForm.escort_staff" filterable clearable placeholder="请选择" @change="validateStaff">
                   <el-option
-                    v-for="item in escortList"
-                    :key="item.id"
+                    v-for="(item, index) in escortList"
+                    :key="index"
                     :label="item.value"
                     :value="item.id">
                   </el-option>
@@ -225,6 +225,20 @@
 export default {
   name: 'editCapacity',
   data() {
+    let validateViceDriver = (rule, value, callback) => {
+      if (!value && !this.staffForm.escort_staff) {
+        callback(new Error('副驾驶和押运员必填一个'))
+      } else {
+        callback();
+      }
+    };
+    let validateEscortStaff = (rule, value, callback) => {
+      if (!value && !this.staffForm.vice_driver) {
+        callback(new Error('副驾驶和押运员必填一个'))
+      } else {
+        callback();
+      }
+    };
     return {
       pageLoading: true,
       truckForm: {},
@@ -239,6 +253,12 @@ export default {
       staffRules: {
         master_driver: [
           { required: true, message: '请输入主驾驶名称', trigger: 'change' }
+        ],
+        vice_driver: [
+          { validator: validateViceDriver, trigger: 'change' }
+        ],
+        escort_staff: [
+          { validator: validateEscortStaff, trigger: 'change' }
         ]
       },
       selectData: {
@@ -264,8 +284,8 @@ export default {
     }
   },
   activated() {
-    console.log(this.capacityId)
-    console.log(this.capacityInfo)
+    this.truckForm = {};
+    this.staffForm = {};
     if (this.activeStep === 0) {
       this.truckForm = {
         capacityId: this.capacityId,
@@ -281,7 +301,6 @@ export default {
         escort_staff: this.capacityInfo.escort_staff && this.capacityInfo.escort_staff.id
       }
     }
-    console.log(this.staffForm);
   },
   mounted() {
     this.init();
@@ -467,6 +486,10 @@ export default {
       if (this.capacityId) {
         this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId });
       }
+    },
+    validateStaff: function () {
+      this.$refs.staffForm.validateField('vice_driver');
+      this.$refs.staffForm.validateField('escort_staff');
     },
     validteClientCallback: function (res) {
       let reg = new RegExp('^(4[0-9]*)$')

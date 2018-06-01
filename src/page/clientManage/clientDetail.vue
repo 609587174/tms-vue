@@ -87,7 +87,7 @@
                   </el-col>
                 </el-row>
               </div>
-              <div class="detail-list detail-form">
+              <div class="detail-list detail-form" v-if="false">
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
@@ -129,7 +129,7 @@
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
-                      基础信息
+                      卸车待时规则
                     </el-col>
                     <el-col :span="6" class="text-right">
                       <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>

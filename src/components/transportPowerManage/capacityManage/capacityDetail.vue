@@ -228,6 +228,7 @@ export default {
     }
   },
   activated() {
+    this.activeTab = 'first';
     this.getDetail();
   },
   computed: {
@@ -263,7 +264,7 @@ export default {
 
     },
     unbindTruck: function () {
-      this.$confirm('此操作将一键解绑挂车, 是否继续?', '提示', {
+      this.$confirm('此操作将一键清空挂车绑定信息，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
@@ -281,7 +282,7 @@ export default {
       });
     },
     unbindStaff: function () {
-      this.$confirm('此操作将一键解绑人员, 是否继续?', '提示', {
+      this.$confirm('此操作将一键清空人员绑定信息，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',

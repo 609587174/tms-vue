@@ -1,38 +1,69 @@
 <template>
-  <div>
-    <div>
+  <div class="out-contain">
+    <div class="search-filters-contain">
       <div>
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
             <el-col :span="24">
-              <el-select v-model="value9" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="getCarList" :loading="carloading">
-                <el-option v-for="item in options4" :key="item.value" :label="item.label" :value="item.value">
-                </el-option>
-              </el-select>
+              <el-form-item label="车牌号:">
+                <el-select v-model="searchFilters.choosedCar" @change="chooseCar" filterable placeholder="请输入关键词" :loading="carLoading">
+                  <el-option v-for="(item,key) in carList" :key="key" :label="item.tractor.plate_number" :value="item.tractor.id">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-row>
           <el-row :gutter="0">
-            <el-col :span="4">
+            <el-col :span="24">
+              <el-form-item label="搜索时间:">
+                <el-date-picker v-model="searchFilters.choosedTime" :picker-options="timeQuickPick" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="chooseTime">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row :gutter="0">
+            <el-col :span="24">
+              <div></div>
+              <div>
+                <el-button class="float-right" type="primary" @click="searchAndRender">搜索</el-button>
+              </div>
             </el-col>
           </el-row>
         </el-form>
       </div>
     </div>
+    <div class="map-loading" v-loading="pageLoading"></div>
     <div id="map-container"></div>
   </div>
 </template>
 <script>
 let pathSimplifierIns;
+let pbFunc;
 export default {
   name: 'routePlayback',
   computed: {
     id: function() {
       console.log('this.$route.params', this.$route.params.id);
       return this.$route.params.id;
+    },
+    todayStart: function() {
+      let today = new Date();
+      let todayDetail = this.pbFunc.getDateDetail(today);
+      let start = '';
+      start = todayDetail.year + '-' + todayDetail.month + '-' + todayDetail.day + ' ' + '00:00:00';
+      return start;
+    },
+    todayEnd: function() {
+      let today = new Date();
+      let todayDetail = this.pbFunc.getDateDetail(today);
+      let end = '';
+      end = todayDetail.year + '-' + todayDetail.month + '-' + todayDetail.day + ' ' + todayDetail.hour + ':' + todayDetail.minute + ':' + todayDetail.second;
+      return end;
     }
   },
   data() {
     return {
+      pageLoading: true,
       map: '', //地图实列
       pathSimplifierIns: '', //轨迹实列
       totalDataResult: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后的总数据集合
@@ -48,12 +79,112 @@ export default {
       startMarker: '',
       endMarker: '',
       deviceDetail: '',
+      todayStartDateCopy: this.todayStartDate,
+      searchFilters: {
+        choosedCar: '',
+        choosedTime: [new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), new Date()], //巨坑
+      },
+      choosedDeviceId: '',
+      carList: [],
+      carLoading: false,
+      oneDayMillisecond: 24 * 3600 * 1000, //一天的毫秒数
+      timeQuickPick: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            let start = new Date();
+            let end = new Date();
+            start.setHours('00');
+            start.setMinutes('00');
+            start.setSeconds('00');
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            let start = new Date(new Date() - 24 * 3600 * 1000);
+            let end = new Date(new Date() - 24 * 3600 * 1000);
+            start.setHours('00');
+            start.setMinutes('00');
+            start.setSeconds('00');
+            end.setHours('23');
+            end.setMinutes('59');
+            end.setSeconds('59');
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '三天内',
+          onClick(picker) {
+            let start = new Date(new Date() - 24 * 3600 * 1000 * 2);
+            let end = new Date();
+            start.setHours('00');
+            start.setMinutes('00');
+            start.setSeconds('00');
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '七天内',
+          onClick(picker) {
+            let start = new Date(new Date() - 24 * 3600 * 1000 * 6);
+            let end = new Date();
+            start.setHours('00');
+            start.setMinutes('00');
+            start.setSeconds('00');
+            picker.$emit('pick', [start, end]);
+          }
+        }]
+      }
 
     }
   },
   methods: {
+    chooseTime: function() {
+      console.log('searchFilters', this.searchFilters.choosedTime);
+    },
     getCarList: function() {
+      return new Promise((resolve, reject) => {
+        this.carLoading = true;
+        this.$$http('getCarList').then((results) => {
+          this.carLoading = false;
+          if (results.data && results.data.code == 0 && results.data.data) {
+            this.carList = results.data.data.results;
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
 
+      })
+    },
+    chooseCar: function() {
+      for (let i in this.carList) {
+        if (this.searchFilters.choosedCar === this.carList[i].tractor.id) {
+          this.choosedDeviceId = this.carList[i].device_id;
+          break;
+        }
+      }
+    },
+    getDeviceDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: this.id
+        };
+        this.$$http('getDeviceDetail', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.deviceDetail = results.data.data;
+            this.searchFilters.choosedCar = this.deviceDetail.tractor.id;
+            console.log('deviceDetail', this.deviceDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
     },
     getTripRecords: function() {
       return new Promise((resolve, reject) => {
@@ -61,13 +192,22 @@ export default {
         this.path = [];
 
         let postData = {
-          id: this.id,
+          id: this.choosedDeviceId ? this.choosedDeviceId : this.id,
           page: this.currentPage,
           page_size: this.pageSize,
-          start_time: '2018-06-01 00:00:00',
+          start_time: this.todayStart,
+          end_time: this.todayEnd,
         };
+        if (this.searchFilters.choosedTime.length) {
+          console.log('typeof this.searchFilters.choosedTime[0]', typeof this.searchFilters.choosedTime[0])
+          if (typeof this.searchFilters.choosedTime[0] === 'string') {
+            postData.start_time = this.searchFilters.choosedTime[0];
+            postData.end_time = this.searchFilters.choosedTime[1];
+          }
+        }
+        console.log('this.searchFilters.choosedTime', this.searchFilters.choosedTime);
         this.$$http('getTripRecords', postData).then((results) => {
-          this.pageLoading = false;
+
           if (results.data && results.data.code == 0 && results.data.data) {
             console.log('results.data.data', results.data.data);
             this.dataResult = results.data.data.trip_results;
@@ -164,9 +304,12 @@ export default {
           } else {
             /* 如果数据已经获取完成 */
 
+
             let pointArray = [];
             let speed = 0;
 
+            _this.pageLoading = false;
+            console.log('this.pageLoading', _this.pageLoading);
             //对第一条线路（即索引 0）创建一个巡航器
             _this.navg1 = pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
 
@@ -198,28 +341,11 @@ export default {
       }
 
     },
-    getDeviceDetail: function(id) {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          id: id
-        };
-        this.$$http('getDeviceDetail', postData).then((results) => {
-          this.pageLoading = false;
-          if (results.data && results.data.code == 0) {
-            this.deviceDetail = results.data.data;
-            console.log('deviceDetail', this.deviceDetail);
-            resolve(results)
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-          reject(err);
-        })
-
-      })
-    },
     searchAndRender: function() {
       let _this = this;
+      _this.totalDataResult = [];
+      _this.resultPath = [];
+      _this.pageLoading = true;
       _this.getTripRecords().then((data) => {
         _this.renderPath(data);
       })
@@ -292,8 +418,6 @@ export default {
 
         });
 
-        console.log('_this.pathSimplifierInsccc', pathSimplifierIns);
-
         _this.pathNavigatorStyle = {
 
           loop: true, //循环播放
@@ -321,7 +445,8 @@ export default {
         pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
           let pointMsgStr = '';
-          pointMsgStr = '<div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
+          pointMsgStr = '<div class="fs-13">车牌号：' + this.deviceDetail.tractor.plate_number +
+            '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
             '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
             'km/h</div>';
 
@@ -331,19 +456,12 @@ export default {
 
         });
 
-
-
-
-
       });
-
-      console.log('_this.pathSimplifierInscccttt', pathSimplifierIns);
-
 
     }
   },
   created() {
-
+    pbFunc = this.pbFunc;
   },
   mounted() {
     /* 创建地图 */
@@ -351,6 +469,8 @@ export default {
       zoom: 5
     });
     this.initPath();
+    this.getCarList();
+    this.getDeviceDetail();
     this.searchAndRender();
     console.log('this.$route.params', this.$route.params);
   },
@@ -358,9 +478,30 @@ export default {
 
 </script>
 <style scoped lang="less">
-#map-container {
-  width: 100%;
-  height: 600px;
+.out-contain {
+  position: relative;
+  #map-container {
+    width: 100%;
+    height: 600px;
+  }
+  .map-loading {
+    position: absolute;
+    height: 50px;
+    width: 100%;
+    left: 0;
+    top: 0;
+  }
+  .search-filters-contain {
+    padding-right: 20px;
+    padding-top: 20px;
+    background-color: #fff;
+    height: 600px;
+    width: 480px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 999;
+  }
 }
 
 </style>

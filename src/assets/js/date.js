@@ -1,4 +1,4 @@
-export const getDateDetail = function(date, isTow) {
+export const getDateDetail = function(date) {
   if(date && date.getFullYear()){
     let dateDetail = {};
     dateDetail.year = date.getFullYear();

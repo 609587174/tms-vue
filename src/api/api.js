@@ -680,7 +680,7 @@ const api = {
   },
 
   getUnload: {
-    url: '/order/trader/unload_area/',
+    url: '/order/trader/unload-area/',
     method: 'get',
     desc: '获取卸货区域',
     param: {
@@ -764,7 +764,7 @@ const api = {
     }
   },
   searchNoUse: {
-    url: '/order/delivery-order/check_capacity/',
+    url: '/order/delivery-order/check-capacity/',
     method: 'get',
     desc: '获取3天没用的运力id',
     param: {
@@ -773,7 +773,7 @@ const api = {
     }
   },
   searchDeliveryOrder: {
-    url: '/order/delivery-order/list_capacity/',
+    url: '/order/delivery-order/list-capacity/',
     method: 'get',
     desc: '获取托运单数据',
     param: {
@@ -889,7 +889,7 @@ const api = {
     }
   },
   editCarPower: {
-    url: '/order/delivery-order/:yid/patch_capacity/',
+    url: '/order/delivery-order/:yid/patch-capacity/',
     method: 'PATCH',
     desc: '修改运力',
     param: {
@@ -898,7 +898,7 @@ const api = {
 
   },
   addCarPower: {
-    url: '/order/delivery-order/add_capacity/',
+    url: '/order/delivery-order/add-capacity/',
     method: 'POST',
     desc: '添加运力',
     param: {
@@ -949,6 +949,22 @@ const api = {
     url: '/map/vehicle_monitors/map_init/',
     method: 'get',
     desc: "实时监控",
+    param: {
+
+    }
+  },
+  changeOrderStatus: {
+    url: '/order/section-trips/:id/change-status/',
+    method: 'PUT',
+    desc: "变更运单状态",
+    param: {
+
+    }
+  },
+  searchOrderHasPower: {
+    url: '/order/delivery-order/list-capacity/',
+    method: 'get',
+    desc: "提货订单所拥有的运力列表",
     param: {
 
     }

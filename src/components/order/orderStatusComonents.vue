@@ -56,7 +56,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
           <div v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -177,14 +177,6 @@ export default {
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
-          for (let i = 0; i < dataBody.length; i++) {
-            dataBody[i].transPowerInfo = {
-              tractor: { plate_number: "", carrier: { name: "" } },
-              semitrailer: { plate_number: "" },
-              master_driver: { name: "" },
-              vice_driver: { name: "" },
-            }
-          }
           var sendData = {};
           vm.listFifterData = dataBody;
           sendData.id = dataBody[0].capacity;

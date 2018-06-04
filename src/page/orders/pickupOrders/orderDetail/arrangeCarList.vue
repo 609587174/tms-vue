@@ -75,7 +75,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
-        pageSize: 3,
+        pageSize: 10,
       },
       searchFilters: {
         keyword: '',
@@ -151,7 +151,7 @@ export default {
       delivery_list: [], //提货单拥有的运单，审核后
       haveTranspower_list: [], //提货单所拥有的运力,未审核
       renderPage_list: [], //当前页渲染的数据
-
+      alreadyList: {},
       lastSearch_list: [],
       add_capacities: [], //增加的运力表
       del_capacities: [], //取消的运力表
@@ -250,6 +250,14 @@ export default {
                   });
                 }).catch(() => {
                   vm.$refs.multipleTable.toggleRowSelection(row, false);
+                });
+              } else {
+                row.bindCheckBox = !row.bindCheckBox;
+                vm.trueAll_list.forEach((Titem) => {
+                  if (Titem.id == row.id) {
+                    Titem.bindCheckBox = true;
+                  }
+
                 });
               }
             }
@@ -423,8 +431,9 @@ export default {
         pagination: false,
         complete_status: true
       };
-      vm.pageLoading = true;
+      this.pageLoading = true;
       var getDataNum = 0;
+
       vm.$$http('searchCapacityList', postData).then((results) => {
 
         if (results.data && results.data.code == 0) {
@@ -432,16 +441,17 @@ export default {
           vm.tractor_semitrailers_List = results.data.data;
         }
         getDataNum++;
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
           vm.sortData(true);
         }
       }).catch((err) => {
         getDataNum++;
         vm.sortData(false);
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
         }
+        console.log('err', err);
       });
       let postData1 = {
         id: this.id
@@ -453,46 +463,71 @@ export default {
           console.log("当前订单数据", results.data.data);
           vm.delivery_list = results.data.data;
         }
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
           vm.sortData(true);
         }
       }).catch((err) => {
         getDataNum++;
         vm.sortData(false);
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
         }
+        console.log('err', err);
       });
-      let postData2 = {
-
-      };
-      this.$$http('searchNoUse', postData2).then((results) => {
+      let postData2 = {};
+      vm.$$http('searchNoUse', postData2).then((results) => {
         if (results.data && results.data.code == 0) {
           console.log("最近未指派的车辆数据", results.data);
           vm.upTo_list = results.data.data;
         }
         getDataNum++;
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
           vm.sortData(true);
         }
       }).catch((err) => {
         getDataNum++;
         vm.sortData(false);
-        if (getDataNum == 3) {
+        if (getDataNum == 4) {
           vm.pageLoading = false;
         }
+        console.log('err', err);
       });
+      let postData4 = {
+        id: vm.id
+      };
+      vm.$$http('searchOrderHasPower', postData4).then((results) => {
+        if (results.data && results.data.code == 0) {
+          console.log("已经添加列表上面的数据", results.data);
+          vm.alreadyList = results.data.data;
+          if (!results.data.data || !vm.alreadyList.capacities) {
+            vm.alreadyList.capacities = [];
+          }
+        }
+        getDataNum++;
+        if (getDataNum == 4) {
+          vm.pageLoading = false;
+          vm.sortData(true);
+        }
+      }).catch((err) => {
+        getDataNum++;
+        vm.sortData(false);
+        if (getDataNum == 4) {
+          vm.pageLoading = false;
+        }
+        console.log('err', err);
+      });
+
     },
     sortData: function(status) {
       if (status) {
         let operationArr = this.pbFunc.deepcopy(this.tractor_semitrailers_List);
         let newArr = [];
         let fifterArr = [];
-        for (let i = 0; i < operationArr.length; i++) {
+        for (let i = 0; i < operationArr.length; i++) { //循环所有运力列表
           var addflag = false;
-          for (let j = 0; j < this.delivery_list.trips.length; j++) {
+          for (let j = 0; j < this.delivery_list.trips.length; j++) { //筛选当前订单的列表
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
@@ -507,20 +542,40 @@ export default {
             fifterArr.push(operationArr[i]);
           }
         }
+        //筛选出待确认列表中不在已确认列表的数据 加入到绑定选择列表 并且删除
+        var fifterArr4 = [];
+        for (let findex1 = 0; findex1 < fifterArr.length; findex1++) {
+          var addAlreaListflag = false;
+          for (let findex4 = 0; findex4 < this.alreadyList.capacities.length; findex4++) {
+            if (fifterArr[findex1].id == this.alreadyList.capacities[findex4]) {
+              addAlreaListflag = true;
+              break;
+            }
+          }
+          if (addAlreaListflag) {
+            fifterArr[findex1].waybill = {};
+            fifterArr[findex1].bindCheckBox = true;
+            this.now_capacities.push(fifterArr[findex1]);
+            newArr.push(fifterArr[findex1]);
+          } else {
+            fifterArr4.push(fifterArr[findex1]);
+          }
+        }
+        //筛选出最近三天没有使用过的运力
         var fifterArr2 = [];
-        for (var findex = 0; findex < fifterArr.length; findex++) {
+        for (var findex = 0; findex < fifterArr4.length; findex++) {
           var upaddfalg = false;
           for (let o = 0; o < this.upTo_list.length; o++) {
-            if (fifterArr[findex].id == this.upTo_list[o]) {
+            if (fifterArr4[findex].id == this.upTo_list[o]) {
               upaddfalg = true;
               break;
             }
           }
           if (!upaddfalg) {
-            fifterArr[findex].waybill = {};
-            newArr.push(fifterArr[findex]);
+            fifterArr4[findex].waybill = {};
+            newArr.push(fifterArr4[findex]);
           } else {
-            fifterArr2.push(fifterArr[findex]);
+            fifterArr2.push(fifterArr4[findex]);
           }
         }
         // var newArr1 = [];

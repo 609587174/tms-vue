@@ -1,7 +1,7 @@
 export default [{
   path: '',
   name: 'index',
-  redirect:'/',
+  redirect: '/',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
     title: '头部边栏'
@@ -60,7 +60,7 @@ export default [{
           },
           component: (resolve) => require(['../page/orders/pickupOrders/orderDetail'], resolve),
           children: [{
-            path: 'orderDetailTab/:id',
+            path: 'orderDetailTab/:id/:type',
             name: 'pickupOrderDetailTab',
             meta: {
               isVerificationL: false,
@@ -85,7 +85,7 @@ export default [{
               },
               component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarList'], resolve),
             }, {
-              path: 'arrangeCarMap/:id',
+              path: 'arrangeCarMap/:id/:type',
               name: 'pickupArrangeCarMap',
               meta: {
                 isVerificationL: false,
@@ -94,84 +94,13 @@ export default [{
               component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/arrangeCarMap'], resolve),
             }]
           }, {
-            path: 'orderRecordsTab/:id',
+            path: 'orderRecordsTab/:id/:type',
             name: 'pickupOrderRecordsTab',
             meta: {
               isVerificationL: false,
               title: '订单记录'
             },
             component: (resolve) => require(['../page/orders/pickupOrders/orderDetail/orderRecordsTab'], resolve),
-          }]
-        }
-      ]
-    }, {
-      path: 'consignmentOrders',
-      name: 'consignmentOrders',
-      redirect: '/orders/consignmentOrders/ordersList',
-      meta: {
-        isVerificationL: true,
-        title: '托运订单'
-      },
-      component: (resolve) => require(['../page/orders/consignmentOrder/consignmentOrders'], resolve),
-      children: [{
-          path: 'ordersList',
-          name: 'consignmentOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '托运订单'
-          },
-          component: (resolve) => require(['../page/orders/consignmentOrder/orderList'], resolve),
-        },
-        {
-          path: 'orderDetail',
-          name: 'consignmentOrderDetail',
-          meta: {
-            isVerificationL: false,
-            title: '订单详情'
-          },
-          component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail'], resolve),
-          children: [{
-            path: 'orderDetailTab/:id',
-            name: 'consignmentOrderDetailTab',
-            meta: {
-              isVerificationL: false,
-              title: '订单详情'
-            },
-            component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/orderDetailTab'], resolve),
-          }, {
-            path: 'arrangeCarTab',
-            name: 'consignmentArrangeCarTab',
-            redirect: '/orders/consignmentOrder/orderDetail/arrangeCarTab/arrangeCarList',
-            meta: {
-              isVerificationL: false,
-              title: '车辆指派',
-            },
-            component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/arrangeCarTab'], resolve),
-            children: [{
-              path: 'arrangeCarList/:id',
-              name: 'consignmentArrangeCarList',
-              meta: {
-                isVerificationL: false,
-                title: '车辆指派列表'
-              },
-              component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/arrangeCarList'], resolve),
-            }, {
-              path: 'arrangeCarMap/:id',
-              name: 'consignmentArrangeCarMap',
-              meta: {
-                isVerificationL: false,
-                title: '地图'
-              },
-              component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/arrangeCarMap'], resolve),
-            }]
-          }, {
-            path: 'orderRecordsTab/:id',
-            name: 'consignmentOrderRecordsTab',
-            meta: {
-              isVerificationL: false,
-              title: '订单记录',
-            },
-            component: (resolve) => require(['../page/orders/consignmentOrder/orderDetail/orderRecordsTab'], resolve),
           }]
         }
       ]
@@ -186,6 +115,61 @@ export default [{
       iconName: 'icon-road',
     },
     component: (resolve) => require(['../page/logisticsManage/logisticsManage'], resolve),
+    children: [{
+      path: 'consignmentOrders',
+      name: 'consignmentOrders',
+      redirect: '/logisticsManage/consignmentOrders/ordersList',
+      meta: {
+        isVerificationL: false,
+        title: '物流调度'
+      },
+      component: (resolve) => require(['../page/logisticsManage/consignmentOrder/consignmentOrders'], resolve),
+      children: [{
+          path: 'ordersList',
+          name: 'consignmentOrdersList',
+          meta: {
+            isVerificationL: false,
+            title: '托运订单'
+          },
+          component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderList'], resolve),
+        },
+        {
+          path: 'orderDetail',
+          name: 'consignmentOrderDetail',
+          meta: {
+            isVerificationL: false,
+            title: '订单详情'
+          },
+          component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail'], resolve),
+          children: [{
+            path: 'orderDetailTab/:id',
+            name: 'consignmentOrderDetailTab',
+            meta: {
+              isVerificationL: false,
+              title: '运单详情'
+            },
+            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderDetailTab'], resolve),
+          }, {
+            path: 'arrangeCarTab',
+            name: 'consignmentArrangeCarTab',
+            redirect: '/logisticsManage/consignmentOrder/orderDetail/arrangeCarTab/arrangeCarList',
+            meta: {
+              isVerificationL: false,
+              title: '运单进程',
+            },
+            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/arrangeCarTab'], resolve),
+          }, {
+            path: 'orderRecordsTab/:id',
+            name: 'consignmentOrderRecordsTab',
+            meta: {
+              isVerificationL: false,
+              title: '订单记录',
+            },
+            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderRecordsTab'], resolve),
+          }]
+        }
+      ]
+    }]
   }, {
     path: 'mapManage',
     name: 'mapManage',
@@ -444,14 +428,14 @@ export default [{
       iconName: 'icon-customer',
     },
     component: (resolve) => require(['../page/clientManage/clientManage'], resolve),
-    children:[{
+    children: [{
       path: 'clientManageSecond',
       name: 'clientManageSecond',
-      redirect:'/clientManage/clientManageSecond/privateClientManage',
+      redirect: '/clientManage/clientManageSecond/privateClientManage',
       meta: {
-          isVerificationL: false,
-          title: '客户管理',
-        },
+        isVerificationL: false,
+        title: '客户管理',
+      },
       component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
       children: [{
           path: 'privateClientManage',
@@ -489,8 +473,7 @@ export default [{
           component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
         },
       ]
-      }
-    ],
+    }],
 
   }, {
     path: 'statistics',

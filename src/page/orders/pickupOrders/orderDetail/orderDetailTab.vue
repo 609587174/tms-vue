@@ -179,6 +179,9 @@ export default {
   computed: {
     id: function() {
       return this.$route.params.id;
+    },
+    operationStatus: function() {
+      return this.$route.params.type;
     }
   },
   data() {
@@ -204,10 +207,10 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}/add` });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}/${this.operationStatus}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}` });
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderRecordsTab/${this.id}/${this.operationStatus}` });
       }
     },
     getOrderDetail: function() {

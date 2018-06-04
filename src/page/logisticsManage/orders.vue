@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'logisticsManage',
+  name: 'orders',
   data() {
     return {
 

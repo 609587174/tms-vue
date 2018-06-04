@@ -74,7 +74,7 @@
 </style>
 <template>
   <div>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :expand-row-keys="expandArr" :row-key="getRowKeys" @expand-change="changeExpand">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div class="listDetalis" style="width:75%;padding-left:48px;">
@@ -97,16 +97,16 @@
           </div>
           <div class="listDetalis carList" style="width:15%">
             <el-row class="commh carInfo">
-              <el-col>车号:{{props.row.transPowerInfo.tractor.plate_number}}</el-col>
+              <el-col>车号:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.tractor.plate_number}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo">
-              <el-col>挂车:{{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number:""}}</el-col>
+              <el-col>挂车:<span v-if="props.row.transPowerInfo"> {{props.row.transPowerInfo.semitrailer?props.row.transPowerInfo.semitrailer.plate_number: ""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo">
-              <el-col>驾驶员:{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</el-col>
+              <el-col>驾驶员:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.master_driver?props.row.transPowerInfo.master_driver.name:""}}</span></el-col>
             </el-row>
             <el-row class="commh carInfo">
-              <el-col>副驾:{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</el-col>
+              <el-col>副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
@@ -320,6 +320,7 @@ export default {
     upStatus: function() {
       var sendData = {};
       var vm = this;
+
       sendData.content = this.changeStatusParam.changeStatusFied;
       sendData.change_type = this.changeStatusParam.changeStatusType;
       sendData.desc = this.changeStatusParam.changeSatusDesc;
@@ -334,6 +335,22 @@ export default {
     },
     getRowKeys: function(row) {
       return row.id;
+    },
+    changeExpand: function(row, expandedRows) {
+      console.log('row', row);
+      console.log('expandedRows', expandedRows);
+      var vm = this;
+      if (row.transPowerInfo) {} else {
+        var sendData = {};
+        sendData.id = row.capacity;
+        vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+          if (transPowerInfo.data.code == 0) {
+            row.transPowerInfo = transPowerInfo.data.data;
+          }
+        }).catch(() => {
+
+        });
+      }
     },
     operation: function(type, rowData) {
       if (type == 'changeSatus') {

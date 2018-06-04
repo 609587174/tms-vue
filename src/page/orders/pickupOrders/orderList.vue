@@ -11,7 +11,7 @@
 <template>
   <div>
     <div class="nav-tab">
-      <el-row v-if="false">
+      <el-row v-if="true">
         <el-col :span="2" :offset="22">
           <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
         </el-col>
@@ -29,9 +29,7 @@
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
-              </el-row>
-              <el-row style="margin-top:10px;">
-                <el-col :span="8">
+                <el-col :span="8" :offset="2">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
                     <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" size="medium">
                     </el-date-picker>

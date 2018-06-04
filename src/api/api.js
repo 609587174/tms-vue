@@ -960,6 +960,14 @@ const api = {
     param: {
 
     }
+  },
+  searchOrderHasPower: {
+    url: '/order/delivery-order/list-capacity/',
+    method: 'get',
+    desc: "提货订单所拥有的运力列表",
+    param: {
+
+    }
   }
 }
 

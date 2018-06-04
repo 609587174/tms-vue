@@ -71,7 +71,7 @@
 
 </style>
 <template>
-  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="small" height="540">
+  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="medium" height="550">
     <el-table-column type="expand">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
@@ -135,7 +135,8 @@
       <template slot-scope="props">
         <div>
           <el-row justify="space-between" type="flex">
-            <el-col :span="5">订单号:{{props.row.order_number}}
+            <el-col :span="5">
+              <el-button type="text" style="height:0px;line-height:0px;" @click="gotoOrderDetalis(props.row)">订单号:{{props.row.order_number}}</el-button>
             </el-col>
             <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
             <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
@@ -212,6 +213,15 @@ export default {
     getRowKeys: function(row) {
       return row.id;
     },
+    gotoOrderDetalis: function(row) {
+      var type = "";
+      if (row.status.key == 'appoint') {
+        type = 'add';
+      } else {
+        type = 'edit';
+      }
+      this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+    },
     operation: function(type, rowData) {
       var vm = this;
       if (type == "addCar") {
@@ -223,7 +233,13 @@ export default {
         //传入一个订单号跳转订单详情-车辆指派页面
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}` });
+        var type = "";
+        if (rowData.status.key == 'appoint') {
+          type = 'add';
+        } else {
+          type = 'edit';
+        }
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}` });
       } else if (type == 'upPlan') {
         var sendData = {
           delivery_order_id: rowData.id

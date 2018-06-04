@@ -192,7 +192,10 @@ export default {
             //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
+              let rotateDeg = (dataItem.direction - 90) + 'deg';
+              console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
+
               return new SimpleMarker({
                 containerClassNames: 'my-marker',
                 iconStyle: {
@@ -200,6 +203,7 @@ export default {
                   style: {
                     width: '20px',
                     height: '20px',
+                    transform: 'rotate(' + rotateDeg + ')',
                   }
                 },
                 label: {

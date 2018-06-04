@@ -108,6 +108,7 @@ export default {
       pageLoading: true,
       map: '', //地图实列
       markerList: [],
+      cluster: '',
       pathSimplifierIns: '', //轨迹实列
       infoWindow: '',
       totalDataResult: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后的总数据集合
@@ -777,12 +778,13 @@ export default {
                 style: {
                   width: '20px',
                   height: '20px',
-                }
+                },
               },
               label: {
                 content: dataItem.position_name,
                 offset: new AMap.Pixel(30, 0)
-              }
+              },
+
             });
 
           },
@@ -861,7 +863,7 @@ export default {
         let mapCenter = this.map.getCenter();
         let bounds = this.map.getBounds();
         let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
-        let lnglat2 = new AMap.LngLat(bounds.southwest.lng, bounds.northeast.lat);
+        let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
         let distance = Math.floor(lnglat1.distance(lnglat2));
 
         console.log('mapCenter', mapCenter, bounds, distance);
@@ -898,11 +900,14 @@ export default {
     renderMarker: function() {
       let _this = this;
       console.log('markerList', _this.markerList);
-
       _this.markerList.render(_this.landmarkList);
-      // _this.map.plugin(["AMap.MarkerClusterer"], function() { // _this.allMakers = _this.markerList.getAllMarkers(); // if (_this.cluster) { // _this.cluster.clearMarkers(); // } // _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, { // minClusterSize: 4, // maxZoom: 17, // }); // });
-
-
+      _this.map.plugin(["AMap.MarkerClusterer"], function() {
+        _this.allMakers = _this.markerList.getAllMarkers();
+        if (_this.cluster) {
+          _this.cluster.clearMarkers();
+        }
+        _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, { minClusterSize: 4, maxZoom: 17, });
+      });
     }
   },
   created() {

@@ -262,11 +262,11 @@ export default {
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.position_type && item.position_type.key === 'LNG') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG') {
+        if (item.async_status === 'ASYNCED') {
           src = 'gas_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'gas_2.png'
               break;
@@ -279,11 +279,11 @@ export default {
         }
       }
       /*卸货站*/
-      if (item.position_type && item.position_type.key === 'DELIVER_POSITION') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'DELIVER_POSITION') {
+        if (item.async_status === 'ASYNCED') {
           src = 'l_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'l_2.png'
               break;
@@ -296,11 +296,11 @@ export default {
         }
       }
       /*食宿停*/
-      if (item.position_type && item.position_type.key === 'REST_AREA') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'REST_AREA') {
+        if (item.async_status === 'ASYNCED') {
           src = 'parking_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'parking_2.png'
               break;
@@ -313,11 +313,11 @@ export default {
         }
       }
       /*气源液厂*/
-      if (item.position_type && item.position_type.key === 'LNG_FACTORY') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG_FACTORY') {
+        if (item.async_status === 'ASYNCED') {
           src = 'lng_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'lng_2.png'
               break;
@@ -494,7 +494,7 @@ export default {
 <style scoped lang="less">
 .map-out-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
   position: relative;
   .map-loading {
     position: absolute;
@@ -554,7 +554,7 @@ export default {
 
 #map-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
 }
 
 .map-choose-address {

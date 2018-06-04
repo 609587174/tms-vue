@@ -4,7 +4,7 @@
       <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
         <el-row :gutter="0">
           <el-col :span="12">
-            <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+            <el-input placeholder="请输入车牌号" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
               <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
             </el-input>
           </el-col>
@@ -349,7 +349,7 @@ export default {
 <style scoped lang="less">
 .map-out-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
   position: relative;
   .map-loading {
     position: absolute;
@@ -427,7 +427,7 @@ export default {
 
 #map-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
 }
 
 </style>

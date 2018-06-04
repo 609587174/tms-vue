@@ -130,17 +130,17 @@ export default {
       stopPointPage: {
         total: '',
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 8,
       },
       offlinePointPage: {
         total: '',
         currentPage: 1,
-        pageSize: 5,
+        pageSize: 7,
       },
       navg1: '',
       distanceMile: '', //总里程
       speed: 0,
-      driveringTime: 5, //巡航时间
+      driveringTime: 10, //巡航时间
       startMarker: '',
       endMarker: '',
       deviceDetail: '',
@@ -224,6 +224,7 @@ export default {
       showMap: true,
       isDisplay: true,
       landmarkList: [],
+      infoInterval: '',
     }
   },
   methods: {
@@ -247,11 +248,14 @@ export default {
     },
     getCarList: function() {
       return new Promise((resolve, reject) => {
+        let postData = {
+          pagination: false,
+        };
         this.carLoading = true;
-        this.$$http('getCarList').then((results) => {
+        this.$$http('getCarList', postData).then((results) => {
           this.carLoading = false;
           if (results.data && results.data.code == 0 && results.data.data) {
-            this.carList = results.data.data.results;
+            this.carList = results.data.data;
             resolve(results)
           } else {
             reject(results);
@@ -436,6 +440,23 @@ export default {
       return resultsData;
 
     },
+    setCurrentInfo: function() {
+      let _this = this;
+      let cursor = _this.navg1.getCursor();
+      let pointMsgStr = '';
+      let longitude = _this.totalDataResult[cursor.idx].location.longitude;
+      let latitude = _this.totalDataResult[cursor.idx].location.latitude;
+      pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
+        '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
+        '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
+        'km/h</div>';
+
+      _this.infoWindow.setInfoBody(pointMsgStr);
+
+      _this.infoWindow.setPosition([longitude, latitude]);
+
+
+    },
     renderPath: function(data) {
       let _this = this;
       let allowTime = 20;
@@ -504,6 +525,8 @@ export default {
             //对第一条线路（即索引 0）创建一个巡航器
             _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
 
+            console.log(' _this.navg1', _this.navg1);
+
             /* 计算地图 */
             setTimeout(() => {
               _this.getLandMarkList().then(() => {
@@ -513,7 +536,9 @@ export default {
 
             /* 计算里程 */
             pointArray = _this.choosePositionForDistance(_this.resultPath, 20); //选取点
-            _this.distanceMile = Math.ceil(_this.calculateDistance(pointArray)); //计算里程
+            _this.navg1.moveToPoint(_this.resultPath.length - 1);
+            _this.distanceMile = Math.ceil(_this.navg1.getMovedDistance());
+            //_this.distanceMile = Math.ceil(_this.calculateDistance(pointArray)); //计算里程
             _this.speed = Math.floor(_this.distanceMile / _this.driveringTime); //计算巡航速度
 
             let endMarkerIndex = _this.resultPath.length - 1;
@@ -521,7 +546,15 @@ export default {
 
             _this.navg1.setSpeed(_this.speed);
 
-            _this.navg1.start();
+            setTimeout(() => {
+              _this.infoWindow.open(_this.map, _this.resultPath[0]);
+              _this.navg1.start();
+            }, 1500);
+
+            _this.navg1.on('move', function() {
+              _this.setCurrentInfo();
+            })
+
           }
 
         }
@@ -554,11 +587,11 @@ export default {
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.position_type && item.position_type.key === 'LNG') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG') {
+        if (item.async_status === 'ASYNCED') {
           src = 'gas_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'gas_2.png'
               break;
@@ -571,11 +604,11 @@ export default {
         }
       }
       /*卸货站*/
-      if (item.position_type && item.position_type.key === 'DELIVER_POSITION') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'DELIVER_POSITION') {
+        if (item.async_status === 'ASYNCED') {
           src = 'l_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'l_2.png'
               break;
@@ -588,11 +621,11 @@ export default {
         }
       }
       /*食宿停*/
-      if (item.position_type && item.position_type.key === 'REST_AREA') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'REST_AREA') {
+        if (item.async_status === 'ASYNCED') {
           src = 'parking_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'parking_2.png'
               break;
@@ -605,8 +638,8 @@ export default {
         }
       }
       /*气源液厂*/
-      if (item.position_type && item.position_type.key === 'LNG_FACTORY') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG_FACTORY') {
+        if (item.async_status === 'ASYNCED') {
           src = 'lng_1.png';
         } else {
           switch (item.confirm_status.key) {
@@ -718,6 +751,7 @@ export default {
 
         }
         //轨迹点添加事件
+
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
           let pointMsgStr = '';
@@ -751,13 +785,8 @@ export default {
 
           getInfoWindow: function(data, context, recycledInfoWindow) {
 
-            let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">地标名称：' + data.position_name + '</span>';
-            let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-              '</div><div class="fs-13">地标位置：' + data.address +
-              '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-              '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-              '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-              '</div></div>';
+            let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
+            let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
             return new SimpleInfoWindow({
               infoTitle: infoTitleStr,
@@ -784,7 +813,6 @@ export default {
                 content: dataItem.position_name,
                 offset: new AMap.Pixel(30, 0)
               },
-
             });
 
           },
@@ -800,6 +828,17 @@ export default {
 
         _this.markerList.on('selectedChanged', function(event, info) {
           if (info.selected) {
+            let infoWindow = _this.markerList.getInfoWindow();
+            let id = info.selected.data.id;
+            _this.getLandmarkDetail(id).then((results) => {
+              console.log('detailresults', results);
+              let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
+              infoWindow.setInfoBody(infoBodyStr);
+
+            }).catch(() => {
+              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
+              infoWindow.setInfoBody(infoBodyStr);
+            })
             //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
             if (!info.sourceEventInfo.isListElementEvent) {
 
@@ -838,9 +877,6 @@ export default {
       _this.infoWindow.setInfoBody(pointMsgStr);
 
       _this.infoWindow.open(_this.map, [row.location.longitude, row.location.latitude]);
-
-    },
-    triggerPath: function() {
 
     },
     pauseDriving: function() { //暂停
@@ -908,7 +944,37 @@ export default {
         }
         _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, { minClusterSize: 4, maxZoom: 17, });
       });
-    }
+    },
+    getLandmarkDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+        this.$$http('getLandMarkDetail', postData).then((results) => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkDetail = results.data.data;
+            console.log('deviceDetail', this.landmarkDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+    getInfoWindowDom: function(data) {
+      let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
+        '</div><div class="fs-13">地标位置：' + data.address +
+        '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
+        '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
+        '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
+        '</div></div>';
+
+      return infoBodyStr;
+    },
   },
   created() {
 
@@ -934,7 +1000,7 @@ export default {
   position: relative;
   #map-container {
     width: 100%;
-    height: 600px;
+    height: 700px;
   }
   .map-loading {
     position: absolute;
@@ -946,7 +1012,7 @@ export default {
   .search-filters-contain {
     padding: 20px 10px 0 10px;
     background-color: #fff;
-    height: 560px;
+    height: 660px;
     width: 480px;
     position: absolute;
     left: 0;

@@ -142,12 +142,12 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="免费等待时长:" prop="free_hour">
-                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="customerMsgForm.free_hour"></el-input>小时
+                    <el-input :autofocus="true" placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.free_hour"></el-input>小时
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="超时计算单价:" prop="overtime_price">
-                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.overtime_price"></el-input>元/小时
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.overtime_price"></el-input>元/小时
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -338,10 +338,10 @@ export default {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
           // this.addType = this.detail.customer_type;
-          // if(this.addType === 'PLAT'){
-          //   this.isDisabled = true;
+          if(this.detail.customer_type === 'PLAT'){
+            this.isDisabled = true;
 
-          // }
+          }
           this.customerMsgForm = {
             name: this.detail.name,
             contact_name: this.detail.contact_name,

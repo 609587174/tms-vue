@@ -35,19 +35,19 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>姓名:</label>
+                      <label>姓名:</label>
                       <div class="detail-form-item">{{clientData.name}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>联系人:</label>
+                      <label>联系人:</label>
                       <div class="detail-form-item">{{clientData.contact_name}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>联系电话:</label>
+                      <label>联系电话:</label>
                       <div class="detail-form-item">{{clientData.contact_phone}}</div>
                     </div>
                   </el-col>
@@ -61,7 +61,7 @@
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>客户类型:</label>
+                      <label>客户类型:</label>
                       <div class="detail-form-item">{{clientData.customer_type==='OWN'?'自有客户':'平台客户'}}</div>
                     </div>
                   </el-col>
@@ -75,7 +75,7 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>亏吨标准:</label>
+                      <label>亏吨标准:</label>
                       <div class="detail-form-item">{{clientData.deficiency_standard}}<span v-if="clientData.deficiency_standard">KG</span></div>
                     </div>
                   </el-col>
@@ -105,19 +105,19 @@
                   <el-row :gutter="10">
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>对应液厂:</label>
+                        <label>对应液厂:</label>
                         <div class="detail-form-item"></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>生效时间:</label>
+                        <label>生效时间:</label>
                         <div class="detail-form-item">{{clientData.fee.valid_start_datetime}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
-                        <label><span class="text-red">* </span>失效时间:</label>
+                        <label>失效时间:</label>
                         <div class="detail-form-item">{{clientData.fee.valid_end_datetime}}</div>
                       </div>
                     </el-col>
@@ -139,13 +139,13 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>到站免费等待时长:</label>
+                      <label>到站免费等待时长:</label>
                       <div class="detail-form-item">{{clientData.free_hour}}<span v-if="clientData.free_hour">小时</span></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label><span class="text-red">* </span>超时计算单价:</label>
+                      <label>超时计算单价:</label>
                       <div class="detail-form-item">{{clientData.overtime_price}}<span v-if="clientData.overtime_price">元/小时</span></div>
                     </div>
                   </el-col>

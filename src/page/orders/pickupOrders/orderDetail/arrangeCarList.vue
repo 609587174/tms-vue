@@ -6,6 +6,9 @@
   /deep/ tr td .cell {
     text-align: center;
   }
+  /deep/ tr th .cell {
+    text-align: center;
+  }
 }
 
 </style>
@@ -13,7 +16,7 @@
   <div class="tab-screen">
     <div>
       <div class="nav-tab">
-        <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+        <el-tabs v-model="activeName" type="card" @tab-click="clicktabs" :filter-method="filterHandler">
           <el-tab-pane label="列表" name="first">
             <div class="tab-screen">
               <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
@@ -50,6 +53,12 @@
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
                 <el-table-column label="勾选" type="selection" width="55" fixed="right">
+                </el-table-column>
+                <el-table-column label="状态" width="80" fixed="right">
+                  <template slot-scope="scope">
+                    <el-tag :type="scope.row.waybill.status === 'driver_pending_confirmation' ? 'success' :(scope.row.waybill.status==='canceled'? 'warning': 'primary')" disable-transitions>{{scope.row.waybill.status === 'driver_pending_confirmation' ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': '未选择')}}
+                    </el-tag>
+                  </template>
                 </el-table-column>
               </el-table>
             </div>
@@ -100,11 +109,11 @@ export default {
       },
       thTableList: [{
         title: '变更',
-        param: 'waybill.waybill_change_status',
+        param: 'waybill.waybill_change_status_display',
         width: ''
       }, {
         title: '运单状态',
-        param: 'waybill.status',
+        param: 'waybill.status_display',
         width: ''
       }, {
         title: '运单号',
@@ -168,6 +177,17 @@ export default {
     }
   },
   methods: {
+    filterTag: function(value, row) {
+      if (row.waybill.status) {
+        return row.waybill.status === value;
+      } else {
+        return !row.waybill.status
+      }
+    },
+    filterHandler: function(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
+    },
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarMap/${this.id}` });
@@ -502,7 +522,7 @@ export default {
           console.log("已经添加列表上面的数据", results.data);
           vm.alreadyList = results.data.data;
           if (!results.data.data || !vm.alreadyList.capacities) {
-            vm.alreadyList.capacities = [];
+            vm.alreadyList.add_capacities = [];
           }
         }
         getDataNum++;
@@ -531,9 +551,11 @@ export default {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              operationArr[i].bindCheckBox = true;
-              this.now_capacities.push(operationArr[i]);
-              addflag = true;
+              if (this.delivery_list.trips[j].status != "canceled") {
+                operationArr[i].bindCheckBox = true;
+                this.now_capacities.push(operationArr[i]);
+                addflag = true;
+              }
             }
           }
           if (addflag) {
@@ -542,12 +564,17 @@ export default {
             fifterArr.push(operationArr[i]);
           }
         }
+        fifterArr.forEach((item) => {
+          if (!item.waybill) {
+            item.waybill = {};
+          }
+        });
         //筛选出待确认列表中不在已确认列表的数据 加入到绑定选择列表 并且删除
         var fifterArr4 = [];
         for (let findex1 = 0; findex1 < fifterArr.length; findex1++) {
           var addAlreaListflag = false;
-          for (let findex4 = 0; findex4 < this.alreadyList.capacities.length; findex4++) {
-            if (fifterArr[findex1].id == this.alreadyList.capacities[findex4]) {
+          for (let findex4 = 0; findex4 < this.alreadyList.add_capacities.length; findex4++) {
+            if (fifterArr[findex1].id == this.alreadyList.add_capacities[findex4]) {
               addAlreaListflag = true;
               break;
             }
@@ -572,7 +599,10 @@ export default {
             }
           }
           if (!upaddfalg) {
-            fifterArr4[findex].waybill = {};
+            if (!fifterArr4[findex].waybill) {
+              fifterArr4[findex].waybill = {};
+            }
+
             newArr.push(fifterArr4[findex]);
           } else {
             fifterArr2.push(fifterArr4[findex]);

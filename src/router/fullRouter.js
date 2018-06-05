@@ -1,11 +1,7 @@
 export default [{
   path: '',
   name: 'index',
-<<<<<<< 8fc7980dff88fd25cab28c980ff13510a8e3d2e3
-  redirect: '/',
-=======
-  redirect:'/dashborad',
->>>>>>> 地图优化
+  redirect: '/dashborad',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
     title: '首页'

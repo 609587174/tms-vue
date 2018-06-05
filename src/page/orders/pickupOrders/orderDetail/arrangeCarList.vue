@@ -422,7 +422,7 @@ export default {
             this.pageLoading = false;
           });
         } else {
-          vm.$confirm('修改后车辆为零,状态会置为带指派', '请注意', {
+          vm.$confirm('修改后车辆为零,状态会置为待指派', '请注意', {
             confirmButtonText: '确认提交',
             cancelButtonText: '返回',
             type: 'warning',

@@ -273,9 +273,9 @@
             </el-container>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="车辆指派" name="second">
+        <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>
-        <el-tab-pane label="订单记录" name="third">
+        <el-tab-pane label="轨迹地图" name="third">
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -308,10 +308,10 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: "/orders/orderDetail/arrangeCarTab" });
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${this.id}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: "/orders/orderDetail/orderRecordsTab" });
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${this.id}` });
       }
     },
     getOrderDetail: function() {

@@ -1,7 +1,7 @@
 export default [{
   path: '',
   name: 'index',
-  redirect: '/dashborad',
+  redirect:'/dashborad',
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
     title: '首页'
@@ -150,22 +150,21 @@ export default [{
             },
             component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderDetailTab'], resolve),
           }, {
-            path: 'arrangeCarTab',
+            path: 'orderProcess/:id',
             name: 'consignmentArrangeCarTab',
-            redirect: '/logisticsManage/consignmentOrder/orderDetail/arrangeCarTab/arrangeCarList',
             meta: {
               isVerificationL: false,
               title: '运单进程',
             },
-            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/arrangeCarTab'], resolve),
+            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderProcess'], resolve),
           }, {
-            path: 'orderRecordsTab/:id',
+            path: 'routePlayback/:id',
             name: 'consignmentOrderRecordsTab',
             meta: {
               isVerificationL: false,
-              title: '订单记录',
+              title: '轨迹地图',
             },
-            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderRecordsTab'], resolve),
+            component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/routePlayback'], resolve),
           }]
         }
       ]

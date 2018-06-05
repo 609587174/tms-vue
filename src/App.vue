@@ -161,16 +161,20 @@ export default {
   },
   created: function(newPath) {
     let vm = this;
+    let users = vm.pbFunc.getLocalData('users', true);
     let token = vm.pbFunc.getLocalData('token', true);
-    // console.log('token', token)
-    if (token) {
+    // console.log('token', users)
+    if (!users&&token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {
           this.$store.state.common.users = results.data.data;
+          vm.pbFunc.setLocalData('users', results.data.data,true);
         }
       }).catch((err) => {
         this.$message.error('获取用户信息失败');
       })
+    }else{
+      this.$store.state.common.users =vm.pbFunc.getLocalData('users', true);
     }
     this.$$http("getSelectData", {}).then(function(reslut) {
       if (reslut.data.code == 0)

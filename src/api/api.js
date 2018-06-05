@@ -9,6 +9,26 @@
  */
 
 const api = {
+  updateCompany: {
+    url: '/carrier/carriers/:id/',
+    method: 'patch',
+    desc: '修改企业信息',
+    param: {
+      id: {
+        desc: '企业ID'
+      }
+    }
+  },
+  getCompany: {
+    url: '/carrier/carriers/:carrier_id/',
+    method: 'get',
+    desc: '企业信息',
+    param: {
+      carrier_id: {
+        desc: '企业ID'
+      }
+    }
+  },
   addCustomer: {
     url: '/carrier/customer/',
     method: 'post',

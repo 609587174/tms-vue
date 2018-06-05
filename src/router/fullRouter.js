@@ -1,10 +1,14 @@
 export default [{
   path: '',
   name: 'index',
+<<<<<<< 8fc7980dff88fd25cab28c980ff13510a8e3d2e3
   redirect: '/',
+=======
+  redirect:'/dashborad',
+>>>>>>> 地图优化
   component: (resolve) => require(['../page/MainFirst'], resolve),
   meta: {
-    title: '头部边栏'
+    title: '首页'
   },
   children: [{
     path: 'dashborad',
@@ -253,7 +257,7 @@ export default [{
         name: 'landmarkList',
         meta: {
           isVerificationL: false,
-          title: '标准里程列表',
+          title: '地标列表',
         },
         component: (resolve) => require(['../page/map/landmark/landmarkList'], resolve),
       }, {
@@ -261,7 +265,7 @@ export default [{
         name: 'landmarkDetail',
         meta: {
           isVerificationL: false,
-          title: '标准里程详情',
+          title: '地标详情',
         },
         component: (resolve) => require(['../page/map/landmark/landmarkDetail'], resolve),
       }, {

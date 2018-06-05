@@ -166,7 +166,8 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
-      }]
+      }],
+      landmarkDetail: {},
     }
   },
   methods: {
@@ -183,6 +184,7 @@ export default {
           confirm_status: this.searchFilters.confirm_status,
           async_status: this.searchFilters.async_status,
           position_type: this.searchFilters.position_type,
+          simplify: true,
         };
 
         if (this.searchFilters.keyword.length) {
@@ -227,14 +229,44 @@ export default {
     chooseProvince: function() {
       //this.getList();
     },
+    getLandmarkDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+        this.$$http('getLandMarkDetail', postData).then((results) => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkDetail = results.data.data;
+            console.log('deviceDetail', this.landmarkDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+    getInfoWindowDom: function(data) {
+      let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
+        '</div><div class="fs-13">地标位置：' + data.address +
+        '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
+        '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
+        '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
+        '</div></div>';
+
+      return infoBodyStr;
+    },
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.position_type && item.position_type.key === 'LNG') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG') {
+        if (item.async_status === 'ASYNCED') {
           src = 'gas_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'gas_2.png'
               break;
@@ -247,11 +279,11 @@ export default {
         }
       }
       /*卸货站*/
-      if (item.position_type && item.position_type.key === 'DELIVER_POSITION') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'DELIVER_POSITION') {
+        if (item.async_status === 'ASYNCED') {
           src = 'l_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'l_2.png'
               break;
@@ -264,11 +296,11 @@ export default {
         }
       }
       /*食宿停*/
-      if (item.position_type && item.position_type.key === 'REST_AREA') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'REST_AREA') {
+        if (item.async_status === 'ASYNCED') {
           src = 'parking_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'parking_2.png'
               break;
@@ -281,11 +313,11 @@ export default {
         }
       }
       /*气源液厂*/
-      if (item.position_type && item.position_type.key === 'LNG_FACTORY') {
-        if (item.async_status.key === 'ASYNCED') {
+      if (item.position_type && item.position_type === 'LNG_FACTORY') {
+        if (item.async_status === 'ASYNCED') {
           src = 'lng_1.png';
         } else {
-          switch (item.confirm_status.key) {
+          switch (item.confirm_status) {
             case 'SUCCESS':
               src = 'lng_2.png'
               break;
@@ -328,14 +360,14 @@ export default {
             },
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
-
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">地标名称：' + data.position_name + '</span>';
-              let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-                '</div><div class="fs-13">地标位置：' + data.address +
-                '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-                '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-                '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-                '</div></div>';
+              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
+              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
+              // let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
+              //   '</div><div class="fs-13">地标位置：' + data.address +
+              //   '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
+              //   '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
+              //   '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
+              //   '</div></div>';
 
               return new SimpleInfoWindow({
                 infoTitle: infoTitleStr,
@@ -376,7 +408,19 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
+            console.log('info', info);
             if (info.selected) {
+              let infoWindow = _this.markerList.getInfoWindow();
+              let id = info.selected.data.id;
+              _this.getLandmarkDetail(id).then((results) => {
+                console.log('detailresults', results);
+                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
+                infoWindow.setInfoBody(infoBodyStr);
+
+              }).catch(() => {
+                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
+                infoWindow.setInfoBody(infoBodyStr);
+              })
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
               if (!info.sourceEventInfo.isListElementEvent) {
 
@@ -401,7 +445,8 @@ export default {
             _this.cluster.clearMarkers();
           }
           _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-            minClusterSize: 5,
+            minClusterSize: 4,
+            maxZoom: 17,
           });
         });
       } else {
@@ -415,7 +460,8 @@ export default {
             }
             console.log('_this.map', _this.map, _this.allMakers);
             _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 3,
+              minClusterSize: 4,
+              maxZoom: 17,
             });
           });
         }, 1000)
@@ -448,7 +494,7 @@ export default {
 <style scoped lang="less">
 .map-out-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
   position: relative;
   .map-loading {
     position: absolute;
@@ -508,7 +554,7 @@ export default {
 
 #map-container {
   width: 100%;
-  height: 600px;
+  height: 700px;
 }
 
 .map-choose-address {

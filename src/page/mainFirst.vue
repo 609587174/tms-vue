@@ -104,25 +104,26 @@
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
-        <router-link :to="{path: '/'}"><div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div></router-link>
+        <router-link :to="{path: '/'}">
+          <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        </router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
             <el-breadcrumb separator="/" class="bread" id="mybread">
-              <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index" :to="item">
-                {{ item.name || "" }}
+              <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
+                {{ item.meta.title || "" }}
               </el-breadcrumb-item>
             </el-breadcrumb>
           </div>
           <div class="usermenu" v-if="user.nick_name">
             <i class="icon-user"></i><span></span>
-            <el-dropdown trigger="click"  @command="logout">
+            <el-dropdown trigger="click" @command="logout">
               <span class="el-dropdown-link">Hi，{{user.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
             <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
-
           </div>
         </div>
       </el-row>

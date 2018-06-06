@@ -184,7 +184,7 @@
                       </el-col>
                       <el-col :span="8">
                         <div class="label-list">
-                          <label>装车磅单审核:</label>
+                          <label>装车磅单审核d:</label>
                           <div class="detail-form-item">
                             <el-button type="text " style="height:0;line-height:0;text-align:left;padding-left:0;">点击产看磅单</el-button>
                           </div>

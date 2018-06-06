@@ -1,6 +1,6 @@
 <template>
   <div class="out-contain">
-    <div class="search-filters-contain" v-show="showMap">
+    <div class="search-filters-contain" v-show="showLeftWindow">
       <div>
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
@@ -66,8 +66,8 @@
         </div>
       </div>
     </div>
-    <div class="side-alert-traggle side-alert-traggle-right" v-show="showMap" @click="triggerAlert"><span>«</span></div>
-    <div class="side-alert-traggle side-alert-traggle-left" v-show="!showMap" @click="triggerAlert"><span>»</span></div>
+    <div class="side-alert-traggle side-alert-traggle-right" v-show="showLeftWindow" @click="triggerAlert"><span>«</span></div>
+    <div class="side-alert-traggle side-alert-traggle-left" v-show="!showLeftWindow" @click="triggerAlert"><span>»</span></div>
     <div class="map-loading" v-loading="pageLoading"></div>
     <div id="map-container"></div>
     <div class="bottom-operate">
@@ -105,12 +105,13 @@ export default {
   },
   data() {
     return {
+      activeName: 'stopPoint',
       pageLoading: true,
       map: '', //地图实列
-      markerList: [],
-      cluster: '',
+      markerList: [], //标注列表实例
+      cluster: '', //点聚合实例
       pathSimplifierIns: '', //轨迹实列
-      infoWindow: '',
+      infoWindow: '', //简单信息窗体实列
       totalDataResult: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后的总数据集合
       totalStopPoint: [], //接口请求返回所有停留点数据，
       totalOfflinePoint: [], //接口请求返回所有离线点数据，
@@ -121,47 +122,46 @@ export default {
       curentOfflinePoint: [], //当前分页停留点数据
       resultPath: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后经纬度集合
       path: [], //接口请求返回数据，过滤后只包含经纬度信息。
-      pathNavigatorStyle: {},
-
-      totalPage: {
+      pathNavigatorStyle: {}, //巡航样式
+      totalPage: { //获取轨迹点数据分页信息
         currentPage: 1,
         pageSize: 1000,
       },
-      stopPointPage: {
+      stopPointPage: { //自定义停留点数据分页信息
         total: '',
         currentPage: 1,
         pageSize: 8,
       },
-      offlinePointPage: {
+      offlinePointPage: { //自定义离线点数据分页信息
         total: '',
         currentPage: 1,
         pageSize: 7,
       },
-      navg1: '',
+      navg1: '', //巡航
       distanceMile: '', //总里程
-      speed: 0,
+      speed: 0, //巡航的展示速度
       driveringTime: 10, //巡航时间
-      startMarker: '',
-      endMarker: '',
-      deviceDetail: '',
-      carNumber: '',
+      startMarker: '', //起点标记
+      endMarker: '', //终点标记
+      deviceDetail: '', //设备详情，获取设备详情是为了页面初始化的时候，获取绑定车辆信息carNumber
+      carNumber: '', //绑定车辆信息
       todayStartDateCopy: this.todayStartDate,
       searchFilters: {
-        choosedCar: '',
-        choosedTime: [new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), new Date()], //巨坑
+        choosedCar: '', //筛选所选择的车辆
+        choosedTime: [new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), new Date()], //筛选所选择的时间段，巨坑，choosedTime初始化不能使用变量。可能是用法不正确。
       },
-      choosedDeviceId: '',
-      carList: [],
-      carLoading: false,
+      choosedDeviceId: '', //筛选所选择的车辆所绑定的设备id，所有轨迹信息是通过设备id来获取
+      carList: [], //车辆列表
+      carLoading: false, //获取车辆列表的loading
       oneDayMillisecond: 24 * 3600 * 1000, //一天的毫秒数
       timeSpacing: {}, //所选择的时间间隔
-      activeName: 'stopPoint',
+
       searchBtn: {
         loading: false,
         text: '搜索',
         isDisabled: false,
       },
-      timeQuickPick: {
+      timeQuickPick: { //选择时间的快捷按钮
         shortcuts: [{
           text: '今天',
           onClick(picker) {
@@ -221,10 +221,9 @@ export default {
           width: '120'
         },
       ],
-      showMap: true,
+      showLeftWindow: true,
       isDisplay: true,
-      landmarkList: [],
-      infoInterval: '',
+      landmarkList: [], //地标列表
     }
   },
   methods: {
@@ -244,6 +243,46 @@ export default {
       } else {
         this.searchBtn.isDisabled = true;
       }
+
+    },
+    /*compareTime calculateTimestamps calculateTimeSpacing 组合起来都是为了计算所选择搜索时间间隔的函数*/
+    compareTime: function(startTime, endTime) {
+
+      let thisResult = (Date.parse(endTime) - Date.parse(startTime));
+
+      return thisResult;
+
+    },
+    calculateTimestamps: function(timestamps) {
+
+      let resultObject = {
+        day: '',
+        hours: '',
+        minutes: ''
+      }
+
+      resultObject.day = Math.floor(timestamps / (24 * 3600 * 1000));
+
+      resultObject.hours = Math.floor((timestamps % (24 * 3600 * 1000)) / (3600 * 1000));
+
+      resultObject.minutes = Math.floor(((timestamps % (24 * 3600 * 1000)) % (3600 * 1000)) / (60 * 1000));
+
+      return resultObject;
+
+    },
+    calculateTimeSpacing: function() {
+
+      let resultObject = {};
+
+      let startTime = this.searchFilters.choosedTime[0];
+
+      let endTime = this.searchFilters.choosedTime[1];
+
+      let timestamps = this.compareTime(startTime, endTime);
+
+      resultObject = this.calculateTimestamps(timestamps);
+
+      return resultObject;
 
     },
     getCarList: function() {
@@ -275,6 +314,7 @@ export default {
         }
       }
     },
+    /* 页面初始化时获取设备详细信息，为了获取车牌号。carNumber */
     getDeviceDetail: function(id) {
       return new Promise((resolve, reject) => {
         let postData = {
@@ -296,6 +336,7 @@ export default {
 
       })
     },
+    /* 获取轨迹点数据ajax请求 */
     getTripRecords: function() {
       return new Promise((resolve, reject) => {
         this.dataResult = [];
@@ -338,85 +379,14 @@ export default {
         })
       })
     },
-    /* 从点数组中选择点,用于计算距离,这里recursiveNum默认为10,取10个点 */
-    choosePositionForDistance: function(positionArray, pointNum = 10) {
-      let resultPositionArray = [];
-      let positionArrayLenght = positionArray.length;
-
-      if (positionArrayLenght <= pointNum) {
-        resultPositionArray = positionArray;
-      } else {
-        resultPositionArray.push(positionArray[0]);
-
-        for (let i = 1; i < pointNum; i++) {
-          let choosedPointIndex = Math.floor(positionArrayLenght / pointNum * i);
-          resultPositionArray.push(positionArray[choosedPointIndex]);
-        }
-      }
-
-      return resultPositionArray;
-
-    },
-    /* 计算距离 */
-    calculateDistance: function(positionArray) {
-      let i = 0;
-      let totalDistance = 0;
-
-      while (i < positionArray.length - 1) {
-        let lnglat1 = new AMap.LngLat(positionArray[i][0], positionArray[i][1]);
-        let lnglat2 = new AMap.LngLat(positionArray[i + 1][0], positionArray[i + 1][1]);
-        totalDistance += lnglat1.distance(lnglat2);
-        i++;
-      }
-
-      return totalDistance;
-
-    },
-    compareTime: function(startTime, endTime) {
-
-      let thisResult = (Date.parse(endTime) - Date.parse(startTime));
-
-      return thisResult;
-
-    },
-    calculateTimestamps: function(timestamps) {
-
-      let resultObject = {
-        day: '',
-        hours: '',
-        minutes: ''
-      }
-
-      resultObject.day = Math.floor(timestamps / (24 * 3600 * 1000));
-
-      resultObject.hours = Math.floor((timestamps % (24 * 3600 * 1000)) / (3600 * 1000));
-
-      resultObject.minutes = Math.floor(((timestamps % (24 * 3600 * 1000)) % (3600 * 1000)) / (60 * 1000));
-
-      return resultObject;
-
-    },
-    calculateTimeSpacing: function() {
-
-      let resultObject = {};
-
-      let startTime = this.searchFilters.choosedTime[0];
-
-      let endTime = this.searchFilters.choosedTime[1];
-
-      let timestamps = this.compareTime(startTime, endTime);
-
-      resultObject = this.calculateTimestamps(timestamps);
-
-      return resultObject;
-
-    },
+    /* 获取轨迹点数据返回的结果中的离线点和停留点只包含开始时间和持续多少秒，calculateEndTime是用来计算结束时间 */
     calculateEndTime: function(startTime, duration) {
       let time = Date.parse(startTime) + duration * 1000;
       let timeDetail = this.pbFunc.getDateDetail(new Date(time));
       let timeStr = timeDetail.year + '-' + timeDetail.month + '-' + timeDetail.day + ' ' + timeDetail.hour + ':' + timeDetail.minute + ':' + timeDetail.second;
       return timeStr;
     },
+    /* 处理离线点和停留点的结束时间和持续时长，后端没有直接返回结果，需要自己计算，data参数为停留点数据或者离线点数据 */
     dealSatrtEndTime: function(data) {
       console.log('datafdfsdf', data);
       let resultsData = [];
@@ -440,20 +410,24 @@ export default {
       return resultsData;
 
     },
+    /* 这里巡航时，实时展示点信息时，设置点信息 */
     setCurrentInfo: function() {
       let _this = this;
-      let cursor = _this.navg1.getCursor();
-      let pointMsgStr = '';
-      let longitude = _this.totalDataResult[cursor.idx].location.longitude;
-      let latitude = _this.totalDataResult[cursor.idx].location.latitude;
-      pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
-        '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
-        '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
-        'km/h</div>';
+      let cursor = _this.navg1.getCursor(); //获取当前点信息，见高德api
+      console.log('cursor', cursor, cursor.idx, cursor.tail, Number(cursor.idx) >= 0);
+      if (Number(cursor.idx) >= 0) {
+        let pointMsgStr = '';
+        let longitude = _this.totalDataResult[cursor.idx].location.longitude;
+        let latitude = _this.totalDataResult[cursor.idx].location.latitude;
+        pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
+          '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
+          '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
+          'km/h</div>';
 
-      _this.infoWindow.setInfoBody(pointMsgStr);
+        _this.infoWindow.setInfoBody(pointMsgStr);
+        _this.infoWindow.setPosition([longitude, latitude]);
 
-      _this.infoWindow.setPosition([longitude, latitude]);
+      }
 
 
     },
@@ -461,24 +435,20 @@ export default {
       let _this = this;
       let allowTime = 20;
       if (_this.pathSimplifierIns) {
-        if (_this.path.length) {
-          /* 如果有数据的情况下 */
-          //拼接数据
+        if (_this.path.length) { //如果有数据
+          /*拼接所有轨迹点数据（totalDataResult），离线点（totalOfflinePoint），停留点（totalStopPoint），轨迹展示所需数据（resultPath）*/
           _this.totalDataResult = [..._this.totalDataResult, ..._this.dataResult];
           _this.totalStopPoint = [..._this.totalStopPoint, ..._this.stopPointResult];
-
           _this.totalOfflinePoint = [..._this.totalOfflinePoint, ..._this.offlinePointResult];
           _this.resultPath = [..._this.resultPath, ..._this.path];
-
-          console.log('_this.pathSimplifierIns', _this.pathSimplifierIns);
           //设置数据，绘制轨迹
           _this.pathSimplifierIns.setData([{
             name: '路线0',
             zIndex: 0,
             path: _this.resultPath
           }]);
-
         } else {
+          _this.pageLoading = false;
           /* 如果没有轨迹数据展示提示，并清空轨迹展示 */
           _this.$message({
             message: '无车辆信息',
@@ -493,6 +463,7 @@ export default {
             path: []
           }]);
 
+          return;
         }
 
         _this.startMarker.setPosition(_this.resultPath[0]);
@@ -500,60 +471,57 @@ export default {
         if (Math.ceil(data.data.data.count / _this.totalPage.pageSize)) {
           /* 一次只拿1000条数据，如果数据没有拿完则继续去获取数据 */
           if (_this.totalPage.currentPage < Math.ceil(data.data.data.count / _this.totalPage.pageSize)) {
-
             _this.totalPage.currentPage++;
-
-            _this.searchAndRender();
+            _this.getTripRecords().then((data) => {
+              _this.renderPath(data);
+            })
           } else {
-            /* 如果数据已经获取完成 */
-            _this.curentStopPoint = _this.totalStopPoint.slice(0, _this.stopPointPage.pageSize);
-            _this.curentStopPoint = _this.dealSatrtEndTime(_this.curentStopPoint);
+            _this.pageLoading = false;
+            /* 停留点逻辑处理
+             **这里后端是返回了当次接口请求返回结果的离线点或者停留点数据，前端通过多次请求获取完整数据后，拼接数据到totalStopPoint／totalOfflinePoint中，并需要自己做分页，
+             */
             _this.stopPointPage.currentPage = 1;
             _this.stopPointPage.total = _this.totalStopPoint.length;
-
+            _this.curentStopPoint = _this.totalStopPoint.slice(0, _this.stopPointPage.pageSize);
+            _this.curentStopPoint = _this.dealSatrtEndTime(_this.curentStopPoint);
+            /* 离线点逻辑处理同停留点 */
             _this.curentOfflinePoint = _this.totalOfflinePoint.slice(0, _this.offlinePointPage.pageSize);
             _this.curentOfflinePoint = _this.dealSatrtEndTime(_this.curentOfflinePoint);
             _this.offlinePointPage.currentPage = 1;
             _this.offlinePointPage.total = _this.totalOfflinePoint.length;
-
-
-            let pointArray = [];
-
-
-            _this.pageLoading = false;
-            console.log('this.pageLoading', _this.pageLoading);
-            //对第一条线路（即索引 0）创建一个巡航器
+            /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
             _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
-
-            console.log(' _this.navg1', _this.navg1);
-
-            /* 计算地图 */
+            /* 获取地标列表并生成地标 */
             setTimeout(() => {
               _this.getLandMarkList().then(() => {
                 _this.renderMarker();
               });
             }, 100)
 
-            /* 计算里程 */
-            pointArray = _this.choosePositionForDistance(_this.resultPath, 20); //选取点
-            _this.navg1.moveToPoint(_this.resultPath.length - 1);
-            _this.distanceMile = Math.ceil(_this.navg1.getMovedDistance());
-            //_this.distanceMile = Math.ceil(_this.calculateDistance(pointArray)); //计算里程
-            _this.speed = Math.floor(_this.distanceMile / _this.driveringTime); //计算巡航速度
-
-            let endMarkerIndex = _this.resultPath.length - 1;
-            _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
-
-            _this.navg1.setSpeed(_this.speed);
-
-            setTimeout(() => {
-              _this.infoWindow.open(_this.map, _this.resultPath[0]);
-              _this.navg1.start();
-            }, 1500);
-
+            if (_this.resultPath.length) {
+              /* 计算里程
+               **利用高德地图getMovedDistance方法计算里程，详情请查看“UI组件库－轨迹展示api”
+               */
+              _this.navg1.moveToPoint(_this.resultPath.length - 1);
+              _this.distanceMile = Math.ceil(_this.navg1.getMovedDistance() / 1000);
+              /*计算巡航速度*/
+              _this.speed = Math.floor(_this.distanceMile / _this.driveringTime * 3600);
+              /*设置终点marker*/
+              let endMarkerIndex = _this.resultPath.length - 1;
+              _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
+              /*监测巡航move事件（调用moveByDistance（动画过程会调用该方法）， moveToPoint 时触发），实时展示轨迹点信息。
+               **这里有个问题是，moveByDistance，moveToPoint才出发move事件，导致轨迹点信息展示只能在导航到达点时才获取信息。没有实时跟着导航移动，需要优化。
+               */
+            }
             _this.navg1.on('move', function() {
               _this.setCurrentInfo();
             })
+
+            setTimeout(() => {
+              _this.infoWindow.open(_this.map, _this.resultPath[0]);
+              _this.navg1.setSpeed(_this.speed);
+              _this.navg1.start();
+            }, 1500);
 
           }
 
@@ -574,9 +542,28 @@ export default {
     },
     searchAndRender: function() {
       let _this = this;
+      if (_this.navg1) {
+        _this.navg1.stop();
+      }
       _this.totalDataResult = [];
       _this.totalStopPoint = [];
+      _this.curentStopPoint = [];
       _this.totalOfflinePoint = [];
+      _this.curentOfflinePoint = [];
+      _this.stopPointPage = {
+        total: '',
+        currentPage: 1,
+        pageSize: 8,
+      }
+      _this.offlinePointPage = {
+        total: '',
+        currentPage: 1,
+        pageSize: 7,
+      };
+      _this.totalPage = {
+        currentPage: 1,
+        pageSize: 1000,
+      };
       _this.resultPath = [];
       _this.pageLoading = true;
       _this.getTripRecords().then((data) => {
@@ -657,10 +644,9 @@ export default {
       return src;
 
     },
+    /* 初始化地图内的各种需要的控件 */
     initPath: function() {
       let _this = this;
-
-
       AMapUI.loadUI(['misc/PathSimplifier', 'overlay/SimpleInfoWindow', 'misc/MarkerList', 'overlay/SimpleMarker'], function(PathSimplifier, SimpleInfoWindow, MarkerList, SimpleMarker) {
 
         if (!PathSimplifier.supportCanvas) {
@@ -726,7 +712,7 @@ export default {
           autoSetFitView: true, //页面自适应
 
         });
-
+        //初始化巡航样式
         _this.pathNavigatorStyle = {
 
           loop: true, //循环播放
@@ -751,7 +737,6 @@ export default {
 
         }
         //轨迹点添加事件
-
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
           let pointMsgStr = '';
@@ -765,10 +750,8 @@ export default {
           _this.infoWindow.open(_this.map, info.pathData.path[info.pointIndex]);
 
         });
-
-
         let $ = MarkerList.utils.$; //即jQuery/Zepto
-
+        //初始化标注列表
         _this.markerList = new MarkerList({
 
           map: _this.map,
@@ -825,16 +808,16 @@ export default {
           autoSetFitView: false
 
         });
-
+        //标注列表添加事件
         _this.markerList.on('selectedChanged', function(event, info) {
           if (info.selected) {
             let infoWindow = _this.markerList.getInfoWindow();
             let id = info.selected.data.id;
+            /* 实时获取地标数据 */
             _this.getLandmarkDetail(id).then((results) => {
               console.log('detailresults', results);
               let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
               infoWindow.setInfoBody(infoBodyStr);
-
             }).catch(() => {
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
               infoWindow.setInfoBody(infoBodyStr);
@@ -865,6 +848,7 @@ export default {
         this.curentOfflinePoint = this.dealSatrtEndTime(this.curentOfflinePoint);
       })
     },
+    /* 停留点或者离线点，查看操作 */
     checkPoint: function(row) {
       console.log('row', row);
       let _this = this;
@@ -891,9 +875,8 @@ export default {
       this.navg1.setSpeed(this.speed);
     },
     triggerAlert: function() {
-      this.showMap = !this.showMap;
+      this.showLeftWindow = !this.showLeftWindow;
     },
-
     getLandMarkList: function() {
       return new Promise((resolve, reject) => {
         let mapCenter = this.map.getCenter();
@@ -901,21 +884,12 @@ export default {
         let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
         let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
         let distance = Math.floor(lnglat1.distance(lnglat2));
-
-        console.log('mapCenter', mapCenter, bounds, distance);
-
         let postData = {
           pagination: false,
           longitude: mapCenter.lng,
           latitude: mapCenter.lat,
           distance: distance,
-
-          // source_type: this.searchFilters.landmarkFrom,
-          // confirm_status: this.searchFilters.confirm_status,
-          // async_status: this.searchFilters.async_status,
-          // position_type: this.searchFilters.position_type,
         };
-
         this.$$http('getLandMarkList', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {

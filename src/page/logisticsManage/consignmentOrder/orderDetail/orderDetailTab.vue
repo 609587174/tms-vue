@@ -285,8 +285,11 @@
 export default {
   name: 'orderDetailTab',
   computed: {
-    id: function() {
-      return this.$route.params.id;
+    setpId: function() {
+      return this.$route.params.setpId;
+    },
+    willId: function() {
+      return this.$route.params.willId;
     }
   },
   data() {
@@ -308,17 +311,17 @@ export default {
   methods: {
     clicktabs: function(targetName) {
       if (targetName.name == 'second') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${this.id}` });
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${this.setpId}/${this.willId}` });
       }
       if (targetName.name == 'third') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${this.id}` });
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${this.setpId}/${this.willId}` });
       }
     },
     getOrderDetail: function() {
       this.pageLoading = true;
       var vm = this;
       let postData = {
-        id: this.id
+        id: this.willId
       }
       this.$$http('getConOrderDetail', postData).then((results) => {
         this.pageLoading = false;

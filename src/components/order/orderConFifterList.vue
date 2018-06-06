@@ -80,7 +80,7 @@
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
               <el-row class="loadInfo commh" style="width:100%;">
-                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.supplier_name}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -310,7 +310,7 @@ export default {
   methods: {
     gotoDetalis: function(rowData) {
       console.log('rowData', rowData);
-      this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.waybill.id}` });
+      this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {
@@ -359,7 +359,7 @@ export default {
       } else if (type == 'loadingEX') {
 
       } else if (type == 'sureDownOrder') {
-
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
 
       } else if (type == 'changeData') {

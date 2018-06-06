@@ -63,7 +63,7 @@
       </el-tabs>
     </div>
     <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+      <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if=" pageData.totalPage>1">
       </el-pagination>
     </div>
   </div>
@@ -79,6 +79,7 @@ export default {
     return {
       expandStatus: true,
       fifterName: "all",
+      pageLoading: false,
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'already_match', value: '已匹配卸货单' }],
@@ -178,14 +179,19 @@ export default {
           var dataBody = results.data.data.data;
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           var sendData = {};
-          vm.listFifterData = dataBody;
+
           sendData.id = dataBody[0].capacity;
           vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+            vm.pageLoading = false;
             if (transPowerInfo.data.code == 0) {
-              vm.listFifterData[0].transPowerInfo = transPowerInfo.data.data;
+              dataBody[0].transPowerInfo = transPowerInfo.data.data;
+              vm.listFifterData = dataBody;
+            } else {
+              vm.listFifterData = dataBody;
             }
           }).catch(() => {
-
+            vm.pageLoading = false;
+            vm.listFifterData = dataBody;
           });
         }
       }).catch(() => {

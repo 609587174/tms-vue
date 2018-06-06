@@ -239,11 +239,8 @@ export default {
       }
     },
     returnToPage: function() {
-      if (this.$route.query.id) {
-        this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: this.$route.query.id } });
-      } else {
-        this.$router.push({ path: "/clientManage/clientManageSecond/privateClientManage" });
-      }
+
+        this.$router.push({ path: "/setting/company/pages" });
     },
     getDetail: function() {
       this.$$http('getCompany', { carrier_id: this.users.carrier.id }).then((results) => {
@@ -252,7 +249,6 @@ export default {
 
           if (this.detail.customer_type === 'PLAT') {
             this.isDisabled = true;
-
           }
           this.editMsgForm = {
             name: this.detail.name,
@@ -261,8 +257,8 @@ export default {
             area: '',
             detail_address: this.detail.detail_address,
             carrier_type: this.detail.carrier_type.key,
-            code: this.detail.organization_code ? 'organization_code' : 'license_code',
-            codeMsg: this.detail.organization_code ? this.detail.organization_code : this.detail.license_code
+            code: this.detail.organization_code&&!this.detail.license_code ? 'organization_code' : 'license_code',
+            codeMsg: this.detail.organization_code&&!this.detail.license_code ? this.detail.organization_code : this.detail.license_code
           }
           this.address = {
             province: this.detail.area.id,

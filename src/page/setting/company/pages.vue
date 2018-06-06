@@ -52,13 +52,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>公司地址:</label>
-                      <div class="detail-form-item">{{companyData.area.area_name}}{{companyData.area.city.area_name}}{{companyData.area.city.county.area_name}}{{companyData.detail_address}}</div>
+                      <div class="detail-form-item" v-if="companyData.area">{{companyData.area.area_name}}{{companyData.area.city.area_name}}{{companyData.area.city.county.area_name}}{{companyData.detail_address}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>企业类型:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.carrier_type.verbose)"></div>
+                      <div class="detail-form-item" v-if="companyData.carrier_type" v-html="pbFunc.dealNullData(companyData.carrier_type.verbose)"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">

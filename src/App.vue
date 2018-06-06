@@ -54,10 +54,12 @@ export default {
         businessStatistics: 'BUSINESS_STATISTICS', //业务统计
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         setting: 'SETTINGS', //设置
+        company:'CARRIER_SETTINGS',//公司主页
         organizationalStructure: 'ORGANIZE_STRUCTURE_SETTINGS', //组织架构
         staffsManage: 'CARRIER_STAFFS_MANAGEMENT', //员工管理
         powerManage: 'PERMISSION_MANAGEMENT', //权限管理
         userSetting: 'PERSONAL_SETTINGS', //个人设置
+
       }
       return dictionaryObject;
     },
@@ -117,7 +119,7 @@ export default {
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
-      console.log('this.$router', allowedRouter[0]);
+      console.log('this.$router', allowedRouter[0],allowedRouter);
       if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
 
     },

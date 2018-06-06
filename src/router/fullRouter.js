@@ -495,10 +495,12 @@ export default [{
     children: [{
       path: 'company',
       name: "company",
+      redirect:'/setting/company/pages',
       meta: {
-        title: 'company',
+        title: '公司主页',
         isVerificationL: true
       },
+
       component: (resolve) => require(['../page/setting/company/company'], resolve),
       children: [{
         path: 'pages',

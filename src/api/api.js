@@ -1035,6 +1035,22 @@ const api = {
       },
     }
   },
+  orderProcess: {
+    url: '/order/section-trips/record/',
+    method: 'get',
+    desc: "获取设备详细信息",
+    param: {
+
+    }
+  },
+  examineLoad: {
+    url: '/order/section-trips/:id/change-status/',
+    method: 'put',
+    desc: "运单分段修改状态",
+    param: {
+
+    }
+  }
 }
 
 

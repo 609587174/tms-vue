@@ -142,7 +142,7 @@ export default [{
           },
           component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail'], resolve),
           children: [{
-            path: 'orderDetailTab/:id',
+            path: 'orderDetailTab/:setpId/:willId',
             name: 'consignmentOrderDetailTab',
             meta: {
               isVerificationL: false,
@@ -150,7 +150,7 @@ export default [{
             },
             component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderDetailTab'], resolve),
           }, {
-            path: 'orderProcess/:id',
+            path: 'orderProcess/:setpId/:willId',
             name: 'consignmentArrangeCarTab',
             meta: {
               isVerificationL: false,

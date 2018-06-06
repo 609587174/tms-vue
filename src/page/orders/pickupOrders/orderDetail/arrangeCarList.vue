@@ -228,9 +228,9 @@ export default {
             if (results.data && results.data.code == 0) {
               console.log("绑定的订单", results.data.data);
               vm.pageLoading = false;
-              if (results.data.data.data.length > 0) {
+              if (results.data.data.length > 0) {
                 var orderListText = "";
-                results.data.data.data.forEach((item) => {
+                results.data.data.forEach((item) => {
                   orderListText += item + ",";
                 });
                 const h = this.$createElement;
@@ -422,7 +422,7 @@ export default {
             this.pageLoading = false;
           });
         } else {
-          vm.$confirm('修改后车辆为零,状态会置为带指派', '请注意', {
+          vm.$confirm('修改后车辆为零,状态会置为待指派', '请注意', {
             confirmButtonText: '确认提交',
             cancelButtonText: '返回',
             type: 'warning',

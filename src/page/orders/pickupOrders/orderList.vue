@@ -3,19 +3,10 @@
   margin-top: 35px;
 }
 
-.nav-tab {
-  background: white;
-}
-
 </style>
 <template>
   <div>
     <div class="nav-tab">
-      <el-row v-if="true">
-        <el-col :span="2" :offset="22">
-          <el-button type="primary" @click="goAddNewOder">新增提货单</el-button>
-        </el-col>
-      </el-row>
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="公有提货单" name="first">
           <div class="tab-screen">

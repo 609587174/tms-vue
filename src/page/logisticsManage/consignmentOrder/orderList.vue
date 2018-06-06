@@ -3,10 +3,6 @@
   margin-top: 35px;
 }
 
-.nav-tab {
-  background: white;
-}
-
 </style>
 <template>
   <div>

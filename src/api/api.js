@@ -455,6 +455,12 @@ const api = {
 
     }
   },
+  getCapacityLog: {
+    url: '/truck/tractor_semitrailers/:id/operate_records/',
+    method: 'get',
+    desc: '获取运力管理操作日志',
+    param: {}
+  },
   searchCapacityList: {
     url: '/truck/tractor_semitrailers/',
     method: 'get',

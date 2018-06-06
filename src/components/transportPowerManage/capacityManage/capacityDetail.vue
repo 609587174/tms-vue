@@ -1,7 +1,9 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
-
-
+.tab-screen {
+  min-height: 100vh;
+  margin-bottom: 20px;
+}
 </style>
 <template>
   <div id="capacityDetail" class="detail-main nav-tab">
@@ -170,15 +172,13 @@
       </el-tab-pane>
       <el-tab-pane label="操作日志" name="second">
         <div class="tab-screen">
-          <!-- <component :is="logComponent" request-api="/order/delivery-order/record/"></component> -->
-          <op-log request-api="/order/delivery-order/record/"></op-log>
+          <op-log :table-data="logData" :loading-state="logLoading" :pagination="logPagination" v-on:refreshlog="refreshLog"></op-log>
         </div>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
-// import opLog from '../../common/opLog';
 export default {
   name: 'capacityDetail',
   components: {
@@ -186,7 +186,13 @@ export default {
   },
   data() {
     return {
-      // logComponent: opLog,
+      logData: [],
+      logLoading: false,
+      logPagination: {
+        currentPage: 1,
+        totalPage: 1,
+        pageSize: 10
+      },
       activeTab: 'first',
       headData: {
         tractor: {
@@ -246,7 +252,140 @@ export default {
   },
   methods: {
     handleTabClick: function (tab) {
-      console.log(tab, event);
+      if (tab.name === 'first') {
+        this.getDetail();
+      }
+      if (tab.name === 'second') {
+        // this.logData = [
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     },
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     },
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     },
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     },
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     },
+        //     {
+        //         "operation_type": [{
+        //             "key": "MODIFY",
+        //             "verbose": "更新"
+        //         }],
+        //         "remarks": [
+        //             "将主驾驶由测试肖海霞改为张三2",
+        //             "将副驾驶由张三2改为111",
+        //             "将押韵员由111改为测试肖海霞"
+        //         ],
+        //         "operation_time": "2018-06-01 12:07:12",
+        //         "operator": {
+        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
+        //             "nick_name": "测试账号"
+        //         },
+        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
+        //     }
+        // ];
+        // this.logLoading = false;
+        // this.logPagination.totalPage = Math.ceil(
+        //   100 / this.logPagination.pageSize
+        // );
+        this.getLog(this.logPagination.currentPage);
+      }
+    },
+    refreshLog: function (page) {
+      this.getLog(page);
+    },
+    getLog: function (page) {
+      this.$$http('getCapacityLog', {id: this.id, page: page}).then((results) => {
+          console.log(results);
+          if (results.data && results.data.code == 0) {
+            this.logData = results.data.data.results;
+            this.logPagination.totalPage = Math.ceil(
+              results.data.data.count / this.logPagination.pageSize
+            );
+          } else {
+            this.$message.error('数据获取失败');
+          }
+          this.logLoading = false;
+        }).catch(() => {
+          this.logLoading = false;
+          this.$message.error('数据获取失败');
+        });
     },
     getDetail: function() {
       this.paddingloading = true;
@@ -256,10 +395,11 @@ export default {
           this.paddingloading = false;
         } else {
           this.paddingloading = false;
-          Message.error("获取数据失败");
+          this.$message.error('数据获取失败');
         }
       }).catch(() => {
         this.paddingloading = false;
+        this.$message.error('数据获取失败');
       })
 
     },

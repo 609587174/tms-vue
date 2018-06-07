@@ -193,7 +193,8 @@ export default {
         totalPage: 1,
         pageSize: 10
       },
-      activeTab: 'first',
+      id: '',
+      activeTab: '',
       headData: {
         tractor: {
           plate_number: '',
@@ -240,14 +241,22 @@ export default {
     }
   },
   activated() {
-    this.activeTab = 'first';
-    this.getDetail();
-  },
-  computed: {
-    id: function() {
-      return this.$route.query.capacityId;
+    this.id = this.$route.query.capacityId;
+    this.activeTab = this.$route.query.activeTab;
+    if (this.activeTab === 'first') {
+      this.getDetail();
+    } else if (this.activeTab === 'second') {
+      this.getLog(this.logPagination.currentPage);
     }
   },
+  // computed: {
+  //   id: function() {
+  //     return this.$route.query.capacityId;
+  //   },
+  //   activeTab: function() {
+  //     return this.$route.query.activeTab;
+  //   }
+  // },
   filters: {
     formatBindStatus: function (value) {
       return value ? '已绑定' : '未绑定'
@@ -262,114 +271,6 @@ export default {
         this.getDetail();
       }
       if (tab.name === 'second') {
-        // this.logData = [
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     },
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     },
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     },
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     },
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     },
-        //     {
-        //         "operation_type": [{
-        //             "key": "MODIFY",
-        //             "verbose": "更新"
-        //         }],
-        //         "remarks": [
-        //             "将主驾驶由测试肖海霞改为张三2",
-        //             "将副驾驶由张三2改为111",
-        //             "将押韵员由111改为测试肖海霞"
-        //         ],
-        //         "operation_time": "2018-06-01 12:07:12",
-        //         "operator": {
-        //             "id": "c2281ff1-2681-4b4c-8314-660fa4cb681f",
-        //             "nick_name": "测试账号"
-        //         },
-        //         "operate_custom_id": "f1fea463-8a47-41e9-85b7-9b44c19ee117"
-        //     }
-        // ];
-        // this.logLoading = false;
-        // this.logPagination.totalPage = Math.ceil(
-        //   100 / this.logPagination.pageSize
-        // );
         this.getLog(this.logPagination.currentPage);
       }
     },

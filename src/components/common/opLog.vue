@@ -7,8 +7,6 @@
   <div>
     <div class="table-list">
       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="logLoading">
-        <!-- <el-table-column v-for="(item,key,) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
-        </el-table-column> -->
         <el-table-column
           label="操作人"
           prop="operator.nick_name">

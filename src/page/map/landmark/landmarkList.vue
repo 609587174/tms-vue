@@ -12,9 +12,6 @@
               <el-row :gutter="0">
                 <el-col :span="12">
                   <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                    <el-select v-model="searchFilters.position_type" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
-                    </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
@@ -35,6 +32,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="4">
+                  <el-form-item label="地标类型:">
+                    <el-select v-model="searchFilters.position_type" @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="4">
                   <el-form-item label="是否同步:">
                     <el-select v-model="searchFilters.async_status" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
@@ -44,7 +48,7 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
+          <div class="operation-btn text-right" v-show="false">
             <el-button type="primary" plain>导入</el-button>
             <el-button type="primary">导出</el-button>
             <el-button type="success">新增</el-button>
@@ -83,7 +87,7 @@ export default {
       return this.$store.getters.getIncludeAllSelect.landmark_confirm_status;
     },
     fieldSelect: function() {
-      return this.$store.state.common.selectData.landmark_position_type;
+      return this.$store.getters.getIncludeAllSelect.landmark_position_type;
     },
     isSynchronizeSelect: function() {
       return this.$store.getters.getIncludeAllSelect.landmark_async_status;
@@ -100,10 +104,6 @@ export default {
       activeName: 'first',
       tableData: [],
       thTableList: [{
-        title: '编号',
-        param: 'position_name',
-        width: ''
-      }, {
         title: '地标名称',
         param: 'position_name',
         width: '250'
@@ -147,7 +147,7 @@ export default {
       searchFilters: {
         keyword: '',
         landmarkFrom: '',
-        position_type: 'DELIVER_POSITION',
+        position_type: '',
         confirm_status: '',
         async_status: '',
       }
@@ -174,11 +174,11 @@ export default {
         page_size: this.pageData.pageSize,
         source_type: this.searchFilters.landmarkFrom,
         confirm_status: this.searchFilters.confirm_status,
-        async_status: this.searchFilters.async_status
+        async_status: this.searchFilters.async_status,
+        position_type: this.searchFilters.position_type,
       };
 
       if (this.searchFilters.keyword.length) {
-        postData.position_type = this.searchFilters.position_type;
         postData.position_name = this.searchFilters.keyword;
       }
 

@@ -206,6 +206,7 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
+          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
@@ -362,40 +363,53 @@ export default {
             getInfoWindow: function(data, context, recycledInfoWindow) {
               let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
-              // let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-              //   '</div><div class="fs-13">地标位置：' + data.address +
-              //   '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-              //   '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-              //   '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-              //   '</div></div>';
-
-              return new SimpleInfoWindow({
-                infoTitle: infoTitleStr,
-                infoBody: infoBodyStr,
-                offset: new AMap.Pixel(0, -37)
-              });
-
+              if (recycledInfoWindow) {
+                recycledInfoWindow.setInfoTitle(infoTitleStr);
+                recycledInfoWindow.setInfoBody(infoBodyStr);
+                return recycledInfoWindow;
+              } else {
+                return new SimpleInfoWindow({
+                  infoTitle: infoTitleStr,
+                  infoBody: infoBodyStr,
+                  offset: new AMap.Pixel(0, -37)
+                });
+              }
             },
 
             //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               src = _this.getIconSrc(dataItem);
-              return new SimpleMarker({
-                containerClassNames: 'my-marker',
-                iconStyle: {
+              if (recycledMarker) {
+                recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                   }
-                },
-                label: {
+                });
+                recycledMarker.setLabel({
                   content: dataItem.position_name,
                   offset: new AMap.Pixel(30, 0)
-                }
-              });
+                })
 
+                return recycledMarker
+              } else {
+                return new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('../../../assets/img/' + src),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                    }
+                  },
+                  label: {
+                    content: dataItem.position_name,
+                    offset: new AMap.Pixel(30, 0)
+                  }
+                });
+              }
             },
 
             //marker上监听的事件
@@ -442,12 +456,15 @@ export default {
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
           _this.allMakers = _this.markerList.getAllMarkers();
           if (_this.cluster) {
-            _this.cluster.clearMarkers();
+            //_this.cluster.clearMarkers();
+            _this.cluster.setMarkers(_this.allMakers);
+          } else {
+            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
+              minClusterSize: 4,
+              maxZoom: 17,
+            });
           }
-          _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-            minClusterSize: 4,
-            maxZoom: 17,
-          });
+
         });
       } else {
 
@@ -456,13 +473,16 @@ export default {
           _this.map.plugin(["AMap.MarkerClusterer"], function() {
             _this.allMakers = _this.markerList.getAllMarkers();
             if (_this.cluster) {
-              _this.cluster.clearMarkers();
+              // _this.cluster.clearMarkers();
+              _this.cluster.setMarkers(_this.allMakers);
+            } else {
+              console.log('_this.map', _this.map, _this.allMakers);
+              _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
+                minClusterSize: 4,
+                maxZoom: 17,
+              });
             }
-            console.log('_this.map', _this.map, _this.allMakers);
-            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
+
           });
         }, 1000)
 

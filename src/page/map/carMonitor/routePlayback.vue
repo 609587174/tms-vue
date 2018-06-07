@@ -38,7 +38,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="操作" :width="60">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="checkPoint(scope.row)">查看</el-button>
+                    <el-button type="primary" size="mini" @click="checkPoint(scope)">查看</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -53,7 +53,7 @@
                 </el-table-column>
                 <el-table-column align="center" label="操作" :width="60">
                   <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="checkPoint(scope.row)">查看</el-button>
+                    <el-button type="primary" size="mini" @click="checkPoint(scope)">查看</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -222,7 +222,7 @@ export default {
         },
       ],
       showLeftWindow: true,
-      isDisplay: true,
+      isDisplay: false,
       landmarkList: [], //地标列表
     }
   },
@@ -351,6 +351,7 @@ export default {
           start_time: this.todayStart,
           end_time: this.todayEnd,
         };
+
         if (this.searchFilters.choosedTime.length) {
           if (typeof this.searchFilters.choosedTime[0] === 'string') {
             postData.start_time = this.searchFilters.choosedTime[0];
@@ -414,7 +415,7 @@ export default {
     setCurrentInfo: function() {
       let _this = this;
       let cursor = _this.navg1.getCursor(); //获取当前点信息，见高德api
-      console.log('cursor', cursor, cursor.idx, cursor.tail, Number(cursor.idx) >= 0);
+      console.log('cursor', cursor, cursor.idx, cursor.tail, Number(cursor.idx) >= 0, _this.totalDataResult.length);
       if (Number(cursor.idx) >= 0) {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
@@ -427,6 +428,10 @@ export default {
         _this.infoWindow.setInfoBody(pointMsgStr);
         _this.infoWindow.setPosition([longitude, latitude]);
 
+      }
+
+      if (cursor.idx == (_this.totalDataResult.length - 1)) {
+        _this.isDisplay = false;
       }
 
 
@@ -516,13 +521,6 @@ export default {
             _this.navg1.on('move', function() {
               _this.setCurrentInfo();
             })
-
-            setTimeout(() => {
-              _this.infoWindow.open(_this.map, _this.resultPath[0]);
-              _this.navg1.setSpeed(_this.speed);
-              _this.navg1.start();
-            }, 1500);
-
           }
 
         }
@@ -715,7 +713,7 @@ export default {
         //初始化巡航样式
         _this.pathNavigatorStyle = {
 
-          loop: true, //循环播放
+          loop: false, //循环播放
 
           speed: 100, //巡航速度，单位千米/小时
 
@@ -738,7 +736,6 @@ export default {
         }
         //轨迹点添加事件
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
-
           let pointMsgStr = '';
           pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
             '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
@@ -748,6 +745,8 @@ export default {
           _this.infoWindow.setInfoBody(pointMsgStr);
 
           _this.infoWindow.open(_this.map, info.pathData.path[info.pointIndex]);
+
+
 
         });
         let $ = MarkerList.utils.$; //即jQuery/Zepto
@@ -771,11 +770,17 @@ export default {
             let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
             let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-            return new SimpleInfoWindow({
-              infoTitle: infoTitleStr,
-              infoBody: infoBodyStr,
-              offset: new AMap.Pixel(0, -37)
-            });
+            if (recycledInfoWindow) {
+              recycledInfoWindow.setInfoTitle(infoTitleStr);
+              recycledInfoWindow.setInfoBody(infoBodyStr);
+              return recycledInfoWindow;
+            } else {
+              return new SimpleInfoWindow({
+                infoTitle: infoTitleStr,
+                infoBody: infoBodyStr,
+                offset: new AMap.Pixel(0, -37)
+              });
+            }
 
           },
 
@@ -783,20 +788,39 @@ export default {
           getMarker: function(dataItem, context, recycledMarker) {
             let src = '';
             src = _this.getIconSrc(dataItem);
-            return new SimpleMarker({
-              containerClassNames: 'my-marker',
-              iconStyle: {
+
+            if (recycledMarker) {
+              recycledMarker.setIconStyle({
                 src: require('../../../assets/img/' + src),
                 style: {
                   width: '20px',
                   height: '20px',
                 },
-              },
-              label: {
+              });
+
+              recycledMarker.setLabel({
                 content: dataItem.position_name,
                 offset: new AMap.Pixel(30, 0)
-              },
-            });
+              })
+
+              return recycledMarker;
+
+            } else {
+              return new SimpleMarker({
+                containerClassNames: 'my-marker',
+                iconStyle: {
+                  src: require('../../../assets/img/' + src),
+                  style: {
+                    width: '20px',
+                    height: '20px',
+                  },
+                },
+                label: {
+                  content: dataItem.position_name,
+                  offset: new AMap.Pixel(30, 0)
+                },
+              });
+            }
 
           },
 
@@ -851,16 +875,21 @@ export default {
     /* 停留点或者离线点，查看操作 */
     checkPoint: function(row) {
       console.log('row', row);
+
       let _this = this;
       let pointMsgStr = '';
+      _this.navg1.pause();
+      _this.isDisplay = false;
+      _this.navg1.pause();
+
       pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
-        '</div><div class="fs-13">定位时间：' + row.create_time +
-        '</div><div class="fs-13">行驶速度：' + row.speed +
+        '</div><div class="fs-13">定位时间：' + row.row.create_time +
+        '</div><div class="fs-13">行驶速度：' + row.row.speed +
         'km/h</div>';
 
       _this.infoWindow.setInfoBody(pointMsgStr);
 
-      _this.infoWindow.open(_this.map, [row.location.longitude, row.location.latitude]);
+      _this.infoWindow.open(_this.map, [row.row.location.longitude, row.row.location.latitude]);
 
     },
     pauseDriving: function() { //暂停
@@ -869,7 +898,22 @@ export default {
     },
     resumeDriving: function() { //恢复
       this.isDisplay = true;
-      this.navg1.resume();
+      let naviStatus = this.navg1.getNaviStatus();
+      console.log('naviStatus', naviStatus);
+      if (naviStatus === 'stop') {
+        this.infoWindow.open(this.map, this.resultPath[0]);
+        this.navg1.setSpeed(this.speed);
+        this.navg1.start();
+      } else {
+        let cursor = this.navg1.getCursor();
+        if (cursor.idx == (this.totalDataResult.length - 1)) {
+          this.infoWindow.open(this.map, this.resultPath[0]);
+          this.navg1.setSpeed(this.speed);
+          this.navg1.start();
+        } else {
+          this.navg1.resume();
+        }
+      }
     },
     changeSpeed: function() {
       this.navg1.setSpeed(this.speed);
@@ -910,13 +954,16 @@ export default {
     renderMarker: function() {
       let _this = this;
       console.log('markerList', _this.markerList);
-      _this.markerList.render(_this.landmarkList);
+      //_this.markerList.render(_this.landmarkList);
       _this.map.plugin(["AMap.MarkerClusterer"], function() {
         _this.allMakers = _this.markerList.getAllMarkers();
         if (_this.cluster) {
-          _this.cluster.clearMarkers();
+          // _this.cluster.clearMarkers();
+          _this.cluster.setMarkers(_this.allMakers);
+        } else {
+          _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, { minClusterSize: 4, maxZoom: 17, });
         }
-        _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, { minClusterSize: 4, maxZoom: 17, });
+
       });
     },
     getLandmarkDetail: function(id) {
@@ -971,10 +1018,22 @@ export default {
 </script>
 <style scoped lang="less">
 .out-contain {
+
   position: relative;
   #map-container {
     width: 100%;
     height: 700px;
+    .amap-logo {
+      right: 0px !important;
+      left: auto !important;
+      display: none;
+    }
+
+    .amap-copyright {
+      right: 0px !important;
+      left: auto !important;
+      display: none;
+    }
   }
   .map-loading {
     position: absolute;

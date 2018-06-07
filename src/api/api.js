@@ -9,6 +9,27 @@
  */
 
 const api = {
+  getShipperList: {
+    url: '/order/trader/',
+    method: 'get',
+    desc: '托运方列表',
+    param: {
+
+    }
+  },
+  getFreightList: {
+    url: '/carrier/trans_fee/',
+    method: 'get',
+    desc: '获取运费列表',
+    param: {
+      agreements__carrier: {
+        desc: '承运商id'
+      },
+      agreements__fluid: {
+        desc: '液厂id'
+      },
+    }
+  },
   updateCompany: {
     url: '/carrier/carriers/:id/',
     method: 'patch',

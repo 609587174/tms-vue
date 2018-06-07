@@ -468,9 +468,14 @@ export default {
       if (scope.operator == "edit") {} else if (scope.operator == "show") {
         this.$router.push({
           path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
-            scope.rowData.id
+            scope.rowData.id + '&activeTab=first'
         });
-      } else if (scope.operator == "operation") {}
+      } else if (scope.operator == "operation") {
+        this.$router.push({
+          path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
+            scope.rowData.id + '&activeTab=second'
+        });
+      }
     },
     pageChange: function() {
       setTimeout(() => {

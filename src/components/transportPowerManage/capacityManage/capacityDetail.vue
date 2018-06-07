@@ -249,14 +249,6 @@ export default {
       this.getLog(this.logPagination.currentPage);
     }
   },
-  // computed: {
-  //   id: function() {
-  //     return this.$route.query.capacityId;
-  //   },
-  //   activeTab: function() {
-  //     return this.$route.query.activeTab;
-  //   }
-  // },
   filters: {
     formatBindStatus: function (value) {
       return value ? '已绑定' : '未绑定'

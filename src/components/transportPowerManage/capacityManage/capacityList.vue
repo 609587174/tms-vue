@@ -1,5 +1,12 @@
 <style lang="less">
-
+.cell {
+  a {
+    color: #409EFF;
+    &:hover {
+      opacity: .7;
+    }
+  }
+}
 
 </style>
 <template>
@@ -59,7 +66,70 @@
     <div class="capacity-list-content">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column v-for="(item,key,) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          <el-table-column
+            label="牵引车车牌号">
+            <template slot-scope="scope">
+              <a :href="'/#/transportPowerManage/carManage/showCarHeadManage?headId=' + scope.row.tractor.id" target="blank">{{scope.row.tractor.plate_number}}</a>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="当前绑定挂车">
+            <template slot-scope="scope">
+              <a v-if="scope.row.semitrailer" :href="'/#/transportPowerManage/carManage/showCarTailManage?tailId=' + scope.row.semitrailer.id" target="blank">{{scope.row.semitrailer.plate_number}}</a>
+              <span v-if="!scope.row.semitrailer">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="随车电话"
+            prop="car_belong_phone">
+            <template slot-scope="scope">
+              <span>{{scope.row.car_belong_phone || '-'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="车辆所属">
+            <template slot-scope="scope">
+              <span>{{scope.row.attributes && scope.row.attributes.verbose || '-'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="分组">
+            <template slot-scope="scope">
+              <span>{{scope.row.group && scope.row.group.group_name || '-'}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="主驾驶">
+            <template slot-scope="scope">
+              <a v-if="scope.row.master_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.master_driver.id" target="blank">{{scope.row.master_driver.name}}</a>
+              <span v-if="!scope.row.master_driver">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="副驾驶">
+            <template slot-scope="scope">
+              <a v-if="scope.row.vice_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.vice_driver.id" target="blank">{{scope.row.vice_driver.name}}</a>
+              <span v-if="!scope.row.vice_driver">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="押运员">
+            <template slot-scope="scope">
+              <a v-if="scope.row.escort_staff" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.escort_staff.id" target="blank">{{scope.row.escort_staff.name}}</a>
+              <span v-if="!scope.row.escort_staff">-</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="挂车绑定状态"
+            prop="truck_bind_status">
+          </el-table-column>
+          <el-table-column
+            label="人员绑定状态"
+            prop="staff_bind_status">
+          </el-table-column>
+          <el-table-column
+            label="完善状态"
+            prop="complete_status">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -228,62 +298,6 @@ export default {
         totalPage: 1,
         pageSize: 10
       },
-      thTableList: [{
-          title: "牵引车车牌号",
-          param: "tractor.plate_number",
-          width: ''
-        },
-        {
-          title: "当前绑定挂车",
-          param: "semitrailer.plate_number",
-          width: ''
-        },
-        {
-          title: "随车电话",
-          param: "car_belong_phone",
-          width: ''
-        },
-        {
-          title: "车辆所属",
-          param: "tractor.attributes.verbose",
-          width: ''
-        },
-        {
-          title: "分组",
-          param: "group.group_name",
-          width: ''
-        },
-        {
-          title: "主驾驶",
-          param: "master_driver.name",
-          width: ''
-        },
-        {
-          title: "副驾驶",
-          param: "vice_driver.name",
-          width: ''
-        },
-        {
-          title: "押运员",
-          param: "escort_staff.name",
-          width: ''
-        },
-        {
-          title: "挂车绑定状态",
-          param: "truck_bind_status",
-          width: ''
-        },
-        {
-          title: "人员绑定状态",
-          param: "staff_bind_status",
-          width: ''
-        },
-        {
-          title: "完善状态",
-          param: "complete_status",
-          width: ''
-        }
-      ],
       selectData: {
         fieldSelect: [
           { id: "tractor_plate_number", value: "牵引车号" },

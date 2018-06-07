@@ -79,12 +79,12 @@
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="车辆归属:">
-                        <div class="detail-form-item">{{headData.tractor.attributes.verbose}}</div>
+                        <div class="detail-form-item">{{headData.semitrailer && headData.semitrailer.attributes.verbose}}</div>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
                       <el-form-item label="车辆所属:">
-                        <div class="detail-form-item">{{headData.tractor.carrier.name}}</div>
+                        <div class="detail-form-item">{{headData.semitrailer && headData.semitrailer.carrier.name}}</div>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -205,7 +205,13 @@ export default {
           }
         },
         semitrailer: {
-          plate_number: ''
+          plate_number: '',
+          attributes: {
+            verbose: ''
+          },
+          carrier: {
+            name: ''
+          }
         },
         group: {
           group_name: ''
@@ -392,6 +398,7 @@ export default {
       this.$$http('getCapacityDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.headData = results.data.data;
+          console.log(this.headData)
           this.paddingloading = false;
         } else {
           this.paddingloading = false;

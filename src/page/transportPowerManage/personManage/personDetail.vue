@@ -32,7 +32,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>从业类型:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.work_type.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.work_type && userData.work_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -46,7 +46,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>人员所属:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.staff_type.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.staff_type && userData.staff_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -58,7 +58,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>在职状态:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.on_job_status.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.on_job_status && userData.on_job_status.verbose)"></div>
               </div>
             </el-col>
           </el-row>
@@ -66,7 +66,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>性别:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.gender.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.gender && userData.gender.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -169,7 +169,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form" v-show="userData.work_type.key === 'DRIVER' || userData.work_type.key === 'DRIVER_ESCORT'">
+        <div class="detail-list detail-form" v-show="(userData.work_type && userData.work_type.key === 'DRIVER') || (userData.work_type && userData.work_type.key === 'DRIVER_ESCORT')">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -217,7 +217,7 @@
           </el-row>
           <!-- </el-form> -->
         </div>
-        <div class="detail-list detail-form" v-show="userData.work_type.key === 'ESCORT' || userData.work_type.key === 'DRIVER_ESCORT'">
+        <div class="detail-list detail-form" v-show="(userData.work_type && userData.work_type.key === 'ESCORT') || (userData.work_type && userData.work_type.key === 'DRIVER_ESCORT')">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -405,10 +405,6 @@ export default {
         }
       },
       userData: {
-        work_type: {},
-        staff_type: {},
-        on_job_status: {},
-        gender: {},
         carrier_driver_trainings: [],
         address: {
           province: '',

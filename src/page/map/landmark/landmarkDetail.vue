@@ -24,7 +24,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传来源:</label>
-                <div class="detail-form-item">{{detailData.source_type.verbose}}</div>
+                <div class="detail-form-item">{{detailData.source_type && detailData.source_type.verbose}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -41,19 +41,19 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核状态:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.operate_remark}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_remark)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.user.username}}</div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.user && detailData.confirm_info.user.username)"></div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item">{{detailData.confirm_info.operate_datetime}}</div>
+                <div class="detail-form-item">{{detailData.confirm_info && detailData.confirm_info.operate_datetime}}</div>
               </div>
             </el-col>
           </el-row>
@@ -125,10 +125,10 @@ export default {
       return this.$route.params.id;
     },
     isSucess: function() {
-      return this.detailData.confirm_status.key !== 'SUCCESS' ? false : true;
+      return (this.detailData.confirm_status && this.detailData.confirm_status.key !== 'SUCCESS') ? false : true;
     },
     isFailure: function() {
-      return this.detailData.confirm_status.key !== 'FAILURE' ? false : true;
+      return (this.detailData.confirm_status && this.detailData.confirm_status.key !== 'FAILURE') ? false : true;
     },
   },
   data() {
@@ -137,9 +137,7 @@ export default {
       pageLoading: 'pageLoading',
       dialogTableVisible: false,
       detailData: {
-        source_type: {},
-        confirm_status: {},
-        confirm_info: { user: {} },
+
       },
       imgObject: {
         imgList: [{
@@ -173,6 +171,7 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
+            this.detailData.source_type = null;
             resolve(results);
           } else {
             reject(results);

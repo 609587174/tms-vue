@@ -158,7 +158,7 @@ export default [{
             },
             component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/orderProcess'], resolve),
           }, {
-            path: 'routePlayback/:id',
+            path: 'routePlayback/:setpId/:willId',
             name: 'consignmentOrderRecordsTab',
             meta: {
               isVerificationL: false,

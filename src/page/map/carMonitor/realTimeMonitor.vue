@@ -165,7 +165,7 @@ export default {
 
             getInfoWindow: function(data, context, recycledInfoWindow) {
 
-              let infoTitleStr = '<div>车辆信息</span>';
+              let infoTitleStr = '<div>车辆信息</div>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
               return new SimpleInfoWindow({
@@ -281,7 +281,7 @@ export default {
         operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
       }
 
-      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</span>`;
+      infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</div>`;
       infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">运单状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */

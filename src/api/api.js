@@ -1050,6 +1050,38 @@ const api = {
     param: {
 
     }
+  },
+  getPundList: {
+    url: '/order/section-trips/weight-note/',
+    method: 'GET',
+    desc: "获取磅单数据",
+    param: {
+
+    }
+  },
+  sureMatch: {
+    url: '/order/section-trips/confirm/',
+    method: 'PUT',
+    desc: "确认卸货单",
+    param: {
+
+    }
+  },
+  getSeal: {
+    url: '/order/section-trips/car-seal/',
+    method: 'GET',
+    desc: "获取铅封数据",
+    param: {
+
+    }
+  },
+  getCount: {
+    url: '/order/delivery-order/count/',
+    method: 'GET',
+    desc: "获取订单数目",
+    param: {
+
+    }
   }
 }
 

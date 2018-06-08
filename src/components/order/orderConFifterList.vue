@@ -357,11 +357,11 @@ export default {
         this.changeSatusBox(rowData);
         this.changeStatusParam.sectiontrip = rowData.id;
       } else if (type == 'loadingEX') {
-
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'sureDownOrder') {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
-
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'changeData') {
 
       } else if (type == 'upSettlement') {

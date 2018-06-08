@@ -78,14 +78,14 @@ export default {
   data() {
     return {
       expandStatus: true,
-      fifterName: "all",
       pageLoading: false,
+      fifterName:"all",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'already_match', value: '已匹配卸货单' }],
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
+        'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
       },
       timeParam: {
@@ -118,19 +118,19 @@ export default {
       },
     };
   },
-  props: ['status'],
-  computed: {
-
+  props: {
+    status:String,
+    countParam:Object
   },
   methods: {
     changeTabs: function(name) {
       this.$emit("changeTab", name);
     },
-    searchList: function() {
+    searchList: function(targetName) {
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
-      if (this.fifterName == 'all') {
+      if (this.fifterName=='all') {
         if (this.status == 'first') {
           sendData.search = 'all_truck_loaded';
         } else if (this.status == 'second') {
@@ -179,8 +179,8 @@ export default {
           var dataBody = results.data.data.data;
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           var sendData = {};
-
-          sendData.id = dataBody[0].capacity;
+          if(dataBody.length>0){
+            sendData.id = dataBody[0].capacity;
           vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
             vm.pageLoading = false;
             if (transPowerInfo.data.code == 0) {
@@ -193,6 +193,10 @@ export default {
             vm.pageLoading = false;
             vm.listFifterData = dataBody;
           });
+        }else{
+          vm.listFifterData = dataBody;
+        }
+          
         }
       }).catch(() => {
         vm.pageLoading = false;
@@ -201,21 +205,87 @@ export default {
     clickFifter: function(targetName) {
       var status = targetName.name;
       //重新查询一次数据
-      this.searchList();
+      this.searchList(targetName);
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
     },
     pageChange: function() {
       setTimeout(() => {
-        this.searchStatus = true;
+        
         this.searchList();
       });
+    },
+    assemblyData:function(){
+      var vm=this;
+      var add="";
+         if(this.status=='first'){
+          add='_driver';
+         }else if(this.status=='second'){
+          add='_match';
+         }else if(this.status=='third'){
+          add='_unload';
+         }else if(this.status=='fourth'){
+          add='_settlement';
+         }else if(this.status=='fifth'){
+          add='_change';
+         }else if(this.status=='sxith'){
+          add='_finish';
+         }
+     var assemblyData=this.statusList[this.status];//当前tabs数组
+      for(var i in assemblyData){
+        for(var j in vm.countParam){//传入过来的数值
+          if(assemblyData[i].key+"_count"==j||(i==0&&(assemblyData[i].key+add+"_count")==j)){
+            if(vm.countParam[j]>99){
+              assemblyData[i].value+="(99+)";
+            }else{
+              assemblyData[i].value+="("+vm.countParam[j]+")";
+            }
+          }
+          
+        }
+      }
     }
+  },
+  mounted(){
+    this.assemblyData();
   },
   created() {
     //this.listFifterData = this.listData;
     this.searchList();
+  },
+  watch: {
+    countParam: {
+      handler(val, oldVal) {
+         var assemblyData=this.statusList[this.status];//当前tabs数组
+         var add="";
+         if(this.status=='first'){
+          add='_driver';
+         }else if(this.status=='second'){
+          add='_match';
+         }else if(this.status=='third'){
+          add='_unload';
+         }else if(this.status=='fourth'){
+          add='_settlement';
+         }else if(this.status=='fifth'){
+          add='_change';
+         }else if(this.status=='sxith'){
+          add='_finish';
+         }
+      for(var i in assemblyData){
+        for(var j in val){//传入过来的数值
+          if(assemblyData[i].key+"_count"==j||(i==0&&(assemblyData[i].key+add+"_count")==j)){
+            if(val[j]>99){
+              assemblyData[i].value+="(99+)";
+            }else{
+              assemblyData[i].value+="("+val[j]+")";
+            }
+          }
+          
+        }
+      }
+      }
+    }
   }
 };
 

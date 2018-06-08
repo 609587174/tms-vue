@@ -44,7 +44,7 @@
               <el-row style="">
                 <el-col :span="20" class="orderPossing">
                   <el-collapse v-model="detailData.length-1">
-                    <el-collapse-item :title="item.operation" :name="key" v-for="(item,key) in detailData" :key="key">
+                    <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key">
                       <div v-if="item.type === 'driver_pending_confirmation'">
                         <el-row>
                           <el-col :span="8">
@@ -411,7 +411,22 @@
                           </el-col>
                         </el-row>
                       </div>
-
+                      <div v-if="item.type === 'unloading_audit_failed'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
                        <div v-if="item.type === 'in_settlement'">
                         <el-row :gutter="40">
                           <el-col :span="8">
@@ -544,6 +559,24 @@ export default {
   },
   data() {
     return {
+      statusType:{
+        driver_pending_confirmation:'司机未确认',
+        to_fluid:'前往装车',
+        reach_fluid:'已到装货地',
+        waiting_seal:'待上传铅封',
+        loading_waiting_audit:'已装车待审核',
+        loading_audit_failed:'装车审核失败',
+        waiting_match:'待匹配卸货单',
+        already_match:'已匹配卸货单',
+        to_site:'前往卸货地',
+        reach_site:'已到卸货地',
+        unloading_waiting_audit:'已卸车待审核',
+        unloading_audit_failed:'卸车审核失败',
+        waiting_settlement:'待提交结算',
+        in_settlement:'已完成',
+        finished:'已到装货地',
+        canceled:'已取消'
+      },
       lockFalg: false,
       activeName: 'second',
       pageLoading: false,
@@ -565,6 +598,7 @@ export default {
       exPound: {},
       sealImgList: [],
       poundImg: {},
+      suerId:"",
       allButton: {
         'loading_waiting_audit': [{
           text: "审核拒绝",
@@ -729,7 +763,7 @@ export default {
           match_trip_list = [],
           sendData;
         this.detailData.forEach(item => {
-          if (item.type == "already_match") {
+          if (item.type == "already_match"||item.identify_id==this.suerId) {
             if (item.status == 'new') {
               match_trip_list.push(item.trip_id);
             } else {
@@ -837,7 +871,11 @@ export default {
         this.$$http("orderProcess", sendData).then((results) => {
           vm.pageLoading = false;
           if (results.data.code == 0) {
-            console.log('运单分段记录', results);
+            vm.$$http("getSectionTrips",{id:vm.setpId}).then(stepInfo=>{
+              if(stepInfo.data.code==0){
+                vm.suerId=stepInfo.data.data.identify;
+              }
+            });
             vm.detailData = results.data.data;
           }
         }).catch(() => {

@@ -484,7 +484,7 @@ export default {
         this.$refs.staffForm.resetFields();
       }
       if (this.capacityId) {
-        this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId });
+        this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId + '&activeTab=first'});
       }
     },
     validateStaff: function () {

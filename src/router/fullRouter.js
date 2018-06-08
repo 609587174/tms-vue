@@ -472,6 +472,66 @@ export default [{
           component: (resolve) => require(['../page/clientManage/platformClientManage'], resolve)
         },
       ]
+    }, {
+      path: 'standardDataManage',
+      name: 'standardDataManage',
+      redirect: '/clientManage/standardDataManage/freight/freightDataList',
+      meta: {
+        isVerificationL: false,
+        title: '标准数据管理',
+      },
+      component: (resolve) => require(['../page/clientManage/standardDataManage/standardDataManage'], resolve),
+      children: [{
+        path: 'freight',
+        name: 'freight',
+        meta: {
+          isVerificationL: false,
+          title: '运费约定',
+        },
+        component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freight'], resolve),
+        children: [{
+          path: 'freightDataList',
+          name: 'freightDataList',
+          meta: {
+            isVerificationL: false,
+            title: '运费约定列表',
+          },
+          component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freightDataList'], resolve)
+        },{
+          path: 'freightDetail',
+          name: 'freightDetail',
+          meta: {
+            isVerificationL: false,
+            title: '运费约定详情',
+          },
+          component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freightDetail'], resolve)
+        }]
+      }, {
+        path: 'mileage',
+        name: 'mileage',
+        meta: {
+          isVerificationL: false,
+          title: '运费约定',
+        },
+        component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDataList'], resolve),
+        children: [{
+          path: 'mileageDataList',
+          name: 'mileageDataList',
+          meta: {
+            isVerificationL: false,
+            title: '标准里程列表',
+          },
+          component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDataList'], resolve)
+        },{
+          path: 'mileageDetail',
+          name: 'mileageDetail',
+          meta: {
+            isVerificationL: false,
+            title: '标准里程详情',
+          },
+          component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDetail'], resolve)
+        }]
+      }]
     }],
 
   }, {
@@ -495,7 +555,7 @@ export default [{
     children: [{
       path: 'company',
       name: "company",
-      redirect:'/setting/company/pages',
+      redirect: '/setting/company/pages',
       meta: {
         title: '公司主页',
         isVerificationL: true
@@ -511,15 +571,15 @@ export default [{
         },
         component: (resolve) => require(['../page/setting/company/pages'], resolve)
       },
-      {
-        path: 'editPages',
-        name: "editPages",
-        meta: {
-          title: 'editPages',
-          isVerificationL: true
-        },
-        component: (resolve) => require(['../page/setting/company/editPages'], resolve)
-      }]
+        {
+          path: 'editPages',
+          name: "editPages",
+          meta: {
+            title: 'editPages',
+            isVerificationL: true
+          },
+          component: (resolve) => require(['../page/setting/company/editPages'], resolve)
+        }]
     }, {
       path: 'organizationalStructure',
       name: "organizationalStructure",

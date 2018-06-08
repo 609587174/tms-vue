@@ -80,28 +80,24 @@ export default {
         ]
       },
       thTableList: [{
-        title: '客户名称',
-        param: 'name',
+        title: '公司名称',
+        param: 'company_name',
         width: ''
       }, {
         title: '联系人',
-        param: 'contact_name',
+        param: 'contact',
         width: ''
       }, {
         title: '联系电话',
         param: 'contact_phone',
         width: ''
       }, {
-        title: '亏吨标准（KG）',
-        param: 'deficiency_standard',
+        title: '公司地址',
+        param: 'detail_address',
         width: ''
       }, {
-        title: '地址',
-        param: 'detail_address',
-        width: '250'
-      }, {
         title: '添加时间',
-        param: 'created_at',
+        param: 'address',
         width: ''
       }],
       tableData: []
@@ -125,7 +121,7 @@ export default {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.results;
+          this.tableData = results.data.data.data;
 
           this.pageData.totalCount = results.data.data.count;
 

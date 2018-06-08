@@ -1117,6 +1117,22 @@ const api = {
     param: {
 
     }
+  },
+  getConCount: {
+    url: '/order/section-trips/count/',
+    method: 'GET',
+    desc: "获取运单数目",
+    param: {
+
+    }
+  },
+  getSectionTrips: {
+    url: '/order/section-trips/:id/',
+    method: 'GET',
+    desc: "获取运单分段详情",
+    param: {
+
+    }
   }
 }
 

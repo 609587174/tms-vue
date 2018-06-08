@@ -432,6 +432,13 @@ export default {
         }
       },
       deep: true　
+    },
+    ListData:{
+      handler(val, oldVal) {
+        console.log('oldDiver',oldVal);
+        console.log('newDiver',val);
+      },
+      deep:true
     }
   }
 }

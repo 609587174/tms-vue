@@ -30,7 +30,7 @@
                 <el-col :span="6">
                   <el-form-item label="托运方:">
                     <el-select v-model="searchFilters.agreements__carrier" :loading="shipperLoading" clearable @change="startSearch" filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.company_name" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -69,7 +69,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next, jumper" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -191,7 +191,7 @@ export default {
         console.log('results', results.data.data);
         this.shipperLoading = false;
         if (results.data && results.data.code == 0) {
-          this.selectData.shipperSelect = this.selectData.shipperSelect.concat(results.data.data.data);
+          this.selectData.shipperSelect = this.selectData.shipperSelect.concat(results.data.data);
         }
       }).catch((err) => {
         this.shipperLoading = false;
@@ -200,8 +200,7 @@ export default {
     },
     getFluidList: function() {
       let postData = {
-        page: 1,
-        page_size: 200,
+
       }
       this.fluidLoading = true;
       this.$$http('getFulid', postData).then((results) => {
@@ -214,13 +213,12 @@ export default {
       })
     },
     handleClick: function(tab, event) {
-      console.log('tab', tab);
       if (tab.name === 'mileage') {
         this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDataList" });
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/freightDetail", query: { id: command.id} });
+      this.$router.push({ path: "/clientManage/standardDataManage/freight/freightDetail", query: { id: command.id} });
     },
 
     pageChange: function() {

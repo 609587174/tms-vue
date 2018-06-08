@@ -118,6 +118,7 @@ export default {
   },
   methods: {
     getDetail: function() {
+      console.log('555555')
       this.pageLoading = true;
       this.$$http('getFreightDetail', {
         id: this.id

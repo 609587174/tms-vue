@@ -27,7 +27,7 @@
                       基础信息
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
                     </el-col>
                   </el-row>
                 </div>
@@ -35,13 +35,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>实际液厂:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_name)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluid_factory&&detailData.fluid_factory.fluid_name)"></div>
                     </div>
                   </el-col>
                   <el-col :span="16">
                     <div class="label-list">
                       <label>液厂地址:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.actual_fluid_address)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluid_factory&&detailData.fluid_factory.actual_address)"></div>
                     </div>
                   </el-col>
                 </el-row>
@@ -49,13 +49,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>站点:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.station_name)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluid_site&&detailData.fluid_site.position_name)"></div>
                     </div>
                   </el-col>
                   <el-col :span="16">
                     <div class="label-list">
                       <label>站点地址:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.station_address)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluid_site&&detailData.fluid_site.address)"></div>
                     </div>
                   </el-col>
                 </el-row>
@@ -63,13 +63,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>标准里程:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.mile)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.standard_mileage)"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>启用状态:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active==='effective'?'是':'否')"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active?'已生效':'未生效')"></div>
                     </div>
                   </el-col>
 
@@ -79,7 +79,7 @@
                     <div class="label-list">
                       <label>生效承运商:</label>
                       <div class="detail-form-item">
-                        <span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1"> ，</span></span>
+                        <span  v-html="pbFunc.dealNullData(detailData.traders&&detailData.traders.name)"></span>
                       </div>
                     </div>
                   </el-col>

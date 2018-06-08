@@ -488,7 +488,7 @@ export default [{
           isVerificationL: false,
           title: '运费约定',
         },
-        component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freight'], resolve),
+        component: (resolve) => require(['../page/clientManage/standardDataManage/standardDataManage'], resolve),
         children: [{
           path: 'freightDataList',
           name: 'freightDataList',
@@ -511,9 +511,9 @@ export default [{
         name: 'mileage',
         meta: {
           isVerificationL: false,
-          title: '运费约定',
+          title: '标准里程',
         },
-        component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDataList'], resolve),
+        component: (resolve) => require(['../page/clientManage/standardDataManage/standardDataManage'], resolve),
         children: [{
           path: 'mileageDataList',
           name: 'mileageDataList',

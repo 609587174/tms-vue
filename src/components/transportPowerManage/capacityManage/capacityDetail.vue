@@ -26,7 +26,7 @@
                   </div>
                   <el-row :gutter="40">
                     <el-col :span="8">
-                      <el-form-item label="牵引车牌:">
+                      <el-form-item label="牵引车车牌号:">
                         <div class="detail-form-item">{{headData.tractor.plate_number}}</div>
                       </el-form-item>
                     </el-col>
@@ -73,7 +73,7 @@
                   </div>
                   <el-row :gutter="40">
                     <el-col :span="8">
-                      <el-form-item label="挂车牌:">
+                      <el-form-item label="挂车车牌号:">
                         <div class="detail-form-item">{{headData.semitrailer && headData.semitrailer.plate_number}}</div>
                       </el-form-item>
                     </el-col>

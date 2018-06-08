@@ -149,7 +149,7 @@
                           </el-col>
                         </el-row>
                       </div>
-                      <div v-if="(item.type === 'waiting_seal'||item.type=='loading_waiting_audit'||item.type=='unloading_waiting_audit')&&item.operation!='上传装车铅封'">
+                      <div v-if="(item.type === 'waiting_seal'||item.type=='loading_waiting_audit')&&item.operation!='上传装车铅封'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -239,6 +239,98 @@
                           </el-col>
                         </el-row>
                       </div>
+
+                      <div v-if="item.type=='unloading_waiting_audit'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>站点:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.station)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>站点地址:</label>
+                              <div class="detail-form-item" style="height:24px">
+                                <el-tooltip class="item" effect="dark" :content="item.fluid_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                  <el-button type="text" style="height:24px;line-height:24px;padding-left:0">{{item.station_address}}</el-button>
+                                </el-tooltip>
+                              </div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>审核时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>计划到厂时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装车毛重:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.gross_weight)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>审核人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>实际到厂时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装车皮重:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.tare_weight)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装车净重:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.net_weight)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装液开始时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_start_time)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装液完成时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_end_time)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>装车磅单审核:</label>
+                              <div class="detail-form-item">
+                                <el-button type="text " style="height:0;line-height:0;text-align:left;padding-left:0;" @click="showImg('showPound',item.weight_id)">点击查看磅单</el-button>
+                              </div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+
                       <div v-if="item.type === 'already_match'">
                         <el-row :gutter="40">
                           <el-col :span="8">
@@ -354,7 +446,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-dialog title="装车磅单通过" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-row>
         <el-col :span="20" :offset="2">
           <img :src="exPound.image_url" style='width:100%;max-height:500px'></img>
@@ -407,7 +499,7 @@
        <el-button type="primary" @click="sendRe('sureLoadExUp')">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="装车磅单拒绝" :visible.sync="dialog.cancleLoadEx" center width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog :title="cancleTitle" :visible.sync="dialog.cancleLoadEx" center width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form label-width="125px" status-icon>
         <el-row>
           <el-col :span="18" :offset="3">
@@ -465,6 +557,8 @@ export default {
         showPreview: false,
         previewIndex: 0,
       },
+      sureTitle:"装车磅单审核通过",
+      cancleTitle:"装车磅单审核拒绝",
       loadPoundReason: "榜单照片不清晰",
       otherInput: "",
       surePound: {},
@@ -493,7 +587,7 @@ export default {
         }, {
           text: "审核通过",
           type: "success",
-          methods: "sureLoadEx"
+          methods: "sureUnLoadEx"
         }],
         'waiting_settlement':[{
           text: "提交结算",
@@ -609,10 +703,13 @@ export default {
           vm.$message.error("磅单图片获取失败")
         });
       } else if (type == 'cancleUnLoadEx') {
+        vm.cancleTitle="卸车磅单审核拒绝";
         vm.dialog.cancleLoadEx = true;
+
       } else if (type == 'sureUnLoadEx') {
+        vm.sureTitle="卸车磅单审核通过";
         sendData.section_trip = this.setpId;
-        if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
+        if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
           this.surePound = this.detailData[this.detailData.length - 1];
           sendData.id = this.detailData[this.detailData.length - 1].weight_id;
         }

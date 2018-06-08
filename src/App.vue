@@ -49,6 +49,7 @@ export default {
         personManage: 'STAFF_MANAGEMENT', //人员管理
         deviceManage: 'DEVICE_MANAGEMENT', //设备管理
         clientManage: 'CUSTOMER_MANAGEMENT', //客户管理
+        standardDataManage:'STANDARD_MILEAGE_MANAGEMENT',//标准数据管理
         clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
         businessStatistics: 'BUSINESS_STATISTICS', //业务统计

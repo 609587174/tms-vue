@@ -28,21 +28,21 @@
                       基础信息
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
                     </el-col>
                   </el-row>
                 </div>
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label>姓名:</label>
-                      <div class="detail-form-item">{{clientData.name}}</div>
+                      <label>客户名称:</label>
+                      <div class="detail-form-item">{{clientData.company_name}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>联系人:</label>
-                      <div class="detail-form-item">{{clientData.contact_name}}</div>
+                      <div class="detail-form-item">{{clientData.contact}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
@@ -61,31 +61,26 @@
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
-                      <label>客户类型:</label>
-                      <div class="detail-form-item">{{clientData.customer_type==='OWN'?'自有客户':'平台客户'}}</div>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
                       <label>社会机构代码:</label>
-                      <div class="detail-form-item">{{clientData.license_code?clientData.license_code:clientData.license3in1_code}}</div>
+                      <div class="detail-form-item">{{clientData.credit_code?clientData.credit_code:clientData.organization_code}}</div>
                     </div>
                   </el-col>
+                  <!-- <el-col :span="8">
+                    <div class="label-list">
+                      <label>营业执照:</label>
+                      <div class="detail-form-item"></div>
+                    </div>
+                  </el-col> -->
                 </el-row>
-                <el-row :gutter="10">
+                <!-- <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
                       <label>亏吨标准:</label>
                       <div class="detail-form-item">{{clientData.deficiency_standard}}<span v-if="clientData.deficiency_standard">KG</span></div>
                     </div>
                   </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>营业执照:</label>
-                      <div class="detail-form-item"></div>
-                    </div>
-                  </el-col>
-                </el-row>
+
+                </el-row> -->
               </div>
               <div class="detail-list detail-form" v-if="false">
                 <div class="detail-form-title">
@@ -125,14 +120,14 @@
                 </div>
                 <div class="text-center" v-if="!clientData.trans_fee.length">暂无数据</div>
               </div>
-              <div class="detail-list detail-form">
+              <div class="detail-list detail-form" v-if="false">
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
                       卸车待时规则
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button> -->
                     </el-col>
                   </el-row>
                 </div>
@@ -204,7 +199,7 @@ export default {
   methods: {
     getDetail: function() {
       this.pageLoading = true;
-      this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
+      this.$$http('getCustomerDetail', { id: this.id }).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.clientData = results.data.data;

@@ -9,6 +9,35 @@
  */
 
 const api = {
+  getFreightDetail: {
+    url: '/carrier/trans_fee/:id/',
+    method: 'get',
+    desc: '运费详情',
+    param: {
+
+    }
+  },
+  getShipperList: {
+    url: '/map/bpm_standard_mileages/all_traders/',
+    method: 'get',
+    desc: '托运方列表',
+    param: {
+
+    }
+  },
+  getFreightList: {
+    url: '/carrier/trans_fee/',
+    method: 'get',
+    desc: '获取运费列表',
+    param: {
+      agreements__carrier: {
+        desc: '承运商id'
+      },
+      agreements__fluid: {
+        desc: '液厂id'
+      },
+    }
+  },
   updateCompany: {
     url: '/carrier/carriers/:id/',
     method: 'patch',
@@ -110,7 +139,8 @@ const api = {
     }
   },
   getCustomerDetail: {
-    url: '/carrier/customer/:customer_id/',
+     url: '/carrier/plat_customer/:id/',
+    // url: '/carrier/customer/:customer_id/',
     method: 'get',
     desc: '客户管理',
     param: {
@@ -120,7 +150,8 @@ const api = {
     }
   },
   getCustomerList: {
-    url: '/carrier/customer/',
+    // url: '/carrier/customer/',
+    url: '/carrier/plat_customer/',
     method: 'get',
     desc: '客户管理',
     param: {
@@ -736,7 +767,8 @@ const api = {
   },
 
   getFulid: {
-    url: '/order/fluid/',
+    // url: '/order/fluid/',
+    url:'/map/bpm_standard_mileages/all_fluid_factories/',
     method: 'get',
     desc: '获取液厂',
     param: {
@@ -807,7 +839,8 @@ const api = {
     }
   },
   getSiteList: {
-    url: '/map/fluid_sites/',
+    // url: '/map/fluid_sites/',
+    url:'/map/bpm_standard_mileages/all_fluid_sites/',
     method: 'get',
     desc: '获取LNG站点列表',
     param: {
@@ -831,7 +864,8 @@ const api = {
     }
   },
   getStandardMileList: {
-    url: '/map/standard_mileages/',
+    // url: '/map/standard_mileages/',
+    url:'/map/bpm_standard_mileages/',
     method: 'get',
     desc: '获取标准里程列表',
     param: {
@@ -858,7 +892,8 @@ const api = {
     }
   },
   getStandardMileDetail: {
-    url: '/map/standard_mileages/:id/',
+    // url: '/map/standard_mileages/:id/',
+    url:'/map/bpm_standard_mileages/:id/',
     method: 'get',
     desc: '标准里程详情',
     param: {
@@ -1047,6 +1082,38 @@ const api = {
     url: '/order/section-trips/:id/change-status/',
     method: 'put',
     desc: "运单分段修改状态",
+    param: {
+
+    }
+  },
+  getPundList: {
+    url: '/order/section-trips/weight-note/',
+    method: 'GET',
+    desc: "获取磅单数据",
+    param: {
+
+    }
+  },
+  sureMatch: {
+    url: '/order/section-trips/confirm/',
+    method: 'PUT',
+    desc: "确认卸货单",
+    param: {
+
+    }
+  },
+  getSeal: {
+    url: '/order/section-trips/car-seal/',
+    method: 'GET',
+    desc: "获取铅封数据",
+    param: {
+
+    }
+  },
+  getCount: {
+    url: '/order/delivery-order/count/',
+    method: 'GET',
+    desc: "获取订单数目",
     param: {
 
     }

@@ -88,9 +88,9 @@ export default {
       if (val.length) {
         for (let i in val) {
           imgListArray[i] = {};
-          if (val[i].src) {
+          if (val[i]) {
             imgListArray[i] = {};
-            imgListArray[i].src = val[i].src;
+            imgListArray[i].src = val[i];
             imgListArray[i].rotate = 0;
           }
         }

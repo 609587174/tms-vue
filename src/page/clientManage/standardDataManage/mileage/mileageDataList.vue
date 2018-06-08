@@ -11,7 +11,7 @@
                 <el-col :span="6">
                   <el-form-item label="托运方:">
                     <el-select v-model="searchFilters.carriers" @change="startSearch" clearable :loading="shipperLoading" filterable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.company_name" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -40,7 +40,7 @@
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                <template slot-scope="scope">
+                <!-- <template slot-scope="scope">
                   <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
                   <div v-else>
                     <span v-if="item.param==='carriers'">
@@ -50,7 +50,7 @@
                     <span v-else>{{scope.row[item.param]}}</span>
 
                   </div>
-                </template>
+                </template> -->
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -60,7 +60,7 @@
             </el-table>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next, jumper" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -102,19 +102,19 @@ export default {
       },
       thTableList: [{
         title: '液厂',
-        param: 'actual_fluid_name',
+        param: 'fluid_factory.fluid_name',
         width: ''
       }, {
         title: '站点',
-        param: 'station_name',
+        param: 'fluid_site.position_name',
         width: ''
       }, {
         title: '标准里程',
-        param: 'mile',
+        param: 'standard_mileage',
         width: ''
       }, {
         title: '生效托运方',
-        param: 'carriers',
+        param: 'traders.name',
         width: '200'
       }, {
         title: '添加时间',
@@ -133,9 +133,9 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        fluid: this.searchFilters.fluid,
-        station: this.searchFilters.station,
-        carriers: this.searchFilters.carriers
+        fluid_factory: this.searchFilters.fluid,
+        fluid_site: this.searchFilters.station,
+        trader: this.searchFilters.carriers
       };
       postData = this.pbFunc.fifterObjIsNull(postData);
 
@@ -147,7 +147,7 @@ export default {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.data;
+          this.tableData = results.data.data.results;
 
           this.pageData.totalCount = results.data.data.count;
 
@@ -167,7 +167,7 @@ export default {
         console.log('results', results.data.data);
         this.shipperLoading = false;
         if (results.data && results.data.code == 0) {
-          this.selectData.shipperSelect = this.selectData.shipperSelect.concat(results.data.data.data);
+          this.selectData.shipperSelect = this.selectData.shipperSelect.concat(results.data.data);
         }
       }).catch((err) => {
         this.shipperLoading = false;
@@ -176,8 +176,8 @@ export default {
     },
     getFluidList: function() {
       let postData = {
-        page: 1,
-        page_size: 500,
+        // page: 1,
+        // page_size: 500,
       }
       this.fluidLoading = true;
       this.$$http('getFulid', postData).then((results) => {
@@ -191,8 +191,8 @@ export default {
     },
     getSiteList: function(query) {
       let postData = {
-        page: 1,
-        page_size: 500,
+        // page: 1,
+        // page_size: 500,
       }
       this.siteLoading = true;
       this.$$http('getSiteList', postData).then((results) => {
@@ -211,13 +211,13 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/mileageDetail", query: { id: command.id } });
+      this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
     },
     editMile(isEdit){
       // if(isEdit){
 
       // }else{
-        this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
+        // this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
       // }
 
     },

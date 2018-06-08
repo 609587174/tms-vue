@@ -131,7 +131,8 @@ const api = {
     }
   },
   getCustomerDetail: {
-    url: '/carrier/customer/:customer_id/',
+     url: '/carrier/plat_customer/:id/',
+    // url: '/carrier/customer/:customer_id/',
     method: 'get',
     desc: '客户管理',
     param: {
@@ -141,7 +142,8 @@ const api = {
     }
   },
   getCustomerList: {
-    url: '/carrier/customer/',
+    // url: '/carrier/customer/',
+    url: '/carrier/plat_customer/',
     method: 'get',
     desc: '客户管理',
     param: {

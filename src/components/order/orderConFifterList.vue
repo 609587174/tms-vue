@@ -82,6 +82,21 @@
               <el-row class="loadInfo commh" style="width:100%;">
                 <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
                 </el-col>
+                <el-col :span="3" class="colinfo">
+                </el-col>
+                <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
+                </el-col>
+                <el-col :span="4" class="colinfo"><span v-if="props.row.active_time">{{props.row.active_time.split(" ")[0]}}</br>{{props.row.active_time.split(" ")[1]}}</span><span v-else>无</span>
+                </el-col>
+                <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+                </el-col>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
+                </el-col>
+              </el-row>
+
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" >
+                <el-col :span="7" class="colinfo">卸:<span>{{props.row.destination}}</span><i class="el-icon-location primary"></i>
+                </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
                 <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
@@ -221,7 +236,7 @@ export default {
           type: "primary",
           methods_type: "changeSatus"
         }],
-        already_match: [{
+        confirm_match: [{
           text: "确认卸货单",
           type: "success",
           methods_type: "sureDownOrder"

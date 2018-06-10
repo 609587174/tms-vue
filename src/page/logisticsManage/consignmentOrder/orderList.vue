@@ -8,45 +8,45 @@
   <div>
     <div class="nav-tab" v-loading="pageLoading">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs"  v-if="show">
-        <el-tab-pane :label="statusName.ALL_DRIVER_COUNT" name="first">
+        <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_DRIVER_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_driver_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.ALL_MATCH_COUNT" name="second">
+        <el-tab-pane :label="statusName.all_match_count" name="second">
           <div v-if="activeName=='second'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_MATCH_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_match_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.ALL_UNLOAD_COUNT" name="third">
+        <el-tab-pane :label="statusName.all_unload_count" name="third">
           <div v-if="activeName=='third'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_UNLOAD_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_unload_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.ALL_SETTLEMENT_COUNT" name="fourth">
+        <el-tab-pane :label="statusName.all_settlement_count" name="fourth">
           <div v-if="activeName=='fourth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_SETTLEMENT_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_settlement_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.ALL_CHANGE_COUNT" name="fifth" >
+        <el-tab-pane :label="statusName.all_change_count" name="fifth" >
           <div v-if="activeName=='fifth'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_CHANGE_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_change_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.ALL_FINISH_COUNT" name="sxith">
+        <el-tab-pane :label="statusName.all_finish_count" name="sxith">
           <div v-if="activeName=='sxith'">
             <keep-alive>
-              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['ALL_FINISH_COUNT']"></orderStatusComonents>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" :countParam="allcounts['all_finish_count']"></orderStatusComonents>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -72,20 +72,20 @@ export default {
       },
       show:false,
        statusName:{
-        ALL_DRIVER_COUNT:'装车',
-        ALL_MATCH_COUNT:'匹配卸车',
-        ALL_UNLOAD_COUNT:'卸车',
-        ALL_SETTLEMENT_COUNT:'结算',
-        ALL_CHANGE_COUNT:'变更中',
-        ALL_FINISH_COUNT:'历史'
+        all_driver_count:'装车',
+        all_match_count:'匹配卸车',
+        all_unload_count:'卸车',
+        all_settlement_count:'结算',
+        all_change_count:'变更中',
+        all_finish_count:'历史'
       },
       allcounts:{
-        'ALL_DRIVER_COUNT':{},
-        'ALL_MATCH_COUNT':{},
-        'ALL_UNLOAD_COUNT':{},
-        'ALL_SETTLEMENT_COUNT':{},
-        'ALL_CHANGE_COUNT':{},
-        'ALL_DRIVER_COUNT':{},
+        'all_driver_count':{},
+        'all_match_count':{},
+        'all_unload_count':{},
+        'all_settlement_count':{},
+        'all_change_count':{},
+        'all_finish_count':{},
       },
       timeParam: [],
       listFifterData: [],
@@ -123,9 +123,7 @@ export default {
           vm.allcounts=dataBody;
           for(var i in dataBody){
             var nums=0;
-            for(var j in dataBody[i]){
-                nums+=dataBody[i][j];
-            }
+            nums=dataBody[i][i];
             if(nums>99){
               nums="99+";
             }

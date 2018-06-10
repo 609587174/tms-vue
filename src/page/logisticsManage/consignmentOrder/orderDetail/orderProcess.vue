@@ -43,7 +43,7 @@
             <el-main>
               <el-row style="">
                 <el-col :span="20" class="orderPossing">
-                  <el-collapse v-model="detailData.length-1">
+                  <el-collapse v-model="extendsArr">
                     <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key">
                       <div v-if="item.type === 'driver_pending_confirmation'">
                         <el-row>
@@ -559,6 +559,7 @@ export default {
   },
   data() {
     return {
+      extendsArr:[],
       statusType:{
         driver_pending_confirmation:'司机未确认',
         to_fluid:'前往装车',
@@ -877,6 +878,10 @@ export default {
               }
             });
             vm.detailData = results.data.data;
+            vm.extendsArr.push(vm.detailData.length-1);
+            if(vm.detailData[vm.detailData.length-1].operation=="上传装车铅封"){
+              vm.extendsArr.push(vm.detailData.length-2);
+            }
           }
         }).catch(() => {
           vm.pageLoading = false;

@@ -6,7 +6,7 @@
 
       </el-col>
       <el-col :span="12">
-        <div class="usermenu text-right" v-if="users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
+        <div class="usermenu text-right" v-if="users&&users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
           <router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
           <!-- <router-link :to="{path: '/'}">退出</router-link> -->
           <a v-on:click="logout" class="cursor-pointer">退出</a>

@@ -30,7 +30,25 @@
 .el-button {
   margin-left: 0;
 }
-
+.garyColor{
+  color:gary;
+}
+.label-list label{
+  width:100px;
+}
+.label-list {
+  padding-left:100px;
+}
+.borderB {
+  border-bottom:1px solid #ebeef5;
+}
+.paddingCancle /deep/ .el-collapse-item__content{
+  padding-top:0;
+  padding-bottom:0; 
+}
+.padds{
+  padding: 25px 0 0px 0
+}
 </style>
 <template>
   <div>
@@ -44,7 +62,7 @@
               <el-row style="">
                 <el-col :span="20" class="orderPossing">
                   <el-collapse v-model="extendsArr">
-                    <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key">
+                    <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key"  v-bind:class="{paddingCancle: item.type=='confirm_match'}">
                       <div v-if="item.type === 'driver_pending_confirmation'">
                         <el-row>
                           <el-col :span="8">
@@ -331,24 +349,27 @@
                         </el-row>
                       </div>
 
-                      <div v-if="item.type === 'already_match'">
+                      <div v-if="item.type === 'confirm_match'" style="margin-top:-20px;">
+                        <div v-for="(Mitem,Mkey) in item.waiting_matchArr" v-bind:class="{ garyColor: Mitem.status!='new',padds:Mkey==0,borderB:item.waiting_matchArr.length>1&&Mkey!=item.waiting_matchArr.length-1 }"  style="border-left:none;border-right:none;">
+                        <el-row style="padding:15px 0;" >
+                        <el-col :span="22">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
                               <label>站点:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.station)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>收货人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.consignee)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.consignee)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划卸车吨位:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plan_tonnage)">吨</div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plan_tonnage)">吨</div>
                             </div>
                           </el-col>
                         </el-row>
@@ -356,22 +377,29 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>站点地址:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.station_address)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station_address)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>收货人电话:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.consignee_phone)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.consignee_phone)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划到站时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plate_number)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plate_number)"></div>
                             </div>
                           </el-col>
                         </el-row>
+                         </el-col>
+                         <el-col :span="2">
+                          <div v-if="Mitem.status!='new'" style="line-height:48px;"><el-tag type="success">待取消</el-tag></div>
+                          <div v-else style="line-height:48px;"><el-tag type="success">待确认</el-tag></div>
+                         </el-col>
+                      </el-row>
+                      </div>
                       </div>
                       <div v-if="item.type === 'to_site'">
                         <el-row :gutter="40">
@@ -389,6 +417,40 @@
                           </el-col>
                         </el-row>
                       </div>
+                       <div v-if="item.type === 'already_match'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                      
+                      <div v-if="item.type === 'waiting_match'">
+                        <el-row :gutter="40">
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+
                       <div v-if="item.type === 'reach_site'">
                         <el-row :gutter="40">
                           <el-col :span="8">
@@ -568,14 +630,15 @@ export default {
         loading_waiting_audit:'已装车待审核',
         loading_audit_failed:'装车审核失败',
         waiting_match:'待匹配卸货单',
+        confirm_match:'待确认卸货单',
         already_match:'已匹配卸货单',
         to_site:'前往卸货地',
         reach_site:'已到卸货地',
         unloading_waiting_audit:'已卸车待审核',
         unloading_audit_failed:'卸车审核失败',
         waiting_settlement:'待提交结算',
-        in_settlement:'已完成',
-        finished:'已到装货地',
+        in_settlement:'结算中',
+        finished:'已完成',
         canceled:'已取消'
       },
       lockFalg: false,
@@ -610,7 +673,7 @@ export default {
           type: "success",
           methods: "sureLoadEx"
         }],
-        'already_match': [{
+        'confirm_match': [{ 
           text: "确认卸货地",
           type: "success",
           methods: "sureMatch"
@@ -625,11 +688,6 @@ export default {
           methods: "sureUnLoadEx"
         }],
         'waiting_settlement':[{
-          text: "提交结算",
-          type: "success",
-          methods: "upInSettlement"
-        }],
-        'in_settlement':[{
           text: "提交结算",
           type: "success",
           methods: "upInSettlement"
@@ -764,16 +822,20 @@ export default {
           match_trip_list = [],
           sendData;
         this.detailData.forEach(item => {
-          if (item.type == "already_match"||item.identify_id==this.suerId) {
-            if (item.status == 'new') {
-              match_trip_list.push(item.trip_id);
-            } else {
-              cancel_trip_list.push(item.trip_id);
-            }
+          if (item.type == "confirm_match"&&item.identify_id==vm.suerId) {
+            item.waiting_matchArr.forEach(Witem=>{
+                if (Witem.status == 'new') {
+                  match_trip_list.push(Witem.trip_id);
+                } else {
+                  cancel_trip_list.push(Witem.trip_id);
+                }
+            });
+            
           }
         });
         sendData.cancel_trip_list = cancel_trip_list;
         sendData.match_trip_list = match_trip_list;
+        sendData.pickup_trip_id=this.setpId;
         this.$$http("sureMatch", sendData).then(results => {
           if (results.data.code == 0) {
             vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
@@ -875,18 +937,50 @@ export default {
             vm.$$http("getSectionTrips",{id:vm.setpId}).then(stepInfo=>{
               if(stepInfo.data.code==0){
                 vm.suerId=stepInfo.data.data.identify;
+                vm.matchData(results.data.data);
+                vm.extendsArr.push(vm.detailData.length-1);
+                if(vm.detailData[vm.detailData.length-1].operation=="上传装车铅封"){
+                vm.extendsArr.push(vm.detailData.length-2);
+                }
               }
             });
-            vm.detailData = results.data.data;
-            vm.extendsArr.push(vm.detailData.length-1);
-            if(vm.detailData[vm.detailData.length-1].operation=="上传装车铅封"){
-              vm.extendsArr.push(vm.detailData.length-2);
-            }
+            //vm.detailData = results.data.data;
+            
           }
         }).catch(() => {
           vm.pageLoading = false;
         });
-    }
+    },
+    matchData:function(allData){
+      var middleArr=[];
+      var middleAlone=[];
+      var addFlag=false;
+      for(var i in allData){
+        if(!allData[i].identify_id){
+          if(addFlag){
+            var waiting_matchOb={};
+            waiting_matchOb.waiting_matchArr=middleAlone;
+            waiting_matchOb.type=middleAlone[middleAlone.length-1].type;
+            middleArr.push(waiting_matchOb);
+            middleAlone=[];
+          }
+          middleArr.push(allData[i]);
+          addFlag=false;
+        }else{
+          middleAlone.push(allData[i]);
+          if(i==allData.length-1){
+            var waiting_matchOb={};
+            waiting_matchOb.waiting_matchArr=middleAlone;
+            waiting_matchOb.type=middleAlone[middleAlone.length-1].type;
+            waiting_matchOb.identify_id=middleAlone[middleAlone.length-1].identify_id;
+            middleArr.push(waiting_matchOb);
+            middleAlone=[];
+          }
+           addFlag=true;
+        }
+      };
+      this.detailData = middleArr;
+    },
   },
   created: function() {
     this.getData();

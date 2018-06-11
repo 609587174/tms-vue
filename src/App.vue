@@ -104,7 +104,7 @@ export default {
       this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
-      if (!menuList.length || !token) {
+      if (!menuList || !token) {
         this.$message.error('验证信息缺失，请重新登录');
         this.$router.replace({ path: '/login' });
       }

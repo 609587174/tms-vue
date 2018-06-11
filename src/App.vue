@@ -10,7 +10,7 @@
 @import './assets/css/settingStyle.less'; //个人设置
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
-@import './assets/css/capacityList';
+@import './assets/css/elementReset';
 
 </style>
 <template>
@@ -49,13 +49,13 @@ export default {
         personManage: 'STAFF_MANAGEMENT', //人员管理
         deviceManage: 'DEVICE_MANAGEMENT', //设备管理
         clientManage: 'CUSTOMER_MANAGEMENT', //客户管理
-        standardDataManage:'STANDARD_MILEAGE_MANAGEMENT',//标准数据管理
+        standardDataManage: 'STANDARD_MILEAGE_MANAGEMENT', //标准数据管理
         clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
         businessStatistics: 'BUSINESS_STATISTICS', //业务统计
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         setting: 'SETTINGS', //设置
-        company:'CARRIER_SETTINGS',//公司主页
+        company: 'CARRIER_SETTINGS', //公司主页
         organizationalStructure: 'ORGANIZE_STRUCTURE_SETTINGS', //组织架构
         staffsManage: 'CARRIER_STAFFS_MANAGEMENT', //员工管理
         powerManage: 'PERMISSION_MANAGEMENT', //权限管理
@@ -120,7 +120,7 @@ export default {
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
-      console.log('this.$router', allowedRouter[0],allowedRouter);
+      console.log('this.$router', allowedRouter[0], allowedRouter);
       if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
 
     },
@@ -167,17 +167,17 @@ export default {
     let users = vm.pbFunc.getLocalData('users', true);
     let token = vm.pbFunc.getLocalData('token', true);
     // console.log('token', users)
-    if (!users&&token) {
+    if (!users && token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {
           this.$store.state.common.users = results.data.data;
-          vm.pbFunc.setLocalData('users', results.data.data,true);
+          vm.pbFunc.setLocalData('users', results.data.data, true);
         }
       }).catch((err) => {
         this.$message.error('获取用户信息失败');
       })
-    }else{
-      this.$store.state.common.users =vm.pbFunc.getLocalData('users', true);
+    } else {
+      this.$store.state.common.users = vm.pbFunc.getLocalData('users', true);
     }
     this.$$http("getSelectData", {}).then(function(reslut) {
       if (reslut.data.code == 0)

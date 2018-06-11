@@ -566,7 +566,7 @@ export default [{
         path: 'pages',
         name: "pages",
         meta: {
-          title: 'pages',
+          title: '公司主页',
           isVerificationL: true
         },
         component: (resolve) => require(['../page/setting/company/pages'], resolve)
@@ -575,7 +575,7 @@ export default [{
           path: 'editPages',
           name: "editPages",
           meta: {
-            title: 'editPages',
+            title: '编辑主页',
             isVerificationL: true
           },
           component: (resolve) => require(['../page/setting/company/editPages'], resolve)

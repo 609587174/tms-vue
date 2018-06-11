@@ -1,6 +1,9 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
-
+.detail-form-training {
+  padding-top: 23px;
+  border-bottom: 1px dashed #ccc;
+}
 
 </style>
 <template>
@@ -115,15 +118,15 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.detail_address)"></div>
               </div>
             </el-col>
-            <el-col :span="8">
+            <!--             <el-col :span="8">
               <div class="label-list">
                 <label>身份证:</label>
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.drive_license_photo)"></div>
               </div>
-            </el-col>
+            </el-col> -->
           </el-row>
         </div>
-        <div class="detail-list detail-form" v-show="userData.work_type.key === 'DRIVER' || userData.work_type.key === 'DRIVER_ESCORT'">
+        <div class="detail-list detail-form" v-show="(userData.work_type && userData.work_type.key === 'DRIVER') || (userData.work_type && userData.work_type.key === 'DRIVER_ESCORT')">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -208,12 +211,13 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_issue_organ)"></div>
               </div>
             </el-col>
-            <el-col :span="8">
-              <div class="label-list">
-                <label>从业资格证:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_photo)"></div>
-              </div>
-            </el-col>
+<!-- <el-col :span="8">
+  <div class="label-list">
+    <label>从业资格证:</label>
+    <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_photo)"></div>
+  </div>
+</el-col>
+ -->
           </el-row>
           <!-- </el-form> -->
         </div>
@@ -256,12 +260,13 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_issue_organ)"></div>
               </div>
             </el-col>
-            <el-col :span="8">
-              <div class="label-list">
-                <label>从业资格证:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_photo)"></div>
-              </div>
-            </el-col>
+<!-- <el-col :span="8">
+  <div class="label-list">
+    <label>从业资格证:</label>
+    <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_photo)"></div>
+  </div>
+</el-col>
+ -->
           </el-row>
           <!-- </el-form> -->
         </div>
@@ -342,13 +347,12 @@
                 培训信息
               </el-col>
               <el-col :span="6" class="text-right">
-                <el-button type="primary" size="mini" @click="goEditDetail(5)" v-if="!userData.carrier_driver_trainings.length">新增一条</el-button>
-                <el-button type="primary" size="mini" @click="goEditDetail(5)" v-if="userData.carrier_driver_trainings.length">编辑该条</el-button>
+                <el-button type="primary" size="mini" @click="goEditDetail(5)">编辑该条</el-button>
               </el-col>
             </el-row>
           </div>
           <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :model="userData" status-icon> -->
-          <div v-for="(item,key) in userData.carrier_driver_trainings">
+          <div v-for="(item,key) in userData.carrier_driver_trainings" class="detail-form-training">
             <el-row :gutter="10">
               <el-col :span="8">
                 <div class="label-list">

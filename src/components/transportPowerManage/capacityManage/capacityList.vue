@@ -1,22 +1,11 @@
-<style lang="less">
-.cell {
-  a {
-    color: #409EFF;
-    &:hover {
-      opacity: .7;
-    }
-  }
-}
-
-</style>
 <template>
   <div class="capacity-list">
     <div class="capacity-list-header">
       <el-form class="search-filters-form" label-width="80px" :model="filterParam" status-icon label-position="left">
         <el-row :gutter="0">
           <el-col :span="12">
-            <el-input placeholder="请输入内容" size="mini" v-model="filterParam.keyword" class="input-with-select" @keyup.native.13="filterSearch">
-              <el-select v-model="filterParam.field" size="mini" slot="prepend" placeholder="请选择">
+            <el-input placeholder="请输入内容" v-model="filterParam.keyword" class="input-with-select" @keyup.native.13="filterSearch">
+              <el-select v-model="filterParam.field" slot="prepend" placeholder="请选择">
                 <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
               </el-select>
               <el-button slot="append" icon="el-icon-search" @click="filterSearch"></el-button>
@@ -25,7 +14,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="完善状态:" size="mini">
+            <el-form-item label="完善状态:">
               <el-select v-model="filterParam.complete_status" placeholder="请选择" @change="filterSearch">
                 <el-option v-for="item in selectData.completeStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
@@ -33,7 +22,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="挂车绑定状态:" size="mini" label-width="100px">
+            <el-form-item label="挂车绑定状态:" label-width="100px">
               <el-select v-model="filterParam.truck_bind_status" placeholder="请选择" @change="filterSearch">
                 <el-option v-for="item in selectData.truckBindStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
@@ -41,7 +30,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="人员绑定状态:" size="mini" label-width="100px">
+            <el-form-item label="人员绑定状态:" label-width="100px">
               <el-select v-model="filterParam.staff_bind_status" placeholder="请选择" @change="filterSearch">
                 <el-option v-for="item in selectData.staffBindStatusOptions" :key="item.value" :label="item.label" :value="item.value">
                 </el-option>
@@ -49,7 +38,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="分组:" size="mini" label-width="50px">
+            <el-form-item label="分组:" label-width="50px">
               <el-select v-model="filterParam.group" placeholder="请选择" @change="filterSearch">
                 <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
                 </el-option>
@@ -66,70 +55,55 @@
     <div class="capacity-list-content">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column
-            label="牵引车车牌号">
+          <el-table-column label="牵引车车牌号">
             <template slot-scope="scope">
               <a :href="'/#/transportPowerManage/carManage/showCarHeadManage?headId=' + scope.row.tractor.id" target="blank">{{scope.row.tractor.plate_number}}</a>
             </template>
           </el-table-column>
-          <el-table-column
-            label="当前绑定挂车">
+          <el-table-column label="当前绑定挂车">
             <template slot-scope="scope">
               <a v-if="scope.row.semitrailer" :href="'/#/transportPowerManage/carManage/showCarTailManage?tailId=' + scope.row.semitrailer.id" target="blank">{{scope.row.semitrailer.plate_number}}</a>
               <span v-if="!scope.row.semitrailer">-</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="随车电话"
-            prop="car_belong_phone">
+          <el-table-column label="随车电话" prop="car_belong_phone">
             <template slot-scope="scope">
               <span>{{scope.row.car_belong_phone || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="车辆所属">
+          <el-table-column label="车辆所属">
             <template slot-scope="scope">
               <span>{{scope.row.attributes && scope.row.attributes.verbose || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="分组">
+          <el-table-column label="分组">
             <template slot-scope="scope">
               <span>{{scope.row.group && scope.row.group.group_name || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="主驾驶">
+          <el-table-column label="主驾驶">
             <template slot-scope="scope">
               <a v-if="scope.row.master_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.master_driver.id" target="blank">{{scope.row.master_driver.name}}</a>
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="副驾驶">
+          <el-table-column label="副驾驶">
             <template slot-scope="scope">
               <a v-if="scope.row.vice_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.vice_driver.id" target="blank">{{scope.row.vice_driver.name}}</a>
               <span v-if="!scope.row.vice_driver">-</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="押运员">
+          <el-table-column label="押运员">
             <template slot-scope="scope">
               <a v-if="scope.row.escort_staff" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.escort_staff.id" target="blank">{{scope.row.escort_staff.name}}</a>
               <span v-if="!scope.row.escort_staff">-</span>
             </template>
           </el-table-column>
-          <el-table-column
-            label="挂车绑定状态"
-            prop="truck_bind_status">
+          <el-table-column label="挂车绑定状态" prop="truck_bind_status">
           </el-table-column>
-          <el-table-column
-            label="人员绑定状态"
-            prop="staff_bind_status">
+          <el-table-column label="人员绑定状态" prop="staff_bind_status">
           </el-table-column>
-          <el-table-column
-            label="完善状态"
-            prop="complete_status">
+          <el-table-column label="完善状态" prop="complete_status">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -150,7 +124,7 @@
         </el-table>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+        <el-pagination background layout="prev, pager, next , jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
       <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
@@ -162,11 +136,7 @@
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
           <el-form-item label="挂车号" prop="semitrailer">
             <el-select v-model="truckDialog.semitrailer" filterable clearable placeholder="请选择">
-              <el-option
-                v-for="(item, index) in semiList"
-                :key="index"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="(item, index) in semiList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -198,31 +168,19 @@
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
           <el-form-item label="主驾驶" prop="master_driver">
             <el-select v-model="staffDialog.master_driver" filterable clearable placeholder="请选择">
-              <el-option
-                v-for="(item, index) in driverList"
-                :key="index"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="(item, index) in driverList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="副驾驶" prop="vice_driver">
             <el-select v-model="staffDialog.vice_driver" filterable clearable placeholder="请选择" @change="validateStaff">
-              <el-option
-                v-for="(item, index) in driverList"
-                :key="index"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="(item, index) in driverList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="押运员" prop="escort_staff">
             <el-select v-model="staffDialog.escort_staff" filterable clearable placeholder="请选择" @change="validateStaff">
-              <el-option
-                v-for="(item, index) in escortList"
-                :key="index"
-                :label="item.value"
-                :value="item.id">
+              <el-option v-for="(item, index) in escortList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
@@ -353,7 +311,7 @@ export default {
     };
   },
   methods: {
-    init: function () {
+    init: function() {
       this.searchList();
     },
     importList: function() {},
@@ -457,7 +415,7 @@ export default {
               result.data.data.count / vm.pageData.pageSize
             );
             vm.tableData.map((n, i) => {
-              for(let key in n) {
+              for (let key in n) {
                 if (key === 'truck_bind_status' || key === 'staff_bind_status') {
                   n[key] = n[key] ? '已绑定' : '未绑定';
                 }
@@ -630,11 +588,11 @@ export default {
     backStaffForm: function() {
       this.staffNotice = false;
     },
-    validateStaff: function () {
+    validateStaff: function() {
       this.$refs.staffDialog.validateField('vice_driver');
       this.$refs.staffDialog.validateField('escort_staff');
     },
-    validteClientCallback: function (res) {
+    validteClientCallback: function(res) {
       let reg = new RegExp('^(4[0-9]*)$')
       if (reg.test(res.data.code)) {
         this.$message({
@@ -644,7 +602,7 @@ export default {
       }
     }
   },
-  mounted: function () {
+  mounted: function() {
     this.getGroups();
     this.getSemiList();
     this.getDriverList();
@@ -656,3 +614,92 @@ export default {
 };
 
 </script>
+<style lang="less">
+.cell {
+  a {
+    color: #409EFF;
+    &:hover {
+      opacity: .7;
+    }
+  }
+}
+
+.capacity-list {
+  .capacity-list-header {
+    padding: 10px 20px;
+    border: 1px solid #e4e7ed;
+    background: #fff;
+    .search-filters-form {
+      .el-row {
+        margin-top: 20px;
+        &:first-child {
+          margin-top: 10px;
+        }
+      }
+    }
+    .input-with-select {
+      .el-input-group__prepend {
+        background-color: #fff;
+      }
+      .el-select .el-input {
+        width: 180px;
+      }
+    }
+  }
+  .capacity-list-content {}
+}
+
+.capacity-list-dialog {
+  .el-dialog__body {
+    padding-top: 6px;
+    .notice-msg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      .el-icon-warning {
+        font-size: 30px;
+        color: #e6a23c;
+        margin: 24px 0 16px;
+      }
+    }
+    .el-form {
+      width: 340px;
+      margin: 0 auto;
+      h2 {
+        text-align: center;
+        font-weight: normal;
+        padding-bottom: 46px;
+        span {
+          color: #4a9bf8;
+        }
+      }
+      .el-form-item {
+        .el-autocomplete {
+          display: block;
+        }
+        .el-select {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.el-dialog {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: 0 !important;
+  transform: translate(-50%, -50%);
+  max-height: calc(100% - 30px);
+  max-width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+
+  >.el-dialog__body {
+    overflow: auto;
+  }
+}
+
+</style>

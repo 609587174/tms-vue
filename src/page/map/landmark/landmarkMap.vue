@@ -190,7 +190,7 @@ export default {
         if (this.searchFilters.keyword.length) {
           postData[this.searchFilters.field] = this.searchFilters.keyword;
         }
-
+        console.log('this.addressName', this.addressName);
         if (this.addressName.province) {
           postData.province = this.addressName.province;
         }

@@ -22,33 +22,32 @@
                     </el-row>
                   </div>
                   <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>订单号:</label>
                         <div class="detail-form-item">{{detailData.order_number}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>订单生成时间:</label>
                         <div class="detail-form-item">{{detailData.created_at}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>托运方:</label>
                         <div class="detail-form-item">{{detailData.trader}}</div>
                       </div>
                     </el-col>
-                  </el-row>
-                  <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>需求车数:</label>
                         <div class="detail-form-item">{{detailData.require_car_number}}</div>
                       </div>
                     </el-col>
                   </el-row>
+                  
                 </div>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -121,39 +120,40 @@
                     </el-row>
                   </div>
                   <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>计费方式:</label>
                         <div class="detail-form-item">11111111</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>标准运价:</label>
                         <div class="detail-form-item">2018-12-12</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>标准里程:</label>
                         <div class="detail-form-item">{{detailData.standard_mile}}</div>
                       </div>
                     </el-col>
-                  </el-row>
-                  <el-row :gutter="40">
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>气差允许范围:</label>
                         <div class="detail-form-item">11111111</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                  </el-row>
+                  <el-row :gutter="40">
+                    
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>待时计算标准:</label>
                         <div class="detail-form-item">2018-12-12</div>
                       </div>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
                         <div class="detail-form-item">xxxx</div>

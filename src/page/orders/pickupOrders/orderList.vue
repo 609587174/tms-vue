@@ -103,7 +103,7 @@ export default {
       listFifterData: [],
       rules: {},
       activeName: 'first',
-      fifterName: 'all',
+      
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -122,7 +122,13 @@ export default {
     };
   },
   computed: {
-
+    fifterName:function(){
+      if(this.$route.query.goTo){
+        return this.$route.query.goTo
+      }else{
+        return 'all'
+      }
+    },
   },
   methods: {
     clicktabs: function(targetName) {
@@ -131,7 +137,10 @@ export default {
     goAddNewOder: function() {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
     },
-    searchList: function() {
+    searchList: function(type) {
+      if(type){
+        this.fifterName=type;
+      }
       var sendData = {};
       var vm = this;
       if (this.fifterParam.field) {
@@ -143,6 +152,10 @@ export default {
       }
       if (this.fifterName != "all") {
         sendData.status = this.fifterName;
+      }
+      if(this.fifterName=='loaded'){
+        sendData.history=true;
+        delete sendData.status;
       }
       if (this.searchStatus) {
         sendData = this.saveSendData;
@@ -167,6 +180,7 @@ export default {
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
+      this.pageData.currentPage=1;
       //重新查询一次数据
       this.searchList();
     },

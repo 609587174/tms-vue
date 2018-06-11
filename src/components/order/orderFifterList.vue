@@ -141,7 +141,7 @@
             <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
             <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
             <el-col :span="5">
-              <el-tooltip :content="props.row.desc" placement="top" effect="light">
+              <el-tooltip :content="props.row.mark" placement="top" effect="light">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
@@ -227,6 +227,7 @@ export default {
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        
         this.upPlanMethod();
       } else if (type == 'changePlan') {
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
@@ -240,6 +241,7 @@ export default {
           type = 'edit';
         }
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}` });
+        //vm.$emit("refreshList",'determine');
       } else if (type == 'upPlan') {
         var sendData = {
           delivery_order_id: rowData.id
@@ -262,8 +264,10 @@ export default {
                 message: '提交计划成功',
                 type: 'success'
               });
+
             }
-            vm.$emit("refreshList");
+
+            vm.$emit("refreshList",'determine');
           }).catch(() => {
             vm.pageLoading = false;
           });

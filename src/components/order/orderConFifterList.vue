@@ -94,7 +94,7 @@
                 </el-col>
               </el-row>
 
-               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" >
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
                 <el-col :span="7" class="colinfo">卸:<span>{{props.row.destination}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -108,6 +108,11 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
+              <el-row v-if="props.row.status.key=='confirm_match'" style="width:100%;margin-top:30px;">
+                <el-col :span="7" class="colinfo">
+                  已经匹配卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往确认</el-button>
+                </el-col>
+             </el-row>
             </div>
           </div>
           <div class="listDetalis carList" style="width:15%">
@@ -122,6 +127,9 @@
             </el-row>
             <el-row class="commh carInfo">
               <el-col>副驾:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.vice_driver?props.row.transPowerInfo.vice_driver.name:""}}</span></el-col>
+            </el-row>
+            <el-row class="commh carInfo">
+              <el-col>押运:<span v-if="props.row.transPowerInfo">{{props.row.transPowerInfo.escort_staff?props.row.transPowerInfo.escort_staff.name:""}}</span></el-col>
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
@@ -143,7 +151,7 @@
             </el-col>
             <el-col :span="4" v-if="1==0">卸货单号:{{props.row.order_number}}</el-col>
             <el-col :span="4">托运商:{{props.row.delivery_order.trader}}</el-col>
-            <el-col :span="3">标准运费:</el-col>
+            <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
@@ -200,71 +208,32 @@ export default {
   data() {
     return {
       lockFalg: false,
+      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match'],
       buttonAll: {
-        driver_pending_confirmation: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
-        to_fluid: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
-        reach_fluid: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
+        driver_pending_confirmation: [],
+        to_fluid: [],
+        reach_fluid: [],
         loading_waiting_audit: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }, {
           text: "装车审核",
           type: "success",
           methods_type: "loadingEX",
           attrPlan: true
         }],
-        loading_audit_failed: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
-        waiting_match: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
+        loading_audit_failed: [],
+        waiting_match: [],
         confirm_match: [{
           text: "确认卸货单",
           type: "success",
           methods_type: "sureDownOrder"
         }],
-        to_site: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
-        reach_site: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
+        to_site: [],
+        reach_site: [],
         unloading_waiting_audit: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }, {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
         }],
-        unloading_audit_failed: [{
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
-        }],
+        unloading_audit_failed: [],
         waiting_settlement: [{
           text: "调整数据",
           type: "success",

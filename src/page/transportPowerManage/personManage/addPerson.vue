@@ -100,15 +100,16 @@
                     <el-input placeholder="请输入" type="text" v-model="userForm.detail_address"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="身份证:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
+                <!-- <el-col :span="8">
+  <el-form-item label="身份证:">
+    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
+      <el-button size="small" type="primary" plain>上传图片</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    </el-upload>
+  </el-form-item>
+</el-col>
+ -->
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -148,7 +149,7 @@
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <!--                 <el-col :span="8">
                   <el-form-item label="驾驶证:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
@@ -156,7 +157,7 @@
                       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -196,15 +197,16 @@
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.qualification_certificate_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证:">
-                    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
+                <!-- <el-col :span="8">
+  <el-form-item label="从业资格证:">
+    <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
-                      <el-button size="small" type="primary" plain>上传图片</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-                    </el-upload>
-                  </el-form-item>
-                </el-col>
+      <el-button size="small" type="primary" plain>上传图片</el-button>
+      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+    </el-upload>
+  </el-form-item>
+</el-col>
+ -->
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -244,15 +246,15 @@
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.escort_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="从业资格证:">
+                <!--                 <el-col :span="8">
+                  <el-form-item label="押运资格证:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="userForm.idImg" list-type="picture">
                       <el-button size="small" type="primary" plain>上传图片</el-button>
                       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
                     </el-upload>
                   </el-form-item>
-                </el-col>
+                </el-col> -->
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -491,17 +493,14 @@ export default {
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{2,10})$/gi, message: '姓名为2～10个汉字', trigger: 'blur' }
         ],
         work_type: [
-          { required: true, message: '选择从业类型', trigger: 'blur' },
-        ],
-        employmentType: [ //从业类型
-          { required: true, message: '请选择从业类型', trigger: 'blur' }
+          { required: true, message: '选择从业类型', trigger: 'change' },
         ],
         mobile_phone: [ //手机号码
           { required: true, message: '请输入手机号码', trigger: 'blur' },
           { pattern: /^1\d{10}$/, message: '请输入正确的手机号码', trigger: 'blur' }
         ],
         staff_type: [ //人员所属
-          { required: true, message: '请选择人员所属', trigger: 'blur' },
+          { required: true, message: '请选择人员所属', trigger: 'change' },
         ],
         id_number: [ //身份证号码
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
@@ -539,7 +538,7 @@ export default {
           { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{2,10})$/gi, message: '姓名为2～10个汉字', trigger: 'blur' }
         ],
         heath_examination_remark: [
-          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{0,50})$/gi, message: '备注不多于50个字符', trigger: 'blur' },
+          { pattern: /^(.{0,50})$/gi, message: '备注不多于50个字符', trigger: 'blur' },
         ]
       },
       saveBasicAndReviewBtn: {
@@ -822,7 +821,7 @@ export default {
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
       console.log('this.detailData.work_type.key', this.detailData.work_type.key);
-      if (this.detailData.work_type === 'DRIVER') {
+      if (this.detailData.work_type && this.detailData.work_type.key === 'DRIVER') {
         stepNum = 5;
       }
       this.addPersonAjax(postData, formName, btnObject, stepNum);

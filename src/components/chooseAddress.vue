@@ -62,6 +62,11 @@ export default {
       //this.getCity();
       this.address.city = '';
       this.address.area = '';
+      this.addressName.city = '';
+      this.addressName.area = '';
+      this.addressCode.city = '';
+      this.addressCode.area = '';
+
       if (this.addressName) {
         for (let i in this.provinceList) {
           if (this.address.province === this.provinceList[i].id) {
@@ -84,25 +89,9 @@ export default {
     cityChange() {
       //this.getArea();
       this.address.area = '';
-      this.$emit('chooseCity');
-      if (this.addressName) {
-        for (let i in this.areaList) {
-          if (this.address.area === this.areaList[i].id) {
-            this.addressName.area = this.areaList[i].area_name;
-            break;
-          }
-        }
-      }
-      if (this.addressCode) {
-        for (let i in this.areaList) {
-          if (this.address.area === this.areaList[i].id) {
-            this.addressCode.area = this.areaList[i].area_name;
-            break;
-          }
-        }
-      }
-    },
-    areaChange() {
+      this.addressName.area = '';
+      this.addressCode.area = '';
+
       if (this.addressName) {
         for (let i in this.cityList) {
           if (this.address.city === this.cityList[i].id) {
@@ -115,6 +104,26 @@ export default {
         for (let i in this.cityList) {
           if (this.address.city === this.cityList[i].id) {
             this.addressCode.city = this.cityList[i].area_name;
+            break;
+          }
+        }
+      }
+      console.log('this.addressCode', this.address);
+      this.$emit('chooseCity');
+    },
+    areaChange() {
+      if (this.addressName) {
+        for (let i in this.areaList) {
+          if (this.address.area === this.areaList[i].id) {
+            this.addressName.area = this.areaList[i].area_name;
+            break;
+          }
+        }
+      }
+      if (this.addressCode) {
+        for (let i in this.areaList) {
+          if (this.address.area === this.areaList[i].id) {
+            this.addressCode.area = this.areaList[i].area_name;
             break;
           }
         }

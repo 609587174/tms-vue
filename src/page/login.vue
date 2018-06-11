@@ -13,17 +13,17 @@
       <el-form class="user-form" label-width="100px" :rules="rules" :model="ruleForm" status-icon ref="ruleForm">
         <div class="des" v-if="isLogin">请您<a class="cursor-pointer text-blue" v-on:click="toLink('company')">填写企业信息</a>并提交注册审核！</div>
         <el-form-item label="用户名：" prop="username">
-          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-input :autofocus="true" placeholder="请输入用户名／手机号" v-model="ruleForm.username">
           </el-input>
         </el-form-item>
         <el-form-item label="密码：" prop="password">
-          <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+          <el-input placeholder="请输入密码" type="password" v-model="ruleForm.password">
           </el-input>
         </el-form-item>
         <el-form-item label="验证码：" prop="verify_code" validate-on-rule-change>
           <el-row>
             <el-col :span="15">
-              <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.verify_code" class="vaInput" onkeyup="this.value=this.value.replace(/\s+/g,'')" maxlength="4"> </el-input>
+              <el-input placeholder="请输入验证码" type="text" v-model="ruleForm.verify_code" class="vaInput" maxlength="4"> </el-input>
             </el-col>
             <el-col :span="8" :offset="1"><img :src="verifyCodeData.image_code_path" width="100%" height="32" v-on:click="refreshVaImg"></el-col>
           </el-row>

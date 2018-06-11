@@ -38,13 +38,14 @@
                       </el-select>
                     </el-form-item>
                   </el-col> -->
-                  <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;">
+                  <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status.key!='canceled'">
                     需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
                   </el-col>
-                  <el-col :span="2">
+                  <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
                     <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
                     <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
                   </el-col>
+                  <el-col :span="4" :offset="20" v-if="delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
                 </el-row>
               </el-form>
             </div>
@@ -52,7 +53,7 @@
               <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
-                <el-table-column label="勾选" type="selection" width="55" fixed="right">
+                <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
                 </el-table-column>
                 <el-table-column label="状态" width="80" fixed="right">
                   <template slot-scope="scope">
@@ -67,8 +68,7 @@
               </el-pagination>
             </div>
           </el-tab-pane>
-          <el-tab-pane label="地图" name="second">
-          </el-tab-pane>
+          
         </el-tabs>
       </div>
     </div>
@@ -177,6 +177,9 @@ export default {
     }
   },
   methods: {
+    checkSelectable: function(row) {
+      return !row.isDisable
+    },
     filterTag: function(value, row) {
       if (row.waybill.status) {
         return row.waybill.status === value;
@@ -374,7 +377,7 @@ export default {
           this.$$http("addCarPower", sendData).then((results) => {
             this.pageLoading = false;
             if (results.data.code == 0) {
-              vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
+              vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
             }
           }).catch(() => {
             this.pageLoading = false;
@@ -428,7 +431,7 @@ export default {
           this.$$http("editCarPower", sendData).then((results) => {
             this.pageLoading = false;
             if (results.data.code == 0) {
-              vm.$router.push({ path: "/orders/pickupOrders/ordersList" });
+              vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
             }
           }).catch(() => {
             this.pageLoading = false;
@@ -634,6 +637,11 @@ export default {
         //   }
         // }
         newArr = newArr.concat(fifterArr2);
+        if(this.delivery_list.status.key=='canceled'){
+          newArr.forEach(item=>{
+            item.isDisable=true;
+          });
+        }
         this.trueAll_list = newArr;
         this.renderAll_list = newArr;
 

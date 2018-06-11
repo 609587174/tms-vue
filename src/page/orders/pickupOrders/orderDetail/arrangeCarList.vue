@@ -270,6 +270,18 @@ export default {
                   });
                 }).catch(() => {
                   vm.$refs.multipleTable.toggleRowSelection(row, false);
+                  var new_now_capacities1 = [];
+                  vm.now_capacities.forEach((item, index) => {
+                    if (item.id != row.id) {
+                      new_now_capacities1.push(item);
+                    }
+                  });
+                  vm.now_capacities = new_now_capacities1;
+                  vm.trueAll_list.forEach((Titem) => {
+                    if (Titem.id == row.id) {
+                      Titem.bindCheckBox = false;
+                    }
+                  });
                 });
               } else {
                 row.bindCheckBox = !row.bindCheckBox;

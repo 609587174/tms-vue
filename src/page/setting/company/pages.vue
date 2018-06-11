@@ -7,71 +7,69 @@
   }
 }
 
-
-
 </style>
 <template>
   <div class="detail-main">
-          <el-container>
-            <el-header style="margin-top:15px;">
-              <p>企业信息</p>
-            </el-header>
-            <el-main v-loading="pageLoading">
-              <div class="detail-list detail-form">
-                <div class="detail-form-title">
-                  <el-row>
-                    <el-col :span="12" :offset="6" class="text-center">
-                      企业基础信息
-                    </el-col>
-                    <el-col :span="6" class="text-right">
-                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑</el-button>
-                    </el-col>
-                  </el-row>
-                </div>
-                <el-row :gutter="10">
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>企业名称:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.name)"></div>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>联系人:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.contact_name)"></div>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>联系电话:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.contact_phone)"></div>
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>公司地址:</label>
-                      <div class="detail-form-item" v-if="companyData.area">{{companyData.area.area_name}}{{companyData.area.city.area_name}}{{companyData.area.city.county.area_name}}{{companyData.detail_address}}</div>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>企业类型:</label>
-                      <div class="detail-form-item" v-if="companyData.carrier_type" v-html="pbFunc.dealNullData(companyData.carrier_type.verbose)"></div>
-                    </div>
-                  </el-col>
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>社会机构代码:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.license_code?companyData.license_code:companyData.organization_code)"></div>
-                    </div>
-                  </el-col>
-                </el-row>
+    <el-container>
+      <el-header style="margin-top:15px;">
+        <p>企业信息</p>
+      </el-header>
+      <el-main v-loading="pageLoading">
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                企业基础信息
+              </el-col>
+              <el-col :span="6" class="text-right">
+                <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑</el-button>
+              </el-col>
+            </el-row>
+          </div>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>企业名称:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.name)"></div>
               </div>
-            </el-main>
-          </el-container>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>联系人:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.contact_name)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>联系电话:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.contact_phone)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>公司地址:</label>
+                <div class="detail-form-item" v-if="companyData.area">{{companyData.area.area_name}}{{companyData.area.city.area_name}}{{companyData.area.city.county.area_name}}{{companyData.detail_address}}</div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>企业类型:</label>
+                <div class="detail-form-item" v-if="companyData.carrier&&companyData.carrier_type" v-html="pbFunc.dealNullData(companyData.carrier&&companyData.carrier_type.verbose)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>社会机构代码:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.license_code?companyData.license_code:companyData.organization_code)"></div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
+      </el-main>
+    </el-container>
+  </div>
 </template>
 <script>
 export default {
@@ -86,7 +84,9 @@ export default {
           return time.getTime() > Date.now() - 8.64e6
         }
       },
-      companyData: {}
+      companyData: {
+        carrier: {}
+      }
 
     }
   },
@@ -114,7 +114,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/setting/company/editPages?activeStep=" + number});
+      this.$router.push({ path: "/setting/company/editPages?activeStep=" + number });
     },
 
   }

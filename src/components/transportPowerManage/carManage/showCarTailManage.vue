@@ -330,7 +330,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage?activeStep=" + number + "&tailId=" + this.tailId });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage?activeStep=" + number + "&tailId=" + this.tailId + "&operate=edit" });
     },
 
   }

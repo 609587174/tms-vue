@@ -94,7 +94,7 @@ export default {
         ],
         verify_code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { min: 4,max: 4, message: '输入4位验证码', trigger: 'blur' }
+          { min: 4, max: 4, message: '输入4位验证码', trigger: 'blur' }
         ]
       },
       submitBtn: {
@@ -117,6 +117,7 @@ export default {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {
           this.$store.state.common.users = results.data.data;
+          this.pbFunc.setLocalData('users', results.data.data, true);
         }
       }).catch((err) => {
         this.$message.error('获取用户信息失败');
@@ -234,6 +235,7 @@ export default {
   created() {
     sessionStorage.clear();
     this.refreshVaImg();
+    console.log('$this.$route', this.$route)
     // this.enterLogin(event);
   }
 };

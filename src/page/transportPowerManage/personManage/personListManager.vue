@@ -186,7 +186,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: command.id } });
     },
     addPerson: function() {
-      this.$router.push({ path: "/transportPowerManage/personManage/addPerson" });
+      this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { operate: 'add' } });
     },
     importList: function() {
       this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });

@@ -211,7 +211,7 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_issue_organ)"></div>
               </div>
             </el-col>
-<!-- <el-col :span="8">
+            <!-- <el-col :span="8">
   <div class="label-list">
     <label>从业资格证:</label>
     <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.qualification_certificate_photo)"></div>
@@ -260,7 +260,7 @@
                 <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_issue_organ)"></div>
               </div>
             </el-col>
-<!-- <el-col :span="8">
+            <!-- <el-col :span="8">
   <div class="label-list">
     <label>从业资格证:</label>
     <div class="detail-form-item" v-html="pbFunc.dealNullData(userData.escort_license_photo)"></div>
@@ -460,7 +460,7 @@ export default {
       console.log(file);
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number, query: { id: this.userData.id, activeStep: number } });
+      this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number, query: { id: this.userData.id, activeStep: number, operate: 'edit' } });
     },
 
   }

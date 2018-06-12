@@ -62,12 +62,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="出生日期:">
+                  <el-form-item label="出生日期:" prop="birthday">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthday" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="年龄:">
+                  <el-form-item label="年龄:" prop="age">
                     <el-input placeholder="请输入年龄" type="text" v-model="userForm.age"></el-input>
                   </el-form-item>
                 </el-col>
@@ -128,24 +128,24 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addClientFormSetpTow" :rules="rules" :model="userForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="驾驶证档案编号:" prop="drive_license_number">
+                  <el-form-item label="档案编号:" prop="drive_license_number">
                     <el-input placeholder="请输入" type="text" v-model="userForm.drive_license_number"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="驾驶证初次发证时间:">
+                  <el-form-item label="初次发证时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="驾驶证到期时间:">
+                  <el-form-item label="到期时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.drive_license_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="驾驶证发证机关:" prop="drive_license_issue_organ">
+                  <el-form-item label="发证机关:" prop="drive_license_issue_organ">
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.drive_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
@@ -181,19 +181,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="从业资格证初次发证时间:">
+                  <el-form-item label="初次发证时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="从业资格证到期时间:">
+                  <el-form-item label="到期时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.qualification_certificate_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="从业资格证发证机关:">
+                  <el-form-item label="发证机关:">
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.qualification_certificate_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
@@ -230,19 +230,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="押运证初次发证时间:">
+                  <el-form-item label="初次发证时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="押运证到期时间:">
+                  <el-form-item label="到期时间:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.escort_license_due_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="押运证发证机关:" prop="escort_license_issue_organ">
+                  <el-form-item label="发证机关:" prop="escort_license_issue_organ">
                     <el-input :autofocus="true" placeholder="请输入" type="text" v-model="userForm.escort_license_issue_organ"></el-input>
                   </el-form-item>
                 </el-col>
@@ -412,7 +412,7 @@ export default {
       return this.$store.state.common.selectData.carrier_driver_work_type;
     },
     returnPage: function() {
-      return this.$route.query.id ? '详情页' : '列表页';
+      return (this.$route.query.operate === 'edit') ? '详情页' : '列表页';
     },
     staffsSelect: function() {
       return this.$store.state.common.selectData.carrier_driver_staff_type;
@@ -506,6 +506,12 @@ export default {
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
           { pattern: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/, message: '请输入正确的身份证号码', trigger: 'blur' }
         ],
+        birthday: [
+          { required: true, message: '请选择出生日期', trigger: 'blur' },
+        ],
+        age: [
+          { required: true, message: '请填写年龄', trigger: 'blur' },
+        ],
         on_job_status: [ //在职状态
           { required: true, message: '请选择在职状态', trigger: 'blur' },
         ],
@@ -557,11 +563,10 @@ export default {
     if (this.id) {
       this.getDetail();
     }
-    console.log('this', this, typeof null, typeof undefined, typeof '', null === null);
   },
   methods: {
     returnToPage: function() {
-      if (this.$route.query.id) {
+      if (this.$route.query.operate === 'edit') {
         this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: this.$route.query.id } });
       } else {
         this.$router.push({ path: "/transportPowerManage/personManage/personListManage" });
@@ -666,7 +671,8 @@ export default {
             message: '提交成功',
             type: 'success'
           });
-          this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+
+          this.returnToPage();
         }
       }).catch((err) => {
         btnObject.btnText = btnTextCopy;
@@ -675,6 +681,7 @@ export default {
       })
 
     },
+
     getDetail: function() {
       this.pageLoading = true;
       this.$$http('getDriversDetail', { id: this.id }).then((results) => {
@@ -706,22 +713,10 @@ export default {
           this.detailData.address.city = (areaCopy && areaCopy.city && areaCopy.city.id) ? areaCopy.city.id : '';
           this.detailData.address.area = (areaCopy && areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
           this.userForm = this.detailData;
+          this.userForm.drive_license_number = this.userForm.drive_license_number ? this.userForm.drive_license_number : this.userForm.id_number;
           console.log('this.detailDta', results.data.data, this.detailData.address);
         }
       })
-    },
-    goDetalis() {
-      if (this.id) {
-        this.$router.push({
-          path: "/transportPowerManage/personManage/personDetail",
-          query: { id: this.id }
-        });
-      } else {
-        this.$router.push({
-          path: "/transportPowerManage/personManage/personListManage"
-        })
-
-      }
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
@@ -758,12 +753,17 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
+              console.log('isReview', isReview);
               if (isReview) {
-                this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
+                this.returnToPage();
+                //this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
+                let operate = this.$route.query.operate;
                 this.detailData = results.data.data;
-                this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: stepNum - 1, id: id } });
+                this.userForm.drive_license_number = this.detailData.drive_license_number ? this.detailData.drive_license_number : this.detailData.id_number;
+                this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { activeStep: stepNum - 1, id: id, operate: operate } });
+
               }
             }
           }).catch((err) => {

@@ -7,7 +7,9 @@
 .el-main {
   padding-top: 0px;
 }
-
+.insureBottom{
+  
+}
 </style>
 <template>
   <div id="addPerson" class="detail-main">
@@ -71,12 +73,12 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="装备质量:">
-                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.total_weight}}kg</div>
+                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.total_weight}}吨</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="牵引车总质量:">
-                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.towing_weight}}kg</div>
+                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.towing_weight}}吨</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -264,7 +266,7 @@
               </el-row>
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <div v-for="(item,key) in headData.tractor_insurances">
+            <div v-for="(item,key) in headData.tractor_insurances" >
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="保险类型:" prop="qualification_certificate_number">

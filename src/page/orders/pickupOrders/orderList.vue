@@ -140,7 +140,11 @@ export default {
     },
     searchList: function(type) {
       if(type){
-        this.fifterName=type;
+        this.thisFifterName=type;
+      }
+      
+      if(type){
+        this.thisFifterName=type;
       }
       var sendData = {};
       var vm = this;
@@ -183,7 +187,8 @@ export default {
       var status = targetName.name;
       this.pageData.currentPage=1;
       //重新查询一次数据
-      this.searchList();
+      //this.searchList();
+      this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo="+this.thisFifterName });
     },
     pageChange: function() {
       setTimeout(() => {
@@ -193,6 +198,9 @@ export default {
     }
   },
   created() {
+    if(this.thisFifterName!=this.fifterName){
+        this.thisFifterName=this.fifterName;
+     }
     //this.listFifterData = this.listData;
     this.searchList();
     this.$$http("getCount", {}).then(results => {
@@ -209,9 +217,12 @@ export default {
 
     });
   },
-  mounted(){
-      this.thisFifterName=this.fifterName;
+  watch: {
+  '$route' (to, from) {
+  //刷新参数放到这里里面去触发就可以刷新相同界面了
+    this.searchList();
   }
+}
 };
 
 </script>

@@ -586,6 +586,14 @@ const api = {
 
     }
   },
+  deleteInsuranceFromTail: {
+    url: '/truck/semitrailers/:id/semitrailer_insurances/',
+    method: 'delete',
+    desc: '删除保险',
+    param: {
+
+    }
+  },
   getHeadDetalis: {
     url: '/truck/tractors/:id/',
     method: 'get',

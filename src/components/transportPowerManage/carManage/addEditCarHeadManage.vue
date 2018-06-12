@@ -64,12 +64,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="整备质量:" prop="total_weight">
+                  <el-form-item label="整备质量(吨):" prop="total_weight">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.total_weight"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="牵引车总质量:" prop="towing_weight">
+                  <el-form-item label="牵引车质量(吨):" prop="towing_weight">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.towing_weight"></el-input>
                   </el-form-item>
                 </el-col>
@@ -519,7 +519,7 @@ export default {
       }
       this.pageLoading = true;
       var vm = this;
-      this.$$http('getHeadDetalis', sendData).then(function(result) {
+      this.$$http('getHeadDetalis', sendData).then((result) =>{
         if (result.data.code == 0) {
           vm.headCarFormStep1 = vm.getTrueObj(vm.headCarFormStep1, result.data.data);
 
@@ -531,9 +531,11 @@ export default {
           vm.headCarFormStep3 = vm.getTrueObj(vm.headCarFormStep3, result.data.data);
           vm.headCarFormStep2 = vm.getTrueObj(vm.headCarFormStep2, result.data.data);
           var tractor_insurancesList = vm.headCarFormStep3.tractor_insurances;
+          console.log("ssss1",this);
           for (let i = 0; i < tractor_insurancesList.length; i++) {
-            tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type.key;
-            tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method.key;
+            console.log("ssss2",this);
+            tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type?tractor_insurancesList[i].insurance_type.key:"";
+            tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method?tractor_insurancesList[i].insurance_method.key:"";
           }
           vm.pageLoading = false;
           if (vm.headCarFormStep3.tractor_insurances.length == 0) {
@@ -542,7 +544,8 @@ export default {
         } else {
           vm.pageLoading = false;
         };
-      }).catch(function() {
+      }).catch(function(err) {
+        console.log('err',err);
         vm.pageLoading = false;
       });
     },

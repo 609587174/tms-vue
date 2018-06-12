@@ -84,13 +84,13 @@
                 </el-col>
                 <el-col :span="3" class="colinfo">
                 </el-col>
-                <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
+                <el-col :span="4" class="colinfo">{{props.row.delivery_order.plan_time.split(" ")[0]}}</br>{{props.row.delivery_order.plan_time.split(" ")[1]}}
                 </el-col>
-                <el-col :span="4" class="colinfo"><span v-if="props.row.active_time">{{props.row.active_time.split(" ")[0]}}</br>{{props.row.active_time.split(" ")[1]}}</span><span v-else>无</span>
+                <el-col :span="4" class="colinfo"><span v-if="props.row.delivery_order.active_time">{{props.row.delivery_order.active_time.split(" ")[0]}}</br>{{props.row.delivery_order.active_time.split(" ")[1]}}</span><span v-else>无</span>
                 </el-col>
-                <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
+                <el-col :span="3" class="colinfo">{{props.row.delivery_order.plan_tonnage}}
                 </el-col>
-                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.delivery_order.active_tonnage">{{props.row.delivery_order.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
 
@@ -153,7 +153,7 @@
             <el-col :span="4">托运商:{{props.row.delivery_order.trader}}</el-col>
             <el-col :span="3">标准运价:</el-col>
             <el-col :span="2">
-              <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light">
+              <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
@@ -208,6 +208,7 @@ export default {
   data() {
     return {
       lockFalg: false,
+      delayTime:500,
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match'],
       buttonAll: {
         driver_pending_confirmation: [],

@@ -278,47 +278,47 @@
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>审核时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <label>收货人:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.contact)"></div>
                             </div>
                           </el-col>
                         </el-row>
                         <el-row :gutter="40">
-                          <el-col :span="8">
+                           <el-col :span="8">
                             <div class="label-list">
-                              <label>计划到厂时间:</label>
+                              <label>收货人电话:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.contact_phone)"></div>
+                            </div>
+                          </el-col>
+                           <el-col :span="8">
+                            <div class="label-list">
+                              <label>计划到站时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车毛重:</label>
+                              <label>卸车毛重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.gross_weight)"></div>
                             </div>
                           </el-col>
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>审核人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                            </div>
-                          </el-col>
                         </el-row>
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>实际到厂时间:</label>
+                              <label>实际到站时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车皮重:</label>
+                              <label>卸车皮重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.tare_weight)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车净重:</label>
+                              <label>卸车净重:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.net_weight)"></div>
                             </div>
                           </el-col>
@@ -326,13 +326,13 @@
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装液开始时间:</label>
+                              <label>卸车开始时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_start_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装液完成时间:</label>
+                              <label>卸车完成时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.work_end_time)"></div>
                             </div>
                           </el-col>
@@ -340,7 +340,7 @@
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
-                              <label>装车磅单审核:</label>
+                              <label>卸车磅单审核:</label>
                               <div class="detail-form-item">
                                 <el-button type="text " style="height:0;line-height:0;text-align:left;padding-left:0;" @click="showImg('showPound',item.weight_id)">点击查看磅单</el-button>
                               </div>
@@ -417,7 +417,7 @@
                           </el-col>
                         </el-row>
                       </div>
-                       <div v-if="item.type === 'already_match'">
+                       <div v-if="item.type === 'confirm_match'">
                         <el-row :gutter="40">
                           <el-col :span="8">
                             <div class="label-list">
@@ -485,6 +485,12 @@
                             <div class="label-list">
                               <label>操作时间:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
+                          <el-col :span="8">
+                            <div class="label-list">
+                              <label>拒绝原因:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.reason)"></div>
                             </div>
                           </el-col>
                         </el-row>
@@ -790,7 +796,7 @@ export default {
         } else {
           if (id) {
             var sendData = {};
-            sendData.section_trip = this.setpId;
+            //sendData.section_trip = this.setpId;
             sendData.id = id;
             if (vm.poundImg[id]) {
               var imgList = vm.poundImg[id];
@@ -814,7 +820,7 @@ export default {
           vm.imgObject.showPreview = true;
         }else{
           var sendData={};
-          sendData.section_trip=this.setpId;
+          //sendData.section_trip=this.setpId;
           sendData.id=id;
           this.$$http("getSeal",sendData).then(results=>{
             if(results.data.code==0){
@@ -842,7 +848,7 @@ export default {
       var vm = this;
       var sendData = {};
       if (type == 'sureLoadEx') {
-        sendData.section_trip = this.setpId;
+        //sendData.section_trip = this.setpId;
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
           if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
             this.surePound = this.detailData[this.detailData.length - 2];
@@ -868,7 +874,7 @@ export default {
 
       } else if (type == 'sureUnLoadEx') {
         vm.sureTitle="卸车磅单审核通过";
-        sendData.section_trip = this.setpId;
+        //sendData.section_trip = this.setpId;
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
           this.surePound = this.detailData[this.detailData.length - 1];
           sendData.id = this.detailData[this.detailData.length - 1].weight_id;

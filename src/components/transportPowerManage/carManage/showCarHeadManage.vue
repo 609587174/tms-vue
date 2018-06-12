@@ -71,29 +71,29 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="装备质量:">
-                  <div class="detail-form-item">{{headData.total_weight}}</div>
+                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.total_weight}}kg</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="牵引车总质量:">
-                  <div class="detail-form-item">{{headData.towing_weight}}</div>
+                  <div class="detail-form-item" v-if="headData.total_weight>0">{{headData.towing_weight}}kg</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="长度:">
-                  <div class="detail-form-item">{{headData.length}}</div>
+                  <div class="detail-form-item" v-if="headData.length>0">{{headData.length}}m</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="宽度:">
-                  <div class="detail-form-item">{{headData.width}}</div>
+                  <div class="detail-form-item" v-if="headData.width>0">{{headData.width}}m</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="高度:">
-                  <div class="detail-form-item">{{headData.height}}</div>
+                <el-form-item label="高度:" >
+                  <div class="detail-form-item" v-if="headData.height>0">{{headData.height}}m</div>
                 </el-form-item>
               </el-col>
             </el-row>

@@ -66,29 +66,29 @@
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="核定载质量:">
-                  <div class="detail-form-item">{{tailData.transport_weight}}</div>
+                  <div class="detail-form-item" v-if="tailData.transport_weight>0">{{tailData.transport_weight}}kg</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="罐体容积:">
-                  <div class="detail-form-item">{{tailData.volume}}</div>
+                  <div class="detail-form-item" v-if="tailData.volume>0">{{tailData.volume}}m³</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="长度:">
-                  <div class="detail-form-item">{{tailData.length}}</div>
+                  <div class="detail-form-item" v-if="tailData.length>0">{{tailData.length}}m</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="宽度:">
-                  <div class="detail-form-item">{{tailData.width}}</div>
+                  <div class="detail-form-item" v-if="tailData.width>0">{{tailData.width}}m</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="高度:">
-                  <div class="detail-form-item">{{tailData.height}}</div>
+                  <div class="detail-form-item" v-if="tailData.height>0">{{tailData.height}}m</div>
                 </el-form-item>
               </el-col>
             </el-row>

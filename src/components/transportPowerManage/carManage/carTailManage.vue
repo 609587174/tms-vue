@@ -116,7 +116,7 @@ export default {
 
   methods: {
     addHeadCarPage: function() {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage" });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage", query: { operate: 'add' } });
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {

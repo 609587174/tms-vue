@@ -106,6 +106,7 @@ export default {
       this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
+      console.log('menuList', menuList, token);
       this.$router.afterEach((to, from) => {
         if (!to.path.match(/(^\/$)|login|register|registerCompany|registerSuccess|forgetPassword|401|404/) && !from.path.match(/login/)) {
           if (!menuList || !token) {
@@ -115,7 +116,6 @@ export default {
           }
         }
       })
-
     },
     pathIn: function(isGoFirstPath) {
       let allowedRouter = [];

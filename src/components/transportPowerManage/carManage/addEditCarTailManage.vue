@@ -295,8 +295,6 @@ export default {
     return {
       editStatus: false,
       titleType: "新增挂车",
-      stepTitle: "基本信息填写",
-      activeStep: 0,
       pageLoading: false,
       pickerOptions0: {
         disabledDate(time) {
@@ -393,11 +391,6 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.activeStep) {
-      this.activeStep = parseInt(this.$route.query.activeStep);
-      this.stepTitle = this.activeStep == 0 ? '基本信息填写' : (this.activeStep == 1 ? '证件信息填写' : (this.activeStep == 2 ? '保险信息填写' : '其他信息填写'));
-
-    }
     if (this.$route.query.tailId) {
       this.tailId = this.$route.query.tailId;
       this.getTailDetalis(this.$route.query.tailId);
@@ -417,8 +410,31 @@ export default {
       }
     },
     returnPage: function() {
-      return this.$route.query.tailId ? '详情页' : '列表页';
+      return (this.$route.query.operate === 'edit') ? '详情页' : '列表页';
     },
+    stepTitle: function() {
+      let stepTitle = '';
+      let activeStep = this.$route.query.activeStep ? Number(this.$route.query.activeStep) : 0;
+
+      switch (activeStep) {
+        case 1:
+          stepTitle = "证件信息填写";
+          break;
+        case 2:
+          stepTitle = "保险信息填写";
+          break;
+        case 3:
+          stepTitle = "其他信息填写";
+          break;
+        default:
+          stepTitle = "基础信息";
+      }
+
+      return stepTitle;
+    },
+    activeStep: function() {
+      return this.$route.query.activeStep ? Number(this.$route.query.activeStep) : 0;
+    }
   },
   methods: {
     goOtherSetp: function(stepInfo, operation, formName) {
@@ -429,7 +445,7 @@ export default {
       }
     },
     goDetalis: function() {
-      if (this.tailId) {
+      if (this.$route.query.operate === 'edit') {
         this.$router.push({
           path: `/transportPowerManage/carManage/showCarTailManage?tailId=${ this.tailId }`
         });
@@ -480,31 +496,28 @@ export default {
           }
           this.$$http('upadteTailFrom', sendData).then((result) => {
             if (result.data.code == 0) {
+              vm.$message({
+                message: '成功',
+                type: 'success'
+              });
               if (operation == 'out') {
                 //跳转详情
-                vm.$message({
-                  message: '成功',
-                  type: 'success'
-                });
-                vm.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+                //vm.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+                vm.goDetalis();
               } else {
-                vm.$message({
-                  message: '成功',
-                  type: 'success'
-                });
-                vm.activeStep += 1;
+                let nextStep = Number(vm.activeStep) + 1;
                 vm.pageLoading = false;
-                if (vm.activeStep == 2) {
+                if (nextStep == 2) {
                   vm.addInsuranceListForm();
                 }
-                if (vm.activeStep == 1) {
-                  vm.stepTitle = "证件信息填写";
-                } else if (vm.activeStep == 2) {
-                  vm.stepTitle = "保险信息填写";
-                } else if (vm.activeStep == 3) {
-                  vm.stepTitle = "其他信息填写";
-                }
-
+                vm.$router.push({
+                  path: "/transportPowerManage/carManage/addEditCarTailManage",
+                  query: {
+                    tailId: vm.tailId,
+                    activeStep: nextStep,
+                    operate: vm.$route.query.operate
+                  }
+                });
               }
             } else {
               vm.pageLoading = false;
@@ -530,7 +543,7 @@ export default {
           this.tailCarFormStep.vehicle_type = this.tailCarFormStep.vehicle_type ? this.tailCarFormStep.vehicle_type.key : "";
           this.tailCarFormStep.trans_type = this.tailCarFormStep.trans_type ? this.tailCarFormStep.trans_type.key : "";
 
-          if (this.$route.query.activeStep == 2 && !this.tailCarFormStep.semitrailer_insurances.length) {
+          if (this.activeStep == 2 && !this.tailCarFormStep.semitrailer_insurances.length) {
             this.addInsuranceListForm();
           }
 
@@ -575,20 +588,22 @@ export default {
               this.tailCarFormStep.id = result.data.data.id;
               this.tailId = result.data.data.id;
               if (operation == 'out') {
-                this.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
+                this.goDetalis();
+                //this.$router.push({ path: "/transportPowerManage/carManage/showCarTailManage?tailId=" + this.tailId });
               } else {
                 this.$message({
                   message: '添加成功',
                   type: 'success'
                 });
-                this.activeStep += 1;
-                if (this.activeStep == 1) {
-                  this.stepTitle = "证件信息填写";
-                } else if (this.activeStep == 2) {
-                  this.stepTitle = "保险信息填写";
-                } else if (this.activeStep == 3) {
-                  this.stepTitle = "其他信息填写";
-                }
+                let nextStep = Number(this.activeStep) + 1;
+                this.$router.push({
+                  path: "/transportPowerManage/carManage/addEditCarTailManage",
+                  query: {
+                    tailId: this.tailId,
+                    activeStep: nextStep,
+                    operate: this.$route.query.operate
+                  }
+                });
               }
             } else if (result.data.code == 400) {
               Message.error(result.data.msg);

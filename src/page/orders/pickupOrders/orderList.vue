@@ -33,37 +33,37 @@
       </el-tabs>
     </div>
     <div class="listOrder nav-tab" v-loading="pageLoading">
-      <el-tabs v-model="fifterName" type="card" @tab-click="clickFifter">
+      <el-tabs v-model="thisFifterName" type="card" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-          <div v-if="fifterName=='all'">
+          <div v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.appoint_count" name="appoint">
-          <div v-if="fifterName=='appoint'">
+          <div v-if="thisFifterName=='appoint'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.determine_count" name="determine">
-          <div v-if="fifterName=='determine'">
+          <div v-if="thisFifterName=='determine'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
-          <div v-if="fifterName=='confirmed'">
+          <div v-if="thisFifterName=='confirmed'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.history_count" name="loaded">
-          <div v-if="fifterName=='loaded'">
+          <div v-if="thisFifterName=='loaded'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
@@ -109,6 +109,7 @@ export default {
         totalPage: 1,
         pageSize: 10,
       },
+      thisFifterName:"all",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -146,14 +147,14 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam.length > 0) {
+      if (this.timeParam&&this.timeParam.length>0) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }
-      if (this.fifterName != "all") {
-        sendData.status = this.fifterName;
+      if (this.thisFifterName != "all") {
+        sendData.status = this.thisFifterName;
       }
-      if(this.fifterName=='loaded'){
+      if(this.thisFifterName=='loaded'){
         sendData.history=true;
         delete sendData.status;
       }
@@ -207,6 +208,9 @@ export default {
     }).catch(() => {
 
     });
+  },
+  mounted(){
+      this.thisFifterName=this.fifterName;
   }
 };
 

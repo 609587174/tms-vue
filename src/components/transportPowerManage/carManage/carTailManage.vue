@@ -65,7 +65,7 @@ export default {
       pageStatus: false,
       fifterParam: {
         keyword: "",
-        field: "",
+        field: "plate_number",
       },
       seachListParam: {
         plate_number: '',

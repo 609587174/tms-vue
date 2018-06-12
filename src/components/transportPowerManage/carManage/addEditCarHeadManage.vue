@@ -201,7 +201,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">填写证件信息</el-button>
+                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
               </el-col>
               <el-col :span="6">
                 <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
@@ -249,7 +249,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">填写保险信息</el-button>
+                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
               </el-col>
               <el-col :span="6">
                 <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
@@ -360,6 +360,13 @@ export default {
         callback(new Error("危险品灯号由10个数值组成，如37060111-16"));
       }
     };
+    var fuel_typeVa=(rule, value, callback) => {
+       if (value == "") {
+        callback(new Error("请选择燃料类型"));
+      } else {
+        callback();
+      }
+    }
     return {
       editStatus: false,
       activeStep: 0,
@@ -430,7 +437,7 @@ export default {
           { min: 10, max: 15, message: '发动机号为10~15个字段', trigger: 'blur' }
         ],
         fuel_type: [
-          { required: true, message: '请选择燃料类型', trigger: 'blur' }
+          { validator: fuel_typeVa, trigger: 'blur' }
         ],
         brand: [
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }

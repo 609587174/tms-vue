@@ -148,24 +148,21 @@ export default {
         sendData.status = this.fifterName;
       }
 
-      if (this.timeParam.unload_active_time.length > 0) {
+       if (this.timeParam.unload_active_time&&this.timeParam.unload_active_time.length>0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
       }
-      if (this.timeParam.unload_plan_time.length > 0) {
+      if (this.timeParam.unload_plan_time&&this.timeParam.unload_plan_time.length>0 ) {
         sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
         sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
       }
-      if (this.timeParam.active_time.length > 0) {
+      if (this.timeParam.active_time &&this.timeParam.active_time.length>0) {
         sendData.active_time_start = this.timeParam.active_time[0]; //实际装车
         sendData.active_time_end = this.timeParam.active_time[1];
       }
-      if (this.timeParam.load_plan_time.length > 0) {
+      if (this.timeParam.load_plan_time &&this.timeParam.load_plan_time.length>0) {
         sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
-      }
-      if (this.fifterParam.field) {
-        sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
 
       if (this.searchStatus) {

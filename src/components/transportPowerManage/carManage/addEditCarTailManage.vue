@@ -103,7 +103,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">填写证件信息</el-button>
+                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
               </el-col>
               <el-col :span="6">
                 <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
@@ -151,7 +151,7 @@
             </el-form>
             <el-row>
               <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">填写保险信息</el-button>
+                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
               </el-col>
               <el-col :span="6">
                 <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
@@ -220,7 +220,7 @@
               </div>
             </el-form>
             <el-col :span="6" :offset="8">
-              <el-button type="success" @click="goOtherSetp('update','nextStep','addInsuanceFrom')">填写其他信息</el-button>
+              <el-button type="success" @click="goOtherSetp('update','nextStep','addInsuanceFrom')">保存并下一步</el-button>
             </el-col>
             <el-col :span="6">
               <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFrom')">保存并退出</el-button>

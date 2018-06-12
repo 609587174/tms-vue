@@ -24,9 +24,9 @@
       color: #fff;
       .st-company-name {
         font-size: 24px;
-        img{
-         position: relative;
-         top: 12px;
+        img {
+          position: relative;
+          top: 12px;
         }
       }
       .head-nav {
@@ -124,9 +124,10 @@
   margin-left: 50px;
   color: #606266;
 }
-.head-user-no{
+
+.head-user-no {
   color: #fff;
-  a{
+  a {
     color: #fff;
   }
 }
@@ -140,8 +141,9 @@
           <div class="head-nav-wraper clearfix">
             <div class="st-company-name float-left"><a href="/"><img src="../assets/img/91LNG.png"></a> </div>
             <div class="float-right head-user">
-              <div v-if="users.nick_name">
-                欢迎您：<span>{{users.nick_name}}，</span><router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link>
+              <div v-if="users && users.nick_name">
+                欢迎您：<span>{{users && users.nick_name}}，</span>
+                <router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link>
                 <a href="javascript:void(0);">｜</a>
                 <a href="javascript:void(0);" v-on:click="logout">退出</a>
               </div>
@@ -235,7 +237,7 @@ export default {
     }
   },
   methods: {
-     logout: function() {
+    logout: function() {
       this.$confirm("确定退出?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",

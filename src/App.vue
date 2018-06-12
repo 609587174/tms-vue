@@ -99,15 +99,23 @@ export default {
         path: '*',
         redirect: '/404'
       }]));
+      console.log('this.$routerxxxx1', this.$route);
+
     },
     loginDirect: function(newPath) {
       this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
-      if (!menuList || !token) {
-        this.$message.error('验证信息缺失，请重新登录');
-        this.$router.replace({ path: '/login' });
-      }
+      this.$router.afterEach((to, from) => {
+        if (!to.path.match(/(^\/$)|login|register|registerCompany|registerSuccess|forgetPassword|401|404/) && !from.path.match(/login/)) {
+          if (!menuList || !token) {
+            this.$message.error('验证信息缺失，请重新登录');
+            this.$router.replace({ path: '/login' });
+
+          }
+        }
+      })
+
     },
     pathIn: function(isGoFirstPath) {
       let allowedRouter = [];
@@ -115,7 +123,7 @@ export default {
       let menuDictionaryObject = this.findDictionary(menuList);
       let token = this.pbFunc.getLocalData('token', true);
       console.log('this.$router', this.$route.path, menuList, menuDictionaryObject);
-      this.isHasTokenAndMenu(menuList, token);
+      //this.isHasTokenAndMenu(menuList, token);
       allowedRouter = this.getRoutesList(menuDictionaryObject);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;

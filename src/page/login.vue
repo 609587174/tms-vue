@@ -234,6 +234,7 @@ export default {
   created() {
     sessionStorage.clear();
     this.refreshVaImg();
+    console.log('$this.$route', this.$route)
     // this.enterLogin(event);
   }
 };

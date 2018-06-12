@@ -141,7 +141,7 @@
             <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
             <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col>
             <el-col :span="5">
-              <el-tooltip :content="props.row.mark" placement="top" effect="light">
+              <el-tooltip :content="props.row.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
@@ -184,6 +184,7 @@ export default {
   name: 'orderFifterList',
   data() {
     return {
+      delayTime:500,
       expandStatus: true,
       pageLoading: false,
       expandFalg: true
@@ -266,8 +267,7 @@ export default {
               });
 
             }
-
-            vm.$emit("refreshList",'determine');
+            this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
           }).catch(() => {
             vm.pageLoading = false;
           });

@@ -59,7 +59,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="核定载质量(kg):" prop="transport_weight">
+                  <el-form-item label="核定载质量(吨):" prop="transport_weight">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.transport_weight"></el-input>
                   </el-form-item>
                 </el-col>
@@ -332,7 +332,7 @@ export default {
         operation_verify_date: "", //行驶证年审日期
         semitrailer_insurances: [],
         bottle_report_number: "", //罐体报告编号
-        bottle_verify_date: "11111", //罐体检验日期
+        bottle_verify_date: "", //罐体检验日期
         pressure_bottle_number: "", //压力容器编号
         pressure_bottle_verify_date: "", //压力容器检验日期
 
@@ -622,11 +622,12 @@ export default {
 
     },
     deleteInsuranceFrom: function(index) {
+      var vm =this;
       if (this.tailCarFormStep.semitrailer_insurances[index].id) {
         vm.pageLoading = true;
         var send = {
           id: this.tailId,
-          tractor_insurance_id: this.tailCarFormStep.semitrailer_insurances[index].id
+          semitrailer_insurance_id: this.tailCarFormStep.semitrailer_insurances[index].id
         }
         this.$$http('deleteInsuranceFromTail', send).then((result) => {
           this.pageLoading = false;

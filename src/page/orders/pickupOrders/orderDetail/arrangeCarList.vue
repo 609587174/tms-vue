@@ -55,9 +55,9 @@
                 </el-table-column>
                 <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
                 </el-table-column>
-                <el-table-column label="状态" width="80" fixed="right">
+                <el-table-column label="状态" width="90" fixed="right">
                   <template slot-scope="scope">
-                    <el-tag :type="scope.row.waybill.status === 'driver_pending_confirmation' ? 'success' :(scope.row.waybill.status==='canceled'? 'warning': 'primary')" disable-transitions>{{scope.row.waybill.status === 'driver_pending_confirmation' ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': '未选择')}}
+                    <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
                     </el-tag>
                   </template>
                 </el-table-column>
@@ -91,6 +91,8 @@ export default {
         field: '',
         orderStateList: '',
       },
+      allStatus:['driver_pending_confirmation','to_fluid','reach_fluid','waiting_seal'],
+      noCanceled:['loading_waiting_audit','loading_audit_failed','waiting_match','already_match','to_site','reach_site','unloading_waiting_audit','unloading_audit_failed','waiting_settlement','in_settlement','finished'],
       selectData: {
         fieldSelect: [{
           value: '车号',

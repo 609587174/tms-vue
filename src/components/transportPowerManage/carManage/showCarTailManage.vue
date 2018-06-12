@@ -66,7 +66,7 @@
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="核定载质量:">
-                  <div class="detail-form-item" v-if="tailData.transport_weight>0">{{tailData.transport_weight}}kg</div>
+                  <div class="detail-form-item" v-if="tailData.transport_weight>0">{{tailData.transport_weight}}吨</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -291,7 +291,7 @@ export default {
         operation_verify_date: "", //行驶证年审日期
         semitrailer_insurances: [],
         bottle_report_number: "", //罐体报告编号
-        bottle_verify_date: "11111", //罐体检验日期
+        bottle_verify_date: "", //罐体检验日期
         pressure_bottle_number: "", //压力容器编号
         pressure_bottle_verify_date: "", //压力容器检验日期
       },

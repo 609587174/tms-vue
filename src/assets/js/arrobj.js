@@ -593,9 +593,9 @@ export const fifterbyArr = function(Obj, fifterArr) {
 }
 
 export const dealNullData = function(data) {
-  if(data === null || data === undefined || data === ''){
+  if (data === null || data === undefined || data === '') {
     return '<span class="text-stance">无</span>'
-  }else{
+  } else {
     return data
   }
 }

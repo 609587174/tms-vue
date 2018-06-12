@@ -227,6 +227,12 @@ export default {
     }
   },
   methods: {
+    dateToStr: function(date) {
+      let dateDetail = this.pbFunc.getDateDetail(date);
+      let str = '';
+      str = dateDetail.year + '-' + dateDetail.month + '-' + dateDetail.day + ' ' + dateDetail.hour + ':' + dateDetail.minute + ':' + dateDetail.second;
+      return str;
+    },
     chooseTime: function() {
       console.log('searchFilters', this.searchFilters.choosedTime);
       if (this.searchFilters.choosedTime.length) {
@@ -337,40 +343,18 @@ export default {
       })
     },
     /* 获取轨迹点数据ajax请求 */
-    getTripRecords: function() {
+    getTripRecords: function(startTime, endTime, currentPage) {
       return new Promise((resolve, reject) => {
-        this.dataResult = [];
-        this.stopPointResult = [];
-        this.offlinePointResult = [];
-        this.path = [];
-
         let postData = {
           id: this.choosedDeviceId ? this.choosedDeviceId : this.id,
-          page: this.totalPage.currentPage,
+          page: currentPage,
           page_size: this.totalPage.pageSize,
-          start_time: this.todayStart,
-          end_time: this.todayEnd,
+          start_time: startTime,
+          end_time: endTime,
         };
-
-        if (this.searchFilters.choosedTime.length) {
-          if (typeof this.searchFilters.choosedTime[0] === 'string') {
-            postData.start_time = this.searchFilters.choosedTime[0];
-            postData.end_time = this.searchFilters.choosedTime[1];
-          }
-        }
         console.log('this.searchFilters.choosedTime', this.searchFilters.choosedTime);
         this.$$http('getTripRecords', postData).then((results) => {
-
           if (results.data && results.data.code == 0 && results.data.data) {
-            console.log('results.data.data', results.data.data);
-
-            this.dataResult = results.data.data.trip_results;
-            this.stopPointResult = results.data.data.stopping_point_locations;
-            this.offlinePointResult = results.data.data.offline_point_locations;
-
-            for (let i in this.dataResult) {
-              this.path[i] = [this.dataResult[i].location.longitude, this.dataResult[i].location.latitude];
-            }
             resolve(results)
           } else {
             reject(results);
@@ -379,6 +363,44 @@ export default {
           reject(err);
         })
       })
+    },
+    getOneDayRecords: function(startTime, endTime) {
+      return new Promise((resolve, reject) => {
+        let currentPage = 1;
+
+        let getRecords = (startTime, endTime) => {
+
+          return new Promise((resolve, reject) => {
+            this.getTripRecords(startTime, endTime, currentPage).then((results) => {
+              let dataResult = results.data.data.trip_results;
+              let stopPointResult = results.data.data.stopping_point_locations;
+              let offlinePointResult = results.data.data.offline_point_locations;
+              let path = [];
+
+              for (let i in dataResult) {
+                path[i] = [dataResult[i].location.longitude, dataResult[i].location.latitude];
+              }
+              this.totalDataResult = [...this.totalDataResult, ...dataResult];
+              this.totalStopPoint = [...this.totalStopPoint, ...stopPointResult];
+              this.totalOfflinePoint = [...this.totalOfflinePoint, ...offlinePointResult];
+              this.resultPath = [...this.resultPath, ...path];
+
+              if (currentPage < Math.ceil(results.data.data.count / this.totalPage.pageSize)) {
+                currentPage++;
+                getRecords(startTime, endTime)
+              } else {
+                resolve();
+              }
+            })
+
+          })
+        }
+
+        getRecords(startTime, endTime).then(() => {
+          resolve();
+        })
+
+      });
     },
     /* 获取轨迹点数据返回的结果中的离线点和停留点只包含开始时间和持续多少秒，calculateEndTime是用来计算结束时间 */
     calculateEndTime: function(startTime, duration) {
@@ -392,7 +414,6 @@ export default {
       console.log('datafdfsdf', data);
       let resultsData = [];
       for (let i in data) {
-        console.log('data', data[i], typeof data[i]);
         resultsData[i] = data[i];
         if (data[i].hasOwnProperty('offline_seconds')) {
           let durationMinutes = Math.floor(data[i].offline_seconds / 60);
@@ -436,11 +457,11 @@ export default {
 
 
     },
-    renderPath: function(data) {
+    renderPath: function() {
       let _this = this;
       let allowTime = 20;
       if (_this.pathSimplifierIns) {
-        if (_this.path.length) { //如果有数据
+        if (_this.resultPath.length) { //如果有数据
           /*拼接所有轨迹点数据（totalDataResult），离线点（totalOfflinePoint），停留点（totalStopPoint），轨迹展示所需数据（resultPath）*/
           _this.totalDataResult = [..._this.totalDataResult, ..._this.dataResult];
           _this.totalStopPoint = [..._this.totalStopPoint, ..._this.stopPointResult];
@@ -460,7 +481,9 @@ export default {
             type: 'success'
           });
 
-          _this.navg1.destroy();
+          if (_this.navg1) {
+            _this.navg1.destroy();
+          }
 
           _this.pathSimplifierIns.setData([{
             name: '路线0',
@@ -473,57 +496,47 @@ export default {
 
         _this.startMarker.setPosition(_this.resultPath[0]);
 
-        if (Math.ceil(data.data.data.count / _this.totalPage.pageSize)) {
-          /* 一次只拿1000条数据，如果数据没有拿完则继续去获取数据 */
-          if (_this.totalPage.currentPage < Math.ceil(data.data.data.count / _this.totalPage.pageSize)) {
-            _this.totalPage.currentPage++;
-            _this.getTripRecords().then((data) => {
-              _this.renderPath(data);
-            })
-          } else {
-            _this.pageLoading = false;
-            /* 停留点逻辑处理
-             **这里后端是返回了当次接口请求返回结果的离线点或者停留点数据，前端通过多次请求获取完整数据后，拼接数据到totalStopPoint／totalOfflinePoint中，并需要自己做分页，
-             */
-            _this.stopPointPage.currentPage = 1;
-            _this.stopPointPage.total = _this.totalStopPoint.length;
-            _this.curentStopPoint = _this.totalStopPoint.slice(0, _this.stopPointPage.pageSize);
-            _this.curentStopPoint = _this.dealSatrtEndTime(_this.curentStopPoint);
-            /* 离线点逻辑处理同停留点 */
-            _this.curentOfflinePoint = _this.totalOfflinePoint.slice(0, _this.offlinePointPage.pageSize);
-            _this.curentOfflinePoint = _this.dealSatrtEndTime(_this.curentOfflinePoint);
-            _this.offlinePointPage.currentPage = 1;
-            _this.offlinePointPage.total = _this.totalOfflinePoint.length;
-            /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
-            _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
-            /* 获取地标列表并生成地标 */
-            setTimeout(() => {
-              _this.getLandMarkList().then(() => {
-                _this.renderMarker();
-              });
-            }, 100)
+        _this.pageLoading = false;
+        /* 停留点逻辑处理
+         **这里后端是返回了当次接口请求返回结果的离线点或者停留点数据，前端通过多次请求获取完整数据后，拼接数据到totalStopPoint／totalOfflinePoint中，并需要自己做分页，
+         */
+        _this.stopPointPage.currentPage = 1;
+        _this.stopPointPage.total = _this.totalStopPoint.length;
+        _this.curentStopPoint = _this.totalStopPoint.slice(0, _this.stopPointPage.pageSize);
+        _this.curentStopPoint = _this.dealSatrtEndTime(_this.curentStopPoint);
+        /* 离线点逻辑处理同停留点 */
+        _this.curentOfflinePoint = _this.totalOfflinePoint.slice(0, _this.offlinePointPage.pageSize);
+        _this.curentOfflinePoint = _this.dealSatrtEndTime(_this.curentOfflinePoint);
+        _this.offlinePointPage.currentPage = 1;
+        _this.offlinePointPage.total = _this.totalOfflinePoint.length;
+        /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
+        _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
+        /* 获取地标列表并生成地标 */
+        setTimeout(() => {
+          _this.getLandMarkList().then(() => {
+            _this.renderMarker();
+          });
+        }, 100)
 
-            if (_this.resultPath.length) {
-              /* 计算里程
-               **利用高德地图getMovedDistance方法计算里程，详情请查看“UI组件库－轨迹展示api”
-               */
-              _this.navg1.moveToPoint(_this.resultPath.length - 1);
-              _this.distanceMile = Math.ceil(_this.navg1.getMovedDistance() / 1000);
-              /*计算巡航速度*/
-              _this.speed = Math.floor(_this.distanceMile / _this.driveringTime * 3600);
-              /*设置终点marker*/
-              let endMarkerIndex = _this.resultPath.length - 1;
-              _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
-              /*监测巡航move事件（调用moveByDistance（动画过程会调用该方法）， moveToPoint 时触发），实时展示轨迹点信息。
-               **这里有个问题是，moveByDistance，moveToPoint才出发move事件，导致轨迹点信息展示只能在导航到达点时才获取信息。没有实时跟着导航移动，需要优化。
-               */
-            }
-            _this.navg1.on('move', function() {
-              _this.setCurrentInfo();
-            })
-          }
-
+        if (_this.resultPath.length) {
+          /* 计算里程
+           **利用高德地图getMovedDistance方法计算里程，详情请查看“UI组件库－轨迹展示api”
+           */
+          _this.navg1.moveToPoint(_this.resultPath.length - 1);
+          _this.distanceMile = Math.ceil(_this.navg1.getMovedDistance() / 1000);
+          /*计算巡航速度*/
+          _this.speed = Math.floor(_this.distanceMile / _this.driveringTime * 3600);
+          /*设置终点marker*/
+          let endMarkerIndex = _this.resultPath.length - 1;
+          _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
+          /*监测巡航move事件（调用moveByDistance（动画过程会调用该方法）， moveToPoint 时触发），实时展示轨迹点信息。
+           **这里有个问题是，moveByDistance，moveToPoint才出发move事件，导致轨迹点信息展示只能在导航到达点时才获取信息。没有实时跟着导航移动，需要优化。
+           */
         }
+        _this.navg1.on('move', function() {
+          _this.setCurrentInfo();
+        })
+
       } else {
         if (allowTime > 0) {
           /* 防止代码出错无限调用renderPath */
@@ -531,42 +544,82 @@ export default {
           /* 这里发现pathSimplifierIns有时还没初始化好,所以如果没有初始化好则再次执行renderPath */
           setTimeout(() => {
             console.log('xxxx');
-            _this.renderPath(data);
+            _this.renderPath();
           }, 200)
         }
 
       }
 
     },
+    getDaySpace: function(startTime, endTime) {
+      let start = new Date(startTime);
+      let end = new Date(endTime);
+
+      start.setHours('00');
+      start.setMinutes('00');
+      start.setSeconds('00');
+
+      end.setHours('00');
+      end.setMinutes('00');
+      end.setSeconds('00');
+
+      let daySpace = Math.floor((endTime - startTime) / (1000 * 60 * 60 * 24));
+      console.log('daySpace', daySpace);
+      return daySpace;
+    },
     searchAndRender: function() {
-      let _this = this;
-      if (_this.navg1) {
-        _this.navg1.stop();
+
+      if (this.navg1) {
+        this.navg1.stop();
       }
-      _this.totalDataResult = [];
-      _this.totalStopPoint = [];
-      _this.curentStopPoint = [];
-      _this.totalOfflinePoint = [];
-      _this.curentOfflinePoint = [];
-      _this.stopPointPage = {
+      this.totalDataResult = [];
+      this.totalStopPoint = [];
+      this.curentStopPoint = [];
+      this.totalOfflinePoint = [];
+      this.curentOfflinePoint = [];
+      this.resultPath = [];
+
+      this.stopPointPage = {
         total: '',
         currentPage: 1,
         pageSize: 8,
       }
-      _this.offlinePointPage = {
+      this.offlinePointPage = {
         total: '',
         currentPage: 1,
         pageSize: 7,
       };
-      _this.totalPage = {
+      this.totalPage = {
         currentPage: 1,
         pageSize: 1000,
       };
-      _this.resultPath = [];
-      _this.pageLoading = true;
-      _this.getTripRecords().then((data) => {
-        _this.renderPath(data);
-      })
+
+      this.pageLoading = true;
+
+      console.log(this.searchFilters.choosedTime)
+      let daySpace = this.getDaySpace(Date.parse(this.searchFilters.choosedTime[0]), Date.parse(this.searchFilters.choosedTime[1]));
+      console.log('daySpace', daySpace);
+      if (daySpace > 0) {
+        let endTime = new Date(Date.parse(this.searchFilters.choosedTime[0]));
+
+
+        this.getOneDayRecords(this.searchFilters.choosedTime[0], this.todayEnd).then(() => {
+
+        });
+
+        for (let i = 0; i < (daySpace + 1); i++) {
+          if (i === 0) {
+
+          }
+        }
+      } else {
+        this.getOneDayRecords(this.todayStart, this.todayEnd).then(() => {
+          this.pageLoading = false;
+          this.renderPath();
+        });
+      }
+
+
     },
 
     getIconSrc: function(item) {

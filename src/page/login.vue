@@ -94,7 +94,7 @@ export default {
         ],
         verify_code: [
           { required: true, message: '请输入验证码', trigger: 'blur' },
-          { validator: checkImgCode, trigger: 'blur' }
+          { min: 4,max: 4, message: '输入4位验证码', trigger: 'blur' }
         ]
       },
       submitBtn: {

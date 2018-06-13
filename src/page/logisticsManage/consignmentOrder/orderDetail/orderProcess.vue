@@ -1006,7 +1006,7 @@ export default {
         //   sendData.status = 'loading_audit_failed';
         // }
 
-        sendData.id = this.weight_id;
+        sendData.id = weight_id;
         //sendData.weight_id = "";
         sendData.is_checked='refuse';
         if (this.loadPoundReason != 'other') {

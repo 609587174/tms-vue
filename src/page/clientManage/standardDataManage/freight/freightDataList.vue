@@ -126,7 +126,7 @@ export default {
         param: 'change_rate',
         width: '200'
       }, {
-        title: '生效承运商',
+        title: '生效托运方',
         param: 'carrier_name',
         width: '200'
       }, {

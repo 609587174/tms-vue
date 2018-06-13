@@ -220,7 +220,6 @@
                     </el-row>
                   </div>
                 </div>
-
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
                     <el-row>
@@ -236,7 +235,7 @@
                         <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor.plate_number)"></div>
                       </div>
                     </el-col>
-                   <el-col :span="8">
+                    <el-col :span="8">
                       <div class="label-list">
                         <label>驾驶员:</label>
                         <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.master_driver.name)"></div>
@@ -254,7 +253,7 @@
                       <div class="label-list">
                         <label>副驾驶:</label>
                         <div class="detail-form-item" v-if="transPowerData.vice_driver" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></div>
-                         <div v-else>无</div>
+                        <div v-else>无</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
@@ -266,8 +265,6 @@
                     </el-col>
                   </el-row>
                 </div>
-
-
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
                     <el-row>
@@ -323,8 +320,8 @@
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>
-        <el-tab-pane label="轨迹地图" name="third">
-        </el-tab-pane>
+        <!-- <el-tab-pane label="轨迹地图" name="third">
+        </el-tab-pane> -->
       </el-tabs>
     </div>
   </div>
@@ -384,7 +381,7 @@ export default {
             loadArr = [];
 
           for (var i = 0; i < vm.detailData.trips.length; i++) {
-            if (vm.detailData.trips[i].section_type.key== 'unload') {
+            if (vm.detailData.trips[i].section_type.key == 'unload') {
               unloadArr.push(vm.detailData.trips[i]);
             } else {
               loadArr.push(this.detailData.trips[i]);

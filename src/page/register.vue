@@ -64,6 +64,7 @@ export default {
       }
     };
     const checkRepassword = (rule, value, callback) => {
+      console.log('this', this);
       if (value !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致，请重新输入'));
       } else if (value.indexOf(" ") != -1) {
@@ -103,7 +104,7 @@ export default {
       rules: {
         nick_name: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
-          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/,message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
+          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{4,20})$/, message: '用户名为4-20个字符，支持中文、字母、数字', trigger: 'blur' },
         ],
         phone: [
           { required: true, message: '请输入手机号码', trigger: 'blur' },

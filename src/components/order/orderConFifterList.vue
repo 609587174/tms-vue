@@ -322,20 +322,20 @@ export default {
       return row.id;
     },
     changeExpand: function(row, expandedRows) {
-      console.log('row', row);
-      console.log('expandedRows', expandedRows);
-      var vm = this;
-      if (row.transPowerInfo) {} else {
-        var sendData = {};
-        sendData.id = row.capacity;
-        vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
-          if (transPowerInfo.data.code == 0) {
-            row.transPowerInfo = transPowerInfo.data.data;
-          }
-        }).catch(() => {
+      // console.log('row', row);
+      // console.log('expandedRows', expandedRows);
+      // var vm = this;
+      // if (row.transPowerInfo) {} else {
+      //   var sendData = {};
+      //   sendData.id = row.capacity;
+      //   vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+      //     if (transPowerInfo.data.code == 0) {
+      //       row.transPowerInfo = transPowerInfo.data.data;
+      //     }
+      //   }).catch(() => {
 
-        });
-      }
+      //   });
+      // }
     },
     operation: function(type, rowData) {
       if (type == 'changeSatus') {

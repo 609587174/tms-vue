@@ -829,6 +829,15 @@ const api = {
 
     }
   },
+  getTransPowerInfoList: {
+    url: '/truck/tractor_semitrailers/',
+    method: 'get',
+    desc: '获取运力详情列表',
+    param: {
+
+
+    }
+  },
   searchNoUse: {
     url: '/order/delivery-order/check-capacity/',
     method: 'get',

@@ -183,16 +183,29 @@ export default {
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           var sendData = {};
           if (dataBody.length > 0) {
-            sendData.id = dataBody[0].capacity;
-            vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
+            var capacityList=[];
+            for(var i=0;i<dataBody.length;i++){
+              capacityList.push(dataBody[i].capacity);
+            }
+            sendData.ids = capacityList;
+            vm.$$http("getTransPowerInfoList", sendData).then((transPowerInfo) => {
               vm.pageLoading = false;
               if (transPowerInfo.data.code == 0) {
-                dataBody[0].transPowerInfo = transPowerInfo.data.data;
+                var transPowerInfoList = transPowerInfo.data.data.results;
+                transPowerInfoList.forEach((Ttiem)=>{
+                  dataBody.forEach((Ditem)=>{
+                    if(Ditem.capacity==Ttiem.id){
+                      Ditem.transPowerInfo=Ttiem;
+                    }
+                  });
+                });
+
                 vm.listFifterData = dataBody;
               } else {
                 vm.listFifterData = dataBody;
               }
-            }).catch(() => {
+            }).catch((err) => {
+              console.log('err',err);
               vm.pageLoading = false;
               vm.listFifterData = dataBody;
             });
@@ -201,7 +214,8 @@ export default {
           }
 
         }
-      }).catch(() => {
+      }).catch((err) => {
+        console.log('err',err);
         vm.pageLoading = false;
       });
     },

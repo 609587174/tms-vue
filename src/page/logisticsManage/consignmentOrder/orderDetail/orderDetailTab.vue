@@ -350,7 +350,10 @@ export default {
       transPowerData: {
         tractor: {
           carrier: {}
-        }
+        },
+        master_driver:{},
+        vice_driver:{},
+        escort_staff:{}
       },
       loadArr: [{}],
       unloadArr: []

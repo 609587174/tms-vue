@@ -379,7 +379,11 @@ export default {
           this.$$http("addCarPower", sendData).then((results) => {
             this.pageLoading = false;
             if (results.data.code == 0) {
-              vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
+              if(this.operationStatus=='add'){
+                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
+              }else{
+                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+              }
             }
           }).catch(() => {
             this.pageLoading = false;

@@ -139,19 +139,13 @@ export default {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
     },
     searchList: function(type) {
-      if(type){
-        this.thisFifterName=type;
-      }
-      
-      if(type){
-        this.thisFifterName=type;
-      }
+     
       var sendData = {};
       var vm = this;
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam&&this.timeParam.length>0) {
+      if (this.timeParam instanceof Array&&this.timeParam.length>0) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }

@@ -310,7 +310,7 @@ export default {
       tailCarFormStep: {
         plate_number: "", //挂车排
         attributes: 'SELF_SUPPORT', //车辆归属
-        carrier: { name: '胜通物流公司', id: '55555c1f-1ffe-4419-9646-157c1aa0571d' }, //车辆所属
+        carrier: this.$store.state.common.users.carrier,//车辆所属
         vin_number: "", //车架号
         vehicle_type: 'HEAVE_SEMITRAILER',
         brand: "", //品牌型号

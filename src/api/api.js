@@ -1087,7 +1087,7 @@ const api = {
     }
   },
   examineLoad: {
-    url: '/order/section-trips/:id/change-status/',
+    url: '/order/section-trips/:id/weight-note/',
     method: 'put',
     desc: "运单分段修改状态",
     param: {

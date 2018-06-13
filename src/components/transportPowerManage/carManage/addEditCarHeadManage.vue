@@ -18,7 +18,7 @@
       <el-main v-loading="pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <el-form class="addheadcarform" label-width="100px" ref="addEditFormSetp1" :rules="rules" :model="headCarFormStep1" status-icon :label-position="'left'">
+            <el-form class="addheadcarform" label-width="110px" ref="addEditFormSetp1" :rules="rules" :model="headCarFormStep1" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="牵引车牌:" prop="plate_number">
@@ -41,7 +41,7 @@
               <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="车架号:" prop="vin_number">
-                    <el-input placeholder="请输入" type="text" v-model="headCarFormStep1.vin_number" :disabled="editStatus"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="headCarFormStep1.vin_number" :disabled="editStatus"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -69,7 +69,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="牵引车质量(吨):" prop="towing_weight">
+                  <el-form-item label="牵引车质量(吨)" prop="towing_weight" >
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.towing_weight"></el-input>
                   </el-form-item>
                 </el-col>
@@ -406,8 +406,8 @@ export default {
         safety_valve_3_number: '',
         safety_valve_3_due_date: '',
         safety_valve_4_number: '',
-        safety_valve_4_due_date: ''
-
+        safety_valve_4_due_date: '',
+        
       },
       headCarFormStep2: {
         license_number: '',
@@ -415,11 +415,12 @@ export default {
         license_verify_date: '',
         operation_number: '',
         operation_issue_date: '',
-        operation_verify_date: ''
-
+        operation_verify_date: '',
+        
       },
       headCarFormStep3: {
-        tractor_insurances: []
+        tractor_insurances: [],
+
       },
       rules: {
         plate_number: [

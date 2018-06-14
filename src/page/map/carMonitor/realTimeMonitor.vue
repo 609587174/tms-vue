@@ -168,11 +168,17 @@ export default {
               let infoTitleStr = '<div>车辆信息</div>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-              return new SimpleInfoWindow({
-                infoTitle: infoTitleStr,
-                infoBody: infoBodyStr,
-                offset: new AMap.Pixel(0, -37)
-              });
+              if (recycledInfoWindow) {
+                recycledInfoWindow.setInfoTitle(infoTitleStr);
+                recycledInfoWindow.setInfoBody(infoBodyStr);
+                return recycledInfoWindow;
+              } else {
+                return new SimpleInfoWindow({
+                  infoTitle: infoTitleStr,
+                  infoBody: infoBodyStr,
+                  offset: new AMap.Pixel(0, -37)
+                });
+              }
 
             },
 
@@ -180,24 +186,40 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               let rotateDeg = (dataItem.direction - 90) + 'deg';
-              console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
 
-              return new SimpleMarker({
-                containerClassNames: 'my-marker',
-                iconStyle: {
+              if (recycledMarker) {
+                recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                     transform: 'rotate(' + rotateDeg + ')',
                   }
-                },
-                label: {
+                });
+                recycledMarker.setLabel({
                   content: dataItem.tractor.plate_number,
                   offset: new AMap.Pixel(30, 0)
-                }
-              });
+                });
+
+                return recycledMarker
+              } else {
+                return new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('../../../assets/img/' + src),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                      transform: 'rotate(' + rotateDeg + ')',
+                    }
+                  },
+                  label: {
+                    content: dataItem.tractor.plate_number,
+                    offset: new AMap.Pixel(30, 0)
+                  }
+                });
+              }
 
             },
 
@@ -219,10 +241,10 @@ export default {
 
                 AMap.plugin('AMap.Geocoder', function() {
 
-                  let lnglat = [116.396574, 39.992706]
+                  let lnglat = [info.selected.data.location.longitude, info.selected.data.location.latitude]
                   let geocoder = new AMap.Geocoder({
                     // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-                    city: '010'
+                    city: ''
                   })
                   geocoder.getAddress(lnglat, function(status, data) {
                     if (status === 'complete' && data.info === 'OK') {
@@ -248,10 +270,6 @@ export default {
               }
             }
           });
-
-
-
-
 
         });
     },
@@ -306,7 +324,7 @@ export default {
     renderMarker: function() {
       console.log('markerList', this.markerList);
       let _this = this;
-      if (_this.markerList) {
+      let renderAndCluster = function() {
         /* 生成marker，详见高德地图标注列表api */
         _this.markerList.render(_this.carList);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
@@ -320,20 +338,12 @@ export default {
             maxZoom: 17,
           });
         });
+      }
+      if (_this.markerList) {
+        renderAndCluster();
       } else {
-
         setTimeout(() => {
-          _this.markerList.render(_this.carList);
-          _this.map.plugin(["AMap.MarkerClusterer"], function() {
-            _this.allMakers = _this.markerList.getAllMarkers();
-            if (_this.cluster) {
-              _this.cluster.clearMarkers();
-            }
-            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
-          });
+          renderAndCluster();
         }, 1000)
 
       }

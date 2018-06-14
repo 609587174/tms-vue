@@ -40,7 +40,7 @@
         </el-form-item>
         <div class="user-page-btn">
           <el-form-item>
-            <el-button type="success" @click="onSubmit" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+            <el-button type="primary" @click="startSearch" :loading="searchBtn.loading" :disabled="searchBtn.isDisabled" class="float-right">{{searchBtn.text}}</el-button>
           </el-form-item>
           <el-form-item>已有账号，请<span class="text-blue cursor-pointer" v-on:click="toLoginPage">登录</span></el-form-item>
         </div>

@@ -295,7 +295,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="保险金额:" prop="insuranceAmout" label-width="120px">
+                    <el-form-item label="保险金额:" :prop="Inamount['insuranceAmoutProp'+key]" label-width="120px">
                       <el-input placeholder="请输入" type="text" v-model="item.amount"></el-input>
                     </el-form-item>
                   </el-col>
@@ -368,6 +368,7 @@ export default {
       }
     }
     return {
+      Inamount:{},
       editStatus: false,
       activeStep: 0,
       titleType: "新增牵引车",
@@ -438,7 +439,7 @@ export default {
           { min: 10, max: 15, message: '发动机号为10~15个字段', trigger: 'blur' }
         ],
         fuel_type: [
-          { validator: fuel_typeVa, trigger: 'blur' }
+          { validator: fuel_typeVa, trigger: 'change' }
         ],
         brand: [
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }
@@ -537,6 +538,8 @@ export default {
             console.log("ssss2",this);
             tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type?tractor_insurancesList[i].insurance_type.key:"";
             tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method?tractor_insurancesList[i].insurance_method.key:"";
+            vm.Inamount['insuranceAmoutProp'+i]='tractor_insurances['+i+'].amount';
+            vm.rules['tractor_insurances['+i+'].amount']={validator: onlyNum, trigger: 'blur' };
           }
           vm.pageLoading = false;
           if (vm.headCarFormStep3.tractor_insurances.length == 0) {

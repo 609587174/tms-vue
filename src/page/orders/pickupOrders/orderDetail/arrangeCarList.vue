@@ -314,7 +314,6 @@ export default {
                     if (Titem.id == row.id) {
                       Titem.bindCheckBox = false;
                     }
-
                   });
                   var new_now_capacities1 = [];
                   vm.now_capacities.forEach((item, index) => {
@@ -344,9 +343,8 @@ export default {
             row.bindCheckBox = !row.bindCheckBox;
             vm.trueAll_list.forEach((Titem) => {
               if (Titem.id == row.id) {
-                Titem.bindCheckBox = true;
+                Titem.bindCheckBox = false;
               }
-
             });
             var new_now_capacities = [];
             vm.now_capacities.forEach((item, index) => {

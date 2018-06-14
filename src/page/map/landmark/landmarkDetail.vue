@@ -53,7 +53,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>审核时间:</label>
-                <div class="detail-form-item">{{detailData.confirm_info && detailData.confirm_info.operate_datetime}}</div>
+                <div class="detail-form-item" v-html="detailData.confirm_info && detailData.confirm_info.operate_datetime"></div>
               </div>
             </el-col>
           </el-row>
@@ -140,15 +140,7 @@ export default {
 
       },
       imgObject: {
-        imgList: [{
-          src: 'http://91lng.cn/img/banner_1.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_2.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_3.jpg',
-        }, {
-          src: 'http://91lng.cn/img/banner_4.jpg',
-        }],
+        imgList: [],
         showPreview: false,
         previewIndex: 0,
       }
@@ -171,7 +163,11 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
-            this.detailData.source_type = null;
+            this.imgObject.imgList = [];
+            for (let i in this.detailData.position_pics) {
+              this.imgObject.imgList.push(this.detailData.position_pics[i]);
+            }
+            //this.detailData.source_type = null;
             resolve(results);
           } else {
             reject(results);

@@ -58,7 +58,7 @@
                 </el-col>
                 <el-col :span="4">
                   <el-form-item>
-                    <el-button type="primary" @click="startSearch" class="float-right">搜索</el-button>
+                    <el-button type="primary" @click="startSearch" :isDisabled="searchBtn.isDisabled" :loading="searchBtn.isLoading" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -168,6 +168,11 @@ export default {
         id: 'tel',
       }],
       landmarkDetail: {},
+      searchBtn: {
+        isDisabled: false,
+        isLoading: false,
+        text: '搜索'
+      }
     }
   },
   methods: {
@@ -210,6 +215,12 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
+            if (!this.landmarkList.length) {
+              this.$message({
+                message: '无数据',
+                type: 'success'
+              });
+            }
             resolve(results)
           } else {
             reject(results);
@@ -223,8 +234,14 @@ export default {
       })
     },
     startSearch: function() {
+      this.searchBtn.isDisabled = true;
+      this.searchBtn.loading = true;
+      this.searchBtn.text = '搜索中';
       this.getList().then((data) => { //展示该数据
         this.renderMarker();
+        this.searchBtn.isDisabled = false;
+        this.searchBtn.loading = false;
+        this.searchBtn.text = '搜索';
       })
     },
     chooseProvince: function() {
@@ -263,7 +280,7 @@ export default {
     getIconSrc: function(item) {
       let src = ''
       /*lng加气站*/
-      if (item.position_type && item.position_type === 'LNG') {
+      if ((item.position_type && item.position_type === 'LNG') || (item.position_type && item.position_type === 'GAS_STATION')) {
         if (item.async_status === 'ASYNCED') {
           src = 'gas_1.png';
         } else {

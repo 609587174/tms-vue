@@ -168,11 +168,17 @@ export default {
               let infoTitleStr = '<div>车辆信息</div>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-              return new SimpleInfoWindow({
-                infoTitle: infoTitleStr,
-                infoBody: infoBodyStr,
-                offset: new AMap.Pixel(0, -37)
-              });
+              if (recycledInfoWindow) {
+                recycledInfoWindow.setInfoTitle(infoTitleStr);
+                recycledInfoWindow.setInfoBody(infoBodyStr);
+                return recycledInfoWindow;
+              } else {
+                return new SimpleInfoWindow({
+                  infoTitle: infoTitleStr,
+                  infoBody: infoBodyStr,
+                  offset: new AMap.Pixel(0, -37)
+                });
+              }
 
             },
 
@@ -180,24 +186,40 @@ export default {
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               let rotateDeg = (dataItem.direction - 90) + 'deg';
-              console.log('rotateDeg', rotateDeg);
               src = _this.getIconSrc(dataItem);
 
-              return new SimpleMarker({
-                containerClassNames: 'my-marker',
-                iconStyle: {
+              if (recycledMarker) {
+                recycledMarker.setIconStyle({
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                     transform: 'rotate(' + rotateDeg + ')',
                   }
-                },
-                label: {
+                });
+                recycledMarker.setLabel({
                   content: dataItem.tractor.plate_number,
                   offset: new AMap.Pixel(30, 0)
-                }
-              });
+                });
+
+                return recycledMarker
+              } else {
+                return new SimpleMarker({
+                  containerClassNames: 'my-marker',
+                  iconStyle: {
+                    src: require('../../../assets/img/' + src),
+                    style: {
+                      width: '20px',
+                      height: '20px',
+                      transform: 'rotate(' + rotateDeg + ')',
+                    }
+                  },
+                  label: {
+                    content: dataItem.tractor.plate_number,
+                    offset: new AMap.Pixel(30, 0)
+                  }
+                });
+              }
 
             },
 
@@ -210,18 +232,19 @@ export default {
 
           });
 
+
           _this.markerList.on('selectedChanged', function(event, info) {
 
-            let device_id = info.selected.data.device_id;
             if (info.selected) {
+              let device_id = info.selected.data.device_id;
               _this.getDeviceDetail(device_id).then((results) => {
 
                 AMap.plugin('AMap.Geocoder', function() {
 
-                  let lnglat = [116.396574, 39.992706]
+                  let lnglat = [info.selected.data.location.longitude, info.selected.data.location.latitude]
                   let geocoder = new AMap.Geocoder({
                     // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-                    city: '010'
+                    city: ''
                   })
                   geocoder.getAddress(lnglat, function(status, data) {
                     if (status === 'complete' && data.info === 'OK') {
@@ -235,8 +258,6 @@ export default {
                     }
                   })
                 })
-
-
 
               })
               //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
@@ -258,13 +279,13 @@ export default {
       let _this = this;
       let infoWindowDom = {};
       let detailData = results.data.data;
-      let carMsg = detailData.tractor ? detailData.tractor.plate_number : '无';
-      let semitrailer = detailData.semitrailer ? detailData.semitrailer.plate_number : '无';
-      let waybill_vehicle_status = detailData.waybill_vehicle_status ? detailData.waybill_vehicle_status.verbose : '无';
-      let device_status = detailData.location_info ? detailData.location_info.device_status.verbose : '无';
-      let master_driver = detailData.master_driver ? detailData.master_driver.name : '无';
-      let vice_driver = detailData.vice_driver ? detailData.vice_driver.name : '无';
-      let escort_staff = detailData.escort_staff ? detailData.escort_staff.name : '无';
+      let carMsg = (detailData.tractor && detailData.tractor.plate_number) ? detailData.tractor.plate_number : '无';
+      let semitrailer = (detailData.semitrailer && detailData.semitrailer.plate_number) ? detailData.semitrailer.plate_number : '无';
+      let waybill_vehicle_status = (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.verbose) ? detailData.waybill_vehicle_status.verbose : '无';
+      let device_status = (detailData.location_info && detailData.location_info.device_status && detailData.location_info.device_status.verbose) ? detailData.location_info.device_status.verbose : '无';
+      let master_driver = (detailData.master_driver && detailData.master_driver.name) ? detailData.master_driver.name : '无';
+      let vice_driver = (detailData.vice_driver && detailData.vice_driver.name) ? detailData.vice_driver.name : '无';
+      let escort_staff = (detailData.escort_staff && detailData.escort_staff.name) ? detailData.escort_staff.name : '无';
       let operatorDom = '';
 
       let routePlayback = () => {
@@ -275,11 +296,14 @@ export default {
       let fellowOrder = () => {
         console.log('xxxx');
       }
+      /*
       if (waybill_vehicle_status !== '无' && waybill_vehicle_status !== 'free') {
         operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--primary el-button--mini">订单跟踪</a>&nbsp;<a href="javascript:void(0)"  id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
       } else {
         operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
-      }
+      }*/
+
+      operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</div>`;
       infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">运单状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
@@ -300,7 +324,7 @@ export default {
     renderMarker: function() {
       console.log('markerList', this.markerList);
       let _this = this;
-      if (_this.markerList) {
+      let renderAndCluster = function() {
         /* 生成marker，详见高德地图标注列表api */
         _this.markerList.render(_this.carList);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
@@ -314,20 +338,12 @@ export default {
             maxZoom: 17,
           });
         });
+      }
+      if (_this.markerList) {
+        renderAndCluster();
       } else {
-
         setTimeout(() => {
-          _this.markerList.render(_this.carList);
-          _this.map.plugin(["AMap.MarkerClusterer"], function() {
-            _this.allMakers = _this.markerList.getAllMarkers();
-            if (_this.cluster) {
-              _this.cluster.clearMarkers();
-            }
-            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
-          });
+          renderAndCluster();
         }, 1000)
 
       }
@@ -373,8 +389,7 @@ export default {
 
     .total-data-item {
       text-align: center;
-      width: 100px;
-      padding-left: 10px;
+      padding: 0px 10px;
       border-right: 1px solid #ddd;
       float: left;
       img {

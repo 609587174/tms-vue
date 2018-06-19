@@ -21,6 +21,8 @@
   float: left;
 }
 
+.choosed-cloumn {}
+
 .g-statues-bar .bread {
   line-height: 60px;
   height: 59px;
@@ -99,6 +101,10 @@
   vertical-align: middle;
 }
 
+.color-4a9bf8 {
+  color: #4a9bf8;
+}
+
 </style>
 <template>
   <el-container>
@@ -139,8 +145,10 @@
             <template v-if="route.children && dealChildren(route.children).length">
               <el-submenu :key="index" :index="route.name">
                 <template slot="title">
-                  <i :class="[{ 'color-4a9bf8' : activeMenu.match(route.path) }, route.meta.iconName]"></i>
-                  <span>{{route.meta.title||"无名字"}}</span>
+                  <div :class="{ 'choosed-cloumn' : activeMenu.match(route.path) }">
+                    <i :class="[{ 'color-4a9bf8' : activeMenu.match(route.path) }, route.meta.iconName]"></i>
+                    <span>{{route.meta.title||"无名字"}}</span>
+                  </div>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute">
                   <span :class="{ 'color-4a9bf8' : activeMenu === cRoute.path }">{{cRoute.meta.title||"无名字"}}</span>

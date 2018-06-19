@@ -12,7 +12,7 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '概览',
-      iconName: 'icon-lng-dashboard'
+      iconName: 'icon-dashboard'
     },
     component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
   }, {
@@ -21,7 +21,7 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '订单',
-      iconName: 'icon-lng-dashboard',
+      iconName: 'icon-order',
     },
     component: (resolve) => require(['../page/orders/orders'], resolve),
     children: [{
@@ -175,7 +175,7 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '地图',
-      iconName: 'icon-road',
+      iconName: 'icon-map',
     },
     component: (resolve) => require(['../page/map/mapManage'], resolve),
     children: [{
@@ -245,7 +245,7 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '运力',
-      iconName: 'icon-map',
+      iconName: 'icon-transport',
     },
     component: (resolve) => require(['../page/transportPowerManage/transportPowerManage'], resolve),
     children: [{

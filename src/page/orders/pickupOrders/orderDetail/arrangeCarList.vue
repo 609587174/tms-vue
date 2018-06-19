@@ -68,7 +68,6 @@
               </el-pagination>
             </div>
           </el-tab-pane>
-          
         </el-tabs>
       </div>
     </div>
@@ -592,8 +591,8 @@ export default {
         var fifterArr4 = [];
         for (let findex1 = 0; findex1 < fifterArr.length; findex1++) {
           var addAlreaListflag = false;
-          for (let findex4 = 0; findex4 < this.alreadyList.add_capacities.length; findex4++) {
-            if (fifterArr[findex1].id == this.alreadyList.add_capacities[findex4]) {
+          for (let findex4 = 0; findex4 < this.alreadyList.capacities.length; findex4++) {
+            if (fifterArr[findex1].id == this.alreadyList.capacities[findex4]) {
               addAlreaListflag = true;
               break;
             }

@@ -694,7 +694,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill.capacity);
+          vm.start_capacities.push(row.waybill.capacity||row.id);
         });
       });
     },

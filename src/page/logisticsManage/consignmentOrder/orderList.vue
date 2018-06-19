@@ -79,6 +79,14 @@ export default {
         all_change_count:'变更中',
         all_finish_count:'历史'
       },
+      allStatusName:{
+        all_driver_count:'装车',
+        all_match_count:'匹配卸车',
+        all_unload_count:'卸车',
+        all_settlement_count:'结算',
+        all_change_count:'变更中',
+        all_finish_count:'历史'
+      },
       allcounts:{
         'all_driver_count':{},
         'all_match_count':{},
@@ -108,13 +116,22 @@ export default {
         ]
       },
     };
+
   },
   computed: {
 
   },
   created() {
     this.pageLoading=true;
-    this.$$http("getConCount",{}).then(results=>{
+    this.reshCount();
+  },
+  methods: {
+    clicktabs: function(targetName) {
+      this.reshCount();
+    },
+    reshCount:function(){
+      var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
+      this.$$http("getConCount",{}).then(results=>{
         var vm=this;
         vm.show=true;
         this.pageLoading=false;
@@ -127,19 +144,17 @@ export default {
             if(nums>99){
               nums="99+";
             }
-            vm.statusName[i]+="("+nums+")";
+            renderStatus[i]+="("+nums+")";
           }
         }
+        this.statusName=renderStatus;
       }).catch(()=>{
 
       });
-  },
-  methods: {
-    clicktabs: function(targetName) {
-
     },
     changeTabs: function(fifterName) {
       this.activeName = fifterName;
+      this.reshCount();
     },
     goAddNewOder: function() {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });

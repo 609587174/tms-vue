@@ -99,6 +99,13 @@ export default {
         confirmed_count: '已确认',
         history_count: '历史'
       },
+      allStatusName:{
+        all_count: '全部',
+        appoint_count: '待指派',
+        determine_count: '待确认',
+        confirmed_count: '已确认',
+        history_count: '历史'
+      },
       timeParam: [],
       listFifterData: [],
       rules: {},
@@ -191,6 +198,7 @@ export default {
       });
     },
     getCountList:function(){
+      var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
       this.$$http("getCount", {}).then(results => {
       if (results.data.code == 0) {
         var dataBody = results.data.data;
@@ -198,8 +206,9 @@ export default {
           if (dataBody[i] > 99) {
             dataBody[i] = '99+';
           }
-          this.statusName[i] += "(" + dataBody[i] + ")";
+          renderStatus[i] += "(" + dataBody[i] + ")";
         }
+        this.statusName=renderStatus;
       }
       }).catch(() => {
 

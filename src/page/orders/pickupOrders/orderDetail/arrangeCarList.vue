@@ -540,7 +540,7 @@ export default {
           console.log("已经添加列表上面的数据", results.data);
           vm.alreadyList = results.data.data;
           if (!results.data.data || !vm.alreadyList.capacities) {
-            vm.alreadyList.add_capacities = [];
+            vm.alreadyList.capacities = [];
           }
         }
         getDataNum++;
@@ -640,7 +640,7 @@ export default {
         //   }
         // }
         newArr = newArr.concat(fifterArr2);
-        if(this.delivery_list.status.key=='canceled'){
+        if(this.delivery_list.status.key=='canceled'||this.delivery_list.status.key=='confirmed'){
           newArr.forEach(item=>{
             item.isDisable=true;
           });

@@ -534,6 +534,55 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
+        },{
+          path: 'editLogistics',
+          name: "editLogistics",
+          meta: {
+            title: '物流费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
+        },{
+          path: 'logisticsWaybillDetail/:willId',
+          name: "logisticsWaybillDetail",
+          meta: {
+            title: '物流费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
+        }]
+      },{
+        path: 'income',
+        name: "income",
+        meta: {
+          title: '收入统计',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
+        children: [{
+          path: 'incomeList',
+          name: "incomeList",
+          meta: {
+            title: '收入统计列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
+        },{
+          path: 'editIncome',
+          name: "editIncome",
+          meta: {
+            title: '收入统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
+        },{
+          path: 'incomeWaybillDetail/:willId',
+          name: "incomeWaybillDetail",
+          meta: {
+            title: '收入统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
         }]
       }]
     }]

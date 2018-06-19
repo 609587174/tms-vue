@@ -7,7 +7,8 @@
 <template>
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-      <el-tab-pane label="物流费用统计" name="logistics">
+      <el-tab-pane label="物流费用统计" name="logistics"></el-tab-pane>
+      <el-tab-pane label="收入统计" name="income">
         <div class="tab-screen">
           <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
             <el-row :gutter="0">
@@ -39,7 +40,7 @@
         <div class="operation-btn">
           <el-row>
             <el-col :span="20" class="total-data">
-              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
+              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.freig?tableData.data.freig:0}}元，过路费{{tableData.data&&tableData.data.road_to?tableData.data.road_to:0}}元，停车费{{tableData.data&&tableData.data.parking_f?tableData.data.parking_f:0}}元，其它费用{{tableData.data&&tableData.data.other_co?tableData.data.other_co:0}}元，收入{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
               <el-button type="primary">导出</el-button>
@@ -57,16 +58,16 @@
                 <div v-else>{{scope.row[item.param]}}</div>
               </template>
             </el-table-column>
-            <el-table-column label="运费合计" align="center" width="100" fixed="right">
+            <el-table-column label="收入" align="center" width="130" fixed="right">
               <template slot-scope="scope">
-                <div>{{scope.row.waiting_charges}}</div>
+                <div>{{scope.row.income}}</div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="100" fixed="right">
+            <!-- <el-table-column label="操作" align="center" width="100" fixed="right">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
         </div>
         <div class="page-list text-center">
@@ -74,18 +75,17 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="收入统计" name="income"></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 export default {
-  name: 'logisticsList',
+  name: 'incomeList',
   computed: {
 
   },
   activated: function() {
-    this.activeName = 'logistics';
+    this.activeName = 'income';
   },
   data() {
     return {
@@ -95,9 +95,9 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName:'logistics',
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
+      activeName:'income',
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -139,53 +139,49 @@ export default {
         title: '卸货站',
         param: 'station',
         width: ''
-      }, {
-        title: '计划装车时间',
-        param: 'plan_time',
-        width: '180'
-      }, {
+      },{
         title: '实际装车时间',
-        param: 'activate_start',
+        param: 'active_time',
         width: '180'
       }, {
         title: '实际离站时间',
-        param: 'activate_end',
+        param: 'leave_time',
         width: '180'
       }, {
-        title: '装车吨位',
-        param: 'loading_quantity',
+        title: '实际里程',
+        param: 'actual_mile',
         width: ''
       }, {
-        title: '实收吨位',
-        param: 'actual_quantity',
+        title: '运费',
+        param: 'freight',
         width: ''
       }, {
-        title: '亏吨',
-        param: 'deficiency',
+        title: '过路费',
+        param: 'road_toll',
         width: ''
       }, {
-        title: '核算吨位',
-        param: 'check_quantity',
+        title: '停车费',
+        param: 'parking_fee',
         width: ''
       }, {
-        title: '标准里程',
-        param: 'stand_mile',
+        title: '加油/气费',
+        param: 'fuel',
         width: ''
       }, {
-        title: '起步价',
-        param: 'label_price',
+        title: '维修费',
+        param: 'maintenance_cost',
         width: ''
       }, {
-        title: '运费费率',
-        param: 'freight_value',
+        title: '其它费用',
+        param: 'other_cost',
         width: ''
       }, {
-        title: '运费金额',
-        param: 'change_value',
+        title: '高速路（对公）',
+        param: 'high_cost',
         width: ''
       }, {
-        title: '卸车待时金额',
-        param: 'waiting_price',
+        title: '油/气费（对公）',
+        param: 'oli_gas',
         width: ''
       }],
       tableData: []
@@ -206,10 +202,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}` });
-      }else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/business/logistics/editLogistics`, query: { id: row.id } });
+        this.$router.push({ path: `/statistics/business/income/incomeWaybillDetail/${row.waybill_id}` });
       }
+      // else if (tpye === 'edit') {
+      //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });
+      // }
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -234,7 +231,7 @@ export default {
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getLogisticStatisticList', postData).then((results) => {
+      this.$$http('getIncomeStatisticList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

@@ -1,5 +1,3 @@
-<!-- staffDialog.vue -->
-<!-- staffDialog -->
 <template>
   <div>
     <el-dialog :title="title" :visible="staffDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">

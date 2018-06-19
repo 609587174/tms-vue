@@ -1,17 +1,16 @@
+
 <style scoped lang="less">
 
 
 </style>
 <template>
   <div>
-    <keep-alive :include="['logisticsList','incomeList']">
-      <router-view></router-view>
-    </keep-alive>
+    <router-view></router-view>
   </div>
 </template>
 <script>
 export default {
-  name: 'business',
+  name: 'logisticsList',
   data() {
     return {
 

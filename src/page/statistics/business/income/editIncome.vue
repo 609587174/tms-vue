@@ -61,79 +61,75 @@
                 </el-col>
               </el-row>
               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="计划装车时间:" prop="plan_time">
-                    <el-date-picker v-model="editMsgForm.plan_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
-                  </el-form-item>
-                </el-col>
+
                 <el-col :span="8">
                   <el-form-item label="实际装车时间:">
-                    <el-date-picker v-model="editMsgForm.activate_start" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.active_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实际离站时间:">
-                    <el-date-picker v-model="editMsgForm.activate_end" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.leave_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="实际里程:" prop="actual_mile">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_mile"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="装车吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
+                  <el-form-item label="运费:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.freight"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实收吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
+                  <el-form-item label="过路费:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.road_toll"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="亏吨:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
+                  <el-form-item label="停车费:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.parking_fee"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="核算吨位:" prop="check_quantity">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
+                  <el-form-item label="油/气费:" prop="fuel">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.fuel"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="标准里程:" prop="stand_mile">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_mile"></el-input>
+                  <el-form-item label="维修费:" prop="maintenance_cost">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.maintenance_cost"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="起步价:" prop="label_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.label_price"></el-input>
+                  <el-form-item label="其他费用:" prop="other_cost">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.other_cost"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="运输费率:" prop="freight_value">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
+                  <el-form-item label="高速费(对公):" prop="high_cost">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.high_cost"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运费金额:" prop="change_value">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_value"></el-input>
+                  <el-form-item label="油/气费(对公):" prop="oli_gas">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.oli_gas"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="卸车待时金额:" prop="waiting_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
+                  <el-form-item label="收入:" prop="income">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.income"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="运费合计:" prop="waiting_charges">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
-                  </el-form-item>
-                </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注:" prop="remark">
                     <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.remark"></el-input>
@@ -171,25 +167,24 @@ export default {
       pageLoading: false,
       isDisabled: true,
       editMsgForm: {
-        fluid: '', //实际液厂
-        company: '', //托运方
-        waybill: '', //运单号
-        plan_time: '', //计划装车时间
-        activate_start: '', //实际装车时间
-        activate_end: '', //离站时间
-        deficiency: '', //亏吨
-        deficiency_standard: '', //亏吨标准
-        loading_quantity: '', //装车吨位
-        actual_quantity: '', //实收吨位
-        check_quantity: '', //核算吨位
-        stand_mile: '', //标准里程
-        label_price: '', //起步价
-        freight_value: '', //运输费率
-        change_value: '', //运费金额
-        waiting_price: '', //卸车待时金额
-        waiting_charges: '', //运费合计
-        plate_number: '', //车牌号
-        station: '', //站点
+        waybill: '', // 运单号
+        order: '', // 业务单号
+        company: '', // 托运方
+        plate_number: '', // 车牌号
+        fluid: '', // 实际液厂
+        station: '', // 站点名称
+        active_time: '', // 实际装车时间
+        leave_time: '', // 实际离站时间
+        actual_mile: '', // 实际里程
+        freight: '', // 运费
+        road_toll: '', // 过路费
+        parking_fee: '', // 停车费
+        fuel: '', // 油/气费
+        maintenance_cost: '', // 维修费
+        other_cost: '', // 其他费用
+        high_cost: '', // 高速费(对公)
+        oli_gas: '', // 油/气费(对公)
+        income: '', // 收入
         remark: '' //备注
       },
 
@@ -240,34 +235,33 @@ export default {
       // if (this.$route.query.id) {
       //   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
       // } else {
-      this.$router.push({ path: "/statistics/business/logistics/logisticsList" });
+      this.$router.push({ path: "/statistics/business/income/incomeList" });
       // }
     },
     getDetail: function() {
-      this.$$http('getLogisticStatisticDetail', { id: this.id }).then((results) => {
+      this.$$http('getIncomeStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
 
           this.editMsgForm = {
-            fluid: this.detail.fluid, //实际液厂
-            company: this.detail.company, //托运方
-            waybill: this.detail.waybill, //运单号
-            plan_time: this.detail.plan_time, //计划装车时间
-            activate_start: this.detail.activate_start, //实际装车时间
-            activate_end: this.detail.activate_end, //离站时间
-            deficiency: this.detail.deficiency, //亏吨
-            deficiency_standard: this.detail.deficiency_standard, //亏吨标准
-            loading_quantity: this.detail.loading_quantity, //装车吨位
-            actual_quantity: this.detail.actual_quantity, //实收吨位
-            check_quantity: this.detail.check_quantity, //核算吨位
-            stand_mile: this.detail.stand_mile, //标准里程
-            label_price: this.detail.label_price, //起步价
-            freight_value: this.detail.freight_value, //运输费率
-            change_value: this.detail.change_value, //运费金额
-            waiting_price: this.detail.waiting_price, //卸车待时金额
-            waiting_charges: this.detail.waiting_charges, //运费合计
-            plate_number: this.detail.plate_number, //车牌号
-            station: this.detail.station, //站点
+            waybill: this.detail.waybill, // 运单号
+            order: this.detail.order, // 业务单号
+            company: this.detail.company, // 托运方
+            plate_number: this.detail.plate_number, // 车牌号
+            fluid: this.detail.fluid, // 实际液厂
+            station: this.detail.station, // 站点名称
+            active_time: this.detail.active_time, // 实际装车时间
+            leave_time: this.detail.leave_time, // 实际离站时间
+            actual_mile: this.detail.actual_mile, // 实际里程
+            freight: this.detail.freight, // 运费
+            road_toll: this.detail.road_toll, // 过路费
+            parking_fee: this.detail.parking_fee, // 停车费
+            fuel: this.detail.fuel, // 油/气费
+            maintenance_cost: this.detail.maintenance_cost, // 维修费
+            other_cost: this.detail.other_cost, // 其他费用
+            high_cost: this.detail.high_cost, // 高速费(对公)
+            oli_gas: this.detail.oli_gas, // 油/气费(对公)
+            income: this.detail.income, // 收入
             remark: '' //备注
           }
           console.log('this.editMsgForm', this.detail, this.editMsgForm)
@@ -293,7 +287,7 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
-              this.$router.push({ path: "/statistics/business/logistics/logisticsList" });
+              this.$router.push({ path: "/statistics/business/income/incomeList" });
             }
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;
@@ -308,7 +302,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time','check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'waiting_charges', 'remark'];
+      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'waiting_charges', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

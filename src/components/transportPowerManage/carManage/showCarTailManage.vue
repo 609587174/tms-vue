@@ -78,17 +78,17 @@
             <el-row :gutter="40">
               <el-col :span="8">
                 <el-form-item label="长度:">
-                  <div class="detail-form-item" v-if="tailData.length>0">{{tailData.length}}m</div>
+                  <div class="detail-form-item" v-if="tailData.length>0">{{tailData.length}}(mm)</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="宽度:">
-                  <div class="detail-form-item" v-if="tailData.width>0">{{tailData.width}}m</div>
+                  <div class="detail-form-item" v-if="tailData.width>0">{{tailData.width}}(mm)</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="高度:">
-                  <div class="detail-form-item" v-if="tailData.height>0">{{tailData.height}}m</div>
+                  <div class="detail-form-item" v-if="tailData.height>0">{{tailData.height}}(mm)</div>
                 </el-form-item>
               </el-col>
             </el-row>

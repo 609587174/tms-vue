@@ -177,7 +177,7 @@ export default {
           vm.searchStatus = false;
           var dataBody = results.data.data.data;
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
-          this.listFifterData = dataBody;
+          vm.listFifterData = dataBody;
         }
       }).catch(() => {
         this.pageLoading = false;
@@ -215,7 +215,6 @@ export default {
       });
     }
   },
-
   created() {
     if(this.thisFifterName!=this.fifterName){
         this.thisFifterName=this.fifterName;
@@ -227,7 +226,8 @@ export default {
   watch: {
   '$route' (to, from) {
   //刷新参数放到这里里面去触发就可以刷新相同界面了
-    this.searchList();
+    this.thisFifterName=this.$route.query.goTo||"all";
+    this.searchList();    
   }
 }
 };

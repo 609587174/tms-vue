@@ -262,49 +262,8 @@ export default {
         this.searchList();
       });
     },
-    assemblyData: function() {
-      var vm = this;
-      var add = "";
-      if (this.status == 'first') {
-        add = '_driver';
-      } else if (this.status == 'second') {
-        add = '_match';
-      } else if (this.status == 'third') {
-        add = '_unload';
-      } else if (this.status == 'fourth') {
-        add = '_settlement';
-      } else if (this.status == 'fifth') {
-        add = '_change';
-      } else if (this.status == 'sxith') {
-        add = '_finish';
-      }
-      var assemblyData = this.statusList[this.status]; //当前tabs数组
-      for (var i in assemblyData) {
-        for (var j in vm.countParam) { //传入过来的数值
-          if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
-            if (vm.countParam[j] > 99) {
-              assemblyData[i].value += "(99+)";
-            } else {
-              assemblyData[i].value += "(" + vm.countParam[j] + ")";
-            }
-          }
-
-        }
-      }
-    }
-  },
-  mounted() {
-    this.assemblyData();
-  },
-  created() {
-    //this.listFifterData = this.listData;
-    this.searchList();
-  },
-  watch: {
-    countParam: {
-      handler(val, oldVal) {
-        this.searchList();
-        var renderStatus=this.pbFunc.deepcopy(this.allStatusList);
+    assemblyData: function(val) {
+     var renderStatus=this.pbFunc.deepcopy(this.allStatusList);
         var assemblyData = renderStatus[this.status]; //当前tabs数组
         var add = "";
         if (this.status == 'first') {
@@ -329,10 +288,23 @@ export default {
                 assemblyData[i].value += "(" + val[j] + ")";
               }
             }
-
           }
         }
         this.statusList[this.status] = assemblyData;
+    }
+  },
+  mounted() {
+    this.assemblyData(this.countParam);
+  },
+  created() {
+    //this.listFifterData = this.listData;
+    this.searchList();
+  },
+  watch: {
+    countParam: {
+      handler(val, oldVal) {
+        this.searchList();
+        this.assemblyData(val);
       }
     }
   }

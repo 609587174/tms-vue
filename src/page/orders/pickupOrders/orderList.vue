@@ -175,7 +175,7 @@ export default {
       }).catch(() => {
         this.pageLoading = false;
       });
-
+      this.getCountList();
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
@@ -189,15 +189,9 @@ export default {
         this.searchStatus = true;
         this.searchList();
       });
-    }
-  },
-  created() {
-    if(this.thisFifterName!=this.fifterName){
-        this.thisFifterName=this.fifterName;
-     }
-    //this.listFifterData = this.listData;
-    this.searchList();
-    this.$$http("getCount", {}).then(results => {
+    },
+    getCountList:function(){
+      this.$$http("getCount", {}).then(results => {
       if (results.data.code == 0) {
         var dataBody = results.data.data;
         for (var i in dataBody) {
@@ -207,9 +201,19 @@ export default {
           this.statusName[i] += "(" + dataBody[i] + ")";
         }
       }
-    }).catch(() => {
+      }).catch(() => {
 
-    });
+      });
+    }
+  },
+
+  created() {
+    if(this.thisFifterName!=this.fifterName){
+        this.thisFifterName=this.fifterName;
+     }
+    //this.listFifterData = this.listData;
+    this.searchList();
+    
   },
   watch: {
   '$route' (to, from) {

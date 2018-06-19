@@ -71,17 +71,17 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="外廓长(m):" prop="length">
+                  <el-form-item label="外廓长(mm):" prop="length">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.length"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廓宽(m):" prop="width">
+                  <el-form-item label="外廓宽(mm):" prop="width">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.width"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廓高(m):" prop="height">
+                  <el-form-item label="外廓高(mm):" prop="height">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.height"></el-input>
                   </el-form-item>
                 </el-col>

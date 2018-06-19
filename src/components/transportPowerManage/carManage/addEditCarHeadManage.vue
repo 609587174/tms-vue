@@ -76,17 +76,17 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="外廓长:" prop="length">
+                  <el-form-item label="外廓长(mm):" prop="length">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.length"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廓宽:" prop="width">
+                  <el-form-item label="外廓宽(mm):" prop="width">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.width"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="外廓高:" prop="height">
+                  <el-form-item label="外廓高(mm):" prop="height">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.height"></el-input>
                   </el-form-item>
                 </el-col>
@@ -439,7 +439,8 @@ export default {
           { min: 10, max: 15, message: '发动机号为10~15个字段', trigger: 'blur' }
         ],
         fuel_type: [
-          { validator: fuel_typeVa, trigger: 'change' }
+          { validator: fuel_typeVa, trigger: 'change' },
+          { required: true, message: '请选择燃料类型', trigger: 'blur' }
         ],
         brand: [
           { min: 10, max: 20, message: '10~20个字段', trigger: 'blur' }

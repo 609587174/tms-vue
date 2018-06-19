@@ -163,11 +163,11 @@ export default {
         sendData.history=true;
         delete sendData.status;
       }
+      sendData.page = this.pageData.currentPage;
+      sendData.page_size = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;
       }
-      sendData.page = this.pageData.currentPage;
-      sendData.page_size = this.pageData.pageSize;
       this.pageLoading = true;
 
       this.$$http("searchPickOrderList", sendData).then((results) => {

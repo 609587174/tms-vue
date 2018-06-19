@@ -95,7 +95,7 @@
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
               <el-row class="loadInfo commh" style="width:100%;">
-                <el-col :span="7" class="colinfo">装:<span>{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">
                 </el-col>
@@ -110,7 +110,7 @@
               </el-row>
 
                <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
-                <el-col :span="7" class="colinfo">卸:<span>{{props.row.destination}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.destination}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>

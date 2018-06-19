@@ -55,17 +55,17 @@
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
-                  <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'">
+                  <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'||item.param==='change_number'">
                     <ul>
                       <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}</li>
                     </ul>
                   </div>
                   <div v-else>
-                    <span v-if="scope.row.agreements.length&&item.param!=='created_at'&&item.param!=='fluid_name'">
-                      {{scope.row.agreements[0][item.param]}}
-                    </span>
-                    <span v-else></span>
-                    <span v-if="item.param==='created_at'">{{scope.row.created_at}}</span>
+                    <div v-if="scope.row.agreements.length&&item.param==='carrier_name'||item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                      <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
+                    </div>
+                    <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -135,7 +135,7 @@ export default {
         width: '200'
       }, {
         title: '变动值',
-        param: 'change_rate',
+        param: 'change_number',
         width: ''
       }, {
         title: '生效托运方',
@@ -184,7 +184,14 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.data;
-
+          for (let i in this.tableData) {
+            this.tableData[i].carrierListStr = '';
+            this.tableData[i].fluidListStr = '';
+            for (let j in this.tableData[i].agreements) {
+              this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+            }
+          }
           this.pageData.totalCount = results.data.data.count;
 
           console.log('this.tableData', this.tableData, this.pageData.totalCount);

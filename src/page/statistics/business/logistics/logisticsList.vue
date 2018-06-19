@@ -43,7 +43,7 @@
       <div class="operation-btn">
         <el-row>
           <el-col :span="20" class="total-data">
-            一共{{tableData.waybill?tableData.waybill:0}}单，销售总额{{tableData.waiting_charg?tableData.waiting_charg:0}}元
+            一共{{tableData.waybill?tableData.waybill:0}}单，运费总计{{tableData.waiting_charg?tableData.waiting_charg:0}}元
           </el-col>
           <el-col :span="4" class="text-right">
             <el-button type="primary">导出</el-button>
@@ -66,11 +66,6 @@
               <div>{{scope.row.waiting_charges}}</div>
             </template>
           </el-table-column>
-          <el-table-column label="是否对账" align="center" width="100" fixed="right">
-            <template slot-scope="scope">
-              <div>{{scope.row.is_reconciliation.verbose}}</div>
-            </template>
-          </el-table-column>
           <el-table-column label="操作" align="center" width="100" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
@@ -87,7 +82,7 @@
 </template>
 <script>
 export default {
-  name: 'salesList',
+  name: 'logisticsList',
   computed: {
 
   },
@@ -126,11 +121,11 @@ export default {
         width: ''
       }, {
         title: '业务单号',
-        param: 'business_order',
+        param: 'order',
         width: ''
       }, {
-        title: '承运商',
-        param: 'carrier',
+        title: '托运方',
+        param: 'company',
         width: '200'
       }, {
         title: '车号',
@@ -146,19 +141,19 @@ export default {
         width: ''
       }, {
         title: '计划装车时间',
-        param: 'plan_loading_time',
+        param: 'plan_time',
         width: '180'
       }, {
         title: '实际装车时间',
-        param: 'active_time',
+        param: 'activate_start',
         width: '180'
       }, {
         title: '实际离站时间',
-        param: 'leave_time',
+        param: 'activate_end',
         width: '180'
       }, {
         title: '装车吨位',
-        param: 'plan_tonnage',
+        param: 'loading_quantity',
         width: ''
       }, {
         title: '实收吨位',
@@ -178,15 +173,15 @@ export default {
         width: ''
       }, {
         title: '起步价',
-        param: 'initial_price',
+        param: 'label_price',
         width: ''
       }, {
-        title: '标准运费',
+        title: '运费费率',
         param: 'freight_value',
         width: ''
       }, {
-        title: '气差金额',
-        param: 'difference_value',
+        title: '运费金额',
+        param: 'change_value',
         width: ''
       }, {
         title: '卸车待时金额',

@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    数据统计
+    <router-view></router-view>
   </div>
 </template>
 <script>

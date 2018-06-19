@@ -10,7 +10,7 @@
 </template>
 <script>
 export default {
-  name: 'consignment',
+  name: 'logisticsList',
   data() {
     return {
 

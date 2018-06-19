@@ -1,10 +1,10 @@
 <template>
   <div class="out-contain">
-    <div class="search-filters-contain" v-show="showLeftWindow">
-      <div>
+    <div class="nav-tab">
+      <div class="tab-screen">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row :gutter="0">
-            <el-col :span="24">
+            <el-col :span="6">
               <el-form-item label="车牌号:">
                 <el-select v-model="searchFilters.choosedCar" @change="chooseCar" filterable placeholder="请输入关键词" :loading="carLoading">
                   <el-option v-for="(item,key) in carList" :key="key" :label="item.tractor.plate_number" :value="item.tractor.id">
@@ -12,28 +12,28 @@
                 </el-select>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row :gutter="0">
-            <el-col :span="24">
+            <el-col :span="10">
               <el-form-item label="搜索时间:">
                 <el-date-picker v-model="searchFilters.choosedTime" :picker-options="timeQuickPick" type="datetimerange" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" @change="chooseTime">
                 </el-date-picker>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row :gutter="0">
-            <el-col :span="24">
+            <el-col :span="6">
               <div class="float-left time-spacing">{{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟</div>
               <div>
-                <el-button class="float-right" type="primary" @click="searchAndRender" :disabled="searchBtn.isDisabled" :loading="searchBtn.loading">{{searchBtn.text}}</el-button>
+                <el-button class="float-left" type="primary" @click="searchAndRender" :disabled="searchBtn.isDisabled" :loading="searchBtn.loading">{{searchBtn.text}}</el-button>
               </div>
             </el-col>
           </el-row>
         </el-form>
+      </div>
+    </div>
+    <transition name="fade">
+      <div class="search-filters-contain" v-show="showLeftWindow">
         <div class="nav-tab point-tab">
           <el-tabs v-model="activeName" type="card">
             <el-tab-pane label="停留点" name="stopPoint">
-              <el-table :data="curentStopPoint" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+              <el-table :data="curentStopPoint" stripe style="width: 100%" size="mini" v-loading="offlineAndstopLoading">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
                 <el-table-column align="center" label="操作" :width="60">
@@ -43,12 +43,12 @@
                 </el-table-column>
               </el-table>
               <div class="page-list text-center">
-                <el-pagination background layout="prev, pager, next" :total="stopPointPage.total" :page-size="stopPointPage.pageSize" :current-page.sync="stopPointPage.currentPage" @current-change="stopPointPageChange" v-if="!pageLoading && stopPointPage.total>10">
+                <el-pagination background layout="prev, pager, next" :total="stopPointPage.total" :page-size="stopPointPage.pageSize" :current-page.sync="stopPointPage.currentPage" @current-change="stopPointPageChange" v-if="!offlineAndstopLoading && stopPointPage.total>10">
                 </el-pagination>
               </div>
             </el-tab-pane>
             <el-tab-pane label="离线点" name="offlinePoint">
-              <el-table :data="curentOfflinePoint" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+              <el-table :data="curentOfflinePoint" stripe style="width: 100%" size="mini" v-loading="offlineAndstopLoading">
                 <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
                 </el-table-column>
                 <el-table-column align="center" label="操作" :width="60">
@@ -58,24 +58,33 @@
                 </el-table-column>
               </el-table>
               <div class="page-list text-center">
-                <el-pagination background layout="prev, pager, next" :total="offlinePointPage.total" :page-size="offlinePointPage.pageSize" :current-page.sync="offlinePointPage.currentPage" @current-change="offlinePointPageChange" v-if="!pageLoading && offlinePointPage.total>10">
+                <el-pagination background layout="prev, pager, next" :total="offlinePointPage.total" :page-size="offlinePointPage.pageSize" :current-page.sync="offlinePointPage.currentPage" @current-change="offlinePointPageChange" v-if="!offlineAndstopLoading && offlinePointPage.total>10">
                 </el-pagination>
               </div>
             </el-tab-pane>
           </el-tabs>
         </div>
       </div>
-    </div>
-    <div class="side-alert-traggle side-alert-traggle-right" v-show="showLeftWindow" @click="triggerAlert"><span>«</span></div>
-    <div class="side-alert-traggle side-alert-traggle-left" v-show="!showLeftWindow" @click="triggerAlert"><span>»</span></div>
+    </transition>
+    <transition name="fade">
+      <div class="side-alert-traggle side-alert-traggle-right" v-show="showLeftWindow" @click="triggerAlert"><span>收起</span></div>
+    </transition>
+    <transition name="fade">
+      <div class="side-alert-traggle side-alert-traggle-left" v-show="!showLeftWindow" @click="triggerAlert">
+        <span>展开</span></div>
+    </transition>
     <div class="map-loading" v-loading="pageLoading"></div>
     <div id="map-container"></div>
     <div class="bottom-operate">
       <div class="display-distance">{{distanceMile}}公里</div>
+      <div class="landmark-operate">
+        <el-button type="success" size="mini" :loading="getLandmarkBtn.isLoading" :isDisabled="getLandmarkBtn.isDisabled" @click="checkLandmark()" v-if="!isNeedGetLandmark">{{getLandmarkBtn.text}}</el-button>
+        <el-button type="primary" size="mini" @click="hideLandmark()" v-if="isNeedGetLandmark">隐藏地标</el-button>
+      </div>
       <div class="startAndPause text-center"><img v-show="!isDisplay" @click="resumeDriving" src="@/assets/img/play.png" /><img v-show="isDisplay" @click="pauseDriving" src="@/assets/img/suspend.png" /></div>
       <div class="speed-control">
-        <span>{{speed}}km/h</span>
         <input class="speedRange" type="range" min="1000" max="200000" step="5000" v-model="speed" @change="changeSpeed">
+        <span>{{speed}}km/h</span>
       </div>
     </div>
   </div>
@@ -93,6 +102,7 @@ export default {
     return {
       activeName: 'stopPoint',
       pageLoading: true,
+      offlineAndstopLoading: true,
       map: '', //地图实列
       markerList: [], //标注列表实例
       cluster: '', //点聚合实例
@@ -116,12 +126,12 @@ export default {
       stopPointPage: { //自定义停留点数据分页信息
         total: '',
         currentPage: 1,
-        pageSize: 8,
+        pageSize: 10,
       },
       offlinePointPage: { //自定义离线点数据分页信息
         total: '',
         currentPage: 1,
-        pageSize: 7,
+        pageSize: 10,
       },
       navg1: '', //巡航
       distanceMile: '', //总里程
@@ -204,9 +214,16 @@ export default {
           width: '120'
         },
       ],
-      showLeftWindow: true,
+      showLeftWindow: false,
       isDisplay: false,
       landmarkList: [], //地标列表
+      isGetLandmark: false,
+      isNeedGetLandmark: false,
+      getLandmarkBtn: {
+        text: '查看地标',
+        isLoading: false,
+        isDisabled: false,
+      }
     }
   },
   methods: {
@@ -338,14 +355,16 @@ export default {
       for (let i in data) {
         resultsData[i] = data[i];
         if (data[i].hasOwnProperty('offline_seconds')) {
-          let durationMinutes = Math.floor(data[i].offline_seconds / 60);
+          let durationHours = Math.floor(data[i].offline_seconds / 3600);
+          let durationMinutes = Math.floor((data[i].offline_seconds % 3600) / 60);
           let durationSeconds = data[i].offline_seconds % 60;
-          resultsData[i].duration = durationMinutes + '分' + durationSeconds + '秒';
+          resultsData[i].duration = durationHours + '时' + durationMinutes + '分' + durationSeconds + '秒';
           resultsData[i].end_time = this.calculateEndTime(data[i].create_time, data[i].offline_seconds);
         } else {
-          let durationMinutes = Math.floor(data[i].stopping_seconds / 60);
+          let durationHours = Math.floor(data[i].offline_seconds / 3600);
+          let durationMinutes = Math.floor((data[i].offline_seconds % 3600) / 60);
           let durationSeconds = data[i].stopping_seconds % 60;
-          resultsData[i].duration = durationMinutes + '分' + durationSeconds + '秒';
+          resultsData[i].duration = durationHours + '时' + durationMinutes + '分' + durationSeconds + '秒';
           resultsData[i].end_time = this.calculateEndTime(data[i].create_time, data[i].stopping_seconds);
         }
 
@@ -371,15 +390,21 @@ export default {
       return daySpace;
     },
     /* 获取到所有数据以后对数据进行再次组合排序 */
-    sortResult: function(dataArray) {
+    sortResult: function(dataArray, apiName) {
       console.log('dataArray', dataArray);
-      for (let i = 0; i < dataArray.length; i++) {
-        this.totalDataResult = this.totalDataResult.concat(dataArray[i].totalDataResult);
-        this.totalStopPoint = this.totalStopPoint.concat(dataArray[i].totalStopPoint);
-        this.totalOfflinePoint = this.totalOfflinePoint.concat(dataArray[i].totalOfflinePoint);
-        this.resultPath = this.resultPath.concat(dataArray[i].resultPath);
+      if (apiName === 'getTripRecords') {
+        for (let i = 0; i < dataArray.length; i++) {
+          this.totalDataResult = this.totalDataResult.concat(dataArray[i].totalDataResult);
+          this.resultPath = this.resultPath.concat(dataArray[i].resultPath);
+        }
+        this.renderPath();
+      } else if (apiName === 'getOfflineAndStopRecords') {
+        for (let i = 0; i < dataArray.length; i++) {
+          this.totalStopPoint = this.totalStopPoint.concat(dataArray[i].totalStopPoint);
+          this.totalOfflinePoint = this.totalOfflinePoint.concat(dataArray[i].totalOfflinePoint);
+        }
+        this.offlineStopPointSetPage();
       }
-      this.renderPath();
     },
     /* 触发搜索时，需要初始化一些数据 */
     initData: function() {
@@ -392,16 +417,17 @@ export default {
       this.totalOfflinePoint = [];
       this.curentOfflinePoint = [];
       this.resultPath = [];
+      this.isGetLandmark = false;
 
       this.stopPointPage = {
         total: '',
         currentPage: 1,
-        pageSize: 8,
+        pageSize: 10,
       }
       this.offlinePointPage = {
         total: '',
         currentPage: 1,
-        pageSize: 7,
+        pageSize: 10,
       };
       this.totalPage = {
         currentPage: 1,
@@ -409,9 +435,11 @@ export default {
       };
 
       this.pageLoading = true;
+      this.offlineAndstopLoading = true;
+
     },
     /* 获取轨迹点数据ajax请求，一次请求默认获取1000条数据 */
-    getTripRecords: function(startTime, endTime, currentPage) {
+    getTripRecords: function(startTime, endTime, currentPage, apiName) {
       return new Promise((resolve, reject) => {
         let postData = {
           id: this.choosedDeviceId ? this.choosedDeviceId : this.id,
@@ -420,7 +448,7 @@ export default {
           start_time: startTime,
           end_time: endTime,
         };
-        this.$$http('getTripRecords', postData).then((results) => {
+        this.$$http(apiName, postData).then((results) => {
           if (results.data && results.data.code == 0 && results.data.data) {
             resolve(results)
           } else {
@@ -432,27 +460,33 @@ export default {
       })
     },
     /* 获取一天的轨迹点数据 */
-    getOneDayRecords: function(startTime, endTime, dataObject) {
+    getOneDayRecords: function(startTime, endTime, dataObject, apiName) {
       return new Promise((resolve, reject) => {
         let currentPage = 1;
 
         /* 使用递归获取一天的数据 */
         let getRecords = (startTime, endTime) => {
-          this.getTripRecords(startTime, endTime, currentPage).then((results) => {
+          this.getTripRecords(startTime, endTime, currentPage, apiName).then((results) => {
             /* 一次请求所返回的停留点数据（stopPointResult），离线点数据（offlinePointResult），轨迹点数据（dataResult），path是用于轨迹回放的源数据 */
-            let dataResult = results.data.data.trip_results;
-            let stopPointResult = results.data.data.stopping_point_locations;
-            let offlinePointResult = results.data.data.offline_point_locations;
-            /* path是用于轨迹回放的源数据只取经纬度 */
-            let path = [];
-            for (let i in dataResult) {
-              path[i] = [dataResult[i].location.longitude, dataResult[i].location.latitude];
+
+            if (apiName === 'getTripRecords') { //获取轨迹点
+              let dataResult = results.data.data.trip_results;
+              /* path是用于轨迹回放的源数据只取经纬度 */
+              let path = [];
+              for (let i in dataResult) {
+                path[i] = [dataResult[i].location.longitude, dataResult[i].location.latitude];
+              }
+              /* 每次取回的数据合并到一天的总数据里面 */
+              dataObject.totalDataResult = [...dataObject.totalDataResult, ...dataResult];
+              dataObject.resultPath = [...dataObject.resultPath, ...path];
+            } else if (apiName === 'getOfflineAndStopRecords') { //获取离线点和停留点
+              let stopPointResult = results.data.data.stopping_point_locations;
+              let offlinePointResult = results.data.data.offline_point_locations;
+
+              dataObject.totalStopPoint = [...dataObject.totalStopPoint, ...stopPointResult];
+              dataObject.totalOfflinePoint = [...dataObject.totalOfflinePoint, ...offlinePointResult];
             }
-            /* 每次取回的数据合并到一天的总数据里面 */
-            dataObject.totalDataResult = [...dataObject.totalDataResult, ...dataResult];
-            dataObject.totalStopPoint = [...dataObject.totalStopPoint, ...stopPointResult];
-            dataObject.totalOfflinePoint = [...dataObject.totalOfflinePoint, ...offlinePointResult];
-            dataObject.resultPath = [...dataObject.resultPath, ...path];
+
             /* 如果一天的轨迹点数据大于1000条，则得继续获取数据，这里使用递归，获取一天的数据 */
             if (currentPage < Math.ceil(results.data.data.count / this.totalPage.pageSize)) {
               currentPage++;
@@ -469,99 +503,111 @@ export default {
       });
     },
     /* 获取一次搜索的所有轨迹点数据 */
-    getAllRecords: function() {
+    getAllRecords: function(apiName) {
       /*业务逻辑：
        **后端轨迹点表结构以天为单位，所以，一次请求只能获取一天的数据。并只对这一天的数据进行分页。所以这里需要循环获取一次搜索的多天数据
        **这里我使用 getOneDayRecords 并发来获取各天的数据。这样可以减少一次搜索的时长，然后再对并发获取回来的数据，使用 sortResult 进行组装。
        ***/
 
       /* daySpace为一次搜索所间隔的天数，如果为0，则为一天的请求。大于0得需要循环请求各天数据。*/
-      let daySpace = this.getDaySpace(Date.parse(this.searchFilters.choosedTime[0]), Date.parse(this.searchFilters.choosedTime[1]));
-      /* dataArray 用于存储所有的一天请求返回的数据，最后用于数据组装 */
-      let dataArray = [];
-      if (daySpace > 0) { //如果多天数据需要循环请求
-        /* ajaxEndNum，一天的数据获取完成，ajaxEndNum加1，如果ajaxEndNum-1==daySpace,代表所有数据获取完成 */
-        let ajaxEndNum = 0;
-        for (let i = 0; i < (daySpace + 1); i++) {
-          dataArray[i] = {
+      return new Promise((resolve, reject) => {
+        let daySpace = this.getDaySpace(Date.parse(this.searchFilters.choosedTime[0]), Date.parse(this.searchFilters.choosedTime[1]));
+        /* dataArray 用于存储所有的一天请求返回的数据，最后用于数据组装 */
+        let dataArray = [];
+        let callBackFun = (dataArray, apiName) => {
+          if (apiName === 'getTripRecords') {
+            this.pageLoading = false;
+          } else if (apiName === 'getOfflineAndStopRecords') {
+            this.offlineAndstopLoading = false;
+          }
+          this.sortResult(dataArray, apiName);
+          resolve()
+        }
+        if (daySpace > 0) { //如果多天数据需要循环请求
+          /* ajaxEndNum，一天的数据获取完成，ajaxEndNum加1，如果ajaxEndNum-1==daySpace,代表所有数据获取完成 */
+          let ajaxEndNum = 0;
+          for (let i = 0; i < (daySpace + 1); i++) {
+            dataArray[i] = {
+              totalDataResult: [],
+              totalStopPoint: [],
+              totalOfflinePoint: [],
+              resultPath: [],
+            }
+            if (i === 0) { //第一天
+
+              let endTime = new Date(Date.parse(this.searchFilters.choosedTime[0]));
+              endTime.setHours('23');
+              endTime.setMinutes('59');
+              endTime.setSeconds('59');
+              let endTimeStr = this.dateToStr(endTime);
+
+              this.getOneDayRecords(this.searchFilters.choosedTime[0], endTimeStr, dataArray[i], apiName).then(() => {
+                ajaxEndNum++;
+                if (ajaxEndNum - 1 === daySpace) {
+                  callBackFun(dataArray, apiName);
+                }
+              });
+            } else if (i === daySpace) { //最后一天
+              let startTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
+              startTime.setHours('00');
+              startTime.setMinutes('00');
+              startTime.setSeconds('00');
+              let startTimeStr = this.dateToStr(startTime);
+              let endTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
+              let endTimeStr = this.dateToStr(endTime);
+
+              this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[i], apiName).then(() => {
+                ajaxEndNum++;
+                if (ajaxEndNum - 1 === daySpace) {
+                  callBackFun(dataArray, apiName);
+                }
+              });
+            } else { //中间的天数
+              let startTime = new Date(Date.parse(this.searchFilters.choosedTime[0]) + 1000 * 60 * 60 * 24 * i);
+              startTime.setHours('00');
+              startTime.setMinutes('00');
+              startTime.setSeconds('00');
+              let startTimeStr = this.dateToStr(startTime);
+
+              let endTime = new Date(Date.parse(this.searchFilters.choosedTime[0]) + 1000 * 60 * 60 * 24 * i);
+              endTime.setHours('23');
+              endTime.setMinutes('59');
+              endTime.setSeconds('59');
+              let endTimeStr = this.dateToStr(endTime);
+
+              this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[i], apiName).then(() => {
+                ajaxEndNum++;
+                if (ajaxEndNum - 1 === daySpace) {
+                  callBackFun(dataArray, apiName);
+                }
+              });
+            }
+          }
+        } else { //如果只有一天数据
+          let startTime = new Date(Date.parse(this.searchFilters.choosedTime[0]));
+          let startTimeStr = this.dateToStr(startTime);
+          let endTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
+          let endTimeStr = this.dateToStr(endTime);
+          dataArray[0] = {
             totalDataResult: [],
             totalStopPoint: [],
             totalOfflinePoint: [],
             resultPath: [],
           }
-          if (i === 0) { //第一天
+          this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[0], apiName).then(() => {
+            callBackFun(dataArray, apiName);
 
-            let endTime = new Date(Date.parse(this.searchFilters.choosedTime[0]));
-            endTime.setHours('23');
-            endTime.setMinutes('59');
-            endTime.setSeconds('59');
-            let endTimeStr = this.dateToStr(endTime);
-
-            this.getOneDayRecords(this.searchFilters.choosedTime[0], endTimeStr, dataArray[i]).then(() => {
-              ajaxEndNum++;
-              if (ajaxEndNum - 1 === daySpace) {
-                this.pageLoading = false;
-                this.sortResult(dataArray);
-              }
-            });
-          } else if (i === daySpace) { //最后一天
-            let startTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
-            startTime.setHours('00');
-            startTime.setMinutes('00');
-            startTime.setSeconds('00');
-            let startTimeStr = this.dateToStr(startTime);
-            let endTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
-            let endTimeStr = this.dateToStr(endTime);
-
-            this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[i]).then(() => {
-              ajaxEndNum++;
-              if (ajaxEndNum - 1 === daySpace) {
-                this.pageLoading = false;
-                this.sortResult(dataArray);
-              }
-            });
-          } else { //中间的天数
-            let startTime = new Date(Date.parse(this.searchFilters.choosedTime[0]) + 1000 * 60 * 60 * 24 * i);
-            startTime.setHours('00');
-            startTime.setMinutes('00');
-            startTime.setSeconds('00');
-            let startTimeStr = this.dateToStr(startTime);
-
-            let endTime = new Date(Date.parse(this.searchFilters.choosedTime[0]) + 1000 * 60 * 60 * 24 * i);
-            endTime.setHours('23');
-            endTime.setMinutes('59');
-            endTime.setSeconds('59');
-            let endTimeStr = this.dateToStr(endTime);
-
-            this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[i]).then(() => {
-              ajaxEndNum++;
-              if (ajaxEndNum - 1 === daySpace) {
-                this.pageLoading = false;
-                this.sortResult(dataArray);
-              }
-            });
-          }
+          });
         }
-      } else { //如果只有一天数据
-        let startTime = new Date(Date.parse(this.searchFilters.choosedTime[0]));
-        let startTimeStr = this.dateToStr(startTime);
-        let endTime = new Date(Date.parse(this.searchFilters.choosedTime[1]));
-        let endTimeStr = this.dateToStr(endTime);
-        dataArray[0] = {
-          totalDataResult: [],
-          totalStopPoint: [],
-          totalOfflinePoint: [],
-          resultPath: [],
-        }
-        this.getOneDayRecords(startTimeStr, endTimeStr, dataArray[0]).then(() => {
-          this.pageLoading = false;
-          this.sortResult(dataArray);
-        });
-      }
+      })
+
+
     },
     searchAndRender: function() {
       this.initData();
-      this.getAllRecords();
+      this.getAllRecords('getTripRecords').then(() => {
+        this.getAllRecords('getOfflineAndStopRecords');
+      });
     },
 
     getIconSrc: function(item) {
@@ -878,6 +924,20 @@ export default {
 
       console.log('xxx')
     },
+    offlineStopPointSetPage: function() {
+      /* 停留点逻辑处理
+       **这里后端是返回了当次接口请求返回结果的离线点或者停留点数据，前端通过多次请求获取完整数据后，拼接数据到totalStopPoint／totalOfflinePoint中，并需要自己做分页，
+       */
+      this.stopPointPage.currentPage = 1;
+      this.stopPointPage.total = this.totalStopPoint.length;
+      this.curentStopPoint = this.totalStopPoint.slice(0, this.stopPointPage.pageSize);
+      this.curentStopPoint = this.dealSatrtEndTime(this.curentStopPoint);
+      /* 离线点逻辑处理同停留点 */
+      this.curentOfflinePoint = this.totalOfflinePoint.slice(0, this.offlinePointPage.pageSize);
+      this.curentOfflinePoint = this.dealSatrtEndTime(this.curentOfflinePoint);
+      this.offlinePointPage.currentPage = 1;
+      this.offlinePointPage.total = this.totalOfflinePoint.length;
+    },
     renderPath: function() {
       let _this = this;
       let allowTime = 20;
@@ -912,26 +972,15 @@ export default {
 
         _this.startMarker.setPosition(_this.resultPath[0]);
 
-        /* 停留点逻辑处理
-         **这里后端是返回了当次接口请求返回结果的离线点或者停留点数据，前端通过多次请求获取完整数据后，拼接数据到totalStopPoint／totalOfflinePoint中，并需要自己做分页，
-         */
-        _this.stopPointPage.currentPage = 1;
-        _this.stopPointPage.total = _this.totalStopPoint.length;
-        _this.curentStopPoint = _this.totalStopPoint.slice(0, _this.stopPointPage.pageSize);
-        _this.curentStopPoint = _this.dealSatrtEndTime(_this.curentStopPoint);
-        /* 离线点逻辑处理同停留点 */
-        _this.curentOfflinePoint = _this.totalOfflinePoint.slice(0, _this.offlinePointPage.pageSize);
-        _this.curentOfflinePoint = _this.dealSatrtEndTime(_this.curentOfflinePoint);
-        _this.offlinePointPage.currentPage = 1;
-        _this.offlinePointPage.total = _this.totalOfflinePoint.length;
+
         /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
         _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
-        /* 获取地标列表并生成地标 */
-        setTimeout(() => {
+
+        if (_this.isNeedGetLandmark) {
           _this.getLandMarkList().then(() => {
             _this.renderMarker();
           });
-        }, 100)
+        }
 
         if (_this.resultPath.length) {
           /* 计算里程
@@ -988,8 +1037,7 @@ export default {
 
       pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
         '</div><div class="fs-13">定位时间：' + row.row.create_time +
-        '</div><div class="fs-13">行驶速度：' + row.row.speed +
-        'km/h</div>';
+        '</div>';
 
       _this.infoWindow.setInfoBody(pointMsgStr);
 
@@ -1024,6 +1072,22 @@ export default {
     triggerAlert: function() {
       this.showLeftWindow = !this.showLeftWindow;
     },
+    checkLandmark: function() {
+      /* 获取地标列表并生成地标 */
+      this.isNeedGetLandmark = true;
+      if (this.isGetLandmark) {
+        this.renderMarker();
+      } else {
+        this.getLandMarkList().then(() => {
+          this.renderMarker();
+        });
+      }
+    },
+    hideLandmark: function() {
+      this.isNeedGetLandmark = false;
+      this.markerList.clearData();
+      this.cluster.clearMarkers();
+    },
     getLandMarkList: function() {
       return new Promise((resolve, reject) => {
         let mapCenter = this.map.getCenter();
@@ -1038,10 +1102,21 @@ export default {
           latitude: mapCenter.lat,
           distance: distance,
         };
+
+        this.getLandmarkBtn.text = '获取中';
+        this.getLandmarkBtn.isDisabled = true;
+        this.getLandmarkBtn.isLoading = true;
+
         this.$$http('getLandMarkList', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
-            console.log('this.landmarkList', this.landmarkList);
+
+            this.getLandmarkBtn.text = '查看地标';
+            this.getLandmarkBtn.isDisabled = false;
+            this.getLandmarkBtn.isLoading = false;
+            this.isGetLandmark = true;
+
+
             resolve(results)
           } else {
             reject(results);
@@ -1145,26 +1220,24 @@ export default {
     height: 50px;
     width: 100%;
     left: 0;
-    top: 0;
+    top: 82px;
   }
   .search-filters-contain {
     padding: 20px 10px 0 10px;
     background-color: #fff;
-    height: 660px;
+    height: 570px;
     width: 480px;
     position: absolute;
     left: 0;
-    top: 0;
+    top: 140px;
     z-index: 999;
   }
   .time-spacing {
-    padding-left: 10px;
+    padding: 0 20px 0 0;
     line-height: 40px;
     font-size: 14px;
   }
-  .point-tab {
-    margin-top: 20px;
-  }
+
   .bottom-operate {
     width: 100%;
     height: 50px;
@@ -1176,6 +1249,12 @@ export default {
       top: 0;
       left: 10px;
       line-height: 50px;
+      width: 100px;
+    }
+    .landmark-operate {
+      position: absolute;
+      top: 11px;
+      left: 110px;
       width: 100px;
     }
     .startAndPause {
@@ -1197,22 +1276,24 @@ export default {
   }
   .side-alert-traggle {
     position: absolute;
-    top: 280px;
+    top: 380px;
 
     width: 26px;
-    height: 28px;
+    height: 50px;
 
-    line-height: 28px;
+
+    line-height: 24px;
 
     cursor: pointer;
     text-align: center;
 
-    border: 1px solid #bbb;
+    border: 1px solid #4a9bf8;
     border-left: 0 none;
-    background-color: #f4f5f7;
+    background-color: #fff;
+    color: #4a9bf8;
     z-index: 999;
     span {
-      font-size: 22px;
+      font-size: 16px;
     }
   }
   .side-alert-traggle-right {
@@ -1222,6 +1303,16 @@ export default {
   .side-alert-traggle-left {
     left: 0px;
   }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>

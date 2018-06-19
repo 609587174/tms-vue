@@ -9,6 +9,158 @@
  */
 
 const api = {
+  updateIncomeStatistic: {
+    url: '/statistic/income/:id/',
+    method: 'patch',
+    desc: '收入统计详情',
+    param: {
+      plan_time: {
+        desc: '计划装车时间'
+      },
+      check_quantity: {
+        desc: '核算吨位'
+      },
+      stand_mile: {
+        desc: '标准里程'
+      },
+      label_price: {
+        desc: '标准运价'
+      },
+      freight_value: {
+        desc: '运费费率'
+      },
+      change_value: {
+        desc: '运费金额'
+      },
+      waiting_price: {
+        desc: '卸车待时金额'
+      },
+      waiting_charges: {
+        desc: '运费合计'
+      },
+      remark: {
+        desc: '备注'
+      },
+    }
+  },
+  getIncomeStatisticDetail: {
+    url: '/statistic/income/:id/',
+    method: 'get',
+    desc: '收入统计详情',
+    param: {
+      id: {
+        desc: '收入统计ID'
+      },
+    }
+  },
+  getIncomeStatisticList: {
+    url: '/statistic/income/',
+    method: 'get',
+    desc: '收入统计列表',
+    param: {
+      waybill: {
+        desc: '运单号'
+      },
+      company: {
+        desc: '托运方'
+      },
+      plate_number: {
+        desc: '托运方'
+      },
+      active_time_start: {
+        desc: '实际装车时间 开始'
+      },
+      active_time_end: {
+        desc: '实际装车时间 结束'
+      },
+      leave_time_end: {
+        desc: '实际离站时间 结束'
+      },
+      leave_time_start: {
+        desc: '实际离站时间 开始'
+      },
+    }
+  },
+  getFreightDetail: {
+    url: '/carrier/trans_fee/:id/',
+    method: 'get',
+    desc: '运费详情',
+    param: {
+
+    }
+  },
+  updateLogisticStatistic: {
+    url: '/statistic/logistic/:id/',
+    method: 'patch',
+    desc: '物流费用详情',
+    param: {
+      plan_time: {
+        desc: '计划装车时间'
+      },
+      check_quantity: {
+        desc: '核算吨位'
+      },
+      stand_mile: {
+        desc: '标准里程'
+      },
+      label_price: {
+        desc: '标准运价'
+      },
+      freight_value: {
+        desc: '运费费率'
+      },
+      change_value: {
+        desc: '运费金额'
+      },
+      waiting_price: {
+        desc: '卸车待时金额'
+      },
+      waiting_charges: {
+        desc: '运费合计'
+      },
+      remark: {
+        desc: '备注'
+      },
+    }
+  },
+  getLogisticStatisticDetail: {
+    url: '/statistic/logistic/:id/',
+    method: 'get',
+    desc: '物流费用详情',
+    param: {
+      id: {
+        desc: '物流费用ID'
+      },
+    }
+  },
+  getLogisticStatisticList: {
+    url: '/statistic/logistic/',
+    method: 'get',
+    desc: '物流费用列表',
+    param: {
+      waybill: {
+        desc: '运单号'
+      },
+      company: {
+        desc: '托运方'
+      },
+      plate_number: {
+        desc: '托运方'
+      },
+      active_time_start: {
+        desc: '实际装车时间 开始'
+      },
+      active_time_end: {
+        desc: '实际装车时间 结束'
+      },
+      leave_time_end: {
+        desc: '实际离站时间 结束'
+      },
+      leave_time_start: {
+        desc: '实际离站时间 开始'
+      },
+    }
+  },
   getFreightDetail: {
     url: '/carrier/trans_fee/:id/',
     method: 'get',

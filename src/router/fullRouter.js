@@ -463,7 +463,7 @@ export default [{
             title: '运费约定列表',
           },
           component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freightDataList'], resolve)
-        },{
+        }, {
           path: 'freightDetail',
           name: 'freightDetail',
           meta: {
@@ -488,7 +488,7 @@ export default [{
             title: '标准里程列表',
           },
           component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDataList'], resolve)
-        },{
+        }, {
           path: 'mileageDetail',
           name: 'mileageDetail',
           meta: {
@@ -504,11 +504,88 @@ export default [{
     path: 'statistics',
     name: 'statistics',
     meta: {
-      isVerificationL: true,
+      isVerificationL: false,
       title: '数据统计',
       iconName: 'icon-data',
     },
     component: (resolve) => require(['../page/statistics/statistics'], resolve),
+    children: [{
+      path: 'business',
+      name: "business",
+      redirect: '/statistics/business/logistics/logisticsList',
+      meta: {
+        title: '业务统计',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/business/business'], resolve),
+      children: [{
+        path: 'logistics',
+        name: "logistics",
+        meta: {
+          title: '物流费用',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/business/logistics/logistics'], resolve),
+        children: [{
+          path: 'logisticsList',
+          name: "logisticsList",
+          meta: {
+            title: '物流费用列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
+        },{
+          path: 'editLogistics',
+          name: "editLogistics",
+          meta: {
+            title: '物流费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
+        },{
+          path: 'logisticsWaybillDetail/:willId',
+          name: "logisticsWaybillDetail",
+          meta: {
+            title: '物流费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
+        }]
+      },{
+        path: 'income',
+        name: "income",
+        meta: {
+          title: '收入统计',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
+        children: [{
+          path: 'incomeList',
+          name: "incomeList",
+          meta: {
+            title: '收入统计列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
+        },{
+          path: 'editIncome',
+          name: "editIncome",
+          meta: {
+            title: '收入统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
+        },{
+          path: 'incomeWaybillDetail/:willId',
+          name: "incomeWaybillDetail",
+          meta: {
+            title: '收入统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
+        }]
+      }]
+    }]
   }, {
     path: 'setting',
     name: 'setting',

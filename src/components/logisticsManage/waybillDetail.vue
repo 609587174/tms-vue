@@ -1,11 +1,11 @@
+<!-- waybillDetail.vue -->
 </style>
 <template>
-  <div class="detail-main">
+<!--   <div class="detail-main">
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="运单详情" name="first">
-          <waybill-detail></waybill-detail>
-          <!-- <div class="detail-main" v-loading="pageLoading">
+        <el-tab-pane label="运单详情" name="first"> -->
+          <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-main>
                 <div class="detail-list detail-form">
@@ -233,7 +233,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>车牌号:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor.plate_number)"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor&&transPowerData.tractor.plate_number)"></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
@@ -245,7 +245,7 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>挂车号:</label>
-                        <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.semitrailer.plate_number)"></div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.semitrailer&&transPowerData.semitrailer.plate_number)"></div>
                       </div>
                     </el-col>
                   </el-row>
@@ -317,23 +317,18 @@
                 </div>
               </el-main>
             </el-container>
-          </div> -->
-        </el-tab-pane>
+          </div>
+        <!-- </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>
-        <!-- <el-tab-pane label="轨迹地图" name="third">
-        </el-tab-pane> -->
+
       </el-tabs>
     </div>
-  </div>
+  </div> -->
 </template>
 <script>
-import waybillDetail from '@/components/logisticsManage/waybillDetail';
 export default {
-  name: 'orderDetailTab',
-  components: {
-    waybillDetail: waybillDetail
-  },
+  name: 'waybillDetail',
   computed: {
     setpId: function() {
       return this.$route.params.setpId;
@@ -362,77 +357,67 @@ export default {
     }
   },
   methods: {
-    clicktabs: function(targetName) {
-      if (targetName.name == 'second') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${this.setpId}/${this.willId}` });
+
+    getOrderDetail: function() {
+      this.pageLoading = true;
+      var vm = this;
+      let postData = {
+        id: this.willId
       }
-      if (targetName.name == 'third') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${this.setpId}/${this.willId}` });
-      }
+      this.$$http('getConOrderDetail', postData).then((results) => {
+        this.pageLoading = false;
+        console.log('results', results);
+        if (results.data && results.data.code == 0 && results.data.data) {
+          this.detailData = results.data.data;
+          /* 获取运力 */
+          var unloadArr = [],
+            loadArr = [];
+
+          for (var i = 0; i < vm.detailData.trips.length; i++) {
+            if (vm.detailData.trips[i].section_type.key == 'unload') {
+              unloadArr.push(vm.detailData.trips[i]);
+            } else {
+              loadArr.push(this.detailData.trips[i]);
+            }
+          }
+          vm.unloadArr = unloadArr;
+          vm.loadArr = loadArr;
+          if (vm.detailData.trips && vm.detailData.trips.length && vm.detailData.trips[0].capacity) {
+            vm.getTransPowerInfo(vm.detailData.trips[0].capacity);
+          }
+        } else {
+          vm.$message({
+            message: results.data.msg,
+            type: 'error'
+          });
+        }
+      }).catch((err) => {
+
+      })
     },
-    // getOrderDetail: function() {
-    //   this.pageLoading = true;
-    //   var vm = this;
-    //   let postData = {
-    //     id: this.willId
-    //   }
-    //   this.$$http('getConOrderDetail', postData).then((results) => {
-    //     this.pageLoading = false;
-    //     console.log('results', results);
-    //     if (results.data && results.data.code == 0 && results.data.data) {
-    //       this.detailData = results.data.data;
-    //       /* 获取运力 */
-    //       var unloadArr = [],
-    //         loadArr = [];
+    getTransPowerInfo: function(id) {
+      let postData = {
+        id: id
+      }
+      this.$$http('getTransPowerInfo', postData).then((results) => {
+        console.log('getTransPowerInfo', results);
+        if (results.data && results.data.code == 0 && results.data.data) {
+          this.transPowerData = results.data.data;
+          console.log('this.transPowerData', this.transPowerData);
+        } else {
+          this.$message({
+            message: results.data.msg,
+            type: 'error'
+          });
+        }
+      }).catch((err) => {
 
-    //       for (var i = 0; i < vm.detailData.trips.length; i++) {
-    //         if (vm.detailData.trips[i].section_type.key == 'unload') {
-    //           unloadArr.push(vm.detailData.trips[i]);
-    //         } else {
-    //           loadArr.push(this.detailData.trips[i]);
-    //         }
-    //       }
-    //       vm.unloadArr = unloadArr;
-    //       vm.loadArr = loadArr;
-    //       if (vm.detailData.trips && vm.detailData.trips.length && vm.detailData.trips[0].capacity) {
-    //         vm.getTransPowerInfo(vm.detailData.trips[0].capacity);
-    //       }
-    //     } else {
-    //       vm.$message({
-    //         message: results.data.msg,
-    //         type: 'error'
-    //       });
-    //     }
-    //   }).catch((err) => {
-
-    //   })
-    // },
-    // getTransPowerInfo: function(id) {
-    //   let postData = {
-    //     id: id
-    //   }
-    //   this.$$http('getTransPowerInfo', postData).then((results) => {
-    //     console.log('getTransPowerInfo', results);
-    //     if (results.data && results.data.code == 0 && results.data.data) {
-    //       this.transPowerData = results.data.data;
-    //       console.log('this.transPowerData', this.transPowerData);
-    //     } else {
-    //       this.$message({
-    //         message: results.data.msg,
-    //         type: 'error'
-    //       });
-    //     }
-    //   }).catch((err) => {
-
-    //   })
-    // }
+      })
+    }
   },
-  activated: function() {
-    this.activeName = 'first';
-  },
+
   created: function() {
-    console.log('this.$route', this.$route.params.id, this.id);
-    // this.getOrderDetail();
+    this.getOrderDetail();
   }
 }
 

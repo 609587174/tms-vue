@@ -6,11 +6,11 @@
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="100px" :rules="rules" :model="staffRules" status-icon ref="staffRules">
           <el-form-item label="电话：" prop="phone">
-            <el-input placeholder="请输入" v-model="staffRules.phone" :disabled="staffDialog.type==='update'?true:false" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+            <el-input placeholder="请输入" v-model="staffRules.phone" :disabled="staffDialog.type==='update'?true:false||isEscort" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
           <el-form-item label="姓名：" prop="nick_name">
-            <el-input placeholder="请输入" v-model="staffRules.nick_name" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+            <el-input placeholder="请输入" v-model="staffRules.nick_name" :disabled="isEscort" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
           <el-form-item label="初始密码：" prop="password">
@@ -22,7 +22,7 @@
             </el-input>
           </el-form-item> -->
           <el-form-item label="用户名：" prop="username">
-            <el-input placeholder="请输入" v-model="staffRules.username" onkeyup="this.value=this.value.replace(/\s+/g,'')">
+            <el-input placeholder="请输入" v-model="staffRules.username" :disabled="isEscort" onkeyup="this.value=this.value.replace(/\s+/g,'')">
             </el-input>
           </el-form-item>
           <el-form-item label="邮箱：" prop="email">
@@ -30,12 +30,12 @@
             </el-input>
           </el-form-item>
           <el-form-item label="部门：" prop="department">
-            <el-select v-model="staffRules.department" filterable placeholder="请选择" @change="getPositionList(true)">
+            <el-select v-model="staffRules.department" filterable placeholder="请选择" :disabled="isEscort" @change="getPositionList(true)">
               <el-option v-for="(item,key) in departmentList" :key="key" :label="item.group_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="职位：" prop="carrier_role">
-            <el-select v-model="staffRules.carrier_role" filterable placeholder="请选择">
+            <el-select v-model="staffRules.carrier_role" filterable placeholder="请选择" :disabled="isEscort">
               <el-option v-for="(item,key) in positionList" :key="key" :label="item.role_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -121,7 +121,8 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      title: '新增员工'
+      title: '新增员工',
+      isEscort: false
     }
   },
   computed: {
@@ -130,6 +131,16 @@ export default {
   methods: {
     closeBtn: function() {
       this.$emit('closeDialogBtn', this.type);
+    },
+    changeDepartment() {
+      this.isEscort = false;
+      console.log('部门',this.staffRules.department)
+      for (let i in this.departmentList) {
+        if (this.departmentList[i].id === this.staffRules.department&& this.departmentList[i].department_number === 'DRIVER_ESCORT_STAFF') {
+          this.isEscort = true;
+          break;
+        }
+      }
     },
     editDepartment: function() {
       this.$refs['staffRules'].validate((valid) => {
@@ -211,6 +222,7 @@ export default {
         };
         if (val.isShow && val.type === 'update') {
           console.log('staffRow', this.staffRow)
+
           this.staffRules = {
             username: this.staffRow.username,
             password: '',
@@ -221,6 +233,7 @@ export default {
             carrier_role: this.staffRow.carrier_role.id
           }
           this.rules.password[0].required = false;
+          this.changeDepartment();
           this.getPositionList();
           // this.staffRules.group_name = this.departmentRow.group_name;
           this.title = '修改员工';
@@ -242,7 +255,7 @@ export default {
           ];
           // this.staffRules.group_name = '';
         }　　
-        if(this.$refs['staffRules']){
+        if (this.$refs['staffRules']) {
           this.$refs['staffRules'].clearValidate();　　　　
         }　
       },

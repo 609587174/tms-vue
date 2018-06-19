@@ -4,12 +4,14 @@
 </style>
 <template>
   <div>
-    <router-view></router-view>
+    <keep-alive :include="['logisticsList','incomeList']">
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 <script>
 export default {
-  name: 'statistics',
+  name: 'business',
   data() {
     return {
 

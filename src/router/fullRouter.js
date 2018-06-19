@@ -463,7 +463,7 @@ export default [{
             title: '运费约定列表',
           },
           component: (resolve) => require(['../page/clientManage/standardDataManage/freight/freightDataList'], resolve)
-        },{
+        }, {
           path: 'freightDetail',
           name: 'freightDetail',
           meta: {
@@ -488,7 +488,7 @@ export default [{
             title: '标准里程列表',
           },
           component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDataList'], resolve)
-        },{
+        }, {
           path: 'mileageDetail',
           name: 'mileageDetail',
           meta: {
@@ -504,11 +504,39 @@ export default [{
     path: 'statistics',
     name: 'statistics',
     meta: {
-      isVerificationL: true,
+      isVerificationL: false,
       title: '数据统计',
       iconName: 'icon-data',
     },
     component: (resolve) => require(['../page/statistics/statistics'], resolve),
+    children: [{
+      path: 'business',
+      name: "business",
+      redirect: '/statistics/business/logistics/logisticsList',
+      meta: {
+        title: '业务统计',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/business/business'], resolve),
+      children: [{
+        path: 'logistics',
+        name: "logistics",
+        meta: {
+          title: '物流费用',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/business/logistics/logistics'], resolve),
+        children: [{
+          path: 'logisticsList',
+          name: "logisticsList",
+          meta: {
+            title: '物流费用列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
+        }]
+      }]
+    }]
   }, {
     path: 'setting',
     name: 'setting',

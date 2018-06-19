@@ -1,23 +1,25 @@
 <style scoped lang="less">
 .el-table {
-  /deep/ td{
-    padding:0;
+  /deep/ td {
+    padding: 0;
   }
   /deep/ .cell {
     padding: 0!important;
   }
 }
+
 .fee-list {
-    ul {
-        li {
-            height: 32px;
+  ul {
+    li {
+      height: 32px;
 
-            line-height: 32px;
+      line-height: 32px;
 
-            border-bottom: 1px solid #e4e7ed;
-        }
+      border-bottom: 1px solid #e4e7ed;
     }
+  }
 }
+
 </style>
 <template>
   <div>
@@ -58,7 +60,13 @@
                       <li v-for="(fee,key) in scope.row.records">{{fee[item.param]}}</li>
                     </ul>
                   </div>
-                  <div v-else><span v-if="scope.row.agreements.length&&item.param!=='created_at'">{{scope.row.agreements[0][item.param]}}</span><span v-else>{{scope.row.created_at}}</span></div>
+                  <div v-else>
+                    <span v-if="scope.row.agreements.length&&item.param!=='created_at'&&item.param!=='fluid_name'">
+                      {{scope.row.agreements[0][item.param]}}
+                    </span>
+                    <span v-else></span>
+                    <span v-if="item.param==='created_at'">{{scope.row.created_at}}</span>
+                  </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="140" fixed="right">
@@ -90,9 +98,9 @@ export default {
   data() {
     return {
       pageLoading: false,
-      siteLoading:false,
-      fluidLoading:false,
-      shipperLoading:false,
+      siteLoading: false,
+      fluidLoading: false,
+      shipperLoading: false,
       pageData: {
         currentPage: 1,
         totalCount: '',
@@ -125,6 +133,10 @@ export default {
         title: '变动费率（元/吨/公里）',
         param: 'change_rate',
         width: '200'
+      }, {
+        title: '变动值',
+        param: 'change_rate',
+        width: ''
       }, {
         title: '生效托运方',
         param: 'carrier_name',
@@ -218,7 +230,7 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/clientManage/standardDataManage/freight/freightDetail", query: { id: command.id} });
+      this.$router.push({ path: "/clientManage/standardDataManage/freight/freightDetail", query: { id: command.id } });
     },
 
     pageChange: function() {

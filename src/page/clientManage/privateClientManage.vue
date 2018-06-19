@@ -97,7 +97,7 @@ export default {
         width: ''
       }, {
         title: '添加时间',
-        param: 'address',
+        param: 'created_at',
         width: ''
       }],
       tableData: []

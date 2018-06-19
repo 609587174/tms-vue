@@ -121,12 +121,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="行驶证发证日期:" prop="license_register_date" label-width="150px">
-                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.license_register_date" style="width: 100%;"></el-date-picker>
+                  <el-form-item label="行驶证发证日期:" prop="license_register_date" label-width="150px" >
+                    <el-date-picker :editable="editable" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.license_register_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="行驶证年审日期:" prop="license_verify_date" label-width="150px">
+                  <el-form-item :editable="editable" label="行驶证年审日期:" prop="license_verify_date" label-width="150px">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.license_verify_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -138,12 +138,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="营运证发证日期:" prop="operation_issue_date" label-width="150px">
+                  <el-form-item :editable="editable" label="营运证发证日期:" prop="operation_issue_date" label-width="150px">
                     <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" placeholder="选择日期" v-model="tailCarFormStep.operation_issue_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="营运证年审日期:" prop="operation_verify_date" label-width="150px">
+                  <el-form-item :editable="editable" label="营运证年审日期:" prop="operation_verify_date" label-width="150px">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.operation_verify_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -205,12 +205,12 @@
                 <el-row :gutter="80">
                   <el-col :span="8">
                     <el-form-item label="入保日期:" prop="insuranceAmout">
-                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_start_date" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
+                      <el-date-picker :editable="editable" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_start_date" style="width: 100%;" :picker-options="pickerOptions0"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="到期日期:">
-                      <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_due_date" style="width: 100%;"></el-date-picker>
+                      <el-date-picker :editable="editable" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="item.insurance_due_date" style="width: 100%;"></el-date-picker>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8" style="font-size:32px;text-align:right;" v-if="tailCarFormStep.semitrailer_insurances.length>1">
@@ -239,7 +239,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="罐检检验日期:" prop="bottle_verify_date">
-                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.bottle_verify_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker :editable="editable" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.bottle_verify_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -251,7 +251,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="压力容器检验日期:" prop="pressure_bottle_verify_date">
-                    <el-date-picker type="date" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" placeholder="选择日期" v-model="tailCarFormStep.pressure_bottle_verify_date" style="width: 100%;"></el-date-picker>
+                    <el-date-picker :editable="editable" type="date" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" placeholder="选择日期" v-model="tailCarFormStep.pressure_bottle_verify_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -295,6 +295,7 @@ export default {
     return {
       editStatus: false,
       titleType: "新增挂车",
+      editable:false,
       pageLoading: false,
       pickerOptions0: {
         disabledDate(time) {

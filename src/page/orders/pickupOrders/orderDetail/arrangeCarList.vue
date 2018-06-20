@@ -429,16 +429,31 @@ export default {
             sendData.del_capacities.push(item);
           }
         });
+
+        if(sendData.del_capacities.length==0&&sendData.add_capacities.length==0){
+          vm.$confirm('您没有任何修改', '请注意', {
+            confirmButtonText: '放弃修改',
+            cancelButtonText: '继续修改',
+            type: 'warning',
+            center: true,
+          }).then(() => {
+            vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+          }).catch(() => {
+
+          })
+        }
         if (vm.now_capacities.length > 0) {
-          this.pageLoading = true;
-          this.$$http("editCarPower", sendData).then((results) => {
-            this.pageLoading = false;
-            if (results.data.code == 0) {
+          if(sendData.del_capacities.length>0||sendData.add_capacities.length>0){
+            this.pageLoading = true;
+            this.$$http("editCarPower", sendData).then((results) => {
+              this.pageLoading = false;
+              if (results.data.code == 0) {
               vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
             }
-          }).catch(() => {
-            this.pageLoading = false;
-          });
+            }).catch(() => {
+              this.pageLoading = false;
+            });
+          }
         } else {
           vm.$confirm('修改后车辆为零,状态会置为待指派', '请注意', {
             confirmButtonText: '确认提交',

@@ -10,6 +10,19 @@
   /deep/ .el-table__body {
     .el-table__row {
       background-color: #f5f6fa;
+      &.expanded {
+        td {
+          border-top: 1px solid #e4e7ed;
+          border-bottom: 1px solid #e4e7ed;
+        }
+      }
+      &:first-child {
+        &.expanded {
+          td {
+            border-top: 0;
+          }
+        }
+      }
     }
     .el-table__expanded-cell[class*=cell] {
       padding-left: 0;
@@ -49,7 +62,7 @@
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
-      padding-left: 40px;
+      padding-left: 30px;
     }
     .el-table__expanded-cell[class*=cell] {
       padding: 16px 0;
@@ -72,7 +85,7 @@
 </style>
 <template>
   <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="medium" height="550">
-    <el-table-column type="expand">
+    <el-table-column type="expand" width="40">
       <template slot-scope="props">
         <div class="listDetalis" style="width:75%;padding-left:48px;">
           <el-row class="loadInfo commh" style="width:100%;">
@@ -148,8 +161,8 @@
             <el-col :span="4"> 状态:{{props.row.status.verbose}}
             </el-col>
           </el-row>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div>
+          <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
+          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
         </div>
       </template>
     </el-table-column>
@@ -184,7 +197,7 @@ export default {
   name: 'orderFifterList',
   data() {
     return {
-      delayTime:500,
+      delayTime: 500,
       expandStatus: true,
       pageLoading: false,
       expandFalg: true
@@ -228,7 +241,7 @@ export default {
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
-        
+
         this.upPlanMethod();
       } else if (type == 'changePlan') {
         this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });

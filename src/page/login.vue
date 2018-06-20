@@ -135,25 +135,20 @@ export default {
               this.submitBtn.btnText = '登录';
               this.submitBtn.isDisabled = false;
               this.submitBtn.isBtnLoading = false;
-              console.log('登录', results.data)
               if (results.data && results.data.code === 0) {
                 resolve(results);
-                console.log('登录success', results.data)
-                // this.$message({
-                //   message: '登录成功',
-                //   type: 'success'
-                // });
                 this.pbFunc.setLocalData('token', results.data.data.ticket, true);
                 this.getUser();
-                //this.$emit('login', this.$router.currentRoute.query.from);
               } else {
                 if (results.data && results.data.code === 600) {
                   this.isLogin = true;
                   this.userId = results.data.data.id;
                 }
+                this.refreshVaImg();
                 reject(results);
               }
             }).catch((err) => {
+              this.refreshVaImg();
               this.$message.error('登录失败');
               this.submitBtn.isDisabled = false;
               this.submitBtn.isBtnLoading = false;
@@ -167,7 +162,6 @@ export default {
 
     },
     getMunusList() {
-      console.log('5555555')
       this.$$http('getMenusList').then((results) => {
         if (results.data && results.data.code === 0) {
           if (results.data.data.length) {
@@ -182,14 +176,15 @@ export default {
               confirmButtonText: '关闭',
             });
           }
+        }else{
+          this.refreshVaImg();
         }
       }).catch((err) => {
+        this.refreshVaImg();
         this.$message.error('登录失败');
       })
 
     },
-    // addroutes(menuList){ // if (menuList && menuList.length) { // for (let i in menuList) { // } // } // },
-
     login() {
       this.loginAjax().then((results) => {
         console.log('resultsxxx', results);

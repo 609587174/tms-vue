@@ -19,7 +19,7 @@
     <div class="setting-content">
       <el-row :gutter="22">
         <el-col :span="5">
-          <div class="nav-tab-setting">
+          <div class="nav-tab-setting nav-tab-width">
             <div class="add-user-btn">
               <el-button type="success" size="medium" @click="staffsDialog('add')">新增员工</el-button>
             </div>

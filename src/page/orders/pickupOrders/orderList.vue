@@ -6,10 +6,10 @@
 </style>
 <template>
   <div>
-    <div class="nav-tab">
-      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+    <div class="nav-tab-setting">
+      <el-tabs v-model="activeName" @tab-click="clicktabs">
         <el-tab-pane label="公有提货单" name="first">
-          <div class="tab-screen">
+          <div class="tab-content">
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
@@ -20,7 +20,10 @@
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
-                <el-col :span="8" :offset="2">
+
+              </el-row>
+              <el-row :gutter="30">
+                <el-col :span="8">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
                     <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" size="medium">
                     </el-date-picker>
@@ -32,38 +35,38 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="listOrder nav-tab" v-loading="pageLoading">
-      <el-tabs v-model="thisFifterName" type="card" @tab-click="clickFifter">
+    <div class="listOrder nav-tab-setting" v-loading="pageLoading">
+      <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-          <div v-if="thisFifterName=='all'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.appoint_count" name="appoint">
-          <div v-if="thisFifterName=='appoint'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='appoint'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.determine_count" name="determine">
-          <div v-if="thisFifterName=='determine'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='determine'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.confirmed_count" name="confirmed">
-          <div v-if="thisFifterName=='confirmed'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='confirmed'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="statusName.history_count" name="loaded">
-          <div v-if="thisFifterName=='loaded'">
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='loaded'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
@@ -90,7 +93,7 @@ export default {
       pageLoading: false,
       fifterParam: {
         keyword: "",
-        field: "",
+        field: "trader_name",
       },
       statusName: {
         all_count: '全部',
@@ -110,7 +113,7 @@ export default {
       listFifterData: [],
       rules: {},
       activeName: 'first',
-      
+
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -146,7 +149,7 @@ export default {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
     },
     searchList: function(type) {
-     
+
       var sendData = {};
       var vm = this;
       if (this.fifterParam.field) {
@@ -221,13 +224,13 @@ export default {
      }
     //this.listFifterData = this.listData;
     this.searchList();
-    
+
   },
   watch: {
   '$route' (to, from) {
   //刷新参数放到这里里面去触发就可以刷新相同界面了
     this.thisFifterName=this.$route.query.goTo||"all";
-    this.searchList();    
+    this.searchList();
   }
 }
 };

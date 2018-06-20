@@ -122,7 +122,8 @@ export default {
         ],
         verify_code: [
           { required: true, message: '请输入图片验证码', trigger: 'blur' },
-          { validator: checkImgCode, trigger: 'blur' }
+          { min: 4, max: 4, message: '输入4位验证码', trigger: 'blur' }
+          // { validator: checkImgCode, trigger: 'blur' }
         ],
         message_verify_code: [
           { required: true, message: '请输入短信验证码', trigger: 'blur' }

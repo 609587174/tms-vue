@@ -20,7 +20,7 @@
     <div class="setting-content">
       <el-row :gutter="22">
         <el-col :span="5">
-          <div class="nav-tab-setting">
+          <div class="nav-tab-setting nav-tab-width nav-tab-width">
             <el-tabs v-model="departmentActive" @tab-click="handleClick">
               <el-tab-pane label="部门" name="department">
                 <div class="department-list">

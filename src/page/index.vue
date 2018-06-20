@@ -1,6 +1,4 @@
 <style scoped lang="less">
-@import '../assets/css/themeStyle.less';
-@import '../assets/css/reset.less';
 .el-container {
   background: #fff;
 }
@@ -30,7 +28,7 @@ a {
     }
 
     .link {
-      width: 90px;
+      width: 187px;
       height: 36px;
       border: 1px solid #fff;
       display: inline-block;
@@ -38,15 +36,22 @@ a {
       text-align: center;
       line-height: 34px;
       margin-left: 40px;
+      position: relative;
+      top: 13px; // margin-top: 12px;
       a {
+        width: 90px;
         display: block;
+        float: left;
+        &:last-child {
+          border-left: 1px solid #fff;
+        }
       }
     }
     .user {
       display: inline-block;
       margin-left: 30px;
       .text-blue {
-        color: #26c6da;
+        color: #4a9bf8;
       }
       span {
         padding: 0 10px;
@@ -95,19 +100,17 @@ a {
   .advantage {
     width: 1200px;
     margin: 0 auto;
-    height: 708px;
-    padding-bottom: 90px;
+    margin-bottom: 90px;
     .advantage-list {
       height: 618px;
       width: 100%;
       .advantage-list-msg {
-        height: 255px;
-        margin-bottom: 15px;
+        height: 309px;
         background: #F7F8FA;
         text-align: center;
-        padding: 0 22px;
+        padding: 0 40px;
         img {
-          margin: 26px 0 22px;
+          margin: 56px 0 22px;
         }
         span {
           display: block;
@@ -119,8 +122,6 @@ a {
           font-size: 16px;
           color: #50565C;
           line-height: 22px;
-          width: 279px;
-          margin: 0 auto;
           text-align: center;
         }
       }
@@ -136,18 +137,24 @@ a {
     height: 670px;
     background: url('../assets/img/product.png')no-repeat 50%;
     display: inline-block;
+    .list-title {
+      color: #fff;
+    }
 
     .product-content {
       width: 1120px; // height: 220px;
       margin: 0 auto;
+
       .is-animating {
         // width: 920px;
-        background: #fff;
       }
       /deep/ .el-carousel__container {
         height: 220px;
-        .el-carousel__arrow i {
-          font-size: 24px;
+        .el-carousel__arrow {
+          background: none;
+          i {
+            font-size: 24px;
+          }
         }
         .el-carousel__arrow--left {
           left: 35px;
@@ -156,12 +163,30 @@ a {
           right: 35px;
         }
       }
+      /deep/ .el-carousel__indicators {
+        display: none;
+      }
       .product-list {
+        position: absolute;
+        top: 0;
+        left: 100px;
         width: 820px;
         margin: 0 auto;
         padding: 0 50px;
-        color: #333;
+        color: #fff;
         height: 220px;
+        &:after {
+          content: " ";
+          width: 100%;
+          height: 220px;
+          position: absolute;
+          left: 0;
+          top: 0;
+          background: rgba(255, 255, 255, .2);
+          filter: blur(2px);
+          z-index: 2;
+        }
+
         >span {
           font-size: 24px;
 
@@ -175,10 +200,10 @@ a {
         }
       }
       .app-one {
-        background: url('../assets/img/app1.png')no-repeat right 30px;
+        background: url('../assets/img/app1.png')no-repeat 680px 30px;
       }
       .app-two {
-        background: url('../assets/img/app2.png')no-repeat right 30px;
+        background: url('../assets/img/app2.png')no-repeat 680px 30px;
       }
       .app-code {
         ul {
@@ -189,7 +214,8 @@ a {
             width: 132px;
             height: 50px;
             border-radius: 25px;
-            border: 1px solid #333;
+            border: 1px solid #fff;
+
 
             text-align: center;
             display: inline-block;
@@ -199,6 +225,7 @@ a {
             position: relative;
             >span {
               line-height: 50px;
+              color: #fff;
             }
             &:hover {
               .code {
@@ -214,7 +241,7 @@ a {
               width: 134px;
               height: 160px;
               background: #fff;
-              >span{
+              >span {
                 line-height: 22px;
                 letter-spacing: 3px;
               }
@@ -244,7 +271,6 @@ a {
       background: #409EFF;
       -webkit-transform: rotate(45deg);
       transform: rotate(45deg);
-
     }
     &:after {
       position: absolute;
@@ -257,7 +283,6 @@ a {
       background: #409EFF;
       -webkit-transform: rotate(45deg);
       transform: rotate(45deg);
-
     }
   }
 }
@@ -283,18 +308,18 @@ a {
       <el-header>
         <div class="bpm-head">
           <el-row>
-            <!-- <el-col :span="12"><img src="@/assets/img/logo.png" alt=""></el-col> -->
-            <el-col :span="12" class="text-right">
+            <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
+            <el-col :span="18" class="text-right">
               <a rel="nofollow" target="_blank" :href="businessAppUrl">司机端App下载</a>
               <span>｜</span>
               <a rel="nofollow" target="_blank" :href="driverAppUrl">业务端App下载</a>
-              <div v-if="user&&user.profile" class="user">
-                欢迎您：{{user.profile.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
+              <div v-if="user&&user.nick_name" class="user">
+                欢迎您：{{user.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
                 <span>|</span>
                 <a v-on:click="logout" class="cursor-pointer">退出</a>
               </div>
               <div class="link" v-else>
-                <!-- <router-link :to="{path: '/register'}" class="text-blue">注册</router-link> -->
+                <router-link :to="{path: '/register'}" class="text-blue">注册</router-link>
                 <router-link :to="{path: '/login'}" @click="goLink">登录</router-link>
               </div>
             </el-col>
@@ -317,13 +342,13 @@ a {
             我们的优势
           </div>
           <div class="advantage-content">
-            <el-row :gutter="15">
+            <el-row>
               <el-col :span="6">
                 <div class="advantage-list">
                   <div class="advantage-list-msg">
                     <img src="@/assets/img/ai.png">
-                    <span>全业务场景协作</span>
-                    <div>通过数据同步与多平台协作，支持需要跨部门、 跨角色、跨权限的各类业务协作场景。</div>
+                    <span>车辆智能调度</span>
+                    <div>在确保时效性的前提下，依托 业界领先的算法技术计算装货 与卸货的最优调度方案</div>
                   </div>
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap1.png">
@@ -332,13 +357,13 @@ a {
               </el-col>
               <el-col :span="6">
                 <div class="advantage-list">
-                  <div class="advantage-list-msg">
-                    <img src="@/assets/img/data.png">
-                    <span>全流程数据分析</span>
-                    <div>业务流程中各类指标、数据、操作记录完整沉 淀，通过大数据处理以BI形式提供商业决策支持。</div>
-                  </div>
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap2.png">
+                  </div>
+                  <div class="advantage-list-msg">
+                    <img src="@/assets/img/data.png">
+                    <span>数据精心管理</span>
+                    <div>驾驶员/销售/统计/财务数据实 时同步、精确统计</div>
                   </div>
                 </div>
               </el-col>
@@ -346,11 +371,23 @@ a {
                 <div class="advantage-list">
                   <div class="advantage-list-msg">
                     <img src="@/assets/img/search.png">
-                    <span>全业务流程覆盖</span>
-                    <div>针对LNG贸易业务实际场景，对贸易流程整个 生命周期进行建模，从而进行自动化处理、监 控管理和持续调优。</div>
+                    <span>行业全景洞察</span>
+                    <div>为管理人员与销售人员提供实 时更新的全国LNG价格图表， 为制定销售策略提供辅助</div>
                   </div>
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap3.png">
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="6">
+                <div class="advantage-list">
+                  <div class="advantage-list-img">
+                    <img src="@/assets/img/Bitmap4.png">
+                  </div>
+                  <div class="advantage-list-msg">
+                    <img src="@/assets/img/for.png">
+                    <span>业务协同推进</span>
+                    <div>从获取销售需求到物流运输、 财务管理实现全站多角色高效 协同与跟踪记录</div>
                   </div>
                 </div>
               </el-col>
@@ -415,7 +452,7 @@ export default {
       driverCodeImg: '', //司机端下载二维码
       businessAppUrl: '', //业务端下载链接
       driverAppUrl: '', //司机端下载链接
-      user: this.pbFunc.getLocalData('user', true)
+      user: this.pbFunc.getLocalData('users', true)
     };
   },
   computed: {
@@ -426,7 +463,7 @@ export default {
       this.$router.push({ path: '/login' });
     },
     isLogin() {
-      if (this.user&&this.user.profile) {
+      if (this.user && this.user.nick_name) {
         this.$router.push({ path: '/dashborad' });
       } else {
         this.$router.push({ path: '/login' });

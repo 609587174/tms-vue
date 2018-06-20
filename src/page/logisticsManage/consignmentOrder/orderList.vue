@@ -6,8 +6,8 @@
 </style>
 <template>
   <div>
-    <div class="nav-tab" v-loading="pageLoading">
-      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs"  v-if="show">
+    <div class="nav-tab-setting" v-loading="pageLoading">
+      <el-tabs v-model="activeName" @tab-click="clicktabs"  v-if="show">
         <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">
             <keep-alive>

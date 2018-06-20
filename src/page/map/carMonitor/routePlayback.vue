@@ -141,6 +141,7 @@ export default {
       endMarker: '', //终点标记
       deviceDetail: '', //设备详情，获取设备详情是为了页面初始化的时候，获取绑定车辆信息carNumber
       carNumber: '', //绑定车辆信息
+      masterDriver: '',
       searchFilters: {
         choosedCar: '', //筛选所选择的车辆
         choosedTime: [new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), new Date()], //筛选所选择的时间段，巨坑，choosedTime初始化不能使用变量。可能是用法不正确。
@@ -330,6 +331,7 @@ export default {
           if (results.data && results.data.code == 0) {
             this.deviceDetail = results.data.data;
             this.carNumber = this.deviceDetail.tractor.plate_number;
+            this.masterDriver = (this.deviceDetail.master_driver && this.deviceDetail.master_driver.name) ? this.deviceDetail.master_driver.name : '无';
             this.searchFilters.choosedCar = this.deviceDetail.tractor.id;
             console.log('deviceDetail', this.deviceDetail);
             resolve(results)
@@ -777,17 +779,35 @@ export default {
         }
         //轨迹点添加事件
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
-          let pointMsgStr = '';
-          pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
-            '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
-            '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
-            'km/h</div>';
 
-          _this.infoWindow.setInfoBody(pointMsgStr);
-
-          _this.infoWindow.open(_this.map, info.pathData.path[info.pointIndex]);
+          console.log('info', info);
 
 
+          AMap.plugin('AMap.Geocoder', function() {
+
+            let lnglat = [_this.totalDataResult[info.pointIndex].location.longitude, _this.totalDataResult[info.pointIndex].location.latitude]
+            let geocoder = new AMap.Geocoder({
+              // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+              city: ''
+            })
+            geocoder.getAddress(lnglat, function(status, data) {
+              if (status === 'complete' && data.info === 'OK') {
+                let pointMsgStr = '';
+                let addressDetail = data.regeocode.formattedAddress;
+                pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
+                  '</div><div class="fs-13">车牌号：' + _this.carNumber +
+                  '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
+                  '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
+                  'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+                  '</div>';
+
+
+                _this.infoWindow.setInfoBody(pointMsgStr);
+
+                _this.infoWindow.open(_this.map, info.pathData.path[info.pointIndex]);
+              }
+            })
+          })
 
         });
         let $ = MarkerList.utils.$; //即jQuery/Zepto
@@ -908,7 +928,8 @@ export default {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
         let latitude = _this.totalDataResult[cursor.idx].location.latitude;
-        pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
+        pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
+          '</div><div class="fs-13">车牌号：' + _this.carNumber +
           '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
           '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
           'km/h</div>';
@@ -1030,18 +1051,35 @@ export default {
     checkPoint: function(row) {
 
       let _this = this;
-      let pointMsgStr = '';
       _this.navg1.pause();
       _this.isDisplay = false;
       _this.navg1.pause();
 
-      pointMsgStr = '<div class="fs-13">车牌号：' + _this.carNumber +
-        '</div><div class="fs-13">定位时间：' + row.row.create_time +
-        '</div>';
+      AMap.plugin('AMap.Geocoder', function() {
 
-      _this.infoWindow.setInfoBody(pointMsgStr);
+        let lnglat = [row.row.location.longitude, row.row.location.latitude]
+        let geocoder = new AMap.Geocoder({
+          // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+          city: ''
+        })
+        geocoder.getAddress(lnglat, function(status, data) {
+          if (status === 'complete' && data.info === 'OK') {
+            let pointMsgStr = '';
+            let addressDetail = data.regeocode.formattedAddress;
+            pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
+              '</div><div class="fs-13">车牌号：' + _this.carNumber +
+              '</div><div class="fs-13">定位时间：' + row.row.create_time +
+              '</div><div class="fs-13">行驶速度：' + row.row.speed +
+              'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+              '</div>';
 
-      _this.infoWindow.open(_this.map, [row.row.location.longitude, row.row.location.latitude]);
+
+            _this.infoWindow.setInfoBody(pointMsgStr);
+
+            _this.infoWindow.open(_this.map, [row.row.location.longitude, row.row.location.latitude]);
+          }
+        })
+      })
 
     },
     pauseDriving: function() { //暂停

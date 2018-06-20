@@ -78,7 +78,7 @@
           <el-row class="loadInfo commh" style="width:100%;">
             <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.fluid_name}}</span><i class="el-icon-location primary"></i>
             </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
+            <el-col :span="3" class="colinfo">
             </el-col>
             <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
             </el-col>

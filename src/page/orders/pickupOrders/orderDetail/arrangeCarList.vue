@@ -640,7 +640,7 @@ export default {
         //   }
         // }
         newArr = newArr.concat(fifterArr2);
-        if(this.delivery_list.status.key=='canceled'||this.delivery_list.status.key=='confirmed'){
+        if(this.delivery_list.status.key=='canceled'){
           newArr.forEach(item=>{
             item.isDisable=true;
           });

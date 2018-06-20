@@ -132,7 +132,7 @@
                         <div class="detail-form-item">2018-12-12</div>
                       </div>
                     </el-col>
-                    <el-col :span="6">
+                 <!--    <el-col :span="6">
                       <div class="label-list">
                         <label>标准里程:</label>
                         <div class="detail-form-item">{{detailData.standard_mile}}</div>
@@ -143,9 +143,9 @@
                         <label>气差允许范围:</label>
                         <div class="detail-form-item">11111111</div>
                       </div>
-                    </el-col>
+                    </el-col> -->
                   </el-row>
-                  <el-row :gutter="40">
+                  <!-- <el-row :gutter="40">
                     
                     <el-col :span="6">
                       <div class="label-list">
@@ -159,7 +159,7 @@
                         <div class="detail-form-item">xxxx</div>
                       </div>
                     </el-col>
-                  </el-row>
+                  </el-row> -->
                 </div>
               </el-main>
             </el-container>

@@ -91,14 +91,14 @@
             </el-select>
           </el-form-item>
         </el-col> -->
-          <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status.key!='canceled'">
+          <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status && delivery_list.status.key!='canceled'">
             需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
           </el-col>
-          <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
+          <el-col :span="2" v-if="delivery_list.status && delivery_list.status.key!='canceled'">
             <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
             <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
           </el-col>
-          <el-col :span="4" :offset="20" v-if="delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
+          <el-col :span="4" :offset="20" v-if="delivery_list.status && delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
         </el-row>
       </div>
       <el-tabs v-model="activeName" @tab-click="clicktabs" :filter-method="filterHandler">

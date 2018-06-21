@@ -72,7 +72,7 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>承运商:</label>
-                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="detailData.carriers && index!=detailData.carriers.length-1">,</span></span>
                         </div>
                       </div>
                     </el-col>
@@ -128,13 +128,13 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计算标准:</label>
-                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
+                        <div class="detail-form-item" v-if="detailData.carriers && detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
+                        <div class="detail-form-item" v-if="detailData.carriers &&  detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
                       </div>
                     </el-col>
                   </el-row>

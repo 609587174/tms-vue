@@ -7,7 +7,9 @@
 .el-main {
   padding-top: 0px;
 }
-
+.bottomLine{
+  border-bottom: 1px dashed #ccc;
+}
 </style>
 <template>
   <div id="addPerson" class="detail-main">
@@ -166,7 +168,7 @@
               </el-row>
             </div>
             <!-- <el-form class="addheaduserform" label-width="120px" ref="addClientFormSetpOne" :rules="rules" :model="userData" status-icon> -->
-            <div v-for="(item,key) in tailData.semitrailer_insurances">
+            <div v-for="(item,key) in tailData.semitrailer_insurances" v-bind:class="{'bottomLine':headData.tractor_insurances.length>1&&key!=headData.tractor_insurances.length-1}">
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="保险类型:" prop="qualification_certificate_number">

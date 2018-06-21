@@ -276,7 +276,7 @@
                             <div class="label-list">
                               <label>站点地址:</label>
                               <div class="detail-form-item" style="height:24px">
-                                <el-tooltip class="item" effect="dark" :content="item.fluid_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                <el-tooltip class="item" effect="dark" :content="item.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
                                   <el-button type="text" style="height:24px;line-height:24px;padding-left:0">{{item.station_address}}</el-button>
                                 </el-tooltip>
                               </div>

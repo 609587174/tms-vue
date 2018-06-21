@@ -15,39 +15,21 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
+              <el-row :gutter="20">
+                <el-col :span="6">
                   <el-form-item label="从业类型:">
                     <el-select v-model="searchFilters.employmentType" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in employmentTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="是否绑定:">
                     <el-select v-model="searchFilters.isBind" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isBindSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <!--   <el-col :span="4">
-                  <el-form-item label="计划日期:">
-                    <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="计划日期:">
-                    <el-row :gutter="0" class="margin-clear">
-                      <el-col :md="11">
-                        <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
-                      </el-col>
-                      <el-col :md="1" class="text-center text-stance">-</el-col>
-                      <el-col :md="11">
-                        <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="selectData.data" style="width: 100%;"></el-date-picker>
-                      </el-col>
-                    </el-row>
-                  </el-form-item>
-                </el-col> -->
               </el-row>
             </el-form>
           </div>
@@ -58,7 +40,7 @@
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
                 <template slot-scope="scope">
@@ -131,7 +113,7 @@ export default {
       }, {
         title: '在职状态',
         param: 'on_job_status.verbose',
-        width: '250'
+        width: ''
       }, {
         title: '驾驶证号',
         param: 'drive_license_number',

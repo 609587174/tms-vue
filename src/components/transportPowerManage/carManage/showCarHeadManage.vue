@@ -11,12 +11,23 @@
   border-bottom: 1px dashed #ccc;
 }
 
+.insureBottom {}
+
 </style>
 <template>
   <div id="addPerson" class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;">
-        <p>查看牵引车</p>
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: '/transportPowerManage/carManage'}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>牵引车详情</p>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main>
         <el-form class="addheaduserform" label-width="145px" :model="headData" status-icon>
@@ -95,7 +106,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="高度:" >
+                <el-form-item label="高度:">
                   <div class="detail-form-item" v-if="headData.height>0">{{headData.height}}(mm)</div>
                 </el-form-item>
               </el-col>

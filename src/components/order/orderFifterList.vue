@@ -16,13 +16,6 @@
           border-bottom: 1px solid #e4e7ed;
         }
       }
-      &:first-child {
-        &.expanded {
-          td {
-            border-top: 0;
-          }
-        }
-      }
     }
     .el-table__expanded-cell[class*=cell] {
       padding-left: 0;

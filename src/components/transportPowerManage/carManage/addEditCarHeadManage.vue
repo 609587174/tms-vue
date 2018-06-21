@@ -1,9 +1,10 @@
 <template>
-  <div id="addeditHeadCarPage">
+  <div id="addeditHeadCarPage" class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;height:80px">
+      <el-header class="mt-5">
         <el-row>
-          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="returnToPage"></div>
           </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
@@ -11,13 +12,14 @@
         </el-row>
       </el-header>
       <el-row>
-        <el-col class="stepTitle">
+        <el-col class="stepTitle mt-25">
           {{stepTitle}}
         </el-col>
       </el-row>
       <el-main v-loading="pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
+            <!-- <div class="detail-form-title text-center">基础人员</div> -->
             <el-form class="addheadcarform" label-width="110px" ref="addEditFormSetp1" :rules="rules" :model="headCarFormStep1" status-icon :label-position="'left'">
               <el-row :gutter="80">
                 <el-col :span="8">
@@ -69,7 +71,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="牵引车质量(吨)" prop="towing_weight" >
+                  <el-form-item label="牵引车质量(吨)" prop="towing_weight">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep1.towing_weight"></el-input>
                   </el-form-item>
                 </el-col>
@@ -199,14 +201,14 @@
                 </el-row>
               </el-collapse-transition>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
@@ -247,14 +249,14 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
@@ -317,11 +319,13 @@
                 </el-row>
               </div>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFromStep3')">保存并且退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFromStep3')">保存并且退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
       </el-main>
@@ -360,16 +364,16 @@ export default {
         callback(new Error("危险品灯号由10个数值组成，如37060111-16"));
       }
     };
-    var fuel_typeVa=(rule, value, callback) => {
-       if (value == "") {
+    var fuel_typeVa = (rule, value, callback) => {
+      if (value == "") {
         callback(new Error("请选择燃料类型"));
       } else {
         callback();
       }
     }
     return {
-      Inamount:{},
-      editable:false,
+      Inamount: {},
+      editable: false,
       editStatus: false,
       activeStep: 0,
       titleType: "新增牵引车",
@@ -409,7 +413,7 @@ export default {
         safety_valve_3_due_date: '',
         safety_valve_4_number: '',
         safety_valve_4_due_date: '',
-        
+
       },
       headCarFormStep2: {
         license_number: '',
@@ -418,7 +422,7 @@ export default {
         operation_number: '',
         operation_issue_date: '',
         operation_verify_date: '',
-        
+
       },
       headCarFormStep3: {
         tractor_insurances: [],
@@ -523,7 +527,7 @@ export default {
       }
       this.pageLoading = true;
       var vm = this;
-      this.$$http('getHeadDetalis', sendData).then((result) =>{
+      this.$$http('getHeadDetalis', sendData).then((result) => {
         if (result.data.code == 0) {
           vm.headCarFormStep1 = vm.getTrueObj(vm.headCarFormStep1, result.data.data);
 
@@ -535,13 +539,13 @@ export default {
           vm.headCarFormStep3 = vm.getTrueObj(vm.headCarFormStep3, result.data.data);
           vm.headCarFormStep2 = vm.getTrueObj(vm.headCarFormStep2, result.data.data);
           var tractor_insurancesList = vm.headCarFormStep3.tractor_insurances;
-          console.log("ssss1",this);
+          console.log("ssss1", this);
           for (let i = 0; i < tractor_insurancesList.length; i++) {
-            console.log("ssss2",this);
-            tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type?tractor_insurancesList[i].insurance_type.key:"";
-            tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method?tractor_insurancesList[i].insurance_method.key:"";
-            vm.Inamount['insuranceAmoutProp'+i]='tractor_insurances['+i+'].amount';
-            vm.rules['tractor_insurances['+i+'].amount']={validator: onlyNum, trigger: 'blur' };
+            console.log("ssss2", this);
+            tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type ? tractor_insurancesList[i].insurance_type.key : "";
+            tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method ? tractor_insurancesList[i].insurance_method.key : "";
+            vm.Inamount['insuranceAmoutProp' + i] = 'tractor_insurances[' + i + '].amount';
+            vm.rules['tractor_insurances[' + i + '].amount'] = { validator: onlyNum, trigger: 'blur' };
           }
           vm.pageLoading = false;
           if (vm.headCarFormStep3.tractor_insurances.length == 0) {
@@ -551,7 +555,7 @@ export default {
           vm.pageLoading = false;
         };
       }).catch(function(err) {
-        console.log('err',err);
+        console.log('err', err);
         vm.pageLoading = false;
       });
     },
@@ -773,7 +777,9 @@ export default {
     width: 100%;
   }
 }
-
+.detail-main .go-return{
+  margin-top: 22px;
+}
 #addeditHeadCarPage {
   border: 1px solid rgb(222, 222, 222);
 }
@@ -801,11 +807,10 @@ export default {
 }
 
 .stepTitle {
-  background-color: rgb(235, 238, 245);
-  height: 40px;
+  background-color: #ebeef5;
+  height: 46px;
   text-align: center;
-  font-size: 18px;
-  line-height: 40px;
+  line-height: 48px;
 }
 
 </style>

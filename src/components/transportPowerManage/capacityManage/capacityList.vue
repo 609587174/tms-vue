@@ -1,10 +1,10 @@
 <template>
-  <div class="capacity-list">
-    <div class="capacity-list-header">
+  <div class="nav-tab">
+    <div class="tab-screen border-top">
       <el-form class="search-filters-form" label-width="80px" :model="filterParam" status-icon label-position="left">
         <el-row :gutter="0">
           <el-col :span="12">
-            <el-input placeholder="请输入内容" v-model="filterParam.keyword" class="input-with-select" @keyup.native.13="filterSearch">
+            <el-input placeholder="请输入内容" v-model="filterParam.keyword" class="search-filters-screen" @keyup.native.13="filterSearch">
               <el-select v-model="filterParam.field" slot="prepend" placeholder="请选择">
                 <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
               </el-select>
@@ -55,55 +55,55 @@
     <div class="capacity-list-content">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-          <el-table-column label="牵引车车牌号">
+          <el-table-column label="牵引车车牌号" align="center" width="140">
             <template slot-scope="scope">
               <a :href="'/#/transportPowerManage/carManage/showCarHeadManage?headId=' + scope.row.tractor.id" target="blank">{{scope.row.tractor.plate_number}}</a>
             </template>
           </el-table-column>
-          <el-table-column label="当前绑定挂车">
+          <el-table-column label="当前绑定挂车" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.semitrailer" :href="'/#/transportPowerManage/carManage/showCarTailManage?tailId=' + scope.row.semitrailer.id" target="blank">{{scope.row.semitrailer.plate_number}}</a>
               <span v-if="!scope.row.semitrailer">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="随车电话" prop="car_belong_phone">
+          <el-table-column label="随车电话" prop="car_belong_phone" width="140" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.car_belong_phone || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="车辆所属">
+          <el-table-column label="车辆所属" align="center" width="140">
             <template slot-scope="scope">
               <span>{{scope.row.attributes && scope.row.attributes.verbose || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="分组">
+          <el-table-column label="分组" align="center" width="140">
             <template slot-scope="scope">
               <span>{{scope.row.group && scope.row.group.group_name || '-'}}</span>
             </template>
           </el-table-column>
-          <el-table-column label="主驾驶">
+          <el-table-column label="主驾驶" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.master_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.master_driver.id" target="blank">{{scope.row.master_driver.name}}</a>
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="副驾驶">
+          <el-table-column label="副驾驶" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.vice_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.vice_driver.id" target="blank">{{scope.row.vice_driver.name}}</a>
               <span v-if="!scope.row.vice_driver">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="押运员">
+          <el-table-column label="押运员" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.escort_staff" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.escort_staff.id" target="blank">{{scope.row.escort_staff.name}}</a>
               <span v-if="!scope.row.escort_staff">-</span>
             </template>
           </el-table-column>
-          <el-table-column label="挂车绑定状态" prop="truck_bind_status">
+          <el-table-column label="挂车绑定状态" prop="truck_bind_status" align="center" width="140">
           </el-table-column>
-          <el-table-column label="人员绑定状态" prop="staff_bind_status">
+          <el-table-column label="人员绑定状态" prop="staff_bind_status" align="center" width="140">
           </el-table-column>
-          <el-table-column label="完善状态" prop="complete_status">
+          <el-table-column label="完善状态" prop="complete_status" align="center" width="140">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
@@ -127,23 +127,23 @@
         <el-pagination background layout="prev, pager, next , jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
-      <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
+      <el-dialog custom-class="capacity-list-dialog" title="绑定挂车" width="30%" :visible.sync="bindTruckFormVisible" append-to-body center @close="closeFormDialog('truckDialog')" @open="openFormDialog('truckDialog')">
         <div class="notice-msg" v-show="truckNotice">
           <i class="el-icon-warning"></i>
           <pre class="notice-msg">{{truckDialog.noticeMsg}}</pre>
         </div>
         <el-form v-show="!truckNotice" :model="truckDialog" ref="truckDialog" label-width="80px" :rules="truckRules">
           <h2>请为牵引车：<span>{{truckDialog.truckNum}}</span>绑定挂车</h2>
-          <el-form-item label="挂车号" prop="semitrailer">
+          <el-form-item label="挂车号:" prop="semitrailer">
             <el-select v-model="truckDialog.semitrailer" filterable clearable placeholder="请选择">
               <el-option v-for="(item, index) in semiList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="随车电话">
+          <el-form-item label="随车电话:">
             <el-input v-model="truckDialog.car_belong_phone" auto-complete="off"></el-input>
           </el-form-item>
-          <el-form-item label="分组">
+          <el-form-item label="分组:">
             <el-select v-model="truckDialog.group" clearable placeholder="请选择分组">
               <el-option v-if="item.id" v-for="(item, index) in selectData.groupOptions" :key="index" :label="item.group_name" :value="item.id">
               </el-option>
@@ -159,26 +159,26 @@
           <el-button type="primary" @click="forceSubmitTruckForm">确定</el-button>
         </div>
       </el-dialog>
-      <el-dialog custom-class="capacity-list-dialog" title="绑定人员" :visible.sync="bindStaffFormVisible" append-to-body center @close="closeFormDialog('staffDialog')" @open="openFormDialog('staffDialog')">
+      <el-dialog custom-class="capacity-list-dialog" title="绑定人员" width="30%" :visible.sync="bindStaffFormVisible" append-to-body center @close="closeFormDialog('staffDialog')" @open="openFormDialog('staffDialog')">
         <div class="notice-msg" v-show="staffNotice">
           <i class="el-icon-warning"></i>
           <pre class="notice-msg">{{staffDialog.noticeMsg}}</pre>
         </div>
         <el-form v-show="!staffNotice" :model="staffDialog" ref="staffDialog" label-width="70px" :rules="staffRules">
           <h2>请为牵引车：<span>{{staffDialog.truckNum}}</span>绑定人员&nbsp;&nbsp;挂车：<span>{{staffDialog.semiNum}}</span></h2>
-          <el-form-item label="主驾驶" prop="master_driver">
+          <el-form-item label="主驾驶:" prop="master_driver">
             <el-select v-model="staffDialog.master_driver" filterable clearable placeholder="请选择">
               <el-option v-for="(item, index) in driverList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="副驾驶" prop="vice_driver">
+          <el-form-item label="副驾驶:" prop="vice_driver">
             <el-select v-model="staffDialog.vice_driver" filterable clearable placeholder="请选择" @change="validateStaff">
               <el-option v-for="(item, index) in driverList" :key="index" :label="item.value" :value="item.id">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="押运员" prop="escort_staff">
+          <el-form-item label="押运员:" prop="escort_staff">
             <el-select v-model="staffDialog.escort_staff" filterable clearable placeholder="请选择" @change="validateStaff">
               <el-option v-for="(item, index) in escortList" :key="index" :label="item.value" :value="item.id">
               </el-option>

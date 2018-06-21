@@ -6,6 +6,17 @@
   }
 }
 
+/deep/ .el-table {
+  &:before {
+    height: 0;
+  }
+  th {
+    &.is-leaf {
+      border: none;
+    }
+  }
+}
+
 </style>
 <template>
   <div>
@@ -21,8 +32,8 @@
             </el-input>
           </el-col>
         </el-row>
-        <el-row :gutter="30" style="" class="searchSection">
-          <el-col :span="8"  class="searchSection">
+        <el-row :gutter="20" style="" class="searchSection">
+          <el-col :span="8" class="searchSection">
             <el-form-item align="right" label="计划装货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
@@ -30,14 +41,14 @@
           </el-col>
           <el-col :span="8">
             <el-form-item align="right" label="实际装货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions"  v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row  :gutter="30" style="" class="searchSection">
+        <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" v-if="status!='first'">
-            <el-form-item align="right" label="计划卸货时间:" label-width="105px" >
+            <el-form-item align="right" label="计划卸货时间:" label-width="105px">
               <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
@@ -49,10 +60,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-
       </el-form>
     </div>
-    <div class="listOrder nav-tab-setting" v-loading="pageLoading" style="margin-top:40px;">
+    <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
@@ -78,25 +88,25 @@ export default {
   },
   data() {
     return {
-      editable:false,
+      editable: false,
       pickerOptions: {
         shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          },{
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          },]
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, ]
       },
       expandStatus: true,
       pageLoading: false,
@@ -109,7 +119,7 @@ export default {
         'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
       },
-      allStatusList:{
+      allStatusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
@@ -177,19 +187,19 @@ export default {
         sendData.status = this.fifterName;
       }
 
-       if (this.timeParam.unload_active_time instanceof Array&&this.timeParam.unload_active_time.length>0) {
+      if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
       }
-      if (this.timeParam.unload_plan_time instanceof Array&&this.timeParam.unload_plan_time.length>0 ) {
+      if (this.timeParam.unload_plan_time instanceof Array && this.timeParam.unload_plan_time.length > 0) {
         sendData.unload_plan_time_start = this.timeParam.unload_plan_time[0]; //计划卸货
         sendData.unload_plan_time_end = this.timeParam.unload_plan_time[1];
       }
-      if (this.timeParam.active_time instanceof Array&&this.timeParam.active_time.length>0) {
+      if (this.timeParam.active_time instanceof Array && this.timeParam.active_time.length > 0) {
         sendData.load_active_time_start = this.timeParam.active_time[0]; //实际装车
         sendData.load_active_time_end = this.timeParam.active_time[1];
       }
-      if (this.timeParam.load_plan_time instanceof Array &&this.timeParam.load_plan_time.length>0) {
+      if (this.timeParam.load_plan_time instanceof Array && this.timeParam.load_plan_time.length > 0) {
         sendData.load_plan_time_start = this.timeParam.load_plan_time[0]; //计划装车
         sendData.load_plan_time_end = this.timeParam.load_plan_time[1];
       }
@@ -198,11 +208,12 @@ export default {
       }
 
       sendData.pageSize = this.pageData.pageSize;
-      
+
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
       }else{
+
         vm.saveSendData = sendData;
         this.pageData.currentPage=1;
         sendData.page = this.pageData.currentPage;
@@ -217,8 +228,8 @@ export default {
           vm.pageData.totalPage = Math.ceil(results.data.data.count / vm.pageData.pageSize);
           var sendData = {};
           if (dataBody.length > 0) {
-            var capacityList=[];
-            for(var i=0;i<dataBody.length;i++){
+            var capacityList = [];
+            for (var i = 0; i < dataBody.length; i++) {
               capacityList.push(dataBody[i].capacity);
             }
             sendData.ids = capacityList;
@@ -226,10 +237,10 @@ export default {
               vm.pageLoading = false;
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
-                transPowerInfoList.forEach((Ttiem)=>{
-                  dataBody.forEach((Ditem)=>{
-                    if(Ditem.capacity==Ttiem.id){
-                      Ditem.transPowerInfo=Ttiem;
+                transPowerInfoList.forEach((Ttiem) => {
+                  dataBody.forEach((Ditem) => {
+                    if (Ditem.capacity == Ttiem.id) {
+                      Ditem.transPowerInfo = Ttiem;
                     }
                   });
                 });
@@ -239,7 +250,7 @@ export default {
                 vm.listFifterData = dataBody;
               }
             }).catch((err) => {
-              console.log('err',err);
+              console.log('err', err);
               vm.pageLoading = false;
               vm.listFifterData = dataBody;
             });
@@ -249,7 +260,7 @@ export default {
 
         }
       }).catch((err) => {
-        console.log('err',err);
+        console.log('err', err);
         vm.pageLoading = false;
       });
     },
@@ -268,34 +279,34 @@ export default {
       });
     },
     assemblyData: function(val) {
-     var renderStatus=this.pbFunc.deepcopy(this.allStatusList);
-        var assemblyData = renderStatus[this.status]; //当前tabs数组
-        var add = "";
-        if (this.status == 'first') {
-          add = '_driver';
-        } else if (this.status == 'second') {
-          add = '_match';
-        } else if (this.status == 'third') {
-          add = '_unload';
-        } else if (this.status == 'fourth') {
-          add = '_settlement';
-        } else if (this.status == 'fifth') {
-          add = '_change';
-        } else if (this.status == 'sxith') {
-          add = '_finish';
-        }
-        for (var i in assemblyData) {
-          for (var j in val) { //传入过来的数值
-            if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
-              if (val[j] > 99) {
-                assemblyData[i].value += "(99+)";
-              } else {
-                assemblyData[i].value += "(" + val[j] + ")";
-              }
+      var renderStatus = this.pbFunc.deepcopy(this.allStatusList);
+      var assemblyData = renderStatus[this.status]; //当前tabs数组
+      var add = "";
+      if (this.status == 'first') {
+        add = '_driver';
+      } else if (this.status == 'second') {
+        add = '_match';
+      } else if (this.status == 'third') {
+        add = '_unload';
+      } else if (this.status == 'fourth') {
+        add = '_settlement';
+      } else if (this.status == 'fifth') {
+        add = '_change';
+      } else if (this.status == 'sxith') {
+        add = '_finish';
+      }
+      for (var i in assemblyData) {
+        for (var j in val) { //传入过来的数值
+          if (assemblyData[i].key + "_count" == j || (i == 0 && (assemblyData[i].key + add + "_count") == j)) {
+            if (val[j] > 99) {
+              assemblyData[i].value += "(99+)";
+            } else {
+              assemblyData[i].value += "(" + val[j] + ")";
             }
           }
         }
-        this.statusList[this.status] = assemblyData;
+      }
+      this.statusList[this.status] = assemblyData;
     }
   },
   mounted() {

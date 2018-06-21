@@ -16,29 +16,29 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
+              <el-row :gutter="20">
+                <el-col :span="6">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.confirm_status" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="地标来源:">
                     <el-select v-model="searchFilters.landmarkFrom" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="地标类型:">
                     <el-select v-model="searchFilters.position_type" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="是否同步:">
                     <el-select v-model="searchFilters.async_status" @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
@@ -53,7 +53,7 @@
             <el-button type="primary">导出</el-button>
             <el-button type="success">新增</el-button>
           </div>
-          <div class="table-list">
+          <div class="table-list mt-25">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
               </el-table-column>

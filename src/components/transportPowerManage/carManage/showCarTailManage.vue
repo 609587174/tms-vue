@@ -14,8 +14,17 @@
 <template>
   <div id="addPerson" class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;">
-        <p>查看挂车</p>
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: '/transportPowerManage/carManage/carTailManage'}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>挂车详情</p>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main>
         <el-form class="addheaduserform" label-width="130px" :model="tailData" status-icon>

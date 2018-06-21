@@ -1,6 +1,13 @@
 <style scoped lang="less">
-.listOrder {
-  margin-top: 35px;
+/deep/ .el-table {
+  &:before {
+    height: 0;
+  }
+  th {
+    &.is-leaf {
+      border: none;
+    }
+  }
 }
 
 </style>
@@ -13,19 +20,18 @@
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" size="medium">
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
                   </el-input>
                 </el-col>
-
               </el-row>
-              <el-row :gutter="30">
+              <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" size="medium">
+                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -35,7 +41,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <div class="listOrder nav-tab-setting" v-loading="pageLoading">
+    <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
@@ -102,7 +108,7 @@ export default {
         confirmed_count: '已确认',
         history_count: '历史'
       },
-      allStatusName:{
+      allStatusName: {
         all_count: '全部',
         appoint_count: '待指派',
         determine_count: '待确认',
@@ -119,7 +125,7 @@ export default {
         totalPage: 1,
         pageSize: 10,
       },
-      thisFifterName:"all",
+      thisFifterName: "all",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -133,10 +139,10 @@ export default {
     };
   },
   computed: {
-    fifterName:function(){
-      if(this.$route.query.goTo){
+    fifterName: function() {
+      if (this.$route.query.goTo) {
         return this.$route.query.goTo
-      }else{
+      } else {
         return 'all'
       }
     },
@@ -155,15 +161,15 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      if (this.timeParam instanceof Array&&this.timeParam.length>0) {
+      if (this.timeParam instanceof Array && this.timeParam.length > 0) {
         sendData.plan_time_start = this.timeParam[0];
         sendData.plan_time_end = this.timeParam[1];
       }
       if (this.thisFifterName != "all") {
         sendData.status = this.thisFifterName;
       }
-      if(this.thisFifterName=='loaded'){
-        sendData.history=true;
+      if (this.thisFifterName == 'loaded') {
+        sendData.history = true;
         delete sendData.status;
       }
       
@@ -193,10 +199,10 @@ export default {
     },
     clickFifter: function(targetName) {
       var status = targetName.name;
-      this.pageData.currentPage=1;
+      this.pageData.currentPage = 1;
       //重新查询一次数据
       //this.searchList();
-      this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo="+this.thisFifterName });
+      this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName });
     },
     pageChange: function() {
       setTimeout(() => {
@@ -204,39 +210,39 @@ export default {
         this.searchList();
       });
     },
-    getCountList:function(){
-      var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
+    getCountList: function() {
+      var renderStatus = this.pbFunc.deepcopy(this.allStatusName);
       this.$$http("getCount", {}).then(results => {
-      if (results.data.code == 0) {
-        var dataBody = results.data.data;
-        for (var i in dataBody) {
-          if (dataBody[i] > 99) {
-            dataBody[i] = '99+';
+        if (results.data.code == 0) {
+          var dataBody = results.data.data;
+          for (var i in dataBody) {
+            if (dataBody[i] > 99) {
+              dataBody[i] = '99+';
+            }
+            renderStatus[i] += "(" + dataBody[i] + ")";
           }
-          renderStatus[i] += "(" + dataBody[i] + ")";
+          this.statusName = renderStatus;
         }
-        this.statusName=renderStatus;
-      }
       }).catch(() => {
 
       });
     }
   },
   created() {
-    if(this.thisFifterName!=this.fifterName){
-        this.thisFifterName=this.fifterName;
-     }
+    if (this.thisFifterName != this.fifterName) {
+      this.thisFifterName = this.fifterName;
+    }
     //this.listFifterData = this.listData;
     this.searchList();
 
   },
   watch: {
-  '$route' (to, from) {
-  //刷新参数放到这里里面去触发就可以刷新相同界面了
-    this.thisFifterName=this.$route.query.goTo||"all";
-    this.searchList();
+    '$route' (to, from) {
+      //刷新参数放到这里里面去触发就可以刷新相同界面了
+      this.thisFifterName = this.$route.query.goTo || "all";
+      this.searchList();
+    }
   }
-}
 };
 
 </script>

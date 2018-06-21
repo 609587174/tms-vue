@@ -320,7 +320,7 @@ a {
               </div>
               <div class="link" v-else>
                 <router-link :to="{path: '/register'}" class="text-blue">注册</router-link>
-                <router-link :to="{path: '/login'}" @click="goLink">登录</router-link>
+                <router-link :to="{path: '/login'}">登录</router-link>
               </div>
             </el-col>
           </el-row>
@@ -459,9 +459,9 @@ export default {
 
   },
   methods: {
-    goLink() {
-      this.$router.push({ path: '/login' });
-    },
+    // goLink() {
+    //   this.$router.push({ path: '/login' });
+    // },
     isLogin() {
       if (this.user && this.user.nick_name) {
         this.$router.push({ path: '/dashborad' });

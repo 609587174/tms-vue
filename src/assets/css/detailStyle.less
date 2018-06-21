@@ -1,29 +1,37 @@
     // 新增 编辑 查看详情
-    .detail-main {
-      border: 1px solid @tms-border-two-level;
-      background: @tms-white;
-      &.nav-tab {
-        border: 0;
-        border-top: 1px solid @tms-border-two-level;
+.detail-main {
+    border: 1px solid @tms-border-two-level;
+    background: @tms-white;
+    &.nav-tab {
         position: relative;
         top: 40px;
+
+        border: 0;
+        border-top: 1px solid @tms-border-two-level;
         .el-tabs__header {
             position: absolute;
             top: -40px;
         }
-      }
-      .el-main {
+    }
+    .el-main {
+        padding-top: 0;
         overflow: hidden;
-      }
-      .el-header p {
+    }
+    .go-return {
+        width: 32px;
+        height: 32px;
+        margin-top: 30px;
+    }
+    .el-header p {
         height: 60px;
-        margin: 0 0;
+        margin: 16px 0 0 0;
+
         font-size: 26px;
         line-height: 60px;
 
         text-align: center;
-      }
-      .detail-form-title {
+    }
+    .detail-form-title {
         height: 46px;
         padding: 0 20px;
         margin: 0 -25px;
@@ -33,46 +41,47 @@
         background: @tms-border-there-level;
 
         .font-size(16px);
-      }
-      .detail-form {
+    }
+    .detail-form {
         margin: 30px 2%;
         .el-input {
-          width: 100%;
+            width: 100%;
         }
         .el-select {
-          width: 100%;
+            width: 100%;
         }
-      }
-      .detail-btn {
-        .el-button {
-          width: 200px;
-
-          .font-size(16px);
-        }
-      }
-      .detail-list {
-        .detail-form-title {
-          margin: 30px -52px;
-        }
-      }
     }
+    .detail-btn {
+        .el-button {
+            width: 200px;
 
-    .label-list {
-      position: relative;
+            .font-size(16px);
+        }
+    }
+    .detail-list {
+        .detail-form-title {
+            margin: 30px -52px;
+        }
+    }
+}
 
-      padding-left: 140px;
-      margin-bottom: 25px;
+.label-list {
+    position: relative;
 
-      font-size: 14px;
-      label {
+    padding-left: 140px;
+    margin-bottom: 25px;
+
+    font-size: 14px;
+    label {
         position: absolute;
         left: 0;
+
         display: block;
         width: 140px;
 
         text-align: right;
-      }
-      .detail-form-item {
-        padding-left: 15px;
-      }
     }
+    .detail-form-item {
+        padding-left: 15px;
+    }
+}

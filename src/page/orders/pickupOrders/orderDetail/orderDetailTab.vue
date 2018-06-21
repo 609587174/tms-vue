@@ -12,6 +12,18 @@
         <el-tab-pane label="订单详情" name="first">
           <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/orders/pickupOrders/ordersList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>订单详情</p>
+                  </el-col>
+                </el-row>
+              </el-header>
               <el-main>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -47,7 +59,6 @@
                       </div>
                     </el-col>
                   </el-row>
-                   
                 </div>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -61,7 +72,8 @@
                     <el-col :span="6">
                       <div class="label-list">
                         <label>承运商:</label>
-                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span></div>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span>
+                        </div>
                       </div>
                     </el-col>
                     <el-col :span="6">
@@ -96,7 +108,7 @@
                         <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
-                      <el-col :span="6">
+                    <el-col :span="6">
                       <div class="label-list">
                         <label>备注:</label>
                         <div class="detail-form-item">{{detailData.mark}}</div>
@@ -112,32 +124,6 @@
                       </el-col>
                     </el-row>
                   </div>
-                 <!--  <el-row :gutter="40">
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计费方式:</label>
-                        <div class="detail-form-item">11111111</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>标准运价:</label>
-                        <div class="detail-form-item">2018-12-12</div>
-                      </div>
-                    </el-col> -->
-                 <!--    <el-col :span="6">
-                      <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>气差允许范围:</label>
-                        <div class="detail-form-item">11111111</div>
-                      </div>
-                    </el-col> -->
-                 <!--  </el-row> -->
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
@@ -151,7 +137,7 @@
                         <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
                       </div>
                     </el-col>
-                  </el-row> 
+                  </el-row>
                 </div>
               </el-main>
             </el-container>

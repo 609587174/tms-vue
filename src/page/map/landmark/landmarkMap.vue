@@ -18,46 +18,44 @@
                   </el-input>
                 </el-col>
               </el-row>
-              <el-row :gutter="10">
-                <el-col :span="4">
+              <el-row :gutter="20">
+                <el-col :span="6">
                   <el-form-item label="地标类型:">
                     <el-select v-model="searchFilters.position_type" placeholder="请选择">
                       <el-option v-for="(item,key) in typeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.confirm_status" placeholder="请选择">
                       <el-option v-for="(item,key) in checkStatusSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="地标来源:">
                     <el-select v-model="searchFilters.landmarkFrom" placeholder="请选择">
                       <el-option v-for="(item,key) in landmarkFromSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="6">
                   <el-form-item label="是否同步:">
                     <el-select v-model="searchFilters.async_status" placeholder="请选择">
                       <el-option v-for="(item,key) in isSynchronizeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
+
+              </el-row>
+              <el-row>
                 <el-col :span="8">
                   <el-form-item label="地标区域:" class="map-choose-address">
                     <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="20">
-                  &nbsp;
-                </el-col>
-                <el-col :span="4">
+                <el-col :span="6" :offset="10">
                   <el-form-item>
                     <el-button type="primary" @click="startSearch" :isDisabled="searchBtn.isDisabled" :loading="searchBtn.isLoading" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
@@ -65,7 +63,7 @@
               </el-row>
             </el-form>
           </div>
-          <div class="map-out-container">
+          <div class="map-out-container mt-25">
             <div class="map-loading" v-loading="pageLoading"></div>
             <div class="icon-description">
               <div class="clearfix">

@@ -1,5 +1,7 @@
 <style scoped lang="less">
 .table-list {
+  width: 90%;
+  margin: 25px auto;
   border-bottom: 0;
 }
 

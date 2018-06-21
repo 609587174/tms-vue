@@ -111,6 +111,7 @@ export default {
         ]
       },
       tableData: [],
+      saveSendData:{}
     }
   },
 
@@ -136,8 +137,11 @@ export default {
       sendData[this.fifterParam.field] = this.fifterParam.keyword;
       vm.pageLoading = true;
       if (vm.pageStatus) {
+        sendData=this.saveSendData;
         sendData.page = vm.pageData.currentPage;
-
+      }else{
+        this.saveSendData=sendData;
+        sendData.page=1;
       }
       this.$$http('searchTailCarList', sendData).then(function(result) {
         var resultData;

@@ -166,6 +166,7 @@ export default {
       this.$emit("changeTab", name);
     },
     searchList: function(targetName) {
+      //
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
@@ -219,7 +220,6 @@ export default {
         sendData.page = this.pageData.currentPage;
       }
       sendData.pageSize = this.pageData.pageSize;
-
       this.$$http("searchConOrderList", sendData).then((results) => {
         vm.pageLoading = false;
         vm.searchStatus = false;
@@ -268,6 +268,7 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
+      this.$emit("changeTab", this.status);
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
@@ -319,7 +320,6 @@ export default {
   watch: {
     countParam: {
       handler(val, oldVal) {
-        this.searchList();
         this.assemblyData(val);
       }
     }

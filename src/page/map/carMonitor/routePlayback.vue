@@ -387,7 +387,7 @@ export default {
       end.setMinutes('00');
       end.setSeconds('00');
 
-      let daySpace = Math.floor((endTime - startTime) / (1000 * 60 * 60 * 24));
+      let daySpace = Math.floor((end - start) / (1000 * 60 * 60 * 24));
       console.log('daySpace', daySpace);
       return daySpace;
     },
@@ -1051,7 +1051,6 @@ export default {
     checkPoint: function(row) {
 
       let _this = this;
-      _this.navg1.pause();
       _this.isDisplay = false;
       _this.navg1.pause();
 
@@ -1259,6 +1258,9 @@ export default {
     width: 100%;
     left: 0;
     top: 82px;
+    /deep/ .el-loading-mask {
+      background-color: rgba(250, 250, 250, 0);
+    }
   }
   .search-filters-contain {
     padding: 20px 10px 0 10px;

@@ -612,9 +612,8 @@
             </el-container>
           </div>
         </el-tab-pane>
-        <!-- <el-tab-pane label="轨迹地图" name="third">
-</el-tab-pane>
- -->
+        <el-tab-pane label="轨迹地图" name="third">
+        </el-tab-pane>
       </el-tabs>
     </div>
     <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">

@@ -266,11 +266,13 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="detail-list detail-form">
+                
+                
+                <div class="detail-list detail-form" v-for="(item,index) in unloadArr" :key="item.id">
                   <div class="detail-form-title">
                     <el-row>
                       <el-col :span="12" :offset="6" class="text-center">
-                        费用约定
+                        卸车费用约定{{index+1}}
                       </el-col>
                     </el-row>
                   </div>
@@ -278,19 +280,19 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>计费方式:</label>
-                        <div class="detail-form-item">11111111</div>
+                        <div class="detail-form-item" v-html="pbFunc.dealNullData(item.bill_type)"></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>标准运价:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <div class="detail-form-item"><span v-if="item.initial_price>0">{{item.initial_price}}元+</span><span>{{item.change_rate}}元/吨/每公里</span></div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>标准里程:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <div class="detail-form-item">{{item.standard_mile}}KM</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -298,19 +300,19 @@
                     <el-col :span="8">
                       <div class="label-list">
                         <label>气差允许范围:</label>
-                        <div class="detail-form-item">11111111</div>
+                        <div class="detail-form-item">0</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>待时计算标准:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <div class="detail-form-item">{{item.free_hour}}</div>
                       </div>
                     </el-col>
                     <el-col :span="8">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <div class="detail-form-item">{{item.overtime_price}}</div>
                       </div>
                     </el-col>
                   </el-row>

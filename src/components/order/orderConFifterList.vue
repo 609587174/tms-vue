@@ -123,7 +123,7 @@
               </el-row>
 
                <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
-                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.destination}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -141,6 +141,13 @@
                   已经匹配卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往确认</el-button>
                 </el-col>
              </el-row>
+
+             <el-row v-if="props.row.status.key=='already_match'" style="width:100%;margin-top:30px;">
+                <el-col :span="7" class="colinfo">
+                  已经确认卸货单,<el-button style="padding-left:0" type="text" @click="operation('sureDownOrder',props.row)">前往查看</el-button>
+                </el-col>
+             </el-row>
+
             </div>
           </div>
           <div class="listDetalis carList" style="width:15%">
@@ -177,9 +184,9 @@
             <el-col :span="4" :title="props.row.waybill.waybill_number" class="whiteSpan">
               <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
-            <el-col :span="4" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
+            <el-col :span="3" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan">托运商:{{props.row.delivery_order.trader}}</el-col>
-            <el-col :span="3">标准运价:</el-col>
+            <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">
               <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
@@ -240,7 +247,7 @@ export default {
       lockFalg: false,
       delayTime:500,
       expandFalg:true,
-      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match'],
+      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match'],
       buttonAll: {
         driver_pending_confirmation: [],
         to_fluid: [],

@@ -299,7 +299,7 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>计划到站时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.plan_time)"></div>
                             </div>
                           </el-col>
                           <el-col :span="8">
@@ -394,7 +394,7 @@
                                 <el-col :span="8">
                                   <div class="label-list">
                                     <label>计划到站时间:</label>
-                                    <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plate_number)"></div>
+                                    <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.plan_arrive_time)"></div>
                                   </div>
                                 </el-col>
                               </el-row>
@@ -519,25 +519,26 @@
                           <el-col :span="8">
                             <div class="label-list">
                               <label>操作人:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operation)"></div>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
                         </el-row>
                       </div>
                       <div v-if="item.type === 'to_site'">
                         <el-row :gutter="40">
+                         <el-col :span="8">
+                            <div class="label-list">
+                              <label>操作时间:</label>
+                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                            </div>
+                          </el-col>
                           <el-col :span="8">
                             <div class="label-list">
                               <label>操作人:</label>
                               <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                             </div>
                           </el-col>
-                          <el-col :span="8">
-                            <div class="label-list">
-                              <label>操作时间:</label>
-                              <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                            </div>
-                          </el-col>
+                         
                         </el-row>
                       </div>
                       <div v-if="item.type === 'already_match'">
@@ -617,14 +618,20 @@
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <div class="label-list">
-              <el-form-item label="实际到场时间:" prop="active_time">
+              <el-form-item label="实际到厂时间:" prop="active_time" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
+                <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="实际到站时间:" prop="active_time" v-else>
                 <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="10">
             <div class="label-list">
-              <el-form-item label="装车毛重(吨):" prop="gross_weight">
+              <el-form-item label="装车毛重(吨):" prop="gross_weight" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
+                <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
+              </el-form-item>
+                <el-form-item label="卸车毛重(吨):" prop="gross_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
               </el-form-item>
             </div>
@@ -633,14 +640,20 @@
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <div class="label-list">
-              <el-form-item label="装液开始时间:" prop="work_start_time">
+              <el-form-item label="装液开始时间:" prop="work_start_time" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
+                <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+              <el-form-item label="卸车开始时间:" prop="work_start_time" v-else>
                 <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
             </div>
           </el-col>
           <el-col :span="10">
             <div class="label-list">
-              <el-form-item label="装车皮重(吨):" prop="tare_weight">
+              <el-form-item label="装车皮重(吨):" prop="tare_weight" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
+                <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
+              </el-form-item>
+              <el-form-item label="卸车皮重(吨):" prop="tare_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
               </el-form-item>
             </div>
@@ -649,14 +662,22 @@
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <div class="label-list">
-              <el-form-item label="装液完成时间:" prop="work_end_time">
+              <el-form-item label="装液完成时间:" prop="work_end_time" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
+
+              <el-form-item label="卸车完成时间:" prop="work_start_time" v-else>
+                <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+
             </div>
           </el-col>
           <el-col :span="10">
             <div class="label-list">
-              <el-form-item label="装车净重(吨):" prop="net_weight">
+              <el-form-item label="装车净重(吨):" prop="net_weight" v-if="this.detailData[this.detailData.length - 1].type!='unloading_waiting_audit'">
+                <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
+              </el-form-item>
+              <el-form-item label="卸车净重(吨):" prop="net_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
               </el-form-item>
             </div>
@@ -814,7 +835,7 @@ export default {
       if (type == 'showPound') {
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
-          this.imgObject.imgList = imgList;
+          this.imgObject.imgList = [imgList];
           this.imgObject.showPreview = true;
         } else {
           if (id) {

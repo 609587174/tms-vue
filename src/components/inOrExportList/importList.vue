@@ -6,7 +6,7 @@
   <div class="import">
     <el-row> 
       <el-col :span="2" :offset="17"><el-button type="primary" @click="downExample">下载导入模版</el-button></el-col>
-      <el-col :span="2"><el-button type="primary" @click="upExcl">上传导入数据</el-button></el-col>
+      <el-col :span="2"><el-upload action="http://devtms.hhtdlng.com/imports/base-tractor/"><el-button type="primary" @click="upExcl">上传导入数据</el-button></el-upload></el-col>
       <el-col :span="2"><el-button type="success" @click="importSystem"> 导入系统</el-button></el-col>
   </el-row>
   </div>
@@ -16,7 +16,7 @@ export default {
   name: 'importComponets',
   data() {
     return {
-
+      
     };
   },
   computed: {

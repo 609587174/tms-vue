@@ -47,7 +47,7 @@
                       </div>
                     </el-col>
                   </el-row>
-                  
+                   
                 </div>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
@@ -60,53 +60,46 @@
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>装货地:</label>
+                        <label>承运商:</label>
+                        <div class="detail-form-item"><span v-for="(item,index) in detailData.carriers">{{item.carrier_name}}<span v-if="index!=detailData.carriers.length-1">,</span></span></div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>卸货区域:</label>
+                        <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                      </div>
+                    </el-col>
+                    <el-col :span="6">
+                      <div class="label-list">
+                        <label>液厂:</label>
                         <div class="detail-form-item">{{detailData.fluid_name}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item">{{detailData.standard_mile}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划时间:</label>
-                        <div class="detail-form-item">{{detailData.created_at}}</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划吨位:</label>
-                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
+                        <label>液厂地址:</label>
+                        <div class="detail-form-item">{{detailData.fluid_address}}</div>
                       </div>
                     </el-col>
                   </el-row>
                   <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>
-                          卸货地:</label>
-                        <div class="detail-form-item">{{detailData.destination[0]}}</div>
+                        <label>计划装货时间:</label>
+                        <div class="detail-form-item">{{detailData.plan_time}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
-                        <label>标准里程:</label>
-                        <div class="detail-form-item"></div>
+                        <label>计划装货吨位:</label>
+                        <div class="detail-form-item">{{detailData.plan_tonnage}}</div>
                       </div>
                     </el-col>
-                    <el-col :span="6">
+                      <el-col :span="6">
                       <div class="label-list">
-                        <label>计划时间:</label>
-                        <div class="detail-form-item"></div>
-                      </div>
-                    </el-col>
-                    <el-col :span="6">
-                      <div class="label-list">
-                        <label>计划吨位:</label>
-                        <div class="detail-form-item"></div>
+                        <label>备注:</label>
+                        <div class="detail-form-item">{{detailData.mark}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -119,7 +112,7 @@
                       </el-col>
                     </el-row>
                   </div>
-                  <el-row :gutter="40">
+                 <!--  <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>计费方式:</label>
@@ -131,7 +124,7 @@
                         <label>标准运价:</label>
                         <div class="detail-form-item">2018-12-12</div>
                       </div>
-                    </el-col>
+                    </el-col> -->
                  <!--    <el-col :span="6">
                       <div class="label-list">
                         <label>标准里程:</label>
@@ -144,22 +137,21 @@
                         <div class="detail-form-item">11111111</div>
                       </div>
                     </el-col> -->
-                  </el-row>
-                  <!-- <el-row :gutter="40">
-                    
+                 <!--  </el-row> -->
+                  <el-row :gutter="40">
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计算标准:</label>
-                        <div class="detail-form-item">2018-12-12</div>
+                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].free_hour}}</div>
                       </div>
                     </el-col>
                     <el-col :span="6">
                       <div class="label-list">
                         <label>待时计费标准:</label>
-                        <div class="detail-form-item">xxxx</div>
+                        <div class="detail-form-item" v-if="detailData.carriers.length>0">{{detailData.carriers[0].overtime_price}}</div>
                       </div>
                     </el-col>
-                  </el-row> -->
+                  </el-row> 
                 </div>
               </el-main>
             </el-container>

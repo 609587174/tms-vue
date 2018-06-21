@@ -55,6 +55,10 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="提示" :visible.sync="importVisible" width="30%">
+      <span>牵引车信息导入</span>
+      
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -62,6 +66,7 @@ export default {
   name: 'carHeadManage',
   data() {
     return {
+      importVisible:false,
       pageStatus: false,
       fifterParam: {
         keyword: "",

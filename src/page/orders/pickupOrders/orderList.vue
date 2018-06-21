@@ -166,10 +166,14 @@ export default {
         sendData.history=true;
         delete sendData.status;
       }
-      sendData.page = this.pageData.currentPage;
+      
       sendData.page_size = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
+      }else{
+        this.pageData.currentPage=1;
+        sendData.page = this.pageData.currentPage;
       }
       this.pageLoading = true;
 

@@ -11,65 +11,118 @@
   }
 }
 
+.detail-tab {
+  position: relative;
+  .operation-btn {
+    position: absolute;
+    width: 100%;
+    top: -25px;
+    z-index: 2;
+  }
+  .el-tabs__header {
+    .el-tabs__nav .el-tabs__item {
+      /deep/ &.is-active {
+        background: #f2f5fe;
+        &:after {
+          border: 0!important;
+          top: 33px;
+        }
+      }
+    }
+  }
+  /deep/ .el-table__fixed-right {
+    border-top: 1px solid #e4e7ed;
+  }
+}
+
+.go-return {
+  width: 32px;
+  height: 32px;
+  margin-top: 14px;
+}
+
+.el-header p {
+  height: 60px;
+
+  font-size: 26px;
+  line-height: 60px;
+
+  text-align: center;
+}
+
 </style>
 <template>
-  <div class="tab-screen">
-    <div>
-      <div class="nav-tab">
-        <el-tabs v-model="activeName" type="card" @tab-click="clicktabs" :filter-method="filterHandler">
-          <el-tab-pane label="列表" name="first">
-            <div class="tab-screen">
-              <el-form class="search-filters-form" label-width="60px" :model="searchFilters" status-icon label-position="left">
-                <el-row :gutter="0">
-                  <el-col :span="12">
-                    <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                      <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                        <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                      <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
-                    </el-input>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <!-- <el-col :span="4">
-                    <el-form-item label="状态:">
-                      <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
-                        <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col> -->
-                  <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status.key!='canceled'">
-                    需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
-                  </el-col>
-                  <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
-                    <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
-                    <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
-                  </el-col>
-                  <el-col :span="4" :offset="20" v-if="delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
-                </el-row>
-              </el-form>
-            </div>
-            <div class="table-list">
-              <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" v-loading="pageLoading" @select="checkRows">
-                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
-                </el-table-column>
-                <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
-                </el-table-column>
-                <el-table-column label="状态" width="90" fixed="right">
-                  <template slot-scope="scope">
-                    <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
-                    </el-tag>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-            <div class="page-list text-center ">
-              <el-pagination background layout="prev, pager, next,jumper " :page-count="pageData.totalPage " :page-size="pageData.pageSize " :current-page.sync="pageData.currentPage " @current-change="pageChange " v-if="!pageLoading && pageData.totalPage>1">
-              </el-pagination>
-            </div>
-          </el-tab-pane>
-        </el-tabs>
+  <div>
+    <div class="nav-tab">
+      <div class="tab-screen">
+        <el-header>
+          <el-row>
+            <el-col :span="3">
+              <router-link :to="{path: '/orders/pickupOrders/ordersList'}">
+                <div class="go-return icon-back"></div>
+              </router-link>
+            </el-col>
+            <el-col :span="18">
+              <p>车辆指派</p>
+            </el-col>
+          </el-row>
+        </el-header>
+        <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon label-position="left">
+          <el-row :gutter="0">
+            <el-col :span="16" :offset="4">
+              <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select>
+                <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+              </el-input>
+            </el-col>
+          </el-row>
+        </el-form>
       </div>
+    </div>
+    <div class="nav-tab-setting detail-tab mt-25">
+      <div class="operation-btn text-right">
+        <el-row :gutter="0">
+          <!--  <el-col :span="4">
+          <el-form-item label="状态:">
+            <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
+              <el-option v-for="(item,key) in selectData.orderStateListSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col> -->
+          <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status.key!='canceled'">
+            需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
+          </el-col>
+          <el-col :span="2" v-if="delivery_list.status.key!='canceled'">
+            <el-button v-if="operationStatus=='add'" type="primary" plain @click="operation('addCar')">添加车辆</el-button>
+            <el-button v-if="operationStatus=='edit'" type="primary" @click="operation('changeCar')">提交修改</el-button>
+          </el-col>
+          <el-col :span="4" :offset="20" v-if="delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
+        </el-row>
+      </div>
+      <el-tabs v-model="activeName" @tab-click="clicktabs" :filter-method="filterHandler">
+        <el-tab-pane label="列表" name="first">
+          <div class="table-list border-top-clear">
+            <el-table :data="renderPage_list" ref="multipleTable" stripe style="width: 100%" size="mini" v-loading="pageLoading" @select="checkRows">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:150">
+              </el-table-column>
+              <el-table-column label="勾选" type="selection" width="55" fixed="right" :selectable="checkSelectable">
+              </el-table-column>
+              <el-table-column label="状态" width="90" fixed="right">
+                <template slot-scope="scope">
+                  <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
+                  </el-tag>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="page-list text-center ">
+            <el-pagination background layout="prev, pager, next,jumper " :page-count="pageData.totalPage " :page-size="pageData.pageSize " :current-page.sync="pageData.currentPage " @current-change="pageChange " v-if="!pageLoading && pageData.totalPage>1">
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
     </div>
   </div>
 </template>
@@ -87,11 +140,11 @@ export default {
       },
       searchFilters: {
         keyword: '',
-        field: '',
+        field: 'tractor.plate_number',
         orderStateList: '',
       },
-      allStatus:['driver_pending_confirmation','to_fluid','reach_fluid','waiting_seal'],
-      noCanceled:['loading_waiting_audit','loading_audit_failed','waiting_match','already_match','to_site','reach_site','unloading_waiting_audit','unloading_audit_failed','waiting_settlement','in_settlement','finished'],
+      allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal'],
+      noCanceled: ['loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished'],
       selectData: {
         fieldSelect: [{
           value: '车号',
@@ -376,9 +429,9 @@ export default {
           this.$$http("addCarPower", sendData).then((results) => {
             this.pageLoading = false;
             if (results.data.code == 0) {
-              if(this.operationStatus=='add'){
+              if (this.operationStatus == 'add') {
                 vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
-              }else{
+              } else {
                 vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
               }
             }
@@ -430,7 +483,7 @@ export default {
           }
         });
 
-        if(sendData.del_capacities.length==0&&sendData.add_capacities.length==0){
+        if (sendData.del_capacities.length == 0 && sendData.add_capacities.length == 0) {
           vm.$confirm('您没有任何修改', '请注意', {
             confirmButtonText: '放弃修改',
             cancelButtonText: '继续修改',
@@ -443,13 +496,13 @@ export default {
           })
         }
         if (vm.now_capacities.length > 0) {
-          if(sendData.del_capacities.length>0||sendData.add_capacities.length>0){
+          if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
             this.pageLoading = true;
             this.$$http("editCarPower", sendData).then((results) => {
               this.pageLoading = false;
               if (results.data.code == 0) {
-              vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-            }
+                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+              }
             }).catch(() => {
               this.pageLoading = false;
             });
@@ -655,9 +708,9 @@ export default {
         //   }
         // }
         newArr = newArr.concat(fifterArr2);
-        if(this.delivery_list.status.key=='canceled'){
-          newArr.forEach(item=>{
-            item.isDisable=true;
+        if (this.delivery_list.status.key == 'canceled') {
+          newArr.forEach(item => {
+            item.isDisable = true;
           });
         }
         this.trueAll_list = newArr;
@@ -708,7 +761,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill.capacity||row.id);
+          vm.start_capacities.push(row.waybill.capacity || row.id);
         });
       });
     },

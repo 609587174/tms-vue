@@ -1,9 +1,10 @@
 <template>
-  <div id="addeditTailCarPage">
+  <div id="addeditTailCarPage" class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;height:80px">
+      <el-header class="mt-5">
         <el-row>
-          <el-col :span="2" class="left-arrow-d"><span @click="goDetalis"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="goDetalis"></div>
           </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
@@ -11,7 +12,7 @@
         </el-row>
       </el-header>
       <el-row>
-        <el-col class="stepTitle">
+        <el-col class="stepTitle mt-25">
           {{stepTitle}}
         </el-col>
       </el-row>
@@ -101,14 +102,14 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('add','nextStep','addEditFormSetp1')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('add','out','addEditFormSetp1')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
@@ -121,7 +122,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="行驶证发证日期:" prop="license_register_date" label-width="150px" >
+                  <el-form-item label="行驶证发证日期:" prop="license_register_date" label-width="150px">
                     <el-date-picker :editable="editable" value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="tailCarFormStep.license_register_date" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -149,14 +150,14 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="8">
-                <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
-              </el-col>
-              <el-col :span="6">
-                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('update','nextStep','addEditFormSetp2')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp2')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
@@ -219,13 +220,14 @@
                 </el-row>
               </div>
             </el-form>
-            <el-col :span="6" :offset="8">
-              <el-button type="success" @click="goOtherSetp('update','nextStep','addInsuanceFrom')">保存并下一步</el-button>
-            </el-col>
-            <el-col :span="6">
-              <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFrom')">保存并退出</el-button>
-            </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="success" @click="goOtherSetp('update','nextStep','addInsuanceFrom')">保存并下一步</el-button>
+                  <el-button type="primary" @click="goOtherSetp('update','out','addInsuanceFrom')">保存并退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
         <transition name="el-fade-in-linear">
@@ -256,11 +258,13 @@
                 </el-col>
               </el-row>
             </el-form>
-            <el-row>
-              <el-col :span="6" :offset="11">
-                <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp4')">保存并且退出</el-button>
-              </el-col>
-            </el-row>
+            <div class="detail-btn">
+              <el-row>
+                <el-col :span="12" :offset="6" class="text-center">
+                  <el-button type="primary" @click="goOtherSetp('update','out','addEditFormSetp4')">保存并且退出</el-button>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </transition>
       </el-main>
@@ -295,7 +299,7 @@ export default {
     return {
       editStatus: false,
       titleType: "新增挂车",
-      editable:false,
+      editable: false,
       pageLoading: false,
       pickerOptions0: {
         disabledDate(time) {
@@ -311,7 +315,7 @@ export default {
       tailCarFormStep: {
         plate_number: "", //挂车排
         attributes: 'SELF_SUPPORT', //车辆归属
-        carrier: this.$store.state.common.users.carrier,//车辆所属
+        carrier: this.$store.state.common.users.carrier, //车辆所属
         vin_number: "", //车架号
         vehicle_type: 'HEAVE_SEMITRAILER',
         brand: "", //品牌型号
@@ -623,7 +627,7 @@ export default {
 
     },
     deleteInsuranceFrom: function(index) {
-      var vm =this;
+      var vm = this;
       if (this.tailCarFormStep.semitrailer_insurances[index].id) {
         vm.pageLoading = true;
         var send = {
@@ -687,10 +691,13 @@ export default {
 
 .stepTitle {
   background-color: rgb(235, 238, 245);
-  height: 40px;
-  text-align: center;
-  font-size: 18px;
-  line-height: 40px;
+  height: 46px;
+  text-align: center; // font-size: 18px;
+  line-height: 46px;
+}
+
+.detail-main .go-return {
+  margin-top: 22px;
 }
 
 .right-arrow-d {

@@ -20,8 +20,19 @@
         <el-tab-pane label="订单记录" name="third">
           <div class="detail-main" v-loading="pageLoading">
             <el-container>
+              <el-header>
+                <el-row>
+                  <el-col :span="3">
+                    <router-link :to="{path: '/orders/pickupOrders/ordersList'}">
+                      <div class="go-return icon-back"></div>
+                    </router-link>
+                  </el-col>
+                  <el-col :span="18">
+                    <p>订单记录</p>
+                  </el-col>
+                </el-row>
+              </el-header>
               <el-main>
-                <h3 class="text-center record-detail-title">订单记录</h3>
                 <div class="detail-list detail-form">
                   <div class="detail-form-title">
                     <el-row>
@@ -31,7 +42,7 @@
                     </el-row>
                   </div>
                   <div class="table-list" v-if="allTableList.create_list.length>0">
-                    <el-table :data="renderList.r_create_list"  max-height="500">
+                    <el-table :data="renderList.r_create_list" max-height="500">
                       <el-table-column fixed prop="driver_no" label="生成提货单号">
                         <template slot-scope="rowsData">
                           {{rowsData.row.msg}}

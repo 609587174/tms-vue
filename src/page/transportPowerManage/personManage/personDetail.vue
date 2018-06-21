@@ -9,8 +9,17 @@
 <template>
   <div id="addPerson" class="detail-main">
     <el-container>
-      <el-header style="margin-top:15px;">
-        <p>人员信息</p>
+      <el-header>
+        <el-row>
+          <el-col :span="3">
+            <router-link :to="{path: '/transportPowerManage/personManage/personListManage'}">
+              <div class="go-return icon-back"></div>
+            </router-link>
+          </el-col>
+          <el-col :span="18">
+            <p>人员信息</p>
+          </el-col>
+        </el-row>
       </el-header>
       <el-main>
         <div class="detail-list detail-form">

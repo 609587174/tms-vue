@@ -1,18 +1,25 @@
 <!-- personDetail.vue -->
 <style scoped lang="less">
-.tab-screen {
-  min-height: 100vh;
-  margin-bottom: 20px;
-}
+
+
 </style>
 <template>
-  <div id="capacityDetail" class="detail-main nav-tab">
+  <div id="capacityDetail" class="nav-tab">
     <el-tabs v-model="activeTab" type="card" @tab-click="handleTabClick">
       <el-tab-pane label="车辆绑定信息" name="first">
-        <div class="tab-screen">
+        <div class="detail-main border-top-clear">
           <el-container>
-            <el-header style="margin-top:15px;">
-              <p>车辆绑定信息</p>
+            <el-header>
+              <el-row>
+                <el-col :span="3">
+                  <router-link :to="{path: '/transportPowerManage/capacityManage/capacityList'}">
+                    <div class="go-return icon-back"></div>
+                  </router-link>
+                </el-col>
+                <el-col :span="18">
+                  <p>车辆绑定信息</p>
+                </el-col>
+              </el-row>
             </el-header>
             <el-main>
               <el-form label-width="120px" :model="headData" status-icon>
@@ -171,7 +178,19 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="操作日志" name="second">
-        <div class="tab-screen">
+        <div class="detail-main border-top-clear">
+          <el-header>
+            <el-row>
+              <el-col :span="3">
+                <router-link :to="{path: '/transportPowerManage/capacityManage/capacityList'}">
+                  <div class="go-return icon-back"></div>
+                </router-link>
+              </el-col>
+              <el-col :span="18">
+                <p>操作日志</p>
+              </el-col>
+            </el-row>
+          </el-header>
           <op-log :table-data="logData" :loading-state="logLoading" :pagination="logPagination" v-on:refreshlog="refreshLog"></op-log>
         </div>
       </el-tab-pane>
@@ -182,7 +201,8 @@
 export default {
   name: 'capacityDetail',
   components: {
-    'op-log': () => import('../../common/opLog')
+    'op-log': () =>
+      import ('../../common/opLog')
   },
   data() {
     return {
@@ -250,15 +270,15 @@ export default {
     }
   },
   filters: {
-    formatBindStatus: function (value) {
+    formatBindStatus: function(value) {
       return value ? '已绑定' : '未绑定'
     },
-    formatStatus: function (value) {
+    formatStatus: function(value) {
       return value ? '已完善' : '未完善'
     }
   },
   methods: {
-    handleTabClick: function (tab) {
+    handleTabClick: function(tab) {
       if (tab.name === 'first') {
         this.getDetail();
       }
@@ -266,25 +286,25 @@ export default {
         this.getLog(this.logPagination.currentPage);
       }
     },
-    refreshLog: function (page) {
+    refreshLog: function(page) {
       this.getLog(page);
     },
-    getLog: function (page) {
-      this.$$http('getCapacityLog', {id: this.id, page: page}).then((results) => {
-          console.log(results);
-          if (results.data && results.data.code == 0) {
-            this.logData = results.data.data.results;
-            this.logPagination.totalPage = Math.ceil(
-              results.data.data.count / this.logPagination.pageSize
-            );
-          } else {
-            this.$message.error('数据获取失败');
-          }
-          this.logLoading = false;
-        }).catch(() => {
-          this.logLoading = false;
+    getLog: function(page) {
+      this.$$http('getCapacityLog', { id: this.id, page: page }).then((results) => {
+        console.log(results);
+        if (results.data && results.data.code == 0) {
+          this.logData = results.data.data.results;
+          this.logPagination.totalPage = Math.ceil(
+            results.data.data.count / this.logPagination.pageSize
+          );
+        } else {
           this.$message.error('数据获取失败');
-        });
+        }
+        this.logLoading = false;
+      }).catch(() => {
+        this.logLoading = false;
+        this.$message.error('数据获取失败');
+      });
     },
     getDetail: function() {
       this.paddingloading = true;
@@ -303,14 +323,14 @@ export default {
       })
 
     },
-    unbindTruck: function () {
+    unbindTruck: function() {
       this.$confirm('此操作将一键清空挂车绑定信息，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         center: true
       }).then(() => {
-        this.$$http('unbindTruck', {id: this.id}).then(results => {
+        this.$$http('unbindTruck', { id: this.id }).then(results => {
           this.$message({
             type: 'success',
             message: '解绑挂车成功!'
@@ -321,14 +341,14 @@ export default {
         });
       });
     },
-    unbindStaff: function () {
+    unbindStaff: function() {
       this.$confirm('此操作将一键清空人员绑定信息，是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         center: true
       }).then(() => {
-        this.$$http('unbindStaff', {id: this.id}).then(results => {
+        this.$$http('unbindStaff', { id: this.id }).then(results => {
           this.$message({
             type: 'success',
             message: '解绑人员成功!'
@@ -340,7 +360,7 @@ export default {
       });
     },
     goEditDetail: function(number, data) {
-      this.$router.push({ name: 'editCapacity', params: {capacityInfo: data, activeStep: number} });
+      this.$router.push({ name: 'editCapacity', params: { capacityInfo: data, activeStep: number } });
     },
   }
 }

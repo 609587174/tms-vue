@@ -28,7 +28,7 @@
         <el-tab-pane label="运费约定" name="freight">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-              <el-row :gutter="30">
+              <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
                     <el-select v-model="searchFilters.agreements__carrier" :loading="shipperLoading" clearable @change="startSearch" filterable placeholder="请输入选择">
@@ -46,12 +46,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right">
-            <!-- <el-button type="primary" plain @click="importList">导入</el-button>
+          <div class="operation-btn text-right" v-if="false">
+            <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button>
-            <el-button type="success" @click="addPerson">新增</el-button> -->
+            <el-button type="success" @click="addPerson">新增</el-button>
           </div>
-          <div class="table-list">
+          <div class="table-list mt-25">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">

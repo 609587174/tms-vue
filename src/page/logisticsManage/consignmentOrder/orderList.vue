@@ -1,7 +1,4 @@
 <style scoped lang="less">
-.listOrder {
-  margin-top: 35px;
-}
 
 </style>
 <template>

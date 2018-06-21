@@ -300,6 +300,9 @@ a {
     line-height: 26px;
   }
 }
+.el-footer{
+  padding: 0;
+}
 
 </style>
 <template>

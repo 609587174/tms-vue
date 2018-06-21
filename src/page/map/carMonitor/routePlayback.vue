@@ -18,7 +18,7 @@
                 </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
+            <el-col :span="8">
               <div class="float-left time-spacing">{{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟</div>
               <div>
                 <el-button class="float-left" type="primary" @click="searchAndRender" :disabled="searchBtn.isDisabled" :loading="searchBtn.loading">{{searchBtn.text}}</el-button>
@@ -1273,7 +1273,7 @@ export default {
     z-index: 999;
   }
   .time-spacing {
-    padding: 0 20px 0 0;
+    padding: 0 20px;
     line-height: 40px;
     font-size: 14px;
   }

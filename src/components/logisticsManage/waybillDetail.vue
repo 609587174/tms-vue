@@ -341,6 +341,7 @@
 <script>
 export default {
   name: 'waybillDetail',
+  props:['backLink'],
   computed: {
     setpId: function() {
       return this.$route.params.setpId;

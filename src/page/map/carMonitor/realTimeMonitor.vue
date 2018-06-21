@@ -286,21 +286,25 @@ export default {
       let operatorDom = '';
 
       let routePlayback = () => {
+        let deviceId = results.data.data.device_id;
         _this.$router.push({
-          path: `/mapManage/carMonitor/routePlayback/${results.data.data.device_id}`,
+          path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
         })
       };
       let fellowOrder = () => {
+        let waybillId = (results.data.data.waybill && results.data.data.waybill.id) ? results.data.data.waybill.id : '';
+        let stepId = results.data.data.selection_trip_id ? results.data.data.selection_trip_id : '';
+        _this.$router.push({
+          path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
+        })
         console.log('xxxx');
       }
-      /*
+
       if (waybill_vehicle_status !== '无' && waybill_vehicle_status !== 'free') {
         operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--primary el-button--mini">订单跟踪</a>&nbsp;<a href="javascript:void(0)"  id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
       } else {
         operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
-      }*/
-
-      operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
+      }
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 ">车辆信息:${carMsg}</div>`;
       infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">运单状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
@@ -401,6 +405,16 @@ export default {
     left: 0px;
     bottom: 0px;
     z-index: 9999;
+  }
+  .map-loading {
+    position: absolute;
+    height: 52px;
+    width: 100%;
+    left: 0;
+    top: 0px;
+    /deep/ .el-loading-mask {
+      background-color: rgba(250, 250, 250, 0);
+    }
   }
 }
 

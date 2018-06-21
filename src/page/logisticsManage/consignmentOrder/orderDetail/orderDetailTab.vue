@@ -8,8 +8,8 @@
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>
-        <!-- <el-tab-pane label="轨迹地图" name="third">
-        </el-tab-pane> -->
+        <el-tab-pane label="轨迹地图" name="third">
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -40,9 +40,9 @@ export default {
         tractor: {
           carrier: {}
         },
-        master_driver:{},
-        vice_driver:{},
-        escort_staff:{}
+        master_driver: {},
+        vice_driver: {},
+        escort_staff: {}
       },
       loadArr: [{}],
       unloadArr: []

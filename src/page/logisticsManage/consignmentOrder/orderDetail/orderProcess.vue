@@ -1071,13 +1071,12 @@ export default {
                 vm.suerId = stepInfo.data.data.identify;
                 vm.matchData(results.data.data);
                 vm.extendsArr.push(vm.detailData.length - 1);
-                if (vm.detailData[vm.detailData.length - 1].operation == "上传装车铅封") {
+                if (vm.detailData[vm.detailData.length - 1].operation == "上传装车铅封"||vm.detailData[vm.detailData.length - 1].operation == "已匹配卸货单") {
                   vm.extendsArr.push(vm.detailData.length - 2);
                 }
               }
             });
             //vm.detailData = results.data.data;
-
           }
         }).catch(() => {
           vm.pageLoading = false;

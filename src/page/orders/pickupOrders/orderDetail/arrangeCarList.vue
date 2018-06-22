@@ -111,7 +111,7 @@
               </el-table-column>
               <el-table-column label="状态" width="90" fixed="right">
                 <template slot-scope="scope">
-                  <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
+                  <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消过': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
                   </el-tag>
                 </template>
               </el-table-column>
@@ -218,8 +218,9 @@ export default {
       lastSearch_list: [],
       add_capacities: [], //增加的运力表
       del_capacities: [], //取消的运力表
-      start_capacities: [],
-      now_capacities: [],
+      start_capacities: [],//初始的运力表
+      now_capacities: [], //已经选择的运力表
+      default_del_capacities:[]//默认需要取消的运力
     }
   },
   computed: {
@@ -462,11 +463,11 @@ export default {
         this.now_capacities.forEach(item => {
           var addFalg = true;
           vm.start_capacities.forEach(startItem => {
-            if (item.id == startItem) {
+            if (item.id == startItem.capacity) {
               addFalg = false;
             }
           });
-          if (addFalg) {
+          if (addFalg&&item.waybill&&!(vm.allStatus.indexOf(item.waybill.status)>-1)) {
             sendData.add_capacities.push(item.id);
           }
         });
@@ -474,14 +475,15 @@ export default {
         this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
-            if (item == nowItem.id) {
+            if (item.capacity == nowItem.id) {
               cancleFalg = false;
             }
           });
-          if (cancleFalg) {
-            sendData.del_capacities.push(item);
+          if (cancleFalg&&item.waybill&&vm.allStatus.indexOf(item.status)>-1) {
+            sendData.del_capacities.push(item.capacity);
           }
         });
+        sendData.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
 
         if (sendData.del_capacities.length == 0 && sendData.add_capacities.length == 0) {
           vm.$confirm('您没有任何修改', '请注意', {
@@ -637,9 +639,14 @@ export default {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              if (this.delivery_list.trips[j].status != "canceled") {
+              if (this.delivery_list.trips[j].status != "canceled"&&this.delivery_list.trips[j].waybill_change_status!= "canceled") {
                 operationArr[i].bindCheckBox = true;
+                operationArr[i].isDisable=false;
                 this.now_capacities.push(operationArr[i]);
+                addflag = true;
+              }else if(this.delivery_list.trips[j].waybill_change_status== "canceled"){
+                operationArr[i].isDisable=true;
+                this.default_del_capacities.push(operationArr[i].id);
                 addflag = true;
               }
             }
@@ -713,6 +720,7 @@ export default {
             item.isDisable = true;
           });
         }
+
         this.trueAll_list = newArr;
         this.renderAll_list = newArr;
 
@@ -761,7 +769,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill.capacity || row.id);
+          vm.start_capacities.push(row.waybill || row);
         });
       });
     },

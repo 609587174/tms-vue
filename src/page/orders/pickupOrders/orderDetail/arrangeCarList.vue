@@ -610,7 +610,8 @@ export default {
           console.log("已经添加列表上面的数据", results.data);
           vm.alreadyList = results.data.data;
           if (!results.data.data || !vm.alreadyList.capacities) {
-            vm.alreadyList.capacities = [];
+            vm.alreadyList.add_capacities = [];
+             vm.alreadyList.capacities = [];
           }
         }
         getDataNum++;
@@ -666,8 +667,8 @@ export default {
         var fifterArr4 = [];
         for (let findex1 = 0; findex1 < fifterArr.length; findex1++) {
           var addAlreaListflag = false;
-          for (let findex4 = 0; findex4 < this.alreadyList.capacities.length; findex4++) {
-            if (fifterArr[findex1].id == this.alreadyList.capacities[findex4]) {
+          for (let findex4 = 0; findex4 < this.alreadyList.add_capacities.length; findex4++) {
+            if (fifterArr[findex1].id == this.alreadyList.add_capacities[findex4]) {
               addAlreaListflag = true;
               break;
             }

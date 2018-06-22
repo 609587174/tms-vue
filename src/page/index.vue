@@ -313,9 +313,9 @@ a {
           <el-row>
             <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
             <el-col :span="18" class="text-right">
-              <a rel="nofollow" target="_blank" :href="businessAppUrl">司机端App下载</a>
+              <a rel="nofollow" target="_blank" :href="driverAppUrl">司机端App下载</a>
               <span>｜</span>
-              <a rel="nofollow" target="_blank" :href="driverAppUrl">业务端App下载</a>
+              <a rel="nofollow" target="_blank" :href="businessAppUrl">业务端App下载</a>
               <div v-if="user&&user.nick_name" class="user">
                 欢迎您：{{user.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
                 <span>|</span>
@@ -507,12 +507,12 @@ export default {
       this.driverCodeImg = '';
       this.businessAppUrl = 'https://www.pgyer.com/business_pro';
       this.driverAppUrl = 'https://www.pgyer.com/driver_pro';
-    } else if (currentUrl.match('bpm.hhtdlng.com')) {
+    } else if (currentUrl.match('tms.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
       this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
       this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
-    } else if (currentUrl.match('bpm.91lng.cn')) {
+    } else if (currentUrl.match('tms.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
       this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';

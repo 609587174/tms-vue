@@ -1,4 +1,30 @@
-<!-- powerManage.vue -->
+<style scoped lang="less">
+.el-table {
+  /deep/ td {
+    padding: 0;
+    font-size: 14px;
+  }
+  /deep/ .cell {
+    padding: 0!important;
+  }
+  td {
+    vertical-align:middle;
+      display: table-cell;
+
+    li {
+      padding: 6px 0;
+     min-height: 24px;
+      border-bottom: 1px solid #e4e7ed;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+      font-size: 14px;
+    }
+  }
+}
+
+</style>
 <template>
   <div class="setting">
     <div class="nav-tab" v-if="false">
@@ -48,26 +74,22 @@
                     <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
                       <template slot-scope="scope">
                         <div v-if="item.param ==='menu_name'">{{scope.row.menu_name}}</div>
-                        <div v-if="item.param ==='menu'">
-                          <dl>
-                            <dt v-for="(item,key) in scope.row.second_menus">
-                              {{item.menu_name}}
-                            </dt>
-                          </dl>
-                        </div>
-                        <div v-if="item.param==='desc'">{{}}</div>
-                        <div v-if="item.param==='desc'">{{}}</div>
+                        <ul v-if="item.param ==='menu'">
+                          <li v-for="(item,key) in scope.row.second_menus">
+                            {{item.menu_name}}
+                          </li>
+                        </ul>
                       </template>
                     </el-table-column>
                     <el-table-column label="操作" width="450">
                       <template slot-scope="scope">
-                        <dl class="power-op">
-                          <dt v-for="(item,key) in scope.row.second_menus">
+                        <ul class="power-op">
+                          <li v-for="(item,key) in scope.row.second_menus">
                             <el-checkbox-group v-model="selectMenus">
                               <el-checkbox v-for="(itemThird,index) in item.third_menus" :label="itemThird.id" :key="index">{{itemThird.menu_name}}</el-checkbox>
                             </el-checkbox-group>
-                          </dt>
-                        </dl>
+                          </li>
+                        </ul>
                       </template>
                     </el-table-column>
                   </el-table>
@@ -342,7 +364,3 @@ export default {
 }
 
 </script>
-<style scoped lang="less">
-
-
-</style>

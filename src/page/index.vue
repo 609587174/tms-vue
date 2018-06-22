@@ -183,7 +183,7 @@ a {
           left: 0;
           top: 0;
           background: rgba(255, 255, 255, .2);
-          filter: blur(2px);
+          // filter: blur(2px);
           z-index: 2;
         }
 
@@ -365,7 +365,7 @@ a {
                   </div>
                   <div class="advantage-list-msg">
                     <img src="@/assets/img/data.png">
-                    <span>数据精心管理</span>
+                    <span>数据精细管理</span>
                     <div>驾驶员/销售/统计/财务数据实 时同步、精确统计</div>
                   </div>
                 </div>

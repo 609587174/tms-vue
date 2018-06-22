@@ -19,7 +19,7 @@
                     </el-col>
                     <el-col :span="10">
                       <el-form-item label="搜索时间:">
-                        {{todayStart}} - {{todayEnd}}
+                        {{startTime}} - {{endTime}}
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">

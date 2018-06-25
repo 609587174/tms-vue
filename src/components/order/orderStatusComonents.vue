@@ -244,7 +244,6 @@ export default {
                     }
                   });
                 });
-
                 vm.listFifterData = dataBody;
               } else {
                 vm.listFifterData = dataBody;

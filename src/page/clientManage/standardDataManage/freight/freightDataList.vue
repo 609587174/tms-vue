@@ -61,11 +61,11 @@
                     </ul>
                   </div>
                   <div v-else>
-                    <div v-if="scope.row.agreements.length&&item.param==='carrier_name'||item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
                       <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
                     </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
-                    <span v-if="scope.row.agreements.length&&item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&item.param==='carrier_name'||item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
                   </div>
                 </template>
               </el-table-column>

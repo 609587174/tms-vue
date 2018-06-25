@@ -18,7 +18,7 @@
           <el-form-item label="联系电话：" prop="contact_phone">
             <el-input v-model.trim="registerForm.contact_phone" type="text" placeholder="请输入电话"></el-input>
           </el-form-item>
-          <el-form-item label="公司地址：" prop="area">
+          <el-form-item label="公司地址：" prop="address">
             <choose-address :address.sync="address"></choose-address>
             <!-- <el-row :gutter="0">
               <el-col :md="8">
@@ -87,7 +87,7 @@ export default {
         name: '',
         contact_name: '',
         contact_phone: '',
-        area: '',
+        address: '',
         detail_address: '',
         carrier_type: ''
       },
@@ -105,7 +105,7 @@ export default {
           { required: true, message: '请输入联系电话', trigger: 'blur' },
           { pattern: /(^(\(0\d{2}\)|0\d{2}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' } ///^\d{3,4}-?\d{7,8}$/=====/^((0\d{2,3}-\d{7,8})|(1\d{10}$))$/
         ],
-        area: [
+        address: [
           { required: true, message: '请选择区域', trigger: 'blur' }
         ],
         detail_address: [
@@ -148,15 +148,16 @@ export default {
     onSubmit() {
       console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id
-      this.registerForm.area = this.address.area
+      this.registerForm.address = this.address.area ? this.address.area : this.address.city;
+      console.log('from',this.registerForm)
       this.$refs['registerForm'].validate((valid) => {
         if (valid) {
           if (this.checked) {
             this.submitBtn.isDisabled = true;
             this.submitBtn.btnText = '注册中';
             this.submitBtn.isLoading = true;
+            this.registerForm.area = this.registerForm.address;
             this.$$http('addCarrier', this.registerForm).then((results) => {
-              console.log('注册成功', results.data);
               // this.pageLoading = false;
               this.submitBtn.btnText = '注册';
               this.submitBtn.isLoading = false;
@@ -167,7 +168,7 @@ export default {
                   type: 'success'
                 });
                 setTimeout(() => {
-                  this.$router.push({ path: "registerSuccess"});
+                  this.$router.push({ path: "registerSuccess" });
                 }, 3000)
 
               }

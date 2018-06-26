@@ -188,8 +188,8 @@ export default {
             this.tableData[i].carrierListStr = '';
             this.tableData[i].fluidListStr = '';
             for (let j in this.tableData[i].agreements) {
-              this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
-              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+              // this.tableData[i].carrierListStr += this.tableData[i].agreements[j].carrier_name + (j < this.tableData[i].agreements[j].length - 1 ? ',' : '');
+              this.tableData[i].fluidListStr += this.tableData[i].agreements[j].fluid_name + (j < this.tableData[i].agreements.length - 1 ? '，' : '');
             }
           }
           this.pageData.totalCount = results.data.data.count;

@@ -152,6 +152,9 @@ export default {
     }
   },
   methods: {
+    // pageChange() {
+    //   this.getStaffsList(this.currentDepartmentId, this.currentPositionId, this.isValid === '1' ? true : false)
+    // },
     staffsDialog: function(operation, row) {
       this.staffDialog.isShow = true;
       this.staffDialog.type = operation;

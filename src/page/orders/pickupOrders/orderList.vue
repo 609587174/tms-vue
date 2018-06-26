@@ -9,7 +9,13 @@
     }
   }
 }
-
+.searchButton{
+  border-bottom:1px solid lightgrey;
+  cursor:pointer;
+}
+.searchButton:hover{
+  background-color:#ecf5ff;
+}
 </style>
 <template>
   <div>
@@ -20,7 +26,7 @@
             <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" :rules="rules">
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen">
+                  <el-input placeholder="请输入" v-model="fifterParam.keyword" class="search-filters-screen" @keyup.native.13="searchList">
                     <el-select v-model="fifterParam.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
@@ -44,6 +50,7 @@
     <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
+
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
@@ -71,8 +78,22 @@
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane :label="statusName.history_count" name="loaded">
-          <div class="tab-content padding-clear-top" v-if="thisFifterName=='loaded'">
+        <el-tab-pane  name="history">
+        <span slot="label">
+        <el-popover 
+          placement="right-start"
+          width="100"
+          trigger="hover"
+          v-model="seachExtend">
+          <el-row>
+            <el-col class="searchButton" @click.native="changeF('history')"><el-button type="text" style="color:black" >{{statusName.history_count}}</el-button></el-col>
+            <el-col class="searchButton" @click.native="changeF('loaded')"><el-button type="text" style="color:black" >{{statusName.loaded_count}}</el-button></el-col>
+            <el-col class="searchButton" @click.native="changeF('canceled')" style="border-bottom:none"><el-button type="text" style="color:black" >{{statusName.canceled_count}}</el-button></el-col>
+          </el-row>
+          <el-button slot="reference" type="text" style="color:black">{{statusName.history_count}}<i class="el-icon-caret-bottom el-icon--right"></i></el-button>
+        </el-popover>
+        </span>
+          <div class="tab-content padding-clear-top" v-if="thisFifterName=='history'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
             </keep-alive>
@@ -95,8 +116,10 @@ export default {
   },
   data() {
     return {
+      seachExtend:false,
       searchStatus: false,
       pageLoading: false,
+      historyStatus:'',
       fifterParam: {
         keyword: "",
         field: "trader_name",
@@ -106,6 +129,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
+        loaded_count:'已完成',
+        canceled_count:'已取消',
         history_count: '历史'
       },
       allStatusName: {
@@ -113,6 +138,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
+        loaded_count:'已完成',
+        canceled_count:'已取消',
         history_count: '历史'
       },
       timeParam: [],
@@ -154,6 +181,16 @@ export default {
     goAddNewOder: function() {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
     },
+    changeF:function(type){
+      this.pageData.currentPage = 1;
+      this.seachExtend=false;
+      this.thisFifterName='history';
+      if(type!='history'){
+        this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName +"&st="+type});
+      }else{
+        this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName });
+      }
+    },
     searchList: function(type) {
 
       var sendData = {};
@@ -168,9 +205,13 @@ export default {
       if (this.thisFifterName != "all") {
         sendData.status = this.thisFifterName;
       }
-      if (this.thisFifterName == 'loaded') {
-        sendData.history = true;
-        delete sendData.status;
+      if (this.thisFifterName == 'history') {
+        if(this.historyStatus=='history'||this.historyStatus==''){
+          sendData.history = true;
+          delete sendData.status;
+        }else{
+          sendData.status = this.historyStatus;
+        }
       }
       
       sendData.page_size = this.pageData.pageSize;
@@ -198,10 +239,11 @@ export default {
       this.getCountList();
     },
     clickFifter: function(targetName) {
-      var status = targetName.name;
+      //this.historyStatus = targetName.name;
       this.pageData.currentPage = 1;
       //重新查询一次数据
       //this.searchList();
+      this.historyStatus="";
       this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName });
     },
     pageChange: function() {
@@ -240,6 +282,7 @@ export default {
     '$route' (to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.thisFifterName = this.$route.query.goTo || "all";
+      this.historyStatus=this.$route.query.st || "";
       this.searchList();
     }
   }

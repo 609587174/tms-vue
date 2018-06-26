@@ -214,7 +214,6 @@ export default {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
       }else{
-
         vm.saveSendData = sendData;
         this.pageData.currentPage=1;
         sendData.page = this.pageData.currentPage;

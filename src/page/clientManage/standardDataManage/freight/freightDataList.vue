@@ -65,7 +65,7 @@
                       <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
                     </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
-                    <span v-if="scope.row.agreements.length&&item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time')">{{scope.row.agreements[0][item.param]}}</span>
                     <span v-if="item.param==='company_name'">{{scope.row.company.company_name}}</span>
                   </div>
                 </template>

@@ -52,7 +52,7 @@
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list mt-25">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" border>
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" height="600" v-loading="pageLoading" border>
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
                   <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'||item.param==='initial_price'||item.param==='change_rate'||item.param==='change_number'">
@@ -61,11 +61,12 @@
                     </ul>
                   </div>
                   <div v-else>
-                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'" :title="item.param==='carrier_name'?scope.row.carrierListStr:scope.row.fluidListStr" class="text-blue">
+                    <div v-if="scope.row.agreements.length&&item.param==='fluid_name'" :title="scope.row.fluidListStr" class="text-blue">
                       <span v-for="(value,key) in scope.row.agreements" v-if="key<5">{{value[item.param]}}<br></span>
                     </div>
                     <span v-if="item.param==='created_at'">{{scope.row[item.param]}}</span>
-                    <span v-if="scope.row.agreements.length&&item.param==='carrier_name'||item.param==='effective_time'||item.param==='dead_time'">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="scope.row.agreements.length&&(item.param==='effective_time'||item.param==='dead_time')">{{scope.row.agreements[0][item.param]}}</span>
+                    <span v-if="item.param==='company_name'">{{scope.row.company.company_name}}</span>
                   </div>
                 </template>
               </el-table-column>
@@ -139,7 +140,7 @@ export default {
         width: ''
       }, {
         title: '生效托运方',
-        param: 'carrier_name',
+        param: 'company_name',
         width: '200'
       }, {
         title: '生效液厂',
@@ -170,7 +171,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        agreements__carrier: this.searchFilters.agreements__carrier,
+        company: this.searchFilters.agreements__carrier,
         agreements__fluid: this.searchFilters.agreements__fluid
       };
       postData = this.pbFunc.fifterObjIsNull(postData);

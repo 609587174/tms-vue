@@ -73,7 +73,8 @@
           </el-table-column>
           <el-table-column label="车辆所属" align="center" width="140">
             <template slot-scope="scope">
-              <span>{{scope.row.attributes && scope.row.attributes.verbose || '-'}}</span>
+              <span v-if="scope.row.semitrailer && scope.row.semitrailer.carrier&&scope.row.semitrailer.carrier.name">{{scope.row.semitrailer.carrier.name}}</span>
+              <span v-else>-</span>
             </template>
           </el-table-column>
           <el-table-column label="分组" align="center" width="140">

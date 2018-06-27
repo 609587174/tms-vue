@@ -111,7 +111,7 @@
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.delivery_order.plan_tonnage}}
                 </el-col>
-                <el-col :span="3" class="colinfo"><span v-if="props.row.delivery_order.active_tonnage">{{props.row.delivery_order.active_tonnage}}</span><span v-else>无</span>
+                <el-col :span="3" class="colinfo"><span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
 

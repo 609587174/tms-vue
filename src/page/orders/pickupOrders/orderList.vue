@@ -35,9 +35,9 @@
                 </el-col>
               </el-row>
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="10">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                    <el-date-picker v-model="timeParam" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd">
+                      <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -50,7 +50,6 @@
     <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
         <el-tab-pane :label="statusName.all_count" name="all">
-
           <div class="tab-content padding-clear-top" v-if="thisFifterName=='all'">
             <keep-alive>
               <orderFifterList :ListData="listFifterData" @refreshList="searchList"></orderFifterList>
@@ -116,7 +115,27 @@ export default {
   },
   data() {
     return {
+      editable:false,
       seachExtend:false,
+      pickerOptions: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', [start, end]);
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            const end = new Date();
+            const start = new Date();
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+            picker.$emit('pick', [start, end]);
+          }
+        }, ]
+      },
       searchStatus: false,
       pageLoading: false,
       historyStatus:'',
@@ -142,11 +161,13 @@ export default {
         canceled_count:'已取消',
         history_count: '历史'
       },
-      timeParam: [],
+
       listFifterData: [],
       rules: {},
       activeName: 'first',
+      timeParam:[
 
+      ],
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -276,6 +297,9 @@ export default {
     }
     //this.listFifterData = this.listData;
     this.searchList();
+    var defaultStart=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00"
+    var defaultEnd=new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
+    this.timeParam=[defaultStart,defaultEnd];
 
   },
   watch: {

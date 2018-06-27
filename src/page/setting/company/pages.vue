@@ -56,7 +56,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>企业类型:</label>
-                <div class="detail-form-item" v-if="companyData.carrier&&companyData.carrier_type" v-html="pbFunc.dealNullData(companyData.carrier&&companyData.carrier_type.verbose)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(companyData.carrier_type&&companyData.carrier_type.verbose)"></div>
               </div>
             </el-col>
             <el-col :span="8">

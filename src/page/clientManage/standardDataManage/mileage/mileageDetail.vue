@@ -75,23 +75,24 @@
                       <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.standard_mileage)"></div>
                     </div>
                   </el-col>
-                  <el-col :span="8">
+                  <!-- <el-col :span="8">
                     <div class="label-list">
                       <label>启用状态:</label>
                       <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.is_active?'已生效':'未生效')"></div>
                     </div>
-                  </el-col>
-
-                </el-row>
-                <el-row :gutter="10">
+                  </el-col> -->
                   <el-col :span="8">
                     <div class="label-list">
-                      <label>生效承运商:</label>
+                      <label>生效托运方:</label>
                       <div class="detail-form-item">
                         <span  v-html="pbFunc.dealNullData(detailData.traders&&detailData.traders.name)"></span>
                       </div>
                     </div>
                   </el-col>
+
+                </el-row>
+                <el-row :gutter="10">
+
                 </el-row>
               </div>
             </el-main>

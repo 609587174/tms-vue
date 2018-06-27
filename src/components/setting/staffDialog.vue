@@ -31,7 +31,7 @@
           </el-form-item>
           <el-form-item label="部门：" prop="department">
             <el-select v-model="staffRules.department" filterable placeholder="请选择" :disabled="isEscort" @change="getPositionList(true)">
-              <el-option v-for="(item,key) in departmentList" :key="key" :label="item.group_name" :value="item.id"></el-option>
+              <el-option v-for="(item,key) in departmentListCopy" :key="key" :label="item.group_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="职位：" prop="carrier_role">
@@ -66,7 +66,8 @@ export default {
     },
     closeDialogBtn: Function,
   },
-
+  computed: {
+  },
   data: function() {
     const isSpace = (rule, value, callback) => {
       if (value.indexOf(" ") != -1) {
@@ -87,6 +88,7 @@ export default {
         carrier_role: ''
       },
       positionList: [], //职位列表
+      departmentListCopy:[],
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' },
@@ -134,11 +136,13 @@ export default {
     },
     changeDepartment() {
       this.isEscort = false;
-      console.log('部门',this.staffRules.department)
-      for (let i in this.departmentList) {
-        if (this.departmentList[i].id === this.staffRules.department&& this.departmentList[i].department_number === 'DRIVER_ESCORT_STAFF') {
+      this.departmentListCopy = this.pbFunc.deepcopy(this.departmentList)
+      for (let i in this.departmentListCopy) {
+        if (this.departmentListCopy[i].department_number === 'DRIVER_ESCORT_STAFF' && this.staffRow.departmentKey === 'DRIVER_ESCORT_STAFF' && this.staffDialog.type === 'update') {
           this.isEscort = true;
           break;
+        } else if (this.departmentListCopy[i].department_number === 'DRIVER_ESCORT_STAFF') {
+          this.departmentListCopy.splice(i, 1);
         }
       }
     },
@@ -238,6 +242,7 @@ export default {
           // this.staffRules.group_name = this.departmentRow.group_name;
           this.title = '修改员工';
         } else {
+          this.changeDepartment();
           this.title = '新增员工';
           this.staffRules = {
             username: '',

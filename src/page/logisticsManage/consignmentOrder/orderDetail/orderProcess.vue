@@ -60,8 +60,8 @@
         <el-tab-pane label="运单详情" name="first">
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
-          <div class="detail-main border-top-clear">
-            <el-container v-show="!pageLoading">
+          <div class="detail-main border-top-clear" v-loading="pageLoading">
+            <el-container v-show="!pageLoading" >
               <el-header>
                 <el-row>
                   <el-col :span="3">
@@ -778,6 +778,7 @@ export default {
         finished: '已完成',
         canceled: '已取消'
       },
+      operationIsOk:true,
       lockFalg: false,
       activeName: 'second',
       pageLoading: false,
@@ -973,7 +974,9 @@ export default {
         sendData.cancel_trip_list = cancel_trip_list;
         sendData.match_trip_list = match_trip_list;
         sendData.pickup_trip_id = this.setpId;
+        this.pageLoading=true;
         this.$$http("sureMatch", sendData).then(results => {
+          vm.pageLoading=false;
           if (results.data.code == 0) {
             vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
             vm.$message({
@@ -984,13 +987,16 @@ export default {
             vm.$message.error("确认卸货单失败")
           }
         }).catch(() => {
+          vm.pageLoading=false;
           vm.$message.error("确认卸货单失败")
         });
       } else if (type == 'upInSettlement') {
         var sendData = {};
         sendData.id = this.setpId;
         sendData.status = 'in_settlement';
+        this.pageLoading=true;
         this.$$http('changeOrderStatus', sendData).then(results => {
+          vm.pageLoading=false;
           if (results.data.code == 0) {
             vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
             vm.$message({
@@ -1001,6 +1007,7 @@ export default {
             vm.$message.error("提交结算失败")
           }
         }).catch(() => {
+          vm.pageLoading=false;
           vm.$message.error("提交结算失败")
         });
       }
@@ -1034,15 +1041,23 @@ export default {
         sendData.id = weight_id;
         //sendData.weight_id = weight_id;
         sendData.is_checked = 'pass';
-        this.$$http("examineLoad", sendData).then(results => {
-          if (results.data.code == 0) {
-            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
-            vm.$message({
-              type: "success",
-              message: "审核通过成功"
-            })
-          }
-        });
+        if(this.operationIsOk){
+          this.operationIsOk=false;
+          vm.pageLoading=true;
+            this.$$http("examineLoad", sendData).then(results => {
+            vm.pageLoading=false;
+            vm.operationIsOk=true;
+            if (results.data.code == 0) {
+              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$message({
+                type: "success",
+                message: "审核通过成功"
+              })
+            }
+          }).catch(()=>{
+            vm.pageLoading=false;
+          });
+        }
       } else if (type == 'cancleLoadExUp') {
         var sendData = {};
         // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
@@ -1059,17 +1074,24 @@ export default {
         } else {
           sendData.reason = this.otherInput;
         }
-
-        this.$$http("examineLoad", sendData).then(results => {
-          if (results.data.code == 0) {
-            console.log('results', results);
-            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
-            vm.$message({
-              type: "success",
-              message: "审核拒绝成功"
-            })
-          }
-        });
+        if(this.operationIsOk){
+            this.operationIsOk=false;
+            vm.pageLoading=true;
+            this.$$http("examineLoad", sendData).then(results => {
+            this.operationIsOk=true;
+            vm.pageLoading=false;
+            if (results.data.code == 0) {
+              console.log('results', results);
+              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$message({
+                type: "success",
+                message: "审核拒绝成功"
+              })
+            }
+          }).catch(()=>{
+            vm.pageLoading=false;
+          });
+        }
       }
     },
     getData: function() {

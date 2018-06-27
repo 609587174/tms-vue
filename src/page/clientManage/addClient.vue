@@ -248,7 +248,6 @@ export default {
         codeMsg: [
           { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
         ]
-
       },
       saveBasicAndReviewBtn: {
         isLoading: false,

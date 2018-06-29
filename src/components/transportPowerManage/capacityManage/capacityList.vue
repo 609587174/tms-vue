@@ -88,6 +88,12 @@
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>
+           <el-table-column label="主驾电话号码" align="center" width="140">
+            <template slot-scope="scope">
+              <a v-if="scope.row.master_driver" target="blank">{{scope.row.master_driver.mobile_phone}}</a>
+              <span v-if="!scope.row.master_driver">-</span>
+            </template>
+          </el-table-column>
           <el-table-column label="副驾驶" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.vice_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.vice_driver.id" target="blank">{{scope.row.vice_driver.name}}</a>

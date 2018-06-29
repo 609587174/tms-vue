@@ -404,7 +404,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId+"&operate=edit" });
     },
 
   }

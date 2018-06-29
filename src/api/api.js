@@ -1321,6 +1321,14 @@ const api = {
     param: {
 
     }
+  },
+  getFulidDetalis: {
+    url: '/order/actual-fluid/:id/',
+    method: 'GET',
+    desc: "获取液厂详情",
+    param: {
+
+    }
   }
 }
 

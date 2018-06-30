@@ -1329,6 +1329,14 @@ const api = {
     param: {
 
     }
+  },
+  getStationDetalis: {
+    url: '/order/fluid-site/:id/',
+    method: 'GET',
+    desc: "获取站点详情",
+    param: {
+
+    }
   }
 }
 

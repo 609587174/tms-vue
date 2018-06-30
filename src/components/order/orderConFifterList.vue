@@ -122,7 +122,7 @@
               </el-row>
 
                <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
-                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -236,7 +236,7 @@
        <el-button type="primary" @click="upStatus">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" open="openDigo">
+    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
 
@@ -254,6 +254,7 @@ export default {
       delayTime:500,
       showMap:false,
       expandFalg:true,
+      loadPosition:{},
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
       buttonAll: {
         driver_pending_confirmation: [],
@@ -356,10 +357,25 @@ export default {
      if(type=="load"){
         this.$$http('getFulidDetalis',{id:id}).then((results)=>{
           if(results.data.code==0){
-            console.log('f',results);
             vm.showMap=true;
             var pointObj=results.data.data;
-            vm.openDigo(pointObj.coordinate);
+            vm.loadPosition.longitude=pointObj.coordinate.longitude;
+            vm.loadPosition.latitude=pointObj.coordinate.latitude;
+            vm.loadPosition.position=pointObj.coordinate.address;
+            //vm.openDigo(pointObj.coordinate);
+          }
+        }).catch(()=>{
+
+        });
+      }else if(type=="unload"){
+        this.$$http('getStationDetalis',{id:id}).then((results)=>{
+          if(results.data.code==0){
+            vm.showMap=true;
+            var pointObj=results.data.data;
+            vm.loadPosition.longitude=pointObj.location.longitude;
+            vm.loadPosition.latitude=pointObj.location.latitude;
+            vm.loadPosition.position=pointObj.address;
+            //vm.openDigo(pointObj.coordinate);
           }
         }).catch(()=>{
 
@@ -367,18 +383,23 @@ export default {
       }
     },
     openDigo:function(obj){
-       if(!landmarkMap){
+      var vm=this;
+      setTimeout(()=>{
         landmarkMap = new AMap.Map('map-container', {
-          zoom: 15,
+          zoom: 10,
         });
       // /*创建点标记*/
         positionMark = new AMap.Marker({
-          map:landmarkMap,
-        });
-      }
-      let lnglat = [obj.longitude, obj.latitude];
-      landmarkMap.setCenter(lnglat);
-      positionMark.setPosition(lnglat);
+            map:landmarkMap,
+          });
+         positionMark.setLabel({
+            content: vm.loadPosition.position,
+            offset: new AMap.Pixel(30, 0)
+         });
+        let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
+        landmarkMap.setCenter(lnglat);
+        positionMark.setPosition(lnglat);
+      },100);  
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {

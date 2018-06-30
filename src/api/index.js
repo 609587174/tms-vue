@@ -26,7 +26,7 @@ if (currentUrl.match('xxx.91lng.cn')) {
 } else if (currentUrl.match('tms.91lng.cn')) {
   domainUrl = 'http://tms.91lng.cn';
 } else {
-  // domainUrl = 'http://tms.91lng.cn';
+  //domainUrl = 'http://tms.hhtdlng.com';
   domainUrl = 'http://devtms.hhtdlng.com';
 }
 

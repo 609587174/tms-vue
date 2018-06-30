@@ -23,13 +23,13 @@
             <el-row :gutter="10">
               <el-col :span="8">
                 <el-form-item label="实际装车时间:" label-width="105px">
-                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="实际离站时间:" label-width="105px">
-                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -74,7 +74,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="收入统计" name="income"></el-tab-pane>
+      <!-- <el-tab-pane label="收入统计" name="income"></el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

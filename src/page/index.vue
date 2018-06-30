@@ -20,7 +20,7 @@ a {
     color: #fff;
     font-size: 16px;
     img {
-      margin-top: 13px;
+      margin-top: 14px;
     }
     a {
       color: #fff;

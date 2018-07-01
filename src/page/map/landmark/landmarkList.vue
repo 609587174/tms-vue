@@ -11,7 +11,7 @@
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                  <el-input placeholder="请输入站点名称" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>

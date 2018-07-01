@@ -19,11 +19,11 @@ let timeout = 20000;
 let domainUrl = '';
 let currentUrl = document.location.href.toString();
 
-if (currentUrl.match('xxx.91lng.cn')) {
-  domainUrl = 'http://91lng.cn';
+if (currentUrl.match('ptms.91lng.cn')) {
+  domainUrl = 'http://ptms.91lng.cn';
 } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
   domainUrl = 'http://tms.hhtdlng.com';
-} else if (currentUrl.match('tms.91lng.cn')) {
+} else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
   domainUrl = 'http://tms.91lng.cn';
 } else {
   //domainUrl = 'http://tms.hhtdlng.com';

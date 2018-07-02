@@ -2,7 +2,7 @@
 .el-table {
   /deep/ td {
     padding: 0;
-    font-size: 14px;
+    font-size: 13px;
   }
   /deep/ .cell {
     padding: 0!important;
@@ -19,7 +19,22 @@
       &:last-child {
         border-bottom: 0;
       }
-      font-size: 14px;
+
+      /deep/ .el-checkbox__label{
+        font-size: 13px;
+      }
+    }
+  }
+}
+.setting {
+  .setting-content {
+    .nav-tab-setting {
+      .department-list {
+        padding-bottom: 0;
+        .el-menu{
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }

@@ -48,11 +48,11 @@
         </el-row>
       </el-form>
     </div>
-    <div class="operation-btn text-right">
+    <div class="operation-btn text-right" v-if="false">
       <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
       <el-button type="primary" @click="exportList">导出</el-button>
     </div>
-    <div class="capacity-list-content">
+    <div class="capacity-list-content mt-25">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column label="牵引车车牌号" align="center" width="140">

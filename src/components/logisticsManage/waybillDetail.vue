@@ -382,9 +382,13 @@
   </div> -->
 </template>
 <script>
+import imgReview from '@/components/common/imgReview';
 export default {
   name: 'waybillDetail',
   props:['backLink','isCheck'],
+  components: {
+    imgReview: imgReview
+  },
   computed: {
     setpId: function() {
       return this.$route.params.setpId;

@@ -11,11 +11,9 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-row>
-        <el-col class="stepTitle mt-25">
-          {{stepTitle}}
-        </el-col>
-      </el-row>
+      <div class="stepTitle mt-25">
+        {{stepTitle}}
+      </div>
       <el-main v-loading="pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
@@ -777,9 +775,11 @@ export default {
     width: 100%;
   }
 }
-.detail-main .go-return{
+
+.detail-main .go-return {
   margin-top: 22px;
 }
+
 #addeditHeadCarPage {
   border: 1px solid rgb(222, 222, 222);
 }
@@ -811,6 +811,8 @@ export default {
   height: 46px;
   text-align: center;
   line-height: 48px;
+  margin-right: 30px;
+  margin-left: 30px;
 }
 
 </style>

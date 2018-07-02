@@ -270,7 +270,7 @@ export default {
         let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
-      },100);  
+      },100);
     },
     gotoOrderDetalis: function(row) {
       var type = "";
@@ -306,7 +306,7 @@ export default {
           delivery_order_id: rowData.id
         }
         if (rowData.submit_car_number == 0) {
-          vm.$confirm('提交车辆不能为零哦,请你先添加车辆', '请注意', {
+          vm.$confirm('提交车辆不能为0,请你先添加车辆', '请注意', {
             confirmButtonText: '确认',
             showCancelButton: false,
             type: 'warning',

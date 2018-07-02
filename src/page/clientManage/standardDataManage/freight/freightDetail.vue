@@ -116,6 +116,10 @@ export default {
         title: '变动费率（元/吨/公里）',
         param: 'change_rate',
         width: ''
+      }, {
+        title: '变动值',
+        param: 'change_number',
+        width: ''
       }],
     }
   },

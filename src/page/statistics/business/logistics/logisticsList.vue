@@ -41,7 +41,7 @@
             <el-col :span="20" class="total-data">
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
             </el-col>
-            <el-col :span="4" class="text-right">
+            <el-col :span="4" class="text-right" v-if="false">
               <el-button type="primary">导出</el-button>
             </el-col>
           </el-row>

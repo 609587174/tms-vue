@@ -191,7 +191,10 @@
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
-            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
+            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:
+             <span v-if="props.row.interrupt_status.key!='canceling'||props.row.interrupt_status.key!='modifying'||props.row.interrupt_status.key!='abnormal'">{{props.row.interrupt_status.verbose}}</span>
+            <span v-else>{{props.row.status.verbose}}</span>
+          </el-col>
           </el-row>
            <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
           <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
@@ -281,12 +284,14 @@ export default {
           methods_type: "downEx"
         }],
         unloading_audit_failed: [],
-        waiting_settlement: [{
-          text: "调整数据",
-          type: "success",
-          methods_type: "changeData",
-          attrPlan: true
-        }, {
+        waiting_settlement: [
+        // {
+        //   text: "调整数据",
+        //   type: "success",
+        //   methods_type: "changeData",
+        //   attrPlan: true
+        // }, 
+        {
           text: "提交结算",
           type: "primary",
           methods_type: "upSettlement",

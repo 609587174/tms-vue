@@ -27,7 +27,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传时间:</label>
-                <div class="detail-form-item">{{detailData.created_at}}</div>
+                <div class="detail-form-item">{{detailData.create_time}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -38,25 +38,16 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>审核操作:</label>
-                <div class="detail-form-item check-button">
-                  <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
-                  <el-button type="danger" :disabled="isFailure" @click="checkConfirm(false)" size="mini">拒绝</el-button>
-                </div>
+                <label>审核状态:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_status && detailData.confirm_status.verbose)"></div>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>审核状态:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_remark)"></div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.user && detailData.confirm_info.user.username)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.username)"></div>
               </div>
             </el-col>
             <el-col :span="8">

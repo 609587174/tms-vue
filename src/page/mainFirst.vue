@@ -225,7 +225,7 @@
                 <template slot="title">
                   <div class="menu-title-cloumn" :class="[{ 'choosed-cloumn' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }]">
                     <i :class="[{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }, route.meta.iconName]"></i>
-                    <span>{{route.meta.title||"无名字"}}</span>
+                    <span :class="{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }">{{route.meta.title||"无名字"}}</span>
                   </div>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute" class="children-menu">

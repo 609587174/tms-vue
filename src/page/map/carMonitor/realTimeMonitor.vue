@@ -300,7 +300,7 @@ export default {
         console.log('xxxx');
       }
 
-      if (waybill_vehicle_status !== '无' && waybill_vehicle_status !== 'free') {
+      if (waybill_vehicle_status !== '无' && (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.key !== 'free')) {
         operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--primary el-button--mini">订单跟踪</a>&nbsp;<a href="javascript:void(0)"  id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
       } else {
         operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;

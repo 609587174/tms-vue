@@ -64,12 +64,12 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="出生日期:" prop="birthday">
+                  <el-form-item label="出生日期:">
                     <el-date-picker value-format="yyyy-MM-dd" format="yyyy 年 MM 月 dd 日" type="date" placeholder="选择日期" v-model="userForm.birthday" style="width: 100%;"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="年龄:" prop="age">
+                  <el-form-item label="年龄:">
                     <el-input placeholder="请输入年龄" type="text" v-model="userForm.age"></el-input>
                   </el-form-item>
                 </el-col>
@@ -507,12 +507,6 @@ export default {
         id_number: [ //身份证号码
           { required: true, message: '请输入身份证号码', trigger: 'blur' },
           { pattern: /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/, message: '请输入正确的身份证号码', trigger: 'blur' }
-        ],
-        birthday: [
-          { required: true, message: '请选择出生日期', trigger: 'blur' },
-        ],
-        age: [
-          { required: true, message: '请填写年龄', trigger: 'blur' },
         ],
         on_job_status: [ //在职状态
           { required: true, message: '请选择在职状态', trigger: 'blur' },

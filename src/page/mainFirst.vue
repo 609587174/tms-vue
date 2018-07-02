@@ -97,6 +97,7 @@
 .log-img {
   line-height: 55px;
   vertical-align: middle;
+  margin-top: -2px;
 }
 
 .color-4a9bf8 {
@@ -173,18 +174,25 @@
     -o-transform: rotate(45deg);
   }
 }
+/deep/ .el-breadcrumb__item{
+  &:last-child{
+    .el-breadcrumb__inner{
+      color:#4a9bf8;
+    }
 
+  }
+}
 </style>
 <template>
   <el-container>
     <el-header>
       <el-row type="flex" class="g-head">
         <router-link :to="{path: '/'}">
-          <div href="" title="胜通tms" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+          <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
         </router-link>
         <div class="nav">
           <div class="g-statues-bar p-lr">
-            <el-breadcrumb separator="/" class="bread" id="mybread">
+            <el-breadcrumb separator="/" class="bread" id="mybread" separator-class="el-icon-arrow-right">
               <el-breadcrumb-item v-for="(item,index) in breadcrumbs" :key="index">
                 {{ item.meta.title || "" }}
               </el-breadcrumb-item>
@@ -217,7 +225,7 @@
                 <template slot="title">
                   <div class="menu-title-cloumn" :class="[{ 'choosed-cloumn' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }]">
                     <i :class="[{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }, route.meta.iconName]"></i>
-                    <span>{{route.meta.title||"无名字"}}</span>
+                    <span :class="{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }">{{route.meta.title||"无名字"}}</span>
                   </div>
                 </template>
                 <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute" class="children-menu">

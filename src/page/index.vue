@@ -20,7 +20,7 @@ a {
     color: #fff;
     font-size: 16px;
     img {
-      margin-top: 13px;
+      margin-top: 14px;
     }
     a {
       color: #fff;
@@ -502,11 +502,11 @@ export default {
   },
   created() {
     let currentUrl = document.location.href.toString();
-    if (currentUrl.match('xxx.91lng.cn')) {
-      this.businessCodeImg = '';
-      this.driverCodeImg = '';
-      this.businessAppUrl = 'https://www.pgyer.com/business_pro';
-      this.driverAppUrl = 'https://www.pgyer.com/driver_pro';
+    if (currentUrl.match('ptms.91lng.cn')) {
+      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
+      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
     } else if (currentUrl.match('tms.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';

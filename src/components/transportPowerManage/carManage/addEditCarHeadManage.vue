@@ -11,11 +11,9 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-row>
-        <el-col class="stepTitle mt-25">
-          {{stepTitle}}
-        </el-col>
-      </el-row>
+      <div class="stepTitle mt-25">
+        {{stepTitle}}
+      </div>
       <el-main v-loading="pageLoading">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
@@ -233,7 +231,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="运营证号:" prop="operation_number">
+                  <el-form-item label="营运证号:" prop="operation_number">
                     <el-input placeholder="请输入" type="num" v-model="headCarFormStep2.operation_number"></el-input>
                   </el-form-item>
                 </el-col>
@@ -460,8 +458,8 @@ export default {
           { required: true, message: '行驶证编号不能为空', trigger: 'blur' }, { min: 12, max: 12, message: '行驶证为12位数字', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
         ],
         operation_number: [
-          { required: true, message: '运营证编号不能为空', trigger: 'blur' },
-          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
+          { required: true, message: '营运证编号不能为空', trigger: 'blur' },
+          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '营运证为12位数字', trigger: 'blur' }
         ],
         total_weight: [
           { validator: onlyNum, trigger: 'blur' }
@@ -777,9 +775,11 @@ export default {
     width: 100%;
   }
 }
-.detail-main .go-return{
+
+.detail-main .go-return {
   margin-top: 22px;
 }
+
 #addeditHeadCarPage {
   border: 1px solid rgb(222, 222, 222);
 }
@@ -811,6 +811,8 @@ export default {
   height: 46px;
   text-align: center;
   line-height: 48px;
+  margin-right: 30px;
+  margin-left: 30px;
 }
 
 </style>

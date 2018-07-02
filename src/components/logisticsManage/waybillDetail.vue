@@ -219,7 +219,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际吨位:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.check_quantity)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_tonnage)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -342,8 +342,36 @@
             </el-col>
           </el-row>
         </div>
+        <div class="detail-list detail-form" v-if="isCheck">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                榜单信息
+              </el-col>
+            </el-row>
+          </div>
+          <el-row :gutter="40">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>装车榜单:</label>
+                <div class="detail-form-item">
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看榜单</span>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="8" v-if="orderId">
+              <div class="label-list">
+                <label>卸车榜单:</label>
+                <div class="detail-form-item">
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看榜单</span>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
       </el-main>
     </el-container>
+    <img-review :imgObject.sync='imgObject'></img-review>
   </div>
   <!-- </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
@@ -354,16 +382,23 @@
   </div> -->
 </template>
 <script>
+import imgReview from '@/components/common/imgReview';
 export default {
   name: 'waybillDetail',
-  props:['backLink'],
+  props:['backLink','isCheck'],
+  components: {
+    imgReview: imgReview
+  },
   computed: {
     setpId: function() {
       return this.$route.params.setpId;
     },
     willId: function() {
       return this.$route.params.willId;
-    }
+    },
+    orderId: function() {
+      return this.$route.params.orderId ? this.$route.params.orderId : '';
+    },
   },
   data() {
     return {
@@ -381,11 +416,46 @@ export default {
         escort_staff: {}
       },
       loadArr: [{}],
-      unloadArr: []
+      unloadArr: [],
+      poundImg: [],
+      imgObject: {
+        imgList: [],
+        showPreview: false,
+        previewIndex: 0,
+      },
+      loadingInfo: {}, //装车榜单
+      unloadInfo: {}, //卸车榜单
     }
   },
   methods: {
-
+    showImg: function(id) {
+      var vm = this;
+      if (vm.poundImg[id]) {
+        var imgList = vm.poundImg[id];
+        this.imgObject.imgList = [imgList];
+        this.imgObject.showPreview = true;
+      } else {
+        if (id) {
+          var sendData = {};
+          //sendData.section_trip = this.setpId;
+          sendData.id = id;
+          if (vm.poundImg[id]) {
+            var imgList = vm.poundImg[id];
+            this.imgObject.imgList = imgList;
+            this.imgObject.showPreview = true;
+          } else {
+            this.$$http("getPundList", sendData).then(results => {
+              if (results.data.code == 0) {
+                vm.poundImg[results.data.data.data[0].id] = results.data.data.data[0].image_url;
+                var imgList = [results.data.data.data[0].image_url];
+                vm.imgObject.imgList = imgList;
+                vm.imgObject.showPreview = true;
+              }
+            });
+          }
+        }
+      }
+    },
     getOrderDetail: function() {
       this.pageLoading = true;
       var vm = this;
@@ -404,8 +474,12 @@ export default {
           for (var i = 0; i < vm.detailData.trips.length; i++) {
             if (vm.detailData.trips[i].section_type.key == 'unload') {
               unloadArr.push(vm.detailData.trips[i]);
+              if (vm.detailData.trips[i].business_order.id === this.orderId) {
+                this.unloadInfo = this.detailData.trips[i];
+              }
             } else {
               loadArr.push(this.detailData.trips[i]);
+              this.loadingInfo = this.detailData.trips[i];
             }
           }
           vm.unloadArr = unloadArr;

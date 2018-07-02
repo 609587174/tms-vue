@@ -48,11 +48,11 @@
         </el-row>
       </el-form>
     </div>
-    <div class="operation-btn text-right">
+    <div class="operation-btn text-right" v-if="false">
       <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
       <el-button type="primary" @click="exportList">导出</el-button>
     </div>
-    <div class="capacity-list-content">
+    <div class="capacity-list-content mt-25">
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
           <el-table-column label="牵引车车牌号" align="center" width="140">
@@ -85,6 +85,12 @@
           <el-table-column label="主驾驶" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.master_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.master_driver.id" target="blank">{{scope.row.master_driver.name}}</a>
+              <span v-if="!scope.row.master_driver">-</span>
+            </template>
+          </el-table-column>
+           <el-table-column label="主驾电话号码" align="center" width="140">
+            <template slot-scope="scope">
+              <a v-if="scope.row.master_driver" target="blank">{{scope.row.master_driver.mobile_phone}}</a>
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>

@@ -141,24 +141,24 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="运营者年审日期:">
+                <el-form-item label="行驶证年审日期:">
                   <div class="detail-form-item">{{tailData.license_verify_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="运营证号:">
+                <el-form-item label="营运证号:">
                   <div class="detail-form-item">{{tailData.operation_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="运营证发证日期:">
+                <el-form-item label="营运证发证日期:">
                   <div class="detail-form-item">{{tailData.operation_issue_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="行驶证年审日期:">
+                <el-form-item label="营运证年审日期:">
                   <div class="detail-form-item">{{tailData.operation_verify_date}}</div>
                 </el-form-item>
               </el-col>

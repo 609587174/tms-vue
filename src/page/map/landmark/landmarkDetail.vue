@@ -27,7 +27,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>上传时间:</label>
-                <div class="detail-form-item">{{detailData.created_at}}</div>
+                <div class="detail-form-item">{{detailData.create_time}}</div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -38,25 +38,16 @@
             </el-col>
             <el-col :span="8">
               <div class="label-list">
-                <label>审核操作:</label>
-                <div class="detail-form-item check-button">
-                  <el-button type="primary" :disabled="isSucess" @click="checkConfirm(true)" size="mini">通过</el-button>
-                  <el-button type="danger" :disabled="isFailure" @click="checkConfirm(false)" size="mini">拒绝</el-button>
-                </div>
+                <label>审核状态:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_status && detailData.confirm_status.verbose)"></div>
               </div>
             </el-col>
           </el-row>
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>审核状态:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.confirm_info && detailData.confirm_info.operate_remark)"></div>
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="label-list">
                 <label>审核人:</label>
-                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.user && detailData.confirm_info.user.username)"></div>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData( detailData.confirm_info && detailData.confirm_info.operator && detailData.confirm_info.operator.username)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -67,7 +58,7 @@
             </el-col>
           </el-row>
         </div>
-        <div class="detail-list detail-form" v-if="false">
+        <div class="detail-list detail-form">
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
@@ -78,14 +69,60 @@
           <el-row :gutter="10">
             <el-col :span="8">
               <div class="label-list">
-                <label>地标类型:</label>
-                <div class="detail-form-item">加油站</div>
+                <label>匹配运单:</label>
+                <!--这里有问题，需要咨询后端-->
+                <div class="detail-form-item">无</div>
               </div>
             </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>地标同步:</label>
-                <div class="detail-form-item">一同步</div>
+                <div class="detail-form-item" v-if="detailData.is_syncd">已同步</div>
+                <div class="detail-form-item" v-if="!detailData.is_syncd">未同步</div>
+              </div>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="detail-list detail-form">
+          <div class="detail-form-title">
+            <el-row>
+              <el-col :span="12" :offset="6" class="text-center">
+                地标信息
+              </el-col>
+            </el-row>
+          </div>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>地标名称:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.position_name)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>地标类型:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.position_type && detailData.position_type.verbose)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>联系人:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.contacts)"></div>
+              </div>
+            </el-col>
+          </el-row>
+          <el-row :gutter="10">
+            <el-col :span="8">
+              <div class="label-list">
+                <label>联系电话:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.tel)"></div>
+              </div>
+            </el-col>
+            <el-col :span="8">
+              <div class="label-list">
+                <label>备注:</label>
+                <!--这里后端没有返回字段-->
+                <div class="detail-form-item">无</div>
               </div>
             </el-col>
           </el-row>

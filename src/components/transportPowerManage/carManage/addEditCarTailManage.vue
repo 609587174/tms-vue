@@ -134,7 +134,7 @@
               </el-row>
               <el-row :gutter="80">
                 <el-col :span="8">
-                  <el-form-item label="运营证号:" prop="operation_number">
+                  <el-form-item label="营运证号:" prop="operation_number">
                     <el-input placeholder="请输入" type="num" v-model="tailCarFormStep.operation_number"></el-input>
                   </el-form-item>
                 </el-col>
@@ -386,8 +386,8 @@ export default {
           { required: true, message: '行驶证编号不能为空', trigger: 'blur' }, { min: 12, max: 12, message: '行驶证为12位数字', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
         ],
         operation_number: [
-          { required: true, message: '运营证编号不能为空', trigger: 'blur' },
-          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '运营证为12位数字', trigger: 'blur' }
+          { required: true, message: '营运证编号不能为空', trigger: 'blur' },
+          { validator: onlyNum, trigger: 'blur' }, { min: 12, max: 12, message: '营运证为12位数字', trigger: 'blur' }
         ],
         insuranceAmout: [
           { validator: onlyNum, trigger: 'blur' }

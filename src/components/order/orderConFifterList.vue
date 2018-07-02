@@ -91,7 +91,13 @@
     white-space: nowrap;
     display: inline-block;
 }
-
+.el-icon-location{
+  cursor:pointer;
+}
+#map-container {
+  height: 400px;
+  width: 100%;
+}
 </style>
 <template>
   <div>
@@ -101,7 +107,7 @@
           <div class="listDetalis" style="width:75%;padding-left:48px;">
             <div>
               <el-row class="loadInfo commh" style="width:100%;">
-                <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">
                 </el-col>
@@ -116,7 +122,7 @@
               </el-row>
 
                <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
-                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary"></i>
+                <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
                 </el-col>
@@ -185,7 +191,10 @@
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
-            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:{{props.row.status.verbose}}</el-col>
+            <el-col class="whiteSpan" :span="3" :title="props.row.status.verbose">状态:
+             <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
+            <span v-else>{{props.row.status.verbose}}</span>
+          </el-col>
           </el-row>
            <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
           <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
@@ -230,16 +239,25 @@
        <el-button type="primary" @click="upStatus">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
+      <div id="map-container" v-if="showMap"></div>
+    </el-dialog>
+
   </div>
+ 
 </template>
 <script>
+  let landmarkMap;
+  let positionMark;
 export default {
   name: 'orderFifterList',
   data() {
     return {
       lockFalg: false,
       delayTime:500,
+      showMap:false,
       expandFalg:true,
+      loadPosition:{},
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
       buttonAll: {
         driver_pending_confirmation: [],
@@ -266,12 +284,14 @@ export default {
           methods_type: "downEx"
         }],
         unloading_audit_failed: [],
-        waiting_settlement: [{
-          text: "调整数据",
-          type: "success",
-          methods_type: "changeData",
-          attrPlan: true
-        }, {
+        waiting_settlement: [
+        // {
+        //   text: "调整数据",
+        //   type: "success",
+        //   methods_type: "changeData",
+        //   attrPlan: true
+        // }, 
+        {
           text: "提交结算",
           type: "primary",
           methods_type: "upSettlement",
@@ -307,7 +327,8 @@ export default {
       ],
       changeSatusCarList: [],
       changeSatusPerList: [],
-      seletPadding: false
+      seletPadding: false,
+    
     };
   },
   props: ['ListData'],
@@ -320,13 +341,70 @@ export default {
       return returnId;
     }
   },
-  mounted() {
+  mounted: function() {
+    /*生成地图*/
+    // var vm=this;
+    
+    // this.getDetail().then((results) => {
+    //   let lnglat = [results.data.data.location.longitude, results.data.data.location.latitude];
 
+    //   landmarkMap.setCenter(lnglat);
+    //   positionMark.setPosition(lnglat);
+    // });
   },
   methods: {
     gotoDetalis: function(rowData) {
       console.log('rowData', rowData);
       this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+    },
+    showMapDetalis:function(type,id){
+     var vm=this;
+     if(type=="load"){
+        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
+          if(results.data.code==0){
+            vm.showMap=true;
+            var pointObj=results.data.data;
+            vm.loadPosition.longitude=pointObj.coordinate.longitude;
+            vm.loadPosition.latitude=pointObj.coordinate.latitude;
+            vm.loadPosition.position=pointObj.coordinate.address;
+            //vm.openDigo(pointObj.coordinate);
+          }
+        }).catch(()=>{
+
+        });
+      }else if(type=="unload"){
+        this.$$http('getStationDetalis',{id:id}).then((results)=>{
+          if(results.data.code==0){
+            vm.showMap=true;
+            var pointObj=results.data.data;
+            vm.loadPosition.longitude=pointObj.location.longitude;
+            vm.loadPosition.latitude=pointObj.location.latitude;
+            vm.loadPosition.position=pointObj.address;
+            //vm.openDigo(pointObj.coordinate);
+          }
+        }).catch(()=>{
+
+        });
+      }
+    },
+    openDigo:function(obj){
+      var vm=this;
+      setTimeout(()=>{
+        landmarkMap = new AMap.Map('map-container', {
+          zoom: 10,
+        });
+      // /*创建点标记*/
+        positionMark = new AMap.Marker({
+            map:landmarkMap,
+          });
+         positionMark.setLabel({
+            content: vm.loadPosition.position,
+            offset: new AMap.Pixel(30, 0)
+         });
+        let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
+        landmarkMap.setCenter(lnglat);
+        positionMark.setPosition(lnglat);
+      },100);  
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 1) {

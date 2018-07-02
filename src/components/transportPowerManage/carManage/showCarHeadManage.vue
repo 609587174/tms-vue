@@ -242,24 +242,24 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="运营者年审日期:">
+                <el-form-item label="行驶证年审日期:">
                   <div class="detail-form-item">{{headData.license_verify_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="40">
               <el-col :span="8">
-                <el-form-item label="运营证号:">
+                <el-form-item label="营运证号:">
                   <div class="detail-form-item">{{headData.operation_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="运营证发证日期:">
+                <el-form-item label="营运证发证日期:">
                   <div class="detail-form-item">{{headData.operation_issue_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="行驶证年审日期:">
+                <el-form-item label="营运证年审日期:">
                   <div class="detail-form-item">{{headData.operation_verify_date}}</div>
                 </el-form-item>
               </el-col>
@@ -404,7 +404,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId });
+      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId+"&operate=edit" });
     },
 
   }

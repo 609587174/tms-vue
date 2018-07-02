@@ -47,7 +47,6 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-
               </el-row>
               <el-row>
                 <el-col :span="8">
@@ -272,7 +271,7 @@ export default {
         '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
         '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
         '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-        '</div></div>';
+        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary " href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
 
       return infoBodyStr;
     },

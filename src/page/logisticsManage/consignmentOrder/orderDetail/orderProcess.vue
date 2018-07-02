@@ -794,7 +794,7 @@ export default {
       },
       sureTitle: "装车磅单审核通过",
       cancleTitle: "装车磅单审核拒绝",
-      loadPoundReason: "榜单照片不清晰",
+      loadPoundReason: "磅单照片不清晰",
       otherInput: "",
       surePound: {},
       exPound: {},
@@ -833,12 +833,12 @@ export default {
       },
       selectData: {
         loadPoundReasonList: [{
-            key: "榜单照片不清晰",
-            text: "榜单照片不清晰"
+            key: "磅单照片不清晰",
+            text: "磅单照片不清晰"
           },
           {
-            key: "虚假榜单照片",
-            text: "虚假榜单照片"
+            key: "虚假磅单照片",
+            text: "虚假磅单照片"
           }, {
             key: "吨位信息错误",
             text: "吨位信息错误"

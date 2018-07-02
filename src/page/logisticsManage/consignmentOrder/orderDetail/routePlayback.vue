@@ -19,12 +19,13 @@
                     </el-col>
                     <el-col :span="10">
                       <el-form-item label="搜索时间:">
-                        {{startTime}} - {{endTime}}
+                        <span v-if="startTime">{{startTime}} - {{endTime}}</span>
+                        <span v-if="!startTime">无</span>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item>
-                        {{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟
+                        <span v-if="timeSpacing.day">{{timeSpacing.day}}天{{timeSpacing.hours}}小时{{timeSpacing.minutes}}分钟</span>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -121,9 +122,10 @@ export default {
   },
   data() {
     return {
+      deviceDetail: {},
       activeName: 'third',
       childActiveName: 'stopPoint',
-      pageLoading: true,
+      pageLoading: false,
       offlineAndstopLoading: true,
       map: '', //地图实列
       cluster: '', //点聚合实例
@@ -283,10 +285,10 @@ export default {
             let resultsData = results.data.data;
             console.log('getConOrderDetalis results', results, resultsData);
             this.choosedDeviceId = resultsData.device_id;
-            this.startTime = resultsData.waybill.start_time ? resultsData.waybill.start_time : this.todayStart;
-            this.endTime = resultsData.waybill.stop_time ? resultsData.waybill.stop_time : this.todayEnd;
+            this.startTime = (resultsData.waybill && resultsData.waybill.start_time) ? resultsData.waybill.start_time : '';
+            this.endTime = (resultsData.waybill && resultsData.waybill.stop_time) ? resultsData.waybill.stop_time : this.todayEnd;
             this.timeSpacing = this.calculateTimeSpacing();
-            //this.carNumber = resultsData.
+            this.carNumber = resultsData.driver_no;
             console.log('this.startTime', this.startTime, this.endTime);
             resolve(results)
           } else {
@@ -585,6 +587,7 @@ export default {
 
           },
           offset: new AMap.Pixel(-9, -24),
+          visible: false,
         });
         //初始化终点icon
         _this.endMarker = new SimpleMarker({
@@ -597,6 +600,7 @@ export default {
             }
           },
           offset: new AMap.Pixel(-10, -26),
+          visible: false,
         });
         //初始化轨迹
         _this.pathSimplifierIns = new PathSimplifier({
@@ -757,7 +761,7 @@ export default {
 
           return;
         }
-
+        _this.startMarker.show();
         _this.startMarker.setPosition(_this.resultPath[0]);
 
         /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
@@ -773,6 +777,7 @@ export default {
           _this.speed = Math.floor(_this.distanceMile / _this.driveringTime * 3600);
           /*设置终点marker*/
           let endMarkerIndex = _this.resultPath.length - 1;
+          _this.endMarker.show();
           _this.endMarker.setPosition(_this.resultPath[endMarkerIndex]);
           /*监测巡航move事件（调用moveByDistance（动画过程会调用该方法）， moveToPoint 时触发），实时展示轨迹点信息。
            **这里有个问题是，moveByDistance，moveToPoint才出发move事件，导致轨迹点信息展示只能在导航到达点时才获取信息。没有实时跟着导航移动，需要优化。
@@ -879,6 +884,28 @@ export default {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${this.setpId}/${this.willId}` });
       }
     },
+    /* 页面初始化时获取设备详细信息，为了获取车牌号。carNumber */
+    getDeviceDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: this.choosedDeviceId
+        };
+        this.$$http('getDeviceDetail', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.deviceDetail = results.data.data;
+            this.carNumber = this.deviceDetail.tractor.plate_number;
+            this.masterDriver = (this.deviceDetail.master_driver && this.deviceDetail.master_driver.name) ? this.deviceDetail.master_driver.name : '无';
+            console.log('deviceDetail', this.deviceDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
   },
   activated: function() {
     this.activeName = 'third';
@@ -891,8 +918,20 @@ export default {
     this.map = new AMap.Map('map-container', {
       zoom: 5
     });
+
     this.initPath();
-    this.getConOrderDetalis().then((results) => { this.searchAndRender(); })
+    this.getConOrderDetalis().then((results) => {
+      if (this.startTime) {
+        this.searchAndRender();
+      } else {
+        this.$message({
+          message: '无轨迹信息',
+          type: 'success'
+        });
+      }
+
+      this.getDeviceDetail();
+    })
 
   },
   beforeDestroy() {

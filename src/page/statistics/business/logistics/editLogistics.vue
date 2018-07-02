@@ -132,8 +132,8 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="运费合计:" prop="waiting_charges">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
+                  <el-form-item label="运费合计:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -214,9 +214,9 @@ export default {
         waiting_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-        waiting_charges: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        ],
+        // waiting_charges: [
+        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+        // ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -310,8 +310,8 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time','check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'waiting_charges', 'remark'];
-      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
+      let keyArray = ['plan_time','check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'remark'];
+      let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray,true);
       console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

@@ -74,7 +74,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <!-- <el-tab-pane label="收入统计" name="income"></el-tab-pane> -->
+      <el-tab-pane label="收入统计" name="income"></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -206,7 +206,7 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}` });
+        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}/${row.order_id}` });
       }else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/business/logistics/editLogistics`, query: { id: row.id } });
       }

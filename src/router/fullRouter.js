@@ -543,10 +543,10 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
         }, {
-          path: 'logisticsWaybillDetail/:willId',
+          path: 'logisticsWaybillDetail/:willId/:orderId',
           name: "logisticsWaybillDetail",
           meta: {
-            title: '物流费用编辑',
+            title: '运单详情',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
@@ -576,10 +576,10 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
         }, {
-          path: 'incomeWaybillDetail/:willId',
+          path: 'incomeWaybillDetail/:willId/:orderId',
           name: "incomeWaybillDetail",
           meta: {
-            title: '收入统计编辑',
+            title: '运单详情',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)

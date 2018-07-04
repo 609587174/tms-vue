@@ -182,8 +182,7 @@ a {
           position: absolute;
           left: 0;
           top: 0;
-          background: rgba(255, 255, 255, .2);
-          // filter: blur(2px);
+          background: rgba(255, 255, 255, .2); // filter: blur(2px);
           z-index: 2;
         }
 
@@ -300,7 +299,8 @@ a {
     line-height: 26px;
   }
 }
-.el-footer{
+
+.el-footer {
   padding: 0;
 }
 
@@ -503,20 +503,20 @@ export default {
   created() {
     let currentUrl = document.location.href.toString();
     if (currentUrl.match('ptms.91lng.cn')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
+      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
+      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
     } else if (currentUrl.match('tms.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';
       this.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
       this.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
     } else if (currentUrl.match('tms.91lng.cn')) {
-      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
-      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
+      this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
+      this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
+      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
+      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
     } else {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';

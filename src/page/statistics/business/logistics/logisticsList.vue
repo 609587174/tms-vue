@@ -125,7 +125,7 @@ export default {
         width: ''
       }, {
         title: '托运方',
-        param: 'company',
+        param: 'carrier',
         width: '200'
       }, {
         title: '车号',

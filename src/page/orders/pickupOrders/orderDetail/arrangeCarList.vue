@@ -162,6 +162,10 @@ export default {
         }]
       },
       thTableList: [{
+        title: '车号',
+        param: 'tractor.plate_number',
+        width: ''
+      }, {
         title: '变更',
         param: 'waybill.waybill_change_status_display',
         width: ''
@@ -172,10 +176,6 @@ export default {
       }, {
         title: '运单号',
         param: 'waybill.waybill',
-        width: ''
-      }, {
-        title: '车号',
-        param: 'tractor.plate_number',
         width: ''
       }, {
         title: '挂车',

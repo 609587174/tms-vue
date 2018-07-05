@@ -52,6 +52,9 @@
       text-align: center
     }
     .el-table__row {
+      td {
+        text-align: center
+      } 
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
@@ -146,24 +149,22 @@
     </el-table-column>
     <el-table-column label="装卸地" prop="id" min-width="21.875%" type>
       <template slot-scope="props">
-        <div>
-          <el-row justify="space-between" type="flex">
-            <el-col :span="5">
+          <el-row >
+            <el-col :span="6">
               <el-button type="text" style="height:0px;line-height:0px;" @click="gotoOrderDetalis(props.row)">订单号:{{props.row.order_number}}</el-button>
             </el-col>
-            <el-col :span="5"> 托运方:{{props.row.trader}}</el-col>
+            <el-col :span="6"> 托运方:{{props.row.trader}}</el-col>
             <!-- <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col> -->
-            <el-col :span="5">
-              <el-tooltip :content="props.row.mark" placement="top" effect="light" :open-delay="delayTime">
+            <el-col :span="6">
+              <el-tooltip :content="props.row.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
                 <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
-            <el-col :span="4"> 状态:{{props.row.status.verbose}}
+            <el-col :span="6"> 状态:{{props.row.status.verbose}}
             </el-col>
           </el-row>
           <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
           <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
-        </div>
       </template>
     </el-table-column>
     <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">

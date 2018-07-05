@@ -80,7 +80,7 @@
                     <el-collapse v-model="extendsArr">
                       <el-collapse-item :title="statusType[item.type]" :name="key" v-for="(item,key) in detailData" :key="key" v-bind:class="{paddingCancle: item.type=='confirm_match'}">
                         <div v-if="item.type === 'driver_pending_confirmation'">
-                          <el-row>
+                          <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>生成运单号</label>
@@ -681,6 +681,7 @@
             </div>
           </el-col>
         </el-row>
+        
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <div class="label-list">
@@ -701,6 +702,13 @@
                 <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
               </el-form-item>
             </div>
+          </el-col>
+        </el-row>
+        <el-row style="margin-top:15px;" v-if="detailData[detailData.length - 1].type=='unloading_waiting_audit'">
+          <el-col :span="10" :offset="2">
+            <el-form-item label="离站时间:" prop="work_end_time" >
+                <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
           </el-col>
         </el-row>
       </el-form>

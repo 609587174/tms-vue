@@ -1337,6 +1337,14 @@ const api = {
     param: {
 
     }
+  },
+  searchCapacityFreeList: {
+    url: '/truck/tractor_semitrailers/free_tractor_semitrailers/',
+    method: 'get',
+    desc: "获取空闲且已完善的运力",
+    param: {
+
+    }
   }
 }
 

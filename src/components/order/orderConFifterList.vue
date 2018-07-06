@@ -167,11 +167,16 @@
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]">
-              <el-col>
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
+              <el-col >
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
+            <el-row  v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
+              <el-col >
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+           </el-row>
           </div>
           <div style="clear:both"></div>
         </template>
@@ -223,11 +228,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
-          <el-select v-model="changeStatusParam.changeStatusFied" filterable placeholder="请选择变更类型" v-if="changeStatusParam.changeStatusType=='truck'" v-loading="seletPadding">
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.plate_number" :value="item.id"></el-option>
-          </el-select>
-          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择变更类型" v-else filterable>
-            <el-option v-for="(item,key) in changeSatusPerList" :key="key" :label="item.name" :value="item.id"></el-option>
+          <el-select v-model="changeStatusParam.changeStatusFied"  placeholder="请选择变更类型" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding">
+            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -259,10 +261,38 @@ export default {
       expandFalg:true,
       loadPosition:{},
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
+      buttonModyfiyAll:{
+         canceling: [{
+          text: "确认取消",
+          type: "danger",
+          attrPlan: true,
+          methods_type: "sureCancle",
+        }],
+        abnormal: [{
+          text: "故障解决",
+          type: "success",
+          methods_type: "solveFault",
+        }],
+        modifying: []
+      },
       buttonAll: {
-        driver_pending_confirmation: [],
-        to_fluid: [],
-        reach_fluid: [],
+        driver_pending_confirmation: [{
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus",
+        }],
+        to_fluid: [
+        {
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus"
+        }],
+        reach_fluid: [
+        {
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus"
+        }],
         loading_waiting_audit: [{
           text: "装车审核",
           type: "success",
@@ -300,17 +330,7 @@ export default {
         in_settlement: [],
         finished: [],
         canceled: [],
-        canceling: [{
-          text: "确认取消",
-          type: "danger",
-          attrPlan: true,
-          methods_type: "sureCancle",
-        }],
-        abnormal: [{
-          text: "故障解决",
-          type: "success",
-          methods_type: "solveFault",
-        }]
+       
       },
       changeSatusShow: false,
       changeStatusParam: {
@@ -320,10 +340,7 @@ export default {
         sectiontrip: ""
       },
       changeSatusTypeSelect: [
-        { key: 'truck', verbose: "车辆故障需替换" },
-        { key: 'master_driver', verbose: "驾驶员更换" },
-        { key: 'copilot_driver', verbose: "押运员更换" },
-        { key: 'supercargo_driver', verbose: "副驾驶更换" }
+        { key: 'truck', verbose: "车辆变更" },
       ],
       changeSatusCarList: [],
       changeSatusPerList: [],
@@ -414,18 +431,21 @@ export default {
     upStatus: function() {
       var sendData = {};
       var vm = this;
+      if(this.changeStatusParam.changeStatusFied&&this.changeStatusParam.changeStatusType){
+         sendData.content = this.changeStatusParam.changeStatusFied;
+        sendData.change_type = this.changeStatusParam.changeStatusType;
+        sendData.desc = this.changeStatusParam.changeSatusDesc;
+        sendData.sectiontrip = this.changeStatusParam.sectiontrip;
+        this.$$http("upStatus", sendData).then((results) => {
+          console.log('results', results)
+          vm.$emit("changeTabs", 'fifth');
+          vm.changeSatusShow = false;
+        }).catch(() => {
 
-      sendData.content = this.changeStatusParam.changeStatusFied;
-      sendData.change_type = this.changeStatusParam.changeStatusType;
-      sendData.desc = this.changeStatusParam.changeSatusDesc;
-      sendData.sectiontrip = this.changeStatusParam.sectiontrip;
-      this.$$http("upStatus", sendData).then((results) => {
-        console.log('results', results)
-        vm.$emit("changeTabs", 'fifth');
-        vm.changeSatusShow = false;
-      }).catch(() => {
+        });
+      }else{
 
-      });
+      }
     },
     getRowKeys: function(row) {
       return row.id;
@@ -499,26 +519,13 @@ export default {
         var sendData = {};
         var vm = this;
         if (val.changeStatusType == 'truck' && this.changeSatusCarList.length == 0) {
-          sendData.pagination = false;
           this.seletPadding = true;
-          this.$$http("searchHeadCarList", sendData).then((results) => {
+          this.$$http("searchCapacityFreeList", sendData).then((results) => {
             vm.seletPadding = false;
             if (results.data.code == 0) {
               vm.changeSatusCarList = results.data.data;
             }
             console.log('carList', results);
-          }).catch(() => {
-            vm.seletPadding = false;
-          });
-        }
-        if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
-          sendData.pagination = false;
-          this.seletPadding = true;
-          this.$$http("getDriversList", sendData).then((results) => {
-            vm.seletPadding = false;
-            if (results.data.code == 0) {
-              vm.changeSatusPerList = results.data.data;
-            }
           }).catch(() => {
             vm.seletPadding = false;
           });

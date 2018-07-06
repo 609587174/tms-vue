@@ -83,7 +83,7 @@
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
-                                <label>生成运单号</label>
+                                <label>生成运单号:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.waybill)"></div>
                               </div>
                             </el-col>
@@ -611,6 +611,53 @@
                             </el-col>
                           </el-row>
                         </div>
+
+                        <div v-if="item.type === 'modifying'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更类型:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.msg)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更前:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.after_truck_no)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更后:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.before_truck_no)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更提交时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
+                        <div v-if="item.type === 'normal'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>变更确认时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
                       </el-collapse-item>
                     </el-collapse>
                   </el-col>
@@ -784,7 +831,9 @@ export default {
         waiting_settlement: '待提交结算',
         in_settlement: '结算中',
         finished: '已完成',
-        canceled: '已取消'
+        canceled: '已取消',
+        modifying:'运力变更申请',
+        normal:'运力已变更'
       },
       operationIsOk:true,
       lockFalg: false,
@@ -838,6 +887,7 @@ export default {
           type: "success",
           methods: "upInSettlement"
         }]
+        
       },
       selectData: {
         loadPoundReasonList: [{

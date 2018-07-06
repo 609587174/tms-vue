@@ -112,6 +112,12 @@
             </el-col>
           </el-row>
           <el-row :gutter="10">
+            <el-col :span="8" v-if="detailData.position_type && detailData.position_type.key ==='LNG_FACTORY'">
+              <div class="label-list">
+                <label>气种:</label>
+                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.gas_type && detailData.gas_type.verbose)"></div>
+              </div>
+            </el-col>
             <el-col :span="8">
               <div class="label-list">
                 <label>联系电话:</label>
@@ -137,7 +143,7 @@
           </div>
           <div class="img-box clearfix">
             <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item.src" /></div>
-            <div ng-if="!detailData.position_pics.length">无图片</div>
+            <div ng-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">

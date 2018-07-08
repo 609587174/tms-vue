@@ -35,7 +35,7 @@
           </div>
           <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
-            <!-- <el-button type="primary">导出</el-button> -->
+            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
@@ -75,6 +75,11 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       activeName: 'userManage',
       searchFilters: {
@@ -134,6 +139,49 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
+    },
+    exportData() {
+      let postData = {
+        filename: '人员管理',
+        page_arg: 'carrier_driver',
+        work_type: this.searchFilters.employmentType,
+        driver_bind_status: this.searchFilters.isBind,
+        ids: []
+      };
+      for (let i = 57; i <= 88; i++) {
+        postData.ids.push(i.toString());
+      }
+      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+
+      this.$$http('exportPersonData', postData).then((results) => {
+        console.log('results', results.data.data.results);
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     getList: function() {
       let postData = {

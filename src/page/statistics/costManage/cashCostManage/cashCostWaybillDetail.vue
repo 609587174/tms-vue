@@ -20,7 +20,7 @@
 <script>
 import waybillDetail from '@/components/logisticsManage/waybillDetail';
 export default {
-  name: 'logisticsWaybillDetail',
+  name: 'costImportWaybillDetail',
   components: {
     waybillDetail: waybillDetail
   },

@@ -9,6 +9,70 @@
  */
 
 const api = {
+  exportLogisticData: {
+    url: '/exports/logistic/',
+    method: 'post',
+    desc: '物流费用统计',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportSemitrailerData: {
+    url: '/exports/semitrailer/',
+    method: 'post',
+    desc: '导出挂车',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 semitrailer'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportTruckData: {
+    url: '/exports/truck/',
+    method: 'post',
+    desc: '导出牵引车',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 tractor'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  exportPersonData: {
+    url: '/exports/driver/',
+    method: 'post',
+    desc: '导出人员管理',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 carrier_driver'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   updateIncomeStatistic: {
     url: '/statistic/income/:id/',
     method: 'patch',

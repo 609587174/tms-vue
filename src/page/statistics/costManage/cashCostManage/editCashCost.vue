@@ -153,7 +153,7 @@
 </template>
 <script>
 export default {
-  name: 'editConsignment',
+  name: 'editCostImport',
   computed: {
     activeStep: function() {
       return this.$route.query.activeStep || 0;

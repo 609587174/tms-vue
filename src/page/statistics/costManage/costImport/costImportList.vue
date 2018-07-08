@@ -7,8 +7,7 @@
 <template>
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-      <el-tab-pane label="物流费用统计" name="logistics"></el-tab-pane>
-      <el-tab-pane label="收入统计" name="income">
+      <el-tab-pane label="费用导入统计" name="costImport">
         <div class="tab-screen">
           <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
             <el-row :gutter="0">
@@ -24,13 +23,13 @@
             <el-row :gutter="10">
               <el-col :span="8">
                 <el-form-item label="实际装车时间:" label-width="105px">
-                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="实际离站时间:" label-width="105px">
-                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -75,17 +74,19 @@
           </el-pagination>
         </div>
       </el-tab-pane>
+      <el-tab-pane label="现金费用管理" name="cashCost"></el-tab-pane>
+      <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
     </el-tabs>
   </div>
 </template>
 <script>
 export default {
-  name: 'incomeList',
+  name: 'costImportList',
   computed: {
 
   },
   activated: function() {
-    this.activeName = 'income';
+    this.activeName = 'costImport';
   },
   data() {
     return {
@@ -97,7 +98,7 @@ export default {
       },
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
-      activeName:'income',
+      activeName: 'costImport',
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -139,7 +140,7 @@ export default {
         title: '卸货站',
         param: 'station',
         width: ''
-      },{
+      }, {
         title: '实际装车时间',
         param: 'active_time',
         width: '180'
@@ -194,15 +195,17 @@ export default {
       })
     },
     clicktabs: function(targetName) {
-      if (targetName.name == 'logistics') {
+      if (targetName.name === 'costImport') {
+        this.$router.push({ path: `/statistics/costManage/costImport/costImportList` });
+      } else if (targetName.name === 'cashCost') {
+        this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
+      } else if (targetName.name === 'publicCost') {
         this.$router.push({ path: `/statistics/business/logistics/logisticsList` });
-      }else if (targetName.name == 'income') {
-        this.$router.push({ path: `/statistics/business/income/incomeList` });
       }
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/business/income/incomeWaybillDetail/${row.waybill_id}/${row.order_id}` });
+        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}/${row.order_id}` });
       }
       // else if (tpye === 'edit') {
       //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });

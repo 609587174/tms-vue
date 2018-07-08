@@ -585,6 +585,83 @@ export default [{
           component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
         }]
       }]
+    },{
+      path: 'costManage',
+      name: "costManage",
+      redirect: '/statistics/costManage/costImport/costImportList',
+      meta: {
+        title: '费用管理',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/costManage/costManage'], resolve),
+      children: [ {
+        path: 'costImport',
+        name: "costImport",
+        meta: {
+          title: '费用导入统计',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/costManage/costImport/costImport'], resolve),
+        children: [{
+          path: 'costImportList',
+          name: "costImportList",
+          meta: {
+            title: '费用导入统计列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/costImport/costImportList'], resolve)
+        }, {
+          path: 'editCostImport',
+          name: "editCostImport",
+          meta: {
+            title: '费用导入统计编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/costImport/editCostImport'], resolve)
+        }, {
+          path: 'costImportWaybillDetail/:willId/:orderId',
+          name: "costImportWaybillDetail",
+          meta: {
+            title: '运单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/costImport/costImportWaybillDetail'], resolve)
+        }]
+      }, {
+        path: 'cashCost',
+        name: "cashCost",
+        meta: {
+          title: '现金费用管理',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCost'], resolve),
+        children: [{
+          path: 'cashCostList',
+          name: "cashCostList",
+          meta: {
+            title: '现金费用管理列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostList'], resolve)
+        }, {
+          path: 'editCashCost',
+          name: "editCashCost",
+          meta: {
+            title: '现金费用管理编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/editCashCost'], resolve)
+        }, {
+          path: 'cashCostWaybillDetail/:willId/:orderId',
+          name: "cashCostWaybillDetail",
+          meta: {
+            title: '运单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostWaybillDetail'], resolve)
+        }]
+      }
+      ]
     }]
   }, {
     path: 'setting',

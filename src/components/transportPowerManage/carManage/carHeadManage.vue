@@ -27,7 +27,7 @@
       </el-tabs>
       <div class="operation-btn text-right">
         <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
-        <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
+        <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
         <el-button type="success" @click="addHeadCarPage">新增</el-button>
       </div>
       <div class="table-list" v-loading="pageLoading">
@@ -57,7 +57,6 @@
     </div>
     <el-dialog title="提示" :visible.sync="importVisible" width="30%">
       <span>牵引车信息导入</span>
-
     </el-dialog>
   </div>
 </template>
@@ -66,11 +65,16 @@ export default {
   name: 'carHeadManage',
   data() {
     return {
-      importVisible:false,
+      importVisible: false,
       pageStatus: false,
       fifterParam: {
         keyword: "",
         field: "plate_number",
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       seachListParam: {
         plate_number: '',
@@ -120,7 +124,7 @@ export default {
         ]
       },
       tableData: [],
-      saveSendData:{}
+      saveSendData: {}
     }
   },
 
@@ -136,8 +140,47 @@ export default {
     importList: function() {
 
     },
-    exportList: function() {
-
+    exportData() {
+      let vm = this;
+      let sendData = this.pbFunc.deepcopy(this.seachListParam);
+      sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      if (vm.pageStatus) {
+        sendData = this.saveSendData;
+      } else {
+        this.saveSendData = sendData;
+      }
+      sendData.filename = '牵引车管理';
+      sendData.page_arg = 'tractor';
+      sendData.ids = ['7', '8', '9', '10', '1', '2', '3', '4', '5', '6', '17', '18', '19', '20', '31', '22', '23', '24', '25', '26', '27', '28', '29', '30', '11', '12', '13', '14', '15', '16'];
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportTruckData', sendData).then((results) => {
+        console.log('results', results.data.data.results);
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     searchList: function(pageNum) {
       var vm = this;
@@ -145,11 +188,11 @@ export default {
       sendData[this.fifterParam.field] = this.fifterParam.keyword;
       vm.pageLoading = true;
       if (vm.pageStatus) {
-        sendData=this.saveSendData;
+        sendData = this.saveSendData;
         sendData.page = vm.pageData.currentPage;
-      }else{
-        this.saveSendData=sendData;
-        sendData.page=1;
+      } else {
+        this.saveSendData = sendData;
+        sendData.page = 1;
       }
       this.$$http('searchHeadCarList', sendData).then(function(result) {
         var resultData;

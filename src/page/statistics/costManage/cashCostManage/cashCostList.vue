@@ -23,15 +23,23 @@
             </el-row>
             <el-row :gutter="10">
               <el-col :span="8">
-                <el-form-item label="实际装车时间:" label-width="105px">
-                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                <el-form-item label="费用时间:" label-width="105px">
+                  <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="实际离站时间:" label-width="105px">
-                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
-                  </el-date-picker>
+              <el-col :span="6">
+                <el-form-item label="是否匹配:">
+                  <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
+                    <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="费用类型:">
+                  <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
+                    <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -39,11 +47,11 @@
         </div>
         <div class="operation-btn">
           <el-row>
-            <el-col :span="20" class="total-data">
-              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.freig?tableData.data.freig:0}}元，过路费{{tableData.data&&tableData.data.road_to?tableData.data.road_to:0}}元，停车费{{tableData.data&&tableData.data.parking_f?tableData.data.parking_f:0}}元，其它费用{{tableData.data&&tableData.data.other_co?tableData.data.other_co:0}}元，收入{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
-            </el-col>
-            <el-col :span="4" class="text-right">
-              <el-button type="primary">导出</el-button>
+            <!-- <el-col :span="16" class="total-data">
+            </el-col> -->
+            <el-col :span="24" class="text-right">
+              <el-button type="primary" plain @click="importData">导入</el-button>
+              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
             </el-col>
           </el-row>
         </div>
@@ -52,22 +60,16 @@
             <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
               <template slot-scope="scope">
                 <div v-if="item.param === 'waybill'">
-                  <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
                   <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                 </div>
                 <div v-else>{{scope.row[item.param]}}</div>
               </template>
             </el-table-column>
-            <el-table-column label="收入" align="center" width="130" fixed="right">
-              <template slot-scope="scope">
-                <div>{{scope.row.income}}</div>
-              </template>
-            </el-table-column>
-            <!-- <el-table-column label="操作" align="center" width="100" fixed="right">
+            <el-table-column label="操作" align="center" width="100" fixed="right">
               <template slot-scope="scope">
                 <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </el-table>
         </div>
         <div class="page-list text-center">
@@ -86,7 +88,7 @@ export default {
 
   },
   activated: function() {
-    this.activeName = 'costImport';
+    this.activeName = 'cashCost';
   },
   data() {
     return {
@@ -96,93 +98,79 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      leaveTime: [], //实际离站时间
-      activeTime: [], //实际装车时间
-      activeName: 'costImport',
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
+      costTime: [], //费用时间
+      activeName: 'cashCost',
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
-        isReconciliationsSelect: [
+        isMatchSelect: [
           { id: '', value: '全部' },
-          { id: 'unfinished', value: '未对账' },
-          { id: 'finished', value: '已对账' }
+          { id: 'unfinished', value: '已匹配' },
+          { id: 'finished', value: '未匹配' }
+        ],
+        costSelect:[
+          { id: '', value: '全部' },
+          { id: 'unfinished', value: '过路费（普通）' },
+          { id: 'finished', value: '过路费（国家）' },
+          { id: 'unfinished', value: '过桥费' },
+          { id: 'finished', value: '现金油/气（有票）' },
+          { id: 'unfinished', value: '现金油/气（无票）' },
+          { id: 'finished', value: '停车费' },
+          { id: 'unfinished', value: '维修费' },
+          { id: 'finished', value: '检测费' },
+          { id: 'unfinished', value: '其它费用' },
         ],
         fieldSelect: [
-          { id: 'waybill', value: '运单号' },
-          { id: 'company', value: '托运方' },
           { id: 'plate_number', value: '车号' }
         ]
       },
       thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '业务单号',
-        param: 'order',
-        width: ''
-      }, {
-        title: '托运方',
-        param: 'company',
-        width: '200'
-      }, {
         title: '车号',
         param: 'plate_number',
         width: ''
       }, {
-        title: '实际液厂',
+        title: '费用时间',
+        param: 'order',
+        width: ''
+      }, {
+        title: '费用类型',
+        param: 'company',
+        width: ''
+      }, {
+        title: '数量',
+        param: 'plate_number',
+        width: ''
+      }, {
+        title: '税前金额',
         param: 'fluid',
         width: ''
       }, {
-        title: '卸货站',
+        title: '税后金额',
         param: 'station',
         width: ''
       }, {
-        title: '实际装车时间',
+        title: '税额',
         param: 'active_time',
-        width: '180'
+        width: ''
       }, {
-        title: '实际离站时间',
+        title: '是否匹配运单',
         param: 'leave_time',
-        width: '180'
-      }, {
-        title: '实际里程',
-        param: 'actual_mile',
         width: ''
       }, {
-        title: '运费',
+        title: '运单号',
+        param: 'waybill',
+        width: ''
+      }, {
+        title: '添加时间',
         param: 'freight',
-        width: ''
-      }, {
-        title: '过路费',
-        param: 'road_toll',
-        width: ''
-      }, {
-        title: '停车费',
-        param: 'parking_fee',
-        width: ''
-      }, {
-        title: '加油/气费',
-        param: 'fuel',
-        width: ''
-      }, {
-        title: '维修费',
-        param: 'maintenance_cost',
-        width: ''
-      }, {
-        title: '其它费用',
-        param: 'other_cost',
-        width: ''
-      }, {
-        title: '高速路（对公）',
-        param: 'high_cost',
-        width: ''
-      }, {
-        title: '油/气费（对公）',
-        param: 'oli_gas',
         width: ''
       }],
       tableData: []
@@ -194,13 +182,19 @@ export default {
         this.getList();
       })
     },
+    importData(){
+      this.$router.push({ path: `/statistics/costManage/cashCostManage/importCashCost` });
+    },
+    exportData(){
+
+    },
     clicktabs: function(targetName) {
       if (targetName.name === 'costImport') {
         this.$router.push({ path: `/statistics/costManage/costImport/costImportList` });
       } else if (targetName.name === 'cashCost') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsList` });
+        this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
       } else if (targetName.name === 'publicCost') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsList` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/publicCostList` });
       }
     },
     handleMenuClick(tpye, row) {
@@ -222,13 +216,9 @@ export default {
         page_size: this.pageData.pageSize,
         is_reconciliation: this.searchFilters.is_reconciliation
       };
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
+      if (this.costTime instanceof Array && this.costTime.length > 0) {
+        postData.leave_time_start = this.costTime[0];
+        postData.leave_time_end = this.costTime[1];
       }
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);

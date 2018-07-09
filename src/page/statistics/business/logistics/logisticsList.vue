@@ -74,7 +74,7 @@
           </el-pagination>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="收入统计" name="income"></el-tab-pane>
+      <!-- <el-tab-pane label="收入统计" name="income"></el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

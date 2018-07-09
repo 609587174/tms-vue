@@ -200,7 +200,7 @@ export default {
       } else if (targetName.name === 'cashCost') {
         this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
       } else if (targetName.name === 'publicCost') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsList` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/publicCostList` });
       }
     },
     handleMenuClick(tpye, row) {

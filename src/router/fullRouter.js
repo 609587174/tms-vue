@@ -34,14 +34,14 @@ export default [{
       },
       component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
-          path: 'ordersList',
-          name: 'pickupOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '提货订单列表',
-          },
-          component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
+        path: 'ordersList',
+        name: 'pickupOrdersList',
+        meta: {
+          isVerificationL: false,
+          title: '提货订单列表',
         },
+        component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
+      },
         {
           path: 'addNewPickUpOrder',
           name: 'addOrder',
@@ -125,14 +125,14 @@ export default [{
       },
       component: (resolve) => require(['../page/logisticsManage/consignmentOrder/consignmentOrders'], resolve),
       children: [{
-          path: 'ordersList',
-          name: 'consignmentOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '托运订单'
-          },
-          component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderList'], resolve),
+        path: 'ordersList',
+        name: 'consignmentOrdersList',
+        meta: {
+          isVerificationL: false,
+          title: '托运订单'
         },
+        component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderList'], resolve),
+      },
         {
           path: 'orderDetail',
           name: 'consignmentOrderDetail',
@@ -291,14 +291,14 @@ export default [{
       },
       component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
       children: [{
-          path: 'carHeadManage',
-          name: 'carHeadManage',
-          meta: {
-            isVerificationL: false,
-            title: '牵引车管理',
-          },
-          component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
+        path: 'carHeadManage',
+        name: 'carHeadManage',
+        meta: {
+          isVerificationL: false,
+          title: '牵引车管理',
         },
+        component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
+      },
         {
           path: 'carTailManage',
           name: 'carTailManage',
@@ -356,14 +356,14 @@ export default [{
       },
       component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
       children: [{
-          path: 'personListManage',
-          name: 'personListManage',
-          meta: {
-            isVerificationL: false,
-            title: '人员列表管理',
-          },
-          component: (resolve) => require(['../page/transportPowerManage/personManage/personListManager'], resolve)
+        path: 'personListManage',
+        name: 'personListManage',
+        meta: {
+          isVerificationL: false,
+          title: '人员列表管理',
         },
+        component: (resolve) => require(['../page/transportPowerManage/personManage/personListManager'], resolve)
+      },
         {
           path: 'addPerson',
           name: 'addPerson',
@@ -403,22 +403,22 @@ export default [{
       },
       component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
       children: [{
-          path: 'privateClientManage',
-          name: 'privateClientManage',
-          meta: {
-            isVerificationL: false,
-            title: '客户管理',
-          },
-          component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
-        }, {
-          path: 'addClient',
-          name: 'addClient',
-          meta: {
-            isVerificationL: false,
-            title: '新增、编辑客户',
-          },
-          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
+        path: 'privateClientManage',
+        name: 'privateClientManage',
+        meta: {
+          isVerificationL: false,
+          title: '客户管理',
         },
+        component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
+      }, {
+        path: 'addClient',
+        name: 'addClient',
+        meta: {
+          isVerificationL: false,
+          title: '新增、编辑客户',
+        },
+        component: (resolve) => require(['../page/clientManage/addClient'], resolve)
+      },
         {
           path: 'clientDetail',
           name: 'clientDetail',
@@ -504,7 +504,7 @@ export default [{
     path: 'statistics',
     name: 'statistics',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '数据统计',
       iconName: 'icon-data',
     },
@@ -551,43 +551,8 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
         }]
-      }
-      // , {
-      //   path: 'income',
-      //   name: "income",
-      //   meta: {
-      //     title: '收入统计',
-      //     isVerificationL: false
-      //   },
-      //   component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
-      //   children: [{
-      //     path: 'incomeList',
-      //     name: "incomeList",
-      //     meta: {
-      //       title: '收入统计列表',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
-      //   }, {
-      //     path: 'editIncome',
-      //     name: "editIncome",
-      //     meta: {
-      //       title: '收入统计编辑',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
-      //   }, {
-      //     path: 'incomeWaybillDetail/:willId/:orderId',
-      //     name: "incomeWaybillDetail",
-      //     meta: {
-      //       title: '运单详情',
-      //       isVerificationL: false
-      //     },
-      //     component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
-      //   }]
-      // }
-      ]
-    },{
+      }]
+    }, {
       path: 'costManage',
       name: "costManage",
       redirect: '/statistics/costManage/costImport/costImportList',
@@ -596,7 +561,7 @@ export default [{
         isVerificationL: false
       },
       component: (resolve) => require(['../page/statistics/costManage/costManage'], resolve),
-      children: [ {
+      children: [{
         path: 'costImport',
         name: "costImport",
         meta: {
@@ -629,10 +594,9 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/costManage/costImport/costImportWaybillDetail'], resolve)
         }]
-      }
-      , {
-        path: 'cashCost',
-        name: "cashCost",
+      }, {
+        path: 'cashCostManage',
+        name: "cashCostManage",
         meta: {
           title: '现金费用管理',
           isVerificationL: false
@@ -642,7 +606,7 @@ export default [{
           path: 'cashCostList',
           name: "cashCostList",
           meta: {
-            title: '现金费用管理列表',
+            title: '现金费用列表',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostList'], resolve)
@@ -650,7 +614,7 @@ export default [{
           path: 'editCashCost',
           name: "editCashCost",
           meta: {
-            title: '现金费用管理编辑',
+            title: '现金费用编辑',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/costManage/cashCostManage/editCashCost'], resolve)
@@ -662,9 +626,57 @@ export default [{
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostWaybillDetail'], resolve)
+        }, {
+          path: 'importCashCost',
+          name: "importCashCost",
+          meta: {
+            title: '现金费用导入',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/importCashCost'], resolve)
         }]
-      }
-      ]
+      }, {
+        path: 'publicCostManage',
+        name: "publicCostManage",
+        meta: {
+          title: '对公费用管理',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+        children: [{
+          path: 'publicCostList',
+          name: "publicCostList",
+          meta: {
+            title: '对公费用列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCostList'], resolve)
+        }, {
+          path: 'editPublicCost',
+          name: "editPublicCost",
+          meta: {
+            title: '对公费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/editPublicCost'], resolve)
+        }, {
+          path: 'publicCostWaybillDetail/:willId/:orderId',
+          name: "publicCostWaybillDetail",
+          meta: {
+            title: '运单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCostWaybillDetail'], resolve)
+        }, {
+          path: 'importPublicCost',
+          name: "importPublicCost",
+          meta: {
+            title: '对公费用导入',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/importPublicCost'], resolve)
+        }]
+      }]
     }]
   }, {
     path: 'setting',
@@ -676,43 +688,43 @@ export default [{
     },
     component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
-        path: 'company',
-        name: "company",
-        redirect: '/setting/company/pages',
+      path: 'company',
+      name: "company",
+      redirect: '/setting/company/pages',
+      meta: {
+        title: '公司主页',
+        isVerificationL: true
+      },
+
+      component: (resolve) => require(['../page/setting/company/company'], resolve),
+      children: [{
+        path: 'pages',
+        name: "pages",
         meta: {
           title: '公司主页',
           isVerificationL: true
         },
-
-        component: (resolve) => require(['../page/setting/company/company'], resolve),
-        children: [{
-            path: 'pages',
-            name: "pages",
-            meta: {
-              title: '公司主页',
-              isVerificationL: true
-            },
-            component: (resolve) => require(['../page/setting/company/pages'], resolve)
-          },
-          {
-            path: 'editPages',
-            name: "editPages",
-            meta: {
-              title: '编辑主页',
-              isVerificationL: true
-            },
-            component: (resolve) => require(['../page/setting/company/editPages'], resolve)
-          }
-        ]
-      }, {
-        path: 'organizationalStructure',
-        name: "organizationalStructure",
-        meta: {
-          title: '组织架构',
-          isVerificationL: true
-        },
-        component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
+        component: (resolve) => require(['../page/setting/company/pages'], resolve)
       },
+        {
+          path: 'editPages',
+          name: "editPages",
+          meta: {
+            title: '编辑主页',
+            isVerificationL: true
+          },
+          component: (resolve) => require(['../page/setting/company/editPages'], resolve)
+        }
+      ]
+    }, {
+      path: 'organizationalStructure',
+      name: "organizationalStructure",
+      meta: {
+        title: '组织架构',
+        isVerificationL: true
+      },
+      component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
+    },
       {
         path: 'staffsManage',
         name: "staffsManage",

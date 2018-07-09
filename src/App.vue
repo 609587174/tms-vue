@@ -54,6 +54,7 @@ export default {
         clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
         business: 'BUSINESS_STATISTICS', //业务统计
+        costManage: 'EXPENSE_MANAGEMENT', //费用管理
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         setting: 'SETTINGS', //设置
         company: 'CARRIER_SETTINGS', //公司主页

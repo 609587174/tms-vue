@@ -9,6 +9,29 @@
  */
 
 const api = {
+  getCashCostData: {
+    url: '/imports/cash-cost/',
+    method: 'get',
+    desc: '导入现金费用临时列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size:{
+        desc:'一页显示的条数'
+      }
+    }
+  },
+  uploadCashCostData: {
+    url: '/imports/cash-cost/',
+    method: 'post',
+    desc: '导入现金费用',
+    param: {
+      file: {
+        desc: '待上传的excel文件'
+      }
+    }
+  },
   exportLogisticData: {
     url: '/exports/logistic/',
     method: 'post',

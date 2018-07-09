@@ -551,40 +551,42 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
         }]
-      }, {
-        path: 'income',
-        name: "income",
-        meta: {
-          title: '收入统计',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
-        children: [{
-          path: 'incomeList',
-          name: "incomeList",
-          meta: {
-            title: '收入统计列表',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
-        }, {
-          path: 'editIncome',
-          name: "editIncome",
-          meta: {
-            title: '收入统计编辑',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
-        }, {
-          path: 'incomeWaybillDetail/:willId/:orderId',
-          name: "incomeWaybillDetail",
-          meta: {
-            title: '运单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
-        }]
-      }]
+      }
+      // , {
+      //   path: 'income',
+      //   name: "income",
+      //   meta: {
+      //     title: '收入统计',
+      //     isVerificationL: false
+      //   },
+      //   component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
+      //   children: [{
+      //     path: 'incomeList',
+      //     name: "incomeList",
+      //     meta: {
+      //       title: '收入统计列表',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
+      //   }, {
+      //     path: 'editIncome',
+      //     name: "editIncome",
+      //     meta: {
+      //       title: '收入统计编辑',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
+      //   }, {
+      //     path: 'incomeWaybillDetail/:willId/:orderId',
+      //     name: "incomeWaybillDetail",
+      //     meta: {
+      //       title: '运单详情',
+      //       isVerificationL: false
+      //     },
+      //     component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
+      //   }]
+      // }
+      ]
     },{
       path: 'costManage',
       name: "costManage",
@@ -627,7 +629,8 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/costManage/costImport/costImportWaybillDetail'], resolve)
         }]
-      }, {
+      }
+      , {
         path: 'cashCost',
         name: "cashCost",
         meta: {

@@ -283,6 +283,7 @@ export default {
       let master_driver = (detailData.master_driver && detailData.master_driver.name) ? detailData.master_driver.name : '无';
       let vice_driver = (detailData.vice_driver && detailData.vice_driver.name) ? detailData.vice_driver.name : '无';
       let escort_staff = (detailData.escort_staff && detailData.escort_staff.name) ? detailData.escort_staff.name : '无';
+      let speed = (detailData.map_data && detailData.map_data.speed) ? detailData.map_data.speed : 0;
       let operatorDom = '';
 
       let routePlayback = () => {
@@ -307,7 +308,7 @@ export default {
       }
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 ">车牌号:${carMsg}</div>`;
-      infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
+      infoWindowDom.infoBodyStr = `<div class="fs-13 ">挂车号：${semitrailer}</div><div class="fs-13 ">主驾驶：${master_driver}</div><div class="fs-13 ">副驾驶：${vice_driver}</div><div class="fs-13 ">押运员：${escort_staff}</div><div class="fs-13 ">任务状态：${waybill_vehicle_status}</div><div class="fs-13 ">GPS状态：${device_status}</div><div class="fs-13 ">速度：${speed}km/h</div><div class="fs-13 ">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
       setTimeout(function() {

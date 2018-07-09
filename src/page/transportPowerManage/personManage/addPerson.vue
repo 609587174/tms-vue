@@ -518,6 +518,7 @@ export default {
 
         drive_license_number: [ //驾驶证档案编号
           { required: true, message: '请输入驾驶证档案编号', trigger: 'blur' },
+
         ],
 
         qualification_certificate_number: [ //从业资格证号
@@ -857,7 +858,7 @@ export default {
       let btnObject = this.saveBasicAndReviewBtn;
       let keyArray = ['labour_employ_date', 'labour_on_work_date', 'labour_off_work_date', 'contract_start_date', 'contract_due_date', 'contract_correct_date', 'heath_examination_date', 'heath_examination_remark'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     }
 
   }

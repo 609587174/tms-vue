@@ -558,8 +558,10 @@ export default {
       });
     },
     returnToPage: function() {
-      if (this.$route.query.headId) {
+      if (this.$route.query.operate === 'edit') {
+
         this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage", query: { headId: this.$route.query.headId } });
+
       } else {
         this.$router.push({ path: "/transportPowerManage/carManage/carHeadManage" });
       }
@@ -679,7 +681,9 @@ export default {
             vm.pageLoading = false;
             if (operation == 'out') {
               //跳转查询详情页面
-              vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
+              //vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
+
+              this.returnToPage();
             } else {
               vm.activeStep += 1;
               vm.stepTitle = "保险信息填写";

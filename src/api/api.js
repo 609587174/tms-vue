@@ -9,6 +9,148 @@
  */
 
 const api = {
+  importOilGasData: {
+    url: '/imports/export-corporate/',
+    method: 'post',
+    desc: '导入油/气费用统计系统',
+    param: {
+      import: {
+        desc: 'all'
+      }
+    }
+  },
+  getOilGasData: {
+    url: '/imports/corporate/',
+    method: 'get',
+    desc: '导入油/气费用临时列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      }
+    }
+  },
+  updateOilGasStatistic: {
+    url: '/statistic/corporate/:id/',
+    method: 'patch',
+    desc: '油气费详情',
+    param: {
+
+    }
+  },
+  getOilGasStatisticDetail: {
+    url: '/statistic/corporate/:id/',
+    method: 'get',
+    desc: '油气费详情',
+    param: {
+
+    }
+  },
+  getOilGasStatisticList: {
+    url: '/statistic/corporate/',
+    method: 'get',
+    desc: '油气费列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      },
+      plate_number: {
+        desc: '车牌号'
+      }
+    }
+  },
+  importTollFeeData: {
+    url: '/imports/export-highway/',
+    method: 'post',
+    desc: '导入现金费用统计系统',
+    param: {
+      import: {
+        desc: 'all'
+      }
+    }
+  },
+  getTollFeeData: {
+    url: '/imports/highway/',
+    method: 'get',
+    desc: '导入高速费用临时列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      }
+    }
+  },
+  updateTollFeeStatistic: {
+    url: '/statistic/highway-fee/:id/',
+    method: 'patch',
+    desc: '更新高速费',
+    param: {
+
+    }
+  },
+  getTollFeeStatisticDetail: {
+    url: '/statistic/highway-fee/:id/',
+    method: 'get',
+    desc: '高速费详情',
+    param: {
+
+    }
+  },
+  getTollFeeStatisticList: {
+    url: '/statistic/highway-fee/',
+    method: 'get',
+    desc: '高速费列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      },
+      plate_number: {
+        desc: '车牌号'
+      }
+    }
+  },
+  getCashCostStatisticDetail: {
+    url: '/statistic/cash-cost/:id/',
+    method: 'get',
+    desc: '现金费用详情',
+    param: {
+
+    }
+  },
+  updateCashCostStatistic: {
+    url: '/statistic/cash-cost/:id/',
+    method: 'patch',
+    desc: '更新现金费用',
+    param: {
+
+    }
+  },
+  getCashCostStatisticList: {
+    url: '/statistic/cash-cost/',
+    method: 'get',
+    desc: '现金费用列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      },
+      plate_number: {
+        desc: '车牌号'
+      }
+    }
+  },
   getCashCostData: {
     url: '/imports/cash-cost/',
     method: 'get',
@@ -17,15 +159,25 @@ const api = {
       page: {
         desc: '当前页数'
       },
-      page_size:{
-        desc:'一页显示的条数'
+      page_size: {
+        desc: '一页显示的条数'
+      }
+    }
+  },
+  importCashCostData: {
+    url: '/imports/export-cash-cost/',
+    method: 'post',
+    desc: '导入现金费用统计系统',
+    param: {
+      import: {
+        desc: 'all'
       }
     }
   },
   uploadCashCostData: {
     url: '/imports/cash-cost/',
     method: 'post',
-    desc: '导入现金费用',
+    desc: '上传现金费用',
     param: {
       file: {
         desc: '待上传的excel文件'

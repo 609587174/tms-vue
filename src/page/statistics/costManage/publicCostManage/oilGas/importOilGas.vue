@@ -4,13 +4,13 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'现金费用导入'" :table-list="thTableList" :back-link="'/statistics/costManage/cashCostManage/cashCostList'" :api-name-data="apiNameData"></import-data>
+    <import-data :import-title="'油/气导入'" :table-list="thTableList" :back-link="'/statistics/costManage/publicCostManage/oilGas/oilGasList'" :api-name-data="apiNameData"></import-data>
   </div>
 </template>
 <script>
 import importData from '@/components/common/importData'
 export default {
-  name: 'importCashCost',
+  name: 'importTollFee',
   components: {
     importData: importData,
   },
@@ -18,11 +18,15 @@ export default {
     return {
       // requestData:{
       apiNameData: {
-        uploadApi: '/imports/cash-cost/',
-        importApi: 'importCashCostData',
-        listApi:'getCashCostData'
+        uploadApi: '/imports/corporate/',
+        importApi: 'importOilGasData',
+        listApi:'getOilGasData'
       },
       thTableList: [{
+        title: '加油/气公司',
+        param: 'company',
+        width: ''
+      }, {
         title: '车号',
         param: 'plate_number',
         width: ''
@@ -31,24 +35,12 @@ export default {
         param: 'cost_date',
         width: ''
       }, {
-        title: '费用类型',
-        param: 'cost_type.verbose',
-        width: ''
-      }, {
         title: '数量',
         param: 'nums',
         width: ''
       }, {
-        title: '税前金额',
-        param: 'pre_tax_amount',
-        width: ''
-      }, {
-        title: '税后金额',
-        param: 'at_amount',
-        width: ''
-      }, {
-        title: '税额',
-        param: 'tax_amount',
+        title: '单价',
+        param: 'unit_price',
         width: ''
       }],
     };

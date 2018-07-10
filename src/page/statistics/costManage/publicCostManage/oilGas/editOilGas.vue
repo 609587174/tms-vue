@@ -19,7 +19,7 @@
             <!-- <span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回列表页</span></span> -->
           </el-col>
           <el-col :span="20">
-            <p>现金费用编辑</p>
+            <p>油/气费编辑</p>
           </el-col>
         </el-row>
       </el-header>
@@ -30,6 +30,11 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="editMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <el-form-item label="加油/气公司:" prop="company">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.company"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="车号:">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
@@ -37,13 +42,6 @@
                 <el-col :span="8">
                   <el-form-item label="费用时间:">
                     <el-date-picker v-model="editMsgForm.cost_date" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="费用类型:" prop="cost_type">
-                    <el-select v-model="editMsgForm.cost_type" filterable placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -54,22 +52,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税前金额:" prop="pre_tax_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
+                  <el-form-item label="单价:" prop="unit_price">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税后金额:" prop="at_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.at_amount"></el-input>
+                  <el-form-item label="消费金额:" prop="consumption_price">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.consumption_price"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
-                <el-col :span="8">
-                  <el-form-item label="税额:" prop="tax_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.tax_amount"></el-input>
-                  </el-form-item>
-                </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否匹配运单:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_matching"></el-input>
@@ -115,34 +108,29 @@ export default {
       isDisabled: true,
       editMsgForm: {
         plate_number: '', // 车牌号
-        cost_type: '', // 费用类型
         cost_date: '', // 费用时间
+        company: '', // 加油/气公司
+        consumption_price: '', //消费金额
         nums: '', // 数量
-        pre_tax_amount: '', //税前金额
-        at_amount: '', // 税后金额
-        tax_amount: '', //税额
+        unit_price: '', //单价
         is_matching: '', // 是否匹配运单
         waybill: '', // 运单号
       },
       waybillList: [], //运单号列表
       rules: {
-        cost_type: [
-          { required: true, message: '请选择费用类型', trigger: 'blur' },
+        company: [
+          { required: true, message: '请输入公司名称', trigger: 'blur' },
         ],
         nums: [
           { required: true, message: '请输入数量', trigger: 'blur' },
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        pre_tax_amount: [
-          { required: true, message: '请输入税前金额', trigger: 'blur' },
+        unit_price: [
+          { required: true, message: '请输入单价', trigger: 'blur' },
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
-        at_amount: [
-          { required: true, message: '请输入税后金额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        tax_amount: [
-          { required: true, message: '请输入税额', trigger: 'blur' },
+        consumption_price: [
+          { required: true, message: '请输入消费金额', trigger: 'blur' },
           { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         ],
         waybill: [
@@ -162,16 +150,9 @@ export default {
       detail: {},
       customerList: [],
       selectData: {
-        costSelect: [
-          { id: 'logistics_high_speed', value: '过路费（普通）' },
-          { id: 'logistics_high_speed_cash', value: '过路费（国家）' },
-          { id: 'logistics_high_speed_bridge', value: '过桥费' },
-          { id: 'logistics_fuel_cash', value: '现金油/气（有票）' },
-          { id: 'logistics_fuel_cash_no_ticket', value: '现金油/气（无票）' },
-          { id: 'logistics_park', value: '停车费' },
-          { id: 'logistics_maintain', value: '维修费' },
-          { id: 'logistics_detector', value: '检测费' },
-          { id: 'logistics_other', value: '其它费用' },
+        categorySelect: [
+          { id: 'A', value: 'A卡' },
+          { id: 'B', value: 'B卡' },
         ]
       },
     }
@@ -186,22 +167,21 @@ export default {
       // if (this.$route.query.id) {
       //   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
       // } else {
-      this.$router.push({ path: "/statistics/costManage/cashCostManage/cashCostList" });
+      this.$router.push({ path: "/statistics/costManage/publicCostManage/oilGas/oilGasList" });
       // }
     },
     getDetail: function() {
-      this.$$http('getCashCostStatisticDetail', { id: this.id }).then((results) => {
+      this.$$http('getOilGasStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
 
           this.editMsgForm = {
             plate_number: this.detail.plate_number, // 车牌号
-            cost_type: this.detail.cost_type.verbose, // 费用类型
             cost_date: this.detail.cost_date, // 费用时间
+            company: this.detail.company, // 加油/气公司
+            consumption_price: this.detail.consumption_price, //消费金额
             nums: this.detail.nums, // 数量
-            pre_tax_amount: this.detail.pre_tax_amount, //税前金额
-            at_amount: this.detail.at_amount, // 税后金额
-            tax_amount: this.detail.tax_amount, //税额
+            unit_price: this.detail.unit_price, //单价
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
             waybill: this.detail.waybill, // 运单号
           }
@@ -212,7 +192,7 @@ export default {
     },
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      let apiName = 'updateLogisticStatistic';
+      let apiName = 'updateOilGasStatistic';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -228,7 +208,7 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
-              this.$router.push({ path: "/statistics/costManage/cashCostManage/cashCostList" });
+              this.$router.push({ path: "/statistics/costManage/publicCostManage/oilGas/oilGasList" });
             }
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;
@@ -243,7 +223,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['cost_type', 'nums', 'pre_tax_amount', 'at_amount', 'tax_amount', 'waybill'];
+      let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

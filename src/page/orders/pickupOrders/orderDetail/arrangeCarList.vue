@@ -25,7 +25,7 @@
         background: #f2f5fe;
         &:after {
           border: 0!important;
-          top: 33px;
+          top: 32px;
         }
       }
     }

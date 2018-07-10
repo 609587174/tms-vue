@@ -644,37 +644,87 @@ export default [{
         },
         component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
         children: [{
-          path: 'publicCostList',
-          name: "publicCostList",
+          path: 'tollFee',
+          name: "tollFee",
           meta: {
-            title: '对公费用列表',
+            title: '高速费管理',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCostList'], resolve)
-        }, {
-          path: 'editPublicCost',
-          name: "editPublicCost",
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+          children: [{
+            path: 'tollFeeList',
+            name: "tollFeeList",
+            meta: {
+              title: '高速费列表',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/tollFeeList'], resolve)
+          }, {
+            path: 'editTollFee',
+            name: "editTollFee",
+            meta: {
+              title: '高速费编辑',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/editTollFee'], resolve)
+          }, {
+            path: 'tollFeeWaybillDetail/:willId/:orderId',
+            name: "tollFeeWaybillDetail",
+            meta: {
+              title: '运单详情',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail'], resolve)
+          }, {
+            path: 'importTollFee',
+            name: "importTollFee",
+            meta: {
+              title: '高速费导入',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/importTollFee'], resolve)
+          }]
+        },{
+          path: 'oilGas',
+          name: "oilGas",
           meta: {
-            title: '对公费用编辑',
+            title: '油/气费管理',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/editPublicCost'], resolve)
-        }, {
-          path: 'publicCostWaybillDetail/:willId/:orderId',
-          name: "publicCostWaybillDetail",
-          meta: {
-            title: '运单详情',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCostWaybillDetail'], resolve)
-        }, {
-          path: 'importPublicCost',
-          name: "importPublicCost",
-          meta: {
-            title: '对公费用导入',
-            isVerificationL: false
-          },
-          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/importPublicCost'], resolve)
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+          children: [{
+            path: 'oilGasList',
+            name: "oilGasList",
+            meta: {
+              title: '油/气费列表',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/oilGasList'], resolve)
+          }, {
+            path: 'editOilGas',
+            name: "editOilGas",
+            meta: {
+              title: '油/气费编辑',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/editOilGas'], resolve)
+          }, {
+            path: 'oilGasWaybillDetail/:willId',
+            name: "oilGasWaybillDetail",
+            meta: {
+              title: '运单详情',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail'], resolve)
+          }, {
+            path: 'importOilGas',
+            name: "importOilGas",
+            meta: {
+              title: '油/气费导入',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/importOilGas'], resolve)
+          }]
         }]
       }]
     }]

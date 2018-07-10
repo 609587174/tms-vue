@@ -24,7 +24,7 @@
             <el-row :gutter="10">
               <el-col :span="8">
                 <el-form-item label="费用时间:" label-width="105px">
-                  <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                  <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -37,7 +37,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="费用类型:">
-                  <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
+                  <el-select v-model="searchFilters.cost_type" filterable @change="startSearch" placeholder="请选择">
                     <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -62,6 +62,7 @@
                 <div v-if="item.param === 'waybill'">
                   <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                 </div>
+                <div v-if="item.param ==='cost_type'||item.param ==='is_matching'">{{scope.row[item.param].verbose}}</div>
                 <div v-else>{{scope.row[item.param]}}</div>
               </template>
             </el-table-column>
@@ -105,28 +106,30 @@ export default {
       },
       costTime: [], //费用时间
       activeName: 'cashCost',
+      searchPostData: {}, //搜索参数
       searchFilters: {
-        is_reconciliation: [],
+        cost_type: '',
+        is_matching:'',
         keyword: '',
         field: 'plate_number',
       },
       selectData: {
         isMatchSelect: [
           { id: '', value: '全部' },
-          { id: 'unfinished', value: '已匹配' },
-          { id: 'finished', value: '未匹配' }
+          { id: 'yes', value: '已匹配' },
+          { id: 'no', value: '未匹配' }
         ],
         costSelect:[
           { id: '', value: '全部' },
-          { id: 'unfinished', value: '过路费（普通）' },
-          { id: 'finished', value: '过路费（国家）' },
-          { id: 'unfinished', value: '过桥费' },
-          { id: 'finished', value: '现金油/气（有票）' },
-          { id: 'unfinished', value: '现金油/气（无票）' },
-          { id: 'finished', value: '停车费' },
-          { id: 'unfinished', value: '维修费' },
-          { id: 'finished', value: '检测费' },
-          { id: 'unfinished', value: '其它费用' },
+          { id: 'logistics_high_speed', value: '过路费（普通）' },
+          { id: 'logistics_high_speed_cash', value: '过路费（国家）' },
+          { id: 'logistics_high_speed_bridge', value: '过桥费' },
+          { id: 'logistics_fuel_cash', value: '现金油/气（有票）' },
+          { id: 'logistics_fuel_cash_no_ticket', value: '现金油/气（无票）' },
+          { id: 'logistics_park', value: '停车费' },
+          { id: 'logistics_maintain', value: '维修费' },
+          { id: 'logistics_detector', value: '检测费' },
+          { id: 'logistics_other', value: '其它费用' },
         ],
         fieldSelect: [
           { id: 'plate_number', value: '车号' }
@@ -138,31 +141,31 @@ export default {
         width: ''
       }, {
         title: '费用时间',
-        param: 'order',
+        param: 'cost_date',
         width: ''
       }, {
         title: '费用类型',
-        param: 'company',
+        param: 'cost_type',
         width: ''
       }, {
         title: '数量',
-        param: 'plate_number',
+        param: 'nums',
         width: ''
       }, {
         title: '税前金额',
-        param: 'fluid',
+        param: 'pre_tax_amount',
         width: ''
       }, {
         title: '税后金额',
-        param: 'station',
+        param: 'at_amount',
         width: ''
       }, {
         title: '税额',
-        param: 'active_time',
+        param: 'tax_amount',
         width: ''
       }, {
         title: '是否匹配运单',
-        param: 'leave_time',
+        param: 'is_matching',
         width: ''
       }, {
         title: '运单号',
@@ -170,8 +173,8 @@ export default {
         width: ''
       }, {
         title: '添加时间',
-        param: 'freight',
-        width: ''
+        param: 'created_at',
+        width: '180'
       }],
       tableData: []
     }
@@ -194,37 +197,37 @@ export default {
       } else if (targetName.name === 'cashCost') {
         this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
       } else if (targetName.name === 'publicCost') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/publicCostList` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList` });
       }
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}/${row.order_id}` });
+      }else if (tpye === 'edit') {
+        this.$router.push({ path: `/statistics/costManage/cashCostManage/editCashCost`, query: { id: row.id } });
       }
-      // else if (tpye === 'edit') {
-      //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });
-      // }
     },
     startSearch() {
       this.pageData.currentPage = 1;
-      this.getList(this.statusActive);
-
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+      this.getList();
     },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        cost_type: this.searchPostData.cost_type,
+        is_matching:this.searchPostData.is_matching
       };
       if (this.costTime instanceof Array && this.costTime.length > 0) {
-        postData.leave_time_start = this.costTime[0];
-        postData.leave_time_end = this.costTime[1];
+        postData.cost_date_start = this.costTime[0];
+        postData.cost_date_end = this.costTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getIncomeStatisticList', postData).then((results) => {
+      this.$$http('getCashCostStatisticList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

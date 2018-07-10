@@ -12,6 +12,13 @@
     z-index: 1;
     display: inline-block;
   }
+  .el-tabs__header {
+    .el-tabs__nav .el-tabs__item {
+      /deep/ &.is-active {
+        background: #f2f5fe;
+      }
+    }
+  }
 }
 
 </style>
@@ -66,8 +73,9 @@
         <el-button type="primary" plain @click="importData">导入</el-button>
         <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
       </div>
-      <el-tabs v-model="costActive">
-        <el-tab-pane label="高速费管理" name="tollFee">
+      <el-tabs v-model="costActive" @tab-click="publicTabs">
+        <el-tab-pane label="高速费管理" name="tollFee"></el-tab-pane>
+        <el-tab-pane label="油/气费管理" name="oilGas">
           <div class="table-list">
             <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
@@ -75,6 +83,7 @@
                   <div v-if="item.param === 'waybill'">
                     <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                   </div>
+                  <div v-if="item.param ==='is_matching'">{{scope.row[item.param].verbose}}</div>
                   <div v-else>{{scope.row[item.param]}}</div>
                 </template>
               </el-table-column>
@@ -90,19 +99,19 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="油/气费管理" name="oilGas"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'publicCostList',
+  name: 'oilGasList',
   computed: {
 
   },
   activated: function() {
     this.activeName = 'publicCost';
+    this.costActive = 'oilGas';
   },
   data() {
     return {
@@ -119,17 +128,18 @@ export default {
       },
       costTime: [], //费用时间
       activeName: 'publicCost',
-      costActive: 'tollFee',
+      costActive: 'oilGas',
+      searchPostData: {}, //搜索参数
       searchFilters: {
-        is_reconciliation: [],
+        is_matching: '',
         keyword: '',
         field: 'plate_number',
       },
       selectData: {
         isMatchSelect: [
           { id: '', value: '全部' },
-          { id: 'unfinished', value: '已匹配' },
-          { id: 'finished', value: '未匹配' }
+          { id: 'yes', value: '已匹配' },
+          { id: 'no', value: '未匹配' }
         ],
         // costSelect: [
         //   { id: '', value: '全部' },
@@ -149,7 +159,7 @@ export default {
       },
       thTableList: [{
         title: '加油/气公司',
-        param: 'order',
+        param: 'company',
         width: ''
       }, {
         title: '车号',
@@ -157,23 +167,23 @@ export default {
         width: ''
       }, {
         title: '费用时间',
-        param: 'order',
+        param: 'cost_date',
         width: ''
       }, {
         title: '数量',
-        param: 'plate_number',
+        param: 'nums',
         width: ''
       }, {
         title: '单价',
-        param: 'fluid',
+        param: 'unit_price',
         width: ''
       }, {
         title: '消费金额',
-        param: 'station',
+        param: 'consumption_price',
         width: ''
       }, {
         title: '是否匹配运单',
-        param: 'leave_time',
+        param: 'is_matching',
         width: ''
       }, {
         title: '运单号',
@@ -190,7 +200,7 @@ export default {
       })
     },
     importData() {
-      this.$router.push({ path: `/statistics/costManage/publicCostManage/importPublicCost` });
+      this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/importOilGas` });
     },
     exportData() {
 
@@ -201,19 +211,26 @@ export default {
       } else if (targetName.name === 'cashCost') {
         this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
       } else if (targetName.name === 'publicCost') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/publicCostList` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList` });
+      }
+    },
+    publicTabs(targetName) {
+      if (targetName.name === 'tollFee') {
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList` });
+      } else if (targetName.name === 'oilGas') {
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasList` });
       }
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}/${row.order_id}` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
+      }else if (tpye === 'edit') {
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
       }
-      // else if (tpye === 'edit') {
-      //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });
-      // }
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       this.getList(this.statusActive);
 
     },
@@ -221,17 +238,17 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_matching: this.searchPostData.is_matching
       };
       if (this.costTime instanceof Array && this.costTime.length > 0) {
-        postData.leave_time_start = this.costTime[0];
-        postData.leave_time_end = this.costTime[1];
+        postData.cost_date_start = this.costTime[0];
+        postData.cost_date_end = this.costTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
-      this.$$http('getIncomeStatisticList', postData).then((results) => {
+      this.$$http('getOilGasStatisticList', postData).then((results) => {
         console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

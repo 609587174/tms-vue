@@ -121,7 +121,7 @@
                 </el-col>
               </el-row>
 
-               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="(!(fifterStatus.indexOf(props.row.status.key)>-1))&&props.row.section_type=='unload'">
                 <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km

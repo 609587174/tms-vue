@@ -165,17 +165,11 @@ export default {
               let infoTitleStr = '<div>车辆信息</div>';
               let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
 
-              if (recycledInfoWindow) {
-                recycledInfoWindow.setInfoTitle(infoTitleStr);
-                recycledInfoWindow.setInfoBody(infoBodyStr);
-                return recycledInfoWindow;
-              } else {
-                return new SimpleInfoWindow({
-                  infoTitle: infoTitleStr,
-                  infoBody: infoBodyStr,
-                  offset: new AMap.Pixel(0, -37)
-                });
-              }
+              return new SimpleInfoWindow({
+                infoTitle: infoTitleStr,
+                infoBody: infoBodyStr,
+                offset: new AMap.Pixel(0, -37)
+              });
 
             },
 
@@ -185,38 +179,23 @@ export default {
               let rotateDeg = (dataItem.direction - 90) + 'deg';
               src = _this.getIconSrc(dataItem);
 
-              if (recycledMarker) {
-                recycledMarker.setIconStyle({
+
+              return new SimpleMarker({
+                containerClassNames: 'my-marker',
+                iconStyle: {
                   src: require('../../../assets/img/' + src),
                   style: {
                     width: '20px',
                     height: '20px',
                     transform: 'rotate(' + rotateDeg + ')',
                   }
-                });
-                recycledMarker.setLabel({
+                },
+                label: {
                   content: dataItem.tractor.plate_number,
                   offset: new AMap.Pixel(30, 0)
-                });
+                }
+              });
 
-                return recycledMarker
-              } else {
-                return new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('../../../assets/img/' + src),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                      transform: 'rotate(' + rotateDeg + ')',
-                    }
-                  },
-                  label: {
-                    content: dataItem.tractor.plate_number,
-                    offset: new AMap.Pixel(30, 0)
-                  }
-                });
-              }
 
             },
 
@@ -298,7 +277,6 @@ export default {
         _this.$router.push({
           path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
         })
-        console.log('xxxx');
       }
 
       if (waybill_vehicle_status !== '无' && (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.key !== 'free')) {

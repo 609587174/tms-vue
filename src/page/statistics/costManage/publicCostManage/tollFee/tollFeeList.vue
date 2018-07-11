@@ -77,16 +77,19 @@
         <el-tab-pane label="高速费管理" name="tollFee">
           <div class="table-list">
             <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
                 <template slot-scope="scope">
                   <div v-if="item.param === 'waybill'">
                     <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                   </div>
-                  <div v-if="item.param ==='cost_type'||item.param ==='is_matching'">{{scope.row[item.param].verbose}}</div>
-                  <div v-else>{{scope.row[item.param]}}</div>
+                  <div v-else>
+                    <span v-if="item.param ==='cost_type'||item.param ==='is_matching'">{{scope.row[item.param].verbose}}</span>
+                    <span v-else>{{scope.row[item.param]}}</span>
+                  </div>
+
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center" width="100">
+              <el-table-column label="操作" align="center" width="100" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
                 </template>

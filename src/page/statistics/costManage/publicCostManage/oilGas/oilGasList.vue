@@ -78,16 +78,18 @@
         <el-tab-pane label="油/气费管理" name="oilGas">
           <div class="table-list">
             <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
                 <template slot-scope="scope">
                   <div v-if="item.param === 'waybill'">
                     <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                   </div>
-                  <div v-if="item.param ==='is_matching'">{{scope.row[item.param].verbose}}</div>
-                  <div v-else>{{scope.row[item.param]}}</div>
+                  <div v-else>
+                    <span v-if="item.param ==='is_matching'">{{scope.row[item.param].verbose}}</span>
+                    <span v-else>{{scope.row[item.param]}}</span>
+                  </div>
                 </template>
               </el-table-column>
-              <el-table-column label="操作" align="center" width="100">
+              <el-table-column label="操作" align="center" width="100" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
                 </template>
@@ -160,7 +162,7 @@ export default {
       thTableList: [{
         title: '加油/气公司',
         param: 'company',
-        width: ''
+        width: '180'
       }, {
         title: '车号',
         param: 'plate_number',
@@ -168,7 +170,7 @@ export default {
       }, {
         title: '费用时间',
         param: 'cost_date',
-        width: ''
+        width: '180'
       }, {
         title: '数量',
         param: 'nums',
@@ -189,6 +191,10 @@ export default {
         title: '运单号',
         param: 'waybill',
         width: ''
+      }, {
+        title: '添加时间',
+        param: 'created_at',
+        width: '180'
       }],
       tableData: []
     }

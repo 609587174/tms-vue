@@ -62,8 +62,10 @@
                 <div v-if="item.param === 'waybill'">
                   <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                 </div>
-                <div v-if="item.param ==='cost_type'||item.param ==='is_matching'">{{scope.row[item.param].verbose}}</div>
-                <div v-else>{{scope.row[item.param]}}</div>
+                <div v-else>
+                  <span v-if="item.param ==='cost_type'||item.param ==='is_matching'">{{scope.row[item.param].verbose}}</span>
+                  <span v-else>{{scope.row[item.param]}}</span>
+                </div>
               </template>
             </el-table-column>
             <el-table-column label="操作" align="center" width="100" fixed="right">

@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'现金费用导入'" :table-list="thTableList" :back-link="'/statistics/costManage/cashCostManage/cashCostList'" :api-name-data="apiNameData"></import-data>
+    <import-data :import-title="'现金费用导入'" :table-list="thTableList" :back-link="'/statistics/costManage/cashCostManage/cashCostList'" :api-name-data="apiNameData" :post-data="postData"></import-data>
   </div>
 </template>
 <script>
@@ -20,7 +20,12 @@ export default {
       apiNameData: {
         uploadApi: '/imports/cash-cost/',
         importApi: 'importCashCostData',
-        listApi:'getCashCostData'
+        listApi:'getCashCostData',
+        deleteDataApi:'deleteCashCostTemporaryData'
+      },
+      postData:{
+        type:'CashCostManage',
+        exportType:'cash'
       },
       thTableList: [{
         title: '车号',
@@ -29,7 +34,7 @@ export default {
       }, {
         title: '费用时间',
         param: 'cost_date',
-        width: ''
+        width: '180'
       }, {
         title: '费用类型',
         param: 'cost_type.verbose',

@@ -234,7 +234,7 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}/${row.order_id}` });
+        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/editTollFee`, query: { id: row.id } });
       }

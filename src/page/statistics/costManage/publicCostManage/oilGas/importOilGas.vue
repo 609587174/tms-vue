@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'油/气导入'" :table-list="thTableList" :back-link="'/statistics/costManage/publicCostManage/oilGas/oilGasList'" :api-name-data="apiNameData"></import-data>
+    <import-data :import-title="'油/气费导入'" :table-list="thTableList" :back-link="'/statistics/costManage/publicCostManage/oilGas/oilGasList'" :api-name-data="apiNameData" :post-data="postData"></import-data>
   </div>
 </template>
 <script>
@@ -20,7 +20,12 @@ export default {
       apiNameData: {
         uploadApi: '/imports/corporate/',
         importApi: 'importOilGasData',
-        listApi:'getOilGasData'
+        listApi:'getOilGasData',
+        deleteDataApi:'deleteOilGasTemporaryData'
+      },
+      postData:{
+        type:'CorporateBusinessManage',
+        exportType:'corporate'
       },
       thTableList: [{
         title: '加油/气公司',

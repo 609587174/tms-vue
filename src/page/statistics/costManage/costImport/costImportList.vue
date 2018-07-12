@@ -39,7 +39,7 @@
         <div class="operation-btn">
           <el-row>
             <el-col :span="20" class="total-data">
-              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.freig?tableData.data.freig:0}}元，过路费{{tableData.data&&tableData.data.road_to?tableData.data.road_to:0}}元，停车费{{tableData.data&&tableData.data.parking_f?tableData.data.parking_f:0}}元，其它费用{{tableData.data&&tableData.data.other_co?tableData.data.other_co:0}}元，收入{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
+              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，报销费用合计{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
               <el-button type="primary">导出</el-button>
@@ -121,24 +121,12 @@ export default {
         param: 'waybill',
         width: ''
       }, {
-        title: '业务单号',
-        param: 'order',
-        width: ''
-      }, {
         title: '托运方',
         param: 'company',
         width: '200'
       }, {
         title: '车号',
         param: 'plate_number',
-        width: ''
-      }, {
-        title: '实际液厂',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '卸货站',
-        param: 'station',
         width: ''
       }, {
         title: '实际装车时间',
@@ -149,39 +137,67 @@ export default {
         param: 'leave_time',
         width: '180'
       }, {
-        title: '实际里程',
-        param: 'actual_mile',
+        title: '外油/气',
+        param: 'ex_oil',
         width: ''
       }, {
-        title: '运费',
-        param: 'freight',
+        title: '公司油/气',
+        param: 'com_oil',
+        width: ''
+      },  {
+        title: '高速费',
+        param: 'high_cost',
         width: ''
       }, {
-        title: '过路费',
-        param: 'road_toll',
+        title: '过路费（普通）',
+        param: ' road_toll_com',
         width: ''
       }, {
-        title: '停车费',
-        param: 'parking_fee',
+        title: '过路费（国家）',
+        param: ' road_toll_state',
+        width: ''
+      },{
+        title: '过桥费',
+        param: 'pontage',
         width: ''
       }, {
-        title: '加油/气费',
-        param: 'fuel',
+        title: '现金油/气（有票）',
+        param: 'logistics_fuel_cash',
+        width: ''
+      }, {
+        title: '现金油/气（无票）',
+        param: 'logistics_fuel_cash_no_ticket',
+        width: ''
+      },{
+        title: '检测费',
+        param: 'detection_cost',
         width: ''
       }, {
         title: '维修费',
         param: 'maintenance_cost',
         width: ''
       }, {
+        title: '停车费',
+        param: 'parking_fee',
+        width: ''
+      },  {
         title: '其它费用',
         param: 'other_cost',
         width: ''
       }, {
-        title: '高速路（对公）',
-        param: 'high_cost',
+        title: '主驾',
+        param: 'master_driver',
         width: ''
       }, {
-        title: '油/气费（对公）',
+        title: '副驾',
+        param: 'vice_driver',
+        width: ''
+      }, {
+        title: '押运员',
+        param: 'escort_staff',
+        width: ''
+      }, {
+        title: '报销费用合计',
         param: 'oli_gas',
         width: ''
       }],
@@ -213,7 +229,7 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
-      this.getList(this.statusActive);
+      this.getList();
 
     },
     getList() {
@@ -251,7 +267,7 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.getList();
   }
 
 }

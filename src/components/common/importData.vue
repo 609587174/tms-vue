@@ -42,10 +42,10 @@
     <div class="operation-btn">
       <el-row>
         <el-col :span="10" class="total-data">
-          共计0条，无误0条，有误0条
+          共计{{tableData.length?tableData[0].sum:0}}条，无误{{tableData.length?tableData[0].success:0}}条，有误{{tableData.length?tableData[0].failed:0}}条
         </el-col>
         <el-col :span="14" class="text-right">
-          <el-button type="primary" :disabled="downTempBtn.isDisabled" :loading="downTempBtn.isLoading" @click="">{{downTempBtn.text}}</el-button>
+          <el-button type="primary" :disabled="downTempBtn.isDisabled" :loading="downTempBtn.isLoading" @click="exportsTemplate">{{downTempBtn.text}}</el-button>
           <el-upload class="upload-btn" :action="uploadFileData.uploadFileUrl" :onError="uploadError" :onSuccess="uploadSuccess" :beforeUpload="beforeAvatarUpload" :on-progress="uploadProgress" :show-file-list="false">
             <el-button type="primary" plain :disabled="uploadBtn.isDisabled" :loading="uploadBtn.isLoading" @click="">{{uploadBtn.text}}</el-button>
           </el-upload>
@@ -67,7 +67,8 @@
         </el-table-column>
         <el-table-column label="状态" align="center" width="100" fixed="right">
           <template slot-scope="scope">
-            <div class="text-red">{{scope.row.status.verbose}}</div>
+            <div class="text-green" v-if="scope.row.status.key==='SUCCESS'">{{scope.row.status.verbose}}</div>
+            <div class="text-red" v-else>{{scope.row.status.verbose}}</div>
           </template>
         </el-table-column>
         <el-table-column label="备注" align="center" width="240" fixed="right">
@@ -90,8 +91,8 @@ export default {
     importTitle: String,
     backLink: String,
     tableList: Array,
-    apiNameData: Object
-    // pagination: Object,
+    apiNameData: Object,
+    postData: Object,
     // tableData: Array,
     // logLoading: Boolean
   },
@@ -165,6 +166,39 @@ export default {
         domainUrl = 'http://devtms.hhtdlng.com';
       }
       this.uploadFileData.uploadFileUrl = domainUrl + this.apiNameData.uploadApi + '?ticket=' + (this.pbFunc.getLocalData('token', true) ? this.pbFunc.getLocalData('token', true) : '');
+    },
+    exportsTemplate(){
+      let postData={
+        type:this.postData.exportType
+      }
+      this.downTempBtn = {
+        text: '下载导入模板',
+        isLoading: true,
+        isDisabled: true,
+      },
+      this.$$http('exportsTemplate', postData).then((results) => {
+        this.downTempBtn = {
+          text: '下载导入模板',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '下载导入模板成功！',
+            type: 'success'
+          });
+        }else{
+          this.$message.error('下载导入模板失败！');
+        }
+      }).catch((err) => {
+        this.$message.error('下载导入模板失败！');
+        this.downTempBtn = {
+          text: '下载导入模板',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     checkboxInit(row, index) {
       if (row.status.key === 'SUCCESS') {
@@ -255,6 +289,30 @@ export default {
       //   this.isAllSelect = false;
       // }
     },
+    // 匹配运单
+    matchingData(data){
+      let postData = {
+        data:data,
+        type:this.postData.type
+      }
+      this.$$http('matchingWaybill', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+
+          }
+        }).catch((err) => {
+
+        })
+    },
+    // 清除临时表
+    deleteData(){
+      this.$$http(this.apiNameData.deleteDataApi, {}).then((results) => {
+          if (results.data && results.data.code == 0) {
+
+          }
+        }).catch((err) => {
+
+        })
+    },
     // 导入系统
     importsData() {
       console.log('所选ID', this.multipleSelection)
@@ -284,6 +342,7 @@ export default {
             this.pageData.currentPage = 1;
             this.getList();
             this.importSuccess(results.data.data.length);
+            this.matchingData(results.data.data);
 
           } else {
             if (results.data.msg) {
@@ -360,6 +419,10 @@ export default {
       // this.uploadFileData.uploadFileUrl = this.httpUrl + this.apiNameData.uploadApi;
       this.uploadFileData.uploadData.file = file.name;
       console.log('上传前', this.uploadFileData);
+
+      if((formatXls || formatXlsx) && fileSize){
+        this.deleteData();
+      }
       return (formatXls || formatXlsx) && fileSize;
     },
     // 上传时
@@ -369,6 +432,7 @@ export default {
         isLoading: true,
         isDisabled: true
       };
+
     },
     // 上传成功
     uploadSuccess(response, file, fileList) {

@@ -36,14 +36,14 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="卡号类别:" prop="cost_type">
-                    <el-select v-model="editMsgForm.cost_type" filterable placeholder="请选择">
+                    <el-select v-model="editMsgForm.cost_type" filterable :disabled="isDisabled" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.categorySelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="卡号:" prop="card_number">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.card_number"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.card_number"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -55,12 +55,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="消费金额:" prop="consume_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.consume_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.consume_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="服务费:" prop="service_charge">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.service_charge"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.service_charge"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -76,9 +76,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运单号:" prop="waybill">
-                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-form-item label="运单号:" prop="waybill_id">
+                    <el-select v-model="editMsgForm.waybill_id" filterable clearable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -122,22 +122,22 @@ export default {
         service_charge: '', // 服务费
         total_money: '', //共计金额
         is_matching: '', // 是否匹配运单
-        waybill: '', // 运单号
+        waybill_id: '', // 运单号
       },
       waybillList: [], //运单号列表
       rules: {
-        cost_type: [
-          { required: true, message: '请选择费用类型', trigger: 'blur' },
-        ],
-        card_number: [
-          { required: true, message: '请输入卡号', trigger: 'blur' },
-          // { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        consume_price: [
-          { required: true, message: '请输入消费金额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        waybill: [
+        // cost_type: [
+        //   { required: true, message: '请选择费用类型', trigger: 'blur' },
+        // ],
+        // card_number: [
+        //   { required: true, message: '请输入卡号', trigger: 'blur' },
+        //   // { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // consume_price: [
+        //   { required: true, message: '请输入消费金额', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        waybill_id: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
       },
@@ -174,6 +174,19 @@ export default {
       this.$router.push({ path: "/statistics/costManage/publicCostManage/tollFee/tollFeeList" });
       // }
     },
+    getWaybillData(){
+      let postData = {
+        datetime:this.detail.cost_date,
+        plate_number:this.detail.plate_number
+        // datetime:'2018-06-13 22:10:15',
+        // plate_number:'鲁HH5555'
+      }
+      this.$$http('getWaybillData', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.waybillList = results.data.data;
+        }
+      })
+    },
     getDetail: function() {
       this.$$http('getTollFeeStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -188,9 +201,9 @@ export default {
             service_charge: this.detail.service_charge, // 服务费
             total_money: this.detail.total_money, //共计金额
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
-            waybill: this.detail.waybill, // 运单号
+            waybill_id: this.detail.waybill_id, // 运单号
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
+          this.getWaybillData();
         }
       })
 
@@ -228,9 +241,14 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill'];
+      let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      console.log('postDataNew', postData);
+      for(let i in this.waybillList){
+        console.log('运单ID',this.waybillList[i].id,this.editMsgForm.waybill_id)
+        if(this.waybillList[i].id===this.editMsgForm.waybill_id){
+          postData.waybill = this.waybillList[i].waybill_number;
+        }
+      }
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

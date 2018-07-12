@@ -41,7 +41,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="费用类型:" prop="cost_type">
-                    <el-select v-model="editMsgForm.cost_type" filterable placeholder="请选择">
+                    <el-select v-model="editMsgForm.cost_type" filterable placeholder="请选择" :disabled="isDisabled">
                       <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -50,24 +50,24 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="数量:" prop="nums">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.nums"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.nums"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="税前金额:" prop="pre_tax_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="税后金额:" prop="at_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.at_amount"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.at_amount"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="税额:" prop="tax_amount">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.tax_amount"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.tax_amount"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -76,9 +76,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运单号:" prop="waybill">
-                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.value" :value="item.id"></el-option>
+                  <el-form-item label="运单号:" prop="waybill_id">
+                    <el-select v-model="editMsgForm.waybill_id" filterable clearable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -122,30 +122,30 @@ export default {
         at_amount: '', // 税后金额
         tax_amount: '', //税额
         is_matching: '', // 是否匹配运单
-        waybill: '', // 运单号
+        waybill_id: '', // 运单号id
       },
       waybillList: [], //运单号列表
       rules: {
-        cost_type: [
-          { required: true, message: '请选择费用类型', trigger: 'blur' },
-        ],
-        nums: [
-          { required: true, message: '请输入数量', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        pre_tax_amount: [
-          { required: true, message: '请输入税前金额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        at_amount: [
-          { required: true, message: '请输入税后金额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        tax_amount: [
-          { required: true, message: '请输入税额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        waybill: [
+        // cost_type: [
+        //   { required: true, message: '请选择费用类型', trigger: 'blur' },
+        // ],
+        // nums: [
+        //   { required: true, message: '请输入数量', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // pre_tax_amount: [
+        //   { required: true, message: '请输入税前金额', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // at_amount: [
+        //   { required: true, message: '请输入税后金额', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // tax_amount: [
+        //   { required: true, message: '请输入税额', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        waybill_id: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
       },
@@ -189,30 +189,42 @@ export default {
       this.$router.push({ path: "/statistics/costManage/cashCostManage/cashCostList" });
       // }
     },
+    getWaybillData(){
+      let postData = {
+        datetime:this.detail.cost_date,
+        plate_number:this.detail.plate_number
+        // datetime:'2018-06-13 22:10:15',
+        // plate_number:'鲁HH5555'
+      }
+      this.$$http('getWaybillData', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.waybillList = results.data.data;
+        }
+      })
+    },
     getDetail: function() {
       this.$$http('getCashCostStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
-
           this.editMsgForm = {
             plate_number: this.detail.plate_number, // 车牌号
-            cost_type: this.detail.cost_type.verbose, // 费用类型
+            cost_type: this.detail.cost_type.key, // 费用类型
             cost_date: this.detail.cost_date, // 费用时间
             nums: this.detail.nums, // 数量
             pre_tax_amount: this.detail.pre_tax_amount, //税前金额
             at_amount: this.detail.at_amount, // 税后金额
             tax_amount: this.detail.tax_amount, //税额
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
-            waybill: this.detail.waybill, // 运单号
+            waybill_id: this.detail.waybill_id, // 运单号id
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
+          this.getWaybillData();
         }
       })
 
     },
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      let apiName = 'updateLogisticStatistic';
+      let apiName = 'updateCashCostStatistic';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -243,9 +255,13 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['cost_type', 'nums', 'pre_tax_amount', 'at_amount', 'tax_amount', 'waybill'];
+      let keyArray = [ 'waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      console.log('postDataNew', postData);
+      for(let i in this.waybillList){
+        if(this.waybillList[i].id===this.editMsgForm.waybill_id){
+          postData.waybill = this.waybillList[i].waybill_number;
+        }
+      }
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

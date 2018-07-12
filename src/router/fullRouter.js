@@ -619,7 +619,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/costManage/cashCostManage/editCashCost'], resolve)
         }, {
-          path: 'cashCostWaybillDetail/:willId/:orderId',
+          path: 'cashCostWaybillDetail/:willId',
           name: "cashCostWaybillDetail",
           meta: {
             title: '运单详情',
@@ -668,7 +668,7 @@ export default [{
             },
             component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/editTollFee'], resolve)
           }, {
-            path: 'tollFeeWaybillDetail/:willId/:orderId',
+            path: 'tollFeeWaybillDetail/:willId',
             name: "tollFeeWaybillDetail",
             meta: {
               title: '运单详情',

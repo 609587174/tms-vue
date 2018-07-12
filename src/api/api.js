@@ -9,6 +9,77 @@
  */
 
 const api = {
+  exportsTemplate: {
+    url: '/exports/cost/template/',
+    method: 'post',
+    desc: '下载模板',
+    param: {
+
+    }
+  },
+  deleteOilGasTemporaryData: {
+    url: '/imports/bulk_corporate_destroy/',
+    method: 'delete',
+    desc: '清除油/气费临时表',
+    param: {
+
+    }
+  },
+  deleteOilGasTemporaryData: {
+    url: '/imports/bulk_corporate_destroy/',
+    method: 'delete',
+    desc: '清除油/气费临时表',
+    param: {
+
+    }
+  },
+  deleteTollFeeTemporaryData: {
+    url: '/imports/bulk_high_destroy/',
+    method: 'delete',
+    desc: '清除高速费临时表',
+    param: {
+
+    }
+  },
+  deleteCashCostTemporaryData: {
+    url: '/imports/bulk_cash_destroy/',
+    method: 'delete',
+    desc: '清除现金费用临时表',
+    param: {
+      data: {
+        desc: '运单'
+      },
+      type: {
+        desc: '类型'
+      }
+    }
+  },
+  matchingWaybill: {
+    url: '/imports/matching-waybill/matching/',
+    method: 'post',
+    desc: '匹配运单',
+    param: {
+      data: {
+        desc: '运单'
+      },
+      type: {
+        desc: '类型'
+      }
+    }
+  },
+  getWaybillData: {
+    url: '/imports/matching-waybill/search/',
+    method: 'get',
+    desc: '运单前后七天列表',
+    param: {
+      datetime: {
+        desc: '费用时间'
+      },
+      plate_number: {
+        desc: '车牌号'
+      }
+    }
+  },
   importOilGasData: {
     url: '/imports/export-corporate/',
     method: 'post',

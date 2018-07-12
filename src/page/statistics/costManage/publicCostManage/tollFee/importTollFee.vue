@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'高速费导入'" :table-list="thTableList" :back-link="'/statistics/costManage/publicCostManage/tollFee/tollFeeList'" :api-name-data="apiNameData"></import-data>
+    <import-data :import-title="'高速费导入'" :table-list="thTableList" :back-link="'/statistics/costManage/publicCostManage/tollFee/tollFeeList'" :api-name-data="apiNameData" :post-data="postData"></import-data>
   </div>
 </template>
 <script>
@@ -20,7 +20,12 @@ export default {
       apiNameData: {
         uploadApi: '/imports/highway/',
         importApi: 'importTollFeeData',
-        listApi:'getTollFeeData'
+        listApi:'getTollFeeData',
+        deleteDataApi:'deleteTollFeeTemporaryData'
+      },
+      postData:{
+        type:'HighwayFeeManage',
+        exportType:'highfree'
       },
       thTableList: [{
         title: '卡号类别',

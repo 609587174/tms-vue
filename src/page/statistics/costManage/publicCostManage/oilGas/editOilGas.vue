@@ -31,7 +31,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="加油/气公司:" prop="company">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.company"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.company"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -48,17 +48,17 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="数量:" prop="nums">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.nums"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.nums"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="单价:" prop="unit_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.unit_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.unit_price"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="消费金额:" prop="consumption_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.consumption_price"></el-input>
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.consumption_price"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -69,8 +69,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运单号:" prop="waybill">
-                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
+                  <el-form-item label="运单号:" prop="waybill_id">
+                    <el-select v-model="editMsgForm.waybill_id" filterable clearable placeholder="请输入选择">
                       <el-option v-for="(item,key) in waybillList" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -114,26 +114,26 @@ export default {
         nums: '', // 数量
         unit_price: '', //单价
         is_matching: '', // 是否匹配运单
-        waybill: '', // 运单号
+        waybill_id: '', // 运单号id
       },
       waybillList: [], //运单号列表
       rules: {
-        company: [
-          { required: true, message: '请输入公司名称', trigger: 'blur' },
-        ],
-        nums: [
-          { required: true, message: '请输入数量', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        unit_price: [
-          { required: true, message: '请输入单价', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        consumption_price: [
-          { required: true, message: '请输入消费金额', trigger: 'blur' },
-          { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
-        ],
-        waybill: [
+        // company: [
+        //   { required: true, message: '请输入公司名称', trigger: 'blur' },
+        // ],
+        // nums: [
+        //   { required: true, message: '请输入数量', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // unit_price: [
+        //   { required: true, message: '请输入单价', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        // consumption_price: [
+        //   { required: true, message: '请输入消费金额', trigger: 'blur' },
+        //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
+        // ],
+        waybill_id: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
       },
@@ -170,6 +170,19 @@ export default {
       this.$router.push({ path: "/statistics/costManage/publicCostManage/oilGas/oilGasList" });
       // }
     },
+     getWaybillData(){
+      let postData = {
+        datetime:this.detail.cost_date,
+        plate_number:this.detail.plate_number
+        // datetime:'2018-06-13 22:10:15',
+        // plate_number:'鲁HH5555'
+      }
+      this.$$http('getWaybillData', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.waybillList = results.data.data;
+        }
+      })
+    },
     getDetail: function() {
       this.$$http('getOilGasStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -183,9 +196,9 @@ export default {
             nums: this.detail.nums, // 数量
             unit_price: this.detail.unit_price, //单价
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
-            waybill: this.detail.waybill, // 运单号
+            waybill_id: this.detail.waybill_id, // 运单号
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
+          this.getWaybillData();
         }
       })
 
@@ -223,7 +236,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill'];
+      let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       console.log('postDataNew', postData);
       if (btnType === 'out') {

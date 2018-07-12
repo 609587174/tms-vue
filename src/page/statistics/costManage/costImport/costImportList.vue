@@ -42,7 +42,7 @@
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，报销费用合计{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
-              <el-button type="primary">导出</el-button>
+              <!-- <el-button type="primary">导出</el-button> -->
             </el-col>
           </el-row>
         </div>
@@ -57,7 +57,7 @@
                 <div v-else>{{scope.row[item.param]}}</div>
               </template>
             </el-table-column>
-            <el-table-column label="收入" align="center" width="130" fixed="right">
+            <el-table-column label="报销费用合计" align="center" width="130" fixed="right">
               <template slot-scope="scope">
                 <div>{{scope.row.income}}</div>
               </template>
@@ -195,10 +195,6 @@ export default {
       }, {
         title: '押运员',
         param: 'escort_staff',
-        width: ''
-      }, {
-        title: '报销费用合计',
-        param: 'oli_gas',
         width: ''
       }],
       tableData: []

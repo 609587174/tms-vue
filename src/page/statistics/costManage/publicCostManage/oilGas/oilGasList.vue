@@ -71,7 +71,7 @@
     <div class="nav-tab-setting mt-25">
       <div class="public-btn">
         <el-button type="primary" plain @click="importData">导入</el-button>
-        <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
+        <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
       </div>
       <el-tabs v-model="costActive" @tab-click="publicTabs">
         <el-tab-pane label="高速费管理" name="tollFee"></el-tab-pane>

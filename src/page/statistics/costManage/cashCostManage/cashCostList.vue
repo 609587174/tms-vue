@@ -51,7 +51,7 @@
             </el-col> -->
             <el-col :span="24" class="text-right">
               <el-button type="primary" plain @click="importData">导入</el-button>
-              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
+              <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             </el-col>
           </el-row>
         </div>

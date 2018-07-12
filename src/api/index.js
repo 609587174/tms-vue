@@ -141,7 +141,6 @@ const errorState = function(error) {
 
 /* 根据后端接口文档统一处理错误信息 */
 const successState = function(response) {
-
   if (response.data && response.data.code) {
     if (response.data.code == 401) {
       Message.error('登录过期，请重新登录');

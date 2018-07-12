@@ -128,19 +128,28 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>司机:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.master_driver)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.master_driver)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.master_driver_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>副驾:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.copilot_name)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.copilot_name)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.copilot_driver_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>押运:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.supercargo_name)"></div>
+                                <div class="detail-form-item" >
+                                  <span v-html="pbFunc.dealNullData(item.supercargo_name)"></span>
+                                  <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.supercargo_phone)"></span>
+                                </div>
                               </div>
                             </el-col>
                           </el-row>
@@ -637,6 +646,22 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>变更提交时间:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
+                              </div>
+                            </el-col>
+                          </el-row>
+                        </div>
+                        <div v-if="item.type === 'canceled'">
+                          <el-row :gutter="40">
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                              </div>
+                            </el-col>
+                            <el-col :span="8">
+                              <div class="label-list">
+                                <label>操作时间:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
                               </div>
                             </el-col>

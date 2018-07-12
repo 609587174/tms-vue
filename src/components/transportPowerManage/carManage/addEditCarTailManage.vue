@@ -47,7 +47,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车辆类型:" prop="vehicle_type">
-                    <el-select v-model="tailCarFormStep.vehicle_type" placeholder="请选择车辆类型">
+                    <el-select v-model="tailCarFormStep.vehicle_type" placeholder="请选择车辆类型" @change="carTypeChange">
                       <el-option v-for="(item,key) in selectData.carTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
                     </el-select>
                   </el-form-item>
@@ -370,8 +370,8 @@ export default {
           { required: true, message: '质量不能为空', trigger: 'blur' }, { validator: onlyNum, trigger: 'blur' }
         ],
         volume: [
-          { validator: onlyNum, trigger: 'blur' },
-          { required: true, message: '请填写容积', trigger: 'blur' }
+         { required: true, message: '请填写容积', trigger: 'blur' },
+         { validator: onlyNum, trigger: 'blur' }
         ],
         length: [
           { validator: onlyNum, trigger: 'blur' }
@@ -442,6 +442,14 @@ export default {
     }
   },
   methods: {
+    carTypeChange:function(){
+      if(this.tailCarFormStep.vehicle_type=='HEAVE_CONTAINER_SEMITRAILER'){
+        this.rules.volume=[];
+      }else{
+        this.rules.volume.push({ required: true, message: '请填写容积', trigger: 'blur' });
+        this.rules.volume.push({ validator: onlyNum, trigger: 'blur' });
+      }
+    },
     goOtherSetp: function(stepInfo, operation, formName) {
       if (stepInfo == "add" && !this.tailId) {
         this.createFrom(operation, formName);

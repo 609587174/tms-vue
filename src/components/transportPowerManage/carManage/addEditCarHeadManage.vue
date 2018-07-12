@@ -622,7 +622,8 @@ export default {
               vm.headId = result.data.data.id;
               if (operation == 'out') {
                 //跳转查询详情页面
-                vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
+                this.returnToPage();
+                //vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
               } else {
                 vm.activeStep += 1;
                 vm.stepTitle = "证件信息填写";

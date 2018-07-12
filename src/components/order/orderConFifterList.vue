@@ -267,11 +267,7 @@ export default {
           attrPlan: true,
           methods_type: "sureCancle",
         }],
-        abnormal: [{
-          text: "故障解决",
-          type: "success",
-          methods_type: "solveFault",
-        }],
+        abnormal: [],
         modifying: []
       },
       buttonAll: {

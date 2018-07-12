@@ -102,7 +102,6 @@ export default {
   },
   computed: {
     landmarkFromSelect: function() {
-      console.log('this.$store.state.common.selectData', this.$store.state.common.selectData);
       return this.$store.getters.getIncludeAllSelect.landmark_source_type;
     },
     checkStatusSelect: function() {
@@ -198,6 +197,9 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
+      }, {
+        label: '上传人姓名',
+        id: 'upload_user_nick_name',
       }],
     }
   },
@@ -246,7 +248,6 @@ export default {
       this.searchBtn.loading = true;
       this.searchBtn.text = '搜索中';
       this.$$http('getLandMarkList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         this.searchBtn.isDisabled = false;
         this.searchBtn.loading = false;

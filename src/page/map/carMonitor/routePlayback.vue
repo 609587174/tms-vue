@@ -94,7 +94,6 @@ export default {
   name: 'routePlayback',
   computed: {
     id: function() {
-      console.log('this.$route.params', this.$route.params.id);
       return this.$route.params.id;
     },
   },
@@ -235,7 +234,6 @@ export default {
       return str;
     },
     chooseTime: function() {
-      console.log('searchFilters', this.searchFilters.choosedTime);
       if (this.searchFilters.choosedTime.length) {
         this.timeSpacing = this.calculateTimeSpacing();
         if (this.timeSpacing.day > 6) {
@@ -333,7 +331,6 @@ export default {
             this.carNumber = this.deviceDetail.tractor.plate_number;
             this.masterDriver = (this.deviceDetail.master_driver && this.deviceDetail.master_driver.name) ? this.deviceDetail.master_driver.name : '无';
             this.searchFilters.choosedCar = this.deviceDetail.tractor.id;
-            console.log('deviceDetail', this.deviceDetail);
             resolve(results)
           } else {
             reject(results);
@@ -388,12 +385,10 @@ export default {
       end.setSeconds('00');
 
       let daySpace = Math.floor((end - start) / (1000 * 60 * 60 * 24));
-      console.log('daySpace', daySpace);
       return daySpace;
     },
     /* 获取到所有数据以后对数据进行再次组合排序 */
     sortResult: function(dataArray, apiName) {
-      console.log('dataArray', dataArray);
       if (apiName === 'getTripRecords') {
         for (let i = 0; i < dataArray.length; i++) {
           this.totalDataResult = this.totalDataResult.concat(dataArray[i].totalDataResult);
@@ -781,9 +776,6 @@ export default {
         //轨迹点添加事件
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
-          console.log('info', info);
-
-
           AMap.plugin('AMap.Geocoder', function() {
 
             let lnglat = [_this.totalDataResult[info.pointIndex].location.longitude, _this.totalDataResult[info.pointIndex].location.latitude]
@@ -796,11 +788,11 @@ export default {
                 let pointMsgStr = '';
                 let speed = _this.totalDataResult[info.pointIndex].speed ? _this.totalDataResult[info.pointIndex].speed : '0';
                 let addressDetail = data.regeocode.formattedAddress;
-                pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-                  '</div><div class="fs-13">车牌号：' + _this.carNumber +
-                  '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
-                  '</div><div class="fs-13">行驶速度：' + speed +
-                  'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+                pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+                  '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+                  '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
+                  '</div><div class="fs-13 md-5">行驶速度：' + speed +
+                  'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
                   '</div>';
 
 
@@ -931,10 +923,10 @@ export default {
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
         let latitude = _this.totalDataResult[cursor.idx].location.latitude;
         let speed = _this.totalDataResult[cursor.idx].speed ? _this.totalDataResult[cursor.idx].speed : '0';
-        pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-          '</div><div class="fs-13">车牌号：' + _this.carNumber +
-          '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
-          '</div><div class="fs-13">行驶速度：' + speed +
+        pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+          '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+          '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
+          '</div><div class="fs-13 md-5">行驶速度：' + speed +
           'km/h</div>';
 
         _this.infoWindow.setInfoBody(pointMsgStr);
@@ -946,7 +938,6 @@ export default {
         _this.isDisplay = false;
       }
 
-      console.log('xxx')
     },
     offlineStopPointSetPage: function() {
       /* 停留点逻辑处理
@@ -1070,11 +1061,11 @@ export default {
             let pointMsgStr = '';
             let addressDetail = data.regeocode.formattedAddress;
             let speed = row.row.speed ? row.row.speed : '0';
-            pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-              '</div><div class="fs-13">车牌号：' + _this.carNumber +
-              '</div><div class="fs-13">定位时间：' + row.row.create_time +
-              '</div><div class="fs-13">行驶速度：' + speed +
-              'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+            pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+              '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+              '</div><div class="fs-13 md-5">定位时间：' + row.row.create_time +
+              '</div><div class="fs-13 md-5">行驶速度：' + speed +
+              'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
               '</div>';
 
 
@@ -1171,7 +1162,6 @@ export default {
     },
     renderMarker: function() {
       let _this = this;
-      console.log('markerList', _this.markerList);
       _this.markerList.render(_this.landmarkList);
       _this.map.plugin(["AMap.MarkerClusterer"], function() {
         _this.allMakers = _this.markerList.getAllMarkers();
@@ -1192,7 +1182,6 @@ export default {
         this.$$http('getLandMarkDetail', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -1204,11 +1193,11 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-        '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-        '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
-        '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
+      let infoBodyStr = '<div class="fs-13 md-5">地标类型：' + data.position_type.verbose +
+        '</div><div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13 md-5">审核状态：' + data.confirm_status.verbose +
+        '</div><div class="fs-13 md-5">上传来源：' + data.source_type.verbose +
+        '</div><div class="fs-13 md-5">是否同步：' + data.async_status.verbose +
         '</div></div>';
 
       return infoBodyStr;
@@ -1230,7 +1219,6 @@ export default {
     this.timeSpacing = this.calculateTimeSpacing();
   },
   beforeDestroy() {
-    console.log('this beforeDestroy', this);
     if (this.navg1) {
       this.navg1.destroy();
     }

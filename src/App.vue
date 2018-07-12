@@ -2,7 +2,7 @@
 @import './assets/css/themeStyle.less';
 @import './assets/css/common.less';
 @import './assets/css/reset.less';
-@import './assets/css/icon.less';//icon
+@import './assets/css/icon.less'; //icon
 @import './assets/css/tabsStyle.less';
 @import './assets/css/buttonStyle.less';
 @import './assets/css/tableStyle.less';
@@ -101,14 +101,12 @@ export default {
         path: '*',
         redirect: '/404'
       }]));
-      console.log('this.$routerxxxx1', this.$route);
 
     },
     loginDirect: function(newPath) {
       this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
-      console.log('menuList', menuList, token);
       this.$router.afterEach((to, from) => {
         if (!to.path.match(/(^\/$)|login|register|registerCompany|registerSuccess|forgetPassword|401|404/) && !from.path.match(/login/)) {
           if (!menuList || !token) {
@@ -124,13 +122,11 @@ export default {
       let menuList = this.pbFunc.getLocalData('menuList', true);
       let menuDictionaryObject = this.findDictionary(menuList);
       let token = this.pbFunc.getLocalData('token', true);
-      console.log('this.$router', this.$route.path, menuList, menuDictionaryObject);
       //this.isHasTokenAndMenu(menuList, token);
       allowedRouter = this.getRoutesList(menuDictionaryObject);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
-      console.log('this.$router', allowedRouter[0], allowedRouter);
       if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
 
     },
@@ -176,7 +172,6 @@ export default {
     let vm = this;
     let users = vm.pbFunc.getLocalData('users', true);
     let token = vm.pbFunc.getLocalData('token', true);
-    // console.log('token', users)
     if (!users && token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {

@@ -688,11 +688,11 @@ export default {
               if (status === 'complete' && data.info === 'OK') {
                 let pointMsgStr = '';
                 let addressDetail = data.regeocode.formattedAddress;
-                pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-                  '</div><div class="fs-13">车牌号：' + _this.carNumber +
-                  '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
-                  '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
-                  'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+                pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+                  '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+                  '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
+                  '</div><div class="fs-13 md-5">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
+                  'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
                   '</div>';
 
 
@@ -727,7 +727,7 @@ export default {
             let address = data.address ? data.address : '无';
             let contacts = data.contacts ? data.contacts : '无';
             let tel = data.tel ? data.tel : '无';
-            let infoBodyStr = '<br><div class="fs-13 ">地标类型：' + position_type + '</div><div class="fs-13 ">地址：' + address + '</div>';
+            let infoBodyStr = '<br><div class="fs-13 md-5">地标类型：' + position_type + '</div><div class="fs-13 md-5">地址：' + address + '</div>';
 
             if (recycledInfoWindow) {
               recycledInfoWindow.setInfoTitle(infoTitleStr);
@@ -808,10 +808,10 @@ export default {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
         let latitude = _this.totalDataResult[cursor.idx].location.latitude;
-        pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-          '</div><div class="fs-13">车牌号：' + _this.carNumber +
-          '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
-          '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
+        pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+          '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+          '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
+          '</div><div class="fs-13 md-5">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
           'km/h</div>';
 
         _this.infoWindow.setInfoBody(pointMsgStr);
@@ -938,11 +938,11 @@ export default {
           if (status === 'complete' && data.info === 'OK') {
             let pointMsgStr = '';
             let addressDetail = data.regeocode.formattedAddress;
-            pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-              '</div><div class="fs-13">车牌号：' + _this.carNumber +
-              '</div><div class="fs-13">定位时间：' + row.row.create_time +
-              '</div><div class="fs-13">行驶速度：' + row.row.speed +
-              'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+            pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+              '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+              '</div><div class="fs-13 md-5">定位时间：' + row.row.create_time +
+              '</div><div class="fs-13 md-5">行驶速度：' + row.row.speed +
+              'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
               '</div>';
 
 

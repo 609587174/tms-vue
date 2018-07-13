@@ -17,8 +17,8 @@ export default {
         imgUrl: require("../../assets/img/tms_no_data.png"),
         styles: {
           position: 'absolute',
-          top: '30px',
-          height: '500px',
+          top: '44px',
+          height: '440px',
           backgroundColor: "white",
           width: '100%',
           textAlign: 'center',

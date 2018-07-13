@@ -233,7 +233,9 @@ export default {
       }
       sendData.pageSize = this.pageData.pageSize;
       this.$$http("searchConOrderList", sendData).then((results) => {
-        vm.pageLoading = false;
+        setTimeout(()=>{
+          vm.pageLoading = false;
+        })
         vm.searchStatus = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
@@ -246,7 +248,6 @@ export default {
             }
             sendData.ids = capacityList;
             vm.$$http("getTransPowerInfoList", sendData).then((transPowerInfo) => {
-              vm.pageLoading = false;
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
                 dataBody.forEach((Ditem,index) => {
@@ -283,8 +284,8 @@ export default {
           } else {
             vm.listFifterData = dataBody;
           }
-
         }
+
       }).catch((err) => {
         console.log('err', err);
         vm.pageLoading = false;

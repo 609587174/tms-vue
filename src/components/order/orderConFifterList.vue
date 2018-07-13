@@ -100,7 +100,8 @@
 }
 </style>
 <template>
-  <div>
+  <div style="position:relative;">
+    <noData :noDataObj="noDataObj" v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg"  :row-key="getRowKeys" @expand-change="changeExpand" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -243,22 +244,28 @@
     <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
-
   </div>
- 
 </template>
 <script>
   let landmarkMap;
   let positionMark;
+  import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
+   components: {
+    noData: noData
+  },
   data() {
     return {
+      noDataObj:{
+        imgUrl:require("../../assets/img/tms_no_data.png")
+      },
       lockFalg: false,
       delayTime:500,
       showMap:false,
       expandFalg:true,
       loadPosition:{},
+      ListDataSearch:false,
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
       buttonModyfiyAll:{
          canceling: [{
@@ -530,8 +537,11 @@ export default {
     },
     ListData:{
       handler(val, oldVal) {
-        console.log('oldDiver',oldVal);
-        console.log('newDiver',val);
+        
+        setTimeout(()=>{
+          this.ListDataSearch=true;
+        })
+        
       },
       deep:true
     }

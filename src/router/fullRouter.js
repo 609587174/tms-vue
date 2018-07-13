@@ -44,14 +44,14 @@ export default [{
       },
       component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
       children: [{
-          path: 'ordersList',
-          name: 'pickupOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '提货订单列表',
-          },
-          component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
+        path: 'ordersList',
+        name: 'pickupOrdersList',
+        meta: {
+          isVerificationL: false,
+          title: '提货订单列表',
         },
+        component: (resolve) => require(['../page/orders/pickupOrders/orderList'], resolve),
+      },
         {
           path: 'addNewPickUpOrder',
           name: 'addOrder',
@@ -135,14 +135,14 @@ export default [{
       },
       component: (resolve) => require(['../page/logisticsManage/consignmentOrder/consignmentOrders'], resolve),
       children: [{
-          path: 'ordersList',
-          name: 'consignmentOrdersList',
-          meta: {
-            isVerificationL: false,
-            title: '托运订单'
-          },
-          component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderList'], resolve),
+        path: 'ordersList',
+        name: 'consignmentOrdersList',
+        meta: {
+          isVerificationL: false,
+          title: '托运订单'
         },
+        component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderList'], resolve),
+      },
         {
           path: 'orderDetail',
           name: 'consignmentOrderDetail',
@@ -301,14 +301,14 @@ export default [{
       },
       component: (resolve) => require(['../page/transportPowerManage/carManageFiled/carManage'], resolve),
       children: [{
-          path: 'carHeadManage',
-          name: 'carHeadManage',
-          meta: {
-            isVerificationL: false,
-            title: '牵引车管理',
-          },
-          component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
+        path: 'carHeadManage',
+        name: 'carHeadManage',
+        meta: {
+          isVerificationL: false,
+          title: '牵引车管理',
         },
+        component: (resolve) => require(['../components/transportPowerManage/carManage/carHeadManage'], resolve)
+      },
         {
           path: 'carTailManage',
           name: 'carTailManage',
@@ -366,14 +366,14 @@ export default [{
       },
       component: (resolve) => require(['../page/transportPowerManage/personManage/personManager'], resolve),
       children: [{
-          path: 'personListManage',
-          name: 'personListManage',
-          meta: {
-            isVerificationL: false,
-            title: '人员列表管理',
-          },
-          component: (resolve) => require(['../page/transportPowerManage/personManage/personListManager'], resolve)
+        path: 'personListManage',
+        name: 'personListManage',
+        meta: {
+          isVerificationL: false,
+          title: '人员列表管理',
         },
+        component: (resolve) => require(['../page/transportPowerManage/personManage/personListManager'], resolve)
+      },
         {
           path: 'addPerson',
           name: 'addPerson',
@@ -413,22 +413,22 @@ export default [{
       },
       component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
       children: [{
-          path: 'privateClientManage',
-          name: 'privateClientManage',
-          meta: {
-            isVerificationL: false,
-            title: '客户管理',
-          },
-          component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
-        }, {
-          path: 'addClient',
-          name: 'addClient',
-          meta: {
-            isVerificationL: false,
-            title: '新增、编辑客户',
-          },
-          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
+        path: 'privateClientManage',
+        name: 'privateClientManage',
+        meta: {
+          isVerificationL: false,
+          title: '客户管理',
         },
+        component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
+      }, {
+        path: 'addClient',
+        name: 'addClient',
+        meta: {
+          isVerificationL: false,
+          title: '新增、编辑客户',
+        },
+        component: (resolve) => require(['../page/clientManage/addClient'], resolve)
+      },
         {
           path: 'clientDetail',
           name: 'clientDetail',
@@ -744,47 +744,47 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '设置',
-      iconName: 'icon-setting',
+      iconName: 'icon-setting'
     },
     component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
-        path: 'company',
-        name: "company",
-        redirect: '/setting/company/pages',
+      path: 'company',
+      name: "company",
+      redirect: '/setting/company/pages',
+      meta: {
+        title: '公司主页',
+        isVerificationL: true
+      },
+
+      component: (resolve) => require(['../page/setting/company/company'], resolve),
+      children: [{
+        path: 'pages',
+        name: "pages",
         meta: {
           title: '公司主页',
           isVerificationL: true
         },
-
-        component: (resolve) => require(['../page/setting/company/company'], resolve),
-        children: [{
-            path: 'pages',
-            name: "pages",
-            meta: {
-              title: '公司主页',
-              isVerificationL: true
-            },
-            component: (resolve) => require(['../page/setting/company/pages'], resolve)
-          },
-          {
-            path: 'editPages',
-            name: "editPages",
-            meta: {
-              title: '编辑主页',
-              isVerificationL: true
-            },
-            component: (resolve) => require(['../page/setting/company/editPages'], resolve)
-          }
-        ]
-      }, {
-        path: 'organizationalStructure',
-        name: "organizationalStructure",
-        meta: {
-          title: '组织架构',
-          isVerificationL: true
-        },
-        component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
+        component: (resolve) => require(['../page/setting/company/pages'], resolve)
       },
+        {
+          path: 'editPages',
+          name: "editPages",
+          meta: {
+            title: '编辑主页',
+            isVerificationL: true
+          },
+          component: (resolve) => require(['../page/setting/company/editPages'], resolve)
+        }
+      ]
+    }, {
+      path: 'organizationalStructure',
+      name: "organizationalStructure",
+      meta: {
+        title: '组织架构',
+        isVerificationL: true
+      },
+      component: (resolve) => require(['../page/setting/organizationalStructure'], resolve)
+    },
       {
         path: 'staffsManage',
         name: "staffsManage",
@@ -803,6 +803,43 @@ export default [{
         },
         component: (resolve) => require(['../page/setting/powerManage'], resolve)
       }
+    ]
+  }, {
+    path: 'news',
+    name: 'news',
+    meta: {
+      isVerificationL: false,
+      title: '消息通知',
+      iconName: 'icon-setting'
+    },
+    component: (resolve) => require(['../page/news/news'], resolve),
+    children: [{
+      path: 'systemNotice',
+      name: "systemNotice",
+      meta: {
+        title: '系统通知',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/news/news'], resolve),
+      children: [{
+        path: 'systemNoticeList',
+        name: "systemNoticeList",
+        meta: {
+          title: '系统通知列表',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/news/systemNotice/systemNoticeList'], resolve)
+      }]
+    },
+    // {
+    //   path: 'staffsManage',
+    //   name: "staffsManage",
+    //   meta: {
+    //     title: '员工管理',
+    //     isVerificationL: true
+    //   },
+    //   component: (resolve) => require(['../page/setting/staffsManage'], resolve)
+    // }
     ]
   }]
 }];

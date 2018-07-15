@@ -2,7 +2,7 @@
 @import './assets/css/themeStyle.less';
 @import './assets/css/common.less';
 @import './assets/css/reset.less';
-@import './assets/css/icon.less';//icon
+@import './assets/css/icon.less'; //icon
 @import './assets/css/tabsStyle.less';
 @import './assets/css/buttonStyle.less';
 @import './assets/css/tableStyle.less';
@@ -21,6 +21,10 @@
 import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
+import noData from '@/components/common/noData';
+
+
+Vue.component("noData", noData);
 
 export default {
   name: 'App',
@@ -33,9 +37,10 @@ export default {
   methods: {
     buildDictionary: function() {
       let dictionaryObject = {
-        dashborad: 'OVERVIEW', //概览
+        dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
+        dispatchDashboard:'OVERVIEW_DISPATCH_SECOND',
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
@@ -54,6 +59,7 @@ export default {
         clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
         business: 'BUSINESS_STATISTICS', //业务统计
+        costManage: 'EXPENSE_MANAGEMENT', //费用管理
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         setting: 'SETTINGS', //设置
         company: 'CARRIER_SETTINGS', //公司主页
@@ -100,14 +106,12 @@ export default {
         path: '*',
         redirect: '/404'
       }]));
-      console.log('this.$routerxxxx1', this.$route);
 
     },
     loginDirect: function(newPath) {
       this.pathIn(true);
     },
     isHasTokenAndMenu: function(menuList, token) {
-      console.log('menuList', menuList, token);
       this.$router.afterEach((to, from) => {
         if (!to.path.match(/(^\/$)|login|register|registerCompany|registerSuccess|forgetPassword|401|404/) && !from.path.match(/login/)) {
           if (!menuList || !token) {
@@ -123,14 +127,18 @@ export default {
       let menuList = this.pbFunc.getLocalData('menuList', true);
       let menuDictionaryObject = this.findDictionary(menuList);
       let token = this.pbFunc.getLocalData('token', true);
-      console.log('this.$router', this.$route.path, menuList, menuDictionaryObject);
       //this.isHasTokenAndMenu(menuList, token);
       allowedRouter = this.getRoutesList(menuDictionaryObject);
       this.extendRoutes(allowedRouter);
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
-      console.log('this.$router', allowedRouter[0], allowedRouter);
-      if (isGoFirstPath) { this.$router.replace({ path: allowedRouter[0].path }); }
+      if (isGoFirstPath) {
+        if (allowedRouter[0] && allowedRouter[0].children) {
+          this.$router.replace({ name: allowedRouter[0].children[0].name });
+        } else {
+          this.$router.replace({ path: allowedRouter[0].path });
+        }
+      }
 
     },
     getRoutesList: function(menuDictionaryObject) {
@@ -175,7 +183,6 @@ export default {
     let vm = this;
     let users = vm.pbFunc.getLocalData('users', true);
     let token = vm.pbFunc.getLocalData('token', true);
-    // console.log('token', users)
     if (!users && token) {
       this.$$http('getUser', {}).then((results) => {
         if (results.data && results.data.code === 0) {

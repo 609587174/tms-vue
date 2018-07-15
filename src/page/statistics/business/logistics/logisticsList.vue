@@ -23,13 +23,13 @@
             <el-row :gutter="10">
               <el-col :span="8">
                 <el-form-item label="实际装车时间:" label-width="105px">
-                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="实际离站时间:" label-width="105px">
-                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch"  range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -41,13 +41,13 @@
             <el-col :span="20" class="total-data">
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
             </el-col>
-            <el-col :span="4" class="text-right" v-if="false">
-              <el-button type="primary">导出</el-button>
+            <el-col :span="4" class="text-right">
+              <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             </el-col>
           </el-row>
         </div>
         <div class="table-list">
-          <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+          <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
             <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
               <template slot-scope="scope">
                 <div v-if="item.param === 'waybill'">
@@ -68,6 +68,7 @@
               </template>
             </el-table-column>
           </el-table>
+          <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
         </div>
         <div class="page-list text-center">
           <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -95,9 +96,15 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName:'logistics',
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
+      activeName: 'logistics',
       leaveTime: [], //实际离站时间
       activeTime: [], //实际装车时间
+      searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -125,7 +132,7 @@ export default {
         width: ''
       }, {
         title: '托运方',
-        param: 'company',
+        param: 'carrier',
         width: '200'
       }, {
         title: '车号',
@@ -200,27 +207,79 @@ export default {
     clicktabs: function(targetName) {
       if (targetName.name == 'logistics') {
         this.$router.push({ path: `/statistics/business/logistics/logisticsList` });
-      }else if (targetName.name == 'income') {
+      } else if (targetName.name == 'income') {
         this.$router.push({ path: `/statistics/business/income/incomeList` });
       }
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}` });
-      }else if (tpye === 'edit') {
+        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}/${row.order_id}` });
+      } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/business/logistics/editLogistics`, query: { id: row.id } });
       }
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList(this.statusActive);
 
+    },
+    exportData() {
+      let postData = {
+        filename: '物流费用统计',
+        page_arg: 'logistic',
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        ids: []
+      };
+      for (let i = 91; i <= 109; i++) {
+        postData.ids.push(i.toString());
+      }
+      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+        postData.leave_time_start = this.leaveTime[0];
+        postData.leave_time_end = this.leaveTime[1];
+      }
+      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+
+      this.$$http('exportLogisticData', postData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -230,19 +289,15 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
       this.$$http('getLogisticStatisticList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

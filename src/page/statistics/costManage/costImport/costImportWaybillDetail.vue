@@ -10,7 +10,7 @@
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运力详情" name="first">
           <!-- <waybill-detail></waybill-detail> -->
-          <waybill-detail :back-link="'/statistics/business/income/incomeList'"></waybill-detail>
+          <waybill-detail :back-link="'/statistics/costManage/costImport/costImportList'"></waybill-detail>
         </el-tab-pane>
 
       </el-tabs>
@@ -20,7 +20,7 @@
 <script>
 import waybillDetail from '@/components/logisticsManage/waybillDetail';
 export default {
-  name: 'logisticsWaybillDetail',
+  name: 'costImportWaybillDetail',
   components: {
     waybillDetail: waybillDetail
   },

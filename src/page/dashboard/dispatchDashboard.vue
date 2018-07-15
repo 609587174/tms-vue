@@ -4,12 +4,16 @@
 </style>
 <template>
   <div>
-    概览页
+   <dashborad dispatchPage="dispatchDashboard"></dashborad>
   </div>
 </template>
 <script>
+import  dashborad from '@/components/dashboard/allDashboard';
 export default {
-  name: 'dashborad',
+  name: 'dispatchDashboard',
+  components: {
+    dashborad: dashborad
+  },
   data() {
     return {
 

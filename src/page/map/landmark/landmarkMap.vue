@@ -164,6 +164,9 @@ export default {
       }, {
         label: '联系电话',
         id: 'tel',
+      }, {
+        label: '上传人姓名',
+        id: 'upload_user_nick_name',
       }],
       landmarkDetail: {},
       searchBtn: {
@@ -193,7 +196,6 @@ export default {
         if (this.searchFilters.keyword.length) {
           postData[this.searchFilters.field] = this.searchFilters.keyword;
         }
-        console.log('this.addressName', this.addressName);
         if (this.addressName.province) {
           postData.province = this.addressName.province;
         }
@@ -209,7 +211,6 @@ export default {
         this.pageLoading = true;
 
         this.$$http('getLandMarkList', postData).then((results) => {
-          console.log('this.pageLoading', this.pageLoading);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkList = results.data.data.results;
@@ -254,7 +255,6 @@ export default {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.landmarkDetail = results.data.data;
-            console.log('deviceDetail', this.landmarkDetail);
             resolve(results)
           } else {
             reject(results);
@@ -266,12 +266,12 @@ export default {
       })
     },
     getInfoWindowDom: function(data) {
-      let infoBodyStr = '<div class="fs-13">地标类型：' + data.position_type.verbose +
-        '</div><div class="fs-13">地标位置：' + data.address +
-        '</div><div class="fs-13">审核状态：' + data.confirm_status.verbose +
-        '</div><div class="fs-13">上传来源：' + data.source_type.verbose +
+      let infoBodyStr = '<div class="fs-13 md-5">地标类型：' + data.position_type.verbose +
+        '</div><div class="fs-13 md-5">地标位置：' + data.address +
+        '</div><div class="fs-13 md-5">审核状态：' + data.confirm_status.verbose +
+        '</div><div class="fs-13 md-5">上传来源：' + data.source_type.verbose +
         '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary " href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
+        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary el-button--mini" href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
 
       return infoBodyStr;
     },
@@ -437,12 +437,10 @@ export default {
           });
 
           _this.markerList.on('selectedChanged', function(event, info) {
-            console.log('info', info);
             if (info.selected) {
               let infoWindow = _this.markerList.getInfoWindow();
               let id = info.selected.data.id;
               _this.getLandmarkDetail(id).then((results) => {
-                console.log('detailresults', results);
                 let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
                 infoWindow.setInfoBody(infoBodyStr);
 
@@ -465,7 +463,6 @@ export default {
     },
     renderMarker: function() {
       let _this = this;
-      console.log('markerList', _this.markerList);
       if (_this.markerList) {
         _this.markerList.render(_this.landmarkList);
         _this.map.plugin(["AMap.MarkerClusterer"], function() {
@@ -491,7 +488,6 @@ export default {
               // _this.cluster.clearMarkers();
               _this.cluster.setMarkers(_this.allMakers);
             } else {
-              console.log('_this.map', _this.map, _this.allMakers);
               _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
                 minClusterSize: 4,
                 maxZoom: 17,
@@ -537,6 +533,9 @@ export default {
     width: 100%;
     left: 0;
     top: 0;
+    /deep/ .el-loading-mask {
+      background-color: rgba(250, 250, 250, 0);
+    }
   }
   .icon-description {
     padding: 10px;

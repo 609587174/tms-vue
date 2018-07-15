@@ -101,7 +101,6 @@ export default {
   },
   methods: {
     getDetail: function() {
-      console.log('users', this.users);
       this.pageLoading = true;
       this.$$http('getCompany', { carrier_id: this.users.carrier.id }).then((results) => {
         this.pageLoading = false;

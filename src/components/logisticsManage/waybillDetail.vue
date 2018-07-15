@@ -96,7 +96,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>实际液厂:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.fluid_name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.actual_fluid_name)"></div>
                 </div>
               </el-col>
               <el-col :span="8">
@@ -158,7 +158,7 @@
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
-                卸货信息{{index+1}}
+                卸货信息{{index+1}}<span v-if="item.status.key=='canceled'">(已取消)</span>
               </el-col>
             </el-row>
           </div>
@@ -291,7 +291,7 @@
           <div class="detail-form-title">
             <el-row>
               <el-col :span="12" :offset="6" class="text-center">
-                卸车费用约定{{index+1}}
+                卸车费用约定{{index+1}}<span v-if="item.status.key=='canceled'">(已取消)</span>
               </el-col>
             </el-row>
           </div>
@@ -319,7 +319,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>气差允许范围:</label>
-                <div class="detail-form-item">0</div>
+                <div class="detail-form-item">{{item.kui_tons_standard}}kg</div>
               </div>
             </el-col>
            <el-col :span="8">

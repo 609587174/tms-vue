@@ -518,6 +518,7 @@ export default {
 
         drive_license_number: [ //驾驶证档案编号
           { required: true, message: '请输入驾驶证档案编号', trigger: 'blur' },
+
         ],
 
         qualification_certificate_number: [ //从业资格证号
@@ -569,7 +570,7 @@ export default {
       }
     },
     chooseProvincecopy: function() {
-      console.log('this.address', this.userForm.address)
+
     },
     dealIdNumber: function() {
       if (this.userForm.id_number.match(/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/)) {
@@ -579,8 +580,15 @@ export default {
         let birthDay = birthdayStr.slice(6);
         let dateObject = new Date();
         let currentYear = dateObject.getFullYear();
+        /* 判断男女 */
+        let secondStr = this.userForm.id_number.toString().substr(-2, 1);
+        let gender = secondStr % 2 > 0 ? 'MALE' : 'FEMALE';
+
+        this.userForm.gender = gender;
         this.userForm.birthday = birthYear + '-' + birthMonth + '-' + birthDay;
         this.userForm.age = currentYear - birthYear;
+
+
       }
     },
     addNewTraining: function() {
@@ -597,14 +605,14 @@ export default {
       this.userForm.carrier_driver_trainings.push(newTraining);
     },
     delTraining: function(index) {
-      console.log('index', index, this.userForm.carrier_driver_trainings[index]);
+
       if (this.userForm.carrier_driver_trainings[index].isDefault) {
         this.userForm.carrier_driver_trainings[index].isLoading = true;
         this.userForm.carrier_driver_trainings[index].isDisabled = true;
         this.$$http('deleteDriverTraining', { id: this.id, carrier_driver_training_id: this.userForm.carrier_driver_trainings[index].id }).then((results) => {
           this.userForm.carrier_driver_trainings[index].isLoading = false;
           this.userForm.carrier_driver_trainings[index].isDisabled = false;
-          console.log('results', results);
+
           if (results.data && results.data.code == 0 && results.data.data) {
             this.$message({
               message: '删除成功',
@@ -619,7 +627,7 @@ export default {
       } else {
         this.userForm.carrier_driver_trainings.splice(index, 1);
       }
-      console.log('index', index);
+
     },
     saveTrainingAndReview: function() {
       let btnObject = this.saveBasicAndReviewBtn;
@@ -632,7 +640,7 @@ export default {
         carrier_driver_trainings_add: [],
       }
 
-      console.log('this.userForm.carrier_driver_trainings', this.userForm.carrier_driver_trainings)
+
       for (let i in this.userForm.carrier_driver_trainings) {
         let keyArray = ['entry_training_content', 'entry_training_date', 'entry_training_exam', 'entry_training_exam_result', 'entry_training_remark'];
         let carrier_driver_trainings = this.pbFunc.fifterbyArr(this.userForm.carrier_driver_trainings[i], keyArray);
@@ -655,13 +663,13 @@ export default {
       btnObject.btnText = '正在提交';
       btnObject.isLoading = true;
 
-      console.log('postData', postData);
+
       //postData = this.pbFunc.fifterObjIsNull(postData);
       this.$$http(apiName, postData).then((results) => {
         btnObject.btnText = btnTextCopy;
         btnObject.isLoading = false;
         btnObject.isDisabled = false;
-        console.log('results', results);
+
         if (results.data && results.data.code == 0 && results.data.data) {
           this.$message({
             message: '提交成功',
@@ -710,20 +718,18 @@ export default {
           this.detailData.address.area = (areaCopy && areaCopy.city && areaCopy.city.county) ? areaCopy.city.county.id : '';
           this.userForm = this.detailData;
           this.userForm.drive_license_number = this.userForm.drive_license_number ? this.userForm.drive_license_number : this.userForm.id_number;
-          console.log('this.detailDta', results.data.data, this.detailData.address);
         }
       })
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview(file) {
-      console.log(file);
+
     },
     addPersonAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      console.log('btnTextCopy', btnTextCopy);
-      console.log('postData', postData);
+
       let apiName = 'addDrivers';
       btnObject.isDisabled = true;
       this.$refs[formName].validate((valid) => {
@@ -743,13 +749,13 @@ export default {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
             btnObject.isDisabled = false;
-            console.log('results', results);
+
             if (results.data && results.data.code == 0 && results.data.data) {
               this.$message({
                 message: '提交成功',
                 type: 'success'
               });
-              console.log('isReview', isReview);
+
               if (isReview) {
                 this.returnToPage();
                 //this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: results.data.data.id } });
@@ -773,7 +779,6 @@ export default {
       });
     },
     goAddDriverLicense() {
-      console.log('this.userForm', this.userForm.birthday);
 
       let formName = 'addClientFormSetpOne';
       let btnObject = this.nextStepBtn;
@@ -816,7 +821,7 @@ export default {
       let stepNum = 4;
       let keyArray = ['qualification_certificate_number', 'qualification_certificate_issue_date', 'qualification_certificate_due_date', 'qualification_certificate_issue_organ'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      console.log('this.detailData.work_type.key', this.detailData.work_type.key);
+
       if (this.detailData.work_type && this.detailData.work_type.key === 'DRIVER') {
         stepNum = 5;
       }
@@ -857,7 +862,7 @@ export default {
       let btnObject = this.saveBasicAndReviewBtn;
       let keyArray = ['labour_employ_date', 'labour_on_work_date', 'labour_off_work_date', 'contract_start_date', 'contract_due_date', 'contract_correct_date', 'heath_examination_date', 'heath_examination_remark'];
       let postData = this.pbFunc.fifterbyArr(this.userForm, keyArray);
-      this.addPersonAjax(postData, formName, btnObject, true);
+      this.addPersonAjax(postData, formName, btnObject, null, true);
     }
 
   }

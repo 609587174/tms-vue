@@ -41,6 +41,12 @@
                   <div class="table-list">
                     <el-table :data="detailData.records" stripe style="width: 100%" size="mini">
                       <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                        <template slot-scope="scope">
+                          <div class="fee-list" v-if="item.param==='start_mileage'||item.param==='end_mileage'">
+                            {{scope.row[item.param]}}<span v-if="item.param==='start_mileage'">（不含）</span><span v-if="item.param==='end_mileage'">（含）</span>
+                          </div>
+                          <div v-else>{{scope.row[item.param]}}</div>
+                        </template>
                       </el-table-column>
                     </el-table>
                   </div>
@@ -134,7 +140,6 @@ export default {
   },
   methods: {
     getDetail: function() {
-      console.log('555555')
       this.pageLoading = true;
       this.$$http('getFreightDetail', {
         id: this.id
@@ -149,10 +154,10 @@ export default {
 
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

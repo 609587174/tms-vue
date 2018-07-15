@@ -7,14 +7,24 @@ export default [{
     title: '首页'
   },
   children: [{
-    path: 'dashborad',
-    name: 'dashborad',
+    path: 'dashboard',
+    name: 'dashboard',
     meta: {
-      isVerificationL: true,
+      isVerificationL: false,
       title: '概览',
       iconName: 'icon-dashboard'
     },
-    component: (resolve) => require(['../page/dashborad/dashborad'], resolve),
+    component: (resolve) => require(['../page/dashboard/dashboard'], resolve),
+    //redirect: '/dashboard/dispatchDashboard',
+    children: [{
+      path: 'dispatchDashboard',
+      name: 'dispatchDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '调度概览',
+      },
+      component: (resolve) => require(['../page/dashboard/dispatchDashboard'], resolve),
+    }]
   }, {
     path: 'orders',
     name: 'orders',
@@ -274,7 +284,7 @@ export default [{
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
       }, {
-        path: 'editCapacity',
+        path: 'editCapacity/:id/:activeStep/',
         name: 'editCapacity',
         meta: {
           isVerificationL: false,
@@ -504,7 +514,7 @@ export default [{
     path: 'statistics',
     name: 'statistics',
     meta: {
-      isVerificationL: false,
+      isVerificationL: true,
       title: '数据统计',
       iconName: 'icon-data',
     },
@@ -543,46 +553,188 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
         }, {
-          path: 'logisticsWaybillDetail/:willId',
+          path: 'logisticsWaybillDetail/:willId/:orderId',
           name: "logisticsWaybillDetail",
           meta: {
-            title: '物流费用编辑',
+            title: '运单详情',
             isVerificationL: false
           },
           component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
         }]
-      }, {
-        path: 'income',
-        name: "income",
+      }]
+    }, {
+      path: 'costManage',
+      name: "costManage",
+      redirect: '/statistics/costManage/costImport/costImportList',
+      meta: {
+        title: '费用管理',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/costManage/costManage'], resolve),
+      children: [{
+        path: 'costImport',
+        name: "costImport",
         meta: {
-          title: '收入统计',
+          title: '费用导入统计',
           isVerificationL: false
         },
-        component: (resolve) => require(['../page/statistics/business/income/income'], resolve),
+        component: (resolve) => require(['../page/statistics/costManage/costImport/costImport'], resolve),
         children: [{
-          path: 'incomeList',
-          name: "incomeList",
+          path: 'costImportList',
+          name: "costImportList",
           meta: {
-            title: '收入统计列表',
+            title: '费用导入统计列表',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/business/income/incomeList'], resolve)
+          component: (resolve) => require(['../page/statistics/costManage/costImport/costImportList'], resolve)
         }, {
-          path: 'editIncome',
-          name: "editIncome",
+          path: 'editCostImport',
+          name: "editCostImport",
           meta: {
-            title: '收入统计编辑',
+            title: '费用导入统计编辑',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/business/income/editIncome'], resolve)
+          component: (resolve) => require(['../page/statistics/costManage/costImport/editCostImport'], resolve)
         }, {
-          path: 'incomeWaybillDetail/:willId',
-          name: "incomeWaybillDetail",
+          path: 'costImportWaybillDetail/:willId',
+          name: "costImportWaybillDetail",
           meta: {
-            title: '收入统计编辑',
+            title: '运单详情',
             isVerificationL: false
           },
-          component: (resolve) => require(['../page/statistics/business/income/incomeWaybillDetail'], resolve)
+          component: (resolve) => require(['../page/statistics/costManage/costImport/costImportWaybillDetail'], resolve)
+        }]
+      }, {
+        path: 'cashCostManage',
+        name: "cashCostManage",
+        meta: {
+          title: '现金费用管理',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCost'], resolve),
+        children: [{
+          path: 'cashCostList',
+          name: "cashCostList",
+          meta: {
+            title: '现金费用列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostList'], resolve)
+        }, {
+          path: 'editCashCost',
+          name: "editCashCost",
+          meta: {
+            title: '现金费用编辑',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/editCashCost'], resolve)
+        }, {
+          path: 'cashCostWaybillDetail/:willId',
+          name: "cashCostWaybillDetail",
+          meta: {
+            title: '运单详情',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostWaybillDetail'], resolve)
+        }, {
+          path: 'importCashCost',
+          name: "importCashCost",
+          meta: {
+            title: '现金费用导入',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/importCashCost'], resolve)
+        }]
+      }, {
+        path: 'publicCostManage',
+        name: "publicCostManage",
+        meta: {
+          title: '对公费用管理',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+        children: [{
+          path: 'tollFee',
+          name: "tollFee",
+          meta: {
+            title: '高速费管理',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+          children: [{
+            path: 'tollFeeList',
+            name: "tollFeeList",
+            meta: {
+              title: '高速费列表',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/tollFeeList'], resolve)
+          }, {
+            path: 'editTollFee',
+            name: "editTollFee",
+            meta: {
+              title: '高速费编辑',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/editTollFee'], resolve)
+          }, {
+            path: 'tollFeeWaybillDetail/:willId',
+            name: "tollFeeWaybillDetail",
+            meta: {
+              title: '运单详情',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail'], resolve)
+          }, {
+            path: 'importTollFee',
+            name: "importTollFee",
+            meta: {
+              title: '高速费导入',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/importTollFee'], resolve)
+          }]
+        }, {
+          path: 'oilGas',
+          name: "oilGas",
+          meta: {
+            title: '油/气费管理',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/statistics/costManage/publicCostManage/publicCost'], resolve),
+          children: [{
+            path: 'oilGasList',
+            name: "oilGasList",
+            meta: {
+              title: '油/气费列表',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/oilGasList'], resolve)
+          }, {
+            path: 'editOilGas',
+            name: "editOilGas",
+            meta: {
+              title: '油/气费编辑',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/editOilGas'], resolve)
+          }, {
+            path: 'oilGasWaybillDetail/:willId',
+            name: "oilGasWaybillDetail",
+            meta: {
+              title: '运单详情',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail'], resolve)
+          }, {
+            path: 'importOilGas',
+            name: "importOilGas",
+            meta: {
+              title: '油/气费导入',
+              isVerificationL: false
+            },
+            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/importOilGas'], resolve)
+          }]
         }]
       }]
     }]

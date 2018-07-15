@@ -1,4 +1,3 @@
-
 <style scoped lang="less">
 
 
@@ -10,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'logisticsList',
+  name: 'dashborad',
   data() {
     return {
 

@@ -44,28 +44,32 @@
             <el-button type="success" size="medium" @click="organizationDialog('position','add')">新增职位</el-button>
           </div>
           <div class="nav-tab-setting nav-tab-mt">
-            <div class="position-list table-list">
-              <el-table :data="positionTableData" stripe style="width: 100%" size="mini" v-loading="positionLoading">
-                <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                  <template slot-scope="scope">
-                    <div v-if="item.param==='role_name'">{{scope.row.role_name}}</div>
-                    <div v-if="item.param==='work_type'">
-                      <router-link class="text-blur" :to="{path: '/setting/powerManage', query: { departmentId: scope.row.department.id, positionId:scope.row.id}}">权限设置</router-link>
-                    </div>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" align="center">
-                  <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="organizationDialog('position','update',scope.row)">编辑</el-button>
-                    <el-button type="primary" size="mini" plain @click="deletePosition(scope.row.id)">删除</el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-              <div class="page-list text-center">
-                <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" @size-change="pageChange" v-if="!positionLoading && pageData.totalCount>pageData.pageSize">
-                </el-pagination>
+            <div class="position-list">
+              <div class="table-list">
+                <el-table :data="positionTableData" stripe style="width: 100%" size="mini" v-loading="positionLoading" :class="{'tabal-height-500':!positionTableData.length}">
+                  <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                    <template slot-scope="scope">
+                      <div v-if="item.param==='role_name'">{{scope.row.role_name}}</div>
+                      <div v-if="item.param==='work_type'">
+                        <router-link class="text-blur" :to="{path: '/setting/powerManage', query: { departmentId: scope.row.department.id, positionId:scope.row.id}}">权限设置</router-link>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                      <el-button type="primary" size="mini" @click="organizationDialog('position','update',scope.row)">编辑</el-button>
+                      <el-button type="primary" size="mini" plain @click="deletePosition(scope.row.id)">删除</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <no-data v-if="!positionLoading && !positionTableData.length"></no-data>
               </div>
             </div>
+            <div class="page-list text-center">
+              <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" @size-change="pageChange" v-if="!positionLoading && pageData.totalCount>pageData.pageSize">
+              </el-pagination>
+            </div>
+
           </div>
         </el-col>
       </el-row>
@@ -150,7 +154,6 @@ export default {
         this.departmentDialog.isShow = true;
         this.departmentDialog.type = operation;
         if (operation === 'update') {
-          console.log('修改的部门', this.active, this.departmentTableData[this.active])
           if (this.departmentTableData.length) {
             this.departmentRow = this.departmentTableData[this.active];
           }
@@ -161,7 +164,6 @@ export default {
         this.departmentRow = this.departmentTableData[this.active];
         if (operation === 'update') {
           this.positionRow = row
-          console.log('职位info', row)
           // if (this.positionTableData.length) {
           //   this.positionRow = this.positionTableData[this.active];
           // }
@@ -180,8 +182,6 @@ export default {
           this.getPositionList(this.departmentRow, this.active); //职位列表
         }
       }
-
-      console.log('this.departmentDialog', this.departmentDialog)
     },
     // 获取部门列表
     getDepartmentList: function() {
@@ -219,7 +219,6 @@ export default {
           this.positionTableData = results.data.data.results;
           this.positionLoading = false;
           this.pageData.totalCount = results.data.data.count;
-          console.log('分页', this.pageData.totalCount)
         }
       }).catch((err) => {
         this.positionLoading = false;
@@ -239,6 +238,7 @@ export default {
                 message: '删除职位成功',
                 type: 'success'
               });
+              this.pageData.currentPage = 1;
               this.getPositionList(this.departmentRow, this.active); //职位列表
             }
           }).catch((err) => {
@@ -257,14 +257,13 @@ export default {
 
     },
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+
     },
     pageChange: function() {
       setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
         this.getPositionList(this.departmentRow, this.active);
       })
     }

@@ -12,7 +12,9 @@
   .el-form {
     margin: 0 auto;
     width: 340px;
-    .el-input, .el-autocomplete, .el-select {
+    .el-input,
+    .el-autocomplete,
+    .el-select {
       width: 100%;
     }
   }
@@ -130,11 +132,7 @@
               <el-row :gutter="80">
                 <el-form-item label="挂车号">
                   <el-select v-model="truckForm.semitrailer" filterable clearable placeholder="请选择">
-                    <el-option
-                      v-for="item in semiList"
-                      :key="item.id"
-                      :label="item.value"
-                      :value="item.id">
+                    <el-option v-for="item in semiList" :key="item.id" :label="item.value" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -147,11 +145,7 @@
               <el-row :gutter="80">
                 <el-form-item label="分组">
                   <el-select v-model="truckForm.group" clearable placeholder="请选择">
-                    <el-option
-                      v-for="item in selectData.groupOptions"
-                      :key="item.id"
-                      :label="item.group_name"
-                      :value="item.id">
+                    <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -165,31 +159,19 @@
             <el-form :model="staffForm" ref="staffForm" label-width="70px" :rules="staffRules">
               <el-form-item label="主驾驶" prop="master_driver">
                 <el-select v-model="staffForm.master_driver" filterable clearable placeholder="请选择">
-                  <el-option
-                    v-for="item in driverList"
-                    :key="item.id"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="item in driverList" :key="item.id" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="副驾驶" prop="vice_driver">
                 <el-select v-model="staffForm.vice_driver" filterable clearable placeholder="请选择" @change="validateStaff">
-                  <el-option
-                    v-for="(item, index) in driverList"
-                    :key="index"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="(item, index) in driverList" :key="index" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="押运员" prop="escort_staff">
                 <el-select v-model="staffForm.escort_staff" filterable clearable placeholder="请选择" @change="validateStaff">
-                  <el-option
-                    v-for="(item, index) in escortList"
-                    :key="index"
-                    :label="item.value"
-                    :value="item.id">
+                  <el-option v-for="(item, index) in escortList" :key="index" :label="item.value" :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -270,46 +252,57 @@ export default {
     }
   },
   computed: {
-    capacityInfo: function () {
+    capacityInfo: function() {
       return this.$route.params.capacityInfo;
     },
     capacityId: function() {
-      return this.$route.params.capacityInfo.id;
+      return this.$route.params.id;
     },
-    titleType: function () {
+    titleType: function() {
       return parseInt(this.$route.params.activeStep) === 0 ? '编辑绑定挂车' : '编辑绑定人员';
     },
-    activeStep: function () {
+    activeStep: function() {
       return parseInt(this.$route.params.activeStep);
-    }
-  },
-  activated() {
-    this.truckForm = {};
-    this.staffForm = {};
-    if (this.activeStep === 0) {
-      this.truckForm = {
-        capacityId: this.capacityId,
-        semitrailer: this.capacityInfo.semitrailer && this.capacityInfo.semitrailer.id,
-        car_belong_phone: this.capacityInfo.car_belong_phone || null,
-        group: this.capacityInfo.group && this.capacityInfo.group.id
-      }
-    } else if (this.activeStep === 1) {
-      this.staffForm = {
-        capacityId: this.capacityId,
-        master_driver: this.capacityInfo.master_driver && this.capacityInfo.master_driver.id,
-        vice_driver: this.capacityInfo.vice_driver && this.capacityInfo.vice_driver.id,
-        escort_staff: this.capacityInfo.escort_staff && this.capacityInfo.escort_staff.id
-      }
     }
   },
   mounted() {
     this.init();
   },
   methods: {
-    init: function () {
+    init: function() {
       this.setSelectData();
+      this.getDetail()
     },
-    setSelectData: function () {
+    getDetail: function() {
+      this.$$http('getCapacityDetail', { id: this.capacityId }).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.headData = results.data.data;
+          this.truckForm = {};
+          this.staffForm = {};
+          if (this.activeStep === 0) {
+            this.truckForm = {
+              capacityId: this.capacityId,
+              semitrailer: this.headData.semitrailer && this.headData.semitrailer.id,
+              car_belong_phone: this.headData.car_belong_phone || null,
+              group: this.headData.group && this.headData.group.id
+            }
+          } else if (this.activeStep === 1) {
+            this.staffForm = {
+              capacityId: this.capacityId,
+              master_driver: this.headData.master_driver && this.headData.master_driver.id,
+              vice_driver: this.headData.vice_driver && this.headData.vice_driver.id,
+              escort_staff: this.headData.escort_staff && this.headData.escort_staff.id
+            }
+          }
+        } else {
+          this.$message.error('数据获取失败');
+        }
+      }).catch(() => {
+        this.$message.error('数据获取失败');
+      })
+
+    },
+    setSelectData: function() {
       let p1 = this.getGroups();
       let p2 = this.getSemiList();
       let p3 = this.getDriverList();
@@ -337,13 +330,13 @@ export default {
             res.data.data.map((n, j) => {
               this.driverList.push({
                 id: n.id,
-                value: n.name
+                value: n.name + "  " + n.mobile_phone
               });
               // 驾驶员/押运员添加进押运员数组
               if (i === 1) {
                 this.escortList.push({
                   id: n.id,
-                  value: n.name
+                  value: n.name + "  " + n.mobile_phone
                 });
               }
             });
@@ -354,22 +347,22 @@ export default {
           results[3].data.data.map((n, i) => {
             this.escortList.push({
               id: n.id,
-              value: n.name
+              value: n.name + "  " + n.mobile_phone
             });
           });
         }
         this.pageLoading = false;
       }).catch(err => {
-        console.log(err);
+
       });
     },
     getGroups: function() {
       return this.$$http('getGroups')
     },
-    getSemiList: function () {
-      return this.$$http('searchTailCarList', {pagination: false})
+    getSemiList: function() {
+      return this.$$http('searchTailCarList', { pagination: false })
     },
-    getDriverList: function () {
+    getDriverList: function() {
       let param1 = {
         work_type: 'DRIVER',
         pagination: false
@@ -383,9 +376,9 @@ export default {
       return Promise.all([req1, req2])
     },
     getEscortList: function() {
-      return this.$$http('getDriversList', {work_type: 'ESCORT', pagination: false})
+      return this.$$http('getDriversList', { work_type: 'ESCORT', pagination: false })
     },
-    submitTruckForm: function () {
+    submitTruckForm: function() {
       this.$refs.truckForm.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -395,7 +388,7 @@ export default {
             group: this.truckForm.group
           }
           this.$$http('bindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -406,12 +399,12 @@ export default {
               this.truckForm.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
-            console.log(err);
+
           });
         }
       });
     },
-    submitStaffForm: function () {
+    submitStaffForm: function() {
       this.$refs.staffForm.validate((isValid, unvailidField) => {
         if (isValid) {
           let send = {
@@ -421,7 +414,7 @@ export default {
             escort_staff: this.staffForm.escort_staff
           }
           this.$$http('bindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
-            if(results.data.code === 0) {
+            if (results.data.code === 0) {
               this.$message({
                 message: '绑定成功',
                 type: 'success'
@@ -432,12 +425,12 @@ export default {
               this.staffForm.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
-            console.log(err);
+
           });
         }
       });
     },
-    forceSubmitTruckForm: function () {
+    forceSubmitTruckForm: function() {
       let send = {
         id: this.truckForm.capacityId,
         semitrailer: this.truckForm.semitrailer,
@@ -445,7 +438,7 @@ export default {
         group: this.truckForm.group
       }
       this.$$http('forceBindTruck', dealObjectValue(send), this.validteClientCallback).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'
@@ -454,10 +447,10 @@ export default {
           this.goDetail();
         }
       }).catch((err) => {
-        console.log(err);
+
       });
     },
-    forceSubmitStaffForm: function () {
+    forceSubmitStaffForm: function() {
       let send = {
         id: this.staffForm.capacityId,
         master_driver: this.staffForm.master_driver,
@@ -465,7 +458,7 @@ export default {
         escort_staff: this.staffForm.escort_staff
       }
       this.$$http('forceBindStaff', dealObjectValue(send), this.validteClientCallback).then((results) => {
-        if(results.data.code === 0) {
+        if (results.data.code === 0) {
           this.$message({
             message: '绑定成功',
             type: 'success'
@@ -474,7 +467,7 @@ export default {
           this.goDetail();
         }
       }).catch((err) => {
-        console.log(err);
+
       });
     },
     goDetail: function() {
@@ -484,14 +477,14 @@ export default {
         this.$refs.staffForm.resetFields();
       }
       if (this.capacityId) {
-        this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId + '&activeTab=first'});
+        this.$router.push({ path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" + this.capacityId + '&activeTab=first' });
       }
     },
-    validateStaff: function () {
+    validateStaff: function() {
       this.$refs.staffForm.validateField('vice_driver');
       this.$refs.staffForm.validateField('escort_staff');
     },
-    validteClientCallback: function (res) {
+    validteClientCallback: function(res) {
       let reg = new RegExp('^(4[0-9]*)$')
       if (reg.test(res.data.code)) {
         this.$message({

@@ -27,11 +27,11 @@
       </el-tabs>
       <div class="operation-btn text-right">
         <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
-        <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
+        <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
         <el-button type="success" @click="addHeadCarPage">新增</el-button>
       </div>
       <div class="table-list" v-loading="pageLoading">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini">
+        <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -49,6 +49,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
@@ -78,6 +79,11 @@ export default {
         currentPage: 1,
         totalPage: 1,
         pageSize: 10,
+      },
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
       },
       thTableList: [{
         title: '挂车车牌号',
@@ -128,8 +134,48 @@ export default {
     importList: function() {
 
     },
-    exportList: function() {
+    exportData() {
+      let vm = this;
+      let sendData = this.pbFunc.deepcopy(this.seachListParam);
+      sendData[this.fifterParam.field] = this.fifterParam.keyword;
+      if (vm.pageStatus) {
+        sendData = this.saveSendData;
+      } else {
+        this.saveSendData = sendData;
+      }
+      sendData.filename = '挂车管理';
+      sendData.page_arg = 'semitrailers';
+      sendData.ids = ['34', '35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56'];
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
 
+      this.$$http('exportSemitrailerData', sendData).then((results) => {
+        console.log('results', results.data.data.results);
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
     },
     searchList: function() {
       var vm = this;

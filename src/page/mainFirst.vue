@@ -174,14 +174,15 @@
     -o-transform: rotate(45deg);
   }
 }
-/deep/ .el-breadcrumb__item{
-  &:last-child{
-    .el-breadcrumb__inner{
-      color:#4a9bf8;
-    }
 
+/deep/ .el-breadcrumb__item {
+  &:last-child {
+    .el-breadcrumb__inner {
+      color: #4a9bf8;
+    }
   }
 }
+
 </style>
 <template>
   <el-container>
@@ -327,6 +328,7 @@ export default {
     }
     let menus = this.$store.state.common.menuData;
     if (menus) {
+
       this.menus = menus;
       // console.log('this.menus', this.menus);
     }

@@ -278,8 +278,6 @@ export default {
     },
     editAjax(postData, formName, btnObject, stepNum, isReview) {
       let btnTextCopy = this.pbFunc.deepcopy(btnObject).btnText;
-      console.log('btnTextCopy', btnTextCopy);
-      console.log('postData', postData);
       let apiName = 'updateCompany';
       btnObject.isDisabled = true;
       this.editMsgForm.area = this.address.area;
@@ -291,7 +289,6 @@ export default {
           postData.id = this.users.carrier.id;
           postData.area =this.address.area;
           postData.user_id = this.users.id;
-          console.log('修改企业详细', postData);
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
@@ -314,8 +311,6 @@ export default {
       });
     },
     editBasics(btn, btnType) {
-      console.log('this.userForm', this.editMsgForm);
-
       let formName = 'addFormSetpOne';
       let btnObject = btn;
       let keyArray = ['name', 'contact_name', 'contact_phone', 'area', 'detail_address', 'carrier_type'];
@@ -326,12 +321,8 @@ export default {
         this.editMsgForm.organization_code = this.editMsgForm.codeMsg;
         keyArray.push('organization_code');
       }
-
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      console.log('postData', postData);
-
       postData.customer_type = 'OWN'
-      console.log('postDataNew', postData);
       if (btnType === 'next') {
         this.editAjax(postData, formName, btnObject, 2);
       } else if (btnType === 'out') {
@@ -339,7 +330,6 @@ export default {
       }
     },
     // editUnload(btn) {
-    //   console.log('this.userForm', this.editMsgForm);
 
     //   let formName = 'addFormSetpTwo';
     //   let btnObject = btn;

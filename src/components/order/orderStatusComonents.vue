@@ -109,8 +109,8 @@ export default {
         }, {
           text: '今天',
           onClick(picker) {
-            const end = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
-            const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
+            const end = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 23:59:59";
+            const start = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00";
             picker.$emit('pick', [start, end]);
           }
         }]
@@ -131,7 +131,7 @@ export default {
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: '"all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '故障中' }],
+        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '故障中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
       },
       timeParam: {
@@ -194,9 +194,9 @@ export default {
           sendData.search = 'all_finish';
         }
       } else {
-        if(this.fifterName == 'canceling'||this.fifterName == 'modifying'||this.fifterName == 'abnormal'){
-          sendData.interrupt_status=this.fifterName;
-        }else{
+        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
+          sendData.interrupt_status = this.fifterName;
+        } else {
           sendData.status = this.fifterName;
         }
       }
@@ -226,14 +226,16 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
-      }else{
+      } else {
         vm.saveSendData = sendData;
-        this.pageData.currentPage=1;
+        this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
       sendData.pageSize = this.pageData.pageSize;
       this.$$http("searchConOrderList", sendData).then((results) => {
-        vm.pageLoading = false;
+        setTimeout(() => {
+          vm.pageLoading = false;
+        })
         vm.searchStatus = false;
         if (results.data.code == 0) {
           var dataBody = results.data.data.data;
@@ -246,27 +248,26 @@ export default {
             }
             sendData.ids = capacityList;
             vm.$$http("getTransPowerInfoList", sendData).then((transPowerInfo) => {
-              vm.pageLoading = false;
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
-                dataBody.forEach((Ditem,index) => {
-                  Ditem.transPowerInfo={
-                    tractor:{},
-                    semitrailer:{},
-                    master_driver:{},
-                    vice_driver:{},
-                    escort_staff:{},
+                dataBody.forEach((Ditem, index) => {
+                  Ditem.transPowerInfo = {
+                    tractor: {},
+                    semitrailer: {},
+                    master_driver: {},
+                    vice_driver: {},
+                    escort_staff: {},
                   };
                   transPowerInfoList.forEach((Ttiem) => {
-                  var status=true;
+                    var status = true;
                     if (Ditem.capacity == Ttiem.id) {
-                      Ttiem.tractor=Ttiem.tractor?Ttiem.tractor:{};
-                      Ttiem.semitrailer=Ttiem.semitrailer?Ttiem.semitrailer:{};
-                      Ttiem.master_driver=Ttiem.master_driver?Ttiem.master_driver:{};
-                      Ttiem.vice_driver=Ttiem.vice_driver?Ttiem.vice_driver:{};
-                      Ttiem.escort_staff=Ttiem.escort_staff?Ttiem.escort_staff:{};
+                      Ttiem.tractor = Ttiem.tractor ? Ttiem.tractor : {};
+                      Ttiem.semitrailer = Ttiem.semitrailer ? Ttiem.semitrailer : {};
+                      Ttiem.master_driver = Ttiem.master_driver ? Ttiem.master_driver : {};
+                      Ttiem.vice_driver = Ttiem.vice_driver ? Ttiem.vice_driver : {};
+                      Ttiem.escort_staff = Ttiem.escort_staff ? Ttiem.escort_staff : {};
                       Ditem.transPowerInfo = Ttiem;
-                      status=false;
+                      status = false;
                     }
                   });
                 });
@@ -283,8 +284,8 @@ export default {
           } else {
             vm.listFifterData = dataBody;
           }
-
         }
+
       }).catch((err) => {
         console.log('err', err);
         vm.pageLoading = false;

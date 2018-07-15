@@ -53,38 +53,43 @@
           </div>
         </el-col>
         <el-col :span="19">
-          <div class="nav-tab-setting  nav-tab-width">
+          <div class="nav-tab-setting nav-tab-width">
             <el-tabs v-model="staffsActive" @tab-click="staffClick">
               <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
-                <div class="position-list table-list">
+                <div class="position-list">
                   <div class="staff-radio">
                     <el-radio v-model="isValid" label="1" @change="getStaffsList(departmentRow,currentPositionId,false,true)">有效</el-radio>
                     <el-radio v-model="isValid" label="2" @change="getStaffsList(departmentRow,currentPositionId,true,true)">已注销</el-radio>
                   </div>
-                  <el-table :data="staffsTableData" stripe style="width: 100%" size="mini" v-loading="staffLoading">
-                    <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                    </el-table-column>
-                    <el-table-column label="操作" align="center">
-                      <template slot-scope="scope">
-                        <div v-if="!scope.row.is_deleted">
-                          <el-button type="primary" size="mini" @click="staffsDialog('update',scope.row)">修改</el-button>
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,true)">注销</el-button>
-                        </div>
-                        <div v-if="scope.row.is_deleted">
-                          <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,false)">启用</el-button>
-                        </div>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                  <div class="page-list text-center">
-                    <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
-                    </el-pagination>
+                  <div class="table-list">
+
+                    <el-table :data="staffsTableData" stripe style="width: 100%" size="mini" v-loading="staffLoading" :class="{'tabal-height-500':!staffsTableData.length}">
+                      <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                      </el-table-column>
+                      <el-table-column label="操作" align="center">
+                        <template slot-scope="scope">
+                          <div v-if="!scope.row.is_deleted">
+                            <el-button type="primary" size="mini" @click="staffsDialog('update',scope.row)">修改</el-button>
+                            <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,true)">注销</el-button>
+                          </div>
+                          <div v-if="scope.row.is_deleted">
+                            <el-button type="primary" size="mini" plain @click="isDeletdStaffOp(scope.row,false)">启用</el-button>
+                          </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                    <no-data v-if="!staffLoading && !staffsTableData.length"></no-data>
+                    <div class="page-list text-center">
+                      <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>pageData.pageSize">
+                      </el-pagination>
+                    </div>
                   </div>
                 </div>
+
               </el-tab-pane>
             </el-tabs>
-            <div class="user-no-data text-center text-stance" v-if="!positionTableData.length&&!staffLoading">
-              暂无数据
+            <div class="user-no-data" v-if="!positionTableData.length&&!staffLoading">
+              <no-data v-if="!staffLoading && !positionTableData.length"></no-data>
             </div>
           </div>
         </el-col>
@@ -103,7 +108,7 @@ export default {
   data() {
     return {
       departmentLoading: true, //部门列表loading
-      staffLoading: true, //员工列表loading
+      staffLoading: false, //员工列表loading
       pageLoading: false,
       pageData: {
         currentPage: 1,
@@ -215,7 +220,6 @@ export default {
       this.positionLoading = true;
       this.isValid = '1';
       this.active = index.toString();
-      console.log('departmentInfo', departmentInfo)
       this.$$http('getPositionList', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.positionTableData = results.data.data;
@@ -266,13 +270,13 @@ export default {
         is_deleted: isDeletd,
         id: row.id
       }
-      console.log(postData)
       this.$$http('updateStaff', postData).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
             message: isDeletd ? '员工注销成功' : '员工启用成功',
             type: 'success'
           });
+          this.pageData.currentPage = 1;
           this.getStaffsList(this.departmentRow, this.currentPositionId, !isDeletd, true)
         }
       }).catch((err) => {
@@ -315,7 +319,6 @@ export default {
 
     },
     staffClick: function(tab, event) {
-      console.log('职位', tab, event);
       this.currentPositionId = tab.name;
       this.isValid = '1';
       this.getStaffsList(this.departmentRow, tab.name, false, true)

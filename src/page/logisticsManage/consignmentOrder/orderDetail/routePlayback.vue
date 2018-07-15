@@ -235,6 +235,12 @@ export default {
 
       startTime: '',
       endTime: '',
+
+      actualFluidId: '',
+      stationIdArray: [],
+      markerList: '',
+      fluidStationList: [],
+
     }
   },
   methods: {
@@ -274,22 +280,19 @@ export default {
 
     },
     /* 获取分段详情 */
-    getConOrderDetalis: function() {
+    getSectionTrips: function() {
       return new Promise((resolve, reject) => {
         let postData = {
           id: this.setpId
         };
         this.$$http('getSectionTrips', postData).then((results) => {
           if (results.data && results.data.code == 0) {
-
             let resultsData = results.data.data;
-            console.log('getConOrderDetalis results', results, resultsData);
             this.choosedDeviceId = resultsData.device_id;
             this.startTime = (resultsData.waybill && resultsData.waybill.start_time) ? resultsData.waybill.start_time : '';
             this.endTime = (resultsData.waybill && resultsData.waybill.stop_time) ? resultsData.waybill.stop_time : this.todayEnd;
             this.timeSpacing = this.calculateTimeSpacing();
             this.carNumber = resultsData.driver_no;
-            console.log('this.startTime', this.startTime, this.endTime);
             resolve(results)
           } else {
             reject(results);
@@ -347,7 +350,6 @@ export default {
     },
     /* 获取到所有数据以后对数据进行再次组合排序 */
     sortResult: function(dataArray, apiName) {
-      console.log('dataArray', dataArray);
       if (apiName === 'getTripRecords') {
         for (let i = 0; i < dataArray.length; i++) {
           this.totalDataResult = this.totalDataResult.concat(dataArray[i].totalDataResult);
@@ -430,10 +432,8 @@ export default {
                 path[i] = [dataResult[i].location.longitude, dataResult[i].location.latitude];
               }
               /* 每次取回的数据合并到一天的总数据里面 */
-              console.log('getTripRecords');
               dataObject.totalDataResult = [...dataObject.totalDataResult, ...dataResult];
               dataObject.resultPath = [...dataObject.resultPath, ...path];
-              console.log('getTripRecords');
             } else if (apiName === 'getOfflineAndStopRecords') { //获取离线点和停留点
               let stopPointResult = results.data.data.stopping_point_locations;
               let offlinePointResult = results.data.data.offline_point_locations;
@@ -560,10 +560,26 @@ export default {
         this.getAllRecords('getOfflineAndStopRecords');
       });
     },
+
+    getIconSrc: function(item) {
+      let src = ''
+
+      /*卸货站*/
+      if (item.position_type && item.position_type.key === 'DELIVER_POSITION') {
+        src = 'l_2.png';
+      }
+
+      /*气源液厂*/
+      if (item.position_type && item.position_type.key === 'LNG_FACTORY') {
+        src = 'lng_2.png';
+      }
+      return src;
+
+    },
     /* 初始化地图内的各种需要的控件 */
     initPath: function() {
       let _this = this;
-      AMapUI.loadUI(['misc/PathSimplifier', 'overlay/SimpleInfoWindow', 'overlay/SimpleMarker'], function(PathSimplifier, SimpleInfoWindow, SimpleMarker) {
+      AMapUI.loadUI(['misc/PathSimplifier', 'overlay/SimpleInfoWindow', 'overlay/SimpleMarker', 'misc/MarkerList'], function(PathSimplifier, SimpleInfoWindow, SimpleMarker, MarkerList) {
 
         if (!PathSimplifier.supportCanvas) {
           alert('当前环境不支持 Canvas！');
@@ -575,6 +591,7 @@ export default {
           infoTitle: '<div class="fs-16">点位置信息</div>',
           infoBody: ''
         });
+
         //初始化起点icon
         _this.startMarker = new SimpleMarker({
           map: _this.map,
@@ -655,7 +672,6 @@ export default {
 
         }
         //轨迹点添加事件
-        //轨迹点添加事件
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
           console.log('info', info);
@@ -672,11 +688,11 @@ export default {
               if (status === 'complete' && data.info === 'OK') {
                 let pointMsgStr = '';
                 let addressDetail = data.regeocode.formattedAddress;
-                pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-                  '</div><div class="fs-13">车牌号：' + _this.carNumber +
-                  '</div><div class="fs-13">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
-                  '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
-                  'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+                pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+                  '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+                  '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[info.pointIndex].create_time +
+                  '</div><div class="fs-13 md-5">行驶速度：' + _this.totalDataResult[info.pointIndex].speed +
+                  'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
                   '</div>';
 
 
@@ -686,6 +702,97 @@ export default {
               }
             })
           })
+
+        });
+
+        //初始化卸货站，液厂信息。
+        _this.markerList = new MarkerList({
+
+          map: _this.map,
+
+          //从数据中读取位置, 返回lngLat
+          getPosition: function(item) {
+            return [item.location.longitude, item.location.latitude];
+          },
+
+          //数据ID，如果不提供，默认使用数组索引，即index
+          getDataId: function(item, index) {
+            return index;
+          },
+
+          getInfoWindow: function(data, context, recycledInfoWindow) {
+
+            let infoTitleStr = '<div class="fs-13 ">地标信息：' + data.position_name + '</div>';
+            let position_type = (data.position_type && data.position_type.verbose) ? data.position_type.verbose : '无';
+            let address = data.address ? data.address : '无';
+            let contacts = data.contacts ? data.contacts : '无';
+            let tel = data.tel ? data.tel : '无';
+            let infoBodyStr = '<br><div class="fs-13 md-5">地标类型：' + position_type + '</div><div class="fs-13 md-5">地址：' + address + '</div>';
+
+            if (recycledInfoWindow) {
+              recycledInfoWindow.setInfoTitle(infoTitleStr);
+              recycledInfoWindow.setInfoBody(infoBodyStr);
+              return recycledInfoWindow;
+            } else {
+              return new SimpleInfoWindow({
+                infoTitle: infoTitleStr,
+                infoBody: infoBodyStr,
+                offset: new AMap.Pixel(0, -37)
+              });
+            }
+
+          },
+
+          //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
+          getMarker: function(dataItem, context, recycledMarker) {
+            console.log('dataItem', dataItem);
+            let src = '';
+            let rotateDeg = (dataItem.direction - 90) + 'deg';
+            src = _this.getIconSrc(dataItem);
+
+            if (recycledMarker) {
+
+              recycledMarker.setIconStyle({
+                src: require('../../../../assets/img/' + src),
+                style: {
+                  width: '20px',
+                  height: '20px',
+                  transform: 'rotate(' + rotateDeg + ')',
+                }
+              });
+
+              recycledMarker.setLabel({
+                content: dataItem.position_name,
+                offset: new AMap.Pixel(30, 0)
+              });
+
+              return recycledMarker
+            } else {
+              return new SimpleMarker({
+                containerClassNames: 'my-marker',
+                iconStyle: {
+                  src: require('../../../../assets/img/' + src),
+                  style: {
+                    width: '20px',
+                    height: '20px',
+                    transform: 'rotate(' + rotateDeg + ')',
+                  }
+                },
+                label: {
+                  content: dataItem.position_name,
+                  offset: new AMap.Pixel(30, 0)
+                }
+              });
+            }
+
+          },
+
+          //marker上监听的事件
+          markerEvents: ['click', 'mouseover', 'mouseout'],
+
+          selectedClassNames: 'selected',
+
+          autoSetFitView: false
 
         });
 
@@ -701,10 +808,10 @@ export default {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
         let latitude = _this.totalDataResult[cursor.idx].location.latitude;
-        pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-          '</div><div class="fs-13">车牌号：' + _this.carNumber +
-          '</div><div class="fs-13">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
-          '</div><div class="fs-13">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
+        pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+          '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+          '</div><div class="fs-13 md-5">定位时间：' + _this.totalDataResult[cursor.idx].create_time +
+          '</div><div class="fs-13 md-5">行驶速度：' + _this.totalDataResult[cursor.idx].speed +
           'km/h</div>';
 
         _this.infoWindow.setInfoBody(pointMsgStr);
@@ -831,11 +938,11 @@ export default {
           if (status === 'complete' && data.info === 'OK') {
             let pointMsgStr = '';
             let addressDetail = data.regeocode.formattedAddress;
-            pointMsgStr = '<div class="fs-13">主驾驶员：' + _this.masterDriver +
-              '</div><div class="fs-13">车牌号：' + _this.carNumber +
-              '</div><div class="fs-13">定位时间：' + row.row.create_time +
-              '</div><div class="fs-13">行驶速度：' + row.row.speed +
-              'km/h</div><div class="fs-13">定位地址：' + addressDetail +
+            pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + _this.masterDriver +
+              '</div><div class="fs-13 md-5">车牌号：' + _this.carNumber +
+              '</div><div class="fs-13 md-5">定位时间：' + row.row.create_time +
+              '</div><div class="fs-13 md-5">行驶速度：' + row.row.speed +
+              'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
               '</div>';
 
 
@@ -906,6 +1013,101 @@ export default {
 
       })
     },
+
+    /* 获取运单详情，为了获取液厂和卸货站 */
+    getConOrderDetail: function() {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: this.willId
+        };
+        this.$$http('getConOrderDetail', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            let resultsData = results.data.data;
+            /*获取实际液厂id，用来获取液厂*/
+            this.actualFluidId = (resultsData.delivery_order && resultsData.delivery_order.actual_fluid_id) ? resultsData.delivery_order.actual_fluid_id : '';
+            /*获取运单卸货站id，因为存在分卸情况，卸货站可能有多个。*/
+            if (resultsData.trips && resultsData.trips.length) {
+              for (let i = 0, tripsLength = resultsData.trips.length; i < tripsLength; i++) {
+                /*当分段状态处于卸车分段时（unload），此时才有卸货站信息*/
+                if (resultsData.trips[i].section_type && resultsData.trips[i].section_type.key === 'unload') {
+                  if (resultsData.trips[i].business_order && resultsData.trips[i].business_order.map_postion && resultsData.trips[i].business_order.map_postion.length == 24) {
+                    this.stationIdArray.push(resultsData.trips[i].business_order.map_postion);
+                  }
+                }
+              }
+            }
+
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+    },
+
+    /* 获取实际液厂详情 */
+    getFulidDetalis: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+
+        this.$$http('getFulidDetalis', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            console.log('getFulidDetalis', results);
+
+            let fluidDetail = results.data.data;
+            fluidDetail.position_name = fluidDetail.actual_fluid_name;
+            fluidDetail.address = fluidDetail.coordinate.address;
+            fluidDetail.location = {
+              longitude: fluidDetail.coordinate.longitude,
+              latitude: fluidDetail.coordinate.latitude
+            };
+            fluidDetail.position_type = {
+              key: 'LNG_FACTORY',
+              verbose: '气源液厂',
+            };
+
+            this.fluidStationList.push(fluidDetail);
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+
+    },
+
+    /* 获取卸货站 */
+    getLandMarkList: function() {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          ids: this.stationIdArray.join(','),
+          position_type: 'DELIVER_POSITION',
+        };
+
+        this.$$http('getLandMarkList', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.fluidStationList.push(results.data.data.results)
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
+
+      })
+
+    },
+
+
   },
   activated: function() {
     this.activeName = 'third';
@@ -920,7 +1122,11 @@ export default {
     });
 
     this.initPath();
-    this.getConOrderDetalis().then((results) => {
+
+
+
+
+    this.getSectionTrips().then((results) => {
       if (this.startTime) {
         this.searchAndRender();
       } else {
@@ -930,8 +1136,24 @@ export default {
         });
       }
 
+      this.getConOrderDetail().then(() => {
+        if (this.stationIdArray.length) {
+          this.getLandMarkList().then(() => {
+            this.markerList.render(this.fluidStationList);
+          });
+        }
+        if (this.actualFluidId) {
+          this.getFulidDetalis(this.actualFluidId).then(() => {
+            this.markerList.render(this.fluidStationList);
+          });
+        }
+        console.log('this.stationIdArray', this.stationIdArray, this.actualFluidId);
+      });
+
       this.getDeviceDetail();
     })
+
+
 
   },
   beforeDestroy() {

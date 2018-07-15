@@ -9,13 +9,11 @@
     }
   }
 }
-.searchButton{
-  border-bottom:1px solid lightgrey;
-  cursor:pointer;
-}
 .searchButton:hover{
-  background-color:#ecf5ff;
+  background-color:#f5f7fa;
 }
+
+
 </style>
 <template>
   <div>
@@ -83,8 +81,8 @@
           placement="right-start"
           width="100"
           trigger="hover"
-          v-model="seachExtend">
-          <el-row>
+          v-model="seachExtend" style="padding:8px 0" popper-class="styleSetP">
+          <el-row >
             <el-col class="searchButton" @click.native="changeF('history')"><el-button type="text" style="color:black" >{{statusName.history_count}}</el-button></el-col>
             <el-col class="searchButton" @click.native="changeF('loaded')"><el-button type="text" style="color:black" >{{statusName.loaded_count}}</el-button></el-col>
             <el-col class="searchButton" @click.native="changeF('canceled')" style="border-bottom:none"><el-button type="text" style="color:black" >{{statusName.canceled_count}}</el-button></el-col>

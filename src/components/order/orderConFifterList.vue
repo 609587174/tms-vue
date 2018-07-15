@@ -100,7 +100,8 @@
 }
 </style>
 <template>
-  <div>
+  <div style="position:relative;">
+    <noData :noDataObj="noDataObj" v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg"  :row-key="getRowKeys" @expand-change="changeExpand" height="500">
       <el-table-column type="expand">
         <template slot-scope="props">
@@ -120,8 +121,7 @@
                 <el-col :span="3" class="colinfo"><span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}</span><span v-else>无</span>
                 </el-col>
               </el-row>
-
-               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)">
+               <el-row class="loadInfo commh" style="width:100%;margin-top:30px;" v-if="!(fifterStatus.indexOf(props.row.status.key)>-1)&&props.row.section_type.key=='unload'">
                 <el-col :span="7" class="colinfo">卸:<span style="color:rgb(73,210,208);font-weight:bold;font-size:16px;">{{props.row.business_order.station}}</span><i class="el-icon-location primary" @click="showMapDetalis('unload',props.row.business_order.map_postion)"></i>
                 </el-col>
                 <el-col :span="3" class="colinfo">{{props.row.standard_mile}}km
@@ -167,11 +167,16 @@
             </el-row>
           </div>
           <div class="listDetalis opButton" style="width:9%">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]">
-              <el-col>
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
+              <el-col >
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
+            <el-row  v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
+              <el-col >
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+           </el-row>
           </div>
           <div style="clear:both"></div>
         </template>
@@ -187,7 +192,7 @@
             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan">托运商:{{props.row.delivery_order.trader}}</el-col>
             <el-col :span="4" class="whiteSpan">标准运价:<span v-if="props.row.initial_price>0">{{props.row.initial_price}}元+</span><span>{{props.row.change_rate?props.row.change_rate:0}}元/吨/公里</span></el-col>
             <el-col :span="2">
-              <el-tooltip :content="props.row.delivery_order.mark" placement="top" effect="light" :open-delay="delayTime">
+              <el-tooltip :content="props.row.delivery_order.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
                 <el-button type="text" style="line-height: 0px;height: 0px;">备注<i class="el-icon-document"></i></el-button>
               </el-tooltip>
             </el-col>
@@ -223,11 +228,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
-          <el-select v-model="changeStatusParam.changeStatusFied" filterable placeholder="请选择变更类型" v-if="changeStatusParam.changeStatusType=='truck'" v-loading="seletPadding">
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.plate_number" :value="item.id"></el-option>
-          </el-select>
-          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择变更类型" v-else filterable>
-            <el-option v-for="(item,key) in changeSatusPerList" :key="key" :label="item.name" :value="item.id"></el-option>
+          <el-select v-model="changeStatusParam.changeStatusFied"  placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding">
+            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -242,27 +244,57 @@
     <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
-
   </div>
- 
 </template>
 <script>
   let landmarkMap;
   let positionMark;
+  import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
+   components: {
+    noData: noData
+  },
   data() {
     return {
+      noDataObj:{
+        imgUrl:require("../../assets/img/tms_no_data.png")
+      },
       lockFalg: false,
       delayTime:500,
       showMap:false,
       expandFalg:true,
       loadPosition:{},
+      ListDataSearch:false,
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
+      buttonModyfiyAll:{
+         canceling: [{
+          text: "确认取消",
+          type: "danger",
+          attrPlan: true,
+          methods_type: "sureCancle",
+        }],
+        abnormal: [],
+        modifying: []
+      },
       buttonAll: {
-        driver_pending_confirmation: [],
-        to_fluid: [],
-        reach_fluid: [],
+        driver_pending_confirmation: [{
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus",
+        }],
+        to_fluid: [
+        {
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus"
+        }],
+        reach_fluid: [
+        {
+          text: "变更",
+          type: "primary",
+          methods_type: "changeSatus"
+        }],
         loading_waiting_audit: [{
           text: "装车审核",
           type: "success",
@@ -298,19 +330,17 @@ export default {
         }],
 
         in_settlement: [],
-        finished: [],
-        canceled: [],
-        canceling: [{
-          text: "确认取消",
-          type: "danger",
-          attrPlan: true,
-          methods_type: "sureCancle",
+         finished: [{ //已完成
+          text: "查看详情",
+          type: "primary",
+          methods_type: "showDetalis",
         }],
-        abnormal: [{
-          text: "故障解决",
-          type: "success",
-          methods_type: "solveFault",
+        canceled: [{ //已取消
+          text: "查看详情",
+          type: "primary",
+          methods_type: "showDetalis",
         }]
+       
       },
       changeSatusShow: false,
       changeStatusParam: {
@@ -320,10 +350,7 @@ export default {
         sectiontrip: ""
       },
       changeSatusTypeSelect: [
-        { key: 'truck', verbose: "车辆故障需替换" },
-        { key: 'master_driver', verbose: "驾驶员更换" },
-        { key: 'copilot_driver', verbose: "押运员更换" },
-        { key: 'supercargo_driver', verbose: "副驾驶更换" }
+        { key: 'truck', verbose: "车辆变更" },
       ],
       changeSatusCarList: [],
       changeSatusPerList: [],
@@ -414,18 +441,21 @@ export default {
     upStatus: function() {
       var sendData = {};
       var vm = this;
+      if(this.changeStatusParam.changeStatusFied&&this.changeStatusParam.changeStatusType){
+         sendData.content = this.changeStatusParam.changeStatusFied;
+        sendData.change_type = this.changeStatusParam.changeStatusType;
+        sendData.desc = this.changeStatusParam.changeSatusDesc;
+        sendData.sectiontrip = this.changeStatusParam.sectiontrip;
+        this.$$http("upStatus", sendData).then((results) => {
+          console.log('results', results)
+          vm.$emit("changeTabs", 'fifth');
+          vm.changeSatusShow = false;
+        }).catch(() => {
 
-      sendData.content = this.changeStatusParam.changeStatusFied;
-      sendData.change_type = this.changeStatusParam.changeStatusType;
-      sendData.desc = this.changeStatusParam.changeSatusDesc;
-      sendData.sectiontrip = this.changeStatusParam.sectiontrip;
-      this.$$http("upStatus", sendData).then((results) => {
-        console.log('results', results)
-        vm.$emit("changeTabs", 'fifth');
-        vm.changeSatusShow = false;
-      }).catch(() => {
+        });
+      }else{
 
-      });
+      }
     },
     getRowKeys: function(row) {
       return row.id;
@@ -464,6 +494,8 @@ export default {
 
       } else if (type == 'solveFault') {
 
+      } else if (type == 'showDetalis') { //查看详情
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }
     },
     upSettlement: function(rowData) {
@@ -499,9 +531,8 @@ export default {
         var sendData = {};
         var vm = this;
         if (val.changeStatusType == 'truck' && this.changeSatusCarList.length == 0) {
-          sendData.pagination = false;
           this.seletPadding = true;
-          this.$$http("searchHeadCarList", sendData).then((results) => {
+          this.$$http("searchCapacityFreeList", sendData).then((results) => {
             vm.seletPadding = false;
             if (results.data.code == 0) {
               vm.changeSatusCarList = results.data.data;
@@ -511,25 +542,16 @@ export default {
             vm.seletPadding = false;
           });
         }
-        if (val.changeStatusType != 'truck' && this.changeSatusPerList.length == 0) {
-          sendData.pagination = false;
-          this.seletPadding = true;
-          this.$$http("getDriversList", sendData).then((results) => {
-            vm.seletPadding = false;
-            if (results.data.code == 0) {
-              vm.changeSatusPerList = results.data.data;
-            }
-          }).catch(() => {
-            vm.seletPadding = false;
-          });
-        }
       },
       deep: true　
     },
     ListData:{
       handler(val, oldVal) {
-        console.log('oldDiver',oldVal);
-        console.log('newDiver',val);
+        
+        setTimeout(()=>{
+          this.ListDataSearch=true;
+        })
+        
       },
       deep:true
     }

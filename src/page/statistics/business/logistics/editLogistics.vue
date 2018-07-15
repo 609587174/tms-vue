@@ -272,7 +272,6 @@ export default {
             station: this.detail.station, //站点
             remark: '' //备注
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
         }
       })
 
@@ -312,7 +311,6 @@ export default {
       let btnObject = btn;
       let keyArray = ['plan_time','check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray,true);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

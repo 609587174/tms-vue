@@ -467,7 +467,7 @@ export default {
     // },
     isLogin() {
       if (this.user && this.user.nick_name) {
-        this.$router.push({ path: '/dashborad' });
+        this.$router.push({ path: '/dashboard/dispatchDashboard' });
       } else {
         this.$router.push({ path: '/login' });
       }

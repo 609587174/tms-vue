@@ -242,7 +242,6 @@ export default {
             }
           }
         }
-        console.log('单行选择', selection, row, this.selectIds);
       } else {
         for (let i in this.tableData) {
           if (this.tableData[i].id === row.id) {
@@ -256,7 +255,6 @@ export default {
             }
           }
         }
-        console.log('单行选择', selection, row, this.singleSelectIds);
       }
 
       // if (this.selectIds.length) {
@@ -281,8 +279,6 @@ export default {
           }
         }
       }
-      console.log('是否全选', selection, this.tableData)
-
       // if (selection.length) {
       //   this.isAllSelect = true;
       // } else {
@@ -320,8 +316,6 @@ export default {
       if (this.isAllSelect) postData.import = 'all';
       if (this.selectIds.length) postData.ids = this.selectIds;
       if (this.singleSelectIds.length) postData.ids = this.singleSelectIds;
-      console.log('postData', postData);
-
       if (this.isAllSelect || this.singleSelectIds.length) {
         this.importBtn = {
           text: '导入系统中',
@@ -329,7 +323,6 @@ export default {
           isDisabled: true,
         };
         this.$$http(this.apiNameData.importApi, postData).then((results) => {
-          // console.log('results', results.data.data.results);
           this.importBtn = {
             text: '导入系统',
             isLoading: false,
@@ -387,6 +380,7 @@ export default {
       //   //   });
       //   // }
       // });
+      nums = nums?nums:0;
       this.$confirm('成功导入' + nums + '条数据', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -477,7 +471,6 @@ export default {
       this.pageLoading = true;
 
       this.$$http(this.apiNameData.listApi, postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
@@ -507,7 +500,6 @@ export default {
           // }
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

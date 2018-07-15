@@ -44,13 +44,13 @@
               <el-row :gutter="10">
                 <el-col :span="8">
                   <el-form-item label="费用时间:" label-width="105px">
-                    <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss">
+                    <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="是否匹配:">
-                    <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
+                    <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>

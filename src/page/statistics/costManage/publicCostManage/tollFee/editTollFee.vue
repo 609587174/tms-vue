@@ -194,7 +194,7 @@ export default {
 
           this.editMsgForm = {
             plate_number: this.detail.plate_number, // 车牌号
-            cost_type: this.detail.cost_type.verbose, // 类别
+            cost_type: this.detail.cost_type.key, // 类别
             cost_date: this.detail.cost_date, // 费用时间
             card_number: this.detail.card_number, // 卡号
             consume_price: this.detail.consume_price, //消费金额

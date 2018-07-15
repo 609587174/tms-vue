@@ -35,7 +35,7 @@
           </div>
           <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
-            <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
+            <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
@@ -110,7 +110,7 @@ export default {
       }, {
         title: '电话号码',
         param: 'mobile_phone',
-        width: ''
+        width: '160'
       }, {
         title: '绑定车辆',
         param: 'bind_tractors.plate_number',

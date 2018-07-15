@@ -71,7 +71,7 @@
                 <el-col :span="8">
                   <el-form-item label="运单号:" prop="waybill_id">
                     <el-select v-model="editMsgForm.waybill_id" filterable clearable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>

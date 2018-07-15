@@ -1,34 +1,26 @@
 <style scoped lang="less">
 .dispatchTitle{
-  margin:40px 0 0 15px;
-  padding-left:10px;
-  border-bottom:1px solid lightgray;
-  height:30px;
-  line-height:30px;
+  margin:40px 0 0 10px;
+  padding:1px;
+  height:40px;
+  line-height:40px;
 }
 .dashboradContent{
-  border:1px solid lightgray;
   border-top:none;
-  margin:0 25px 40px 25px;
+  margin:0 25px 0px 25px;
   padding: 1px;
-
+  font-weight:bold;
+}
+.el-col-4{
+  width:190px;
 }
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
-   <div class="detail-list detail-form" style="margin:30px 25px 0px 25px;border: 1px solid lightgray;">
-    <div class="detail-form-title" style="height: 30px;line-height: 30px;margin:0 ">
-      <el-row>
-          <el-col :span="2" >
-            概览
-          </el-col>
-        </el-row>
-      </div>
-    </div>
     <div class="dashboradContent">
       <div class="dispatchTitle border-bottom">{{allDashboradTitle[dispatchPage]}}</div>
-      <el-row v-for="(itemList,index) in renderDashboard" :key="index" :gutter="40"   style="margin:40px 0">
-        <el-col v-for="(item,itemIndex) in itemList" :key="item.key"  :span="4">
+      <el-row v-for="(itemList,index) in renderDashboard" :key="index" :gutter="20"   style="margin:0 0 40px 0">
+        <el-col v-for="(item,itemIndex) in itemList" :key="item.key"  :span="4" style="margin-top:40px;">
           <dashboradSqure :dashboradSqureData="item"></dashboradSqure>
         </el-col>
       </el-row>
@@ -47,13 +39,13 @@ export default {
     return {
       pageLoading:false,
       allDashboard:{
-        'dispatchDashboard':[
-          {key:'appoint_count',value:'待添加车辆订单'},
-          {key:'loading_waiting_audit_count',value:'待审核装车榜单'},
-          {key:'confirm_match_count',value:'待确认卸货单'},
-          {key:'unloading_waiting_audit_count',value:'待审核卸车榜单'},
-          {key:'waiting_settlement_count',value:'待提交结算'},
-        ]
+        'dispatchDashboard':[//物流调度概览
+          {key:'appoint_count',value:'待添加车辆订单',goUrl:'/orders/pickupOrders/ordersList?goTo=appoint'},
+          {key:'loading_waiting_audit_count',value:'待审核装车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList'},
+          {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList'},
+          {key:'unloading_waiting_audit_count',value:'待审核卸车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList'},
+          {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList'},
+        ],
       },
       renderDashboard:[],
       allDashboradTitle:{

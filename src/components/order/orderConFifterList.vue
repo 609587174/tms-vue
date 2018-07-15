@@ -330,8 +330,16 @@ export default {
         }],
 
         in_settlement: [],
-        finished: [],
-        canceled: [],
+         finished: [{ //已完成
+          text: "查看详情",
+          type: "primary",
+          methods_type: "showDetalis",
+        }],
+        canceled: [{ //已取消
+          text: "查看详情",
+          type: "primary",
+          methods_type: "showDetalis",
+        }]
        
       },
       changeSatusShow: false,
@@ -486,6 +494,8 @@ export default {
 
       } else if (type == 'solveFault') {
 
+      } else if (type == 'showDetalis') { //查看详情
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }
     },
     upSettlement: function(rowData) {

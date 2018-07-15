@@ -40,6 +40,7 @@ export default {
         dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
+        dispatchDashboard:'OVERVIEW_DISPATCH_SECOND',
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度

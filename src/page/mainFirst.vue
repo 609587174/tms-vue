@@ -189,9 +189,7 @@
     }
   }
 }
-<<<<<<< HEAD
 
-=======
 // 消息通知
 .notice-temp{
   background-color: #fff;
@@ -252,7 +250,6 @@
     padding: 0 22px;
   }
 }
->>>>>>> 消息系统
 </style>
 <template>
   <el-container>

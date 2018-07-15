@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    概览页
+    <router-view></router-view>
   </div>
 </template>
 <script>

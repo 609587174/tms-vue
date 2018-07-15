@@ -337,13 +337,13 @@ export default {
             res.data.data.map((n, j) => {
               this.driverList.push({
                 id: n.id,
-                value: n.name
+                value: n.name+"  "+n.mobile_phone
               });
               // 驾驶员/押运员添加进押运员数组
               if (i === 1) {
                 this.escortList.push({
                   id: n.id,
-                  value: n.name
+                  value: n.name+"  "+n.mobile_phone
                 });
               }
             });
@@ -354,7 +354,7 @@ export default {
           results[3].data.data.map((n, i) => {
             this.escortList.push({
               id: n.id,
-              value: n.name
+              value: n.name+"  "+n.mobile_phone
             });
           });
         }

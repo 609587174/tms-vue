@@ -37,7 +37,7 @@ export default {
   methods: {
     buildDictionary: function() {
       let dictionaryObject = {
-        dashborad: 'OVERVIEW', //概览
+        dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单

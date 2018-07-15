@@ -1,14 +1,46 @@
 <style scoped lang="less">
-
+.nav-tab{
+  position: relative;
+}
 
 </style>
 <template>
   <div>
     <div class="nav-tab">
+      <div class="operation-tab-btn text-right">
+        <el-button type="success" size="mini">全部已读</el-button>
+      </div>
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="客户管理" name="system">
+        <el-tab-pane label="系统通知" name="system">
           <div class="news">
-
+            <ul>
+              <li class="is-unread cursor-pointer">
+                <el-row :gutter="10">
+                  <el-col :span="18">
+                    【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。
+                  </el-col>
+                  <el-col :span="4" class="text-right text-time">
+                    2018-07-07 16:23
+                  </el-col>
+                  <el-col :span="2" class="text-right">
+                    <el-button type="primary" size="mini">查看详情</el-button>
+                  </el-col>
+                </el-row>
+              </li>
+              <li class="is-unread cursor-pointer">
+                <el-row :gutter="10">
+                  <el-col :span="18">
+                    【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。
+                  </el-col>
+                  <el-col :span="4" class="text-right text-time">
+                    2018-07-07 16:23
+                  </el-col>
+                  <el-col :span="2" class="text-right">
+                    <el-button type="primary" size="mini">查看详情</el-button>
+                  </el-col>
+                </el-row>
+              </li>
+            </ul>
           </div>
           <div class="operation-btn text-right" v-if="false">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->

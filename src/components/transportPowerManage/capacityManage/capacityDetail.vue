@@ -291,7 +291,6 @@ export default {
     },
     getLog: function(page) {
       this.$$http('getCapacityLog', { id: this.id, page: page }).then((results) => {
-        console.log(results);
         if (results.data && results.data.code == 0) {
           this.logData = results.data.data.results;
           this.logPagination.totalPage = Math.ceil(
@@ -311,7 +310,6 @@ export default {
       this.$$http('getCapacityDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.headData = results.data.data;
-          console.log(this.headData)
           this.paddingloading = false;
         } else {
           this.paddingloading = false;
@@ -337,7 +335,7 @@ export default {
           });
           this.getDetail();
         }).catch(error => {
-          console.log(error);
+
         });
       });
     },
@@ -355,12 +353,12 @@ export default {
           });
           this.getDetail();
         }).catch(error => {
-          console.log(error);
+
         });
       });
     },
     goEditDetail: function(number, data) {
-      this.$router.push({ name: 'editCapacity', params: { capacityInfo: data, activeStep: number } });
+      this.$router.push({ path: `/transportPowerManage/capacityManage/editCapacity/${data.id}/${number}/` });
     },
   }
 }

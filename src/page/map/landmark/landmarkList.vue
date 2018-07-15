@@ -248,20 +248,22 @@ export default {
       this.searchBtn.isDisabled = true;
       this.searchBtn.loading = true;
       this.searchBtn.text = '搜索中';
-      this.$$http('getLandMarkList', postData).then((results) => {
-        this.pageLoading = false;
-        this.searchBtn.isDisabled = false;
-        this.searchBtn.loading = false;
-        this.searchBtn.text = '搜索';
-        if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.results;
+      this.$$http('getLandMarkList', postData)
+        .then((results) => {
+          this.pageLoading = false;
+          this.searchBtn.isDisabled = false;
+          this.searchBtn.loading = false;
+          this.searchBtn.text = '搜索';
+          if (results.data && results.data.code == 0) {
+            this.tableData = results.data.data.results;
 
-          this.pageData.totalCount = results.data.data.count;
+            this.pageData.totalCount = results.data.data.count;
 
-        }
-      }).catch((err) => {
-        this.pageLoading = false;
-      })
+          }
+        })
+        .catch((err) => {
+          this.pageLoading = false;
+        })
 
     },
     handleMenuClick: function(command) {

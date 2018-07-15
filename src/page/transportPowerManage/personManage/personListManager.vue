@@ -39,7 +39,7 @@
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
               </el-table-column>
               <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -48,6 +48,7 @@
                 </template>
               </el-table-column>
             </el-table>
+            <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -64,7 +65,6 @@ export default {
   name: 'personListManage',
   computed: {
     employmentTypeSelect: function() {
-      console.log('this.$store.getters.getIncludeAllSelect', this.$store.state.common.selectData.carrier_driver_work_type);
       return this.$store.getters.getIncludeAllSelect.carrier_driver_work_type;
     }
   },
@@ -159,7 +159,6 @@ export default {
       }
 
       this.$$http('exportPersonData', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.exportBtn = {
           text: '导出',
           isLoading: false,
@@ -195,14 +194,12 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getDriversList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
 
           this.pageData.totalCount = results.data.data.count;
 
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -210,7 +207,7 @@ export default {
 
     },
     handleClick: function(tab, event) {
-      console.log('tab', tab);
+
     },
     handleMenuClick: function(command) {
       this.$router.push({ path: "/transportPowerManage/personManage/personDetail", query: { id: command.id } });
@@ -229,7 +226,6 @@ export default {
     },
     pageChange: function() {
       setTimeout(() => {
-        console.log('currentPage', this.pageData.currentPage);
         this.getList();
       })
     }

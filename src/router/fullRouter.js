@@ -284,7 +284,7 @@ export default [{
         },
         component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
       }, {
-        path: 'editCapacity',
+        path: 'editCapacity/:id/:activeStep/',
         name: 'editCapacity',
         meta: {
           isVerificationL: false,

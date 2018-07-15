@@ -54,7 +54,7 @@
     </div>
     <div class="capacity-list-content mt-25">
       <div class="table-list">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+        <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}" v-loading="pageLoading">
           <el-table-column label="牵引车车牌号" align="center" width="140">
             <template slot-scope="scope">
               <a :href="'/#/transportPowerManage/carManage/showCarHeadManage?headId=' + scope.row.tractor.id" target="blank">{{scope.row.tractor.plate_number}}</a>
@@ -88,7 +88,7 @@
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>
-           <el-table-column label="主驾电话号码" align="center" width="140">
+          <el-table-column label="主驾电话号码" align="center" width="140">
             <template slot-scope="scope">
               <a v-if="scope.row.master_driver" target="blank">{{scope.row.master_driver.mobile_phone}}</a>
               <span v-if="!scope.row.master_driver">-</span>
@@ -129,6 +129,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next , jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
@@ -336,7 +337,7 @@ export default {
           });
         }
       }).catch(error => {
-        console.log(error);
+
       });
     },
     getSemiList: function() {
@@ -350,7 +351,7 @@ export default {
           }));
         }
       }).catch(function(error) {
-        console.log(error);
+
       });
     },
     getDriverList: function() {
@@ -383,7 +384,7 @@ export default {
           });
         }
       }).catch(err => {
-        console.log(err);
+
       })
     },
     getEscortList: function() {
@@ -397,7 +398,7 @@ export default {
           });
         }
       }).catch(function(error) {
-        console.log(error);
+
       });
     },
     searchList: function() {
@@ -515,7 +516,7 @@ export default {
               this.truckDialog.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
-            console.log(err);
+
           });
         }
       });
@@ -542,7 +543,7 @@ export default {
               this.staffDialog.noticeMsg = results.data.msg;
             }
           }).catch((err) => {
-            console.log(err);
+
           });
         }
       });
@@ -565,7 +566,7 @@ export default {
           this.searchList();
         }
       }).catch((err) => {
-        console.log(err);
+
       });
     },
     forceSubmitStaffForm: function() {
@@ -586,7 +587,7 @@ export default {
           this.searchList();
         }
       }).catch((err) => {
-        console.log(err);
+
       });
     },
     backTruckForm: function() {

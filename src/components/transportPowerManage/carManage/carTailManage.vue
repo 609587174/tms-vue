@@ -31,7 +31,7 @@
         <el-button type="success" @click="addHeadCarPage">新增</el-button>
       </div>
       <div class="table-list" v-loading="pageLoading">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini">
+        <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -49,6 +49,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <no-data v-if="!pageLoading && !tableData.length"></no-data>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">

@@ -109,8 +109,8 @@ export default {
         }, {
           text: '今天',
           onClick(picker) {
-            const end = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
-            const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
+            const end = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 23:59:59";
+            const start = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00";
             picker.$emit('pick', [start, end]);
           }
         }]
@@ -194,9 +194,9 @@ export default {
           sendData.search = 'all_finish';
         }
       } else {
-        if(this.fifterName == 'canceling'||this.fifterName == 'modifying'||this.fifterName == 'abnormal'){
-          sendData.interrupt_status=this.fifterName;
-        }else{
+        if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
+          sendData.interrupt_status = this.fifterName;
+        } else {
           sendData.status = this.fifterName;
         }
       }
@@ -226,14 +226,14 @@ export default {
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
-      }else{
+      } else {
         vm.saveSendData = sendData;
-        this.pageData.currentPage=1;
+        this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
       sendData.pageSize = this.pageData.pageSize;
       this.$$http("searchConOrderList", sendData).then((results) => {
-        setTimeout(()=>{
+        setTimeout(() => {
           vm.pageLoading = false;
         })
         vm.searchStatus = false;
@@ -250,24 +250,24 @@ export default {
             vm.$$http("getTransPowerInfoList", sendData).then((transPowerInfo) => {
               if (transPowerInfo.data.code == 0) {
                 var transPowerInfoList = transPowerInfo.data.data.results;
-                dataBody.forEach((Ditem,index) => {
-                  Ditem.transPowerInfo={
-                    tractor:{},
-                    semitrailer:{},
-                    master_driver:{},
-                    vice_driver:{},
-                    escort_staff:{},
+                dataBody.forEach((Ditem, index) => {
+                  Ditem.transPowerInfo = {
+                    tractor: {},
+                    semitrailer: {},
+                    master_driver: {},
+                    vice_driver: {},
+                    escort_staff: {},
                   };
                   transPowerInfoList.forEach((Ttiem) => {
-                  var status=true;
+                    var status = true;
                     if (Ditem.capacity == Ttiem.id) {
-                      Ttiem.tractor=Ttiem.tractor?Ttiem.tractor:{};
-                      Ttiem.semitrailer=Ttiem.semitrailer?Ttiem.semitrailer:{};
-                      Ttiem.master_driver=Ttiem.master_driver?Ttiem.master_driver:{};
-                      Ttiem.vice_driver=Ttiem.vice_driver?Ttiem.vice_driver:{};
-                      Ttiem.escort_staff=Ttiem.escort_staff?Ttiem.escort_staff:{};
+                      Ttiem.tractor = Ttiem.tractor ? Ttiem.tractor : {};
+                      Ttiem.semitrailer = Ttiem.semitrailer ? Ttiem.semitrailer : {};
+                      Ttiem.master_driver = Ttiem.master_driver ? Ttiem.master_driver : {};
+                      Ttiem.vice_driver = Ttiem.vice_driver ? Ttiem.vice_driver : {};
+                      Ttiem.escort_staff = Ttiem.escort_staff ? Ttiem.escort_staff : {};
                       Ditem.transPowerInfo = Ttiem;
-                      status=false;
+                      status = false;
                     }
                   });
                 });

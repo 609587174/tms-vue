@@ -36,6 +36,10 @@ export default {
         param: 'card_number',
         width: ''
       }, {
+        title: '车号',
+        param: 'plate_number',
+        width: ''
+      }, {
         title: '费用时间',
         param: 'cost_date',
         width: '180'

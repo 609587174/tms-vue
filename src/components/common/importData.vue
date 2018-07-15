@@ -332,7 +332,9 @@ export default {
             this.pageData.currentPage = 1;
             this.getList();
             this.importSuccess(results.data.data.length);
-            this.matchingData(results.data.data);
+            if(results.data.data.length){
+              this.matchingData(results.data.data);
+            }
 
           } else {
             if (results.data.msg) {

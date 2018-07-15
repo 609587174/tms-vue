@@ -596,7 +596,7 @@ export default [{
           },
           component: (resolve) => require(['../page/statistics/costManage/costImport/editCostImport'], resolve)
         }, {
-          path: 'costImportWaybillDetail/:willId/:orderId',
+          path: 'costImportWaybillDetail/:willId',
           name: "costImportWaybillDetail",
           meta: {
             title: '运单详情',

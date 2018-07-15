@@ -168,7 +168,6 @@ export default {
           }
 
           this.$$http(apiName, postData).then((results) => {
-            console.log('部门', results.data);
             // this.pageLoading = false;
             this.submitBtn.btnText = '确 定';
             this.submitBtn.isLoading = false;
@@ -216,7 +215,6 @@ export default {
   watch: {
     staffDialog: {
       handler(val, oldVal) {　　　　　　
-        console.log('编辑', val, oldVal)
         const isSpace = (rule, value, callback) => {
           if (value.indexOf(" ") != -1) {
             callback(new Error('密码不能包含空格'));
@@ -225,8 +223,6 @@ export default {
           }
         };
         if (val.isShow && val.type === 'update') {
-          console.log('staffRow', this.staffRow)
-
           this.staffRules = {
             username: this.staffRow.username,
             password: '',

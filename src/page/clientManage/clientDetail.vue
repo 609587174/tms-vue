@@ -219,10 +219,10 @@ export default {
 
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

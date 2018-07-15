@@ -134,7 +134,6 @@ export default {
       };
       this.pageLoading = true;
       this.$$http('getStandardMileDetail', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
@@ -145,10 +144,10 @@ export default {
       })
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

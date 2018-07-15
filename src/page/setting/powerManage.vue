@@ -80,43 +80,47 @@
           <div class="nav-tab-setting">
             <el-tabs v-model="powerActive" @tab-click="powerClick">
               <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
-                <div class="position-list table-list">
-                  <div class="staff-radio text-right">
-                    <el-button type="primary" size="medium" @click="setPower">保存</el-button>
-                    <el-button size="medium" @click="cancel" v-if="selectMenusCopy.length||selectMenus.length">取消</el-button>
+                <div class="position-list">
+                  <div class="table-list">
+                    <div class="staff-radio text-right">
+                      <el-button type="primary" size="medium" @click="setPower">保存</el-button>
+                      <el-button size="medium" @click="cancel" v-if="selectMenusCopy.length||selectMenus.length">取消</el-button>
+                    </div>
+                    <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading" :class="{'tabal-height-500':!permissionsTableData.length}">
+                      <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+                        <template slot-scope="scope">
+                          <div v-if="item.param ==='menu_name'">{{scope.row.menu_name}}</div>
+                          <ul v-if="item.param ==='menu'">
+                            <li v-for="(item,key) in scope.row.second_menus">
+                              {{item.menu_name}}
+                            </li>
+                          </ul>
+                        </template>
+                      </el-table-column>
+                      <el-table-column label="操作" width="450">
+                        <template slot-scope="scope">
+                          <ul class="power-op">
+                            <li v-for="(item,key) in scope.row.second_menus">
+                              <el-checkbox-group v-model="selectMenus">
+                                <el-checkbox v-for="(itemThird,index) in item.third_menus" :label="itemThird.id" :key="index">{{itemThird.menu_name}}</el-checkbox>
+                              </el-checkbox-group>
+                            </li>
+                          </ul>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                    <no-data v-if="!permissionsLoading && !permissionsTableData.length"></no-data>
+                    <!-- <div class="page-list text-center">
+                      <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+                      </el-pagination>
+                    </div> -->
                   </div>
-                  <el-table :data="permissionsTableData" border style="width: 100%" size="mini" v-loading="permissionsLoading">
-                    <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                      <template slot-scope="scope">
-                        <div v-if="item.param ==='menu_name'">{{scope.row.menu_name}}</div>
-                        <ul v-if="item.param ==='menu'">
-                          <li v-for="(item,key) in scope.row.second_menus">
-                            {{item.menu_name}}
-                          </li>
-                        </ul>
-                      </template>
-                    </el-table-column>
-                    <el-table-column label="操作" width="450">
-                      <template slot-scope="scope">
-                        <ul class="power-op">
-                          <li v-for="(item,key) in scope.row.second_menus">
-                            <el-checkbox-group v-model="selectMenus">
-                              <el-checkbox v-for="(itemThird,index) in item.third_menus" :label="itemThird.id" :key="index">{{itemThird.menu_name}}</el-checkbox>
-                            </el-checkbox-group>
-                          </li>
-                        </ul>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                  <!-- <div class="page-list text-center">
-                    <el-pagination background layout="prev, pager, next,jumper" :total="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
-                    </el-pagination>
-                  </div> -->
                 </div>
               </el-tab-pane>
             </el-tabs>
-            <div class="user-no-data text-center text-stance" v-if="!positionTableData.length&&!permissionsLoading">
-              暂无数据
+
+            <div class="user-no-data" v-if="!positionTableData.length&&!permissionsLoading">
+              <no-data v-if="!permissionsLoading && !positionTableData.length"></no-data>
             </div>
           </div>
         </el-col>
@@ -265,7 +269,6 @@ export default {
       })
     },
     powerClick: function(tab, event) {
-      console.log('职位', tab, event);
       this.currentPositionId = tab.name;
       this.currentPositionName = tab.label;
       this.getPositionDetail();
@@ -274,7 +277,6 @@ export default {
     getPositionDetail: function() {
       this.$$http('getPositionDetail', { id: this.currentPositionId }).then((results) => {
         if (results.data && results.data.code == 0) {
-          console.log('getPositionDetail', results.data);
           this.currentPositionName = results.data.data.role_name;
           this.selectMenus = [];
           this.positionDetailMenus = results.data.data.menus;
@@ -289,7 +291,6 @@ export default {
             }
           }
           this.selectMenusCopy = this.selectMenus;
-          console.log('this.selectMenus', this.selectMenus);
 
         }
       }).catch((err) => {})

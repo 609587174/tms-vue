@@ -264,7 +264,6 @@ export default {
             income: this.detail.income, // 收入
             remark: '' //备注
           }
-          console.log('this.editMsgForm', this.detail, this.editMsgForm)
         }
       })
 
@@ -304,7 +303,6 @@ export default {
       let btnObject = btn;
       let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'waiting_charges', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      console.log('postDataNew', postData);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

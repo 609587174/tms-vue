@@ -140,7 +140,6 @@ export default {
   },
   methods: {
     getDetail: function() {
-      console.log('555555')
       this.pageLoading = true;
       this.$$http('getFreightDetail', {
         id: this.id
@@ -155,10 +154,10 @@ export default {
 
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     handleClick() {
 

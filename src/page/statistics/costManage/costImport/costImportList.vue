@@ -47,7 +47,7 @@
           </el-row>
         </div>
         <div class="table-list">
-          <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+          <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
             <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
               <template slot-scope="scope">
                 <div v-if="item.param === 'waybill'">
@@ -68,6 +68,7 @@
               </template>
             </el-table-column> -->
           </el-table>
+          <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
         </div>
         <div class="page-list text-center">
           <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -247,14 +248,10 @@ export default {
       this.pageLoading = true;
 
       this.$$http('getIncomeStatisticList', postData).then((results) => {
-        console.log('results', results.data.data.results);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
-
           this.pageData.totalCount = results.data.data.count;
-
-          console.log('this.tableData', this.tableData, this.pageData.totalCount);
         }
       }).catch((err) => {
         this.pageLoading = false;

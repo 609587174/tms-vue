@@ -54,7 +54,7 @@
       </el-row>
     </div>
     <div class="table-list mt-25">
-      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" @select-all="isAllSelectData" @select="singleSelectData" ref="table">
+      <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" @select-all="isAllSelectData" @select="singleSelectData" ref="table" :class="{'tabal-height-500':!tableData.length}">
         <el-table-column type="selection" width="55" :selectable="checkboxInit">
         </el-table-column>
         <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
@@ -77,6 +77,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <no-data v-if="!pageLoading && !tableData.length"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -151,7 +152,6 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
-      // console.log('全选',this.multipleSelection)
     },
     uploadApiUrl() {
       let domainUrl = '';
@@ -234,7 +234,6 @@ export default {
           if (this.tableData[i].id === row.id) {
             if (this.tableData[i].isSelect) {
               this.tableData[i].isSelect = false;
-              // console.log('dddddd',row.id)
               this.selectIds.push(row.id);
             } else {
               this.tableData[i].isSelect = true;
@@ -247,7 +246,6 @@ export default {
           if (this.tableData[i].id === row.id) {
             if (this.tableData[i].isSelect) {
               this.tableData[i].isSelect = false;
-              // console.log('dddddd',row.id)
               this.singleSelectIds.splice(this.singleSelectIds.findIndex(item => item === row.id), 1);
             } else {
               this.tableData[i].isSelect = true;
@@ -311,7 +309,6 @@ export default {
     },
     // 导入系统
     importsData() {
-      console.log('所选ID', this.multipleSelection)
       let postData = {};
       if (this.isAllSelect) postData.import = 'all';
       if (this.selectIds.length) postData.ids = this.selectIds;
@@ -412,8 +409,6 @@ export default {
       }
       // this.uploadFileData.uploadFileUrl = this.httpUrl + this.apiNameData.uploadApi;
       this.uploadFileData.uploadData.file = file.name;
-      console.log('上传前', this.uploadFileData);
-
       if((formatXls || formatXlsx) && fileSize){
         this.deleteData();
       }
@@ -430,7 +425,6 @@ export default {
     },
     // 上传成功
     uploadSuccess(response, file, fileList) {
-      console.log('上传成功', response, file, fileList);
       this.uploadBtn = {
         text: '上传导入数据',
         isLoading: false,

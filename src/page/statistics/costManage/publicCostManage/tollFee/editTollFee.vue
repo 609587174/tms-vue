@@ -244,7 +244,6 @@ export default {
       let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for(let i in this.waybillList){
-        console.log('运单ID',this.waybillList[i].id,this.editMsgForm.waybill_id)
         if(this.waybillList[i].id===this.editMsgForm.waybill_id){
           postData.waybill = this.waybillList[i].waybill_number;
         }

@@ -47,6 +47,10 @@ export default {
         title: '单价',
         param: 'unit_price',
         width: ''
+      }, {
+        title: '消费金额',
+        param: 'consumption_price',
+        width: ''
       }],
     };
   },

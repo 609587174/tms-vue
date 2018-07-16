@@ -75,7 +75,10 @@
   float: right;
   padding: 0 2em;
   color: black;
-  position:relative;
+  .notice{
+    display: inline-block;
+    position:relative;
+  }
   /deep/ .el-badge__content{
     &.is-fixed{
       top: 18px;
@@ -199,7 +202,7 @@
   position: absolute;
   font-size: 14px;
   top: 52px;
-  right: 220px;
+  right: -100px;
   .notice-temp-title{
     height: 50px;
     text-align: center;
@@ -267,9 +270,33 @@
             </el-breadcrumb>
           </div>
           <div class="usermenu" v-if="user.nick_name">
-            <el-badge :value="10" :max="10" class="item">
-              <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
-            </el-badge>
+            <div class="notice">
+              <div class="notice-temp" v-if="showNotice">
+                <div class="notice-temp-title">系统通知</div>
+                <div class="notice-temp-content">
+                  <ul>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                    <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
+                  </ul>
+                </div>
+                <div class="notice-temp-footer">
+                  <el-row>
+                    <el-col :span="12">
+                      <span class="cursor-pointer" v-on:click="signRead(true)">全部已读</span>
+                    </el-col>
+                    <el-col :span="12" class="text-right">
+                      <span class="cursor-pointer"v-on:click="signRead(false)">查看全部 ></span>
+                    </el-col>
+                  </el-row>
+                </div>
+              </div>
+              <el-badge :value="10" :max="10" class="item">
+                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+              </el-badge>
+            </div>
             <span class="ml-25 mr-25 text-stance fs-18">|</span>
             <i class="icon-user"></i>
             <el-dropdown trigger="click" @command="logout">
@@ -278,28 +305,7 @@
                 <el-dropdown-item>退出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <div class="notice-temp" v-if="showNotice">
-              <div class="notice-temp-title">系统通知</div>
-              <div class="notice-temp-content">
-                <ul>
-                  <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                  <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                  <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                  <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                  <li class="is-unread cursor-pointer">【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。<span>2018-07-07 16:23</span></li>
-                </ul>
-              </div>
-              <div class="notice-temp-footer">
-                <el-row>
-                  <el-col :span="12">
-                    <span class="cursor-pointer" v-on:click="signRead(true)">全部已读</span>
-                  </el-col>
-                  <el-col :span="12" class="text-right">
-                    <span class="cursor-pointer"v-on:click="signRead(false)">查看全部 ></span>
-                  </el-col>
-                </el-row>
-              </div>
-            </div>
+
             <!-- <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link> -->
           </div>
         </div>

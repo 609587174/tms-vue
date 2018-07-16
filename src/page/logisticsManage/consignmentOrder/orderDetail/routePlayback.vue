@@ -345,7 +345,6 @@ export default {
 
 
       let daySpace = Math.floor((end - start) / (1000 * 60 * 60 * 24));
-      console.log('daySpace', daySpace);
       return daySpace;
     },
     /* 获取到所有数据以后对数据进行再次组合排序 */
@@ -395,7 +394,6 @@ export default {
     /* 获取轨迹点数据ajax请求，一次请求默认获取1000条数据 */
     getTripRecords: function(startTime, endTime, currentPage, apiName) {
       return new Promise((resolve, reject) => {
-        console.log('this.choosedDeviceId', this.choosedDeviceId);
         let postData = {
           id: this.choosedDeviceId,
           page: currentPage,
@@ -674,9 +672,6 @@ export default {
         //轨迹点添加事件
         _this.pathSimplifierIns.on('pointMouseover pointClick', function(e, info) {
 
-          console.log('info', info);
-
-
           AMap.plugin('AMap.Geocoder', function() {
 
             let lnglat = [_this.totalDataResult[info.pointIndex].location.longitude, _this.totalDataResult[info.pointIndex].location.latitude]
@@ -745,7 +740,7 @@ export default {
 
           //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
           getMarker: function(dataItem, context, recycledMarker) {
-            console.log('dataItem', dataItem);
+
             let src = '';
             let rotateDeg = (dataItem.direction - 90) + 'deg';
             src = _this.getIconSrc(dataItem);
@@ -803,7 +798,7 @@ export default {
     setCurrentInfo: function() {
       let _this = this;
       let cursor = _this.navg1.getCursor(); //获取当前点信息，见高德api
-      console.log('cursor', cursor, cursor.idx, cursor.tail, Number(cursor.idx) >= 0, _this.totalDataResult.length);
+
       if (Number(cursor.idx) >= 0) {
         let pointMsgStr = '';
         let longitude = _this.totalDataResult[cursor.idx].location.longitude;
@@ -900,7 +895,6 @@ export default {
           allowTime--;
           /* 这里发现pathSimplifierIns有时还没初始化好,所以如果没有初始化好则再次执行renderPath */
           setTimeout(() => {
-            console.log('xxxx');
             _this.renderPath();
           }, 200)
         }
@@ -922,7 +916,6 @@ export default {
     },
     /* 停留点或者离线点，查看操作 */
     checkPoint: function(row) {
-      console.log('row', row);
       let _this = this;
       _this.isDisplay = false;
       _this.navg1.pause();
@@ -955,13 +948,14 @@ export default {
 
     },
     pauseDriving: function() { //暂停
-      this.isDisplay = false;
-      this.navg1.pause();
+      if (this.navg1) {
+        this.isDisplay = false;
+        this.navg1.pause();
+      }
     },
     resumeDriving: function() { //恢复
       this.isDisplay = true;
       let naviStatus = this.navg1.getNaviStatus();
-      console.log('naviStatus', naviStatus);
       if (naviStatus === 'stop') {
         this.infoWindow.open(this.map, this.resultPath[0]);
         this.navg1.setSpeed(this.speed);
@@ -978,7 +972,7 @@ export default {
       }
     },
     changeSpeed: function() {
-      this.navg1.setSpeed(this.speed);
+      this.navg1 && this.navg1.setSpeed(this.speed);
     },
     triggerAlert: function() {
       this.showLeftWindow = !this.showLeftWindow;
@@ -1002,7 +996,6 @@ export default {
             this.deviceDetail = results.data.data;
             this.carNumber = this.deviceDetail.tractor.plate_number;
             this.masterDriver = (this.deviceDetail.master_driver && this.deviceDetail.master_driver.name) ? this.deviceDetail.master_driver.name : '无';
-            console.log('deviceDetail', this.deviceDetail);
             resolve(results)
           } else {
             reject(results);
@@ -1057,7 +1050,6 @@ export default {
 
         this.$$http('getFulidDetalis', postData).then((results) => {
           if (results.data && results.data.code == 0) {
-            console.log('getFulidDetalis', results);
 
             let fluidDetail = results.data.data;
             fluidDetail.position_name = fluidDetail.actual_fluid_name;
@@ -1147,7 +1139,6 @@ export default {
             this.markerList.render(this.fluidStationList);
           });
         }
-        console.log('this.stationIdArray', this.stationIdArray, this.actualFluidId);
       });
 
       this.getDeviceDetail();
@@ -1157,7 +1148,6 @@ export default {
 
   },
   beforeDestroy() {
-    console.log('this beforeDestroy', this);
     if (this.navg1) {
       this.navg1.destroy();
     }

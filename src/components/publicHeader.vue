@@ -2,8 +2,9 @@
   <el-header>
     <el-row>
       <el-col :span="12">
-        <router-link :to="{path: '/'}"><div href="" title="运输管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div></router-link>
-
+        <router-link :to="{path: '/'}">
+          <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+        </router-link>
       </el-col>
       <el-col :span="12">
         <div class="usermenu text-right" v-if="users&&users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
@@ -59,6 +60,7 @@ export default {
         .catch(() => {});
     },
     signOut: function() {
+      /*
       this.$$http('signOut', {}).then((results) => {
         if (results.data && results.data.code == 0) {
           this.$message({
@@ -72,7 +74,17 @@ export default {
 
       }).catch((err) => {
         this.$message.error('退出失败');
-      })
+      })*/
+      this.$$http('signOut');
+
+      this.$message({
+        message: '退出成功',
+        type: 'success'
+      });
+      localStorage.clear();
+      this.$store.state.common.users = {};
+      this.$router.push({ path: '/login' });
+
     }
   }
 }

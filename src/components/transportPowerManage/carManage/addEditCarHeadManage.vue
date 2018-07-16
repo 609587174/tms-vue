@@ -614,7 +614,7 @@ export default {
 
 
           console.log('sendData', sendData.attributes, vm.headCarFormStep1)
-          vm.$$http('creatHeadFrom', sendData).then(function(result) {
+          vm.$$http('creatHeadFrom', sendData).then((result) => {
             vm.pageLoading = false;
             if (result.data.code == 0) {
               vm.headCarFormStep2.id = result.data.data.id;
@@ -622,7 +622,7 @@ export default {
               vm.headId = result.data.data.id;
               if (operation == 'out') {
                 //跳转查询详情页面
-                this.returnToPage();
+                vm.returnToPage();
                 //vm.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage?headId=" + vm.headId });
               } else {
                 vm.activeStep += 1;

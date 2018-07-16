@@ -40,7 +40,7 @@ export default {
         dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
-        dispatchDashboard:'OVERVIEW_DISPATCH_SECOND',
+        dispatchDashboard: 'OVERVIEW_DISPATCH_SECOND',
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
@@ -133,6 +133,7 @@ export default {
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
       if (isGoFirstPath) {
+        console.log('allowedRouter[0].children', allowedRouter);
         if (allowedRouter[0] && allowedRouter[0].children) {
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {

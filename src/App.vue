@@ -173,12 +173,13 @@ export default {
       return newRoute;
     },
     logoutDirect: function() {
+      localStorage.clear();
       //清除session
-      this.pbFunc.setLocalData('token', '');
+      //this.pbFunc.setLocalData('token', '');
       //清除菜单
-      this.pbFunc.setLocalData('menuList', '');
+      //this.pbFunc.setLocalData('menuList', '');
       //回到登录页
-      this.$router.replace({ path: '/login' });
+      // this.$router.replace({ path: '/login' });
     }
   },
   created: function(newPath) {

@@ -10,55 +10,7 @@ a {
   font-family: PingFangSC-Light!important;
 }
 
-.el-header {
-  background: #232F36;
-  height: 64px!important;
-  .bpm-head {
-    width: 1200px;
-    margin: 0 auto;
-    line-height: 64px;
-    color: #fff;
-    font-size: 16px;
-    img {
-      margin-top: 14px;
-    }
-    a {
-      color: #fff;
-      font-size: 16px;
-    }
 
-    .link {
-      width: 187px;
-      height: 36px;
-      border: 1px solid #fff;
-      display: inline-block;
-      border-radius: 4px;
-      text-align: center;
-      line-height: 34px;
-      margin-left: 40px;
-      position: relative;
-      top: 13px; // margin-top: 12px;
-      a {
-        width: 90px;
-        display: block;
-        float: left;
-        &:last-child {
-          border-left: 1px solid #fff;
-        }
-      }
-    }
-    .user {
-      display: inline-block;
-      margin-left: 30px;
-      .text-blue {
-        color: #4a9bf8;
-      }
-      span {
-        padding: 0 10px;
-      }
-    }
-  }
-}
 
 .el-main {
   padding: 0;
@@ -308,27 +260,7 @@ a {
 <template>
   <div>
     <el-container>
-      <el-header>
-        <div class="bpm-head">
-          <el-row>
-            <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
-            <el-col :span="18" class="text-right">
-              <a rel="nofollow" target="_blank" :href="driverAppUrl">司机端App下载</a>
-              <span>｜</span>
-              <a rel="nofollow" target="_blank" :href="businessAppUrl">业务端App下载</a>
-              <div v-if="user&&user.nick_name" class="user">
-                欢迎您：{{user.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
-                <span>|</span>
-                <a v-on:click="logout" class="cursor-pointer">退出</a>
-              </div>
-              <div class="link" v-else>
-                <router-link :to="{path: '/register'}" class="text-blue">注册</router-link>
-                <router-link :to="{path: '/login'}">登录</router-link>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-header>
+      <common-header :type="'index'" :app-url="appUrl" :login-link="isLogin"></common-header>
       <el-main>
         <div class="banner">
           <div class="banner-content">
@@ -447,14 +379,20 @@ a {
   </div>
 </template>
 <script>
+import commonHeader from '@/components/common/commonHeader'
 export default {
   name: 'index',
+  components: {
+    commonHeader: commonHeader
+  },
   data() {
     return {
       businessCodeImg: '', //业务端下载二维码
       driverCodeImg: '', //司机端下载二维码
-      businessAppUrl: '', //业务端下载链接
-      driverAppUrl: '', //司机端下载链接
+      appUrl: {
+        businessAppUrl: '', //业务端下载链接
+        driverAppUrl: '', //司机端下载链接
+      },
       user: this.pbFunc.getLocalData('users', true)
     };
   },
@@ -462,9 +400,6 @@ export default {
 
   },
   methods: {
-    // goLink() {
-    //   this.$router.push({ path: '/login' });
-    // },
     isLogin() {
       if (this.user && this.user.nick_name) {
         //this.$router.push({ path: '/dashboard/dispatchDashboard' });
@@ -473,67 +408,29 @@ export default {
         this.$router.push({ path: '/login' });
       }
     },
-    logout: function() {
-      this.$confirm("确定退出?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.signOut();
-        })
-        .catch(() => {});
-    },
-    signOut: function() {
-
-      /*this.$$http('signOut', {}).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.$message({
-            message: '退出成功',
-            type: 'success'
-          });
-          localStorage.clear();
-          this.user = '';
-          this.$router.push({ path: '/' });
-        }
-
-      }).catch((err) => {
-        this.$message.error('退出失败');
-      })*/
-
-      this.$$http('signOut');
-      this.$message({
-        message: '退出成功',
-        type: 'success'
-      });
-      localStorage.clear();
-      this.user = '';
-      this.$router.push({ path: '/' });
-
-    }
   },
   created() {
     let currentUrl = document.location.href.toString();
     if (currentUrl.match('ptms.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
     } else if (currentUrl.match('tms.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
     } else if (currentUrl.match('tms.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
     } else {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
     }
   }
 };

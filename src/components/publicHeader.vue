@@ -3,35 +3,29 @@
     <el-row>
       <el-col :span="12">
         <router-link :to="{path: '/'}">
-          <div href="" title="运输管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
+          <div title="运输管理系统" class="logo"><img class="log-img" src="../assets/img/91LNG.png"></div>
         </router-link>
       </el-col>
       <el-col :span="12">
-        <div class="usermenu text-right" v-if="users&&users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
+      <!--   <div class="usermenu text-right" v-if="users&&users.nick_name&&isFind">欢迎您：{{users.nick_name}}，
           <router-link :to="{path: '/orders/pickupOrders/ordersList'}" class="text-blue">进入91LNG</router-link><span class="division"></span>
-          <!-- <router-link :to="{path: '/'}">退出</router-link> -->
           <a v-on:click="logout" class="cursor-pointer">退出</a>
-        </div>
-        <div class="usermenu text-right" v-else>
+        </div> -->
+        <div class="usermenu text-right">
           <router-link :to="{path: '/register'}">注册</router-link><span class="division"></span>
           <router-link :to="{path: '/login'}">登录</router-link>
         </div>
       </el-col>
     </el-row>
   </el-header>
-  <!--
-  <div class="nav">
-    <div class="usermenu" v-if="user.name">
-      欢迎您：{{user.name}}
-      <router-link :to="{path: '/'}"><i class="el-icon-location"></i>首页</router-link>
-      <a href="javascript:;" @click="logout"><i class="el-icon-circle-close"></i>退出</a>
-    </div>
-  </div> -->
 </template>
 <script>
 export default {
   name: 'publicHeader',
-  props: ['isFind'],
+  props: {
+    users: Object,
+    logout: Function,
+  },
 
   data: function() {
 
@@ -40,52 +34,52 @@ export default {
     }
   },
   computed: {
-    users: function() {
-      console.log('users', this.$store.state.common.users);
-      return this.$store.state.common.users;
-    }
+    // users: function() {
+    //   console.log('users', this.$store.state.common.users);
+    //   return this.$store.state.common.users;
+    // }
 
   },
   methods: {
-    logout: function() {
-      this.$confirm("确定退出?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.signOut();
-          this.$emit("logout");
-        })
-        .catch(() => {});
-    },
-    signOut: function() {
-      /*
-      this.$$http('signOut', {}).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.$message({
-            message: '退出成功',
-            type: 'success'
-          });
-          localStorage.clear();
-          this.$store.state.common.users = {};
-          this.$router.push({ path: '/login' });
-        }
+    // logout: function() {
+    //   this.$confirm("确定退出?", "提示", {
+    //       confirmButtonText: "确定",
+    //       cancelButtonText: "取消",
+    //       type: "warning"
+    //     })
+    //     .then(() => {
+    //       this.signOut();
+    //       this.$emit("logout");
+    //     })
+    //     .catch(() => {});
+    // },
+    // signOut: function() {
 
-      }).catch((err) => {
-        this.$message.error('退出失败');
-      })*/
-      this.$$http('signOut');
+    //   this.$$http('signOut', {}).then((results) => {
+    //     if (results.data && results.data.code == 0) {
+    //       this.$message({
+    //         message: '退出成功',
+    //         type: 'success'
+    //       });
+    //       localStorage.clear();
+    //       this.$store.state.common.users = {};
+    //       this.$router.push({ path: '/login' });
+    //     }
 
-      this.$message({
-        message: '退出成功',
-        type: 'success'
-      });
-      localStorage.clear();
-      this.$store.state.common.users = {};
-      this.$router.push({ path: '/login' });
+    //   }).catch((err) => {
+    //     this.$message.error('退出失败');
+    //   })
+    //   this.$$http('signOut');
 
-    }
+    //   this.$message({
+    //     message: '退出成功',
+    //     type: 'success'
+    //   });
+    //   localStorage.clear();
+    //   this.$store.state.common.users = {};
+    //   this.$router.push({ path: '/login' });
+
+    // }
   }
 }
 

@@ -9,6 +9,29 @@
  */
 
 const api = {
+  batchReadMessages: {
+    url: '/notifications/web_messages/bulk_read/',
+    method: 'put',
+    desc: '消息批量已读',
+    param: {
+      ids:{
+        desc:'id'
+      }
+    }
+  },
+  getMessagesList: {
+    url: '/notifications/web_messages/',
+    method: 'get',
+    desc: '通知消息列表',
+    param: {
+      page:{
+        desc:'当前页数'
+      },
+      page_size:{
+        desc:'一页条数'
+      }
+    }
+  },
   exportsTemplate: {
     url: '/exports/cost/template/',
     method: 'post',

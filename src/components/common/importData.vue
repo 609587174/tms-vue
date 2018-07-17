@@ -167,38 +167,38 @@ export default {
       }
       this.uploadFileData.uploadFileUrl = domainUrl + this.apiNameData.uploadApi + '?ticket=' + (this.pbFunc.getLocalData('token', true) ? this.pbFunc.getLocalData('token', true) : '');
     },
-    exportsTemplate(){
-      let postData={
-        type:this.postData.exportType
+    exportsTemplate() {
+      let postData = {
+        type: this.postData.exportType
       }
       this.downTempBtn = {
-        text: '下载导入模板',
-        isLoading: true,
-        isDisabled: true,
-      },
-      this.$$http('exportsTemplate', postData).then((results) => {
-        this.downTempBtn = {
           text: '下载导入模板',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '下载导入模板成功！',
-            type: 'success'
-          });
-        }else{
+          isLoading: true,
+          isDisabled: true,
+        },
+        this.$$http('exportsTemplate', postData).then((results) => {
+          this.downTempBtn = {
+            text: '下载导入模板',
+            isLoading: false,
+            isDisabled: false,
+          }
+          if (results.data && results.data.code == 0) {
+            window.open(results.data.data.filename);
+            this.$message({
+              message: '下载导入模板成功！',
+              type: 'success'
+            });
+          } else {
+            this.$message.error('下载导入模板失败！');
+          }
+        }).catch((err) => {
           this.$message.error('下载导入模板失败！');
-        }
-      }).catch((err) => {
-        this.$message.error('下载导入模板失败！');
-        this.downTempBtn = {
-          text: '下载导入模板',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
+          this.downTempBtn = {
+            text: '下载导入模板',
+            isLoading: false,
+            isDisabled: false,
+          }
+        })
     },
     checkboxInit(row, index) {
       if (row.status.key === 'SUCCESS') {
@@ -284,28 +284,32 @@ export default {
       // }
     },
     // 匹配运单
-    matchingData(data){
+    matchingData(data) {
       let postData = {
-        data:data,
-        type:this.postData.type
+        data: data,
+        type: this.postData.type
       }
       this.$$http('matchingWaybill', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
+        if (results.data && results.data.code == 0) {
 
-          }
-        }).catch((err) => {
+        }
+      }).catch((err) => {
 
-        })
+      })
     },
     // 清除临时表
-    deleteData(){
-      this.$$http(this.apiNameData.deleteDataApi, {}).then((results) => {
+    deleteData() {
+      return new Promise((resolve, reject) => {
+        this.$$http(this.apiNameData.deleteDataApi, {}).then((results) => {
           if (results.data && results.data.code == 0) {
-
+            resolve(results);
+          } else {
+            reject(results);
           }
         }).catch((err) => {
-
+          reject(err);
         })
+      })
     },
     // 导入系统
     importsData() {
@@ -332,7 +336,7 @@ export default {
             this.pageData.currentPage = 1;
             this.getList();
             this.importSuccess(results.data.data.length);
-            if(results.data.data.length){
+            if (results.data.data.length) {
               this.matchingData(results.data.data);
             }
 
@@ -379,7 +383,7 @@ export default {
       //   //   });
       //   // }
       // });
-      nums = nums?nums:0;
+      nums = nums ? nums : 0;
       this.$confirm('成功导入' + nums + '条数据', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -411,8 +415,14 @@ export default {
       }
       // this.uploadFileData.uploadFileUrl = this.httpUrl + this.apiNameData.uploadApi;
       this.uploadFileData.uploadData.file = file.name;
-      if((formatXls || formatXlsx) && fileSize){
-        this.deleteData();
+      if ((formatXls || formatXlsx) && fileSize) {
+        this.deleteData().then((results)=>{
+          if (results.data && results.data.code == 0) {
+            return true;
+          }else{
+            return false
+          }
+        });
       }
       return (formatXls || formatXlsx) && fileSize;
     },

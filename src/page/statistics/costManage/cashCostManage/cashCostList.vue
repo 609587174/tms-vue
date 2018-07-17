@@ -30,7 +30,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="是否匹配:">
-                  <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
+                  <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
                     <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>

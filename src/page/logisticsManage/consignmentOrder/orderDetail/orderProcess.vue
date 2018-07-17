@@ -1055,7 +1055,19 @@ export default {
       } else if (type == 'cancleLoadEx') {
         vm.dialog.cancleLoadEx = true;
       } else if (type == 'sureMatch') {
-        var cancel_trip_list = [],
+        if(this.changeStatus=='modifying'){
+          vm.$confirm('卸车分段不能确认,是否前往【已匹配待确认】中确认', '请注意', {
+            confirmButtonText: '前往',
+            cancelButtonText: '取消',
+            type: 'warning',
+            center: true,
+          }).then(() => {
+            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match"});
+          }).catch(() => {
+
+          })
+        }else{
+          var cancel_trip_list = [],
           match_trip_list = [],
           sendData;
         this.detailData.forEach(item => {
@@ -1089,6 +1101,8 @@ export default {
           vm.pageLoading=false;
           vm.$message.error("确认卸货单失败")
         });
+        }
+        
       } else if (type == 'upInSettlement') {
         var sendData = {};
         sendData.id = this.setpId;
@@ -1204,6 +1218,7 @@ export default {
             vm.$$http("getSectionTrips", { id: vm.setpId }).then(stepInfo => {
               if (stepInfo.data.code == 0) {
                 vm.suerId = stepInfo.data.data.identify;
+                vm.changeStatus=stepInfo.data.data.interrupt_status.key;
                 vm.matchData(results.data.data);
                 vm.extendsArr.push(vm.detailData.length - 1);
                 if (vm.detailData[vm.detailData.length - 1].operation == "上传装车铅封"||vm.detailData[vm.detailData.length - 1].operation == "已匹配卸货单") {

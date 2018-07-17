@@ -167,7 +167,8 @@ export default {
   },
   props: {
     status: String,
-    countParam: Object
+    countParam: Object,
+    secondActiveName:String
   },
   methods: {
     changeTabs: function(name) {
@@ -295,7 +296,8 @@ export default {
       var status = targetName.name;
       //重新查询一次数据
       this.searchList(targetName);
-      this.$emit("changeTab", this.status);
+      //this.$emit("changeTab", this.status);
+      this.$emit("childchangeTabs", { first: this.status, second:targetName.name });
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
@@ -341,6 +343,7 @@ export default {
     this.assemblyData(this.countParam);
   },
   created() {
+    this.fifterName=this.secondActiveName;
     //this.listFifterData = this.listData;
     this.searchList();
   },

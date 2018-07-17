@@ -15,23 +15,23 @@
 </style>
 <template>
   <div class="setting">
-    <div class="nav-tab" v-if="false">
-      <div class="tab-screen">
+    <div class="nav-tab">
+      <div class="tab-screen border-top">
         <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
           <el-row>
             <el-col :span="12">
-              <el-input placeholder="请输入" v-model="searchFilters.keyword" class="search-filters-screen">
+              <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                 <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                   <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
               </el-input>
             </el-col>
           </el-row>
         </el-form>
       </div>
     </div>
-    <div class="setting-content">
+    <div class="setting-content mt-25">
       <el-row :gutter="22">
         <el-col :span="5">
           <div class="nav-tab-setting">
@@ -122,16 +122,15 @@ export default {
       isValid: '1',
       departmentActive: 'department',
       staffsActive: '',
+      searchPostData:{},
       searchFilters: {
-        employmentType: '',
-        isBind: '',
         keyword: '',
-        field: 'name',
+        field: 'nick_name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'name', value: '职位' },
-          { id: 'mobile_phone', value: '部门' },
+          { id: 'nick_name', value: '姓名' },
+          { id: 'phone', value: '电话号码' },
         ]
       },
       thTableList: [{
@@ -172,6 +171,11 @@ export default {
     }
   },
   methods: {
+    startSearch() {
+      this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+      this.getStaffsList(this.departmentRow, this.currentPositionId, this.isValid === '1' ? false : true);
+    },
     pageChange() {
       setTimeout(() => {
         this.getStaffsList(this.departmentRow, this.currentPositionId, this.isValid === '1' ? false : true);
@@ -244,8 +248,10 @@ export default {
         department: departmentInfo.id,
         is_deleted: isDeletd,
         page: this.pageData.currentPage,
-        carrier_role: positionId
+        carrier_role: positionId,
       };
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
       this.staffLoading = true;
       this.$$http('getStaffs', postData).then((results) => {
         if (results.data && results.data.code == 0) {

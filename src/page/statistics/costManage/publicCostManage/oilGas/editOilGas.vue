@@ -170,10 +170,10 @@ export default {
       this.$router.push({ path: "/statistics/costManage/publicCostManage/oilGas/oilGasList" });
       // }
     },
-     getWaybillData(){
+    getWaybillData() {
       let postData = {
-        datetime:this.detail.cost_date,
-        plate_number:this.detail.plate_number
+        datetime: this.detail.cost_date,
+        plate_number: this.detail.plate_number
         // datetime:'2018-06-13 22:10:15',
         // plate_number:'鲁HH5555'
       }
@@ -238,6 +238,11 @@ export default {
       let btnObject = btn;
       let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
+      for (let i in this.waybillList) {
+        if (this.waybillList[i].id === this.editMsgForm.waybill_id) {
+          postData.waybill = this.waybillList[i].waybill_number;
+        }
+      }
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);
       }

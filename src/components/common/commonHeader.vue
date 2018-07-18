@@ -71,7 +71,7 @@ export default {
               // this.$emit("logout");
               localStorage.clear();
               // this.users = [];
-              this.$router.push({ path: '/login' });
+              this.$router.push({ path: this.type === 'index' ? '/' : '/login' });
             }
 
           }).catch((err) => {

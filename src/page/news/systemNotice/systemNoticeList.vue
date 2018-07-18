@@ -14,7 +14,7 @@
         <el-tab-pane label="系统通知" name="system">
           <div class="news" v-loading="pageLoading" :class="{'tabal-height-500':!newsList.length}">
             <ul>
-              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id">
+              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead(item.id)">
                 <el-row :gutter="10">
                   <el-col :span="18">
                     <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。
@@ -43,7 +43,6 @@
             </ul>
             <no-data v-if="!pageLoading && !newsList.length"></no-data>
           </div>
-
           <div class="page-list text-center">
             <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
@@ -72,6 +71,11 @@ export default {
 
   },
   methods: {
+    pageChange() {
+      setTimeout(() => {
+        this.getList();
+      })
+    },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
@@ -88,21 +92,38 @@ export default {
         this.pageLoading = false;
       })
     },
-    batchRead() {
+    // 未读消息
+    getUnreadNewNum() {
+      this.$$http('getUnreadNewNum', {}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.$store.state.common.unreadNewNum = results.data.data.count;
+          // this.unreadNewNum = results.data.data.count;
+        }
+      }).catch((err) => {})
+    },
+    batchRead(id) {
       let postData = {
         ids: []
       }
-      for (let i in this.newsList) {
-        if (!this.newsList[i].read) {
-          postData.ids.push(this.newsList[i].id);
-        }
+      if (id) {
+        postData.ids.push(id)
+      } else {
+        for (let i in this.newsList) {
+          if (!this.newsList[i].read) {
+            postData.ids.push(this.newsList[i].id);
+          }
 
+        }
       }
       if (postData.ids.length) {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             this.getList();
-            // this.noticeList = results.data.data.results;
+            if(id){
+              this.$store.state.common.unreadNewNum --;
+            }else{
+              this.getUnreadNewNum();
+            }
           }
         }).catch((err) => {
 

@@ -9,6 +9,27 @@
  */
 
 const api = {
+  getExportTableTitle: {
+    url: '/exports/header/',
+    method: 'get',
+    desc: '导出列表头部',
+    param: {
+      page_arg:{
+        desc:'表格类型'
+      },
+      need_all:{
+        desc:'全部'
+      }
+    }
+  },
+  getUnreadNewNum: {
+    url: '/notifications/web_messages/unread_count/',
+    method: 'get',
+    desc: '未读信息的条数',
+    param: {
+
+    }
+  },
   batchReadMessages: {
     url: '/notifications/web_messages/bulk_read/',
     method: 'put',

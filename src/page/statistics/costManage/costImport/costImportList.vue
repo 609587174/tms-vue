@@ -151,11 +151,11 @@ export default {
         width: ''
       }, {
         title: '过路费（普通）',
-        param: ' road_toll_com',
+        param: 'road_toll_com',
         width: ''
       }, {
         title: '过路费（国家）',
-        param: ' road_toll_state',
+        param: 'road_toll_state',
         width: ''
       },{
         title: '过桥费',

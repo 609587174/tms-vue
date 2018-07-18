@@ -255,7 +255,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = [ 'waybill_id'];
+      let keyArray = ['waybill_id'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for(let i in this.waybillList){
         if(this.waybillList[i].id===this.editMsgForm.waybill_id){

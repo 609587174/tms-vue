@@ -42,7 +42,8 @@
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
-              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button>
+              <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
+              <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             </el-col>
           </el-row>
         </div>
@@ -96,10 +97,9 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      exportBtn: {
-        text: '导出',
-        isLoading: false,
-        isDisabled: false,
+      exportType: {
+        type: 'logistic',
+        filename: '物流费用统计'
       },
       activeName: 'logistics',
       leaveTime: [], //实际离站时间
@@ -195,7 +195,8 @@ export default {
         param: 'waiting_price',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      exportPostData: {} //导出筛选
     }
   },
   methods: {
@@ -224,57 +225,6 @@ export default {
       this.getList(this.statusActive);
 
     },
-    exportData() {
-      let postData = {
-        filename: '物流费用统计',
-        page_arg: 'logistic',
-        is_reconciliation: this.searchPostData.is_reconciliation,
-        ids: []
-      };
-      for (let i = 91; i <= 109; i++) {
-        postData.ids.push(i.toString());
-      }
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-
-      this.exportBtn = {
-        text: '导出中',
-        isLoading: true,
-        isDisabled: true,
-      }
-
-      this.$$http('exportLogisticData', postData).then((results) => {
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
-        }
-      }).catch((err) => {
-        this.$message.error('导出失败');
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
-    },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
@@ -292,7 +242,7 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getLogisticStatisticList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

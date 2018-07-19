@@ -14,7 +14,7 @@
         <el-tab-pane label="系统通知" name="system">
           <div class="news" v-loading="pageLoading" :class="{'tabal-height-500':!newsList.length}">
             <ul>
-              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead(item.id)">
+              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead(item)">
                 <el-row :gutter="10">
                   <el-col :span="18">
                     <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。
@@ -88,12 +88,25 @@ export default {
         }
       }).catch((err) => {})
     },
-    batchRead(id) {
+    // 详情跳转
+    urlLink(row) {
+      // switch(row){
+      //   case row.extra.action==='ADD_TRUCKS'
+      // }
+      // if(){
+
+      // }
+      // if (row.business_id || row.unload_id) {
+
+      // }
+    },
+    // 标记全部已读  单个已读
+    batchRead(row) {
       let postData = {
         ids: []
       }
-      if (id) {
-        postData.ids.push(id)
+      if (row) {
+        postData.ids.push(row.id)
       } else {
         for (let i in this.newsList) {
           if (!this.newsList[i].read) {
@@ -106,9 +119,9 @@ export default {
         this.$$http('batchReadMessages', postData).then((results) => {
           if (results.data && results.data.code == 0) {
             this.getList();
-            if(id){
-              this.$store.state.common.unreadNewNum --;
-            }else{
+            if (row) {
+              this.$store.state.common.unreadNewNum--;
+            } else {
               this.getUnreadNewNum();
             }
           }

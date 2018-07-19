@@ -184,7 +184,7 @@
           </el-breadcrumb>
         </div>
         <div class="usermenu" v-if="users.nick_name">
-          <div class="notice">
+          <div class="notice" v-if="false">
             <div class="notice-temp" v-if="showNotice">
               <div class="notice-temp-title">系统通知</div>
               <div class="notice-temp-content" v-loading="noticeLoading">
@@ -208,7 +208,7 @@
               <i class="icon-notice cursor-pointer" v-on:click="isShowNotice()" title=""></i>
             </el-badge>
           </div>
-          <span class="ml-25 mr-25 text-stance fs-18">|</span>
+          <!-- <span class="ml-25 mr-25 text-stance fs-18">|</span> -->
           <i class="icon-user"></i>
           <el-dropdown trigger="click" @command="logout">
             <span class="el-dropdown-link">Hi，{{users.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
@@ -270,7 +270,7 @@ export default {
         domainUrl = 'devtms.hhtdlng.com';
       }
       //,['c55f02c5-81e2-433c-84a0-e974d0642bab'],{'Authorization':''}
-      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/');
+      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/'+ this.users.id +'/');
       ws.onopen = function(event) {
         console.log('链接消息', event)
         ws.send({

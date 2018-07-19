@@ -51,7 +51,9 @@
 .padds {
   padding: 25px 0 0px 0
 }
-
+.label-list label {
+  width:100px;
+}
 </style>
 <template>
   <div>
@@ -719,7 +721,7 @@
       </el-tabs>
     </div>
     <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
-      <el-form ref="examinePoundForm" :rules="rules" :model="surePound" status-icon :label-position="'left'" v-if="detailData.length>0">
+      <el-form ref="examinePoundForm" :rules="rules" :model="surePound" status-icon :label-position="'right'" v-if="detailData.length>0" label-width="100px">
         <el-row>
           <el-col :span="20" :offset="2">
             <img :src="exPound.image_url" style='width:100%;max-height:500px'></img>
@@ -727,73 +729,61 @@
         </el-row>
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-            <div class="label-list">
               <el-form-item label="实际到厂时间:" prop="active_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
               <el-form-item label="实际到站时间:" prop="active_time" v-else>
                 <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
-            </div>
           </el-col>
           <el-col :span="10">
-            <div class="label-list">
               <el-form-item label="装车毛重(吨):" prop="gross_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
               </el-form-item>
               <el-form-item label="卸车毛重(吨):" prop="gross_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
               </el-form-item>
-            </div>
           </el-col>
         </el-row>
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-            <div class="label-list">
               <el-form-item label="装液开始时间:" prop="work_start_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
               <el-form-item label="卸车开始时间:" prop="work_start_time" v-else>
                 <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
-            </div>
           </el-col>
           <el-col :span="10">
-            <div class="label-list">
               <el-form-item label="装车皮重(吨):" prop="tare_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
               </el-form-item>
               <el-form-item label="卸车皮重(吨):" prop="tare_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
               </el-form-item>
-            </div>
           </el-col>
         </el-row>
         
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-            <div class="label-list">
               <el-form-item label="装液完成时间:" prop="work_end_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
               <el-form-item label="卸车完成时间:" prop="work_start_time" v-else>
                 <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
-            </div>
           </el-col>
           <el-col :span="10">
-            <div class="label-list">
               <el-form-item label="装车净重(吨):" prop="net_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
                 <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
               </el-form-item>
               <el-form-item label="卸车净重(吨):" prop="net_weight" v-else>
                 <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
               </el-form-item>
-            </div>
           </el-col>
         </el-row>
         <el-row style="margin-top:15px;" v-if="detailData[detailData.length - 1].type=='unloading_waiting_audit'">
-          <el-col :span="10" :offset="2">
+          <el-col :span="10" :offset="2" >
             <el-form-item label="离站时间:" prop="work_end_time" >
                 <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
@@ -1144,6 +1134,7 @@ export default {
           gross_weight: this.surePound.gross_weight,
           tare_weight: this.surePound.tare_weight,
           net_weight: this.surePound.net_weight,
+          leave_time:this.surePound.leave_time||null
         };
         // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
         //   sendData.status = 'waiting_settlement';

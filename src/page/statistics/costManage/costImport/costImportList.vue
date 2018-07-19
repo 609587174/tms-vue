@@ -42,7 +42,7 @@
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，报销费用合计{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
-              <!-- <el-button type="primary">导出</el-button> -->
+              <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportIncomeData'"></export-button>
             </el-col>
           </el-row>
         </div>
@@ -100,6 +100,7 @@ export default {
       leaveTime: [], //卸货完成时间
       activeTime: [], //实际装车时间
       activeName: 'costImport',
+      exportType:{},
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -198,7 +199,8 @@ export default {
         param: 'escort_staff',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -246,7 +248,7 @@ export default {
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getIncomeStatisticList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

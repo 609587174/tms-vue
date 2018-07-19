@@ -9,6 +9,22 @@
  */
 
 const api = {
+  exportIncomeData: {
+    url: '/exports/income/',
+    method: 'post',
+    desc: '费用导入统计',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   getExportTableTitle: {
     url: '/exports/header/',
     method: 'get',

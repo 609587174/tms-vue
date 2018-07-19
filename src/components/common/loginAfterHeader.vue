@@ -252,8 +252,8 @@ export default {
 
   },
   created() {
-    this.wsLink();
-    this.getUnreadNewNum();
+    // this.wsLink();
+    // this.getUnreadNewNum();
 
   },
   methods: {
@@ -269,9 +269,13 @@ export default {
       } else {
         domainUrl = 'devtms.hhtdlng.com';
       }
+      //,['c55f02c5-81e2-433c-84a0-e974d0642bab'],{'Authorization':''}
       let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/');
       ws.onopen = function(event) {
         console.log('链接消息', event)
+        ws.send({
+          authorization:'666666'
+        })
       }
       // $timeout(() => {
       //   ws.onopen = function(event) {

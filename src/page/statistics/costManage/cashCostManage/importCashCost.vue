@@ -18,14 +18,14 @@ export default {
     return {
       // requestData:{
       apiNameData: {
-        uploadApi: '/imports/cash-cost/',
-        importApi: 'importCashCostData',
-        listApi:'getCashCostData',
-        deleteDataApi:'deleteCashCostTemporaryData'
+        uploadApi: '/imports/cash-cost/', //上传导入数据接口url
+        importApi: 'importCashCostData', //导入系统apiName
+        listApi: 'getCashCostData', //上传之后临时表apiName
+        deleteDataApi: 'deleteCashCostTemporaryData' //清空临时表apiName
       },
-      postData:{
-        type:'CashCostManage',
-        exportType:'cash'
+      postData: {
+        matchingType: 'CashCostManage', //匹配运单apiName
+        exportType: 'cash' //导出模板类型参数
       },
       thTableList: [{
         title: '车号',

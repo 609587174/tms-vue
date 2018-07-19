@@ -100,7 +100,10 @@ export default {
       leaveTime: [], //卸货完成时间
       activeTime: [], //实际装车时间
       activeName: 'costImport',
-      exportType:{},
+      exportType: {
+        type: 'income',
+        filename: '费用导出统计'
+      },
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -146,7 +149,7 @@ export default {
         title: '公司油/气',
         param: 'com_oil',
         width: ''
-      },  {
+      }, {
         title: '高速费',
         param: 'high_cost',
         width: ''
@@ -158,7 +161,7 @@ export default {
         title: '过路费（国家）',
         param: 'road_toll_state',
         width: ''
-      },{
+      }, {
         title: '过桥费',
         param: 'pontage',
         width: ''
@@ -170,7 +173,7 @@ export default {
         title: '现金油/气（无票）',
         param: 'logistics_fuel_cash_no_ticket',
         width: ''
-      },{
+      }, {
         title: '检测费',
         param: 'detection_cost',
         width: ''
@@ -182,7 +185,7 @@ export default {
         title: '停车费',
         param: 'parking_fee',
         width: ''
-      },  {
+      }, {
         title: '其它费用',
         param: 'other_cost',
         width: ''

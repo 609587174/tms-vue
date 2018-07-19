@@ -24,7 +24,7 @@ export default {
         deleteDataApi:'deleteTollFeeTemporaryData'
       },
       postData:{
-        type:'HighwayFeeManage',
+        matchingType:'HighwayFeeManage',
         exportType:'highfree'
       },
       thTableList: [{

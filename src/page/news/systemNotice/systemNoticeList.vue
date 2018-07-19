@@ -27,19 +27,6 @@
                   </el-col>
                 </el-row>
               </li>
-              <!-- <li class="is-unread cursor-pointer">
-                <el-row :gutter="10">
-                  <el-col :span="18">
-                    【服务中心】您有业务单[S1806250011]燃投衡水故城正在 等待修改审批。
-                  </el-col>
-                  <el-col :span="4" class="text-right text-time">
-                    2018-07-07 16:23
-                  </el-col>
-                  <el-col :span="2" class="text-right">
-                    <el-button type="primary" size="mini">查看详情</el-button>
-                  </el-col>
-                </el-row>
-              </li> -->
             </ul>
             <no-data v-if="!pageLoading && !newsList.length"></no-data>
           </div>

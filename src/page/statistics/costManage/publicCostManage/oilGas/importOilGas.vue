@@ -24,7 +24,7 @@ export default {
         deleteDataApi:'deleteOilGasTemporaryData'
       },
       postData:{
-        type:'CorporateBusinessManage',
+        matchingType:'CorporateBusinessManage',
         exportType:'corporate'
       },
       thTableList: [{

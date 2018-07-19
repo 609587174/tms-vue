@@ -287,7 +287,7 @@ export default {
     matchingData(data) {
       let postData = {
         data: data,
-        type: this.postData.type
+        type: this.postData.matchingType
       }
       this.$$http('matchingWaybill', postData).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -336,7 +336,7 @@ export default {
             this.pageData.currentPage = 1;
             this.getList();
             this.importSuccess(results.data.data.length);
-            if (results.data.data.length) {
+            if (results.data.data.length && this.postData.matchingData) {
               this.matchingData(results.data.data);
             }
 
@@ -416,10 +416,10 @@ export default {
       // this.uploadFileData.uploadFileUrl = this.httpUrl + this.apiNameData.uploadApi;
       this.uploadFileData.uploadData.file = file.name;
       if ((formatXls || formatXlsx) && fileSize) {
-        this.deleteData().then((results)=>{
+        this.deleteData().then((results) => {
           if (results.data && results.data.code == 0) {
             return true;
-          }else{
+          } else {
             return false
           }
         });

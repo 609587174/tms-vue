@@ -186,7 +186,7 @@
           <el-row justify="space-between" type="flex">
             <el-col :span="4" :title="props.row.delivery_order.order_number" class="whiteSpan">订单号:{{props.row.delivery_order.order_number}}</el-col>
             <el-col :span="4" :title="props.row.waybill.waybill_number" class="whiteSpan">
-              <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span>运单号:{{props.row.waybill.waybill_number}}</span></a>
+              <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a>
             </el-col>
             <el-col :span="3" :title="props.row.business_order.order_number" class="whiteSpan" v-if="props.row.business_order.order_number">卸货单号:{{props.row.business_order.order_number}}</el-col>
             <el-col :span="4" :title="props.row.delivery_order.trader" class="whiteSpan">托运商:{{props.row.delivery_order.trader}}</el-col>

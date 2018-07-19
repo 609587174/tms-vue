@@ -19,12 +19,11 @@ export default {
       // requestData:{
       apiNameData: {
         uploadApi: '/imports/cash-cost/',
-        importApi: 'importCashCostData',
-        listApi:'getCashCostData',
-        deleteDataApi:'deleteCashCostTemporaryData'
+        importApi: 'importPersonData',
+        listApi:'getPersonTemporaryData',
+        deleteDataApi:'deletePersonTemporaryData'
       },
       postData:{
-        type:'CashCostManage',
         exportType:'cash'
       },
       thTableList: [{

@@ -34,7 +34,7 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
+            <el-button type="primary" plain @click="importList">导入</el-button>
             <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
             <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPersonData'"></export-button>
             <el-button type="success" @click="addPerson">新增</el-button>
@@ -175,7 +175,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { operate: 'add' } });
     },
     importList: function() {
-      this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });
+      this.$router.push({ path: "/transportPowerManage/personManage/importPersonManage" });
     },
     exportList: function() {
 

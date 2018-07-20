@@ -124,7 +124,11 @@ export default {
           if (results.data && results.data.code == 0) {
             this.getList();
             if (row) {
-              this.$store.state.common.unreadNewNum--;
+              if (this.$store.state.common.unreadNewNum) {
+                this.$store.commit('ChangeMsgNum', {
+                  num: -1
+                });
+              }
               if (this.isShowLink(row)) {
                 this.urlLink(row);
               }

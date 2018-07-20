@@ -337,7 +337,7 @@ export default {
             this.pageData.currentPage = 1;
             this.getList();
             this.importSuccess(results.data.data.length);
-            if (results.data.data.length && this.postData.matchingData) {
+            if (results.data.data.length && this.postData.matchingType) {
               this.matchingData(results.data.data);
             }
 

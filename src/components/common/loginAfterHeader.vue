@@ -205,7 +205,7 @@
               </div>
             </div>
             <span slot="reference">
-              <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
+              <el-badge :value="$store.state.common.unreadNewNum" :max="100" class="item">
                 <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
               </el-badge>
             </span>
@@ -238,7 +238,7 @@ export default {
       showNotice: false,
       noticeLoading: false,
       noticeList: [],
-      unreadNewNum: 0
+      unreadNewNum: 0,
     }
   },
   computed: {
@@ -254,10 +254,10 @@ export default {
   created() {
     this.wsLink();
     this.getUnreadNewNum();
-
   },
   methods: {
     wsLink() {
+      let vm = this;
       let currentUrl = document.location.href.toString();
       let domainUrl = '';
       if (currentUrl.match('ptms.91lng.cn')) {
@@ -273,26 +273,27 @@ export default {
       let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       ws.onopen = function(event) {
         console.log('链接消息', event)
-
       }
-      // $timeout(() => {
-      //   ws.onopen = function(event) {
-      //     console.log('重新链接消息', event)
-      //   }
-      // }, 10000)
-      ws.onmessage = function(event) {
+      ws.onmessage = (event) => {
         console.log('接收的消息', event.data);
-        let msg = JSON.parse(event.data)
-        this.$notify({
-          title: '自定义位置',
-          message: msg.content,
-          position: 'bottom-right'
+        let msg = JSON.parse(event.data);
+        vm.$store.commit('ChangeMsgNum', {
+          num: 1
         });
+        vm.$notify({
+          title: msg.message_type.verbose,
+          message: msg.content,
+          position: 'bottom-right',
+          duration: 0
+        });
+      }
+      ws.onerror = (event) => {
+        // vm.wsLink();
+      }
+      ws.onclose = (event) => {
+        // vm.wsLink();
+      }
 
-      }
-      ws.onerror = function(event) {
-        console.log('报错', event)
-      }
     },
     // 未读消息
     getUnreadNewNum() {
@@ -324,7 +325,7 @@ export default {
       })
     },
     isShowLink(row) {
-      if (row.order_id || row.delivery_id || row.waybill_id) {
+      if (row.delivery_id || row.waybill_id) {
         return true;
       } else {
         return false;
@@ -332,12 +333,12 @@ export default {
     },
     // 详情跳转
     urlLink(row) {
-      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
-        this.$router.push({ path: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
-      } else if (row.order_id || row.delivery_id) {
-        this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.delivery_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.delivery_id + '/add' });
+      } else if (row.delivery_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + row.delivery_id + '/add' });
       } else if (row.waybill_id) {
-        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trips_id });
       }
     },
     signRead(isShow, row) {
@@ -352,7 +353,6 @@ export default {
             if (!this.noticeList[i].read) {
               postData.ids.push(this.noticeList[i].id);
             }
-
           }
         }
         console.log('postData', postData)
@@ -360,7 +360,9 @@ export default {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
               if (row) {
-                this.$store.state.common.unreadNewNum--;
+                if (this.$store.state.common.unreadNewNum) {
+                  this.$store.state.common.unreadNewNum--;
+                }
                 if (this.isShowLink(row)) {
                   this.urlLink(row);
                 }

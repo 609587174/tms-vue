@@ -46,10 +46,12 @@ export default {
             isDisabled: false,
           }
           if (results.data && results.data.code == 0) {
+            let ids = [];
             for (let i in results.data.data) {
-              this.tableIds.push(results.data.data[i].id);
-              resolve(results);
+              ids.push(results.data.data[i].id);
             }
+            this.tableIds = ids.join(',');
+            resolve(results);
           } else {
             this.$message.error('导出失败');
             reject(results);

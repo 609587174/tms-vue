@@ -137,6 +137,7 @@ export default {
         fluid_site: this.searchFilters.station,
         trader: this.searchFilters.carriers
       };
+      console.log('postData',postData);
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       // postData[this.searchFilters.field] = this.searchFilters.keyword;

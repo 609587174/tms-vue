@@ -14,7 +14,7 @@
         <el-tab-pane label="系统通知" name="system">
           <div class="news" v-loading="pageLoading" :class="{'tabal-height-500':!newsList.length}">
             <ul>
-              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead(item)">
+              <li class="cursor-pointer" v-for="(item,index) in newsList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="batchRead('',item)">
                 <el-row :gutter="10">
                   <el-col :span="18">
                     <span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。
@@ -22,7 +22,7 @@
                   <el-col :span="4" class="text-right text-time">
                     {{item.created_at}}
                   </el-col>
-                  <el-col :span="2" class="text-right">
+                  <el-col :span="2" class="text-right" v-if="isShowLink(item)">
                     <el-button type="primary" size="mini">查看详情</el-button>
                   </el-col>
                 </el-row>
@@ -88,31 +88,35 @@ export default {
         }
       }).catch((err) => {})
     },
+    isShowLink(row) {
+      if (row.order_id || row.delivery_id || row.waybill_id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     // 详情跳转
     urlLink(row) {
-      // switch(row){
-      //   case row.extra.action==='ADD_TRUCKS'
-      // }
-      // if(){
-
-      // }
-      // if (row.business_id || row.unload_id) {
-
-      // }
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
+      } else if (row.order_id || row.delivery_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      } else if (row.waybill_id) {
+        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+      }
     },
     // 标记全部已读  单个已读
-    batchRead(row) {
+    batchRead(even, row) {
       let postData = {
         ids: []
       }
       if (row) {
-        postData.ids.push(row.id)
+        postData.ids.push(row.id);
       } else {
         for (let i in this.newsList) {
           if (!this.newsList[i].read) {
             postData.ids.push(this.newsList[i].id);
           }
-
         }
       }
       if (postData.ids.length) {
@@ -121,6 +125,9 @@ export default {
             this.getList();
             if (row) {
               this.$store.state.common.unreadNewNum--;
+              if (this.isShowLink(row)) {
+                this.urlLink(row);
+              }
             } else {
               this.getUnreadNewNum();
             }

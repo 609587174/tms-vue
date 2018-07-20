@@ -42,8 +42,8 @@ const api = {
   },
   exportIncomeData: {
     url: '/exports/income/',
-    method: 'post',
-    desc: '费用导入统计',
+    method: 'get',
+    desc: '费用导入统计导出',
     param: {
       filename: {
         desc: '文件名'
@@ -348,7 +348,7 @@ const api = {
   },
   exportLogisticData: {
     url: '/exports/logistic/',
-    method: 'post',
+    method: 'get',
     desc: '物流费用统计',
     param: {
       filename: {
@@ -364,7 +364,7 @@ const api = {
   },
   exportSemitrailerData: {
     url: '/exports/semitrailer/',
-    method: 'post',
+    method: 'get',
     desc: '导出挂车',
     param: {
       filename: {
@@ -380,7 +380,7 @@ const api = {
   },
   exportTruckData: {
     url: '/exports/truck/',
-    method: 'post',
+    method: 'get',
     desc: '导出牵引车',
     param: {
       filename: {
@@ -396,7 +396,7 @@ const api = {
   },
   exportPersonData: {
     url: '/exports/driver/',
-    method: 'post',
+    method: 'get',
     desc: '导出人员管理',
     param: {
       filename: {

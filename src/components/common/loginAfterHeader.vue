@@ -106,10 +106,9 @@
 // 消息通知
 .notice-temp {
   background-color: #fff;
-  width: 386px;
+  width: 100%;
   height: 422px;
-  box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5);
-  position: absolute;
+  box-shadow: 0px 0px 7px 0px rgba(107, 107, 107, 0.5); //position: absolute;
   font-size: 14px;
   top: 52px;
   right: -100px;
@@ -184,31 +183,34 @@
           </el-breadcrumb>
         </div>
         <div class="usermenu" v-if="users.nick_name">
-          <div class="notice" v-if="false">
-            <div class="notice-temp" v-if="showNotice">
-              <div class="notice-temp-title">系统通知</div>
-              <div class="notice-temp-content" v-loading="noticeLoading">
-                <ul>
-                  <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
-                </ul>
-              </div>
-              <div class="notice-temp-footer">
-                <el-row>
-                  <el-col :span="12">
-                    <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
-                  </el-col>
-                  <el-col :span="12" class="text-right">
-                    <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
-                  </el-col>
-                </el-row>
+          <el-popover placement="top" width="386" trigger="click" v-model="showNotice">
+            <div class="notice" v-if="!false">
+              <div class="notice-temp" v-if="showNotice">
+                <div class="notice-temp-title">系统通知</div>
+                <div class="notice-temp-content" v-loading="noticeLoading">
+                  <ul>
+                    <li class="cursor-pointer" v-for="(item,index) in noticeList" :class="item.read?'':'is-unread'" :key="item.id" v-on:click="signRead(true,item)"><span v-if="item.message_type.key">【{{item.message_type.verbose}}】</span>{{item.content}}。<span class="time">{{item.created_at}}</span></li>
+                  </ul>
+                </div>
+                <div class="notice-temp-footer">
+                  <el-row>
+                    <el-col :span="12">
+                      <span class="cursor-pointer" v-on:click="signRead(true)">一键已读</span>
+                    </el-col>
+                    <el-col :span="12" class="text-right">
+                      <span class="cursor-pointer" v-on:click="signRead(false)">查看全部 ></span>
+                    </el-col>
+                  </el-row>
+                </div>
               </div>
             </div>
-            <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
-              <!-- {{$store.state.common.unreadNewNum}} -->
-              <i class="icon-notice cursor-pointer" v-on:click="isShowNotice()" title=""></i>
-            </el-badge>
-          </div>
-          <!-- <span class="ml-25 mr-25 text-stance fs-18">|</span> -->
+            <span slot="reference">
+              <el-badge :value="$store.state.common.unreadNewNum" :max="10" class="item">
+                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+              </el-badge>
+            </span>
+          </el-popover>
+          <span class="ml-25 mr-25 text-stance fs-18">|</span>
           <i class="icon-user"></i>
           <el-dropdown trigger="click" @command="logout">
             <span class="el-dropdown-link">Hi，{{users.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
@@ -229,8 +231,6 @@ export default {
   props: {
     users: Object,
     logout: Function,
-
-
   },
 
   data: function() {
@@ -252,8 +252,8 @@ export default {
 
   },
   created() {
-    // this.wsLink();
-    // this.getUnreadNewNum();
+    this.wsLink();
+    this.getUnreadNewNum();
 
   },
   methods: {
@@ -270,12 +270,10 @@ export default {
         domainUrl = 'devtms.hhtdlng.com';
       }
       //,['c55f02c5-81e2-433c-84a0-e974d0642bab'],{'Authorization':''}
-      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/'+ this.users.id +'/');
+      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       ws.onopen = function(event) {
         console.log('链接消息', event)
-        ws.send({
-          authorization:'666666'
-        })
+
       }
       // $timeout(() => {
       //   ws.onopen = function(event) {
@@ -283,10 +281,12 @@ export default {
       //   }
       // }, 10000)
       ws.onmessage = function(event) {
-        console.log('接收的消息', event.data)
+        console.log('接收的消息', event.data);
+        let msg = JSON.parse(event.data)
         this.$notify({
-          title: '系统通知',
-          message: event.data,
+          title: '自定义位置',
+          message: msg.content,
+          position: 'bottom-right'
         });
 
       }
@@ -311,7 +311,7 @@ export default {
         page: 1,
         page_size: 5,
       }
-      if (this.unreadNewNum) {
+      if (this.$store.state.common.unreadNewNum) {
         postData.unread_only = true;
       }
       this.$$http('getMessagesList', postData).then((results) => {
@@ -323,20 +323,50 @@ export default {
         this.noticeLoading = false;
       })
     },
-    signRead(isShow) {
+    isShowLink(row) {
+      if (row.order_id || row.delivery_id || row.waybill_id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    // 详情跳转
+    urlLink(row) {
+      if (row.extra && row.extra.action === 'ADD_TRUCKS' && row.order_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/' + row.order_id + '/add' });
+      } else if (row.order_id || row.delivery_id) {
+        this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
+      } else if (row.waybill_id) {
+        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+      }
+    },
+    signRead(isShow, row) {
       if (isShow) {
         let postData = {
           ids: []
         }
-        for (let i in this.noticeList) {
-          if (!this.noticeList[i].read) {
-            postData.ids.push(this.noticeList[i].id);
+        if (row) {
+          postData.ids.push(row.id);
+        } else {
+          for (let i in this.noticeList) {
+            if (!this.noticeList[i].read) {
+              postData.ids.push(this.noticeList[i].id);
+            }
+
           }
         }
+        console.log('postData', postData)
         if (postData.ids.length) {
           this.$$http('batchReadMessages', postData).then((results) => {
             if (results.data && results.data.code == 0) {
-              this.getUnreadNewNum();
+              if (row) {
+                this.$store.state.common.unreadNewNum--;
+                if (this.isShowLink(row)) {
+                  this.urlLink(row);
+                }
+              } else {
+                this.getUnreadNewNum();
+              }
             }
           }).catch((err) => {})
         }

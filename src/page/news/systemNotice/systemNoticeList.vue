@@ -102,7 +102,7 @@ export default {
       } else if (row.order_id || row.delivery_id) {
         this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + (row.order_id ? row.order_id : row.delivery_id) + '/add' });
       } else if (row.waybill_id) {
-        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.waybill_id });
+        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trip_id });
       }
     },
     // 标记全部已读  单个已读

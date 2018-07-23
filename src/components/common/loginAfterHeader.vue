@@ -262,9 +262,9 @@ export default {
       let domainUrl = '';
       if (currentUrl.match('ptms.91lng.cn')) {
         domainUrl = 'ptms.91lng.cn';
-      } else if (currentUrl.match('tms.hhtdlng.com')) {
+      } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
         domainUrl = 'tms.hhtdlng.com';
-      } else if (currentUrl.match('tms.91lng.cn')) {
+      } else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
         domainUrl = 'tms.91lng.cn';
       } else {
         domainUrl = 'devtms.hhtdlng.com';
@@ -338,7 +338,7 @@ export default {
       } else if (row.delivery_id) {
         this.$router.push({ path: '/orders/pickupOrders/orderDetail/orderDetailTab/' + row.delivery_id + '/add' });
       } else if (row.waybill_id) {
-        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trips_id });
+        this.$router.push({ path: '/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/' + row.waybill_id + '/' + row.section_trip_id });
       }
     },
     signRead(isShow, row) {

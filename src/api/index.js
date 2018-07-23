@@ -18,6 +18,7 @@ let timeout = 20000;
 /* 配置访问url */
 let domainUrl = '';
 
+
 export const getDomainUrl = function(prefix=''){//掐指一算五个环境
   let currentUrl = document.location.href.toString();
   let domainUrl = '';

@@ -47,6 +47,13 @@
             </keep-alive>
           </div>
         </el-tab-pane>
+        <el-tab-pane :label="statusName.all_finish_count" name="seven">
+          <div v-if="activeName=='seven'">
+            <keep-alive>
+              <orderStatusComonents :status="activeName" @changeTab="changeTabs" @childchangeTabs="childchangeTabs" :countParam="allcounts['all_count']" @reshCount="reshCount" :secondActiveName="secondActiveName"></orderStatusComonents>
+            </keep-alive>
+          </div>
+        </el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -74,7 +81,8 @@ export default {
         all_unload_count:'卸车',
         all_settlement_count:'结算',
         all_change_count:'变更中',
-        all_finish_count:'历史'
+        all_finish_count:'历史',
+        all_count:'全部'
       },
       allStatusName:{
         all_driver_count:'装车',
@@ -82,7 +90,8 @@ export default {
         all_unload_count:'卸车',
         all_settlement_count:'结算',
         all_change_count:'变更中',
-        all_finish_count:'历史'
+        all_finish_count:'历史',
+        all_count:'全部'
       },
       allcounts:{
         'all_driver_count':{},
@@ -91,6 +100,7 @@ export default {
         'all_settlement_count':{},
         'all_change_count':{},
         'all_finish_count':{},
+        'all_count':{}
       },
       timeParam: [],
       listFifterData: [],

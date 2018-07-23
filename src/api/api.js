@@ -20,6 +20,16 @@ const api = {
     }
   },
   getPersonTemporaryData: {
+    url: '/imports/export-carrier-driver/',
+    method: 'get',
+    desc: '获取临时表',
+    param: {
+      import: {
+        desc: 'all'
+      }
+    }
+  },
+  getPersonTemporaryData: {
     url: '/imports/base-carrier-driver/',
     method: 'get',
     desc: '导入人员数据进临时列表',

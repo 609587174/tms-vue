@@ -10,7 +10,7 @@
 <script>
 import importData from '@/components/common/importData'
 export default {
-  name: 'importCashCost',
+  name: 'importPersonManage',
   components: {
     importData: importData,
   },
@@ -18,13 +18,13 @@ export default {
     return {
       // requestData:{
       apiNameData: {
-        uploadApi: '/imports/cash-cost/',
+        uploadApi: '/imports/base-carrier-driver/',
         importApi: 'importPersonData',
         listApi:'getPersonTemporaryData',
         deleteDataApi:'deletePersonTemporaryData'
       },
       postData:{
-        exportType:'cash'
+        exportType:'driver'
       },
       thTableList: [{
         title: '姓名',

@@ -147,6 +147,7 @@ export default {
   created() {
     this.uploadApiUrl();
     this.getList();
+    // this.deleteData();
     // this.importSuccess();
   },
   methods: {
@@ -497,6 +498,7 @@ export default {
             //   }
             // }
           }
+          console.log('table',this.tableData);
           // if (this.isAllSelect) {
           this.$nextTick(function() {
             this.checked();

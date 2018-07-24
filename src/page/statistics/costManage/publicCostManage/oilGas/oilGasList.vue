@@ -237,8 +237,8 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      this.getList(this.statusActive);
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+      this.getList();
 
     },
     getList() {
@@ -268,7 +268,7 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.getList();
   }
 
 }

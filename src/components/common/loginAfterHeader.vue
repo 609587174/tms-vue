@@ -239,6 +239,7 @@ export default {
       noticeLoading: false,
       noticeList: [],
       unreadNewNum: 0,
+      wsNum: 10
     }
   },
   computed: {
@@ -287,11 +288,15 @@ export default {
           duration: 0
         });
       }
-      ws.onerror = (event) => {
-        // vm.wsLink();
-      }
+      // ws.onerror = (event) => {
+      //   // vm.wsLink();
+      // }
       ws.onclose = (event) => {
-        // vm.wsLink();
+        this.wsNum--;
+        if (this.wsNum > 0) {
+          vm.wsLink();
+        }
+
       }
 
     },

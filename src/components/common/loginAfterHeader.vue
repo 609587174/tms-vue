@@ -204,9 +204,9 @@
                 </div>
               </div>
             </div>
-            <span slot="reference">
-              <el-badge :value="$store.state.common.unreadNewNum" :max="100" class="item">
-                <i class="icon-notice cursor-pointer" v-on:click="isShowNotice"></i>
+            <span slot="reference" v-on:click="isShowNotice">
+              <el-badge :value="$store.state.common.unreadNewNum?$store.state.common.unreadNewNum:''" :max="10" class="item">
+                <i class="icon-notice cursor-pointer"></i>
               </el-badge>
             </span>
           </el-popover>
@@ -315,6 +315,7 @@ export default {
       if (this.$store.state.common.unreadNewNum) {
         postData.unread_only = true;
       }
+      this.getUnreadNewNum();
       this.$$http('getMessagesList', postData).then((results) => {
         this.noticeLoading = false;
         if (results.data && results.data.code == 0) {

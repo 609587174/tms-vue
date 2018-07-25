@@ -107,12 +107,12 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      costTime: [], //费用时间
+      costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
       activeName: 'cashCost',
       searchPostData: {}, //搜索参数
       searchFilters: {
         cost_type: '',
-        is_matching:'',
+        is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
         keyword: '',
         field: 'plate_number',
       },
@@ -122,7 +122,7 @@ export default {
           { id: 'yes', value: '已匹配' },
           { id: 'no', value: '未匹配' }
         ],
-        costSelect:[
+        costSelect: [
           { id: '', value: '全部' },
           { id: 'logistics_high_speed', value: '过路费（普通）' },
           { id: 'logistics_high_speed_cash', value: '过路费（国家）' },
@@ -188,10 +188,10 @@ export default {
         this.getList();
       })
     },
-    importData(){
+    importData() {
       this.$router.push({ path: `/statistics/costManage/cashCostManage/importCashCost` });
     },
-    exportData(){
+    exportData() {
 
     },
     clicktabs: function(targetName) {
@@ -206,7 +206,7 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
-      }else if (tpye === 'edit') {
+      } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/costManage/cashCostManage/editCashCost`, query: { id: row.id } });
       }
     },
@@ -214,13 +214,16 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
+      }
     },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
         cost_type: this.searchPostData.cost_type,
-        is_matching:this.searchPostData.is_matching
+        is_matching: this.searchPostData.is_matching
       };
       if (this.costTime instanceof Array && this.costTime.length > 0) {
         postData.cost_date_start = this.costTime[0];
@@ -243,7 +246,7 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.getList();
   }
 
 }

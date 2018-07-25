@@ -130,12 +130,12 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      costTime: [], //费用时间
+      costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
       activeName: 'publicCost',
       costActive: 'tollFee',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        is_matching: '',
+        is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
         keyword: '',
         field: 'plate_number',
       },
@@ -244,7 +244,9 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
-
+      if(this.pbFunc.objSize(this.$route.query)){
+        this.$router.push({ path: this.$route.path })
+      }
     },
     getList() {
       let postData = {

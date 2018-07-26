@@ -55,6 +55,10 @@ export default {
         title: '税额',
         param: 'tax_amount',
         width: ''
+      }, {
+        title: '是否为行程内费用',
+        param: 'is_travel.verbose',
+        width: ''
       }],
     };
   },

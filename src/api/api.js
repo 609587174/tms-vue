@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getLedgerList: {
+    url: '/statistic/ledger/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
   importPersonData: {
     url: '/imports/export-carrier-driver/',
     method: 'post',

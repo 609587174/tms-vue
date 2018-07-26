@@ -51,6 +51,10 @@ export default {
         title: '服务费',
         param: 'service_charge',
         width: ''
+      }, {
+        title: '是否为行程内费用',
+        param: 'is_travel.verbose',
+        width: ''
       }],
     };
   },

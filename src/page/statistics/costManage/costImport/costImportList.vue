@@ -62,11 +62,11 @@
                 <div>{{scope.row.income}}</div>
               </template>
             </el-table-column>
-            <!-- <el-table-column label="操作" align="center" width="100" fixed="right">
+            <el-table-column label="行程外费用" align="center" width="140" fixed="right">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                <div>{{scope.row.extra_fee}}</div>
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </el-table>
           <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
         </div>

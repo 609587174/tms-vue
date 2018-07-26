@@ -42,7 +42,7 @@ export default {
         title: '人员所属',
         param: 'staff_type.SELF_OWNED_TRUCK',
         width: ''
-      }, 
+      },
       {//
         title: '身份证号',
         param: 'id_number',
@@ -64,7 +64,7 @@ export default {
       },{
         title: '家属联系方式',
         param: 'family_member_phone',
-        width: ''
+        width: '160'
       },
       {//
         title: '准驾类型',
@@ -78,20 +78,20 @@ export default {
       {
         title: '驾驶证档案编号',
         param: 'drive_license_number',
-        width: ''
+        width: '180'
       },
       {
         title: '驾驶证发证时间',
         param: 'drive_license_issue_date',
-        width: ''
+        width: '180'
       }, {
         title: '驾驶证到期时间',
         param: 'drive_license_due_date',
-        width: ''
+        width: '180'
       }, {
         title: '驾驶证发证机关',
         param: 'drive_license_issue_organ',
-        width: ''
+        width: '180'
       },{
         title: '从业资格号',
         param: 'qualification_certificate_number',
@@ -100,17 +100,17 @@ export default {
       {
         title: '从业资格证发证时间',
         param: 'qualification_certificate_issue_date',
-        width: ''
+        width: '200'
       },
       {
         title: '从业资格证到期时间',
         param: 'qualification_certificate_due_date',
-        width: ''
+        width: '200'
       },
       {
         title: '从业资格证发证机关',
         param: 'qualification_certificate_issue_organ',
-        width: ''
+        width: '200'
       },{
         title: '押运证号',
         param: 'escort_license_number',
@@ -118,15 +118,15 @@ export default {
       },{
         title: '押运证发证时间',
         param: 'escort_license_issue_date',
-        width: ''
+        width: '180'
       },{
         title: '押运证到期时间',
         param: 'escort_license_due_date',
-        width: ''
+        width: '180'
       },{
         title: '押运证发证机关',
         param: 'escort_license_issue_organ',
-        width: ''
+        width: '180'
       },{
         title: '录用日期',
         param: 'labour_employ_date',
@@ -142,11 +142,11 @@ export default {
       },{
         title: '合同起始日期',
         param: 'contract_start_date',
-        width: ''
+        width: '160'
       },{
         title: '合同截止日期',
         param: 'contract_due_date',
-        width: ''
+        width: '160'
       },{
         title: '转正日期',
         param: 'contract_correct_date',

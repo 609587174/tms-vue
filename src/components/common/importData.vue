@@ -57,7 +57,7 @@
       <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" @selection-change="handleSelectionChange" @select-all="isAllSelectData" @select="singleSelectData" ref="table" :class="{'tabal-height-500':!tableData.length}">
         <el-table-column type="selection" width="55" :selectable="checkboxInit">
         </el-table-column>
-        <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
+        <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:(tableList.length>6?140:'')">
           <!-- <template slot-scope="scope">
             <div v-if="item.param === 'waybill'">
               <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
@@ -498,7 +498,7 @@ export default {
             //   }
             // }
           }
-          console.log('table',this.tableData);
+          console.log('table', this.tableData);
           // if (this.isAllSelect) {
           this.$nextTick(function() {
             this.checked();

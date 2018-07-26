@@ -540,7 +540,7 @@ export default [{
       name: "business",
       redirect: '/statistics/business/logistics/logisticsList',
       meta: {
-        title: '业务统计',
+        title: '物流数据',
         isVerificationL: false
       },
       component: (resolve) => require(['../page/statistics/business/business'], resolve),
@@ -752,6 +752,32 @@ export default [{
             component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/importOilGas'], resolve)
           }]
         }]
+      }]
+    },{
+      path: 'ledger',
+      name: "ledger",
+      redirect: '/statistics/ledger/ledgerList',
+      meta: {
+        title: '业务台账',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/ledger/ledger'], resolve),
+      children: [{
+        path: 'ledgerList',
+        name: "ledgerList",
+        meta: {
+          title: '业务台账列表',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/ledger/ledgerList'], resolve),
+      },{
+        path: 'ledgerWaybillDetail/:willId',
+        name: "ledgerWaybillDetail",
+        meta: {
+          title: '运单详情',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/ledger/ledgerWaybillDetail'], resolve)
       }]
     }]
   }, {

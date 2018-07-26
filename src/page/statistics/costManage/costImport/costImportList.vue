@@ -104,6 +104,7 @@ export default {
         type: 'income',
         filename: '费用导出统计'
       },
+      searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -231,6 +232,7 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
 
     },
@@ -238,7 +240,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -248,7 +250,7 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
@@ -265,6 +267,7 @@ export default {
     }
   },
   created() {
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }
 

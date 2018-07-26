@@ -286,6 +286,7 @@ export default {
     }
   },
   created() {
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
   }
 

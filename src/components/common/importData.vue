@@ -397,12 +397,14 @@ export default {
     },
     // 上传前对文件的大小的判断
     beforeAvatarUpload(file) {
-      const formatXls = file.name.split('.')[1] === 'xls';
-      const formatXlsx = file.name.split('.')[1] === 'xlsx';
-      // const extension3 = file.name.split('.')[1] === 'doc'
-      // const extension4 = file.name.split('.')[1] === 'docx'
+      let fileArr = file.name.split('.');
+      let fileLen = fileArr.length - 1;
+      let formatType = false;
+      if (fileArr[fileLen] === 'xls' || fileArr[fileLen] === 'xlsx') {
+        formatType = true;
+      }
       const fileSize = file.size / 1024 / 1024 < 10
-      if (!formatXls && !formatXlsx) {
+      if (!formatType) {
         this.$message({
           message: '只能上传xls、xlsx 格式!',
           type: 'warning'
@@ -414,18 +416,22 @@ export default {
           type: 'warning'
         });
       }
-      // this.uploadFileData.uploadFileUrl = this.httpUrl + this.apiNameData.uploadApi;
       this.uploadFileData.uploadData.file = file.name;
-      if ((formatXls || formatXlsx) && fileSize) {
-        this.deleteData().then((results) => {
-          if (results.data && results.data.code == 0) {
-            return true;
-          } else {
-            return false
-          }
-        });
+      if (formatType && fileSize) {
+        return new Promise((resolve, reject) => {
+          this.$$http(this.apiNameData.deleteDataApi, {}).then((results) => {
+            if (results.data && results.data.code == 0) {
+              resolve(results);
+            } else {
+              reject(results);
+            }
+          }).catch((err) => {
+            reject(err);
+          })
+        })
+      } else {
+        return formatType && fileSize;
       }
-      return (formatXls || formatXlsx) && fileSize;
     },
     // 上传时
     uploadProgress(response, file, fileList) {
@@ -434,7 +440,6 @@ export default {
         isLoading: true,
         isDisabled: true
       };
-
     },
     // 上传成功
     uploadSuccess(response, file, fileList) {

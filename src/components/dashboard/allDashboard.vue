@@ -71,11 +71,11 @@ export default {
         'dispatchDashboard':[
           {//采购概览
           'dashboardSqureData':[
-              {key:'appoint_count',value:'待添加车辆订单',goUrl:'/orders/pickupOrders/ordersList?goTo=appoint'},
-              {key:'loading_waiting_audit_count',value:'待审核装车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit'},
-              {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match'},
-              {key:'unloading_waiting_audit_count',value:'待审核卸车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit'},
-              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement'},
+              {key:'appoint_count',value:'待添加车辆订单',goUrl:'/orders/pickupOrders/ordersList?goTo=appoint',dimension:"order"},
+              {key:'loading_waiting_audit_count',value:'待审核装车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit',dimension:"order"},
+              {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match',dimension:"order"},
+              {key:'unloading_waiting_audit_count',value:'待审核卸车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit',dimension:"order"},
+              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement',dimension:"order"},
             ],
             'searchShow':false,
             'type':'dispatch_centre_schedule',
@@ -86,8 +86,8 @@ export default {
         'importStatisticsDashboard':[
           {//导入统计概览
           'dashboardSqureData':[
-              {key:'match_cash_cost_count',value:'已匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=yes'},
-              {key:'unmatch_cash_cost_count',value:'未匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=no'},
+              {key:'match_cash_cost_count',value:'已匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=yes',dimension:"pen"},
+              {key:'unmatch_cash_cost_count',value:'未匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=no',dimension:"pen"},
             ],
             'searchShow':true,
             'type':'import_dashborad_cash_cost',
@@ -98,10 +98,10 @@ export default {
           },
           {//导入统计概览
           'dashboardSqureData':[
-              {key:'match_highway_count',value:'已匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=yes'},
-              {key:'unmatch_highway_count',value:'未匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=no'},
-              {key:'match_corprate_count',value:'已匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=yes'},
-              {key:'unmatch_corprate_count',value:'未匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=no'}
+              {key:'match_highway_count',value:'已匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=yes',dimension:"pen"},
+              {key:'unmatch_highway_count',value:'未匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=no',dimension:"pen"},
+              {key:'match_corprate_count',value:'已匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=yes',dimension:"pen"},
+              {key:'unmatch_corprate_count',value:'未匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=no',dimension:"pen"}
             ],
             'searchShow':true,
             'type':'import_dashborad_highway',

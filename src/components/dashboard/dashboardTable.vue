@@ -3,7 +3,7 @@
 </style>
 <template>
   
-  <div class="table-list" style="margin-top:20px;width: 500px">
+  <div class="table-list" style="margin-top:10px;width: 700px">
      <el-table
       :data="dashboardTableData" max-height="250"  size="mini" stripe>
       <el-table-column v-for="(item,key) in renderTableData" :key="key"  :prop="item.param" align="center" :label="item.title" @click="operation(item)"></el-table-column>

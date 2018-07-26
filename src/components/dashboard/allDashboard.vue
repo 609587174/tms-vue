@@ -18,12 +18,15 @@
   height:0px;
   margin:0 0 0 10px;
 }
+.marginNone{
+  margin:0 0 0 10px;
+}
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
     <div v-for="(itemList,index) in renderDashboard" :key="index">
       <div class="dashboradContent">
-        <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title==''}">{{itemList.title}}</div>
+        <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}">{{itemList.title}}</div>
         <el-form class="search-filters-form" label-width="80px" status-icon ref="seachHeadCarListFrom" v-if="itemList.searchShow" style="margin-top:30px;">
           <el-row>
             <el-col :span="8">
@@ -38,8 +41,8 @@
           </el-row>
         </el-form>
         <el-row  v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20"  style="margin:0 0 40px 0" :key="Rindex">
-          <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:40px;" :key="item.key">
-            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" :sendTime="itemList.searchData" :sendTimeName="itemList.sendTimeName" ></dashboradSqure> 
+          <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:15px;" :key="item.key">
+            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" :sendTime="itemList.searchData" :sendTimeName="itemList.sendTimeName" :activeData="extendgetData"></dashboradSqure> 
           </el-col>
           <el-collapse-transition>
           <el-col :span="24" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :time="itemList.searchData"></dashboardTable></el-col>

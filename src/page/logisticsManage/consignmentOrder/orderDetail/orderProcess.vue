@@ -685,22 +685,6 @@
                             </el-col>
                           </el-row>
                         </div>
-                         <div v-if="item.type === 'canceled'">
-                          <el-row :gutter="40">
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作人:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                              </div>
-                            </el-col>
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作时间:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                        </div>
                       </el-collapse-item>
                     </el-collapse>
                   </el-col>
@@ -720,7 +704,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :close-on-press-escape="noCancle">
       <el-form ref="examinePoundForm" :rules="rules" :model="surePound" status-icon :label-position="'right'" v-if="detailData.length>0" label-width="100px">
         <el-row>
           <el-col :span="20" :offset="2">
@@ -795,7 +779,7 @@
        <el-button type="primary" @click="sendRe('sureLoadExUp')">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :title="cancleTitle" :visible.sync="dialog.cancleLoadEx" center width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
+    <el-dialog :title="cancleTitle" :visible.sync="dialog.cancleLoadEx" center width="30%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :close-on-press-escape="noCancle">
       <el-form label-width="125px" status-icon>
         <el-row>
           <el-col :span="18" :offset="3">
@@ -843,6 +827,7 @@ export default {
       rules: [
 
       ],
+      noCancle:false,
       examinePoundParam: {},
       extendsArr: [],
       statusType: {

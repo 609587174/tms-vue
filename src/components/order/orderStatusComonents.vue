@@ -45,14 +45,6 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
-          <el-col :span="8">
-              <el-form-item align="right" label="承运类型:" label-width="105px">
-                <el-select  v-model="carrier_type"  placeholder="请选择" @change="searchList" style="width:90%;">
-                    <el-option v-for="(item,key) in selectData.carrier_type_select" :key="item.id" :label="item.value" :value="item.id"></el-option>
-                </el-select>
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" v-if="status!='first'">
@@ -240,7 +232,6 @@ export default {
       }
 
       sendData.pageSize = this.pageData.pageSize;
-      sendData.carrier_type=this.carrier_type;
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;

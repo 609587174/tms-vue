@@ -1764,6 +1764,14 @@ const api = {
     param: {
 
     }
+  },
+  getTmsDashboard: {
+    url: '/statistic/dashborad/',
+    method: 'get',
+    desc: "获取概览数据2",
+    param: {
+
+    }
   }
 }
 

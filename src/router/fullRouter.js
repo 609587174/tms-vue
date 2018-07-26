@@ -24,6 +24,14 @@ export default [{
         title: '调度概览',
       },
       component: (resolve) => require(['../page/dashboard/dispatchDashboard'], resolve),
+    }, {
+      path: 'importStatisticsDashboard',
+      name: 'importStatisticsDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '导入统计概览',
+      },
+      component: (resolve) => require(['../page/dashboard/importStatisticsDashboard'], resolve),
     }]
   }, {
     path: 'orders',

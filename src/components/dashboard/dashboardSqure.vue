@@ -47,13 +47,13 @@ export default {
   },
   methods: {
     gotoPage:function(){
-      this.$router.push({ path:this.dashboradSqureData.goUrl});
+      this.$router.push({ path:`${this.dashboradSqureData.goUrl}&${this.sendTimeName}=${this.sendTime[0]},${this.sendTime[1]}`});
     }
   },
   created() {
 
   },
-  props:['dashboradSqureData']
+  props:['dashboradSqureData','sendTime','sendTimeName']
 };
 
 </script>

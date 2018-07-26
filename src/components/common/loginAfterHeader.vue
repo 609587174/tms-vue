@@ -205,7 +205,7 @@
               </div>
             </div>
             <span slot="reference" v-on:click="isShowNotice">
-              <el-badge :value="$store.state.common.unreadNewNum?$store.state.common.unreadNewNum:''" :max="10" class="item">
+              <el-badge :value="$store.state.common.unreadNewNum?($store.state.common.unreadNewNum<9?$store.state.common.unreadNewNum:'N'):''" class="item">
                 <i class="icon-notice cursor-pointer"></i>
               </el-badge>
             </span>

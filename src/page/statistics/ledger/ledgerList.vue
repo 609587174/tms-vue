@@ -26,7 +26,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="实际离站时间:" label-width="105px">
+            <el-form-item label="卸货完成时间:" label-width="105px">
               <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
@@ -146,7 +146,7 @@ export default {
         param: 'activate_start',
         width: '180'
       }, {
-        title: '最后离站时间',
+        title: '卸货完成时间',
         param: 'activate_end',
         width: '180'
       }, {

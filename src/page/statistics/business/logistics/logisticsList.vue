@@ -6,78 +6,77 @@
 </style>
 <template>
   <div class="nav-tab">
-    <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-      <el-tab-pane label="物流费用统计" name="logistics">
-        <div class="tab-screen">
-          <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-            <el-row :gutter="0">
-              <el-col :span="12">
-                <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                  <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                  <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="8">
-                <el-form-item label="实际装车时间:" label-width="105px">
-                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="卸货完成时间:" label-width="105px">
-                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <div class="operation-btn">
-          <el-row>
-            <el-col :span="20" class="total-data">
-              一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
-            </el-col>
-            <el-col :span="4" class="text-right">
-              <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
-              <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
-            </el-col>
-          </el-row>
-        </div>
-        <div class="table-list">
-          <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
-            <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
-              <template slot-scope="scope">
-                <div v-if="item.param === 'waybill'">
-                  <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-                  <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
-                </div>
-                <div v-else>{{scope.row[item.param]}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="运费合计" align="center" width="100" fixed="right">
-              <template slot-scope="scope">
-                <div>{{scope.row.waiting_charges}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="100" fixed="right">
-              <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
-        </div>
-        <div class="page-list text-center">
-          <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-          </el-pagination>
-        </div>
-      </el-tab-pane>
-      <!-- <el-tab-pane label="收入统计" name="income"></el-tab-pane> -->
-    </el-tabs>
+    <!--   <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+      <el-tab-pane label="物流费用统计" name="logistics"> -->
+    <div class="tab-screen border-top">
+      <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+        <el-row :gutter="0">
+          <el-col :span="12">
+            <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+              <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+              <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+            </el-input>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="实际装车时间:" label-width="105px">
+              <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="实际离站时间:" label-width="105px">
+              <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    <div class="operation-btn">
+      <el-row>
+        <el-col :span="20" class="total-data">
+          一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
+        </el-col>
+        <el-col :span="4" class="text-right">
+          <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
+          <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+        </el-col>
+      </el-row>
+    </div>
+    <div class="table-list">
+      <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
+        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+          <template slot-scope="scope">
+            <div v-if="item.param === 'waybill'">
+              <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
+              <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+            </div>
+            <div v-else>{{scope.row[item.param]}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="运费合计" align="center" width="100" fixed="right">
+          <template slot-scope="scope">
+            <div>{{scope.row.waiting_charges}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="100" fixed="right">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
+    </div>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+      </el-pagination>
+    </div>
+    <!--       </el-tab-pane>
+    </el-tabs> -->
   </div>
 </template>
 <script>
@@ -155,7 +154,7 @@ export default {
         param: 'activate_start',
         width: '180'
       }, {
-        title: '卸货完成时间',
+        title: '实际离站时间',
         param: 'activate_end',
         width: '180'
       }, {

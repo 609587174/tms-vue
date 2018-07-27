@@ -239,7 +239,8 @@ export default {
       noticeLoading: false,
       noticeList: [],
       unreadNewNum: 0,
-      wsNum: 10
+      wsNumClose: 10,
+      wsNumError:10
     }
   },
   computed: {
@@ -287,12 +288,15 @@ export default {
           position: 'bottom-right',
         });
       }
-      // ws.onerror = (event) => {
-      //   // vm.wsLink();
-      // }
+      ws.onerror = function(event) {
+        this.wsNumError--;
+        if (this.wsNumError > 0) {
+          vm.wsLink();
+        }
+      }
       ws.onclose = (event) => {
-        this.wsNum--;
-        if (this.wsNum > 0) {
+        this.wsNumClose--;
+        if (this.wsNumClose > 0) {
           vm.wsLink();
         }
 

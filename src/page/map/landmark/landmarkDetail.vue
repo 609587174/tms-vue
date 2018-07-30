@@ -145,8 +145,8 @@
             </el-row>
           </div>
           <div class="img-box clearfix">
-            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item.src" /></div>
-            <div ng-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
+            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
+            <div v-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">

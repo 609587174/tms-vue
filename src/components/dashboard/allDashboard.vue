@@ -37,7 +37,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="2" style="margin-left:20px;">
-              <el-button @click="getDashboard(renderDashboard)">搜索</el-button>
+              <el-button @click="getDashboard(itemList)">搜索</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -159,7 +159,7 @@ export default {
       var vm=this;
       var searchArr=[]
       if(dashboardSearch){
-        searchArr=dashboardSearch
+        searchArr=[dashboardSearch]
       }else{
         searchArr=this.allDashboard[vm.dispatchPage];
       }

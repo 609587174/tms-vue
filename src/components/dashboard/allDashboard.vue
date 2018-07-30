@@ -24,6 +24,7 @@
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
+    
     <div v-for="(itemList,index) in renderDashboard" :key="index">
       <div class="dashboradContent">
         <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}">{{itemList.title}}</div>
@@ -31,7 +32,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item align="right" label="时间搜索:" >
-                  <el-date-picker  style="width:100%" :editable="editable"  v-model="itemList.searchData" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  <el-date-picker  style="width:100%" :editable="editable"  :clearable="clearable" v-model="itemList.searchData" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
               </el-form-item>
             </el-col>
@@ -45,9 +46,10 @@
             <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" :sendTime="itemList.searchData" :sendTimeName="itemList.sendTimeName" :activeData="extendgetData"></dashboradSqure> 
           </el-col>
           <el-collapse-transition>
-          <el-col :span="24" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :time="itemList.searchData"></dashboardTable></el-col>
+          <el-col :span="24" :id="'extendTab-'+extendgetData.key" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :time="itemList.searchData"></dashboardTable></el-col>
         </el-collapse-transition>
         </el-row>
+
       </div>
     </div>
   </div>
@@ -65,6 +67,7 @@ export default {
     return {
       pageLoading:false,
       editable:false,
+      clearable:false,
       extendData:{},
       extendgetData:{},
       tableShowSatus:false,
@@ -74,11 +77,11 @@ export default {
         'dispatchDashboard':[
           {//采购概览
           'dashboardSqureData':[
-              {key:'appoint_count',value:'待添加车辆订单',goUrl:'/orders/pickupOrders/ordersList?goTo=appoint',dimension:"order"},
-              {key:'loading_waiting_audit_count',value:'待审核装车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit',dimension:"order"},
-              {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match',dimension:"order"},
-              {key:'unloading_waiting_audit_count',value:'待审核卸车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit',dimension:"order"},
-              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement',dimension:"order"},
+              {key:'appoint_count',value:'待添加车辆订单',goUrl:'/orders/pickupOrders/ordersList?goTo=appoint',dimension:"单"},
+              {key:'loading_waiting_audit_count',value:'待审核装车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit',dimension:"单"},
+              {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match',dimension:"单"},
+              {key:'unloading_waiting_audit_count',value:'待审核卸车榜单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit',dimension:"单"},
+              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement',dimension:"单"},
             ],
             'searchShow':false,
             'type':'dispatch_centre_schedule',
@@ -89,8 +92,8 @@ export default {
         'importStatisticsDashboard':[
           {//导入统计概览
           'dashboardSqureData':[
-              {key:'match_cash_cost_count',value:'已匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=yes',dimension:"pen"},
-              {key:'unmatch_cash_cost_count',value:'未匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=no',dimension:"pen"},
+              {key:'match_cash_cost_count',value:'已匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=yes',dimension:"笔"},
+              {key:'unmatch_cash_cost_count',value:'未匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=no',dimension:"笔"},
             ],
             'searchShow':true,
             'type':'import_dashborad_cash_cost',
@@ -101,10 +104,10 @@ export default {
           },
           {//导入统计概览
           'dashboardSqureData':[
-              {key:'match_highway_count',value:'已匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=yes',dimension:"pen"},
-              {key:'unmatch_highway_count',value:'未匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=no',dimension:"pen"},
-              {key:'match_corprate_count',value:'已匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=yes',dimension:"pen"},
-              {key:'unmatch_corprate_count',value:'未匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=no',dimension:"pen"}
+              {key:'match_highway_count',value:'已匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=yes',dimension:"笔"},
+              {key:'unmatch_highway_count',value:'未匹配(高速费)',goUrl:'/statistics/costManage/publicCostManage/tollFee/tollFeeList?is_matching=no',dimension:"笔"},
+              {key:'match_corprate_count',value:'已匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=yes',dimension:"笔"},
+              {key:'unmatch_corprate_count',value:'未匹配(油／气费)',goUrl:'/statistics/costManage/publicCostManage/oilGas/oilGasList?is_matching=no',dimension:"笔"}
             ],
             'searchShow':true,
             'type':'import_dashborad_highway',
@@ -180,6 +183,7 @@ export default {
               vm.filterDashboard(results.data.data,item);
               resolve(results);
             }else{
+              vm.pageLoading=false;
               reject(results);
             }
           }).catch((err) => {

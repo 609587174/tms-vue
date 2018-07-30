@@ -1086,7 +1086,10 @@ export default {
 
         this.$$http('getLandMarkList', postData).then((results) => {
           if (results.data && results.data.code == 0) {
-            this.fluidStationList.push(results.data.data.results)
+            if (results.data.data.results.length) {
+              let resultsData = results.data.data.results;
+              this.fluidStationList = [...this.fluidStationList, ...resultsData];
+            }
             resolve(results)
           } else {
             reject(results);

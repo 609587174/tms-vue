@@ -49,19 +49,19 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
-                  <el-form-item label="是否匹配:">
+                  <el-form-item label="匹配状态:">
                     <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <!-- <el-col :span="6">
-                <el-form-item label="费用类型:">
-                  <el-select v-model="searchFilters.station" filterable @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col> -->
+                <el-col :span="6">
+                  <el-form-item label="行程内费用:" label-width="100px">
+                    <el-select v-model="searchFilters.is_travel" filterable @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.isTravelSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
           </div>
@@ -84,7 +84,7 @@
                     <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                   </div>
                   <div v-else>
-                    <span v-if="item.param ==='is_matching'">{{scope.row[item.param].verbose}}</span>
+                    <span v-if="item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
                     <span v-else>{{scope.row[item.param]}}</span>
                   </div>
                 </template>
@@ -129,12 +129,13 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      costTime: [], //费用时间
+      costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
       activeName: 'publicCost',
       costActive: 'oilGas',
       searchPostData: {}, //搜索参数
       searchFilters: {
-        is_matching: '',
+        is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
+        is_travel: '',
         keyword: '',
         field: 'plate_number',
       },
@@ -143,6 +144,11 @@ export default {
           { id: '', value: '全部' },
           { id: 'yes', value: '已匹配' },
           { id: 'no', value: '未匹配' }
+        ],
+        isTravelSelect: [
+          { id: '', value: '全部' },
+          { id: 'yes', value: '是' },
+          { id: 'no', value: '否' }
         ],
         // costSelect: [
         //   { id: '', value: '全部' },
@@ -185,7 +191,11 @@ export default {
         param: 'consumption_price',
         width: ''
       }, {
-        title: '是否匹配运单',
+        title: '行程内费用',
+        param: 'is_travel',
+        width: ''
+      }, {
+        title: '匹配状态',
         param: 'is_matching',
         width: ''
       }, {
@@ -231,21 +241,24 @@ export default {
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
         this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
-      }else if (tpye === 'edit') {
+      } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
       }
     },
     startSearch() {
       this.pageData.currentPage = 1;
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      this.getList(this.statusActive);
-
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+      this.getList();
+      if (this.pbFunc.objSize(this.$route.query)) {
+        this.$router.push({ path: this.$route.path })
+      }
     },
     getList() {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_matching: this.searchPostData.is_matching
+        is_matching: this.searchPostData.is_matching,
+        is_travel: this.searchPostData.is_travel,
       };
       if (this.costTime instanceof Array && this.costTime.length > 0) {
         postData.cost_date_start = this.costTime[0];
@@ -268,7 +281,8 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
+    this.getList();
   }
 
 }

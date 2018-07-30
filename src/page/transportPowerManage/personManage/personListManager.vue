@@ -34,8 +34,9 @@
             </el-form>
           </div>
           <div class="operation-btn text-right">
-            <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
+            <el-button type="primary" plain @click="importList">导入</el-button>
             <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+            <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportPersonData'"></export-button>
             <el-button type="success" @click="addPerson">新增</el-button>
           </div>
           <div class="table-list">
@@ -76,10 +77,9 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      exportBtn: {
-        text: '导出',
-        isLoading: false,
-        isDisabled: false,
+      exportType: {
+        type: 'carrier_driver',
+        filename: '人员管理'
       },
       activeName: 'userManage',
       searchFilters: {
@@ -132,55 +132,14 @@ export default {
         param: 'escort_license_number',
         width: '250'
       }],
-      tableData: []
+      tableData: [],
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
-    },
-    exportData() {
-      let postData = {
-        filename: '人员管理',
-        page_arg: 'carrier_driver',
-        work_type: this.searchFilters.employmentType,
-        driver_bind_status: this.searchFilters.isBind,
-        ids: []
-      };
-      for (let i = 57; i <= 88; i++) {
-        postData.ids.push(i.toString());
-      }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
-      this.exportBtn = {
-        text: '导出中',
-        isLoading: true,
-        isDisabled: true,
-      }
-
-      this.$$http('exportPersonData', postData).then((results) => {
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-        if (results.data && results.data.code == 0) {
-          window.open(results.data.data.filename);
-          this.$message({
-            message: '导出成功',
-            type: 'success'
-          });
-        } else {
-          this.$message.error('导出失败');
-        }
-      }).catch((err) => {
-        this.$message.error('导出失败');
-        this.exportBtn = {
-          text: '导出',
-          isLoading: false,
-          isDisabled: false,
-        }
-      })
     },
     getList: function() {
       let postData = {
@@ -192,7 +151,7 @@ export default {
       postData[this.searchFilters.field] = this.searchFilters.keyword;
 
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getDriversList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -216,7 +175,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { operate: 'add' } });
     },
     importList: function() {
-      this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });
+      this.$router.push({ path: "/transportPowerManage/personManage/importPersonManage" });
     },
     exportList: function() {
 

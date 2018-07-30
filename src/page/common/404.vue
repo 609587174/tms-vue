@@ -4,7 +4,8 @@
 </style>
 <template>
   <div class="error">
-    <public-header :is-find="true"></public-header>
+    <!-- <public-header :is-find="true"></public-header> -->
+    <common-header :type="'error'"></common-header>
     <div class="error-content">
       <div class="error-left">
         <div class="font">404</div>
@@ -22,11 +23,11 @@
   </div>
 </template>
 <script type="text/javascript">
-import publicHeader from '@/components/publicHeader'
-
+// import publicHeader from '@/components/publicHeader'
+import commonHeader from '@/components/common/commonHeader'
 export default {
   components: {
-    publicHeader: publicHeader,
+    commonHeader: commonHeader,
   },
   data: function() {
 

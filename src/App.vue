@@ -12,6 +12,7 @@
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/elementReset';
+@import './assets/css/news.less';//消息通知
 
 </style>
 <template>
@@ -22,10 +23,10 @@ import Vue from 'vue';
 import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
 import noData from '@/components/common/noData';
-
+import exportButton from '@/components/common/exportButton';
 
 Vue.component("noData", noData);
-
+Vue.component("exportButton", exportButton);
 export default {
   name: 'App',
   data() {
@@ -40,7 +41,8 @@ export default {
         dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
-        dispatchDashboard:'OVERVIEW_DISPATCH_SECOND',
+        dispatchDashboard: 'OVERVIEW_DISPATCH_SECOND',//调度概览
+        importStatisticsDashboard:'IMPORT_OVERVIEW_SECOND',//导入统计概览
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
@@ -58,8 +60,9 @@ export default {
         standardDataManage: 'STANDARD_MILEAGE_MANAGEMENT', //标准数据管理
         clientManageSecond: 'CUSTOMER_MANAGEMENT_SECOND', //客户管理二级菜单
         statistics: 'DATA_STATISTICS', //数据统计
-        business: 'BUSINESS_STATISTICS', //业务统计
+        business: 'BUSINESS_STATISTICS', //物流数据
         costManage: 'EXPENSE_MANAGEMENT', //费用管理
+        ledger: 'BUSINESS_ACCOUNT_SECOND', //业务台账
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         setting: 'SETTINGS', //设置
         company: 'CARRIER_SETTINGS', //公司主页
@@ -133,6 +136,7 @@ export default {
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
       if (isGoFirstPath) {
+        console.log('allowedRouter[0].children', allowedRouter);
         if (allowedRouter[0] && allowedRouter[0].children) {
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {
@@ -171,12 +175,13 @@ export default {
       return newRoute;
     },
     logoutDirect: function() {
+      localStorage.clear();
       //清除session
-      this.pbFunc.setLocalData('token', '');
+      //this.pbFunc.setLocalData('token', '');
       //清除菜单
-      this.pbFunc.setLocalData('menuList', '');
+      //this.pbFunc.setLocalData('menuList', '');
       //回到登录页
-      this.$router.replace({ path: '/login' });
+      // this.$router.replace({ path: '/login' });
     }
   },
   created: function(newPath) {

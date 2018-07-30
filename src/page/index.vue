@@ -10,55 +10,7 @@ a {
   font-family: PingFangSC-Light!important;
 }
 
-.el-header {
-  background: #232F36;
-  height: 64px!important;
-  .bpm-head {
-    width: 1200px;
-    margin: 0 auto;
-    line-height: 64px;
-    color: #fff;
-    font-size: 16px;
-    img {
-      margin-top: 14px;
-    }
-    a {
-      color: #fff;
-      font-size: 16px;
-    }
 
-    .link {
-      width: 187px;
-      height: 36px;
-      border: 1px solid #fff;
-      display: inline-block;
-      border-radius: 4px;
-      text-align: center;
-      line-height: 34px;
-      margin-left: 40px;
-      position: relative;
-      top: 13px; // margin-top: 12px;
-      a {
-        width: 90px;
-        display: block;
-        float: left;
-        &:last-child {
-          border-left: 1px solid #fff;
-        }
-      }
-    }
-    .user {
-      display: inline-block;
-      margin-left: 30px;
-      .text-blue {
-        color: #4a9bf8;
-      }
-      span {
-        padding: 0 10px;
-      }
-    }
-  }
-}
 
 .el-main {
   padding: 0;
@@ -204,6 +156,9 @@ a {
       .app-two {
         background: url('../assets/img/app2.png')no-repeat 680px 30px;
       }
+      .app-three {
+        background: url('../assets/img/app3.png')no-repeat 680px 30px;
+      }
       .app-code {
         ul {
           list-style-type: none;
@@ -308,27 +263,7 @@ a {
 <template>
   <div>
     <el-container>
-      <el-header>
-        <div class="bpm-head">
-          <el-row>
-            <el-col :span="6"><img src="@/assets/img/logo.png" alt=""></el-col>
-            <el-col :span="18" class="text-right">
-              <a rel="nofollow" target="_blank" :href="driverAppUrl">司机端App下载</a>
-              <span>｜</span>
-              <a rel="nofollow" target="_blank" :href="businessAppUrl">业务端App下载</a>
-              <div v-if="user&&user.nick_name" class="user">
-                欢迎您：{{user.nick_name}}，<a class="cursor-pointer text-blue" v-on:click="isLogin">进入91LNG</a>
-                <span>|</span>
-                <a v-on:click="logout" class="cursor-pointer">退出</a>
-              </div>
-              <div class="link" v-else>
-                <router-link :to="{path: '/register'}" class="text-blue">注册</router-link>
-                <router-link :to="{path: '/login'}">登录</router-link>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-header>
+      <common-header :type="'index'" :app-url="appUrl" :login-link="isLogin"></common-header>
       <el-main>
         <div class="banner">
           <div class="banner-content">
@@ -415,6 +350,12 @@ a {
                   <div>与91LNG-TMS运输管理系统无缝衔接，装/卸车信息同步下发至司机、磅单/铅封 及时上传审核、合理规划装卸车路径，协助打造运输环节全透明，运输数据全纪录 的承运体系。</div>
                 </div>
               </el-carousel-item>
+              <el-carousel-item>
+                <div class="product-list app-three">
+                  <span>客户端 APP</span>
+                  <div>与91LNG-BPM业务管理系统衔接，终端买家可进行询价/下单、查看磅单/车辆位 置、管理站点等操作，线上化交易与结算，交易数据可供追溯及分析，让买家更省 心。</div>
+                </div>
+              </el-carousel-item>
             </el-carousel>
             <div class="app-code">
               <ul>
@@ -432,6 +373,13 @@ a {
                     <span>扫码下载</span>
                   </div>
                 </li>
+                <li>
+                  <span>客户端APP</span>
+                  <div class="code">
+                    <img width="100%" :src="consumerCodeImg" alt="">
+                    <span>扫码下载</span>
+                  </div>
+                </li>
               </ul>
             </div>
           </div>
@@ -439,7 +387,7 @@ a {
       </el-main>
       <el-footer>
         <div class="bpm-footer">
-          <div>Copyright © 2017 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
+          <div>Copyright © {{newYear}} 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
             <br> QQ：963819358(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
         </div>
       </el-footer>
@@ -447,81 +395,74 @@ a {
   </div>
 </template>
 <script>
+import commonHeader from '@/components/common/commonHeader'
 export default {
   name: 'index',
+  components: {
+    commonHeader: commonHeader
+  },
   data() {
     return {
       businessCodeImg: '', //业务端下载二维码
       driverCodeImg: '', //司机端下载二维码
-      businessAppUrl: '', //业务端下载链接
-      driverAppUrl: '', //司机端下载链接
-      user: this.pbFunc.getLocalData('users', true)
+      consumerCodeImg: '',//客户端下载二维码
+      appUrl: {
+        businessAppUrl: '', //业务端下载链接
+        driverAppUrl: '', //司机端下载链接
+        consumerAppUrl: '', //客户端下载链接
+      },
+      user: this.pbFunc.getLocalData('users', true),
+      newYear:''
     };
   },
   computed: {
 
   },
   methods: {
-    // goLink() {
-    //   this.$router.push({ path: '/login' });
-    // },
     isLogin() {
       if (this.user && this.user.nick_name) {
-        this.$router.push({ path: '/dashboard/dispatchDashboard' });
+        //this.$router.push({ path: '/dashboard/dispatchDashboard' });
+        this.$emit('login');
       } else {
         this.$router.push({ path: '/login' });
       }
     },
-    logout: function() {
-      this.$confirm("确定退出?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-        .then(() => {
-          this.signOut();
-        })
-        .catch(() => {});
-    },
-    signOut: function() {
-      this.$$http('signOut', {}).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.$message({
-            message: '退出成功',
-            type: 'success'
-          });
-          localStorage.clear();
-          this.user = '';
-          this.$router.push({ path: '/' });
-        }
-
-      }).catch((err) => {
-        this.$message.error('退出失败');
-      })
+    getData() {
+      let myDate = new Date();
+      return myDate.getFullYear();
     }
   },
   created() {
     let currentUrl = document.location.href.toString();
+    this.newYear = this.getData();
     if (currentUrl.match('ptms.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPrepare';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPrepare';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
+      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerPrepare';
+      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerPrepare';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPrepare';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPrepare';
     } else if (currentUrl.match('tms.hhtdlng.com')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessTest';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverTest';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
+      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerTest';
+      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerTest';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessTest';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverTest';
     } else if (currentUrl.match('tms.91lng.cn')) {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessPro';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverPro';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
+      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerPro';
+      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerPro';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessPro';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverPro';
     } else {
       this.businessCodeImg = 'http://www.pgyer.com/app/qrcode/newBusinessDev';
       this.driverCodeImg = 'http://www.pgyer.com/app/qrcode/newDriverDev';
-      this.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
-      this.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
+      this.consumerCodeImg = 'https://www.pgyer.com/app/qrcode/newConsumerDev';
+      this.appUrl.consumerAppUrl = 'https://www.pgyer.com/newConsumerDev';
+      this.appUrl.businessAppUrl = 'https://www.pgyer.com/newBusinessDev';
+      this.appUrl.driverAppUrl = 'https://www.pgyer.com/newDriverDev';
     }
   }
 };

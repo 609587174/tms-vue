@@ -9,6 +9,131 @@
  */
 
 const api = {
+  getLedgerList: {
+    url: '/statistic/ledger/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
+  exportLedgerData: {
+    url: '/exports/ledger/',
+    method: 'get',
+    desc: '业务台账',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  importPersonData: {
+    url: '/imports/export-carrier-driver/',
+    method: 'post',
+    desc: '导入人员信息到库',
+    param: {
+      import: {
+        desc: 'all'
+      }
+    }
+  },
+  getPersonTemporaryData: {
+    url: '/imports/export-carrier-driver/',
+    method: 'get',
+    desc: '获取临时表',
+    param: {
+      import: {
+        desc: 'all'
+      }
+    }
+  },
+  getPersonTemporaryData: {
+    url: '/imports/base-carrier-driver/',
+    method: 'get',
+    desc: '导入人员数据进临时列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页显示的条数'
+      }
+    }
+  },
+  deletePersonTemporaryData: {
+    url: '/imports/bulk_driver_destroy/',
+    method: 'delete',
+    desc: '清除人员临时表',
+    param: {
+
+    }
+  },
+  exportIncomeData: {
+    url: '/exports/income/',
+    method: 'get',
+    desc: '费用导入统计导出',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  getExportTableTitle: {
+    url: '/exports/header/',
+    method: 'get',
+    desc: '导出列表头部',
+    param: {
+      page_arg: {
+        desc: '表格类型'
+      },
+      need_all: {
+        desc: '全部'
+      }
+    }
+  },
+  getUnreadNewNum: {
+    url: '/notifications/web_messages/unread_count/',
+    method: 'get',
+    desc: '未读信息的条数',
+    param: {
+
+    }
+  },
+  batchReadMessages: {
+    url: '/notifications/web_messages/bulk_read/',
+    method: 'put',
+    desc: '消息批量已读',
+    param: {
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
+  getMessagesList: {
+    url: '/notifications/web_messages/',
+    method: 'get',
+    desc: '通知消息列表',
+    param: {
+      page: {
+        desc: '当前页数'
+      },
+      page_size: {
+        desc: '一页条数'
+      }
+    }
+  },
   exportsTemplate: {
     url: '/exports/cost/template/',
     method: 'post',
@@ -257,7 +382,7 @@ const api = {
   },
   exportLogisticData: {
     url: '/exports/logistic/',
-    method: 'post',
+    method: 'get',
     desc: '物流费用统计',
     param: {
       filename: {
@@ -273,7 +398,7 @@ const api = {
   },
   exportSemitrailerData: {
     url: '/exports/semitrailer/',
-    method: 'post',
+    method: 'get',
     desc: '导出挂车',
     param: {
       filename: {
@@ -289,7 +414,7 @@ const api = {
   },
   exportTruckData: {
     url: '/exports/truck/',
-    method: 'post',
+    method: 'get',
     desc: '导出牵引车',
     param: {
       filename: {
@@ -305,7 +430,7 @@ const api = {
   },
   exportPersonData: {
     url: '/exports/driver/',
-    method: 'post',
+    method: 'get',
     desc: '导出人员管理',
     param: {
       filename: {
@@ -1660,6 +1785,14 @@ const api = {
     url: '/order/section-trips/dashborad/',
     method: 'get',
     desc: "获取概览数据",
+    param: {
+
+    }
+  },
+  getTmsDashboard: {
+    url: '/statistic/dashborad/',
+    method: 'get',
+    desc: "获取概览数据2",
     param: {
 
     }

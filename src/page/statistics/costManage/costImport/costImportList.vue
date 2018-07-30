@@ -28,7 +28,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="实际离站时间:" label-width="105px">
+                <el-form-item label="卸货完成时间:" label-width="105px">
                   <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                   </el-date-picker>
                 </el-form-item>
@@ -42,7 +42,7 @@
               一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，报销费用合计{{tableData.data&&tableData.data.inco?tableData.data.inco:0}}元
             </el-col>
             <el-col :span="4" class="text-right">
-              <!-- <el-button type="primary">导出</el-button> -->
+              <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportIncomeData'"></export-button>
             </el-col>
           </el-row>
         </div>
@@ -62,11 +62,11 @@
                 <div>{{scope.row.income}}</div>
               </template>
             </el-table-column>
-            <!-- <el-table-column label="操作" align="center" width="100" fixed="right">
+            <el-table-column label="行程外费用" align="center" width="140" fixed="right">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                <div>{{scope.row.extra_fee}}</div>
               </template>
-            </el-table-column> -->
+            </el-table-column>
           </el-table>
           <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
         </div>
@@ -97,9 +97,14 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      leaveTime: [], //实际离站时间
+      leaveTime: [], //卸货完成时间
       activeTime: [], //实际装车时间
       activeName: 'costImport',
+      exportType: {
+        type: 'income',
+        filename: '费用导出统计'
+      },
+      searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
@@ -134,7 +139,7 @@ export default {
         param: 'active_time',
         width: '180'
       }, {
-        title: '实际离站时间',
+        title: '卸货完成时间',
         param: 'leave_time',
         width: '180'
       }, {
@@ -145,19 +150,19 @@ export default {
         title: '公司油/气',
         param: 'com_oil',
         width: ''
-      },  {
+      }, {
         title: '高速费',
         param: 'high_cost',
         width: ''
       }, {
         title: '过路费（普通）',
-        param: ' road_toll_com',
+        param: 'road_toll_com',
         width: ''
       }, {
         title: '过路费（国家）',
-        param: ' road_toll_state',
+        param: 'road_toll_state',
         width: ''
-      },{
+      }, {
         title: '过桥费',
         param: 'pontage',
         width: ''
@@ -169,7 +174,7 @@ export default {
         title: '现金油/气（无票）',
         param: 'logistics_fuel_cash_no_ticket',
         width: ''
-      },{
+      }, {
         title: '检测费',
         param: 'detection_cost',
         width: ''
@@ -181,7 +186,7 @@ export default {
         title: '停车费',
         param: 'parking_fee',
         width: ''
-      },  {
+      }, {
         title: '其它费用',
         param: 'other_cost',
         width: ''
@@ -198,7 +203,8 @@ export default {
         param: 'escort_staff',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -218,7 +224,7 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}/${row.order_id}` });
+        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
       }
       // else if (tpye === 'edit') {
       //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });
@@ -226,6 +232,7 @@ export default {
     },
     startSearch() {
       this.pageData.currentPage = 1;
+      this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
 
     },
@@ -233,7 +240,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchFilters.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];
@@ -243,10 +250,10 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchFilters.field] = this.searchFilters.keyword;
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getIncomeStatisticList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
@@ -260,6 +267,7 @@ export default {
     }
   },
   created() {
+    this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList();
   }
 

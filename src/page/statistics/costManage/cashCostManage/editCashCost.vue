@@ -76,9 +76,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="运单号:" prop="waybill_id">
-                    <el-select v-model="editMsgForm.waybill_id" filterable clearable placeholder="请输入选择">
-                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.id"></el-option>
+                  <el-form-item label="运单号:" prop="waybill">
+                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -122,7 +122,7 @@ export default {
         at_amount: '', // 税后金额
         tax_amount: '', //税额
         is_matching: '', // 是否匹配运单
-        waybill_id: '', // 运单号id
+        waybill: '', // 运单号
       },
       waybillList: [], //运单号列表
       rules: {
@@ -145,7 +145,7 @@ export default {
         //   { required: true, message: '请输入税额', trigger: 'blur' },
         //   { pattern: /^[0-9]+(.[0-9]{0,2})?$/, message: '支持数值输入，最多支持小数点后2位', trigger: 'blur' }
         // ],
-        waybill_id: [
+        waybill: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
       },
@@ -215,7 +215,7 @@ export default {
             at_amount: this.detail.at_amount, // 税后金额
             tax_amount: this.detail.tax_amount, //税额
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
-            waybill_id: this.detail.waybill_id, // 运单号id
+            waybill: this.detail.waybill, // 运单号
           }
           this.getWaybillData();
         }
@@ -255,11 +255,11 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = [ 'waybill_id'];
+      let keyArray = ['waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for(let i in this.waybillList){
-        if(this.waybillList[i].id===this.editMsgForm.waybill_id){
-          postData.waybill = this.waybillList[i].waybill_number;
+        if(this.waybillList[i].waybill_number===this.editMsgForm.waybill){
+          postData.waybill_id = this.waybillList[i].id;
         }
       }
       if (btnType === 'out') {

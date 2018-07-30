@@ -382,7 +382,7 @@ export default {
     position: absolute;
     left: 0px;
     bottom: 0px;
-    z-index: 9999;
+    z-index: 170;
   }
   .map-loading {
     position: absolute;

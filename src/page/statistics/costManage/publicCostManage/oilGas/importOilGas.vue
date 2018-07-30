@@ -24,7 +24,7 @@ export default {
         deleteDataApi:'deleteOilGasTemporaryData'
       },
       postData:{
-        type:'CorporateBusinessManage',
+        matchingType:'CorporateBusinessManage',
         exportType:'corporate'
       },
       thTableList: [{
@@ -50,6 +50,10 @@ export default {
       }, {
         title: '消费金额',
         param: 'consumption_price',
+        width: ''
+      }, {
+        title: '是否为行程内费用',
+        param: 'is_travel.verbose',
         width: ''
       }],
     };

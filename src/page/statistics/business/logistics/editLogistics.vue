@@ -176,6 +176,7 @@ export default {
         fluid: '', //实际液厂
         company: '', //托运方
         waybill: '', //运单号
+        order:'',//业务单号
         plan_time: '', //计划装车时间
         activate_start: '', //实际装车时间
         activate_end: '', //离站时间
@@ -254,6 +255,7 @@ export default {
             fluid: this.detail.fluid, //实际液厂
             company: this.detail.company, //托运方
             waybill: this.detail.waybill, //运单号
+            order: this.detail.order,//业务单号
             plan_time: this.detail.plan_time, //计划装车时间
             activate_start: this.detail.activate_start, //实际装车时间
             activate_end: this.detail.activate_end, //离站时间

@@ -24,6 +24,14 @@ export default [{
         title: '调度概览',
       },
       component: (resolve) => require(['../page/dashboard/dispatchDashboard'], resolve),
+    }, {
+      path: 'importStatisticsDashboard',
+      name: 'importStatisticsDashboard',
+      meta: {
+        isVerificationL: false,
+        title: '导入统计概览',
+      },
+      component: (resolve) => require(['../page/dashboard/importStatisticsDashboard'], resolve),
     }]
   }, {
     path: 'orders',
@@ -384,6 +392,14 @@ export default [{
           component: (resolve) => require(['../page/transportPowerManage/personManage/addPerson'], resolve)
         },
         {
+          path: 'importPersonManage',
+          name: "importPersonManage",
+          meta: {
+            title: '人员导入',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/transportPowerManage/personManage/importPersonManage'], resolve)
+        }, {
           path: 'personDetail',
           name: 'personDetail',
           meta: {
@@ -524,7 +540,7 @@ export default [{
       name: "business",
       redirect: '/statistics/business/logistics/logisticsList',
       meta: {
-        title: '业务统计',
+        title: '物流数据',
         isVerificationL: false
       },
       component: (resolve) => require(['../page/statistics/business/business'], resolve),
@@ -737,6 +753,32 @@ export default [{
           }]
         }]
       }]
+    },{
+      path: 'ledger',
+      name: "ledger",
+      redirect: '/statistics/ledger/ledgerList',
+      meta: {
+        title: '业务台账',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/ledger/ledger'], resolve),
+      children: [{
+        path: 'ledgerList',
+        name: "ledgerList",
+        meta: {
+          title: '业务台账列表',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/ledger/ledgerList'], resolve),
+      },{
+        path: 'ledgerWaybillDetail/:willId',
+        name: "ledgerWaybillDetail",
+        meta: {
+          title: '运单详情',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/ledger/ledgerWaybillDetail'], resolve)
+      }]
     }]
   }, {
     path: 'setting',
@@ -744,7 +786,7 @@ export default [{
     meta: {
       isVerificationL: true,
       title: '设置',
-      iconName: 'icon-setting',
+      iconName: 'icon-setting'
     },
     component: (resolve) => require(['../page/setting/setting'], resolve),
     children: [{
@@ -803,6 +845,43 @@ export default [{
         },
         component: (resolve) => require(['../page/setting/powerManage'], resolve)
       }
+    ]
+  }, {
+    path: 'news',
+    name: 'news',
+    meta: {
+      isVerificationL: false,
+      title: '消息通知',
+      iconName: 'icon-setting'
+    },
+    component: (resolve) => require(['../page/news/news'], resolve),
+    children: [{
+        path: 'systemNotice',
+        name: "systemNotice",
+        meta: {
+          title: '系统通知',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/news/news'], resolve),
+        children: [{
+          path: 'systemNoticeList',
+          name: "systemNoticeList",
+          meta: {
+            title: '系统通知列表',
+            isVerificationL: false
+          },
+          component: (resolve) => require(['../page/news/systemNotice/systemNoticeList'], resolve)
+        }]
+      },
+      // {
+      //   path: 'staffsManage',
+      //   name: "staffsManage",
+      //   meta: {
+      //     title: '员工管理',
+      //     isVerificationL: true
+      //   },
+      //   component: (resolve) => require(['../page/setting/staffsManage'], resolve)
+      // }
     ]
   }]
 }];

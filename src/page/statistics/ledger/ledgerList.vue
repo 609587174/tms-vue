@@ -39,9 +39,8 @@
         <el-col :span="20" class="total-data">
           一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charges?tableData.data.waiting_charges:0}}元，报销费用合计{{tableData.data&&tableData.data.income?tableData.data.income:0}}元，行程外费用合计{{tableData.data&&tableData.data.extra_fee?tableData.data.extra_fee:0}}元
         </el-col>
-        <el-col :span="4" class="text-right" v-if="false">
-          <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
-          <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+        <el-col :span="4" class="text-right">
+          <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button>
         </el-col>
       </el-row>
     </div>
@@ -98,8 +97,8 @@ export default {
         pageSize: 10,
       },
       exportType: {
-        type: 'logistic',
-        filename: '物流费用统计'
+        type: 'ledger',
+        filename: '业务台账'
       },
       activeName: 'logistics',
       leaveTime: [], //实际离站时间

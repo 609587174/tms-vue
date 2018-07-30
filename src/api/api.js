@@ -17,6 +17,22 @@ const api = {
 
     }
   },
+  exportLedgerData: {
+    url: '/exports/ledger/',
+    method: 'get',
+    desc: '业务台账',
+    param: {
+      filename: {
+        desc: '文件名'
+      },
+      page_arg: {
+        desc: '类型 logistic'
+      },
+      ids: {
+        desc: 'id'
+      }
+    }
+  },
   importPersonData: {
     url: '/imports/export-carrier-driver/',
     method: 'post',

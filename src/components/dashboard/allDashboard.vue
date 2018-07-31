@@ -24,7 +24,7 @@
 </style>
 <template>
   <div v-loading="pageLoading" style="background-color:white" class="detail-main">
-    
+
     <div v-for="(itemList,index) in renderDashboard" :key="index">
       <div class="dashboradContent">
         <div class="dispatchTitle border-bottom" v-bind:class="{isheight:itemList.title=='',marginNone:index>=1}">{{itemList.title}}</div>
@@ -43,7 +43,7 @@
         </el-form>
         <el-row  v-for="(Ritem,Rindex) in itemList.renderDashboard" :gutter="20"  style="margin:0 0 40px 0" :key="Rindex">
           <el-col  v-for="(item,itemIndex) in Ritem"  :span="4" style="margin-top:15px;" :key="item.key">
-            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" :sendTime="itemList.searchData" :sendTimeName="itemList.sendTimeName" :activeData="extendgetData"></dashboradSqure> 
+            <dashboradSqure   :dashboradSqureData="item" @clickExtendTable="clickExtendTable" :sendTime="itemList.searchData" :sendTimeName="itemList.sendTimeName" :activeData="extendgetData"></dashboradSqure>
           </el-col>
           <el-collapse-transition>
           <el-col :span="24" :id="'extendTab-'+extendgetData.key" v-if="Rindex==extendgetData.index&&extendgetData.extendTableType==itemList.type&&tableShowSatus"><dashboardTable :dashboardTableData="extendData[extendgetData.key]" :tableType="extendgetData.key" :time="itemList.searchData"></dashboardTable></el-col>
@@ -71,7 +71,7 @@ export default {
       extendData:{},
       extendgetData:{},
       tableShowSatus:false,
-      defaultStart:new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate()-1) + " 16:00:00",
+      defaultStart:'',//new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate()-1) + " 16:00:00",
       defaultEnd:new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 16:00:00",
       allDashboard:{
         'dispatchDashboard':[
@@ -123,7 +123,10 @@ export default {
   },
   props:['dispatchPage'],
   computed: {
-    
+    yesterday(){
+      let today = new Date();
+      return new Date(today.getTime() - 24*60*60*1000);
+    }
   },
   methods: {
     clickExtendTable:function(backItem,isOnlySearch){
@@ -244,6 +247,7 @@ export default {
     }
   },
   created() {
+    this.defaultStart = this.yesterday.getFullYear() + '-' + (this.yesterday.getMonth() + 1) + '-' + this.yesterday.getDate() + " 16:00:00";
     this.getDashboard();
   },
   watch: {

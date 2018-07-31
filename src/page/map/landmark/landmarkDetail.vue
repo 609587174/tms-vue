@@ -72,9 +72,8 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>匹配运单:</label>
-                <!--这里有问题，需要咨询后端-->
-                <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.waybill_number
-)"></div>
+                <a href="javascript:void(0)" class="detail-form-item color-26c6da" v-if="detailData.waybill_number" @click="goOrderDetail">{{detailData.waybill_number}}</a>
+                <div class="detail-form-item" v-else v-html="pbFunc.dealNullData(detailData.waybill_number)"></div>
               </div>
             </el-col>
             <el-col :span="8">
@@ -145,8 +144,8 @@
             </el-row>
           </div>
           <div class="img-box clearfix">
-            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item.src" /></div>
-            <div ng-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
+            <div class="float-left" v-for="(item,key) in detailData.position_pics" :key="key" v-on:click="toShowPreview(key)"><img :src="item" /></div>
+            <div v-if="detailData.position_pics && !detailData.position_pics.length">无图片</div>
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -206,6 +205,13 @@ export default {
     toShowPreview: function(index) {
       this.imgObject.showPreview = true;
       this.imgObject.previewIndex = index;
+    },
+    goOrderDetail: function() {
+      let stepId = this.detailData.section_trip_id;
+      let waybillId = this.detailData.waybill_id;
+      this.$router.push({
+        path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${stepId}/${waybillId}`,
+      })
     },
     getDetail: function() {
       return new Promise((resolve, reject) => {
@@ -308,6 +314,10 @@ export default {
 .check-button {
   position: relative;
   top: -8px;
+}
+
+.color-26c6da {
+  color: #26c6da;
 }
 
 </style>

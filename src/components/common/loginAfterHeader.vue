@@ -131,7 +131,9 @@
         line-height: 20px;
         padding: 10px 20px;
         color: #606266;
-        text-align: justify;
+        text-align: left;
+        word-break:break-all;
+        word-warp:break-word;
         .time {
           color: #B8B8B8;
         }
@@ -156,13 +158,14 @@
   }
   .notice-temp-footer {
     height: 50px;
-    width: 342px;
-    border-top: 1px solid #e4e7ed;
+    width: 382px;
+    border-top: 1px solid #b9b9b9;
     line-height: 50px;
     color: #9E9E9E;
     padding: 0 22px;
     position: absolute;
     bottom: 0;
+    font-weight: 600;
   }
 }
 
@@ -183,7 +186,7 @@
           </el-breadcrumb>
         </div>
         <div class="usermenu" v-if="users.nick_name">
-          <el-popover placement="top" width="386" trigger="click" v-model="showNotice">
+          <el-popover placement="top" width="426" trigger="click" v-model="showNotice">
             <div class="notice" v-if="!false">
               <div class="notice-temp" v-if="showNotice">
                 <div class="notice-temp-title">系统通知</div>

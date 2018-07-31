@@ -615,9 +615,10 @@ export default {
     this.getSemiList();
     this.getDriverList();
     this.getEscortList();
+    this.init();
   },
   activated: function() {
-    this.init();
+
   }
 };
 

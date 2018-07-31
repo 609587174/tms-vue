@@ -2,9 +2,7 @@
   <div>
     <template>
       <div>
-        <keep-alive>
-          <router-view></router-view>
-        </keep-alive>
+        <router-view></router-view>
       </div>
     </template>
   </div>
@@ -19,8 +17,7 @@ export default {
   data() {
     return {}
   },
-  methods: {
-  },
+  methods: {},
   mounted: function() {}
 }
 

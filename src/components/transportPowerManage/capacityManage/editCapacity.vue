@@ -265,6 +265,9 @@ export default {
       return parseInt(this.$route.params.activeStep);
     }
   },
+  created() {
+
+  },
   mounted() {
     this.init();
   },
@@ -274,6 +277,7 @@ export default {
       this.getDetail()
     },
     getDetail: function() {
+      console.log('this.capacityId', this.capacityId);
       this.$$http('getCapacityDetail', { id: this.capacityId }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.headData = results.data.data;

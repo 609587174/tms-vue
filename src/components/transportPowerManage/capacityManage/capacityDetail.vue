@@ -261,6 +261,9 @@ export default {
     }
   },
   activated() {
+
+  },
+  created() {
     this.id = this.$route.query.capacityId;
     this.activeTab = this.$route.query.activeTab;
     if (this.activeTab === 'first') {

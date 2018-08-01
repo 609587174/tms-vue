@@ -307,58 +307,70 @@ export default {
 
     },
     setSelectData: function() {
-      let p1 = this.getGroups();
-      let p2 = this.getSemiList();
-      let p3 = this.getDriverList();
-      let p4 = this.getEscortList();
-      Promise.all([p1, p2, p3, p4]).then(results => {
-        // 分组数据
-        if (results[0].data.code === 0) {
-          this.groupList = results[0].data.data.results;
-          results[0].data.data.results.map((n, i) => {
-            this.selectData.groupOptions.push(n);
-          });
-        }
-        // 挂车数据
-        if (results[1].data.code == 0) {
-          results[1].data.data.map(((n, i) => {
-            this.semiList.push({
-              id: n.id,
-              value: n.plate_number
-            })
-          }));
-        }
-        // 驾驶员数据
-        if (results[2][0].data.code === 0 && results[2][1].data.code === 0) {
-          results[2].map((res, i) => {
-            res.data.data.map((n, j) => {
-              this.driverList.push({
+      if (this.activeStep == 0) {
+        let p1 = this.getGroups();
+        let p2 = this.getSemiList();
+        Promise.all([p1, p2]).then(results => {
+          // 分组数据
+          if (results[0].data.code === 0) {
+            this.groupList = results[0].data.data.results;
+            results[0].data.data.results.map((n, i) => {
+              this.selectData.groupOptions.push(n);
+            });
+          }
+          // 挂车数据
+          if (results[1].data.code == 0) {
+            results[1].data.data.map(((n, i) => {
+              this.semiList.push({
                 id: n.id,
-                value: n.name + "  " + n.mobile_phone
-              });
-              // 驾驶员/押运员添加进押运员数组
-              if (i === 1) {
-                this.escortList.push({
+                value: n.plate_number
+              })
+            }));
+          }
+          this.pageLoading = false;
+        }).catch(err => {
+
+        });
+      } else {
+        let p3 = this.getDriverList();
+        let p4 = this.getEscortList();
+        Promise.all([p3, p4]).then(results => {
+          console.log('results', results);
+          // 驾驶员数据
+          if (results[0][0].data.code === 0 && results[0][1].data.code === 0) {
+            results[0].map((res, i) => {
+              res.data.data.map((n, j) => {
+                this.driverList.push({
                   id: n.id,
                   value: n.name + "  " + n.mobile_phone
                 });
-              }
+                // 驾驶员/押运员添加进押运员数组
+                if (i === 1) {
+                  this.escortList.push({
+                    id: n.id,
+                    value: n.name + "  " + n.mobile_phone
+                  });
+                }
+              });
             });
-          });
-        }
-        // 押运员数据
-        if (results[3].data.code === 0) {
-          results[3].data.data.map((n, i) => {
-            this.escortList.push({
-              id: n.id,
-              value: n.name + "  " + n.mobile_phone
+          }
+          // 押运员数据
+          if (results[1].data.code === 0) {
+            results[1].data.data.map((n, i) => {
+              this.escortList.push({
+                id: n.id,
+                value: n.name + "  " + n.mobile_phone
+              });
             });
-          });
-        }
-        this.pageLoading = false;
-      }).catch(err => {
+          }
+          this.pageLoading = false;
+        }).catch(err => {
 
-      });
+        });
+      }
+
+
+
     },
     getGroups: function() {
       return this.$$http('getGroups')

@@ -371,13 +371,13 @@ export default {
             res.data.data.map((n, j) => {
               this.driverList.push({
                 id: n.id,
-                value: n.name
+                value: n.name + "  " + n.mobile_phone
               });
               // 驾驶员/押运员添加进押运员数组
               if (i === 1) {
                 this.escortList.push({
                   id: n.id,
-                  value: n.name
+                  value: n.name + "  " + n.mobile_phone
                 });
               }
             });
@@ -403,15 +403,16 @@ export default {
     },
     searchList: function() {
       var vm = this;
-      if (this.filterParam.field && this.filterParam.keyword && this.pageData.currentPage === 1) {
-        this.filterParam[this.filterParam.field] = this.filterParam.keyword;
+      let filterParamCopy = Object.assign({}, this.filterParam);
+      if (filterParamCopy.field && filterParamCopy.keyword && this.pageData.currentPage === 1) {
+        filterParamCopy[filterParamCopy.field] = filterParamCopy.keyword;
       } else {
-        this.filterParam.tractor_plate_number = null;
-        this.filterParam.semitrailer_plate_number = null;
-        this.filterParam.car_belong_phone = null;
-        this.filterParam.driver_staff_name = null;
+        filterParamCopy.tractor_plate_number = null;
+        filterParamCopy.semitrailer_plate_number = null;
+        filterParamCopy.car_belong_phone = null;
+        filterParamCopy.driver_staff_name = null;
       }
-      let param = dealObjectValue(this.filterParam);
+      let param = dealObjectValue(filterParamCopy);
       param.keyword = null;
       param.field = null;
       this.$$http("searchCapacityList", dealObjectValue(param))

@@ -272,11 +272,11 @@ export default {
         this.isAllSelect = !this.isAllSelect;
       }
       for (let i in this.tableData) {
-        for (let j in selection) {
-          if (this.tableData[i].id === selection[j].id) {
-            this.tableData[i].isSelect = this.isAllSelect;
-          }
-        }
+        // for (let j in selection) {
+        //   if (this.tableData[i].id === selection[j].id) {
+        this.tableData[i].isSelect = this.isAllSelect;
+        //   }
+        // }
       }
       // if (selection.length) {
       //   this.isAllSelect = true;

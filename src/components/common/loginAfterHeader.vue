@@ -275,7 +275,8 @@ export default {
         domainUrl = 'devtms.hhtdlng.com';
       }
       //,['c55f02c5-81e2-433c-84a0-e974d0642bab'],{'Authorization':''}
-      let ws = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+      this.$store.state.common.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+      let ws = this.$store.state.common.wsMsg;
       ws.onopen = function(event) {
         console.log('链接消息', event)
       }

@@ -19,8 +19,9 @@ export default {
     removeButton: true,
     queryButton: false
   },
-  unreadNewNum:0,//未读消息
-  selectData: {},//全局数据
-  users:{},//用户个人信息
-  menuList:[],
+  unreadNewNum: 0, //未读消息
+  selectData: {}, //全局数据
+  users: {}, //用户个人信息
+  menuList: [],
+  wsMsg: null //websocket
 }

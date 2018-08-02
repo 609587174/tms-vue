@@ -772,6 +772,11 @@
                 <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
+           <el-col :span="10" >
+            <el-form-item label="实际里程:" prop="active_mile" >
+                <el-input placeholder="请输入" type="text" v-model="surePound.active_mile"></el-input>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
       <span slot="footer" class="dialog-footer" style="text-align: center;">

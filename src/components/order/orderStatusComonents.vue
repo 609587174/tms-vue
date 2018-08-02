@@ -143,7 +143,6 @@ export default {
         active_time: [],
         load_plan_time: []
       },
-      carrier_type:"own",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -300,7 +299,6 @@ export default {
       }
 
       sendData.pageSize = this.pageData.pageSize;
-      sendData.carrier_type=this.carrier_type;
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;

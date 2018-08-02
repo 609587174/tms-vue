@@ -245,6 +245,15 @@
                 </div>
               </el-col>
             </el-row>
+
+            <el-row :gutter="40">
+              <el-col :span="8">
+                <div class="label-list">
+                  <label>实际里程:</label>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(item.weight_active_mile)"></div>
+                </div>
+              </el-col>
+            </el-row>
           </div>
         </div>
         <div class="detail-list detail-form">
@@ -385,7 +394,9 @@
         </div>
       </el-main>
     </el-container>
-    <img-review :imgObject.sync='imgObject'></img-review>
+    <img-review :imgObject.sync='imgObject' >
+
+    </img-review>
   </div>
   <!-- </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">

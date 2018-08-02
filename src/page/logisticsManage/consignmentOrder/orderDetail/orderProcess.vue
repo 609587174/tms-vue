@@ -54,6 +54,10 @@
 .label-list label {
   width:100px;
 }
+.sealTitle{
+  text-align: center;
+  margin-bottom: 20px;
+}
 </style>
 <template>
   <div>
@@ -193,14 +197,14 @@
                               </div>
                             </el-col>
                           </el-row>
-                           <el-row :gutter="40">
+                          <!--  <el-row :gutter="40">
                             <el-col :span="16">
                               <div class="label-list">
                                 <label>铅封号:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.seal_no)"></div>
                               </div>
                             </el-col>
-                          </el-row>
+                          </el-row> -->
                         </div>
                         <div v-if="(item.type === 'waiting_seal'||item.type=='loading_waiting_audit')&&item.operation!='上传装车铅封'">
                           <el-row :gutter="40">
@@ -808,7 +812,9 @@
        <el-button type="primary" @click="sendRe('cancleLoadExUp')">确认拒绝</el-button>
       </span>
     </el-dialog>
-    <img-review :imgObject.sync='imgObject'></img-review>
+    <img-review :imgObject.sync='imgObject'>
+       <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
+    </img-review>
   </div>
 </template>
 <script>
@@ -878,6 +884,7 @@ export default {
       exPound: {},
       sealImgList: [],
       poundImg: {},
+      sealTitle:"",
       suerId: "",
       allButton: {
         'loading_waiting_audit': [{
@@ -946,6 +953,7 @@ export default {
               var imgList = vm.poundImg[id];
               this.imgObject.imgList = imgList;
               this.imgObject.showPreview = true;
+
             } else {
               this.$$http("getPundList", sendData).then(results => {
                 if (results.data.code == 0) {
@@ -960,6 +968,7 @@ export default {
         }
       } else if (type == 'showSeal') {
         if (this.sealImgList.length > 0) {
+          vm.imgObject.title=this.sealTitle;
           vm.imgObject.imgList = this.sealImgList;
           vm.imgObject.showPreview = true;
         } else {
@@ -968,9 +977,22 @@ export default {
           sendData.id = id;
           this.$$http("getSeal", sendData).then(results => {
             if (results.data.code == 0) {
+              var poundTitle="铅封号：";
+              if(results.data.data.data[0].seal_no_list){
+                results.data.data.data[0].seal_no_list.forEach((item,index)=>{
+                  if(index!=results.data.data.data[0].seal_no_list.length-1){
+                    poundTitle+=item+"/";
+                  }else{
+                    poundTitle+=item;
+                  }
+                });
+              }
+              vm.imgObject.title=poundTitle;
+              vm.sealTitle=poundTitle;
               vm.imgObject.imgList = results.data.data.data[0].image_url_list;
               this.sealImgList = results.data.data.data[0].image_url_list;
               vm.imgObject.showPreview = true;
+
             } else {
               vm.$message.error("获取铅封照片出错");
             }

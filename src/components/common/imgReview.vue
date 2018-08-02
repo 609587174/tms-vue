@@ -13,8 +13,9 @@
 -->
 <template>
   <div class="review-background" v-if="imgObject.showPreview">
-    <div class="img-review-out-box" v-on:click.self="imgObject.showPreview = false">
+    <div class="img-review-out-box" v-on:click.self="closePreview()">
       <div class="clearfix img-review-box">
+         <slot></slot>
         <div class="img-review-in-box">
           <ul>
             <li v-for="(item , key) in imgList" :key="key">
@@ -185,7 +186,7 @@ export default {
     bottom: 50px;
     left: 50%;
     margin-left: -155px;
-
+    text-align:center;
 
     height: 24px;
     width: 310px;

@@ -817,7 +817,7 @@
       </span>
     </el-dialog>
     <img-review :imgObject.sync='imgObject'>
-      <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
+      <div v-if="imgObject.title!=''" class="sealTitle">{{imgObject.title}}</div>
     </img-review>
   </div>
 </template>
@@ -880,6 +880,7 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
+        title:"",
       },
       sureTitle: "装车磅单审核通过",
       cancleTitle: "装车磅单审核拒绝",
@@ -945,6 +946,7 @@ export default {
     showImg: function(type, id) {
       var vm = this;
       if (type == 'showPound') {
+         this.imgObject.title="";
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
           this.imgObject.imgList = [imgList];

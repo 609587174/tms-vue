@@ -1150,7 +1150,8 @@ export default {
           gross_weight: this.surePound.gross_weight,
           tare_weight: this.surePound.tare_weight,
           net_weight: this.surePound.net_weight,
-          leave_time: this.surePound.leave_time || null
+          leave_time:this.surePound.leave_time||null,
+          active_mile:this.surePound.active_mile||null
         };
         // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
         //   sendData.status = 'waiting_settlement';
@@ -1168,11 +1169,15 @@ export default {
             vm.pageLoading = false;
             vm.operationIsOk = true;
             if (results.data.code == 0) {
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
-              vm.$message({
+               vm.$message({
                 type: "success",
                 message: "审核通过成功"
               })
+              if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
+                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+              }else{
+                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+              }
             }
           }).catch(() => {
             vm.pageLoading = false;

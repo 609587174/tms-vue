@@ -31,6 +31,16 @@
               <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
             </el-input>
           </el-col>
+
+          <el-col :span="6" :offset="2">
+            <el-form-item label="分组:" label-width="50px">
+              <el-select @change="searchList" v-model="groupParam" placeholder="请选择" >
+                <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
@@ -120,6 +130,7 @@ export default {
       pageLoading: false,
       exportLoading:false,
       fifterName: "all",
+      groupParam:"",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
@@ -152,10 +163,14 @@ export default {
           { id: 'fluid_name', value: '液厂名' },
           { id: 'truck_no', value: '车号' },
           { id: 'waybill_number', value: '运单号' },
+          { id: 'order_station', value: '卸货站点' },
         ],
         carrier_type_select:[
           { id: 'own', value: '自有承运商(自有)' },
           { id: 'external', value: '外部承运商(合作)' },
+        ],
+        groupOptions : [
+          {id: "",group_name: '全部'}
         ]
       },
       searchStatus: false,
@@ -248,6 +263,18 @@ export default {
         }
       });
     },
+    getGroups: function() {
+      this.$$http('getGroups').then(results => {
+        if (results.data.code === 0) {
+          this.groupList = results.data.data.results;
+          results.data.data.results.map((n, i) => {
+            this.selectData.groupOptions.push(n);
+          });
+        }
+      }).catch(error => {
+
+      });
+    },
     searchList: function(targetName) {
       //
       this.$emit("reshCount");
@@ -297,7 +324,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-
+      sendData.truck_group=this.groupParam;
       sendData.pageSize = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;
@@ -421,6 +448,7 @@ export default {
   created() {
     this.fifterName=this.secondActiveName;
     //this.listFifterData = this.listData;
+    this.getGroups();
     this.searchList();
   },
   watch: {

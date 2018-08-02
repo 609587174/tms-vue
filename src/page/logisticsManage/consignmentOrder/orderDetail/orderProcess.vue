@@ -58,6 +58,8 @@
 .sealTitle {
   text-align: center;
   margin-bottom: 20px;
+  z-index:5000;
+  position:relative;
 }
 
 </style>
@@ -1207,7 +1209,7 @@ export default {
             vm.pageLoading = false;
             if (results.data.code == 0) {
               console.log('results', results);
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
               vm.$message({
                 type: "success",
                 message: "审核拒绝成功"

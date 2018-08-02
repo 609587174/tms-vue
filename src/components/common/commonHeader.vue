@@ -75,7 +75,8 @@ export default {
           })
 
           localStorage.clear();
-          this.$router.push({ path: this.type === 'index' ? '/' : '/login' });
+          this.users = {};
+          this.$router.push({ path: '/login' });
 
         })
         .catch(() => {});

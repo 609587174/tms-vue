@@ -1209,7 +1209,11 @@ export default {
             vm.pageLoading = false;
             if (results.data.code == 0) {
               console.log('results', results);
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+               if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
+                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+               }else{
+                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+               }
               vm.$message({
                 type: "success",
                 message: "审核拒绝成功"

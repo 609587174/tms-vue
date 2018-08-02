@@ -1,5 +1,4 @@
 <style scoped lang="less">
-
 .label-list {
   margin-bottom: 0px;
 }
@@ -51,13 +50,16 @@
 .padds {
   padding: 25px 0 0px 0
 }
+
 .label-list label {
-  width:100px;
+  width: 100px;
 }
-.sealTitle{
+
+.sealTitle {
   text-align: center;
   margin-bottom: 20px;
 }
+
 </style>
 <template>
   <div>
@@ -67,7 +69,7 @@
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
           <div class="detail-main border-top-clear" v-loading="pageLoading">
-            <el-container v-show="!pageLoading" >
+            <el-container v-show="!pageLoading">
               <el-header>
                 <el-row>
                   <el-col :span="3">
@@ -134,7 +136,7 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>司机:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.master_driver)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.master_driver_phone)"></span>
                                 </div>
@@ -143,7 +145,7 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>副驾:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.copilot_name)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.copilot_driver_phone)"></span>
                                 </div>
@@ -152,7 +154,7 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>押运:</label>
-                                <div class="detail-form-item" >
+                                <div class="detail-form-item">
                                   <span v-html="pbFunc.dealNullData(item.supercargo_name)"></span>
                                   <span style="margin-left:5px;" v-html="pbFunc.dealNullData(item.supercargo_phone)"></span>
                                 </div>
@@ -286,7 +288,7 @@
                             </el-col>
                           </el-row>
                           <el-row :gutter="40">
-                             <el-col :span="8">
+                            <el-col :span="8">
                               <div class="label-list">
                                 <label>离站时间:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.leave_time)"></div>
@@ -626,7 +628,6 @@
                             </el-col>
                           </el-row>
                         </div>
-
                         <div v-if="item.type === 'abnormal'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -712,73 +713,74 @@
       <el-form ref="examinePoundForm" :rules="rules" :model="surePound" status-icon :label-position="'right'" v-if="detailData.length>0" label-width="100px">
         <el-row>
           <el-col :span="20" :offset="2">
-            <img :src="exPound.image_url" style='width:100%;max-height:500px'></img>
+            <router-link target="_blank" :to="imgReviewSrc">
+              <img :src="exPound.image_url" style='width:100%;max-height:500px'></img>
+            </router-link>
           </el-col>
         </el-row>
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-              <el-form-item label="实际到厂时间:" prop="active_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="实际到站时间:" prop="active_time" v-else>
-                <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
+            <el-form-item label="实际到厂时间:" prop="active_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="实际到站时间:" prop="active_time" v-else>
+              <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
           </el-col>
           <el-col :span="10">
-              <el-form-item label="装车毛重(吨):" prop="gross_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
-              </el-form-item>
-              <el-form-item label="卸车毛重(吨):" prop="gross_weight" v-else>
-                <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
-              </el-form-item>
+            <el-form-item label="装车毛重(吨):" prop="gross_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
+            </el-form-item>
+            <el-form-item label="卸车毛重(吨):" prop="gross_weight" v-else>
+              <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-              <el-form-item label="装液开始时间:" prop="work_start_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="卸车开始时间:" prop="work_start_time" v-else>
-                <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
+            <el-form-item label="装液开始时间:" prop="work_start_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="卸车开始时间:" prop="work_start_time" v-else>
+              <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
           </el-col>
           <el-col :span="10">
-              <el-form-item label="装车皮重(吨):" prop="tare_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
-              </el-form-item>
-              <el-form-item label="卸车皮重(吨):" prop="tare_weight" v-else>
-                <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
-              </el-form-item>
+            <el-form-item label="装车皮重(吨):" prop="tare_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
+            </el-form-item>
+            <el-form-item label="卸车皮重(吨):" prop="tare_weight" v-else>
+              <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
-        
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-              <el-form-item label="装液完成时间:" prop="work_end_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
-              <el-form-item label="卸车完成时间:" prop="work_start_time" v-else>
-                <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-              </el-form-item>
+            <el-form-item label="装液完成时间:" prop="work_end_time" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="卸车完成时间:" prop="work_start_time" v-else>
+              <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
           </el-col>
           <el-col :span="10">
-              <el-form-item label="装车净重(吨):" prop="net_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
-                <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
-              </el-form-item>
-              <el-form-item label="卸车净重(吨):" prop="net_weight" v-else>
-                <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
-              </el-form-item>
+            <el-form-item label="装车净重(吨):" prop="net_weight" v-if="detailData[detailData.length - 1].type!='unloading_waiting_audit'">
+              <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
+            </el-form-item>
+            <el-form-item label="卸车净重(吨):" prop="net_weight" v-else>
+              <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row style="margin-top:15px;" v-if="detailData[detailData.length - 1].type=='unloading_waiting_audit'">
-          <el-col :span="10" :offset="2" >
-            <el-form-item label="离站时间:" prop="work_end_time" >
-                <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+          <el-col :span="10" :offset="2">
+            <el-form-item label="离站时间:" prop="work_end_time">
+              <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
-           <el-col :span="10" >
-            <el-form-item label="实际里程:" prop="active_mile" >
-                <el-input placeholder="请输入" type="text" v-model="surePound.active_mile"></el-input>
+          <el-col :span="10">
+            <el-form-item label="实际里程:" prop="active_mile">
+              <el-input placeholder="请输入" type="text" v-model="surePound.active_mile"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -813,7 +815,7 @@
       </span>
     </el-dialog>
     <img-review :imgObject.sync='imgObject'>
-       <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
+      <div v-if="sealTitle!=''" class="sealTitle">{{sealTitle}}</div>
     </img-review>
   </div>
 </template>
@@ -835,10 +837,11 @@ export default {
   },
   data() {
     return {
+      imgReviewSrc: '',
       rules: [
 
       ],
-      noCancle:false,
+      noCancle: false,
       examinePoundParam: {},
       extendsArr: [],
       statusType: {
@@ -859,10 +862,10 @@ export default {
         in_settlement: '结算中',
         finished: '已完成',
         canceled: '已取消',
-        abnormal:'运力变更申请',
-        normal:'运力已变更'
+        abnormal: '运力变更申请',
+        normal: '运力已变更'
       },
-      operationIsOk:true,
+      operationIsOk: true,
       lockFalg: false,
       activeName: 'second',
       pageLoading: false,
@@ -884,7 +887,7 @@ export default {
       exPound: {},
       sealImgList: [],
       poundImg: {},
-      sealTitle:"",
+      sealTitle: "",
       suerId: "",
       allButton: {
         'loading_waiting_audit': [{
@@ -915,7 +918,7 @@ export default {
           type: "success",
           methods: "upInSettlement"
         }]
-        
+
       },
       selectData: {
         loadPoundReasonList: [{
@@ -968,7 +971,7 @@ export default {
         }
       } else if (type == 'showSeal') {
         if (this.sealImgList.length > 0) {
-          vm.imgObject.title=this.sealTitle;
+          vm.imgObject.title = this.sealTitle;
           vm.imgObject.imgList = this.sealImgList;
           vm.imgObject.showPreview = true;
         } else {
@@ -977,18 +980,18 @@ export default {
           sendData.id = id;
           this.$$http("getSeal", sendData).then(results => {
             if (results.data.code == 0) {
-              var poundTitle="铅封号：";
-              if(results.data.data.data[0].seal_no_list){
-                results.data.data.data[0].seal_no_list.forEach((item,index)=>{
-                  if(index!=results.data.data.data[0].seal_no_list.length-1){
-                    poundTitle+=item+"/";
-                  }else{
-                    poundTitle+=item;
+              var poundTitle = "铅封号：";
+              if (results.data.data.data[0].seal_no_list) {
+                results.data.data.data[0].seal_no_list.forEach((item, index) => {
+                  if (index != results.data.data.data[0].seal_no_list.length - 1) {
+                    poundTitle += item + "/";
+                  } else {
+                    poundTitle += item;
                   }
                 });
               }
-              vm.imgObject.title=poundTitle;
-              vm.sealTitle=poundTitle;
+              vm.imgObject.title = poundTitle;
+              vm.sealTitle = poundTitle;
               vm.imgObject.imgList = results.data.data.data[0].image_url_list;
               this.sealImgList = results.data.data.data[0].image_url_list;
               vm.imgObject.showPreview = true;
@@ -1030,6 +1033,7 @@ export default {
             vm.exPound = results.data.data.data[0];
             vm.poundImg[results.data.data.data[0].id] = results.data.data.data[0].image_url;
             vm.dialog.sureLoadEx = true;
+            vm.imgReviewSrc = `/imgReview?imgList=${vm.exPound.image_url}`;
           }
         }).catch(() => {
           vm.$message.error("磅单图片获取失败")
@@ -1057,61 +1061,61 @@ export default {
       } else if (type == 'cancleLoadEx') {
         vm.dialog.cancleLoadEx = true;
       } else if (type == 'sureMatch') {
-        if(this.changeStatus=='modifying'){
+        if (this.changeStatus == 'modifying') {
           vm.$confirm('卸车分段不能确认,是否前往【已匹配待确认】中确认', '请注意', {
             confirmButtonText: '前往',
             cancelButtonText: '取消',
             type: 'warning',
             center: true,
           }).then(() => {
-            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match"});
+            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
           }).catch(() => {
 
           })
-        }else{
+        } else {
           var cancel_trip_list = [],
-          match_trip_list = [],
-          sendData;
-        this.detailData.forEach(item => {
-          if (item.type == "confirm_match" && item.identify_id == vm.suerId) {
-            item.waiting_matchArr.forEach(Witem => {
-              if (Witem.status == 'new') {
-                match_trip_list.push(Witem.trip_id);
-              } else {
-                cancel_trip_list.push(Witem.trip_id);
-              }
-            });
+            match_trip_list = [],
+            sendData;
+          this.detailData.forEach(item => {
+            if (item.type == "confirm_match" && item.identify_id == vm.suerId) {
+              item.waiting_matchArr.forEach(Witem => {
+                if (Witem.status == 'new') {
+                  match_trip_list.push(Witem.trip_id);
+                } else {
+                  cancel_trip_list.push(Witem.trip_id);
+                }
+              });
 
-          }
-        });
-        sendData.cancel_trip_list = cancel_trip_list;
-        sendData.match_trip_list = match_trip_list;
-        sendData.pickup_trip_id = this.setpId;
-        this.pageLoading=true;
-        this.$$http("sureMatch", sendData).then(results => {
-          vm.pageLoading=false;
-          if (results.data.code == 0) {
-            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
-            vm.$message({
-              type: "success",
-              message: "确认卸货单成功"
-            })
-          } else {
+            }
+          });
+          sendData.cancel_trip_list = cancel_trip_list;
+          sendData.match_trip_list = match_trip_list;
+          sendData.pickup_trip_id = this.setpId;
+          this.pageLoading = true;
+          this.$$http("sureMatch", sendData).then(results => {
+            vm.pageLoading = false;
+            if (results.data.code == 0) {
+              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$message({
+                type: "success",
+                message: "确认卸货单成功"
+              })
+            } else {
+              vm.$message.error("确认卸货单失败")
+            }
+          }).catch(() => {
+            vm.pageLoading = false;
             vm.$message.error("确认卸货单失败")
-          }
-        }).catch(() => {
-          vm.pageLoading=false;
-          vm.$message.error("确认卸货单失败")
-        });
+          });
         }
-        
+
       } else if (type == 'upInSettlement') {
         var sendData = {};
         sendData.id = this.setpId;
         sendData.status = 'in_settlement';
-        this.pageLoading=true;
+        this.pageLoading = true;
         this.$$http('changeOrderStatus', sendData).then(results => {
-          vm.pageLoading=false;
+          vm.pageLoading = false;
           if (results.data.code == 0) {
             vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
             vm.$message({
@@ -1122,7 +1126,7 @@ export default {
             vm.$message.error("提交结算失败")
           }
         }).catch(() => {
-          vm.pageLoading=false;
+          vm.pageLoading = false;
           vm.$message.error("提交结算失败")
         });
       }
@@ -1146,7 +1150,7 @@ export default {
           gross_weight: this.surePound.gross_weight,
           tare_weight: this.surePound.tare_weight,
           net_weight: this.surePound.net_weight,
-          leave_time:this.surePound.leave_time||null
+          leave_time: this.surePound.leave_time || null
         };
         // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
         //   sendData.status = 'waiting_settlement';
@@ -1157,12 +1161,12 @@ export default {
         sendData.id = weight_id;
         //sendData.weight_id = weight_id;
         sendData.is_checked = 'pass';
-        if(this.operationIsOk){
-          this.operationIsOk=false;
-          vm.pageLoading=true;
-            this.$$http("examineLoad", sendData).then(results => {
-            vm.pageLoading=false;
-            vm.operationIsOk=true;
+        if (this.operationIsOk) {
+          this.operationIsOk = false;
+          vm.pageLoading = true;
+          this.$$http("examineLoad", sendData).then(results => {
+            vm.pageLoading = false;
+            vm.operationIsOk = true;
             if (results.data.code == 0) {
               vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
               vm.$message({
@@ -1170,8 +1174,8 @@ export default {
                 message: "审核通过成功"
               })
             }
-          }).catch(()=>{
-            vm.pageLoading=false;
+          }).catch(() => {
+            vm.pageLoading = false;
           });
         }
       } else if (type == 'cancleLoadExUp') {
@@ -1190,12 +1194,12 @@ export default {
         } else {
           sendData.reason = this.otherInput;
         }
-        if(this.operationIsOk){
-            this.operationIsOk=false;
-            vm.pageLoading=true;
-            this.$$http("examineLoad", sendData).then(results => {
-            this.operationIsOk=true;
-            vm.pageLoading=false;
+        if (this.operationIsOk) {
+          this.operationIsOk = false;
+          vm.pageLoading = true;
+          this.$$http("examineLoad", sendData).then(results => {
+            this.operationIsOk = true;
+            vm.pageLoading = false;
             if (results.data.code == 0) {
               console.log('results', results);
               vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
@@ -1204,8 +1208,8 @@ export default {
                 message: "审核拒绝成功"
               })
             }
-          }).catch(()=>{
-            vm.pageLoading=false;
+          }).catch(() => {
+            vm.pageLoading = false;
           });
         }
       }
@@ -1221,10 +1225,10 @@ export default {
             vm.$$http("getSectionTrips", { id: vm.setpId }).then(stepInfo => {
               if (stepInfo.data.code == 0) {
                 vm.suerId = stepInfo.data.data.identify;
-                vm.changeStatus=stepInfo.data.data.interrupt_status.key;
+                vm.changeStatus = stepInfo.data.data.interrupt_status.key;
                 vm.matchData(results.data.data);
                 vm.extendsArr.push(vm.detailData.length - 1);
-                if (vm.detailData[vm.detailData.length - 1].operation == "上传装车铅封"||vm.detailData[vm.detailData.length - 1].operation == "已匹配卸货单") {
+                if (vm.detailData[vm.detailData.length - 1].operation == "上传装车铅封" || vm.detailData[vm.detailData.length - 1].operation == "已匹配卸货单") {
                   vm.extendsArr.push(vm.detailData.length - 2);
                 }
               }

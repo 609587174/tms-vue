@@ -1,25 +1,11 @@
-<!-- 图片预览组件-->
-<!--
-  prop:
-    imgObject:object,必需
-    初始化：
-    imgObject{
-      imgList: [],//图片url列表,必需。
-      showPreview: false,//是否展示预览，默认false,必需
-      previewIndex: 0,//默认展示图片的index,可选
-    }
-  ex:
-    <img-review :imgObject.sync='imgObject'></img-review>
--->
 <template>
-  <div class="review-background" v-if="imgObject.showPreview">
-    <div class="img-review-out-box" v-on:click.self="closePreview()">
+  <div class="review-background">
+    <div class="img-review-out-box">
       <div class="clearfix img-review-box">
-         <slot></slot>
         <div class="img-review-in-box">
           <ul>
             <li v-for="(item , key) in imgList" :key="key">
-              <div v-show="previewIndex == key"><img :src="item.src" v-bind:style="imgStyle" /></div>
+              <div v-show="previewIndex == key"><img :src="item" v-bind:style="imgStyle" /></div>
             </li>
           </ul>
         </div>
@@ -29,7 +15,6 @@
           <a href="javascript:void(0)" v-on:click="zoomBig" v-show="imgList.length">放大</a>
           <a href="javascript:void(0)" v-on:click="zoomSmall" v-show="imgList.length">缩小</a>
           <a href="javascript:void(0)" v-on:click="rotateImg()">旋转</a>
-          <a href="javascript:void(0)" v-on:click="closePreview()">关闭</a>
         </div>
       </div>
     </div>
@@ -51,10 +36,10 @@ export default {
   },
   data() {
     return {
-      previewIndex: 0,
       imgList: [],
-      zoomNum: 1,
+      previewIndex: 0,
       rotateDeg: 0,
+      zoomNum: 1,
     }
   },
   methods: {
@@ -85,53 +70,11 @@ export default {
       if (this.zoomNum > 0.4) {
         this.zoomNum -= 0.2;
       }
-
     },
-    closePreview() {
-      this.zoomNum= 1;
-      this.rotateDeg=0;
-      this.imgObject.showPreview = false;
-    },
-    dealImg() {
-      let imgListArray = []
-      if (this.imgObject && this.imgObject.imgList && this.imgObject.imgList.length) {
-        for (let i in this.imgObject.imgList) {
-          imgListArray[i] = {};
-          if (this.imgObject.imgList[i].src) {
-            imgListArray[i] = {};
-            imgListArray[i].src = this.imgObject.imgList[i].src;
-          }
-        }
-      }
-      return imgListArray;
-    }
   },
   created() {
-    this.imgList = this.dealImg();
-
+    this.imgList = this.$route.query.imgList.split(',');
   },
-  props: {
-    imgObject: Object,
-  },
-  watch: {
-    'imgObject': {
-      handler: function(val, oldVal) {
-        let imgListArray = []
-        if (val.imgList.length) {
-          for (let i in val.imgList) {
-            imgListArray[i] = {};
-            if (val.imgList[i]) {
-              imgListArray[i] = {};
-              imgListArray[i].src = val.imgList[i];
-            }
-          }
-        }
-        this.imgList = imgListArray;
-        this.previewIndex = val.previewIndex || 0;
-      },
-      deep: true,
-    }
-  }
 }
 
 </script>
@@ -145,7 +88,7 @@ export default {
   overflow: auto;
   margin: 0;
   z-index: 2001;
-  background-color: rgba(0, 0, 0, .6);
+  background-color: rgba(0, 0, 0, 1);
   color: #fff;
 }
 
@@ -188,13 +131,15 @@ export default {
     bottom: 50px;
     left: 50%;
     margin-left: -155px;
-    text-align:center;
+
 
     height: 24px;
     width: 310px;
 
     font-size: 16px;
     color: #fff;
+    text-align: center;
+    ;
 
     a {
       margin-left: 10px;

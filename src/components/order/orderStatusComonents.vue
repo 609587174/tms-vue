@@ -31,17 +31,27 @@
               <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
             </el-input>
           </el-col>
+
+          <el-col :span="6" :offset="2">
+            <el-form-item label="分组:" label-width="50px">
+              <el-select @change="searchList" v-model="groupParam" placeholder="请选择" >
+                <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
             <el-form-item align="right" label="计划装货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.load_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item align="right" label="实际装货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -49,13 +59,13 @@
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" v-if="status!='first'">
             <el-form-item align="right" label="计划卸货时间:" label-width="105px">
-              <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" :picker-options="pickerOptions" v-model="timeParam.unload_plan_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="status!='first'&&status!='second'">
             <el-form-item label="实际卸货时间:" label-width="105px">
-              <el-date-picker :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+              <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -120,6 +130,7 @@ export default {
       pageLoading: false,
       exportLoading:false,
       fifterName: "all",
+      groupParam:"",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
@@ -143,7 +154,6 @@ export default {
         active_time: [],
         load_plan_time: []
       },
-      carrier_type:"own",
       selectData: {
         vehicle_type_Select: this.$store.state.common.selectData.truck_attributes,
         brand_Select: this.$store.state.common.selectData.semitrailer_vehicle_type,
@@ -153,10 +163,14 @@ export default {
           { id: 'fluid_name', value: '液厂名' },
           { id: 'truck_no', value: '车号' },
           { id: 'waybill_number', value: '运单号' },
+          { id: 'order_station', value: '卸货站点' },
         ],
         carrier_type_select:[
           { id: 'own', value: '自有承运商(自有)' },
           { id: 'external', value: '外部承运商(合作)' },
+        ],
+        groupOptions : [
+          {id: "",group_name: '全部'}
         ]
       },
       searchStatus: false,
@@ -249,6 +263,18 @@ export default {
         }
       });
     },
+    getGroups: function() {
+      this.$$http('getGroups').then(results => {
+        if (results.data.code === 0) {
+          this.groupList = results.data.data.results;
+          results.data.data.results.map((n, i) => {
+            this.selectData.groupOptions.push(n);
+          });
+        }
+      }).catch(error => {
+
+      });
+    },
     searchList: function(targetName) {
       //
       this.$emit("reshCount");
@@ -298,9 +324,8 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-
+      sendData.truck_group=this.groupParam;
       sendData.pageSize = this.pageData.pageSize;
-      sendData.carrier_type=this.carrier_type;
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
@@ -423,6 +448,7 @@ export default {
   created() {
     this.fifterName=this.secondActiveName;
     //this.listFifterData = this.listData;
+    this.getGroups();
     this.searchList();
   },
   watch: {

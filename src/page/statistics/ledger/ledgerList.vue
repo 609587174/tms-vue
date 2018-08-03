@@ -169,6 +169,10 @@ export default {
         param: 'stand_mile',
         width: ''
       }, {
+        title: '运费金额',
+        param: 'change_value',
+        width: ''
+      }, {
         title: '卸车待时金额',
         param: 'waiting_price',
         width: ''

@@ -108,12 +108,17 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="起步价:" prop="label_price">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.label_price"></el-input>
+                  <el-form-item label="实际里程:" prop="actual_mile">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_mile"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="起步价:" prop="label_price">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.label_price"></el-input>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="8">
                   <el-form-item label="运输费率:" prop="freight_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
@@ -124,13 +129,14 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_value"></el-input>
                   </el-form-item>
                 </el-col>
+
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="卸车待时金额:" prop="waiting_price">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运费合计:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
@@ -186,6 +192,7 @@ export default {
         actual_quantity: '', //实收吨位
         check_quantity: '', //核算吨位
         stand_mile: '', //标准里程
+        actual_mile:'',//实际里程
         label_price: '', //起步价
         freight_value: '', //运输费率
         change_value: '', //运费金额
@@ -201,7 +208,7 @@ export default {
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
         stand_mile: [
-          { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
+          { pattern: /^[0-9]+(.[0-9]{0,1})?$/, message: '支持数值输入，最多支持小数点后1位', trigger: 'blur' }
         ],
         label_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
@@ -215,9 +222,9 @@ export default {
         waiting_price: [
           { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
         ],
-        // waiting_charges: [
-        //   { pattern: /^[0-9]+(.[0-9]{0,3})?$/, message: '支持数值输入，最多支持小数点后3位', trigger: 'blur' }
-        // ],
+        actual_mile: [
+          { pattern: /^[0-9]+(.[0-9]{0,1})?$/, message: '支持数值输入，最多支持小数点后1位', trigger: 'blur' }
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -265,6 +272,7 @@ export default {
             actual_quantity: this.detail.actual_quantity, //实收吨位
             check_quantity: this.detail.check_quantity, //核算吨位
             stand_mile: this.detail.stand_mile, //标准里程
+            actual_mile:this.detail.actual_mile,//实际里程
             label_price: this.detail.label_price, //起步价
             freight_value: this.detail.freight_value, //运输费率
             change_value: this.detail.change_value, //运费金额
@@ -311,7 +319,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time','check_quantity', 'stand_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time','check_quantity', 'stand_mile','actual_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray,true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

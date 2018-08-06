@@ -169,12 +169,15 @@
           <div class="listDetalis opButton" style="width:9%">
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
               <el-col >
-                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+               <el-tooltip class="item" effect="dark" content="该运单申请取消中" placement="top-start" v-if="props.row.waybill.change_status.key=='canceled'">
+                  <el-button :type="item.type" :plan="item.attrPlan" size="mini"  class="is-disabled"> {{item.text}}</el-button>
+                </el-tooltip>
+                <el-button v-else :type="item.type" :plan="item.attrPlan"  size="mini" @click="operation(item.methods_type,props.row)" >{{item.text}}</el-button>
               </el-col>
             </el-row>
             <el-row  v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
               <el-col >
-                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" >{{item.text}}</el-button>
               </el-col>
            </el-row>
           </div>

@@ -244,16 +244,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-
-      sendData.pageSize = this.pageData.pageSize;
-      if (this.searchStatus) {
-        sendData = this.saveSendData;
-        sendData.page = this.pageData.currentPage;
-      } else {
-        vm.saveSendData = sendData;
-        this.pageData.currentPage = 1;
-        sendData.page = this.pageData.currentPage;
-      }
+      sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel='export'
       this.$$http("searchConOrderList", sendData).then((results) => {

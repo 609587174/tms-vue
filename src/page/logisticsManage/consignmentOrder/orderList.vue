@@ -140,7 +140,7 @@ export default {
   },
   created() {
     this.activeName=this.$route.query.goTo||"first";
-    this.secondActiveName=this.$route.query.secondActiveName||"all"
+    this.secondActiveName=this.$route.query.secondActiveName||"loading_waiting_audit"
     this.pageLoading=true;
     this.reshCount();
   },
@@ -192,7 +192,7 @@ export default {
     '$route' (to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.activeName=this.$route.query.goTo||"first";
-      this.secondActiveName=this.$route.query.secondActiveName||"all" 
+      this.secondActiveName=this.$route.query.secondActiveName||"loading_waiting_audit" 
     }
   }
 

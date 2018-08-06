@@ -113,7 +113,7 @@
               </el-table-column>
               <el-table-column label="状态" width="90" fixed="right">
                 <template slot-scope="scope">
-                  <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消过': (noCanceled.indexOf(scope.row.waybill.status).indexOf>-1?'不可取消':'未选择过'))}}
+                  <el-tag :type="allStatus.indexOf(scope.row.waybill.status)>-1 ? 'success' :(scope.row.waybill.status==='canceled'? 'warning':(noCanceled.indexOf(scope.row.waybill.status)>-1?'danger': 'primary'))" disable-transitions>{{allStatus.indexOf(scope.row.waybill.status)>-1 ? '已审核' :(scope.row.waybill.status==='canceled'? '已取消过': (noCanceled.indexOf(scope.row.waybill.status)>-1?'不可取消':'未选择过'))}}
                   </el-tag>
                 </template>
               </el-table-column>

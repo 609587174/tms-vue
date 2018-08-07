@@ -165,8 +165,12 @@ export default {
         param: 'check_quantity',
         width: ''
       }, {
-        title: '实际里程',
+        title: '标准里程',
         param: 'stand_mile',
+        width: ''
+      }, {
+        title: '运费金额',
+        param: 'change_value',
         width: ''
       }, {
         title: '卸车待时金额',

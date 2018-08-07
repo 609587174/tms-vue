@@ -49,7 +49,9 @@ export default {
     } else {
       domainUrl = 'devtms.hhtdlng.com';
     }
-    this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+    if (this.users && this.users.id) {
+      this.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
+    }
   },
   data: function() {
     return {

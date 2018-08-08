@@ -58,8 +58,8 @@
 .sealTitle {
   text-align: center;
   margin-bottom: 20px;
-  z-index:5000;
-  position:relative;
+  z-index: 5000;
+  position: relative;
 }
 
 </style>
@@ -71,7 +71,7 @@
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second" style="background-color:white">
           <div class="detail-main border-top-clear" v-loading="pageLoading">
-            <el-container >
+            <el-container>
               <el-header>
                 <el-row>
                   <el-col :span="3">
@@ -566,7 +566,6 @@
                             </el-col>
                           </el-row>
                         </div>
-                        
                         <div v-if="item.type === 'already_match'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -699,7 +698,7 @@
       </el-tabs>
     </div>
     <el-dialog :title="sureTitle" center :visible.sync="dialog.sureLoadEx" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :close-on-press-escape="noCancle">
-      <el-form ref="examinePoundForm" :rules="rules" :model="surePound" status-icon :label-position="'right'" v-if="detailData.length>0" label-width="100px">
+      <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" v-if="detailData.length>0" label-width="100px">
         <el-row>
           <el-col :span="20" :offset="2">
             <router-link target="_blank" :to="imgReviewSrc">
@@ -829,9 +828,6 @@ export default {
   data() {
     return {
       imgReviewSrc: '',
-      rules: [
-
-      ],
       noCancle: false,
       examinePoundParam: {},
       extendsArr: [],
@@ -869,16 +865,16 @@ export default {
         imgList: [],
         showPreview: false,
         previewIndex: 0,
-        title:"",
+        title: "",
       },
-      buttonCanClick:true,
-      buttonLoading:{
-        settlementButton:false,//结算
-        loadingAuditSuccessButton:false,//装车审核通过
-        loadingAuditFailButton:false,//装车审核失败
-        unloadinguditSuccessButton:false,//卸车审核通过
-        unloadinguditFailButton:false,//卸车审核失败
-        sureUnload:false,//确认卸货地
+      buttonCanClick: true,
+      buttonLoading: {
+        settlementButton: false, //结算
+        loadingAuditSuccessButton: false, //装车审核通过
+        loadingAuditFailButton: false, //装车审核失败
+        unloadinguditSuccessButton: false, //卸车审核通过
+        unloadinguditFailButton: false, //卸车审核失败
+        sureUnload: false, //确认卸货地
       },
       sureTitle: "装车磅单审核通过",
       cancleTitle: "装车磅单审核拒绝",
@@ -909,7 +905,7 @@ export default {
           text: "审核拒绝",
           type: "danger",
           methods: "cancleUnLoadEx"
-        },{
+        }, {
           text: "审核通过",
           type: "success",
           methods: "sureUnLoadEx"
@@ -943,7 +939,7 @@ export default {
     showImg: function(type, id) {
       var vm = this;
       if (type == 'showPound') {
-         this.imgObject.title="";
+        this.imgObject.title = "";
         if (vm.poundImg[id]) {
           var imgList = vm.poundImg[id];
           this.imgObject.imgList = [imgList];
@@ -1062,73 +1058,75 @@ export default {
       } else if (type == 'cancleLoadEx') {
         vm.dialog.cancleLoadEx = true;
       } else if (type == 'sureMatch') {
-        if(vm.buttonCanClick){
-          vm.buttonCanClick=false;
+        if (vm.buttonCanClick) {
+          vm.buttonCanClick = false;
           if (this.changeStatus == 'modifying') {
-          vm.$confirm('卸车分段不能确认,是否前往【已匹配待确认】中确认', '请注意', {
-            confirmButtonText: '前往',
-            cancelButtonText: '取消',
-            type: 'warning',
-            center: true,
-          }).then(() => {
-            vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
-          }).catch(() => {
-
-          })
-        } else {
-          var cancel_trip_list = [],
-            match_trip_list = [],
-            sendData;
-          this.detailData.forEach(item => {
-            if (item.type == "confirm_match" && item.identify_id == vm.suerId) {
-              item.waiting_matchArr.forEach(Witem => {
-                if (Witem.status == 'new') {
-                  match_trip_list.push(Witem.trip_id);
-                } else {
-                  cancel_trip_list.push(Witem.trip_id);
-                }
-              });
-
-            }
-          });
-          sendData.cancel_trip_list = cancel_trip_list;
-          sendData.match_trip_list = match_trip_list;
-          sendData.pickup_trip_id = this.setpId;
-          this.pageLoading = true;
-          this.buttonLoading.suerUnload=true;
-          this.$$http("sureMatch", sendData).then(results => {
-            vm.pageLoading = false;
-            vm.buttonCanClick=true;
-            if (results.data.code == 0) {
-              this.buttonLoading.suerUnload=false;
+            vm.$confirm('卸车分段不能确认,是否前往【已匹配待确认】中确认', '请注意', {
+              confirmButtonText: '前往',
+              cancelButtonText: '取消',
+              type: 'warning',
+              center: true,
+            }).then(() => {
               vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
-              vm.$message({
-                type: "success",
-                message: "确认卸货单成功"
-              })
-            } else {
+            }).catch(() => {
+
+            })
+          } else {
+            var cancel_trip_list = [],
+              match_trip_list = [],
+              sendData;
+            this.detailData.forEach(item => {
+              if (item.type == "confirm_match" && item.identify_id == vm.suerId) {
+                item.waiting_matchArr.forEach(Witem => {
+                  if (Witem.status == 'new') {
+                    match_trip_list.push(Witem.trip_id);
+                  } else {
+                    cancel_trip_list.push(Witem.trip_id);
+                  }
+                });
+
+              }
+            });
+            sendData.cancel_trip_list = cancel_trip_list;
+            sendData.match_trip_list = match_trip_list;
+            sendData.pickup_trip_id = this.setpId;
+            this.pageLoading = true;
+            this.buttonLoading.suerUnload = true;
+            this.$$http("sureMatch", sendData).then(results => {
+              vm.pageLoading = false;
+              vm.buttonCanClick = true;
+              if (results.data.code == 0) {
+                this.buttonLoading.suerUnload = false;
+                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
+                vm.$message({
+                  type: "success",
+                  message: "确认卸货单成功"
+                })
+              } else {
+                vm.$message.error("确认卸货单失败")
+              }
+            }).catch(() => {
+              vm.pageLoading = false;
+              vm.buttonCanClick = true;
+              this.buttonLoading.suerUnload = false;
               vm.$message.error("确认卸货单失败")
-            }
-          }).catch(() => {
-            vm.pageLoading = false;
-            vm.buttonCanClick=true;
-            this.buttonLoading.suerUnload=false;
-            vm.$message.error("确认卸货单失败")
-          });
-        }
+            });
+
+
+          }
         }
       } else if (type == 'upInSettlement') {
-        if(vm.buttonCanClick){
+        if (vm.buttonCanClick) {
           var sendData = {};
           sendData.id = this.setpId;
           sendData.status = 'in_settlement';
           this.pageLoading = true;
-          vm.buttonCanClick=false;
-          vm.buttonLoading.settlementButton=true;
+          vm.buttonCanClick = false;
+          vm.buttonLoading.settlementButton = true;
           this.$$http('changeOrderStatus', sendData).then(results => {
             vm.pageLoading = false;
-            vm.buttonCanClick=false;
-            vm.buttonLoading.settlementButton=false;
+            vm.buttonCanClick = false;
+            vm.buttonLoading.settlementButton = false;
             if (results.data.code == 0) {
               vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
               vm.$message({
@@ -1140,130 +1138,130 @@ export default {
             }
           }).catch(() => {
             vm.pageLoading = false;
-            vm.buttonCanClick=false;
-            vm.buttonLoading.settlementButton=false;
+            vm.buttonCanClick = false;
+            vm.buttonLoading.settlementButton = false;
             vm.$message.error("提交结算失败")
           });
         }
       }
     },
     sendRe: function(type, row) {
-      if(this.buttonCanClick){
-        this.buttonCanClick=false;
-         var vm = this;
-      var weight_id = "";
-      if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit" || this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
-        if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
-          weight_id = this.detailData[this.detailData.length - 2].weight_id;
-        } else {
-          this.surePound = this.detailData[this.detailData.length - 1];
-          weight_id = this.detailData[this.detailData.length - 1].weight_id;
-        }
-      }
-      if (type == 'sureLoadExUp') {
-        var sendData = {
-          active_time: this.surePound.active_time,
-          work_start_time: this.surePound.work_start_time,
-          work_end_time: this.surePound.work_end_time,
-          gross_weight: this.surePound.gross_weight,
-          tare_weight: this.surePound.tare_weight,
-          net_weight: this.surePound.net_weight,
-          leave_time:this.surePound.leave_time||null,
-          active_mile:this.surePound.active_mile||null
-        };
-        // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
-        //   sendData.status = 'waiting_settlement';
-        // } else {
-        //   sendData.status = 'waiting_match';
-        // }
-
-        sendData.id = weight_id;
-        //sendData.weight_id = weight_id;
-        sendData.is_checked = 'pass';
-        if (this.operationIsOk) {
-          this.operationIsOk = false;
-          vm.pageLoading = true;
-          this.$$http("examineLoad", sendData).then(results => {
-            vm.pageLoading = false;
-            vm.operationIsOk = true;
-            vm.buttonCanClick=true;
-            if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
-              vm.buttonLoading.loadingAuditSuccessButton=true;
-            }else{
-              vm.buttonLoading.unloadinguditSuccessButton=true;
-            }
-            if (results.data.code == 0) {
-              
-               vm.$message({
-                type: "success",
-                message: "审核通过成功"
-              });
-
-              if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
-                vm.buttonLoading.loadingAuditSuccessButton=false;
-                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
-              }else{
-                vm.buttonLoading.unloadinguditSuccessButton=false;
-                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
-              }
-            }
-          }).catch(() => {
-            vm.pageLoading = false;
-            vm.buttonCanClick=true;
-            vm.buttonLoading.unloadinguditSuccessButton=false;
-            vm.buttonLoading.loadingAuditSuccessButton=false;
-          });
-        }
-      } else if (type == 'cancleLoadExUp') {
-        var sendData = {};
-        // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
-        //   sendData.status = 'unloading_audit_failed';
-        // } else {
-        //   sendData.status = 'loading_audit_failed';
-        // }
-
-        sendData.id = weight_id;
-        //sendData.weight_id = "";
-        sendData.is_checked = 'refuse';
-        if (this.loadPoundReason != 'other') {
-          sendData.reason = this.loadPoundReason;
-        } else {
-          sendData.reason = this.otherInput;
-        }
-        if (this.operationIsOk) {
-          this.operationIsOk = false;
-          vm.pageLoading = true;
-          if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
-            vm.buttonLoading.loadingAuditFailButton=true;
-          }else{
-            vm.buttonLoading.unloadinguditFailButton=true;
+      if (this.buttonCanClick) {
+        this.buttonCanClick = false;
+        var vm = this;
+        var weight_id = "";
+        if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit" || this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
+          if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
+            weight_id = this.detailData[this.detailData.length - 2].weight_id;
+          } else {
+            this.surePound = this.detailData[this.detailData.length - 1];
+            weight_id = this.detailData[this.detailData.length - 1].weight_id;
           }
-          this.$$http("examineLoad", sendData).then(results => {
-            vm.buttonCanClick=true;
-            this.operationIsOk = true;
-            vm.pageLoading = false;
-            if (results.data.code == 0) {
-              console.log('results', results);
-               if(vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit" ){
-                vm.buttonLoading.loadingAuditFailButton=false;
-                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
-               }else{
-                vm.buttonLoading.unloadinguditFailButton=false;
-                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
-               }
-              vm.$message({
-                type: "success",
-                message: "审核拒绝成功"
-              })
-            }
-          }).catch(() => {
-            vm.pageLoading = false;
-            vm.buttonCanClick=true;
-            vm.buttonLoading.unloadinguditFailButton=false;
-            vm.buttonLoading.loadingAuditFailButton=false;
-          });
         }
-      }
+        if (type == 'sureLoadExUp') {
+          var sendData = {
+            active_time: this.surePound.active_time,
+            work_start_time: this.surePound.work_start_time,
+            work_end_time: this.surePound.work_end_time,
+            gross_weight: this.surePound.gross_weight,
+            tare_weight: this.surePound.tare_weight,
+            net_weight: this.surePound.net_weight,
+            leave_time: this.surePound.leave_time || null,
+            active_mile: this.surePound.active_mile || null
+          };
+          // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
+          //   sendData.status = 'waiting_settlement';
+          // } else {
+          //   sendData.status = 'waiting_match';
+          // }
+
+          sendData.id = weight_id;
+          //sendData.weight_id = weight_id;
+          sendData.is_checked = 'pass';
+          if (this.operationIsOk) {
+            this.operationIsOk = false;
+            vm.pageLoading = true;
+            this.$$http("examineLoad", sendData).then(results => {
+              vm.pageLoading = false;
+              vm.operationIsOk = true;
+              vm.buttonCanClick = true;
+              if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
+                vm.buttonLoading.loadingAuditSuccessButton = true;
+              } else {
+                vm.buttonLoading.unloadinguditSuccessButton = true;
+              }
+              if (results.data.code == 0) {
+
+                vm.$message({
+                  type: "success",
+                  message: "审核通过成功"
+                });
+
+                if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
+                  vm.buttonLoading.loadingAuditSuccessButton = false;
+                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+                } else {
+                  vm.buttonLoading.unloadinguditSuccessButton = false;
+                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+                }
+              }
+            }).catch(() => {
+              vm.pageLoading = false;
+              vm.buttonCanClick = true;
+              vm.buttonLoading.unloadinguditSuccessButton = false;
+              vm.buttonLoading.loadingAuditSuccessButton = false;
+            });
+          }
+        } else if (type == 'cancleLoadExUp') {
+          var sendData = {};
+          // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
+          //   sendData.status = 'unloading_audit_failed';
+          // } else {
+          //   sendData.status = 'loading_audit_failed';
+          // }
+
+          sendData.id = weight_id;
+          //sendData.weight_id = "";
+          sendData.is_checked = 'refuse';
+          if (this.loadPoundReason != 'other') {
+            sendData.reason = this.loadPoundReason;
+          } else {
+            sendData.reason = this.otherInput;
+          }
+          if (this.operationIsOk) {
+            this.operationIsOk = false;
+            vm.pageLoading = true;
+            if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
+              vm.buttonLoading.loadingAuditFailButton = true;
+            } else {
+              vm.buttonLoading.unloadinguditFailButton = true;
+            }
+            this.$$http("examineLoad", sendData).then(results => {
+              vm.buttonCanClick = true;
+              this.operationIsOk = true;
+              vm.pageLoading = false;
+              if (results.data.code == 0) {
+                console.log('results', results);
+                if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
+                  vm.buttonLoading.loadingAuditFailButton = false;
+                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+                } else {
+                  vm.buttonLoading.unloadinguditFailButton = false;
+                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+                }
+                vm.$message({
+                  type: "success",
+                  message: "审核拒绝成功"
+                })
+              }
+            }).catch(() => {
+              vm.pageLoading = false;
+              vm.buttonCanClick = true;
+              vm.buttonLoading.unloadinguditFailButton = false;
+              vm.buttonLoading.loadingAuditFailButton = false;
+            });
+          }
+        }
       }
     },
     getData: function() {

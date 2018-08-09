@@ -11,15 +11,21 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <router-link target="_blank" :to="imgReviewSrc">
-            <img :src="surePound.image_url" style='width:100%;max-height:500px'></img>
-          </router-link>
+          <el-row>
+            <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
+              <router-link target="_blank" :to="imgReviewSrc">
+                <img :src="item" style='width:100%;max-height:100px'></img>
+              </router-link>
+            </el-col>
+          </el-row>
+          <el-col :span="20" :offset="2">
+          </el-col>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车时间:">
-            计划装车时间
+            {{surePound.plan_time}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -31,11 +37,11 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车液厂:">
-            计划装车液厂
+            {{surePound.delivery_order && surePound.delivery_order.fluid_name}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="装液开始时间:" prop="work_start_time">
+          <el-form-item label="装液开始时间:">
             <el-date-picker v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
         </el-col>
@@ -43,11 +49,11 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车吨位:">
-            计划装车吨位
+            {{surePound.plan_tonnage}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="装液完成时间:" prop="work_end_time">
+          <el-form-item label="装液完成时间:">
             <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
           </el-form-item>
         </el-col>
@@ -55,11 +61,11 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车车号:">
-            计划装车车号
+            {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="装车毛重(吨):" prop="gross_weight">
+          <el-form-item label="装车毛重(吨):">
             <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
           </el-form-item>
         </el-col>
@@ -67,11 +73,11 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
-            主驾
+            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="装车皮重(吨):" prop="tare_weight">
+          <el-form-item label="装车皮重(吨):">
             <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
           </el-form-item>
         </el-col>
@@ -79,19 +85,19 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            副驾/押运
+            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="装车净重(吨):" prop="net_weight">
+          <el-form-item label="装车净重(吨):">
             <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer" style="text-align: center;">
-      <el-button @click="dialog.sureLoadEx = false">取 消</el-button>
-      <el-button type="primary" @click="sendRe('sureLoadExUp')" :loading="buttonLoading.unloadinguditSuccessButton">确 定</el-button>
+      <el-button @click="$emit('close')">取 消</el-button>
+      <el-button type="primary" @click="sendRe()" :loading="buttonLoading" :disabble="buttonLoading">确 定</el-button>
     </div>
   </div>
 </template>
@@ -100,24 +106,105 @@ export default {
   name: 'loadingReview',
   data() {
     return {
-      surePound: {},
-      buttonLoading: {},
-      imgReviewSrc: '',
+      buttonLoading: false,
+      imgList: [],
     };
   },
   props: {
-
+    surePound: Object,
+    visible: Boolean,
+    successCallback: Function,
+    cancel: Function,
   },
   computed: {
-
+    imgReviewSrc: function() {
+      return `/imgReview?imgList=${this.imgList.join(',')}`;
+    }
   },
   methods: {
-    sendRe() {
+    getImg() { //获取榜单和铅封图片
+      let qustArray = [];
+      //获取装车榜单
+      if (this.surePound.weight_note) {
+        let req1 = this.$$http('getPundList', { id: this.surePound.weight_note });
+        qustArray.push(req1);
+      }
+      //获取铅封
+      if (this.surePound.carseal) {
+        let req2 = this.$$http('getSeal', { id: this.surePound.carseal });
+        qustArray.push(req2);
+      }
 
+      if (!qustArray.length) return;
+
+      Promise.all(qustArray).then(results => {
+        if (results[0].data.code === 0 && results[1].data.code === 0) {
+          results.map((res, i) => {
+            let imageUrlArray;
+
+            if (i === 0) {
+              imageUrlArray = res.data.data.data;
+              imageUrlArray.map((img, j) => {
+                this.imgList.push(img.image_url);
+              })
+            }
+            if (i === 1) {
+              imageUrlArray = res.data.data.data;
+              imageUrlArray.map((img, k) => {
+                this.imgList = [...this.imgList, ...img.image_url_list];
+              })
+            }
+          })
+        }
+      }).catch(err => {
+
+      })
+
+
+    },
+    sendRe() { //审核通过
+      let sendData = {
+        active_time: this.surePound.active_time,
+        work_start_time: this.surePound.work_start_time,
+        work_end_time: this.surePound.work_end_time,
+        gross_weight: this.surePound.gross_weight,
+        tare_weight: this.surePound.tare_weight,
+        net_weight: this.surePound.net_weight,
+        leave_time: this.surePound.leave_time || null,
+        active_mile: this.surePound.active_mile || null,
+        is_checked: 'pass',
+        id: this.surePound.weight_note || '',
+      };
+
+      if (!this.surePound.weight_note) return;
+
+      this.buttonLoading = true;
+      this.$$http("examineLoad", sendData).then(results => {
+        this.buttonLoading = false;
+        if (results.data.code == 0) {
+          this.$message({
+            type: "success",
+            message: "审核通过成功"
+          });
+
+          this.$emit('successCallback');
+          this.$emit('close');
+        }
+      }).catch((err) => {
+        this.buttonLoading = false;
+      });
     }
   },
   created() {
-
+    this.getImg();
+  },
+  watch: {
+    surePound: {
+      handler(val, oldVal) {
+        this.getImg();
+      },
+      deep: true　
+    },
   }
 };
 

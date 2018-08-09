@@ -768,7 +768,7 @@
           </el-col>
           <el-col :span="10">
             <el-form-item label="实际里程:" prop="active_mile">
-              <el-input placeholder="请输入" type="text" v-model="surePound.active_mile"></el-input>
+              <el-input placeholder="请输入" type="text" v-model="surePound.weight_active_mile"></el-input>
             </el-form-item>
           </el-col>
         </el-row>

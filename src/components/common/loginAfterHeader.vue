@@ -132,8 +132,8 @@
         padding: 10px 20px;
         color: #606266;
         text-align: left;
-        word-break:break-all;
-        word-warp:break-word;
+        word-break: break-all;
+        word-warp: break-word;
         .time {
           color: #B8B8B8;
         }
@@ -229,6 +229,7 @@
   <!-- </div> -->
 </template>
 <script>
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'loginAfterheader',
   props: {
@@ -264,16 +265,7 @@ export default {
     wsLink() {
       let vm = this;
       let currentUrl = document.location.href.toString();
-      let domainUrl = '';
-      if (currentUrl.match('ptms.91lng.cn')) {
-        domainUrl = 'ptms.91lng.cn';
-      } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
-        domainUrl = 'tms.hhtdlng.com';
-      } else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
-        domainUrl = 'tms.91lng.cn';
-      } else {
-        domainUrl = 'devtms.hhtdlng.com';
-      }
+      let domainUrl = getDomainUrl();
       //,['c55f02c5-81e2-433c-84a0-e974d0642bab'],{'Authorization':''}
       this.$store.state.common.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       let ws = this.$store.state.common.wsMsg;

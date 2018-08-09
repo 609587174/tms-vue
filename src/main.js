@@ -8,7 +8,7 @@ import router from './router'
 import axios from 'axios';
 import store from './store/indexStore'
 import * as pbFunc from './assets/utils';
-import http from './api/index';
+import {httpServer} from './api/index';
 import * as filters from '@/assets/js/filter';
 import App from './App'
 
@@ -17,8 +17,9 @@ Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key])
 })
 
+console.log('http',httpServer);
 Vue.prototype.pbFunc = pbFunc;
-Vue.prototype.$$http = http;
+Vue.prototype.$$http = httpServer;
 
 // console.log('http', http);
 

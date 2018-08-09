@@ -155,17 +155,7 @@ export default {
       this.multipleSelection = val;
     },
     uploadApiUrl() {
-      let domainUrl = '';
-      let currentUrl = document.location.href.toString();
-      if (currentUrl.match('ptms.91lng.cn')) {
-        domainUrl = 'http://ptms.91lng.cn';
-      } else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
-        domainUrl = 'http://tms.hhtdlng.com';
-      } else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
-        domainUrl = 'http://tms.91lng.cn';
-      } else {
-        domainUrl = 'http://devtms.hhtdlng.com';
-      }
+      let domainUrl = getDomainUrl('http://');
       this.uploadFileData.uploadFileUrl = domainUrl + this.apiNameData.uploadApi + '?ticket=' + (this.pbFunc.getLocalData('token', true) ? this.pbFunc.getLocalData('token', true) : '');
     },
     exportsTemplate() {

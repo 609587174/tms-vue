@@ -17,19 +17,29 @@ let timeout = 20000;
 
 /* 配置访问url */
 let domainUrl = '';
-let currentUrl = document.location.href.toString();
 
-if (currentUrl.match('ptms.91lng.cn')) {
-  domainUrl = 'http://ptms.91lng.cn';
-} else if (currentUrl.match('tms.hhtdlng.com') && !currentUrl.match('devtms.hhtdlng.com')) {
-  domainUrl = 'http://tms.hhtdlng.com';
-} else if (currentUrl.match('tms.91lng.cn') && !currentUrl.match('ptms.91lng.cn')) {
-  domainUrl = 'http://tms.91lng.cn';
-} else {
-  // domainUrl = 'http://devtms.hhtdlng.com';
-  domainUrl = 'http://tms.hhtdlng.com';
+export const getDomainUrl = function(prefix=''){//掐指一算五个环境
+  let currentUrl = document.location.href.toString();
+  let domainUrl = '';
+
+  if (currentUrl.match('ptms.hhtdlng.com')) {//演示环境
+    domainUrl = `${prefix}ptms.hhtdlng.com`;
+  }  else if (currentUrl.match('ptms.91lng.cn')) {//预发环境
+    domainUrl = `${prefix}ptms.91lng.cn`;
+  } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`)) {//测试环境
+    domainUrl = `${prefix}tms.hhtdlng.com`;
+  } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`)) {//正式环境
+    domainUrl = `${prefix}tms.91lng.cn`;
+  }else if(currentUrl.match(`devtms.hhtdlng.com`)){//开发环境
+    domainUrl = `${prefix}devtms.hhtdlng.com`;
+  } else {
+    domainUrl = `${prefix}tms.hhtdlng.com`;//本地开发环境
+  }
+
+  return domainUrl;
 }
 
+domainUrl = getDomainUrl('http://');
 
 let pending = []; //声明一个数组用于存储每个ajax请求的取消函数和ajax标识
 let unCancelAjax = ['getTripRecords', 'getOfflineAndStopRecords', 'signOut', 'getTransPowerInfoList']; //设定可以重复请求的ajax请求的apiname(str)。
@@ -255,7 +265,7 @@ const dealConfig = function(apiName, postData) {
 
 
 /* http请求统一函数 */
-const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
+export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
 
   if (!apiName) return false;
 
@@ -288,4 +298,3 @@ const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallb
   return promise
 }
 
-export default httpServer

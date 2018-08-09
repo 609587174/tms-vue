@@ -99,13 +99,13 @@
 <template>
   <div style="position:relative;">
     <noData v-if="ListData.length==0"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :expand-row-keys="expandIdArr" :cell-click="rowClick">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:xx
+                实际液厂:{{props.row.actual_fluid_address}}
               </el-col>
               <el-col :span="4">
                 采购价:{{props.row.unit_price}}

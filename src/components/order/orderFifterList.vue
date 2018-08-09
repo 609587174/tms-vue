@@ -1,13 +1,9 @@
 <style scoped lang="less">
-.listTableAll {
-  text-align: center;
-}
 
 .el-table {
-  /deep/ .el-table__header-wrapper tr th .cell {
-    text-align: center;
-  }
+ 
   /deep/ .el-table__body {
+
     .el-table__row {
       background-color: #f5f6fa;
       &.expanded {
@@ -23,6 +19,8 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
+      height:25px;
+      padding:0;
     }
     .listDetalis {
       float: left;
@@ -48,13 +46,8 @@
     .el-col-3 {
       width: 11.5%;
     }
-    .expanded td {
-      text-align: center
-    }
     .el-table__row {
-      td {
-        text-align: center
-      } 
+     
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
@@ -77,54 +70,105 @@
   margin-top: 5px;
   height: 28px;
 }
-.el-icon-location{
-  cursor:pointer;
+
+.el-icon-location {
+  cursor: pointer;
 }
+
 #map-container {
   height: 400px;
   width: 100%;
 }
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  font-size:12px;
+}
+.fontContro{
+  font-size:12px;
+}
+.buttonContent .el-row{
+  margin-top:10px;
+}
+.buttonContent>div:nth-child(1){
+  margin-top:0px;
+}
 </style>
 <template>
   <div style="position:relative;">
-  <noData v-if="ListData.length==0"></noData>
-  <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="medium" height="550">
-    <el-table-column type="expand" width="40">
-      <template slot-scope="props">
-        <div class="listDetalis" style="width:75%;padding-left:48px;">
-          <el-row class="loadInfo commh" style="width:100%;">
-            <el-col :span="7" class="colinfo">装:<span style="color:rgb(97,126,253);font-weight:bold;font-size:16px;">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
-            </el-col>
-            <el-col :span="3" class="colinfo">
-            </el-col>
-            <el-col :span="4" class="colinfo">{{props.row.plan_time.split(" ")[0]}}</br>{{props.row.plan_time.split(" ")[1]}}
-            </el-col>
-            <el-col :span="4" class="colinfo">无
-            </el-col>
-            <el-col :span="3" class="colinfo">{{props.row.plan_tonnage}}
-            </el-col>
-            <el-col :span="3" class="colinfo">无
-            </el-col>
-          </el-row>
-          <el-row class="loadInfo commh" style="width:100%;" v-for="(item,key) in props.row.destination">
-            <el-col :span="7" class="colinfo">
-              卸货区域:<span>{{item}}</span>
-            </el-col>
-          </el-row>
-        </div>
-        <div class="listDetalis carList" style="width:15%">
-          <el-row style="width:80%;" class="commh">
-            <el-col>需求车数:{{props.row.require_car_number}}辆</el-col>
-          </el-row>
-          <el-row style="width:80%;" class="commh">
-            <el-col>提交车数:{{props.row.submit_car_number}}辆</el-col>
-          </el-row>
-          <el-row style="width:80%;" class="commh">
-            <el-col>确认车数:{{props.row.sure_car_number}}辆</el-col>
-          </el-row>
-        </div>
-        <div class="listDetalis opButton" style="width:9%">
-          <el-row v-if="props.row.status.key=='appoint'">
+    <noData v-if="ListData.length==0"></noData>
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandFalg" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :expand-row-keys="expandIdArr" :cell-click="rowClick">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
+            <el-row style="margin-top:5px;">
+              <el-col :span="4">
+                实际液厂:xx
+              </el-col>
+              <el-col :span="4">
+                采购价:{{props.row.unit_price}}
+              </el-col>
+              <el-col :span="4">
+                托运方:<span v-if="props.row.trader.length<10">{{props.row.trader}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.trader" placement="top-start">
+                  <span>{{props.row.trader.slice(0,8)}}....</span>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="4">
+                下单人:{{props.row.creator_name}}
+              </el-col>
+              <el-col :span="4">
+                需求车数:{{props.row.require_car_number}}辆
+              </el-col>
+              <el-col :span="3">
+                确认车数:{{props.row.sure_car_number}}辆
+              </el-col>
+              <el-col :span="1">
+                <el-tooltip :content="props.row.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
+                  <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
+                </el-tooltip>
+              </el-col>
+            </el-row>
+            <el-row style="margin-top:20px;">
+              <el-col :span="4">
+                卸货区域:<span v-if="props.row.destination.length>0">{{props.row.destination[0]}}</span><span v-else>暂无</span>
+              </el-col>
+              <el-col :span="4">
+                采购优惠:{{props.row.business_price}}
+              </el-col>
+              <el-col :span="4">
+                承运方:<span v-if="props.row.carriers&&props.row.trader.length<10">{{props.row.carriers[0].carrier_name}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.carriers[0].carrier_name" placement="top-start">
+                  <span>{{props.row.carriers[0].carrier_name.slice(0,8)}}....</span>
+                </el-tooltip>
+              </el-col>
+              <el-col :span="4">
+                下单时间:{{props.row.created_at}}
+              </el-col>
+              <el-col :span="4">
+                提交车数:{{props.row.submit_car_number}}
+              </el-col>
+            </el-row>
+          </div>
+          <div style="width:100px;float:right;padding-left:10px;" class="buttonContent">
+            <!-- <el-row v-if="props.row.status.key=='appoint'||props.row.status.key=='determine'">
+              <el-col style="text-align:left" class="">
+                <el-button  type="danger" size="mini" plain @click="operation('cancleOrder',props.row)">取消订单</el-button>
+              </el-col>
+            </el-row >
+            <el-row >
+              <el-col v-if="props.row.status.key=='determine'" style="text-align:left">
+                <el-button  type="success" size="mini" plain @click="operation('suerOrder',props.row)">确认订单</el-button>
+              </el-col>
+            </el-row>
+            <el-row >
+              <el-col style="text-align:left">
+                <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
+              </el-col>
+            </el-row> -->
+            <el-row v-if="props.row.status.key=='appoint'">
             <el-col>
               <el-button type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
             </el-col>
@@ -144,55 +188,59 @@
               <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
             </el-col>
           </el-row>
-        </div>
-        <div style="clear:both"></div>
-      </template>
-    </el-table-column>
-    <el-table-column label="装卸地" prop="id" min-width="21.875%" type>
-      <template slot-scope="props">
-          <el-row >
-            <el-col :span="6">
-              <el-button type="text" style="height:0px;line-height:0px;" @click="gotoOrderDetalis(props.row)">订单号:{{props.row.order_number}}</el-button>
-            </el-col>
-            <el-col :span="6"> 托运方:{{props.row.trader}}</el-col>
-            <!-- <el-col :span="5">标准运费:{{props.row.yunfei}}</el-col> -->
-            <el-col :span="6">
-              <el-tooltip :content="props.row.mark||'暂无备注'" placement="top" effect="light" :open-delay="delayTime">
-                <el-button style="height:0px;line-height:0px;" type="text">备注<i class="el-icon-document"></i></el-button>
-              </el-tooltip>
-            </el-col>
-            <el-col :span="6"> 状态:{{props.row.status.verbose}}
-            </el-col>
-          </el-row>
-          <!-- <div style="position: absolute;height:60px;width:15px;background-color:white;left:-48px;top:0"></div>
-          <div style="position: absolute;height:60px;width:15px;background-color:white;right:0;top:0"></div> -->
-      </template>
-    </el-table-column>
-    <el-table-column label="标准里程" prop="carry_type_info.carry_name" min-width="9.375%">
-      <template slot-scope="props">
-      </template>
-    </el-table-column>
-    <el-table-column label="计划时间" prop="carriers.supplier_name" min-width="12.5%">
-      <template slot-scope="props">
-      </template>
-    </el-table-column>
-    <el-table-column label="实际时间" prop="discount_price" min-width="12.5%">
-      <template slot-scope="props">
-      </template>
-    </el-table-column>
-    <el-table-column label="计划吨位" min-width="9.375%">
-      <template slot-scope="props">
-      </template>
-    </el-table-column>
-    <el-table-column label="实际吨位" prop="" min-width="9.375%">
-      <template slot-scope="props">
-      </template>
-    </el-table-column>
-    <el-table-column label="车辆信息" prop="" min-width="15%">
-    </el-table-column>
-    <el-table-column label="操作" prop="" min-width="13%">
-    </el-table-column>
-  </el-table>
+          </div>
+          <div style="clear:both"></div>
+        </template>
+      </el-table-column>
+      <el-table-column label="订单号" prop="" min-width="150">
+        <template slot-scope="props">
+          <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="液厂" prop="" min-width="150">
+        <template slot-scope="props">
+          <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
+        </template>
+      </el-table-column>
+      <el-table-column label="供应商" prop="" min-width="150">
+        <template slot-scope="props">
+              <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" v-if="props.row.supplier_name.length<8"><span>{{props.row.supplier_name}}</span></el-button>
+          <el-tooltip v-else class="item" effect="dark" :content="props.row.supplier_name" placement="top-start">
+              <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" ><span>{{props.row.supplier_name.slice(0,6)}}....</span></el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+      <el-table-column label="计划时间" prop="" min-width="150">
+        <template slot-scope="props">
+           <span class="fontContro">{{props.row.plan_time}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="计划吨位" prop="" min-width="150">
+        <template slot-scope="props">
+           <span class="fontContro">{{props.row.plan_tonnage}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="车辆信息" prop="" min-width="150">
+        <template slot-scope="props">
+           <span class="fontContro">{{props.row.sure_car_number}}/{{props.row.require_car_number}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="" min-width="150">
+        <template slot-scope="props">
+           <span class="fontContro">{{props.row.status.verbose}}</span>
+        </template>
+      </el-table-column>
+       <el-table-column label="操作" prop="" fixed="right" width="100">
+        <template slot-scope="props">
+          <div class="listDetalis opButton" style="width:9%">
+            <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
+            <el-button class="fontContro" v-if="props.row.status.key=='confirmed'" type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
+            <el-button class="fontContro" v-if="props.row.status.key=='determine'" type="primary" size="mini" @click="operation('upPlan',props.row)">提交计划</el-button>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
@@ -212,7 +260,7 @@ export default {
       lockFalg:false,
       expandStatus: true,
       pageLoading: false,
-      expandFalg: true,
+      expandFalg: false,
       loadPosition:{},
     };
   },
@@ -236,9 +284,10 @@ export default {
   },
   methods: {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
-      if (columnIndex === 1) {
-        return [1, 8];
-      }
+     
+    },
+    rowClick:function(row, event, column){
+      
     },
     getRowKeys: function(row) {
       return row.id;

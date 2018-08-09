@@ -145,8 +145,8 @@ export default {
         field: 'tractor.plate_number',
         orderStateList: '',
       },
-      allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal'],
-      noCanceled: ['loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished'],
+      allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal','loading_waiting_audit'],
+      noCanceled: ['loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished','confirm_match'],
       selectData: {
         fieldSelect: [{
           value: '车号',
@@ -638,13 +638,14 @@ export default {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              if (this.delivery_list.trips[j].status != "canceled"&&this.delivery_list.trips[j].waybill_change_status!= "canceled") {
-                operationArr[i].bindCheckBox = true;
+              operationArr[i].bindCheckBox = true;
+              if (this.delivery_list.trips[j].status != "canceled"&&this.delivery_list.trips[j].waybill_change_status!= "canceled") {    
                 operationArr[i].isDisable=false;
                 this.now_capacities.push(operationArr[i]);
                 addflag = true;
               }else if(this.delivery_list.trips[j].waybill_change_status== "canceled"){
                 operationArr[i].isDisable=true;
+                operationArr[i].bindCheckBox = false;
                 this.default_del_capacities.push(operationArr[i].id);
                 addflag = true;
               }
@@ -672,7 +673,6 @@ export default {
             }
           }
           if (addAlreaListflag) {
-            fifterArr[findex1].waybill = {};
             fifterArr[findex1].bindCheckBox = true;
             this.now_capacities.push(fifterArr[findex1]);
             newArr.push(fifterArr[findex1]);
@@ -694,7 +694,6 @@ export default {
             if (!fifterArr4[findex].waybill) {
               fifterArr4[findex].waybill = {};
             }
-
             newArr.push(fifterArr4[findex]);
           } else {
             fifterArr2.push(fifterArr4[findex]);

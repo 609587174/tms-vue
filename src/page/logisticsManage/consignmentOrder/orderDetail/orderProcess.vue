@@ -566,22 +566,7 @@
                             </el-col>
                           </el-row>
                         </div>
-                        <div v-if="item.type === 'to_site'">
-                          <el-row :gutter="40">
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作时间:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operated_at)"></div>
-                              </div>
-                            </el-col>
-                            <el-col :span="8">
-                              <div class="label-list">
-                                <label>操作人:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
-                              </div>
-                            </el-col>
-                          </el-row>
-                        </div>
+                        
                         <div v-if="item.type === 'already_match'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -1116,7 +1101,7 @@ export default {
             vm.buttonCanClick=true;
             if (results.data.code == 0) {
               this.buttonLoading.suerUnload=false;
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
               vm.$message({
                 type: "success",
                 message: "确认卸货单成功"

@@ -12,7 +12,7 @@
 @import './assets/css/dialogStyle.less'; //弹窗样式
 @import './assets/css/userStyle.less'; //登录 注册 找回密码
 @import './assets/css/elementReset';
-@import './assets/css/news.less';//消息通知
+@import './assets/css/news.less'; //消息通知
 
 </style>
 <template>
@@ -41,8 +41,8 @@ export default {
         dashboard: 'OVERVIEW', //概览
         orders: 'ORDER', //订单
         pickupOrders: 'DELIVERY_ORDER', //提货订单
-        dispatchDashboard: 'OVERVIEW_DISPATCH_SECOND',//调度概览
-        importStatisticsDashboard:'IMPORT_OVERVIEW_SECOND',//导入统计概览
+        dispatchDashboard: 'OVERVIEW_DISPATCH_SECOND', //调度概览
+        importStatisticsDashboard: 'IMPORT_OVERVIEW_SECOND', //导入统计概览
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
@@ -137,7 +137,7 @@ export default {
       this.$store.state.common.userData = { name: "测试名称" };
       if (isGoFirstPath) {
         console.log('allowedRouter[0].children', allowedRouter);
-        if (allowedRouter[0] && allowedRouter[0].children) {
+        if (allowedRouter[0] && allowedRouter[0].children && allowedRouter[0].children.length) {
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {
           this.$router.replace({ path: allowedRouter[0].path });

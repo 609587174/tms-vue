@@ -71,6 +71,8 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder"  :loading="exportLoading">导出</el-button>
     </div>
     <div class="nav-tab-setting mt-25" >
@@ -78,7 +80,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :status="fifterName" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -137,7 +139,8 @@ export default {
         'third': [{ key: 'all', value: '全部' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
         'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
-        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }]
+        'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
+        'seven': [{ key: 'all', value: '全部' }],
       },
       allStatusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
@@ -196,6 +199,9 @@ export default {
   methods: {
     changeTabs: function(name) {
       this.$emit("changeTab", name);
+    },
+    changeExtendsStatus:function(){
+      this.expandStatus=!this.expandStatus;
     },
     exportOrder:function(){
       var sendData = {};

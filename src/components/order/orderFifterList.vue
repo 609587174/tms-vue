@@ -105,7 +105,10 @@
           <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:{{props.row.actual_fluid_address}}
+                实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
+                <el-tooltip v-else class="item" effect="dark" :content="props.row.actual_fluid_address" placement="top-start">
+                  <span>{{props.row.actual_fluid_address.slice(0,8)}}....</span>
+                  </el-tooltip>
               </el-col>
               <el-col :span="4">
                 采购价:{{props.row.unit_price}}
@@ -231,12 +234,12 @@
            <span class="fontContro">{{props.row.status.verbose}}</span>
         </template>
       </el-table-column>
-       <el-table-column label="操作" prop="" fixed="right" width="100">
+       <el-table-column label="操作" prop="" fixed="right" width="130">
         <template slot-scope="props">
-          <div class="listDetalis opButton" style="width:9%">
-            <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
-            <el-button class="fontContro" v-if="props.row.status.key=='confirmed'" type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
-            <el-button class="fontContro" v-if="props.row.status.key=='determine'" type="primary" size="mini" @click="operation('upPlan',props.row)">提交计划</el-button>
+          <div class="listDetalis opButton" style="width:100%">
+            <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" plain @click="operation('addCar',props.row)">添加</el-button>
+            <el-button class="fontContro" v-if="props.row.status.key=='confirmed'||props.row.status.key=='determine'" type="success" size="mini" plain @click="operation('changePlan',props.row)">修改</el-button>
+            <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" @click="operation('upPlan',props.row)">提交</el-button>
           </div>
         </template>
       </el-table-column>

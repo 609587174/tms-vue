@@ -19,24 +19,23 @@ let timeout = 20000;
 let domainUrl = '';
 
 
-export const getDomainUrl = function(prefix=''){//掐指一算五个环境
+export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   let currentUrl = document.location.href.toString();
   let domainUrl = '';
 
-  if (currentUrl.match('ptms.hhtdlng.com')) {//演示环境
+  if (currentUrl.match('ptms.hhtdlng.com')) { //演示环境
     domainUrl = `${prefix}ptms.hhtdlng.com`;
-  }  else if (currentUrl.match('ptms.91lng.cn')) {//预发环境
+  } else if (currentUrl.match('ptms.91lng.cn')) { //预发环境
     domainUrl = `${prefix}ptms.91lng.cn`;
-  } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`)) {//测试环境
+  } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`)) { //测试环境
     domainUrl = `${prefix}tms.hhtdlng.com`;
-  } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`)) {//正式环境
+  } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`)) { //正式环境
     domainUrl = `${prefix}tms.91lng.cn`;
-  }else if(currentUrl.match(`devtms.hhtdlng.com`)){//开发环境
+  } else if (currentUrl.match(`devtms.hhtdlng.com`)) { //开发环境
     domainUrl = `${prefix}devtms.hhtdlng.com`;
   } else {
-    domainUrl = `${prefix}tms.hhtdlng.com`;//本地开发环境
+    domainUrl = `${prefix}tms.hhtdlng.com`; //本地开发环境
   }
-
   return domainUrl;
 }
 
@@ -298,4 +297,3 @@ export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErr
   })
   return promise
 }
-

@@ -32,7 +32,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划到站时间:">
-            {{surePound.business_order && surePound.business_order.plan_arrive_time}}
+            {{surePound.business_order && surePound.business_order.plan_arrive_time || surePound.plan_time}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -44,7 +44,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划站点:">
-            {{surePound.business_order && surePound.business_order.station}}
+            {{surePound.business_order && surePound.business_order.station || surePound.station}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -56,7 +56,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="站点地址:">
-            {{surePound.business_order && surePound.business_order.station_address}}
+            {{surePound.business_order && surePound.business_order.station_address || surePound.station_address}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -68,7 +68,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划卸车吨位:">
-            {{surePound.business_order && surePound.business_order.plan_tonnage}}
+            {{surePound.business_order && surePound.business_order.plan_tonnage || surePound.plan_tonnage}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -80,7 +80,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划卸车车号:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number || surePound.plate_number}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -92,7 +92,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -104,7 +104,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -127,10 +127,11 @@ export default {
     return {
       buttonLoading: false,
       imgList: [],
+      surePound: {},
     };
   },
   props: {
-    surePound: Object,
+    surePoundData: Object,
     successCallback: Function,
     cancel: Function,
   },
@@ -191,11 +192,13 @@ export default {
     }
   },
   created() {
+    this.surePound = Object.assign({}, this.surePoundData);
     this.getImg();
   },
   watch: {
-    surePound: {
+    surePoundData: {
       handler(val, oldVal) {
+        this.surePound = Object.assign({}, this.surePoundData);
         this.getImg();
       },
       deep: true　

@@ -37,7 +37,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车液厂:">
-            {{surePound.delivery_order && surePound.delivery_order.fluid_name}}
+            {{surePound.delivery_order && surePound.delivery_order.fluid_name || surePound.fluid}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -61,7 +61,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车车号:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number || surePound.plate_number}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -73,7 +73,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name || surePound.master_driver}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -85,7 +85,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name}}
+            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -108,11 +108,11 @@ export default {
     return {
       buttonLoading: false,
       imgList: [],
+      surePound: {}
     };
   },
   props: {
-    surePound: Object,
-    visible: Boolean,
+    surePoundData: Object,
     successCallback: Function,
     cancel: Function,
   },
@@ -124,6 +124,7 @@ export default {
   methods: {
     getImg() { //获取榜单和铅封图片
       let qustArray = [];
+      this.imgList = [];
       //获取装车榜单
       if (this.surePound.weight_note) {
         let req1 = this.$$http('getPundList', { id: this.surePound.weight_note });
@@ -138,7 +139,7 @@ export default {
       if (!qustArray.length) return;
 
       Promise.all(qustArray).then(results => {
-        if (results[0].data.code === 0 && results[1].data.code === 0) {
+        if (results[0].data.code === 0) {
           results.map((res, i) => {
             let imageUrlArray;
 
@@ -196,11 +197,13 @@ export default {
     }
   },
   created() {
+    this.surePound = Object.assign({}, this.surePoundData);
     this.getImg();
   },
   watch: {
-    surePound: {
+    surePoundData: {
       handler(val, oldVal) {
+        this.surePound = Object.assign({}, this.surePoundData);
         this.getImg();
       },
       deep: true　

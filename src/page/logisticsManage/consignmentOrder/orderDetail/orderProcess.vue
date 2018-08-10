@@ -858,6 +858,12 @@
        <el-button v-else type="primary" @click="sendRe('cancleLoadExUp')"  :loading="buttonLoading.unloadinguditFailButton">确认拒绝</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="卸车磅单审核通过" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <unloadingReview :surePoundData="sureDownPoundData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
+    </el-dialog>
+    <el-dialog title="装车磅单审核通过" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <loadingReview :surePoundData="surePoundData" @close="isShowSurePound = false" @successCallback="loadingReviewSuccess"></loadingReview>
+    </el-dialog>
     <img-review :imgObject.sync='imgObject'>
       <div v-if="imgObject.title!=''" class="sealTitle">{{imgObject.title}}</div>
     </img-review>
@@ -865,6 +871,8 @@
 </template>
 <script>
 import imgReview from '@/components/common/imgReview';
+import loadingReview from '@/components/order/loadingReview';
+import unloadingReview from '@/components/order/unloadingReview';
 export default {
   name: 'orderProcess',
   activeName: "second",
@@ -878,6 +886,8 @@ export default {
   },
   components: {
     imgReview: imgReview,
+    loadingReview,
+    unloadingReview,
   },
   data() {
     return {
@@ -986,7 +996,15 @@ export default {
             text: "其他原因"
           }
         ]
-      }
+      },
+
+
+      isShowSureDownPound: false,
+      sureDownPoundData: {},
+
+      isShowSurePound: false,
+      surePoundData: {},
+
     }
   },
   methods: {
@@ -1068,6 +1086,41 @@ export default {
       var vm = this;
       var sendData = {};
       if (type == 'sureLoadEx') {
+
+        this.isShowSurePound = true;
+        this.surePoundData = {};
+
+        let dataObject = {};
+
+        if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
+
+          if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
+            dataObject = {
+              ...this.detailData[this.detailData.length - 2],
+              weight_note: this.detailData[this.detailData.length - 2].weight_id,
+              carseal: orderProcessData[orderProcessData.length - 1].car_seal
+            }
+          } else {
+            dataObject = {
+              ...this.detailData[this.detailData.length - 1],
+              weight_note: this.detailData[this.detailData.length - 1].weight_id,
+            }
+          }
+
+        }
+
+        if (this.detailData.length > 2 && this.detailData[1].type == "to_fluid") {
+          dataObject = {
+            ...dataObject,
+            ...this.detailData[1]
+          }
+        }
+
+        this.surePoundData = Object.assign({}, dataObject);
+
+
+
+        /*
         //sendData.section_trip = this.setpId;
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
           if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
@@ -1088,18 +1141,44 @@ export default {
           }
         }).catch(() => {
           vm.$message.error("磅单图片获取失败")
-        });
+        });*/
+
       } else if (type == 'cancleUnLoadEx') {
         vm.cancleTitle = "卸车磅单审核拒绝";
         vm.dialog.cancleLoadEx = true;
 
       } else if (type == 'sureUnLoadEx') {
-        vm.sureTitle = "卸车磅单审核通过";
+
+        this.isShowSureDownPound = true;
+        this.sureDownPoundData = {};
+
+        let dataObject = {};
+
+        if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
+          dataObject = {
+            ...this.detailData[this.detailData.length - 1],
+            weight_note: this.detailData[this.detailData.length - 1].weight_id,
+            weight_active_mile: ''
+          }
+        }
+
+        if (this.detailData.length > 2 && this.detailData[1].type == "to_fluid") {
+          dataObject = {
+            ...dataObject,
+            ...this.detailData[1]
+          }
+        }
+
+        this.sureDownPoundData = Object.assign({}, dataObject);
+
+
+        /*vm.sureTitle = "卸车磅单审核通过";
         //sendData.section_trip = this.setpId;
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
           this.surePound = this.detailData[this.detailData.length - 1];
           sendData.id = this.detailData[this.detailData.length - 1].weight_id;
         }
+        console.log('this.surePound', this.surePound);
         this.$$http("getPundList", sendData).then(results => {
           if (results.data.code == 0) {
             vm.exPound = results.data.data.data[0];
@@ -1108,7 +1187,7 @@ export default {
           }
         }).catch(() => {
           vm.$message.error("磅单图片获取失败")
-        });
+        });*/
       } else if (type == 'cancleLoadEx') {
         vm.dialog.cancleLoadEx = true;
       } else if (type == 'sureMatch') {
@@ -1380,6 +1459,12 @@ export default {
       };
       this.detailData = middleArr;
     },
+    unloadingReviewSuccess: function() {
+      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+    },
+    loadingReviewSuccess: function() {
+      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+    }
   },
   created: function() {
     this.getData();

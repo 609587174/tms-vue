@@ -77,7 +77,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name || surePound.master_driver}}
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.mobile_phone ||surePound.master_driver_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -90,7 +90,9 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.master_driver_phone}}</span>
+            <br>
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -146,6 +148,7 @@ export default {
       if (!qustArray.length) return;
 
       Promise.all(qustArray).then(results => {
+        console.log('results', results);
         if (results[0].data.code === 0) {
           results.map((res, i) => {
             let imageUrlArray;
@@ -153,7 +156,12 @@ export default {
             if (i === 0) {
               imageUrlArray = res.data.data.data;
               imageUrlArray.map((img, j) => {
-                this.imgList.push(img.image_url);
+                if (img.image_url) {
+                  this.imgList.push(img.image_url);
+                } else {
+                  this.imgList = [...this.imgList, ...img.image_url_list];
+                }
+
               })
             }
             if (i === 1) {
@@ -210,7 +218,7 @@ export default {
   watch: {
     surePoundData: {
       handler(val, oldVal) {
-        this.surePound = Object.assign({}, this.surePoundData);
+        this.surePound = Object.assign({}, val);
         this.getImg();
       },
       deep: true　

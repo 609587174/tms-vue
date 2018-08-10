@@ -1092,13 +1092,15 @@ export default {
 
         let dataObject = {};
 
+        console.log('this.detailData', this.detailData);
+
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
 
           if (this.detailData[this.detailData.length - 1].operation == "上传装车铅封") {
             dataObject = {
               ...this.detailData[this.detailData.length - 2],
               weight_note: this.detailData[this.detailData.length - 2].weight_id,
-              carseal: orderProcessData[orderProcessData.length - 1].car_seal
+              carseal: this.detailData[this.detailData.length - 1].car_seal
             }
           } else {
             dataObject = {
@@ -1426,21 +1428,21 @@ export default {
       var middleArr = [];
       var middleAlone = [];
       var addFlag = false;
-      var unloadAddress={};
+      var unloadAddress = {};
       for (var i in allData) {
         if (!allData[i].identify_id) {
           if (addFlag) {
             var waiting_matchOb = {};
             waiting_matchOb.waiting_matchArr = middleAlone;
-            unloadAddress[middleAlone[0].identify_id]=middleAlone;
+            unloadAddress[middleAlone[0].identify_id] = middleAlone;
             waiting_matchOb.type = middleAlone[middleAlone.length - 1].type;
             middleArr.push(waiting_matchOb);
             middleAlone = [];
           }
-          if(allData[i].type!="already_match"){
+          if (allData[i].type != "already_match") {
             middleArr.push(allData[i]);
-          }else{
-            allData[i].already_matchArr=unloadAddress[allData[i].identify];
+          } else {
+            allData[i].already_matchArr = unloadAddress[allData[i].identify];
             middleArr.push(allData[i]);
           }
           addFlag = false;

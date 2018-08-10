@@ -97,7 +97,7 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.mobile_phone ||surePound.master_driver_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -110,7 +110,9 @@
       <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="副驾/押运:">
-            {{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.master_driver_phone}}</span>
+            <br>
+            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -151,6 +153,7 @@ export default {
   methods: {
     getImg() {
       let qustArray = [];
+      this.imgList = [];
       //获取卸车榜单
       if (this.surePound.weight_note) {
         this.$$http("getPundList", { id: this.surePound.weight_note }).then(results => {
@@ -174,7 +177,7 @@ export default {
         tare_weight: this.surePound.tare_weight,
         net_weight: this.surePound.net_weight,
         leave_time: this.surePound.leave_time || null,
-        active_mile: this.surePound.active_mile || null,
+        active_mile: this.surePound.weight_active_mile || null,
         is_checked: 'pass',
         id: this.surePound.weight_note || '',
       };

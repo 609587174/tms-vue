@@ -588,7 +588,7 @@ export default {
         'modifying':'matchExtend',
         'abnormal':'loadExtend',
         'finished':'unloadExtend',
-        'canceled':'unloadExtend'
+        'canceled':'loadExtend'
       },
       rules: {
         net_weight: [
@@ -734,7 +734,7 @@ export default {
         if (valid) {
            var sendData = this.UpSettlementForm;
             vm.upSettlementLoading=true;
-            
+
             sendData.status = "in_settlement";
             this.$$http('changeOrderStatus', sendData).then((results) => {
               vm.upSettlementLoading=false;
@@ -749,7 +749,7 @@ export default {
             }).catch(() => {
               vm.upSettlementLoading=false;
             });
-          } 
+          }
       });
     },
     expandArr: function() {
@@ -767,20 +767,38 @@ export default {
     },
     showPound:function(rowData){
 
+      console.log('rowData',rowData)
+
+      let rowDataCopy = Object.assign({},rowData);
+
+      if(rowDataCopy && rowDataCopy.section_type && rowDataCopy.section_type.key && rowDataCopy.section_type.key ==='unload'){
+        rowDataCopy.weight_note = rowDataCopy.pickup_weight_note;
+        rowDataCopy.active_time = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.active_time || rowDataCopy.active_time;
+        rowDataCopy.work_start_time = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.work_start_time || rowDataCopy.work_start_time;
+        rowDataCopy.work_end_time = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.work_end_time || rowDataCopy.work_end_time;
+        rowDataCopy.gross_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.gross_weight || rowDataCopy.gross_weight;
+        rowDataCopy.tare_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.tare_weight || rowDataCopy.tare_weight;
+        rowDataCopy.net_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.net_weight || rowDataCopy.net_weight;
+        rowDataCopy.carseal = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.carseal || rowDataCopy.carseal;
+      }
+
       this.isShowSurePound = true;
 
-      this.choosedListData = rowData;
+      this.choosedListData = rowDataCopy;
 
       this.surePoundTitle = '查看装车磅单'
 
       this.isEditSurePound = false;
     },
     showDownPound:function(rowData){
+
+      console.log('rowData',rowData)
+
       this.isShowSureDownPound = true;
 
       this.choosedListData = rowData;
 
-      this.surePoundTitle = '查看卸车车磅单'
+      this.sureDownPoundTitle = '查看卸车车磅单'
 
       this.isEditSureDownPound = false;
     },
@@ -898,12 +916,13 @@ export default {
                 dataObject = {
                   ...orderProcessData[orderProcessData.length - 2],
                   weight_note: orderProcessData[orderProcessData.length - 2].weight_id,
-                  carseal:orderProcessData[orderProcessData.length - 1].car_seal
+                  carseal:rowData.carseal,
                 }
               } else {
                 dataObject = {
                   ...orderProcessData[orderProcessData.length - 1],
                   weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
+                  carseal:rowData.carseal,
                 }
               }
             }
@@ -967,7 +986,7 @@ export default {
       }
     },
     upSettlement: function(rowData) {
-      
+
       this.UpSettlementForm={
         arrival_time:rowData.arrival_time||"",
         weight_audit_time:rowData.weight_audit_time||"",

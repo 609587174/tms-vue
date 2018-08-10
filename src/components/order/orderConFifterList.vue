@@ -189,7 +189,7 @@
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4">
-                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound">(磅)</a>
+                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a>
                 </el-col>
                 <el-col :span="4">
                   主车: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
@@ -224,7 +224,7 @@
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4">
-                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound">(磅)</a>
+                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a>
                 </el-col>
                 <el-col :span="4">
                   车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
@@ -248,7 +248,7 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4">
-                  实际卸车吨位: {{props.row.active_tonnage}}吨
+                  实际卸车吨位: {{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
@@ -473,12 +473,12 @@
     <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
     </el-dialog>
 
-    <el-dialog title="装车磅单审核通过" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <loadingReview :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
+    <el-dialog :title="surePoundTitle" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <loadingReview :isEdit="isEditSurePound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
     </el-dialog>
 
-    <el-dialog title="卸车磅单审核通过" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <unloadingReview :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
+    <el-dialog :title="sureDownPoundTitle" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <unloadingReview  :isEdit="isEditSureDownPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
 
      <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
@@ -692,7 +692,11 @@ export default {
 
 
       isShowSurePound:false,
+      surePoundTitle:'装车磅单审核通过',
+      isEditSurePound:true,
       isShowSureDownPound:false,
+      sureDownPoundTitle:'卸车磅单审核通过',
+      isEditSureDownPound:true,
       choosedListData:{},
 
 
@@ -761,8 +765,24 @@ export default {
       console.log('rowData', rowData);
       this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
-    showPound:function(){
+    showPound:function(rowData){
 
+      this.isShowSurePound = true;
+
+      this.choosedListData = rowData;
+
+      this.surePoundTitle = '查看装车磅单'
+
+      this.isEditSurePound = false;
+    },
+    showDownPound:function(rowData){
+      this.isShowSureDownPound = true;
+
+      this.choosedListData = rowData;
+
+      this.surePoundTitle = '查看卸车车磅单'
+
+      this.isEditSureDownPound = false;
     },
     showMapDetalis:function(type,id){
      var vm=this;
@@ -860,6 +880,8 @@ export default {
         this.changeStatusParam.sectiontrip = rowData.id;
       } else if (type == 'loadingEX') {
         this.isShowSurePound = true;
+        this.surePoundTitle = '装车榜单审核通过';
+        this.isEditSureDownPound = true;
 
         //this.choosedListData = rowData;
 
@@ -902,6 +924,9 @@ export default {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
         this.isShowSureDownPound = true;
+        this.sureDownPoundTitle = '卸车榜单审核通过';
+        this.isEditSureDownPound = true;
+
         //this.choosedListData = rowData;
 
         /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */

@@ -86,6 +86,7 @@
   </div>
 </template>
 <script>
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'importData',
   props: {

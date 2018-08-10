@@ -37,7 +37,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="实际到站时间:">
-            <el-date-picker v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <el-date-picker v-if="isEdit" v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <span v-if="!isEdit">{{surePound.active_time || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -49,7 +50,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="卸车完成时间:">
-            <el-date-picker v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <el-date-picker v-if="isEdit" v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <span v-if="!isEdit">{{surePound.work_end_time || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -61,7 +63,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="离站时间:">
-            <el-date-picker v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <el-date-picker v-if="isEdit" v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            <span v-if="!isEdit">{{surePound.leave_time || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -73,7 +76,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="实际里程:">
-            <el-input placeholder="请输入" type="text" v-model="surePound.weight_active_mile"></el-input>
+            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.weight_active_mile"></el-input>
+            <span v-if="!isEdit">{{surePound.weight_active_mile || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -85,7 +89,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="卸车毛重(吨):">
-            <el-input placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
+            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
+            <span v-if="!isEdit">{{surePound.gross_weight || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -97,7 +102,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="卸车皮重(吨):">
-            <el-input placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
+            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
+            <span v-if="!isEdit">{{surePound.tare_weight || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -109,12 +115,13 @@
         </el-col>
         <el-col :span="10">
           <el-form-item label="卸车净重(吨):">
-            <el-input placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
+            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
+            <span v-if="!isEdit">{{surePound.net_weight || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer" class="dialog-footer" style="text-align: center;">
+    <div slot="footer" class="dialog-footer" style="text-align: center;" v-if="isEdit">
       <el-button @click="$emit('close')">取 消</el-button>
       <el-button type="primary" @click="sendRe()" :loading="buttonLoading">确 定</el-button>
     </div>
@@ -134,6 +141,7 @@ export default {
     surePoundData: Object,
     successCallback: Function,
     cancel: Function,
+    isEdit: Boolean,
   },
   computed: {
     imgReviewSrc: function() {

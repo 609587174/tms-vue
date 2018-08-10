@@ -265,38 +265,33 @@ const dealConfig = function(apiName, postData) {
 /* http请求统一函数 */
 export const httpServer = (apiName, postData, defaultSuccessCallback, defaultErrorCallback) => {
 
-    if (!apiName) return false;
+  if (!apiName) return false;
 
-    let httpConfig = dealConfig(apiName, postData);
+  let httpConfig = dealConfig(apiName, postData);
 
-    let promise = new Promise(function(resolve, reject) {
-      axios(httpConfig).then(
-        (res) => {
-          //默认使用successState
-          if (defaultSuccessCallback === undefined) {
-            successState(res)
-          } else if (typeof defaultSuccessCallback === 'function') {
-            defaultSuccessCallback(res);
-          }
-          resolve(res)
+  let promise = new Promise(function(resolve, reject) {
+    axios(httpConfig).then(
+      (res) => {
+        //默认使用successState
+        if (defaultSuccessCallback === undefined) {
+          successState(res)
+        } else if (typeof defaultSuccessCallback === 'function') {
+          defaultSuccessCallback(res);
         }
-      ).catch(
-        (response) => {
-          //默认使用errorState
-          if (defaultErrorCallback === undefined) {
-            errorState(response)
-          } else if (typeof defaultErrorCallback === 'function') {
-            defaultErrorCallback(response);
-          }
-          reject(response)
+        resolve(res)
+      }
+    ).catch(
+      (response) => {
+        //默认使用errorState
+        if (defaultErrorCallback === undefined) {
+          errorState(response)
+        } else if (typeof defaultErrorCallback === 'function') {
+          defaultErrorCallback(response);
         }
-      )
+        reject(response)
+      }
+    )
 
-    })
-    return promise
-  } <<
-  << << < HEAD ===
-  === =
-
-  >>>
-  >>> > 修改url配置
+  })
+  return promise
+}

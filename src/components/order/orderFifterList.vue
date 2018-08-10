@@ -218,7 +218,7 @@
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
           <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
-                 <span >{{props.row.plan_time}}</span>
+                 <span >{{props.row.plan_time.split(" ")[0]}}</span>
              </el-tooltip>
            <span v-else>无</span> 
         </template>
@@ -266,7 +266,6 @@ export default {
       delayTime: 500,
       showMap:false,
       lockFalg:false,
-      expandStatus: true,
       pageLoading: false,
       expandFalg: false,
       loadPosition:{},

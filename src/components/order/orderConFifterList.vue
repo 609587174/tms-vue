@@ -177,14 +177,14 @@
                 <el-col :span="4" class="whiteSpan">
                   计划装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
-                    <span>{{props.row.delivery_order.plan_time}}</span>
+                    <span>{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time}}</span>
+                    <span>{{props.row.pick_active_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -219,7 +219,7 @@
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time}}</span>
+                    <span>{{props.row.pick_active_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -329,7 +329,7 @@
         <template slot-scope="props">
           <div class="whiteSpan">
             <el-tooltip class="item" effect="light" :open-delay="2000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
-                 <span >{{props.row.delivery_order.plan_time}}</span>
+                 <span >{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
              </el-tooltip>
            <span v-else>无</span>
           </div>
@@ -358,7 +358,7 @@
       <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
           <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                 <span >{{props.row.pick_active_time}}</span>
+                 <span >{{props.row.pick_active_time.split(" ")[0]}}</span>
              </el-tooltip>
            <span v-else>无</span>
         </template>
@@ -481,6 +481,32 @@
       <unloadingReview :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
 
+     <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
+        <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'"  label-width="100px" :rules="rules">
+          <el-row style="margin-top:15px;">
+          <el-col :span="10" :offset="2">
+            <el-form-item label="实际到站时间:" prop="" >
+              <el-date-picker v-model="UpSettlementForm.arrival_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+            <el-form-item label="离站时间:" prop="" >
+              <el-date-picker v-model="UpSettlementForm.weight_audit_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="10">
+            <el-form-item label="卸车净重(吨):" prop="net_weight" >
+              <el-input placeholder="请输入" type="text" v-model="UpSettlementForm.net_weight"></el-input>
+            </el-form-item>
+            <el-form-item label="实际里程:" prop="active_mile">
+              <el-input placeholder="请输入" type="text" v-model="UpSettlementForm.active_mile"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer" style="text-align: center;">
+          <el-button @click="isShowSureDownPound = false">取 消</el-button>
+          <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
+        </span>
+     </el-dialog>
   </div>
 </template>
 <script>
@@ -497,15 +523,31 @@ export default {
     unloadingReview,
   },
   data() {
+    var onlyNum = (rule, value, callback) => {
+      if ((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null) {
+        callback();
+      } else {
+        callback(new Error("只能是数字"));
+      }
+    };
     return {
       noDataObj:{
         imgUrl:require("../../assets/img/tms_no_data.png")
       },
+      upSettlementLoading:false,
       lockFalg: false,
       delayTime:500,
       showMap:false,
       loadPosition:{},
+      isUpSettlement:false,
       ListDataSearch:false,
+      UpSettlementForm:{
+        arrival_time:"",
+        weight_audit_time:"",
+        net_weight:"",
+        active_mile:""
+      },
+
       fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
       buttonModyfiyAll:{
          canceling: [{
@@ -547,6 +589,14 @@ export default {
         'abnormal':'loadExtend',
         'finished':'unloadExtend',
         'canceled':'unloadExtend'
+      },
+      rules: {
+        net_weight: [
+          { validator: onlyNum, trigger: 'blur' }
+        ],
+        active_mile:[
+          { validator: onlyNum, trigger: 'blur' }
+        ]
       },
       buttonAll: {
         driver_pending_confirmation: [{
@@ -674,6 +724,30 @@ export default {
     // });
   },
   methods: {
+    upSettlementTrue:function(){
+      var vm = this;
+      this.$refs['isUpSettlementForm'].validate((valid) => {
+        if (valid) {
+           var sendData = this.UpSettlementForm;
+            vm.upSettlementLoading=true;
+            
+            sendData.status = "in_settlement";
+            this.$$http('changeOrderStatus', sendData).then((results) => {
+              vm.upSettlementLoading=false;
+              if (results.data.code == 0) {
+                this.isUpSettlement=false;
+                this.$message({
+                  message: '提交结算成功',
+                  type: 'success'
+                });
+                vm.$emit('searchList');
+              }
+            }).catch(() => {
+              vm.upSettlementLoading=false;
+            });
+          } 
+      });
+    },
     expandArr: function() {
       if(this.expandStatus){
         this.ListData.forEach((item)=>{
@@ -868,22 +942,16 @@ export default {
       }
     },
     upSettlement: function(rowData) {
-      var sendData = {};
-      var vm = this;
-      sendData.id = rowData.id;
-
-      sendData.status = "in_settlement";
-      this.$$http('changeOrderStatus', sendData).then((results) => {
-        if (results.data.code == 0) {
-          this.$message({
-            message: '提交结算成功',
-            type: 'success'
-          });
-          vm.$emit('searchList');
-        }
-      }).catch(() => {
-
-      });
+      
+      this.UpSettlementForm={
+        arrival_time:rowData.arrival_time||"",
+        weight_audit_time:rowData.weight_audit_time||"",
+        net_weight:rowData.net_weight||"",
+        active_mile:rowData.weight_active_mile||"",
+        id:rowData.id
+      },
+      this.isUpSettlement=true;
+      //this.upSettlementTrue();
     },
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
@@ -891,11 +959,10 @@ export default {
       this.changeSatusShow = true;
     },
     loadingReviewSuccess:function(){
-      console.log('xxx');
-
+      this.$emit('searchList');
     },
     unloadingReviewSuccess:function(){
-
+      this.$emit('searchList');
     }
   },
   created() {

@@ -567,6 +567,60 @@
                           </el-row>
                         </div>
                         <div v-if="item.type === 'already_match'">
+                          <div v-for="(Aitem,Akey) in item.already_matchArr" v-bind:class="{ garyColor: Aitem.status!='new',padds:Akey==0,borderB:item.already_matchArr.length>1&&Akey!=item.already_matchArr.length-1 }" style="border-left:none;border-right:none;">
+                            <el-row style="padding:15px 0;">
+                              <el-col :span="22">
+                                <el-row :gutter="40">
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>站点:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.station)"></div>
+                                    </div>
+                                  </el-col>
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>收货人:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.consignee)"></div>
+                                    </div>
+                                  </el-col>
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>计划卸车吨位:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.plan_tonnage)">吨</div>
+                                    </div>
+                                  </el-col>
+                                </el-row>
+                                <el-row :gutter="40">
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>站点地址:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.station_address)"></div>
+                                    </div>
+                                  </el-col>
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>收货人电话:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.consignee_phone)"></div>
+                                    </div>
+                                  </el-col>
+                                  <el-col :span="8">
+                                    <div class="label-list">
+                                      <label>计划到站时间:</label>
+                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.plan_arrive_time)"></div>
+                                    </div>
+                                  </el-col>
+                                </el-row>
+                              </el-col>
+                              <el-col :span="2">
+                                <div v-if="Aitem.status!='new'" style="line-height:48px;">
+                                  <el-tag type="success">已取消</el-tag>
+                                </div>
+                                <div v-else style="line-height:48px;">
+                                  <el-tag type="success">已确认</el-tag>
+                                </div>
+                              </el-col>
+                            </el-row>
+                          </div>
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -1293,16 +1347,23 @@ export default {
       var middleArr = [];
       var middleAlone = [];
       var addFlag = false;
+      var unloadAddress={};
       for (var i in allData) {
         if (!allData[i].identify_id) {
           if (addFlag) {
             var waiting_matchOb = {};
             waiting_matchOb.waiting_matchArr = middleAlone;
+            unloadAddress[middleAlone[0].identify_id]=middleAlone;
             waiting_matchOb.type = middleAlone[middleAlone.length - 1].type;
             middleArr.push(waiting_matchOb);
             middleAlone = [];
           }
-          middleArr.push(allData[i]);
+          if(allData[i].type!="already_match"){
+            middleArr.push(allData[i]);
+          }else{
+            allData[i].already_matchArr=unloadAddress[allData[i].identify];
+            middleArr.push(allData[i]);
+          }
           addFlag = false;
         } else {
           middleAlone.push(allData[i]);

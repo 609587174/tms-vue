@@ -638,10 +638,10 @@ export default {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              operationArr[i].bindCheckBox = true;
               if (this.delivery_list.trips[j].status != "canceled"&&this.delivery_list.trips[j].waybill_change_status!= "canceled") {    
                 operationArr[i].isDisable=false;
                 this.now_capacities.push(operationArr[i]);
+                operationArr[i].bindCheckBox = true;
                 addflag = true;
               }else if(this.delivery_list.trips[j].waybill_change_status== "canceled"){
                 operationArr[i].isDisable=true;

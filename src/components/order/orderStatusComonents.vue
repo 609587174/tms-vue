@@ -71,6 +71,8 @@
           </el-col>
         </el-row>
       </el-form>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder"  :loading="exportLoading">导出</el-button>
     </div>
     <div class="nav-tab-setting mt-25" >
@@ -78,7 +80,7 @@
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -197,6 +199,9 @@ export default {
   methods: {
     changeTabs: function(name) {
       this.$emit("changeTab", name);
+    },
+    changeExtendsStatus:function(){
+      this.expandStatus=!this.expandStatus;
     },
     exportOrder:function(){
       var sendData = {};

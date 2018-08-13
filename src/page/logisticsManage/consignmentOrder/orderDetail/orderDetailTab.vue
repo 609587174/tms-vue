@@ -118,7 +118,6 @@ export default {
     this.activeName = 'first';
   },
   created: function() {
-    console.log('this.$route', this.$route.params.id, this.id);
     // this.getOrderDetail();
   }
 }

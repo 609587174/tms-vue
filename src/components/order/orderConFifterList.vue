@@ -756,12 +756,9 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      console.log('rowData', rowData);
       this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
     showPound:function(rowData){
-
-      console.log('rowData',rowData)
 
       let rowDataCopy = Object.assign({},rowData);
 
@@ -783,10 +780,9 @@ export default {
       this.surePoundTitle = '查看装车磅单'
 
       this.isEditSurePound = false;
+
     },
     showDownPound:function(rowData){
-
-      console.log('rowData',rowData)
 
       this.isShowSureDownPound = true;
 
@@ -795,6 +791,7 @@ export default {
       this.sureDownPoundTitle = '查看卸车车磅单'
 
       this.isEditSureDownPound = false;
+
     },
     showMapDetalis:function(type,id){
      var vm=this;
@@ -857,7 +854,6 @@ export default {
         sendData.desc = this.changeStatusParam.changeSatusDesc;
         sendData.sectiontrip = this.changeStatusParam.sectiontrip;
         this.$$http("upStatus", sendData).then((results) => {
-          console.log('results', results)
           vm.$emit("changeTabs", 'fifth');
           vm.changeSatusShow = false;
         }).catch(() => {
@@ -900,7 +896,6 @@ export default {
         /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
         this.$$http("orderProcess", {id:rowData.id}).then((results) => {
 
-          console.log('results',results);
           if (results.data.code == 0) {
             let orderProcessData = results.data.data;
             let dataObject = {};
@@ -921,14 +916,17 @@ export default {
               }
             }
 
-            if (orderProcessData.length > 2 && orderProcessData[1].type == "to_fluid") {
-              dataObject = {
-                ...dataObject,
-                ...orderProcessData[1]
+            orderProcessData.map((item,i)=>{
+              if(item.type === 'to_fluid'){
+                dataObject = {
+                  ...dataObject,
+                  ...item
+                }
               }
-            }
+            })
 
             this.choosedListData = Object.assign({}, dataObject);
+
           }
         });
 
@@ -993,7 +991,6 @@ export default {
     },
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
-      console.log('rowData', rowData);
       this.changeSatusShow = true;
     },
     loadingReviewSuccess:function(){
@@ -1022,7 +1019,6 @@ export default {
             if (results.data.code == 0) {
               vm.changeSatusCarList = results.data.data;
             }
-            console.log('carList', results);
           }).catch(() => {
             vm.seletPadding = false;
           });

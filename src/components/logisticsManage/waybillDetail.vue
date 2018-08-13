@@ -230,14 +230,12 @@
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.active_time)"></div>
                 </div>
               </el-col>
-
               <el-col :span="8">
                 <div class="label-list">
                   <label>下单人:</label>
                   <div class="detail-form-item" v-html="pbFunc.dealNullData(item.business_order.sale_man_name)"></div>
                 </div>
               </el-col>
-
               <el-col :span="8">
                 <div class="label-list">
                   <label>下单人电话:</label>
@@ -245,7 +243,6 @@
                 </div>
               </el-col>
             </el-row>
-
             <el-row :gutter="40">
               <el-col :span="8">
                 <div class="label-list">
@@ -284,9 +281,9 @@
               </div>
             </el-col>
             <el-col :span="8">
-             <div class="label-list">
+              <div class="label-list">
                 <label>驾驶员:</label>
-                <div class="detail-form-item" >
+                <div class="detail-form-item">
                   <span v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.name)"></span>
                   <span style="margin-left:15px;" v-html="pbFunc.dealNullData(transPowerData.master_driver&&transPowerData.master_driver.mobile_phone)"></span>
                 </div>
@@ -303,7 +300,7 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>副驾驶:</label>
-                <div class="detail-form-item"  >
+                <div class="detail-form-item">
                   <span v-if="transPowerData.vice_driver&&transPowerData.vice_driver.name" v-html="pbFunc.dealNullData(transPowerData.vice_driver.name)"></span>
                   <span style="margin-left:15px;" v-if="transPowerData.vice_driver&&transPowerData.vice_driver.mobile_phone" v-html="pbFunc.dealNullData(transPowerData.vice_driver.mobile_phone)"></span>
                   <span v-else v-html="pbFunc.dealNullData('')"></span>
@@ -357,7 +354,7 @@
                 <div class="detail-form-item">{{item.kui_tons_standard}}kg</div>
               </div>
             </el-col>
-           <el-col :span="8">
+            <el-col :span="8">
               <div class="label-list">
                 <label>待时计算标准:</label>
                 <div class="detail-form-item">
@@ -406,8 +403,7 @@
         </div>
       </el-main>
     </el-container>
-    <img-review :imgObject.sync='imgObject' >
-
+    <img-review :imgObject.sync='imgObject'>
     </img-review>
   </div>
   <!-- </el-tab-pane>
@@ -422,7 +418,7 @@
 import imgReview from '@/components/common/imgReview';
 export default {
   name: 'waybillDetail',
-  props:['backLink','isCheck'],
+  props: ['backLink', 'isCheck'],
   components: {
     imgReview: imgReview
   },
@@ -501,7 +497,6 @@ export default {
       }
       this.$$http('getConOrderDetail', postData).then((results) => {
         this.pageLoading = false;
-        console.log('results', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.detailData = results.data.data;
           /* 获取运力 */
@@ -539,10 +534,8 @@ export default {
         id: id
       }
       this.$$http('getTransPowerInfo', postData).then((results) => {
-        console.log('getTransPowerInfo', results);
         if (results.data && results.data.code == 0 && results.data.data) {
           this.transPowerData = results.data.data;
-          console.log('this.transPowerData', this.transPowerData);
         } else {
           this.$message({
             message: results.data.msg,

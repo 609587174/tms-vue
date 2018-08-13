@@ -407,6 +407,12 @@ export default {
     }
   },
   watch: {
+    ListData:{
+      handler(val, oldVal) {
+        this.expandArr();
+      },
+      deep:true
+    },
     expandStatus:{
       handler(val, oldVal) {
         var vm=this;

@@ -315,7 +315,8 @@ export default {
                   type: 'warning',
                   center: true,
                   showClose: false,
-                  closeOnClickModal: false
+                  closeOnClickModal: false,
+                  closeOnPressEscape:false
                 }).then(() => {
                   row.bindCheckBox = !row.bindCheckBox;
                   vm.trueAll_list.forEach((Titem) => {
@@ -380,7 +381,8 @@ export default {
                     showCancelButton: false,
                     center: true,
                     closeOnClickModal: false,
-                    showClose: false
+                    showClose: false,
+                    closeOnPressEscape:false
                   }).then(() => {
                     vm.$refs.multipleTable.toggleRowSelection(row, true);
                   })

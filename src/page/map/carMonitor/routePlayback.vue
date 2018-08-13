@@ -234,14 +234,19 @@ export default {
       return str;
     },
     chooseTime: function() {
-      if (this.searchFilters.choosedTime.length) {
+      if (this.searchFilters.choosedTime && this.searchFilters.choosedTime.length) {
         this.timeSpacing = this.calculateTimeSpacing();
         if (this.timeSpacing.day > 6) {
-          this.$message({
-            message: '查询时间不超过7天',
-            type: 'error'
-          });
-          this.searchBtn.isDisabled = true;
+          if (this.timeSpacing.day === 7 && this.timeSpacing.hours === 0 && this.timeSpacing.minutes === 0) {
+
+          } else {
+            this.$message({
+              message: '查询时间不超过7天',
+              type: 'error'
+            });
+            this.searchBtn.isDisabled = true;
+          }
+
         } else {
           this.searchBtn.isDisabled = false;
         }
@@ -967,7 +972,7 @@ export default {
         } else {
           /* 如果没有轨迹数据展示提示，并清空轨迹展示 */
           _this.$message({
-            message: '无车辆信息',
+            message: '无轨迹信息',
             type: 'success'
           });
 

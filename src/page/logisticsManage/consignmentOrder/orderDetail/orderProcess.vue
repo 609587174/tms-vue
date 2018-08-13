@@ -859,10 +859,10 @@
       </span>
     </el-dialog>
     <el-dialog title="卸车磅单审核通过" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <unloadingReview :surePoundData="sureDownPoundData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
+      <unloadingReview :surePoundData="sureDownPoundData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess" :isEdit="true"></unloadingReview>
     </el-dialog>
     <el-dialog title="装车磅单审核通过" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <loadingReview :surePoundData="surePoundData" @close="isShowSurePound = false" @successCallback="loadingReviewSuccess"></loadingReview>
+      <loadingReview :surePoundData="surePoundData" @close="isShowSurePound = false" @successCallback="loadingReviewSuccess" :isEdit="true"></loadingReview>
     </el-dialog>
     <img-review :imgObject.sync='imgObject'>
       <div v-if="imgObject.title!=''" class="sealTitle">{{imgObject.title}}</div>
@@ -1092,7 +1092,6 @@ export default {
 
         let dataObject = {};
 
-        console.log('this.detailData', this.detailData);
 
         if (this.detailData.length > 0 && this.detailData[this.detailData.length - 1].type == "loading_waiting_audit") {
 
@@ -1111,12 +1110,14 @@ export default {
 
         }
 
-        if (this.detailData.length > 2 && this.detailData[1].type == "to_fluid") {
-          dataObject = {
-            ...dataObject,
-            ...this.detailData[1]
+        this.detailData.map((item, i) => {
+          if (item.type === 'to_fluid') {
+            dataObject = {
+              ...dataObject,
+              ...item
+            }
           }
-        }
+        })
 
         this.surePoundData = Object.assign({}, dataObject);
 
@@ -1376,7 +1377,6 @@ export default {
               this.operationIsOk = true;
               vm.pageLoading = false;
               if (results.data.code == 0) {
-                console.log('results', results);
                 if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
                   vm.buttonLoading.loadingAuditFailButton = false;
                   vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });

@@ -11,12 +11,14 @@
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
       <el-row>
         <el-col :span="20" :offset="2">
-          <el-row>
+          <el-row style="min-height: 131px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
-              <router-link target="_blank" :to="imgReviewSrc">
-                <img :src="item.url" style='width:100%;max-height:100px'></img>
-              </router-link>
-              <div class="text-center">{{item.title}}{{item.num}}</div>
+              <div>
+                <router-link target="_blank" :to="imgReviewSrc">
+                  <img :src="item.url" style='width:100%;height:100px'></img>
+                </router-link>
+                <div class="text-center">{{item.title}}{{item.num}}</div>
+              </div>
             </el-col>
           </el-row>
           <el-col :span="20" :offset="2">

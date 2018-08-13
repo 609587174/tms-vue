@@ -449,8 +449,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
-          <el-select v-model="changeStatusParam.changeStatusFied"  placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding">
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
+          <el-select v-model="changeStatusParam.changeStatusFied"  placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding" filterable>
+            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id" ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -466,8 +466,6 @@
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
 
-    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
-    </el-dialog>
 
     <el-dialog :title="surePoundTitle" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
       <loadingReview :isEdit="isEditSurePound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>

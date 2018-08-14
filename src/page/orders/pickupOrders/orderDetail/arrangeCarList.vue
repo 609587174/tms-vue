@@ -212,8 +212,8 @@ export default {
       delivery_list: [], //提货单拥有的运单，审核后
       haveTranspower_list: [], //提货单所拥有的运力,未审核
       renderPage_list: [], //当前页渲染的数据
-      alreadyList: {},
-      lastSearch_list: [],
+      alreadyList: {},//上一次修改的数据
+      lastSearch_list: [],//最后一次查询出来的数据
       add_capacities: [], //增加的运力表
       del_capacities: [], //取消的运力表
       start_capacities: [],//初始的运力表
@@ -484,7 +484,8 @@ export default {
           }
         });
         sendData.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
-
+        this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
+        this.add_capacities=sendData.add_capacities;
         if (sendData.del_capacities.length == 0 && sendData.add_capacities.length == 0) {
           vm.$confirm('您没有任何修改', '请注意', {
             confirmButtonText: '放弃修改',
@@ -497,27 +498,28 @@ export default {
 
           })
         }
-        if (vm.now_capacities.length > 0) {
-          if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
-            this.pageLoading = true;
-            this.$$http("editCarPower", sendData).then((results) => {
-              this.pageLoading = false;
-              if (results.data.code == 0) {
-                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-              }
-            }).catch(() => {
-              this.pageLoading = false;
-            });
-          }
-        } else {
-          vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
-            confirmButtonText: '确认提交',
-            cancelButtonText: '返回',
-            type: 'warning',
-            center: true,
-            closeOnClickModal: false,
-            showClose: false
-
+        vm.judgeIsDataChange(function(flage){
+          if(flage=='1'){ //如果数据和上一次对比没有改变
+            if (vm.now_capacities.length > 0) {
+              if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
+                vm.pageLoading = true;
+                vm.$$http("editCarPower", sendData).then((results) => {
+                vm.pageLoading = false;
+                if (results.data.code == 0) {
+                  vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                }
+                }).catch(() => {
+                  vm.pageLoading = false;
+                });
+            }
+          } else {
+            vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
+              confirmButtonText: '确认提交',
+              cancelButtonText: '返回',
+              type: 'warning',
+              center: true,
+              closeOnClickModal: false,
+              showClose: false
           }).then(() => {
             vm.$$http("editCarPower", sendData).then((results) => {
               vm.pageLoading = false;
@@ -527,11 +529,56 @@ export default {
             }).catch(() => {
               this.pageLoading = false;
             });
-          }).catch(() => {
-
-          });
+          })
         }
-      }
+      }else{
+         vm.$confirm('订单数据已更新，请重新操作', '请注意', {
+          confirmButtonText: '确认',
+          showCancelButton: false,
+          type: 'warning',
+          center: true,
+          closeOnClickModal: false,
+          showClose: false,
+          closeOnPressEscape:false
+          }).then(() => {
+            vm.$router.go(0);
+          })
+          }
+      });
+    }
+    },
+    judgeIsDataChange:function(callbackFun){
+      var vm=this;
+      this.$$http('searchOrderHasPower', {id:this.id}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          var returnFlag=true;
+          var nowData = results.data.data;//最新的列表
+          if(nowData.add_capacities.length!=this.alreadyList.add_capacities.length||nowData.del_capacities.length!=this.alreadyList.del_capacities.length){
+            returnFlag=false;
+            callbackFun(false);
+          }else{
+            for(var addIndex in vm.alreadyList.add_capacities){
+              if(nowData.add_capacities.indexOf(vm.alreadyList.add_capacities[addIndex])==-1){
+                callbackFun(0);
+                returnFlag=false;
+                break;
+              }
+          }
+            for(var delIndex in vm.alreadyList.del_capacities){
+              if(nowData.del_capacities.indexOf(vm.alreadyList.del_capacities[delIndex])==-1){
+                returnFlag=false;
+                callbackFun(0);
+                break;
+              }
+            }
+          }
+          if(returnFlag){
+            callbackFun(1);
+          }
+        }
+      }).catch((err) => {
+        callbackFun(0);
+      });
     },
     getList: function() {
       var vm = this;
@@ -559,7 +606,6 @@ export default {
         if (getDataNum == 4) {
           vm.pageLoading = false;
         }
-        console.log('err', err);
       });
       let postData1 = {
         id: this.id

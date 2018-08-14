@@ -1,7 +1,7 @@
 <style scoped lang="less">
 .listTableAll {
   text-align: left;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .el-table {
@@ -28,9 +28,9 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      font-size:13px;
-      height:25px;
-      padding:5px 0;
+      font-size: 13px;
+      height: 25px;
+      padding: 5px 0;
       .el-table th.is-leaf {
         border-top: none;
       }
@@ -39,7 +39,7 @@
       float: left;
       height: 30px;
       line-height: 30px;
-      font-size:10px;
+      font-size: 10px;
     }
     .el-icon-location {
       font-size: 10px;
@@ -93,7 +93,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .el-icon-location {
@@ -104,18 +104,22 @@
   height: 400px;
   width: 100%;
 }
-.listDetalis .el-row{
-  margin-top:10px;
+
+.listDetalis .el-row {
+  margin-top: 10px;
 }
-.listDetalis>div:nth-child(1){
-  margin-top:0px;
+
+.listDetalis>div:nth-child(1) {
+  margin-top: 0px;
 }
-.unloadList{
-  margin-top:30px;
+
+.unloadList {
+  margin-top: 30px;
 }
+
 </style>
 <template>
-  <div style="position:relative;font-size: 10px;" >
+  <div style="position:relative;font-size: 10px;">
     <noData v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
@@ -172,15 +176,15 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   计划装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                     <span>{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time.split(" ")[0]}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+                    <span>{{props.row.pick_active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -202,7 +206,11 @@
                     <span>{{Uitem.business_order.station_address.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="4" class="whiteSpan">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
+                <el-col :span="4" class="whiteSpan">计划到站时间:
+                  <el-tooltip class="item" effect="light" :open-delay="1000"  :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
+                     <span >{{Uitem.business_order.plan_arrive_time}}</span>
+                  </el-tooltip>
+                </el-col>
                 <el-col :span="4" class="whiteSpan">计划卸车:{{Uitem.business_order.plan_tonnage}}吨</el-col>
                 <el-col :span="8" class="whiteSpan">收货人:{{Uitem.business_order.consignee}}／{{Uitem.business_order.consignee_phone}}</el-col>
               </el-row>
@@ -214,8 +222,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time.split(" ")[0]}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+                    <span>{{props.row.pick_active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -249,21 +257,21 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
                     <span>{{props.row.active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
                     <span>{{props.row.arrival_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   离站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row.weight_audit_time" placement="top-start" v-if="props.row.weight_audit_time">
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.weight_audit_time" placement="top-start" v-if="props.row.weight_audit_time">
                     <span>{{props.row.weight_audit_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
@@ -297,15 +305,15 @@
         </template>
       </el-table-column>
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
-      <template slot-scope="props">
-        <div  :title="props.row.waybill.waybill_number" class="whiteSpan">
-          <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
+        <template slot-scope="props">
+          <div :title="props.row.waybill.waybill_number" class="whiteSpan">
+            <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
         </div>
       </template>
       </el-table-column>
       <el-table-column label="业务单号" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
                  <span >{{props.row.business_order.order_number}}</span>
             </el-tooltip>
            <span v-else>无</span>
@@ -324,7 +332,7 @@
       <el-table-column label="计划装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
           <div class="whiteSpan">
-            <el-tooltip class="item" effect="light" :open-delay="2000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
+            <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                  <span >{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -338,7 +346,7 @@
       </el-table-column>
       <el-table-column label="计划到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -353,8 +361,8 @@
 
       <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="2000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                 <span >{{props.row.pick_active_time.split(" ")[0]}}</span>
+          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+                 <span >{{props.row.pick_active_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
         </template>
@@ -370,7 +378,7 @@
 
        <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" :open-delay="2000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
+          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
                  <span >{{props.row.arrival_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
@@ -388,7 +396,13 @@
             <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" v-bind:class="{unloadList:Uindex!=0}">
               <el-col style="margin-top:10px;">站点:{{Uitem.business_order.station}}</el-col>
               <el-col style="margin-top:10px;" >计划吨位:<span v-if="Uitem.business_order.plan_tonnage">{{Uitem.business_order.plan_tonnage}}吨</span></el-col>
-              <el-col style="margin-top:10px;" class="whiteSpan">计划到站时间:{{Uitem.business_order.plan_arrive_time}}</el-col>
+              <el-col style="margin-top:10px;" class="whiteSpan">
+              计划到站时间:
+              <el-tooltip class="item" effect="light" :open-delay="1000"  :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
+                 <span >{{Uitem.business_order.plan_arrive_time}}</span>
+             </el-tooltip>
+            <span v-else>无</span>
+            </el-col>
             </el-row>
           </div>
           <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.unload_trips"><span v-if="props.row.unload_trips.length>1&&Uindex!=props.row.unload_trips.length-1">{{Uitem.business_order.station}}/</span><span v-else>{{Uitem.business_order.station}}</span></span></div>
@@ -900,6 +914,7 @@ export default {
             let orderProcessData = results.data.data;
             let dataObject = {};
 
+
             if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "loading_waiting_audit") {
               if (orderProcessData[orderProcessData.length - 1].operation == "上传装车铅封") {
                 dataObject = {
@@ -955,12 +970,14 @@ export default {
               }
             }
 
-            if (orderProcessData.length > 2 && orderProcessData[1].type == "to_fluid") {
-              dataObject = {
-                ...dataObject,
-                ...orderProcessData[1]
+            orderProcessData.map((item,i)=>{
+              if(item.type === 'to_fluid'){
+                dataObject = {
+                  ...dataObject,
+                  ...item
+                }
               }
-            }
+            })
 
             this.choosedListData = Object.assign({}, dataObject);
           }

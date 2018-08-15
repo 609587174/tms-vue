@@ -44,14 +44,14 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label>客户名称:</label>
-                      <div class="detail-form-item">{{clientData.company_name}}</div>
+                      <label>托运方名称:</label>
+                      <div class="detail-form-item">{{clientData.name}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>联系人:</label>
-                      <div class="detail-form-item">{{clientData.contact}}</div>
+                      <div class="detail-form-item">{{clientData.contact_name}}</div>
                     </div>
                   </el-col>
                   <el-col :span="8">
@@ -70,8 +70,14 @@
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
+                      <label>亏吨标准:</label>
+                      <div class="detail-form-item">{{clientData.deficiency_standard}}<span v-if="clientData.deficiency_standard">KG</span></div>
+                    </div>
+                  </el-col>
+                  <el-col :span="8">
+                    <div class="label-list">
                       <label>社会机构代码:</label>
-                      <div class="detail-form-item">{{clientData.credit_code?clientData.credit_code:clientData.organization_code}}</div>
+                      <div class="detail-form-item">{{clientData.license_code?clientData.license_code:clientData.organization_code}}</div>
                     </div>
                   </el-col>
                   <!-- <el-col :span="8">
@@ -82,16 +88,11 @@
                   </el-col> -->
                 </el-row>
                 <!-- <el-row :gutter="10">
-                  <el-col :span="8">
-                    <div class="label-list">
-                      <label>亏吨标准:</label>
-                      <div class="detail-form-item">{{clientData.deficiency_standard}}<span v-if="clientData.deficiency_standard">KG</span></div>
-                    </div>
-                  </el-col>
+
 
                 </el-row> -->
               </div>
-              <div class="detail-list detail-form">
+              <div class="detail-list detail-form" v-if="false">
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
@@ -129,14 +130,14 @@
                 </div>
                 <!-- <div class="text-center" v-if="!clientData.trans_fee.length">暂无数据</div> -->
               </div>
-              <div class="detail-list detail-form" v-if="false">
+              <div class="detail-list detail-form">
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
                       卸车待时规则
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button> -->
+                      <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -144,13 +145,13 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>到站免费等待时长:</label>
-                      <div class="detail-form-item">{{clientData.free_hour}}<span v-if="clientData.free_hour">小时</span></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(clientData.free_hour?clientData.free_hour+'小时':clientData.free_hour)"></div>
                     </div>
                   </el-col>
                   <el-col :span="8">
                     <div class="label-list">
                       <label>超时计算单价:</label>
-                      <div class="detail-form-item">{{clientData.overtime_price}}<span v-if="clientData.overtime_price">元/小时</span></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(clientData.overtime_price?clientData.overtime_price+'元/小时':clientData.overtime_price)"></div>
                     </div>
                   </el-col>
                 </el-row>
@@ -208,7 +209,7 @@ export default {
   methods: {
     getDetail: function() {
       this.pageLoading = true;
-      this.$$http('getCustomerDetail', { id: this.id }).then((results) => {
+      this.$$http('getCustomerDetail', { customer_id: this.id }).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.clientData = results.data.data;
@@ -228,7 +229,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/clientManage/clientManageSecond/addClient?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
+      this.$router.push({ path: "/clientManage/clientManageSecond/editClient?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
     },
 
   }

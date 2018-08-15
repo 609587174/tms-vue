@@ -78,16 +78,16 @@ export default {
           { id: 'name', value: '托运方名称' },
           { id: 'contact_name', value: '联系人' },
           { id: 'contact_phone', value: '联系电话' },
-          { id: 'contact_phone', value: '统一社会机构代码' },
+          { id: 'license_code', value: '统一社会机构代码' },
         ]
       },
       thTableList: [{
         title: '托运方名称',
-        param: 'company_name',
+        param: 'name',
         width: ''
       }, {
         title: '联系人',
-        param: 'contact',
+        param: 'contact_name',
         width: ''
       }, {
         title: '联系电话',
@@ -95,11 +95,11 @@ export default {
         width: ''
       }, {
         title: '亏吨标准',
-        param: 'contact_phone',
+        param: 'deficiency_standard',
         width: ''
       }, {
         title: '统一社会机构代码',
-        param: 'contact_phone',
+        param: 'license_code',
         width: ''
       }, {
         title: '地址',

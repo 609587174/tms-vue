@@ -1,5 +1,12 @@
 <style scoped lang="less">
-
+.detail-main .el-form-item {
+  .unit-free{
+    right: -38px;
+  }
+  .unit-price {
+    right: -58px;
+  }
+}
 
 </style>
 <template>
@@ -82,7 +89,7 @@
                   <el-form-item label="社会机构代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="10">
-                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'&&customerMsgForm.codeMsg?true:false">
+                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license_code'&&customerMsgForm.codeMsg?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
@@ -111,12 +118,12 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="免费等待时长:" prop="free_hour">
-                    <el-input :autofocus="true" placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.free_hour"></el-input>小时
+                    <el-input :autofocus="true" placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.free_hour"></el-input><span class="unit unit-free">小时</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="超时计算单价:" prop="overtime_price">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.overtime_price"></el-input>元/小时
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.overtime_price"></el-input><span class="unit unit-price">元/小时</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -169,7 +176,7 @@ export default {
         deficiency_standard: '',
         free_hour: '',
         overtime_price: '',
-        code: 'license3in1_code',
+        code: 'license_code',
         codeMsg: '',
         license_pic: [],
       },
@@ -181,8 +188,8 @@ export default {
       ],
       selectData: {
         codeSelect: [
-          { id: 'license3in1_code', value: '统一社会机构代码（三合一）' },
-          { id: 'license_code', value: '组织机构代码（非三合一）' },
+          { id: 'license_code', value: '统一社会机构代码（三合一）' },
+          { id: 'organization_code', value: '组织机构代码（非三合一）' },
         ],
         addTypeSelect: [
           { id: 'OWN', value: '默认新增' },
@@ -242,7 +249,7 @@ export default {
     codeTab() {
       this.customerMsgForm.codeMsg = '';
       this.$refs['addFormSetpOne'].clearValidate();
-      if (this.customerMsgForm.code === 'license3in1_code') {
+      if (this.customerMsgForm.code === 'license_code') {
         this.rules.codeMsg = this.sociology;
       } else {
         this.rules.codeMsg = this.structure;
@@ -273,7 +280,7 @@ export default {
           deficiency_standard: '',
           free_hour: '',
           overtime_price: '',
-          code: 'license3in1_code',
+          code: 'license_code',
           codeMsg: '',
           license_pic: [],
         }
@@ -292,8 +299,8 @@ export default {
               deficiency_standard: this.customerList[i].deficiency_standard,
               free_hour: this.customerList[i].free_hour,
               overtime_price: this.customerList[i].overtime_price,
-              code: this.customerList[i].license3in1_code ? 'license3in1_code' : 'license_code',
-              codeMsg: this.customerList[i].license3in1_code ? this.customerList[i].license3in1_code : this.customerList[i].license_code,
+              code: this.customerList[i].license_code ? 'license_code' : 'organization_code',
+              codeMsg: this.customerList[i].license_code ? this.customerList[i].license_code : this.customerList[i].organization_code,
               license_pic: this.customerList[i].license_pic ? this.customerList[i].license_pic : [],
             }
           }
@@ -306,7 +313,7 @@ export default {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
           // this.addType = this.detail.customer_type;
-          if(this.detail.customer_type === 'PLAT'){
+          if (this.detail.customer_type === 'PLAT') {
             this.isDisabled = true;
 
           }
@@ -318,11 +325,11 @@ export default {
             deficiency_standard: this.detail.deficiency_standard,
             free_hour: this.detail.free_hour,
             overtime_price: this.detail.overtime_price,
-            code: this.detail.license_code ? 'license_code' : 'license3in1_code',
-            codeMsg: this.detail.license_code ? this.detail.license_code : this.detail.license3in1_code,
+            code: this.detail.organization_code ? 'organization_code' : 'license_code',
+            codeMsg: this.detail.organization_code ? this.detail.organization_code : this.detail.license_code,
             license_pic: this.detail.license_pic ? this.detail.license_pic : [],
           }
-          if (this.customerMsgForm.code === 'license3in1_code') {
+          if (this.customerMsgForm.code === 'license_code') {
             this.rules.codeMsg = this.sociology;
           } else {
             this.rules.codeMsg = this.structure;
@@ -381,8 +388,8 @@ export default {
       let btnObject = btn;
       let keyArray = ['name', 'contact_name', 'contact_phone', 'detail_address', 'deficiency_standard', 'code', 'codeMsg'];
       let postData = this.pbFunc.fifterbyArr(this.customerMsgForm, keyArray);
-      if (postData.code === 'license3in1_code') {
-        postData.license3in1_code = postData.codeMsg;
+      if (postData.code === 'license_code') {
+        postData.license_code = postData.codeMsg;
       } else if (postData.code === 'license_code') {
         postData.license_code = postData.codeMsg;
       }

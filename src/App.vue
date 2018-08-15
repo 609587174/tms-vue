@@ -46,6 +46,7 @@ export default {
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
+        UnderConsignmentOrders:'OFFLINE_LOGISTICS_DISPATCH',
         mapManage: 'MAP', //地图
         carMonitor: 'MAP_MONITOR', //地图监控
         standardMile: 'STANDARD_MILEAGE_MANAGEMENT', //标准里程

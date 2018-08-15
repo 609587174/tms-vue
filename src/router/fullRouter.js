@@ -138,8 +138,8 @@ export default [{
       name: 'consignmentOrders',
       redirect: '/logisticsManage/consignmentOrders/ordersList',
       meta: {
-        isVerificationL: false,
-        title: '物流调度'
+        isVerificationL: true,
+        title: '平台承运调度'
       },
       component: (resolve) => require(['../page/logisticsManage/consignmentOrder/consignmentOrders'], resolve),
       children: [{
@@ -183,8 +183,46 @@ export default [{
               title: '轨迹地图',
             },
             component: (resolve) => require(['../page/logisticsManage/consignmentOrder/orderDetail/routePlayback'], resolve),
+
           }]
         }
+      ]
+    }, {
+      path: 'UnderConsignmentOrders',
+      name: 'UnderConsignmentOrders',
+      component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/UnderConsignmentOrders'], resolve),
+      meta: {
+        isVerificationL: true,
+        title: '线下承运调度'
+      },
+      redirect: '/logisticsManage/UnderConsignmentOrders/UnderOrdersList',
+      children: [{
+          path: 'UnderOrdersList',
+          name: 'UnderOrdersList',
+          meta: {
+            isVerificationL: false,
+            title: '线下承运调度列表',
+          },
+          component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/UnderOrdersList'], resolve),
+        },
+        {
+          path: 'addUnderOrder',
+          name: 'addUnderOrder',
+          meta: {
+            isVerificationL: false,
+            title: '新增线下承运单',
+          },
+          component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/addUnderOrder'], resolve),
+        },
+        {
+          path: 'underOrderProcess/:setpId/:willId',
+          name: 'underOrderProcess',
+          meta: {
+            isVerificationL: false,
+            title: '运单进程',
+          },
+          component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/underOrderProcess'], resolve),
+        },
       ]
     }]
   }, {
@@ -753,7 +791,7 @@ export default [{
           }]
         }]
       }]
-    },{
+    }, {
       path: 'ledger',
       name: "ledger",
       redirect: '/statistics/ledger/ledgerList',
@@ -770,7 +808,7 @@ export default [{
           isVerificationL: false
         },
         component: (resolve) => require(['../page/statistics/ledger/ledgerList'], resolve),
-      },{
+      }, {
         path: 'ledgerWaybillDetail/:willId',
         name: "ledgerWaybillDetail",
         meta: {

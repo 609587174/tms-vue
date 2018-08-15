@@ -9,7 +9,7 @@
 </template>
 <script>
 export default {
-  name: 'consignmentOrders',
+  name: 'UnderConsignmentOrders',
   data() {
     return {
 

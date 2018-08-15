@@ -463,7 +463,7 @@ export default [{
       redirect: '/clientManage/clientManageSecond/privateClientManage',
       meta: {
         isVerificationL: false,
-        title: '客户管理',
+        title: '托运方管理',
       },
       component: (resolve) => require(['../page/clientManage/clientManageSecond'], resolve),
       children: [{
@@ -475,20 +475,20 @@ export default [{
           },
           component: (resolve) => require(['../page/clientManage/privateClientManage'], resolve)
         }, {
-          path: 'addClient',
-          name: 'addClient',
+          path: 'editClient',
+          name: 'editClient',
           meta: {
             isVerificationL: false,
-            title: '新增、编辑客户',
+            title: '编辑托运方',
           },
-          component: (resolve) => require(['../page/clientManage/addClient'], resolve)
+          component: (resolve) => require(['../page/clientManage/editClient'], resolve)
         },
         {
           path: 'clientDetail',
           name: 'clientDetail',
           meta: {
             isVerificationL: false,
-            title: '客户详情',
+            title: '托运方详情',
           },
           component: (resolve) => require(['../page/clientManage/clientDetail'], resolve)
         },

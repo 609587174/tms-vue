@@ -2,7 +2,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="客户管理" name="userManage">
+        <el-tab-pane label="托运方管理" name="userManage">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
@@ -17,18 +17,19 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
+          <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
-            <el-button type="primary">导出</el-button>
-            <!-- <el-button type="success" @click="addPerson">新增</el-button> -->
+            <!-- <el-button type="primary">导出</el-button> -->
+            <el-button type="success" @click="editClient">新增</el-button>
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" plain size="mini" @click="editClient(true,scope.row.id)">编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -74,13 +75,14 @@ export default {
           { id: true, value: '已绑定' }
         ],
         fieldSelect: [
-          { id: 'name', value: '客户名称' },
+          { id: 'name', value: '托运方名称' },
           { id: 'contact_name', value: '联系人' },
           { id: 'contact_phone', value: '联系电话' },
+          { id: 'contact_phone', value: '统一社会机构代码' },
         ]
       },
       thTableList: [{
-        title: '公司名称',
+        title: '托运方名称',
         param: 'company_name',
         width: ''
       }, {
@@ -92,7 +94,15 @@ export default {
         param: 'contact_phone',
         width: ''
       }, {
-        title: '公司地址',
+        title: '亏吨标准',
+        param: 'contact_phone',
+        width: ''
+      }, {
+        title: '统一社会机构代码',
+        param: 'contact_phone',
+        width: ''
+      }, {
+        title: '地址',
         param: 'detail_address',
         width: ''
       }, {
@@ -114,7 +124,7 @@ export default {
       };
 
       postData[this.searchFilters.field] = this.searchFilters.keyword;
-
+      postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
 
       this.$$http('getCustomerList', postData).then((results) => {
@@ -134,8 +144,13 @@ export default {
     handleMenuClick: function(command) {
       this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: command.id } });
     },
-    addPerson: function() {
-      this.$router.push({ path: "/clientManage/clientManageSecond/addClient" });
+    editClient: function(isEdit, id) {
+      if (isEdit) {
+        this.$router.push({ path: "/clientManage/clientManageSecond/editClient", query: { id: id } });
+      } else {
+        this.$router.push({ path: "/clientManage/clientManageSecond/editClient" });
+      }
+
     },
     importList: function() {
       this.$router.push({ path: "/orders/orderDetail/orderDetailTab/1" });

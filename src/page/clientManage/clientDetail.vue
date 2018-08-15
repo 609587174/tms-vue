@@ -14,7 +14,7 @@
 <template>
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="客户详情" name="detail">
+      <el-tab-pane label="托运方详情" name="detail">
         <div class="detail-main">
           <el-container>
             <el-header>
@@ -25,7 +25,7 @@
                   </router-link>
                 </el-col>
                 <el-col :span="18">
-                  <p>客户信息</p>
+                  <p>托运方信息</p>
                 </el-col>
               </el-row>
             </el-header>
@@ -37,7 +37,7 @@
                       基础信息
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
+                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -91,7 +91,7 @@
 
                 </el-row> -->
               </div>
-              <div class="detail-list detail-form" v-if="false">
+              <div class="detail-list detail-form">
                 <div class="detail-form-title">
                   <el-row>
                     <el-col :span="12" :offset="6" class="text-center">
@@ -127,7 +127,7 @@
                     </el-col>
                   </el-row>
                 </div>
-                <div class="text-center" v-if="!clientData.trans_fee.length">暂无数据</div>
+                <!-- <div class="text-center" v-if="!clientData.trans_fee.length">暂无数据</div> -->
               </div>
               <div class="detail-list detail-form" v-if="false">
                 <div class="detail-form-title">

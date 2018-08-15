@@ -1,55 +1,24 @@
 <style scoped lang="less">
-.el-header p {
-  font-size: 25px;
-  text-align: center;
-  height: 60px;
-  line-height: 60px;
-  margin: 0 0;
-}
 
-.addheadcarform {
-  margin: 30px 5%;
-  .el-input {
-    width: 250px;
-  }
-  .el-select {
-    width: 250px;
-  }
-}
-
-#addClientForm {
-  border: 1px solid rgb(222, 222, 222);
-}
-
-.alone-insurance-form {
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  padding: 30px 30px 0 20px;
-}
-
-.insurance-form-head {
-  background-color: #f1f1f1;
-  height: 41px;
-  line-height: 41px;
-}
 
 </style>
 <template>
   <div id="addPerson" class="detail-main">
     <el-container v-loading="pageLoading">
-      <el-header style="margin-top:15px;">
+      <el-header>
         <el-row>
-          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="returnToPage"></div>
           </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
       </el-header>
-      <el-main v-show="!pageLoading">
+      <el-main v-show="!pageLoading" class="mt-30">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <div class="detail-form-title text-center">基础人员</div>
+            <div class="detail-form-title text-center">基础信息</div>
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="customerMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
@@ -95,10 +64,10 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="亏吨标准:" prop="deficiency_standard">
-                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.deficiency_standard"></el-input>KG
+                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.deficiency_standard"></el-input><span class="unit">KG</span>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" v-if="false">
                   <el-form-item label="营业执照:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="customerMsgForm.license_pic" list-type="picture">
@@ -170,7 +139,7 @@ export default {
   name: 'addCarHeadManage',
   computed: {
     titleType: function() {
-      return this.$route.query.id ? '编辑客户' : '新增客户';
+      return this.$route.query.id ? '编辑托运方' : '新增托运方';
     },
     activeStep: function() {
       return this.$route.query.activeStep || 0;

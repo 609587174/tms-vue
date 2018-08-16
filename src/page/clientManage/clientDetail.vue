@@ -36,7 +36,7 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       基础信息
                     </el-col>
-                    <el-col :span="6" class="text-right">
+                    <el-col :span="6" class="text-right" v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'">
                       <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                     </el-col>
                   </el-row>
@@ -136,7 +136,7 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       卸车待时规则
                     </el-col>
-                    <el-col :span="6" class="text-right">
+                    <el-col :span="6" class="text-right" v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'">
                       <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
                     </el-col>
                   </el-row>

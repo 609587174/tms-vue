@@ -203,62 +203,58 @@ const dealConfig = function(apiName, postData) {
     headers: '',
   }
 
-  if (api.hasOwnProperty(apiName)) {
-    let apiUrl = api[apiName].url ? api[apiName].url : '';
-    let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
-    let token = getLocalData('token', true);
-    httpConfig.method = method;
+  if (!api.hasOwnProperty(apiName)) return;
 
-    if (method == 'get') {
-      httpConfig.headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        "Accept": "application/json",
-        "Content-Type": "application/json; charset=UTF-8"
-      }
-    } else {
-      httpConfig.headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
+  let apiUrl = api[apiName].url ? api[apiName].url : '';
+  let method = api[apiName].method ? api[apiName].method.toLowerCase() : '';
+  let token = getLocalData('token', true);
+  httpConfig.method = method;
+
+  httpConfig.headers = (method == 'get') ? {
+      'X-Requested-With': 'XMLHttpRequest',
+      "Accept": "application/json",
+      "Content-Type": "application/json; charset=UTF-8"
+    }: {
+      'X-Requested-With': 'XMLHttpRequest',
+      'Content-Type': 'application/json; charset=UTF-8'
     }
 
-    if (!api[apiName].notNeedToken) {
-      httpConfig.headers.Authorization = token;
-    }
-    if (apiUrl) {
-      apiUrl = dealApiUrlParam(apiName, postData);
-    } else {
-      return false
-    }
-
-    if (method == 'get' || method == 'delete') {
-      delete httpConfig.data
-    }
-
-    if (method) {
-      if ((method == 'get' || method == 'delete') && (postData && typeof postData === 'object')) {
-        //如果接口为 get 请求，但是参数需要用？跟随，这是需要的对应处理
-        let params = '?';
-        let existedVars = {};
-        for (let t in postData) {
-          if (!existedVars.hasOwnProperty(t)) {
-            params += t + "=" + encodeURIComponent(postData[t]) + '&';
-          }
-        }
-        if (params.match(/^(.+)&$/i)) {
-          params = RegExp.$1;
-          apiUrl += params;
-        }
-      }
-      httpConfig.url = apiUrl;
-      return httpConfig;
-    } else {
-      return false
-    }
-
-  } else {
-    return false;
+  if (!api[apiName].notNeedToken) {
+    httpConfig.headers.Authorization = token;
   }
+
+  if (apiUrl) {
+    apiUrl = dealApiUrlParam(apiName, postData);
+  } else {
+    return false
+  }
+
+
+  if (method == 'get' || method == 'delete') {
+    delete httpConfig.data
+  }
+
+  if (method) {
+    if ((method == 'get' || method == 'delete') && (postData && typeof postData === 'object')) {
+      //如果接口为 get 请求，但是参数需要用？跟随，这是需要的对应处理
+      let params = '?';
+      let existedVars = {};
+      for (let t in postData) {
+        if (!existedVars.hasOwnProperty(t)) {
+          params += t + "=" + encodeURIComponent(postData[t]) + '&';
+        }
+      }
+      if (params.match(/^(.+)&$/i)) {
+        params = RegExp.$1;
+        apiUrl += params;
+      }
+    }
+    httpConfig.url = apiUrl;
+    return httpConfig;
+  } else {
+    return false
+  }
+
 
 }
 

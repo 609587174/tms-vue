@@ -223,6 +223,24 @@ export default [{
           },
           component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/underOrderProcess'], resolve),
         },
+        {
+          path: 'unloadBill',
+          name: 'unloadBill',
+          meta: {
+            isVerificationL: false,
+            title: '卸货单',
+          },
+          component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/unloadBill/unloadBill'], resolve),
+          children: [{
+            path: 'unloadBillList',
+            name: 'unloadBillList',
+            meta: {
+              isVerificationL: false,
+              title: '卸货单列表',
+            },
+            component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/unloadBill/unloadBillList'], resolve),
+          }]
+        },
       ]
     }]
   }, {

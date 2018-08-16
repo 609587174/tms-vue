@@ -9,6 +9,79 @@
  */
 
 const api = {
+  unloadBillMatch: {
+    url: '/order/section-trips/match-business-order/',
+    method: 'post',
+    desc: '匹配卸货单',
+    param: {
+      waybill_id: {
+          desc: '卸货地名称'
+      },
+      match_order_list: {
+          desc: '匹配卸车单ID列表,'
+      },
+      cancel_order_list: {
+          desc: '取消卸车单ID列表'
+      },
+    }
+  },
+  getUnloadBillList: {
+    url: '/order/business_order/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
+  addUnloadBill: {
+      url: '/order/business_order/',
+      method: 'post',
+      desc: '新增卸货单',
+      param: {
+        tms_station_name: {
+            desc: '卸货地名称'
+        },
+        station: {
+            desc: '实际站点名称,'
+        },
+        consignee: {
+            desc: '收货人'
+        },
+        consignee_phone: {
+            desc: '收货人联系电话'
+        },
+        plan_arrive_time: {
+            desc: '计划到站时间'
+        },
+        plan_tonnage: {
+            desc: '计划需求吨位'
+        },
+        station_address:{
+          desc:'站点地址'
+        },
+        business_type:{
+          desc:'业务单类型'
+        },
+        order_source: {
+          desc:'业务单来源，tms建的传TMS'
+        },
+        company_id:{
+          desc:'创建该线下承运单的tms公司的id'
+        },
+        short_name: {
+          desc:'客户简称'
+        },
+        consumer_id:{
+          desc:''
+        },
+        consumer_name: {
+          desc:'客户名称'
+        },
+        station_id:{
+          desc:'站点ID'
+        }
+      }
+  },
   getLedgerList: {
     url: '/statistic/ledger/',
     method: 'get',

@@ -225,7 +225,6 @@ const dealConfig = function(apiName, postData) {
     if (!api[apiName].notNeedToken) {
       httpConfig.headers.Authorization = token;
     }
-
     if (apiUrl) {
       apiUrl = dealApiUrlParam(apiName, postData);
     } else {

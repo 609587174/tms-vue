@@ -151,12 +151,12 @@ export default {
     },
     clicktabs: function(targetName) {
       var defaultTabls=this.defaultSecond[targetName.name];
-      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo="+targetName.name+"&secondActiveName="+defaultTabls });
+      this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/underOrdersList?goTo="+targetName.name+"&secondActiveName="+defaultTabls });
       this.reshCount();
     },
     reshCount:function(){
       var renderStatus=this.pbFunc.deepcopy(this.allStatusName);
-      this.$$http("getConCount",{}).then(results=>{
+      this.$$http("getConCount",{type:"three"}).then(results=>{
         var vm=this;
         vm.show=true;
         this.pageLoading=false;
@@ -179,12 +179,12 @@ export default {
     },
     changeTabs: function(fifterName) {
       //this.activeName = fifterName;
-      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo="+fifterName+"&secondActiveName=all" });
+      this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/underOrdersList?goTo="+fifterName+"&secondActiveName=all" });
       this.reshCount();
     },
      childchangeTabs:function(tabsObj){
       //this.activeName = tabsObj.first;
-      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo="+tabsObj.first+"&secondActiveName="+tabsObj.second });
+      this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/underOrdersList?goTo="+tabsObj.first+"&secondActiveName="+tabsObj.second });
       this.reshCount();
     },
   },

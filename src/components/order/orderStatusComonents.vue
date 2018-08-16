@@ -230,7 +230,7 @@ export default {
           sendData.status = this.fifterName;
         }
       }
-
+      sendData.type='online';
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
@@ -301,7 +301,7 @@ export default {
           sendData.status = this.fifterName;
         }
       }
-
+      sendData.type='online';
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货

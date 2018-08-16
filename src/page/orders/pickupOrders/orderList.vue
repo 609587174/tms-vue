@@ -257,7 +257,7 @@ export default {
           sendData.status = this.historyStatus;
         }
       }
-      
+      sendData.type='online';
       sendData.page_size = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;

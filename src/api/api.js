@@ -1794,6 +1794,46 @@ const api = {
     param: {
 
     }
+  },
+  getFluidsFormAdd: {
+    url: '/map/land_marks/mixin_fluids/',
+    method: 'get',
+    desc: "获取bpm，tms所有的液厂数据",
+    param: {
+
+    }
+  },
+  getCustomerFormAdd: {
+    url: '/carrier/customer/',
+    method: 'GET',
+    desc: "获取承运商客户列表的接口",
+    param: {
+
+    }
+  },
+  changeStatusSection: {
+    url: '/order/section-trips/:id/change-status/',
+    method: 'put',
+    desc: "修改运单分段状态",
+    param: {
+
+    }
+  },
+  cratePickUpOrder: {
+    url: '/order/delivery-order/three-delivery/',
+    method: 'POST',
+    desc: "新增线下承运单",
+    param: {
+
+    }
+  },
+  getCarriesId: {
+    url: '/order/trader/carriers/',
+    method: 'GET',
+    desc: "获取承运商列表",
+    param: {
+
+    }
   }
 }
 

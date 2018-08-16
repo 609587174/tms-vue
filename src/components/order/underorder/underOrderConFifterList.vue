@@ -294,6 +294,18 @@
             </div>
             <div style="clear:both"></div>
           </div>
+          <div style="width:100px;float:right;padding-left:10px;">
+                <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+                <el-col >
+                  <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+                </el-col>
+              </el-row>
+              <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+                <el-col >
+                  <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+                </el-col>
+              </el-row>
+            </div>
         </template>
       </el-table-column>
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
@@ -556,7 +568,7 @@ export default {
       tableHeadConfig:{
          'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
+        'third': [{ key: 'all', value: 'unloadHead' }, {key:'unload_driver_pending_confirmation',value:'unloadHead'}, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
         'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
         'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
@@ -571,6 +583,7 @@ export default {
         'waiting_match':'matchExtend',
         'confirm_match':'matchExtend',
         'already_match':'matchExtend',
+        'unload_driver_pending_confirmation':'unloadExtend',
         'to_site':'unloadExtend',
         'reach_site':'unloadExtend',
         'unloading_waiting_audit':'unloadExtend',
@@ -593,34 +606,86 @@ export default {
         ]
       },
       buttonAll: {
-        driver_pending_confirmation: [{
-          text: "变更",
+        driver_pending_confirmation: [
+        {
+          text: "上传装车磅单",
           type: "primary",
-          methods_type: "changeSatus",
+          methods_type: "upLoadPound",
+        },
+        // {
+        //   text: "变更",
+        //   type: "primary",
+        //   methods_type: "changeSatus",
+        // },
+        { //司机未确认
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
+        }
+        ],
+        unload_driver_pending_confirmation: [{
+          text: "上传卸车磅单",
+          type: "primary",
+          methods_type: "upUnloadPound",
         }],
-        confirm_match:[{ //待匹配卸货单
-          text: "查看卸货地",
+        waiting_match: [{
+          text: "匹配卸货单",
+          type: "primary",
+          methods_type: "waitingMatch",
+        }],
+        confirm_match:[{
+          text: "确认卸货单",
           type: "success",
-          methods_type: "sureUnload",
+          methods_type: "sureDownOrder"
+        },{ //待匹配卸货单
+          text: "变更卸货单",
+          type: "primary",
+          methods_type: "changeUnload",
+          attrPlan: true
+        }],
+        already_match:[
+        { //已配卸货单
+          text: "变更卸货单",
+          type: "primary",
+          methods_type: "changeUnload",
           attrPlan: true
         }],
         to_fluid: [
+        // {
+        //   text: "变更",
+        //   type: "primary",
+        //   methods_type: "changeSatus"
+        // },
         {
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder", //前往装车
+          attrPlan: true
         }],
         waiting_seal:[
-        {
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
+        // {
+        //   text: "变更",
+        //   type: "primary",
+        //   methods_type: "changeSatus"
+        // },
+        { //待上传铅封
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
         }],
         reach_fluid: [
-        {
-          text: "变更",
-          type: "primary",
-          methods_type: "changeSatus"
+        // {
+        //   text: "变更",
+        //   type: "primary",
+        //   methods_type: "changeSatus"
+        // },
+        { //已到装货地
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
         }],
         loading_waiting_audit: [{
           text: "装车审核",
@@ -629,18 +694,17 @@ export default {
           attrPlan: true
         }],
         loading_audit_failed: [],
-        waiting_match: [],
-        confirm_match: [{
-          text: "确认卸货单",
-          type: "success",
-          methods_type: "sureDownOrder"
-        }],
         to_site: [],
         reach_site: [],
         unloading_waiting_audit: [{
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
+        },{ //已装车待审核
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
         }],
         unloading_audit_failed: [],
         waiting_settlement: [
@@ -969,16 +1033,44 @@ export default {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'upSettlement') {
         this.upSettlement(rowData);
-      } else if (type == 'sureCancle') {
+      } else if (type == 'changeUnload') {
+        //变更卸货地
+      } else if (type == 'waitingMatch') {
+        //匹配卸货地
+      } else if (type == 'upUnloadPound') {
+        //上传卸车磅单
+      } else if (type == 'cancleOrder') {
+        //取消运单
+        var sendData={};
+        sendData.id = rowData.id;
+        sendData.status = "canceled";
+        this.$confirm('取消运单后,系统将通知驾驶员,是否确认', '确认取消运单', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$$http("changeStatusSection", sendData).then((results) => {
+            if (results.data.code == 0) {
+              this.$message({
+                type: "success",
+                message: "取消运单成功",
+              });
+              this.$emit('searchList');
+            } else {
+              this.$message.error(results.data.msg);
+            }
+          })
 
-      } else if (type == 'solveFault') {
-
+        }).catch((err) => {
+          console.log('errs', err);
+        });
+      } else if (type == 'upLoadPound') {
+        //上传装车磅单
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }
     },
     upSettlement: function(rowData) {
-
       this.UpSettlementForm={
         arrival_time:rowData.arrival_time||"",
         weight_audit_time:rowData.weight_audit_time||"",

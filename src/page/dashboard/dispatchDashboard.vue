@@ -6,22 +6,24 @@
   <div>
     <dashborad dispatchPage="dispatchDashboard"></dashborad>
     <div>
-      <qiniuFileUpload></qiniuFileUpload>
+      <qiniuImgUpload :fileList.sync="fileList" :uploadTitle="uploadTitle" :limit="limit"></qiniuImgUpload>
     </div>
   </div>
 </template>
 <script>
 import dashborad from '@/components/dashboard/allDashboard';
-import qiniuFileUpload from '@/components/qiniuFileUpload';
+import qiniuImgUpload from '@/components/qiniuImgUpload';
 export default {
   name: 'dispatchDashboard',
   components: {
     dashborad: dashborad,
-    qiniuFileUpload,
+    qiniuImgUpload,
   },
   data() {
     return {
-
+      fileList: [],
+      uploadTitle: '上传榜单',
+      limit: 1,
     };
   },
   computed: {
@@ -32,6 +34,11 @@ export default {
   },
   created() {
 
+  },
+  watch: {
+    fileList: function(val, oldval) {
+      console.log('watch fileList', val, oldval)
+    }
   }
 };
 

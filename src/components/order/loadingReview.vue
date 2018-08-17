@@ -26,6 +26,11 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :span="20" :offset="2">
+          <qiniuImgUpload :fileList.sync="fileList" :uploadTitle="uploadTitle" :limit="limit"></qiniuImgUpload>
+        </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车时间:">
             {{surePound.plan_time}}
@@ -112,14 +117,22 @@
   </div>
 </template>
 <script>
+import qiniuImgUpload from '@/components/qiniuImgUpload';
 export default {
   name: 'loadingReview',
   data() {
     return {
       buttonLoading: false,
       imgList: [],
-      surePound: {}
+      surePound: {},
+
+      fileList: [],
+      uploadTitle: '上传榜单',
+      limit: 1,
     };
+  },
+  components: {
+    qiniuImgUpload,
   },
   props: {
     surePoundData: Object,

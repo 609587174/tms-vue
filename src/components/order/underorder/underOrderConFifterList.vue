@@ -950,89 +950,93 @@ export default {
       //   });
       // }
     },
+    loadingExFun:function(type, rowData){
+      this.isShowSurePound = true;
+      this.surePoundTitle = '装车榜单审核通过';
+      this.isEditSureDownPound = true;
+
+      //this.choosedListData = rowData;
+
+      /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
+      this.$$http("orderProcess", {id:rowData.id}).then((results) => {
+
+        if (results.data.code == 0) {
+          let orderProcessData = results.data.data;
+          let dataObject = {};
+
+          if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "loading_waiting_audit") {
+            if (orderProcessData[orderProcessData.length - 1].operation == "上传装车铅封") {
+              dataObject = {
+                ...orderProcessData[orderProcessData.length - 2],
+                weight_note: orderProcessData[orderProcessData.length - 2].weight_id,
+                carseal:rowData.carseal,
+              }
+            } else {
+              dataObject = {
+                ...orderProcessData[orderProcessData.length - 1],
+                weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
+                carseal:rowData.carseal,
+              }
+            }
+          }
+
+          orderProcessData.map((item,i)=>{
+            if(item.type === 'to_fluid'){
+              dataObject = {
+                ...dataObject,
+                ...item
+              }
+            }
+          })
+
+          this.choosedListData = Object.assign({}, dataObject);
+
+        }
+      });
+    },
+    downExFun:function(type, rowData){
+      this.isShowSureDownPound = true;
+      this.sureDownPoundTitle = '卸车榜单审核通过';
+      this.isEditSureDownPound = true;
+
+      //this.choosedListData = rowData;
+
+      /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
+      this.$$http("orderProcess", {id:rowData.id}).then((results) => {
+
+        if (results.data.code == 0) {
+          let orderProcessData = results.data.data;
+          let dataObject = {};
+
+          if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "unloading_waiting_audit") {
+            dataObject = {
+              ...orderProcessData[orderProcessData.length - 1],
+              weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
+              weight_active_mile: ''
+            }
+          }
+
+          if (orderProcessData.length > 2 && orderProcessData[1].type == "to_fluid") {
+            dataObject = {
+              ...dataObject,
+              ...orderProcessData[1]
+            }
+          }
+
+          this.choosedListData = Object.assign({}, dataObject);
+        }
+      });
+    },
     operation: function(type, rowData) {
       if (type == 'changeSatus') {
         this.changeSatusBox(rowData);
         this.changeStatusParam.sectiontrip = rowData.id;
       } else if (type == 'loadingEX') {
-        this.isShowSurePound = true;
-        this.surePoundTitle = '装车榜单审核通过';
-        this.isEditSureDownPound = true;
-
-        //this.choosedListData = rowData;
-
-        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
-        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
-
-          if (results.data.code == 0) {
-            let orderProcessData = results.data.data;
-            let dataObject = {};
-
-            if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "loading_waiting_audit") {
-              if (orderProcessData[orderProcessData.length - 1].operation == "上传装车铅封") {
-                dataObject = {
-                  ...orderProcessData[orderProcessData.length - 2],
-                  weight_note: orderProcessData[orderProcessData.length - 2].weight_id,
-                  carseal:rowData.carseal,
-                }
-              } else {
-                dataObject = {
-                  ...orderProcessData[orderProcessData.length - 1],
-                  weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
-                  carseal:rowData.carseal,
-                }
-              }
-            }
-
-            orderProcessData.map((item,i)=>{
-              if(item.type === 'to_fluid'){
-                dataObject = {
-                  ...dataObject,
-                  ...item
-                }
-              }
-            })
-
-            this.choosedListData = Object.assign({}, dataObject);
-
-          }
-        });
-
-
+        this.loadingExFun(type, rowData);
       } else if (type == 'sureDownOrder') {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
-        this.isShowSureDownPound = true;
-        this.sureDownPoundTitle = '卸车榜单审核通过';
-        this.isEditSureDownPound = true;
-
-        //this.choosedListData = rowData;
-
-        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
-        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
-
-          if (results.data.code == 0) {
-            let orderProcessData = results.data.data;
-            let dataObject = {};
-
-            if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "unloading_waiting_audit") {
-              dataObject = {
-                ...orderProcessData[orderProcessData.length - 1],
-                weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
-                weight_active_mile: ''
-              }
-            }
-
-            if (orderProcessData.length > 2 && orderProcessData[1].type == "to_fluid") {
-              dataObject = {
-                ...dataObject,
-                ...orderProcessData[1]
-              }
-            }
-
-            this.choosedListData = Object.assign({}, dataObject);
-          }
-        });
+        this.downExFun(type, rowData);
       } else if (type == 'sureUnload') {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'upSettlement') {
@@ -1071,6 +1075,7 @@ export default {
           console.log('errs', err);
         });
       } else if (type == 'upLoadPound') {
+        this.downExFun();
         //上传装车磅单
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });

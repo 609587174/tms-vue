@@ -1,27 +1,33 @@
 <template>
-  <div class="clearfix upload-img-container">
+  <div>
     <el-upload action="" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList" :http-request="uploadFile" :before-upload="beforeAvatarUpload" multiple accept="image/gif,image/jpeg,image/png,image/jpg">
-      <i class="el-icon-plus"></i>
+      <i class="el-icon-plus" v-if="!uploadTitle"></i>
+      <span v-if="uploadTitle">{{uploadTitle}}</span>
     </el-upload>
-    <el-dialog :visible.sync="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
+    <img-review :imgObject.sync="imgObject"></img-review>
   </div>
 </template>
 <script>
 import * as qiniu from 'qiniu-js';
 import axios from 'axios';
+import imgReview from '@/components/common/imgReview';
 export default {
   name: 'qiniuUpload',
   props: {
-
+    fileList: Array,
+    uploadTitle: String,
+    limit: Number,
   },
-
+  components: {
+    imgReview,
+  },
   data: function() {
     return {
-      dialogImageUrl: '',
-      dialogVisible: false,
-      fileList: [],
+      imgObject: {
+        imgList: [], //图片url列表,必需。
+        showPreview: false, //是否展示预览，默认false,必需
+        previewIndex: 0, //默认展示图片的index,可选
+      }
     }
   },
   computed: {
@@ -35,25 +41,49 @@ export default {
           this.fileList.splice(i, 1);
         }
       }
-      console.log(file, this.fileList);
     },
     handlePictureCardPreview(file) {
-      console.log('file', file);
-      this.dialogImageUrl = file.url;
-      this.dialogVisible = true;
+      let previewIndex = 0;
+      let imgList = [];
+
+      for (let i in this.fileList) {
+        if (this.fileList[i].name === file.name) {
+          previewIndex = i;
+        }
+        imgList.push(this.fileList[i].url)
+      }
+
+      this.imgObject = {
+        imgList: imgList,
+        showPreview: true,
+        previewIndex: previewIndex,
+      }
+
     },
     beforeAvatarUpload(file) {
-      if ((file.size / 1024 / 1024) > 2) {
+
+      const isLimte2M = file.size / 1024 / 1024 < 2;
+
+      const isLimteNum = this.limit && this.fileList.length < this.limit;
+
+      if (!isLimte2M) {
         this.$message({
           message: '上传头像图片大小不能超过 2MB',
           type: 'error'
         });
         return false;
       }
-      return true;
+
+      if (!isLimteNum) {
+        this.$message({
+          message: `只限上传${this.limit}张`,
+          type: 'error'
+        });
+      }
+
+      return isLimte2M && isLimteNum;
     },
     uploadFile(e) {
-      console.log('files', e);
       let files = e.file;
 
       let config = {
@@ -69,9 +99,11 @@ export default {
         mimeType: null
       };
 
+      let type = files.type.split('/')[1];
+
       axios.get('http://driver.hhtdlng.com/api/v1/driver-side/qiniu/retrieve-token/', {
         params: {
-          suffix: 'png',
+          suffix: type,
         }
       }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -87,7 +119,6 @@ export default {
     uploadWithSDK(token, putExtra, config, key, file) {
       // 设置next,error,complete对应的操作，分别处理相应的进度信息，错误信息，以及完成后的操作
       let error = err => {
-        console.log('err', err);
         this.$message({
           message: '上传失败',
           type: 'error'
@@ -95,7 +126,6 @@ export default {
       };
 
       let complete = res => {
-        console.log('res', res);
         this.fileList.push({
           name: file.name,
           url: `http://dev-image.hhtdlng.com/${key}`
@@ -103,7 +133,6 @@ export default {
       };
 
       let next = response => {
-        console.log('response', response, file);
         file.percentage = response.total.percent;
       };
 

@@ -1,7 +1,7 @@
 <style scoped lang="less">
 .listTableAll {
   text-align: left;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .el-table {
@@ -28,9 +28,9 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      font-size:13px;
-      height:25px;
-      padding:5px 0;
+      font-size: 13px;
+      height: 25px;
+      padding: 5px 0;
       .el-table th.is-leaf {
         border-top: none;
       }
@@ -39,7 +39,7 @@
       float: left;
       height: 30px;
       line-height: 30px;
-      font-size:10px;
+      font-size: 10px;
     }
     .el-icon-location {
       font-size: 10px;
@@ -93,7 +93,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size:13px;
+  font-size: 13px;
 }
 
 .el-icon-location {
@@ -104,18 +104,22 @@
   height: 400px;
   width: 100%;
 }
-.listDetalis .el-row{
-  margin-top:10px;
+
+.listDetalis .el-row {
+  margin-top: 10px;
 }
-.listDetalis>div:nth-child(1){
-  margin-top:0px;
+
+.listDetalis>div:nth-child(1) {
+  margin-top: 0px;
 }
-.unloadList{
-  margin-top:30px;
+
+.unloadList {
+  margin-top: 30px;
 }
+
 </style>
 <template>
-  <div style="position:relative;font-size: 10px;" >
+  <div style="position:relative;font-size: 10px;">
     <noData v-if="ListData.length==0&&ListDataSearch"></noData>
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" @expand-change="changeExpand" ref="tableConList" height="500">
       <el-table-column type="expand">
@@ -295,23 +299,23 @@
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
-                <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
-                <el-col >
-                  <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
-                </el-col>
-              </el-row>
-              <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
-                <el-col >
-                  <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
-                </el-col>
-              </el-row>
-            </div>
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
-      <template slot-scope="props">
-        <div  :title="props.row.waybill.waybill_number" class="whiteSpan">
-          <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
+        <template slot-scope="props">
+          <div :title="props.row.waybill.waybill_number" class="whiteSpan">
+            <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
         </div>
       </template>
       </el-table-column>
@@ -1035,8 +1039,10 @@ export default {
         this.upSettlement(rowData);
       } else if (type == 'changeUnload') {
         //变更卸货地
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'waitingMatch') {
         //匹配卸货地
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'upUnloadPound') {
         //上传卸车磅单
       } else if (type == 'cancleOrder') {

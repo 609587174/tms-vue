@@ -125,11 +125,13 @@ export default {
         title: '运单号',
         param: 'waybill',
         width: ''
-      }, {
-        title: '业务单号',
-        param: 'order',
-        width: ''
-      }, {
+      },
+      //  {
+      //   title: '业务单号',
+      //   param: 'order',
+      //   width: ''
+      // },
+      {
         title: '托运方',
         param: 'company',
         width: '200'

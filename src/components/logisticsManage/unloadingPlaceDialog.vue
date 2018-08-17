@@ -7,7 +7,7 @@
             <el-input :autofocus="true" placeholder="请输入" v-model="formRules.tms_station_name">
             </el-input>
           </el-form-item>
-          <el-form-item label="实际站点名称:" prop="station">
+          <el-form-item label="实际站点名称:" prop="station_id">
             <el-select v-model="formRules.station_id" :loading="siteLoading" filterable remote clearable @change="selectStation" :remote-method="getSiteList" placeholder="请输入选择">
               <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
             </el-select>
@@ -65,7 +65,7 @@ export default {
       rules: {
         tms_station_name: [
           { required: true, message: '请输入卸货地名称', trigger: 'blur' },
-          { min: 1, max: 20, message: '部门名称字数为1-20字', trigger: 'blur' }
+          // { min: 1, max: 20, message: '部门名称字数为1-20字', trigger: 'blur' }
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
         station_id: [
@@ -82,6 +82,8 @@ export default {
         ],
         plan_tonnage: [
           { required: true, message: '请输入计划需求吨位', trigger: 'blur' },
+          { pattern: /^([1-9]{1,2})+(.[0-9]{0,3})?$/, message: '请输入1-99且最多三位小数的数值', trigger: 'blur' },
+
         ],
       },
       submitBtn: {
@@ -105,7 +107,7 @@ export default {
   },
   computed: {
     waybillId() {
-      return this.$route.query.waybillId;
+      return this.$route.params.waybillId;
     }
   },
   methods: {
@@ -187,7 +189,7 @@ export default {
       let postData = {
         waybill_id: this.waybillId,
         match_order_list: [],
-        cancel_order_list:[]
+        cancel_order_list: []
       }
       console.log('匹配', postData)
       postData.match_order_list.push(id);
@@ -202,7 +204,22 @@ export default {
 
     },
   },
-
+  watch: {
+    unloadingPlaceIsShow(curVal, oldVal) {　
+      this.formRules = {
+        tms_station_name: '', //卸货地名称
+        station_id: '', //实际站点名称id,
+        consignee: '', //收货人
+        consignee_phone: '', //收货人联系电话
+        plan_arrive_time: '', //计划到站时间
+        plan_tonnage: '', //计划需求吨位
+      };　　　　　　　　
+      if (this.$refs['formRules']) {
+        this.$refs['formRules'].clearValidate();　　　　
+      }　　
+      this.addData.station_address = '';
+    },
+  },
   created: function() {
     let currentUrl = document.location.href.toString();
     let domainUrl = '';

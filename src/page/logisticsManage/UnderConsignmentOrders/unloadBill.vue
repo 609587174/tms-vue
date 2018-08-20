@@ -93,43 +93,43 @@ export default {
       },
       planTime: [], //计划到站时间
       thTableList: [{
-        title: '卸货单编号',
-        param: 'order_number',
-        width: ''
-      }, {
-        title: '卸货单状态',
-        param: 'status_display',
-        width: ''
-      }, {
-        title: '站点',
-        param: 'station',
-        width: ''
-      }, {
-        title: '站点地址',
-        param: 'station_address',
-        width: ''
-      }, {
-        title: '计划到站时间',
-        param: 'plan_arrive_time',
-        width: '180'
-      }, {
-        title: '计划吨位',
-        param: 'plan_tonnage',
-        width: ''
-      }, {
-        title: '收货人',
-        param: 'consignee',
-        width: ''
-      }, {
-        title: '收货电话',
-        param: 'consignee_phone',
-        width: ''
-      },
-      //  {
-      //   title: 'ID',
-      //   param: 'id',
-      //   width: '320'
-      // }
+          title: '卸货单编号',
+          param: 'order_number',
+          width: ''
+        }, {
+          title: '卸货单状态',
+          param: 'status_display',
+          width: ''
+        }, {
+          title: '站点',
+          param: 'station',
+          width: ''
+        }, {
+          title: '站点地址',
+          param: 'station_address',
+          width: ''
+        }, {
+          title: '计划到站时间',
+          param: 'plan_arrive_time',
+          width: '180'
+        }, {
+          title: '计划吨位',
+          param: 'plan_tonnage',
+          width: ''
+        }, {
+          title: '收货人',
+          param: 'consignee',
+          width: ''
+        }, {
+          title: '收货电话',
+          param: 'consignee_phone',
+          width: ''
+        },
+        //  {
+        //   title: 'ID',
+        //   param: 'id',
+        //   width: '320'
+        // }
       ],
       tableData: [],
       unloadingPlaceIsShow: false, //新增卸货单弹窗
@@ -144,7 +144,8 @@ export default {
     },
     getList: function() {
       let postData = {
-        page: this.pageData.currentPage
+        page: this.pageData.currentPage,
+        waybill_id: this.waybillId
       };
 
       postData[this.searchFilters.field] = this.searchFilters.keyword;
@@ -155,7 +156,7 @@ export default {
         this.pageLoading = false;
 
         if (results.data && results.data.code == 0) {
-          console.log('results.data',this.matchUnloadId,this.cancelMatchUnloadId)
+          console.log('results.data', this.matchUnloadId, this.cancelMatchUnloadId)
           this.tableData = results.data.data.data.data;
           for (let i in this.tableData) {
             this.tableData[i].is_show = this.tableData[i].is_matched;
@@ -263,7 +264,7 @@ export default {
       this.matchUnloadId = Array.from(new Set(this.matchUnloadId));
       this.cancelMatchUnloadId = Array.from(new Set(this.cancelMatchUnloadId))
       if (row.is_show === row.is_matched) {
-        console.log('点击',row.is_show,row.is_matched,row.id)
+        console.log('点击', row.is_show, row.is_matched, row.id)
         let arr = row.is_show ? this.cancelMatchUnloadId : this.matchUnloadId;
         arr.splice(arr.findIndex(item => item.id === row.id), 1);
         if (row.is_show) {

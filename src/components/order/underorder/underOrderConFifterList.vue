@@ -484,11 +484,11 @@
 
 
     <el-dialog :title="surePoundTitle" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <loadingReview :isEdit="isEditSurePound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
+      <loadingReview :isEdit="isEditSurePound" :isUpload="isUploadPound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
     </el-dialog>
 
     <el-dialog :title="sureDownPoundTitle" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <unloadingReview  :isEdit="isEditSureDownPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
+      <unloadingReview  :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
 
      <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
@@ -756,9 +756,13 @@ export default {
       isShowSurePound:false,
       surePoundTitle:'装车磅单审核通过',
       isEditSurePound:true,
+      isUploadPound:false,
+
+
       isShowSureDownPound:false,
       sureDownPoundTitle:'卸车磅单审核通过',
       isEditSureDownPound:true,
+      isUploadUnloadPound:false,
       choosedListData:{},
 
 
@@ -841,6 +845,8 @@ export default {
         rowDataCopy.carseal = rowDataCopy.pickup_carseal  || rowDataCopy.carseal;
       }
 
+      this.isUploadPound = false;
+
       this.isShowSurePound = true;
 
       this.choosedListData = rowDataCopy;
@@ -851,6 +857,8 @@ export default {
 
     },
     showDownPound:function(rowData){
+
+      this.isUploadUnloadPound = false;
 
       this.isShowSureDownPound = true;
 
@@ -954,6 +962,7 @@ export default {
       this.isShowSurePound = true;
       this.surePoundTitle = '装车榜单审核通过';
       this.isEditSureDownPound = true;
+      this.isUploadPound = false;
 
       //this.choosedListData = rowData;
 
@@ -995,9 +1004,11 @@ export default {
       });
     },
     downExFun:function(type, rowData){
+      console.log('rowData',rowData);
       this.isShowSureDownPound = true;
       this.sureDownPoundTitle = '卸车榜单审核通过';
       this.isEditSureDownPound = true;
+      this.isUploadUnloadPound = false;
 
       //this.choosedListData = rowData;
 
@@ -1028,6 +1039,7 @@ export default {
       });
     },
     operation: function(type, rowData) {
+      console.log('type, rowData',type, rowData);
       if (type == 'changeSatus') {
         this.changeSatusBox(rowData);
         this.changeStatusParam.sectiontrip = rowData.id;
@@ -1049,6 +1061,16 @@ export default {
         this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'upUnloadPound') {
         //上传卸车磅单
+        this.isShowSureDownPound = true;
+
+        this.choosedListData = rowData;
+
+        this.sureDownPoundTitle = '上传卸车磅单'
+
+        this.isEditSureDownPound = true;
+
+        this.isUploadUnloadPound  = true;
+
       } else if (type == 'cancleOrder') {
         //取消运单
         var sendData={};
@@ -1075,8 +1097,19 @@ export default {
           console.log('errs', err);
         });
       } else if (type == 'upLoadPound') {
-        this.downExFun();
         //上传装车磅单
+
+        this.isShowSurePound = true;
+
+        this.choosedListData = rowData;
+
+        this.surePoundTitle = '上传装车磅单'
+
+        this.isEditSurePound = true;
+
+        this.isUploadPound = true;
+
+
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }

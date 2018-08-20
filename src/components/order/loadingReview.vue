@@ -1,3 +1,10 @@
+<!-- 装车榜单审核组件 -->
+<!--
+  本组件成灾功能：
+  1:纯展示不能审核：isedit = false;
+  2:可以审核不能上传装车榜单图片isedit = ture ; isUpload = false;
+  3:可以审核并能上传装车榜单图片isedit = ture ; isUpload = ture;
+ -->
 <style scoped lang="less">
 .loading-review-container {
   /deep/ .el-date-editor.el-input {
@@ -9,7 +16,7 @@
 <template>
   <div class="loading-review-container">
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
-      <el-row>
+      <el-row v-if="!isUpload">
         <el-col :span="20" :offset="2">
           <el-row style="min-height: 131px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
@@ -25,9 +32,14 @@
           </el-col>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row v-if="isUpload">
         <el-col :span="20" :offset="2">
-          <qiniuImgUpload :fileList.sync="fileList" :uploadTitle="uploadTitle" :limit="limit"></qiniuImgUpload>
+          <qiniuImgUpload :fileList.sync="poundUpload.fileList" :uploadTitle="poundUpload.uploadTitle" :limit="poundUpload.limit"></qiniuImgUpload>
+        </el-col>
+      </el-row>
+      <el-row v-if="isUpload" class="mt-10">
+        <el-col :span="20" :offset="2">
+          <qiniuImgUpload :fileList.sync="sealUpload.fileList" :uploadTitle="sealUpload.uploadTitle" :limit="sealUpload.limit"></qiniuImgUpload>
         </el-col>
       </el-row>
       <el-row>
@@ -117,7 +129,7 @@
   </div>
 </template>
 <script>
-import qiniuImgUpload from '@/components/qiniuImgUpload';
+import qiniuImgUpload from '@/components/qiniuImgUpload'; //引入骑牛图片上传组件
 export default {
   name: 'loadingReview',
   data() {
@@ -126,9 +138,20 @@ export default {
       imgList: [],
       surePound: {},
 
-      fileList: [],
-      uploadTitle: '上传榜单',
-      limit: 1,
+      poundUpload: {
+        fileList: [],
+        uploadTitle: '上传榜单',
+        limit: 1,
+      },
+      poundReturnId: '',
+      sealUpload: {
+        fileList: [],
+        uploadTitle: '上传铅封',
+        limit: 2,
+      },
+      sealReturnId: '',
+
+
     };
   },
   components: {
@@ -139,6 +162,7 @@ export default {
     successCallback: Function,
     cancel: Function,
     isEdit: Boolean,
+    isUpload: Boolean,
   },
   computed: {
     imgReviewSrc: function() {
@@ -151,6 +175,7 @@ export default {
   },
   methods: {
     getImg() { //获取榜单和铅封图片
+      console.log('getImg');
       this.imgList = [];
       //获取装车榜单
       if (this.surePound.weight_note) {
@@ -189,7 +214,63 @@ export default {
       }
 
     },
-    sendRe() { //审核通过
+    //上传装车榜单
+    uploadPoundImg() {
+      return new Promise((resolve, reject) => {
+        if (this.poundUpload.fileList.length) {
+          let imgUrlArray = [];
+          for (let i in this.poundUpload.fileList) {
+            imgUrlArray.push(this.poundUpload.fileList[i].url);
+          }
+          let postData = {
+            section_trip: this.surePoundData.id,
+            image_url: imgUrlArray.join(','),
+          };
+          this.$$http("postPundList", postData).then(results => {
+            console.log('results', results);
+            if (results.data.code == 0) {
+              this.poundReturnId = results.data.data.id;
+              resolve(results)
+            } else {
+              reject(results);
+            }
+          }).catch(err => {
+            reject(err);
+          })
+        }
+
+      })
+
+    },
+    //上传铅封榜单
+    uploadSealImg() {
+      if (this.sealUpload.fileList.length) {
+        let imgUrlArray = [];
+        for (let i in this.sealUpload.fileList) {
+          imgUrlArray.push(this.sealUpload.fileList[i].url);
+        }
+        let postData = {
+          section_trip: this.surePoundData.id,
+          image_url_list: imgUrlArray,
+        };
+        this.$$http("postSeal", postData).then(results => {
+          console.log('results', results);
+          if (results.data.code == 0) {
+            this.sealReturnId = results.data.data.id;
+          } else {
+            this.$message({
+              type: "error",
+              message: "铅封上传失败"
+            });
+          }
+        })
+      }
+    },
+    //审核通过ajax
+    sendReAjax() {
+
+      if (!this.surePound.weight_note && !this.poundReturnId) return;
+
       let sendData = {
         active_time: this.surePound.active_time,
         work_start_time: this.surePound.work_start_time,
@@ -200,12 +281,9 @@ export default {
         leave_time: this.surePound.leave_time || null,
         active_mile: this.surePound.active_mile || null,
         is_checked: 'pass',
-        id: this.surePound.weight_note || '',
+        id: this.isUpload ? this.poundReturnId : this.surePound.weight_note,
       };
 
-      if (!this.surePound.weight_note) return;
-
-      this.buttonLoading = true;
       this.$$http("examineLoad", sendData).then(results => {
         this.buttonLoading = false;
         if (results.data.code == 0) {
@@ -220,17 +298,56 @@ export default {
       }).catch((err) => {
         this.buttonLoading = false;
       });
+    },
+    sendRe() { //审核通过
+
+      if (!this.poundUpload.fileList.length) {
+        this.$message({
+          type: "success",
+          message: "请上传磅单",
+        });
+        return;
+      };
+
+      this.buttonLoading = true;
+
+      if (this.isUpload) {
+        this.uploadSealImg();
+        this.uploadPoundImg().then(results => {
+          this.sendReAjax();
+        });
+      } else {
+        this.sendReAjax();
+      }
+
     }
   },
   created() {
     this.surePound = Object.assign({}, this.surePoundData);
-    this.getImg();
+
+    !this.isUpload && this.getImg();
+
   },
   watch: {
+    //这个组件主要应用于弹窗中，弹窗的打开不会触发弹窗内的组件的重新渲染，所以这里监控surePoundData的变化，初始化数据
     surePoundData: {
       handler(val, oldVal) {
+        //数据再次初始化
         this.surePound = Object.assign({}, val);
-        this.getImg();
+
+        !this.isUpload && this.getImg();
+
+        this.poundUpload = {
+          fileList: [],
+          uploadTitle: '上传榜单',
+          limit: 1,
+        };
+
+        this.sealUpload = {
+          fileList: [],
+          uploadTitle: '上传铅封',
+          limit: 2,
+        }
       },
       deep: true　
     },

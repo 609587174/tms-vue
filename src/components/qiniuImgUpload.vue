@@ -36,11 +36,13 @@ export default {
   },
   methods: {
     handleRemove(file, fileList) {
+
       for (let i in this.fileList) {
-        if (this.fileList[i].name === file.name) {
+        if (this.fileList[i].uid === file.uid) {
           this.fileList.splice(i, 1);
         }
       }
+
     },
     handlePictureCardPreview(file) {
       let previewIndex = 0;
@@ -71,7 +73,6 @@ export default {
           message: '上传头像图片大小不能超过 2MB',
           type: 'error'
         });
-        return false;
       }
 
       if (!isLimteNum) {
@@ -101,6 +102,19 @@ export default {
 
       let type = files.type.split('/')[1];
 
+      /*this.$$http('getQiniuKey', {
+        suffix: type,
+      }).then(results => {
+        if (results.data && results.data.code == 0) {
+          let resultsData = results.data.data;
+          let key = resultsData.key;
+          let token = resultsData.token;
+
+          this.uploadWithSDK(token, putExtra, config, key, files);
+        }
+
+      })*/
+
       axios.get('http://driver.hhtdlng.com/api/v1/driver-side/qiniu/retrieve-token/', {
         params: {
           suffix: type,
@@ -126,10 +140,9 @@ export default {
       };
 
       let complete = res => {
-        this.fileList.push({
-          name: file.name,
-          url: `http://dev-image.hhtdlng.com/${key}`
-        })
+        console.log('this.fileList', this.fileList);
+        this.fileList.push({ name: file.name, url: `http://dev-image.hhtdlng.com/${key}` })
+
       };
 
       let next = response => {
@@ -155,6 +168,15 @@ export default {
 
 </script>
 <style scoped lang="less">
+/deep/.el-upload--picture-card {
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+}
 
+/deep/.el-upload-list--picture-card .el-upload-list__item {
+  width: 120px;
+  height: 120px;
+}
 
 </style>

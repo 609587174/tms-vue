@@ -1788,6 +1788,14 @@ const api = {
 
     }
   },
+  postPundList: {
+    url: '/order/section-trips/weight-note/',
+    method: 'post',
+    desc: "上传磅单数据",
+    param: {
+
+    }
+  },
   sureMatch: {
     url: '/order/section-trips/confirm/',
     method: 'PUT',
@@ -1800,6 +1808,14 @@ const api = {
     url: '/order/section-trips/car-seal/',
     method: 'GET',
     desc: "获取铅封数据",
+    param: {
+
+    }
+  },
+  postSeal: {
+    url: '/order/section-trips/car-seal/',
+    method: 'POST',
+    desc: "上传铅封数据",
     param: {
 
     }
@@ -1907,7 +1923,18 @@ const api = {
     param: {
 
     }
-  }
+  },
+  getQiniuKey: {
+    url: '/order/section-trips/qiniu-callback/',
+    method: 'GET',
+    desc: "获取骑牛上传key",
+    param: {
+
+    }
+  },
+
+
+
 }
 
 

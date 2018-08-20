@@ -9,7 +9,7 @@
 <template>
   <div class="loading-review-container">
     <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
-      <el-row>
+      <el-row v-if="!isUpload">
         <el-col :span="20" :offset="2">
           <el-row style="min-height: 110px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
@@ -20,6 +20,11 @@
           </el-row>
           <el-col :span="20" :offset="2">
           </el-col>
+        </el-col>
+      </el-row>
+      <el-row v-if="isUpload">
+        <el-col :span="20" :offset="2">
+          <qiniuImgUpload :fileList.sync="poundUpload.fileList" :uploadTitle="poundUpload.uploadTitle" :limit="poundUpload.limit"></qiniuImgUpload>
         </el-col>
       </el-row>
       <el-row>
@@ -130,13 +135,25 @@
   </div>
 </template>
 <script>
+import qiniuImgUpload from '@/components/qiniuImgUpload';
 export default {
   name: 'unloadingReview',
+  components: {
+    qiniuImgUpload,
+  },
   data() {
     return {
       buttonLoading: false,
       imgList: [],
       surePound: {},
+
+      poundUpload: {
+        fileList: [],
+        uploadTitle: '上传榜单',
+        limit: 1,
+      },
+      poundReturnId: '',
+
     };
   },
   props: {
@@ -144,6 +161,7 @@ export default {
     successCallback: Function,
     cancel: Function,
     isEdit: Boolean,
+    isUpload: Boolean,
   },
   computed: {
     imgReviewSrc: function() {
@@ -167,7 +185,37 @@ export default {
       }
 
     },
-    sendRe() { //审核通过
+    uploadPoundImg() {
+      return new Promise((resolve, reject) => {
+        if (this.poundUpload.fileList.length) {
+          let imgUrlArray = [];
+          for (let i in this.poundUpload.fileList) {
+            imgUrlArray.push(this.poundUpload.fileList[i].url);
+          }
+          let postData = {
+            section_trip: this.surePoundData.id,
+            image_url: imgUrlArray.join(','),
+          };
+          this.$$http("postPundList", postData).then(results => {
+            console.log('results', results);
+            if (results.data.code == 0) {
+              this.poundReturnId = results.data.data.id;
+              resolve(results)
+            } else {
+              reject(results);
+            }
+          }).catch(err => {
+            reject(err);
+          })
+        }
+
+      })
+
+    },
+    sendReAjax() {
+
+      if (!this.surePound.weight_note && !this.poundReturnId) return;
+
       let sendData = {
         active_time: this.surePound.active_time,
         //work_start_time: this.surePound.work_start_time,
@@ -178,12 +226,9 @@ export default {
         leave_time: this.surePound.leave_time || null,
         active_mile: this.surePound.weight_active_mile || null,
         is_checked: 'pass',
-        id: this.surePound.weight_note || '',
+        id: this.isUpload ? this.poundReturnId : this.surePound.weight_note,
       };
 
-      if (!this.surePound.weight_note) return;
-
-      this.buttonLoading = true;
       this.$$http("examineLoad", sendData).then(results => {
         this.buttonLoading = false;
         if (results.data.code == 0) {
@@ -199,17 +244,45 @@ export default {
         this.buttonLoading = false;
       });
 
+    },
+    sendRe() { //审核通过
+
+      if (!this.poundUpload.fileList.length) {
+        this.$message({
+          type: "success",
+          message: "请上传磅单",
+        });
+        return;
+      };
+
+      this.buttonLoading = true;
+
+      if (this.isUpload) {
+        this.uploadPoundImg().then(results => {
+          this.sendReAjax();
+        });
+      } else {
+        this.sendReAjax();
+      }
+
     }
   },
   created() {
+
     this.surePound = Object.assign({}, this.surePoundData);
-    this.getImg();
+
+    !this.isUpload && this.getImg();
   },
   watch: {
     surePoundData: {
       handler(val, oldVal) {
         this.surePound = Object.assign({}, this.surePoundData);
-        this.getImg();
+        !this.isUpload && this.getImg();
+        this.poundUpload = {
+          fileList: [],
+          uploadTitle: '上传榜单',
+          limit: 1,
+        };
       },
       deep: true　
     },

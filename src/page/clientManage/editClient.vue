@@ -1,6 +1,6 @@
 <style scoped lang="less">
 .detail-main .el-form-item {
-  .unit-free{
+  .unit-free {
     right: -38px;
   }
   .unit-price {
@@ -29,7 +29,7 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="customerMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="客户名称:" prop="name">
+                  <el-form-item label="托运方名称:" prop="name">
                     <el-input placeholder="请输入" type="text" v-model="customerMsgForm.name"></el-input>
                     <!-- <el-row>
                       <el-col :span="8">
@@ -181,9 +181,11 @@ export default {
         license_pic: [],
       },
       sociology: [
+        { required: true, message: '请输入机构代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
       ],
       structure: [
+        { required: true, message: '请输入机构代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{8})$/, message: '由8位数字和大写字母组成', trigger: 'blur' }
       ],
       selectData: {
@@ -222,6 +224,7 @@ export default {
           { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '请输入座机号或者手机号', trigger: 'blur' }
         ],
         codeMsg: [
+          { required: true, message: '请输入机构代码', trigger: 'blur' },
           { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
         ]
       },
@@ -390,8 +393,8 @@ export default {
       let postData = this.pbFunc.fifterbyArr(this.customerMsgForm, keyArray);
       if (postData.code === 'license_code') {
         postData.license_code = postData.codeMsg;
-      } else if (postData.code === 'license_code') {
-        postData.license_code = postData.codeMsg;
+      } else if (postData.code === 'organization_code') {
+        postData.organization_code = postData.codeMsg;
       }
 
       // if (this.addType === "PLAT") {

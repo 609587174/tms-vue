@@ -29,10 +29,7 @@
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
-                  <el-button v-if="scope.row.customer_type.key ==='OWN'" type="primary" plain size="mini" @click="editClient(true,scope.row.id)">编辑</el-button>
-                  <el-tooltip v-else class="item" effect="dark" content="第三方客户不可编辑" placement="top" :disabled="false">
-                    <el-button type="info" plain size="mini" class="is-disabled">编辑</el-button>
-                  </el-tooltip>
+
                 </template>
               </el-table-column>
             </el-table>

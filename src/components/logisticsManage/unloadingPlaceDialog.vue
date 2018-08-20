@@ -76,6 +76,7 @@ export default {
         ],
         consignee_phone: [
           { required: true, message: '请输入收货人联系电话', trigger: 'blur' },
+          { pattern: /(^(\(0\d{2}\)|0\d{2}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' }
         ],
         plan_arrive_time: [
           { required: true, message: '请选择计划到站时间', trigger: 'blur' },
@@ -99,7 +100,7 @@ export default {
         business_type: 5, //承运
         order_source: 'TMS', //业务单来源，tms建的传TMS
         short_name: '线下承运', //客户简称
-        consumer_id: '',
+        consumer_id: 'ffa8f1758c6b4263bfb7bc9a20fa8742',
         consumer_name: '线下承运', //客户名称
         station: '' //实际站点名称
       }
@@ -223,19 +224,19 @@ export default {
   created: function() {
     let currentUrl = document.location.href.toString();
     let domainUrl = '';
-    if (currentUrl.match('ptms.hhtdlng.com')) { //演示环境
-      this.addData.consumer_id = '';
-    } else if (currentUrl.match('ptms.91lng.cn')) { //预发环境
-      this.addData.consumer_id = '';
-    } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`)) { //测试环境
-      this.addData.consumer_id = '';
-    } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`)) { //正式环境
-      this.addData.consumer_id = '';
-    } else if (currentUrl.match(`devtms.hhtdlng.com`)) { //开发环境
-      this.addData.consumer_id = 'ffa8f1758c6b4263bfb7bc9a20fa8742';
-    } else {
-      this.addData.consumer_id = 'ffa8f1758c6b4263bfb7bc9a20fa8742';
-    }
+    // if (currentUrl.match('ptms.hhtdlng.com')) { //演示环境
+    //   this.addData.consumer_id = '';
+    // } else if (currentUrl.match('ptms.91lng.cn')) { //预发环境
+    //   this.addData.consumer_id = '';
+    // } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`)) { //测试环境
+    //   this.addData.consumer_id = '';
+    // } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`)) { //正式环境
+    //   this.addData.consumer_id = '';
+    // } else if (currentUrl.match(`devtms.hhtdlng.com`)) { //开发环境
+    //   this.addData.consumer_id = 'ffa8f1758c6b4263bfb7bc9a20fa8742';
+    // } else {
+    //   this.addData.consumer_id = 'ffa8f1758c6b4263bfb7bc9a20fa8742';
+    // }
 
     this.getSiteList();
   }

@@ -36,8 +36,11 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       基础信息
                     </el-col>
-                    <el-col :span="6" class="text-right" v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'">
-                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                    <el-col :span="6" class="text-right" v-if="">
+                      <el-button v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'" type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                      <el-tooltip v-else class="item" effect="dark" content="第三方托运方不可编辑" placement="top" :disabled="false">
+                        <el-button type="info" size="mini" class="is-disabled">编辑该条</el-button>
+                      </el-tooltip>
                     </el-col>
                   </el-row>
                 </div>
@@ -136,8 +139,11 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       卸车待时规则
                     </el-col>
-                    <el-col :span="6" class="text-right" v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'">
-                      <el-button type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                    <el-col :span="6" class="text-right">
+                      <el-button v-if="clientData.customer_type&&clientData.customer_type.key==='OWN'" type="primary" size="mini" @click="goEditDetail(1)">编辑该条</el-button>
+                      <el-tooltip v-else class="item" effect="dark" content="第三方托运方不可编辑" placement="top" :disabled="false">
+                        <el-button type="info" size="mini" class="is-disabled">编辑该条</el-button>
+                      </el-tooltip>
                     </el-col>
                   </el-row>
                 </div>

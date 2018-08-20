@@ -124,7 +124,13 @@ export default {
         title: '收货电话',
         param: 'consignee_phone',
         width: ''
-      }],
+      },
+      //  {
+      //   title: 'ID',
+      //   param: 'id',
+      //   width: '320'
+      // }
+      ],
       tableData: [],
       unloadingPlaceIsShow: false, //新增卸货单弹窗
       matchUnloadId: [], //匹配卸货单ID
@@ -156,7 +162,7 @@ export default {
             for (let j in this.matchUnloadId) {
 
               if (this.tableData[i].id === this.matchUnloadId[j]) {
-                console.log('匹配',this.tableData[i].id, this.matchUnloadId[j])
+                // console.log('匹配',this.tableData[i].id, this.matchUnloadId[j])
                 this.tableData[i].is_show = true;
                 this.tableData[i].status = 'waiting_confirm';
               }
@@ -257,8 +263,8 @@ export default {
       this.matchUnloadId = Array.from(new Set(this.matchUnloadId));
       this.cancelMatchUnloadId = Array.from(new Set(this.cancelMatchUnloadId))
       if (row.is_show === row.is_matched) {
+        console.log('点击',row.is_show,row.is_matched,row.id)
         let arr = row.is_show ? this.cancelMatchUnloadId : this.matchUnloadId;
-        // arr = Array.from(new Set(arr));
         arr.splice(arr.findIndex(item => item.id === row.id), 1);
         if (row.is_show) {
           this.cancelMatchUnloadId = arr;
@@ -267,7 +273,7 @@ export default {
         }
 
       }
-      console.log('匹配运单', row, this.cancelMatchUnloadId, this.matchUnloadId);
+      console.log('匹配运单', this.cancelMatchUnloadId, this.matchUnloadId);
 
 
     },

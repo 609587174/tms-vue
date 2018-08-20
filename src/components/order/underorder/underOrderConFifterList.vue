@@ -1055,10 +1055,12 @@ export default {
         this.upSettlement(rowData);
       } else if (type == 'changeUnload') {
         //变更卸货地
-        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
+        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/'+rowData.waybill.id)
+        // this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'waitingMatch') {
         //匹配卸货地
-        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
+        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/'+rowData.waybill.id)
+        // this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'upUnloadPound') {
         //上传卸车磅单
         this.isShowSureDownPound = true;

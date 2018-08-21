@@ -373,7 +373,7 @@ export default {
                 this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
-                this.$router.push({ path: "/clientManage/clientManageSecond/addClient", query: { activeStep: stepNum - 1, id: id } });
+                this.$router.push({ path: "/clientManage/clientManageSecond/editClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {

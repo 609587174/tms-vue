@@ -288,11 +288,14 @@ export default {
       this.unloadingPlaceIsShow = true;
 
     },
-    closeDialog: function(isSave) {
+    closeDialog: function(isSave, unloadId) {
       this.unloadingPlaceIsShow = false;
 
       if (isSave) {
         this.getList();
+      }
+      if (unloadId) {
+        this.matchUnloadId.push(unloadId);
       }
 
     },

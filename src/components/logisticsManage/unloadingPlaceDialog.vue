@@ -166,12 +166,7 @@ export default {
                 message: '新增卸货单成功',
                 type: 'success'
               });
-
-              if (results.data.data.data.length) {
-                console.log(results.data.data.data[0])
-                this.matchingUnload(results.data.data.data[0]);
-              }
-              // this.$emit('closeDialogBtn', true);
+              this.$emit('closeDialogBtn', true, results.data.data.data[0]);
             }
 
           }).catch((err) => {

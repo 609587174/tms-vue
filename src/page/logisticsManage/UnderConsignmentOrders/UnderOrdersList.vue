@@ -4,7 +4,7 @@
 <template>
   <div>
     <div class="nav-tab-setting" v-loading="pageLoading" style="position:relative;">
-        <el-button style="position:absolute;right:0;top:-10px;z-index:50" type="primary" @click="goAddNewOder">新增提货单</el-button>
+        <el-button style="position:absolute;right:0;top:-10px;z-index:50" type="primary" @click="goAddNewOder">新增承运单</el-button>
       <el-tabs v-model="activeName" @tab-click="clicktabs"  v-if="show">
         <el-tab-pane :label="statusName.all_driver_count" name="first">
           <div v-if="activeName=='first'">

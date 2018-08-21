@@ -1076,10 +1076,7 @@ export default {
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${this.setpId}/${this.willId}` });
-      }
-      if (targetName.name == 'third') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${this.setpId}/${this.willId}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${this.setpId}/${this.willId}` });
       }
     },
     orderOperation: function(type) {

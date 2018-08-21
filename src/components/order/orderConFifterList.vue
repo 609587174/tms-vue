@@ -174,13 +174,13 @@
                     <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="4" class="whiteSpan">
+                <!-- <el-col :span="4" class="whiteSpan">
                   计划装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                     <span>{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
@@ -359,7 +359,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
+      <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'&&this.nowHead!='matchHead'">
         <template slot-scope="props">
           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
                  <span >{{props.row.pick_active_time}}</span>

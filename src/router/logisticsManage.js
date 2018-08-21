@@ -89,6 +89,15 @@ export default {
         component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/addUnderOrder'], resolve),
       },
       {
+        path: 'underOrderDetailTab/:setpId/:willId',
+        name: 'underOrderDetailTab',
+        meta: {
+          isVerificationL: false,
+          title: '运单详情'
+        },
+        component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/underOrderDetailTab'], resolve),
+      },
+      {
         path: 'underOrderProcess/:setpId/:willId',
         name: 'underOrderProcess',
         meta: {

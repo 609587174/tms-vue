@@ -53,7 +53,7 @@
                 <el-col :span="8">
                   <el-form-item label="托运客户:" prop="customer_id">
                     <el-select v-model="pickOrderParam.customer_id" filterable placeholder="请选择"  v-loading="loadingArr.customerLoading" @change="bindTextFunc('customer')">
-                      <el-option v-for="(item,key) in selectData.customerList" :key="item.id" :label="item.contact_name" :value="item.id">
+                      <el-option v-for="(item,key) in selectData.customerList" :key="item.id" :label="item.name" :value="item.id">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -97,7 +97,7 @@
                 </el-col>
                 <el-col :span="5" :offset="1">
                    <el-select v-model="addCarList[aindex].id" filterable placeholder="请选择" @change="carListChange(aindex)" style="max-width:220px;">
-                      <el-option v-for="(item,key) in selectData.carList"  :label="item.tractor.plate_number" :value="item.id">
+                      <el-option v-for="(item,key) in selectData.renderCarLIst"  :label="item.tractor.plate_number" :value="item.id">
                       </el-option>
                     </el-select>
                 </el-col>
@@ -113,7 +113,7 @@
                   <span v-if="!aitem.vice_driver&&aitem.escort_staff"><span>{{aitem.escort_staff.name}}</span><span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span></span>
                 </el-col>
               </el-row>
-              <el-row style="position:relative;margin-top:20px;">
+              <el-row style="position:relative;margin-top:20px;" v-if="addCarList.length<50">
                 <el-col :span="1"  class="cancleCarBtn" style="font-size:22px;">
                   <i class="el-icon-circle-plus" style="color:#85ce61;" @click="addACar"></i>
                 </el-col>
@@ -261,9 +261,9 @@ export default {
       },
       selectData: {
         carList:[],
+        renderCarLIst:[],
         fluidList:[],
         customerList:[]
-
       }
     };
   },
@@ -284,7 +284,7 @@ export default {
       }else if(type=='customer'){
         for(let i in this.selectData.customerList){
           if(this.selectData.customerList[i].id==this.pickOrderParam.customer_id){
-            this.bindText.customerName=this.selectData.customerName[i].contact_name ;
+            this.bindText.customerName=this.selectData.customerList[i].name ;
             break;
           }
         }
@@ -326,9 +326,16 @@ export default {
       this.addCarList.push({id:"",master_driver:{},vice_driver:{},semitrailer:{}});
     },
     carListChange:function(index){
-      for(var carIndex in this.selectData.carList){
+      var thisId=this.addCarList[index].id;
+      for(let carIndex in this.selectData.carList){
         if(this.addCarList[index].id==this.selectData.carList[carIndex].id){
           this.$set(this.addCarList,index,this.pbFunc.deepcopy(this.selectData.carList[carIndex]));
+        }
+      }
+      for(let i in this.addCarList){
+        if(this.addCarList[i].id==thisId&&i!=index){
+          this.$set(this.addCarList,i,{id:"",master_driver:{},vice_driver:{},semitrailer:{}});
+          break;
         }
       }
     },
@@ -336,15 +343,16 @@ export default {
       this.addCarList.splice(index,1);
     },
     needcarNumChange:function(){
-      if(!isNaN(parseInt(this.pickOrderParam.require_car_number))){
-        if(this.pickOrderParam.require_car_number>this.addCarList.length){
+      var require=this.pickOrderParam.require_car_number>50?50:this.pickOrderParam.require_car_number;
+      if(!isNaN(parseInt(require))){
+        if(require>this.addCarList.length){
           var middleArr=[];
-          for(var i=0;i<this.pickOrderParam.require_car_number-this.addCarList.length;i++){
+          for(var i=0;i<require-this.addCarList.length;i++){
             middleArr.push({id:"",master_driver:{},vice_driver:{},semitrailer:{}});
           }
           this.addCarList=this.addCarList.concat(middleArr);
-        }else if(this.pickOrderParam.require_car_number<this.addCarList.length){
-          var delNum=this.addCarList.length-this.pickOrderParam.require_car_number;
+        }else if(require<this.addCarList.length){
+          var delNum=this.addCarList.length-require;
           var middleArr=this.pbFunc.deepcopy(this.addCarList);
           for(var  j=this.addCarList.length-1;j>0;j--){
             if(this.addCarList[j].id==""){
@@ -403,6 +411,7 @@ export default {
         this.loadingArr.carloading=false;
         if(results.data.code==0){
           this.selectData.carList=results.data.data;
+          this.selectData.renderCarLIst=results.data.data;
         }
       }).catch((err)=>{
         this.loadingArr.carloading=false;

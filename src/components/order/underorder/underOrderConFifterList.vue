@@ -1166,7 +1166,7 @@ export default {
     },
     ListData:{
       handler(val, oldVal) {
-        this.expandArr();
+        this.expandArr(); 
         setTimeout(()=>{
           this.ListDataSearch=true;
         })

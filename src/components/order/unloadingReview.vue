@@ -247,7 +247,7 @@ export default {
     },
     sendRe() { //审核通过
 
-      if (!this.poundUpload.fileList.length) {
+      if (this.isUpload && !this.poundUpload.fileList.length) {
         this.$message({
           type: "success",
           message: "请上传磅单",

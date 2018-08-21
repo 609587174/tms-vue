@@ -66,10 +66,8 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-show="false">
-            <el-button type="primary" plain>导入</el-button>
-            <el-button type="primary">导出</el-button>
-            <el-button type="success">新增</el-button>
+          <div class="operation-btn text-right">
+            <el-button type="success" @click="addLandmark">新增</el-button>
           </div>
           <div class="table-list mt-25">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}" v-loading="pageLoading">
@@ -270,6 +268,9 @@ export default {
       if (command.operator === 'check') {
         this.$router.push({ path: `/mapManage/landMark/landmarkDetail/${command.id}` });
       }
+    },
+    addLandmark: function() {
+      this.$router.push({ path: '/mapManage/landMark/editLandmark' });
     }
   },
   created: function() {

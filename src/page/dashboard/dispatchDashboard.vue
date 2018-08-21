@@ -12,18 +12,14 @@
 </template>
 <script>
 import dashborad from '@/components/dashboard/allDashboard';
-import qiniuImgUpload from '@/components/qiniuImgUpload';
 export default {
   name: 'dispatchDashboard',
   components: {
     dashborad: dashborad,
-    qiniuImgUpload,
   },
   data() {
     return {
-      fileList: [],
-      uploadTitle: '上传榜单',
-      limit: 1,
+
     };
   },
   computed: {
@@ -36,9 +32,7 @@ export default {
 
   },
   watch: {
-    fileList: function(val, oldval) {
-      console.log('watch fileList', val, oldval)
-    }
+
   }
 };
 

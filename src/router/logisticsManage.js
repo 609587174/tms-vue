@@ -96,6 +96,15 @@ export default {
           title: '运单进程',
         },
         component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/underOrderProcess'], resolve),
+      }, {
+        path: 'unloadBill/:waybillId',
+        name: 'unloadBill',
+        meta: {
+          isVerificationL: false,
+          title: '卸货单',
+        },
+        component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/unloadBill'], resolve),
+
       },
     ]
   }]

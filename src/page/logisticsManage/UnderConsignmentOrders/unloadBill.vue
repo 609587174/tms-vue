@@ -37,8 +37,8 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="100">
                 <template slot-scope="scope">
-                  <el-button type="text" size="medium" v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'" @click="matchUnload(scope.row)">匹配</el-button>
-                  <el-button type="text" size="medium" v-if="scope.row.is_show&&(isMatch(scope.row.status))" @click="matchUnload(scope.row)">取消匹配</el-button>
+                  <el-button type="text" size="mini" class="match-btn" v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'" @click="matchUnload(scope.row)">匹配</el-button>
+                  <el-button type="text" size="mini" class="match-btn" v-if="scope.row.is_show&&(isMatch(scope.row.status))" @click="matchUnload(scope.row)">取消匹配</el-button>
                   <!-- <el-button v-if="!scope.row.is_matched" type="danger" size="mini" @click="">删除</el-button> -->
                 </template>
               </el-table-column>
@@ -316,5 +316,8 @@ export default {
   display: inline-block;
   margin-right: 10px;
 }
-
+.match-btn{
+  font-size: 13px;
+  line-height: 29px;
+}
 </style>

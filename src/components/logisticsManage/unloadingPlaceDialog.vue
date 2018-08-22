@@ -69,7 +69,7 @@ export default {
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
         station_id: [
-          { required: true, message: '请选择实际站点名称', trigger: 'blur' },
+          { required: true, message: '请选择实际站点名称', trigger: 'change' },
         ],
         consignee: [
           { required: true, message: '请输入收货人', trigger: 'blur' },

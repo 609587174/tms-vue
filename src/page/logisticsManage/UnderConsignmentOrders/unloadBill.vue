@@ -88,7 +88,7 @@ export default {
         fieldSelect: [
           { id: 'station', value: '站点名称' },
           { id: 'consignee', value: '收货人' },
-          { id: 'sale_man', value: '业务员' },
+          // { id: 'sale_man', value: '业务员' },
         ]
       },
       planTime: [], //计划到站时间
@@ -147,7 +147,10 @@ export default {
         page: this.pageData.currentPage,
         waybill_id: this.waybillId
       };
-
+      if (this.planTime instanceof Array && this.planTime.length > 0) {
+        postData.plan_arrive_time_start = this.planTime[0];
+        postData.plan_arrive_time_end = this.planTime[1];
+      }
       postData[this.searchFilters.field] = this.searchFilters.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
@@ -197,7 +200,7 @@ export default {
       if (this.cancelMatchUnloadId.length || this.matchUnloadId.length) {
         this.$msgbox({
           title: '确认匹配卸货地',
-          message: '请确认是否将卸货地匹配至运单，确认后，司机将收到卸货地匹配完成提醒确认匹配卸货地',
+          message: '请确认是否将卸货地匹配至运单，确认后，司机将收到卸货地匹配完成提醒',
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           showCancelButton: true,

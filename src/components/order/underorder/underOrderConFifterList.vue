@@ -174,7 +174,7 @@
                     <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
-               <!--  <el-col :span="4" class="whiteSpan">
+                <!--  <el-col :span="4" class="whiteSpan">
                   计划装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                     <span>{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
@@ -977,29 +977,23 @@ export default {
           let orderProcessData = results.data.data;
           let dataObject = {};
 
-          if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "loading_waiting_audit") {
-            if (orderProcessData[orderProcessData.length - 1].operation == "上传装车铅封") {
+          orderProcessData.map((item,i)=>{
+
+            if(item.type === 'waiting_seal'){
               dataObject = {
-                ...orderProcessData[orderProcessData.length - 2],
-                weight_note: orderProcessData[orderProcessData.length - 2].weight_id,
-                carseal:rowData.carseal,
-              }
-            } else {
-              dataObject = {
-                ...orderProcessData[orderProcessData.length - 1],
-                weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
+                ...item,
+                weight_note: item.weight_id,
                 carseal:rowData.carseal,
               }
             }
-          }
 
-          orderProcessData.map((item,i)=>{
             if(item.type === 'to_fluid'){
               dataObject = {
                 ...dataObject,
                 ...item
               }
             }
+
           })
 
           this.choosedListData = Object.assign({}, dataObject);
@@ -1023,20 +1017,24 @@ export default {
           let orderProcessData = results.data.data;
           let dataObject = {};
 
-          if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "unloading_waiting_audit") {
-            dataObject = {
-              ...orderProcessData[orderProcessData.length - 1],
-              weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
-              weight_active_mile: ''
-            }
-          }
+          orderProcessData.map((item,i)=>{
 
-          if (orderProcessData.length > 2 && orderProcessData[1].type == "to_fluid") {
-            dataObject = {
-              ...dataObject,
-              ...orderProcessData[1]
+            if(item.type === 'unloading_waiting_audit'){
+              dataObject = {
+                  ...item,
+                weight_note: item.weight_id,
+                weight_active_mile: ''
+              }
             }
-          }
+
+            if(item.type === 'to_fluid'){
+              dataObject = {
+                ...dataObject,
+                ...item
+              }
+            }
+
+          })
 
           this.choosedListData = Object.assign({}, dataObject);
         }
@@ -1170,7 +1168,7 @@ export default {
     },
     ListData:{
       handler(val, oldVal) {
-        this.expandArr(); 
+        this.expandArr();
         setTimeout(()=>{
           this.ListDataSearch=true;
         })

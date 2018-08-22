@@ -85,6 +85,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车车号:">
             {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number || surePound.plate_number}}
+            <span v-if="surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name">/{{surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -147,7 +148,7 @@ export default {
       sealUpload: {
         fileList: [],
         uploadTitle: '上传铅封',
-        limit: 2,
+        limit: 3,
       },
       sealReturnId: '',
 
@@ -205,7 +206,7 @@ export default {
                 this.imgList.push({
                   url: imgItem,
                   title: '铅封号：',
-                  num: imageNum[k]
+                  num: imageNum && imageNum[k] ? imageNum[k] : '无'
                 });
               })
             }

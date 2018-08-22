@@ -5,9 +5,6 @@
 <template>
   <div>
     <dashborad dispatchPage="dispatchDashboard"></dashborad>
-    <div>
-      <qiniuImgUpload :fileList.sync="fileList" :uploadTitle="uploadTitle" :limit="limit"></qiniuImgUpload>
-    </div>
   </div>
 </template>
 <script>

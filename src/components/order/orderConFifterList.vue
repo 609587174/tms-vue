@@ -264,8 +264,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                    <span>{{props.row.arrival_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time||props.row.active_time">
+                    <span>{{props.row.arrival_time||props.row.active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -378,8 +378,8 @@
 
        <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                 <span >{{props.row.arrival_time}}</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time">
+                 <span >{{props.row.arrival_time||props.row.active_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
         </template>

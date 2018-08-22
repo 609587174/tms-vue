@@ -260,8 +260,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                    <span>{{props.row.arrival_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time||props.row.active_time">
+                    <span>{{props.row.arrival_time||props.row.active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -301,7 +301,7 @@
           <div style="width:100px;float:right;padding-left:10px;">
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
               <el-col>
-                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key=='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
+                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
                 <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
@@ -387,8 +387,8 @@
 
        <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                 <span >{{props.row.arrival_time}}</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time||props.row.active_time">
+                 <span >{{props.row.arrival_time||props.row.active_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
         </template>
@@ -446,7 +446,7 @@
 
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
               <el-col v-if="key==0">
-                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key=='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
+                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
                 <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>

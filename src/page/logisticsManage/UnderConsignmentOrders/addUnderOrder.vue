@@ -253,10 +253,13 @@ export default {
           { required: true, message: '请填写计划时间', trigger: 'blur' },
         ],
         require_car_number: [
-          { validator: needNumVa, trigger: 'blur' }
+          { validator: needNumVa, trigger: 'blur' },
+          { required: true, message: '请填需求车辆', trigger: 'blur' },
+
         ],
         plan_tonnage: [
-          { validator: planTongVa, trigger: 'blur' }
+          { validator: planTongVa, trigger: 'blur' },
+          { required: true, message: '请填写计划吨位', trigger: 'blur' },
         ],
       },
       selectData: {

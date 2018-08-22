@@ -138,7 +138,7 @@ export default {
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'all', value: '全部' }, {key:'unload_driver_pending_confirmation',value:'司机未确认'},{ key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '故障中' }],
+        'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '变更中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
         'seven': [{ key: 'all', value: '全部' }],
       },
@@ -147,7 +147,7 @@ export default {
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
         'third': [{ key: 'all', value: '全部' }, {key:'unload_driver_pending_confirmation',value:'司机未确认'},{ key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
-        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '故障中' }],
+        'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '变更中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
         'seven': [{ key: 'all', value: '全部' }]
       },

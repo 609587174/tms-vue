@@ -270,10 +270,10 @@ export default {
       this.$store.state.common.wsMsg = new WebSocket('ws://' + domainUrl + '/ws/web/notifications/' + this.users.id + '/');
       let ws = this.$store.state.common.wsMsg;
       ws.onopen = function(event) {
-        console.log('链接消息', event)
+        // console.log('链接消息', event)
       }
       ws.onmessage = (event) => {
-        console.log('接收的消息', event.data);
+        // console.log('接收的消息', event.data);
         let msg = JSON.parse(event.data);
         vm.$store.commit('ChangeMsgNum', {
           num: 1

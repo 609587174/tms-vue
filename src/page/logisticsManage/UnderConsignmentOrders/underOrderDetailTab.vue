@@ -4,7 +4,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
         <el-tab-pane label="运单详情" name="first">
-          <waybill-detail :back-link="'/logisticsManage/consignmentOrders/ordersList'"></waybill-detail>
+          <waybill-detail :back-link="'/logisticsManage/UnderConsignmentOrders/UnderOrdersList'"></waybill-detail>
         </el-tab-pane>
         <el-tab-pane label="运单进程" name="second">
         </el-tab-pane>

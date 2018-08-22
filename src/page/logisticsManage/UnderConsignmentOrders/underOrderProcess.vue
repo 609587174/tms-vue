@@ -75,7 +75,7 @@
               <el-header>
                 <el-row>
                   <el-col :span="3">
-                    <router-link :to="{path: '/logisticsManage/consignmentOrders/ordersList'}">
+                    <router-link :to="{path: '/logisticsManage/UnderConsignmentOrders/UnderOrdersList'}">
                       <div class="go-return icon-back"></div>
                     </router-link>
                   </el-col>

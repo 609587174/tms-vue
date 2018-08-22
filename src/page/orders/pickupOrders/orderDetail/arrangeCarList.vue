@@ -146,7 +146,7 @@ export default {
         orderStateList: '',
       },
       allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal','loading_waiting_audit'],
-      noCanceled: ['loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished','confirm_match'],
+      noCanceled: ['loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished','confirm_match','abnormal'],
       selectData: {
         fieldSelect: [{
           value: '车号',

@@ -708,11 +708,6 @@ export default {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
-        },{ //已装车待审核
-          text: "取消运单",
-          type: "danger",
-          methods_type: "cancleOrder",
-          attrPlan: true
         }],
         unloading_audit_failed: [],
         waiting_settlement: [

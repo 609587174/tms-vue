@@ -302,6 +302,19 @@
             </div>
             <div style="clear:both"></div>
           </div>
+          <div style="width:100px;float:right;padding-left:10px;">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+              <el-col>
+                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
+                <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
@@ -641,6 +654,11 @@ export default {
           type: "success",
           methods_type: "loadingEX",
           attrPlan: true
+        },
+        {
+          text: "装车拒绝",
+          type: "danger",
+          methods_type: "refuseLoadingEX",
         }],
         loading_audit_failed: [],
         waiting_match: [],
@@ -655,6 +673,10 @@ export default {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
+        },{
+          text: "卸车拒绝",
+          type: "danger",
+          methods_type: "refuseDownEx"
         }],
         unloading_audit_failed: [],
         waiting_settlement: [

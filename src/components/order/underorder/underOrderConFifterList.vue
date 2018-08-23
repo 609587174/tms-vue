@@ -976,6 +976,7 @@ export default {
 
             if(item.type === 'waiting_seal'){
               dataObject = {
+                ...dataObject,
                 ...item,
                 weight_note: item.weight_id,
                 carseal:rowData.carseal,
@@ -997,7 +998,6 @@ export default {
       });
     },
     downExFun:function(type, rowData){
-      console.log('rowData',rowData);
       this.isShowSureDownPound = true;
       this.sureDownPoundTitle = '卸车榜单审核通过';
       this.isEditSureDownPound = true;
@@ -1016,6 +1016,7 @@ export default {
 
             if(item.type === 'unloading_waiting_audit'){
               dataObject = {
+                ...dataObject,
                   ...item,
                 weight_note: item.weight_id,
                 weight_active_mile: ''

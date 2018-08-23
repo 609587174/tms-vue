@@ -8,7 +8,7 @@
 </style>
 <template>
   <div class="loading-review-container">
-    <el-form ref="examinePoundForm" :model="surePound" status-icon :label-position="'right'" label-width="100px">
+    <el-form ref="examinePoundForm" :model="surePound" :rules="rules" status-icon :label-position="'right'" label-width="100px">
       <el-row v-if="!isUpload">
         <el-col :span="20" :offset="2">
           <el-row style="min-height: 110px;">
@@ -41,7 +41,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="实际到站时间:">
+          <el-form-item label="实际到站时间:" label-width="120px" prop="active_time">
             <el-date-picker v-if="isEdit" v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             <span v-if="!isEdit">{{surePound.active_time || '无'}}</span>
           </el-form-item>
@@ -54,7 +54,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="卸车完成时间:">
+          <el-form-item label="卸车完成时间:" label-width="120px">
             <el-date-picker v-if="isEdit" v-model="surePound.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             <span v-if="!isEdit">{{surePound.work_end_time || '无'}}</span>
           </el-form-item>
@@ -67,7 +67,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="离站时间:">
+          <el-form-item label="离站时间:" label-width="120px" prop="leave_time">
             <el-date-picker v-if="isEdit" v-model="surePound.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             <span v-if="!isEdit">{{surePound.leave_time || '无'}}</span>
           </el-form-item>
@@ -80,7 +80,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="实际里程:">
+          <el-form-item label="实际里程:" label-width="120px" prop="weight_active_mile">
             <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.weight_active_mile"></el-input>
             <span v-if="!isEdit">{{surePound.weight_active_mile || '无'}}</span>
           </el-form-item>
@@ -93,7 +93,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="卸车毛重(吨):">
+          <el-form-item label="卸车毛重(吨):" label-width="120px" prop="gross_weight">
             <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.gross_weight"></el-input>
             <span v-if="!isEdit">{{surePound.gross_weight || '无'}}</span>
           </el-form-item>
@@ -103,10 +103,11 @@
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
             <span>{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.mobile_phone ||surePound.master_driver_phone}}</span>
+            <span v-if="surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name">/{{surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="卸车皮重(吨):">
+          <el-form-item label="卸车皮重(吨):" label-width="120px" prop="tare_weight">
             <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
             <span v-if="!isEdit">{{surePound.tare_weight || '无'}}</span>
           </el-form-item>
@@ -121,7 +122,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="10">
-          <el-form-item label="卸车净重(吨):">
+          <el-form-item label="卸车净重(吨):" label-width="120px" prop="net_weight">
             <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
             <span v-if="!isEdit">{{surePound.net_weight || '无'}}</span>
           </el-form-item>
@@ -153,6 +154,29 @@ export default {
         limit: 1,
       },
       poundReturnId: '',
+
+      rules: {
+        active_time: [
+          { required: true, message: '请选择实际到厂时间', trigger: 'change' },
+        ],
+        leave_time: [
+          { required: true, message: '请选择离站时间', trigger: 'change' },
+        ],
+        weight_active_mile: [
+          { required: true, message: '请输入实际里程', trigger: 'blur' },
+          { pattern: /^\d+(\.\d+)?$/, message: '请非负的数字', trigger: 'blur' },
+        ],
+        gross_weight: [
+          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+        ],
+        tare_weight: [
+          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+        ],
+        net_weight: [
+          { required: true, message: '请输入卸车净重', trigger: 'blur' },
+          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+        ]
+      }
 
     };
   },
@@ -255,15 +279,21 @@ export default {
         return;
       };
 
-      this.buttonLoading = true;
+      this.$refs['examinePoundForm'].validate(valid => {
 
-      if (this.isUpload) {
-        this.uploadPoundImg().then(results => {
+        if (!valid) return;
+
+        this.buttonLoading = true;
+
+        if (this.isUpload) {
+          this.uploadPoundImg().then(results => {
+            this.sendReAjax();
+          });
+        } else {
           this.sendReAjax();
-        });
-      } else {
-        this.sendReAjax();
-      }
+        }
+
+      })
 
     }
   },

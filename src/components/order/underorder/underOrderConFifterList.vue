@@ -700,6 +700,12 @@ export default {
           type: "success",
           methods_type: "loadingEX",
           attrPlan: true
+        },
+        { 
+          text: "取消运单",
+          type: "danger",
+          methods_type: "cancleOrder",
+          attrPlan: true
         }],
         loading_audit_failed: [],
         to_site: [],
@@ -1044,11 +1050,11 @@ export default {
       } else if (type == 'loadingEX') {
         this.loadingExFun(type, rowData);
       } else if (type == 'sureDownOrder') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
         this.downExFun(type, rowData);
       } else if (type == 'sureUnload') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'upSettlement') {
         this.upSettlement(rowData);
       } else if (type == 'changeUnload') {
@@ -1111,7 +1117,7 @@ export default {
 
 
       } else if (type == 'showDetalis') { //查看详情
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }
     },
     upSettlement: function(rowData) {

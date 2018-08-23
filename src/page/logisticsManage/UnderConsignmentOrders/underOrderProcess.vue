@@ -1074,7 +1074,7 @@ export default {
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${this.setpId}/${this.willId}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/UnderOrdersList/${this.setpId}/${this.willId}` });
       }
     },
     orderOperation: function(type) {
@@ -1198,7 +1198,7 @@ export default {
               type: 'warning',
               center: true,
             }).then(() => {
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
+              vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=second&secondActiveName=confirm_match" });
             }).catch(() => {
 
             })
@@ -1228,7 +1228,7 @@ export default {
               vm.buttonCanClick = true;
               if (results.data.code == 0) {
                 this.buttonLoading.suerUnload = false;
-                vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match" });
+                vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=second&secondActiveName=confirm_match" });
                 vm.$message({
                   type: "success",
                   message: "确认卸货单成功"
@@ -1259,7 +1259,7 @@ export default {
             vm.buttonCanClick = false;
             vm.buttonLoading.settlementButton = false;
             if (results.data.code == 0) {
-              vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList" });
+              vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList" });
               vm.$message({
                 type: "success",
                 message: "提交结算成功"
@@ -1330,10 +1330,10 @@ export default {
 
                 if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
                   vm.buttonLoading.loadingAuditSuccessButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+                  vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=first&secondActiveName=loading_waiting_audit" });
                 } else {
                   vm.buttonLoading.unloadinguditSuccessButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+                  vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=third&secondActiveName=unloading_waiting_audit" });
                 }
               }
             }).catch(() => {
@@ -1374,10 +1374,10 @@ export default {
               if (results.data.code == 0) {
                 if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
                   vm.buttonLoading.loadingAuditFailButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+                  vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=first&secondActiveName=loading_waiting_audit" });
                 } else {
                   vm.buttonLoading.unloadinguditFailButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+                  vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=third&secondActiveName=unloading_waiting_audit" });
                 }
                 vm.$message({
                   type: "success",
@@ -1457,10 +1457,10 @@ export default {
       this.detailData = middleArr;
     },
     unloadingReviewSuccess: function() {
-      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
+      this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=third&secondActiveName=unloading_waiting_audit" });
     },
     loadingReviewSuccess: function() {
-      this.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
+      this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/UnderOrdersList?goTo=first&secondActiveName=loading_waiting_audit" });
     }
   },
   created: function() {

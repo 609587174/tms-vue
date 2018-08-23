@@ -59,7 +59,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="液厂名称:" prop="fluid">
+                  <el-form-item label="实际液厂:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindTextFunc('fluid')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                       </el-option>
@@ -184,8 +184,8 @@ export default {
   name: 'addUnderOrder',
   data() {
     var needNumVa = (rule, value, callback) => {
-      if (!value.match(/^[0-9]\d{0,1}$/) || value == '0') {
-        callback(new Error("只能是1-99的正整数"));
+      if (!value.match(/^[0-9]\d{0,1}$/) || value == '0'||value>50) {
+        callback(new Error("只能是1-50的正整数"));
       } else {
         callback();
       }

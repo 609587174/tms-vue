@@ -72,9 +72,11 @@ export default {
           { required: true, message: '请选择实际站点名称', trigger: 'change' },
         ],
         consignee: [
+          { required: true, message: '请输入收货人', trigger: 'change' },
           { required: true, message: '请输入收货人', trigger: 'blur' },
         ],
         consignee_phone: [
+          { required: true, message: '请输入收货人联系电话', trigger: 'change' },
           { required: true, message: '请输入收货人联系电话', trigger: 'blur' },
           { pattern: /(^(\(0\d{2}\)|0\d{2}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' }
         ],
@@ -117,15 +119,23 @@ export default {
       this.$emit('closeDialogBtn', false);
     },
     selectStation(select) {
-      for (let i in this.fluidSiteSelect) {
-        if (select === this.fluidSiteSelect[i].id) {
-          this.addData.station = this.fluidSiteSelect[i].position_name;
-          this.addData.station_address = this.fluidSiteSelect[i].address;
-          this.formRules.consignee = this.fluidSiteSelect[i].contacts;
-          this.formRules.consignee_phone = this.fluidSiteSelect[i].tel;
-          break;
+      if (select) {
+        for (let i in this.fluidSiteSelect) {
+          if (select === this.fluidSiteSelect[i].id) {
+            this.addData.station = this.fluidSiteSelect[i].position_name;
+            this.addData.station_address = this.fluidSiteSelect[i].address;
+            this.formRules.consignee = this.fluidSiteSelect[i].contacts;
+            this.formRules.consignee_phone = this.fluidSiteSelect[i].tel;
+            break;
+          }
         }
+      } else {
+        this.addData.station = '';
+        this.addData.station_address = '';
+        this.formRules.consignee = '';
+        this.formRules.consignee_phone = '';
       }
+
 
       // this.formRules.station = select.position_name;
     },

@@ -462,6 +462,7 @@ export default {
   },
   methods: {
     showImg: function(id) {
+      console.log('id',id);
       var vm = this;
       if (vm.poundImg[id]) {
         var imgList = vm.poundImg[id];

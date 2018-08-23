@@ -41,7 +41,7 @@
          },
          component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
        }, {
-         path: 'logisticsWaybillDetail/:willId/:orderId',
+         path: 'logisticsWaybillDetail/:willId',
          name: "logisticsWaybillDetail",
          meta: {
            title: '运单详情',

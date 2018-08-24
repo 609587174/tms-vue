@@ -1074,7 +1074,7 @@ export default {
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'first') {
-        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/UnderOrdersList/${this.setpId}/${this.willId}` });
+        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${this.setpId}/${this.willId}` });
       }
     },
     orderOperation: function(type) {

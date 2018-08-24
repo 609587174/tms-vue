@@ -151,7 +151,7 @@
           <el-col :span="18">
             <div class="label-list">
               <label>提货车数:</label>
-              <div class="detail-form-item" v-if="pickOrderParam.require_car_number!=''"><span v-html="pbFunc.dealNullData(pickOrderParam.require_car_number)"></span>车</div>
+              <div class="detail-form-item" v-if="capacitiesNum">{{capacitiesNum}}车</div>
             </div>
           </el-col>
         </el-row>
@@ -242,6 +242,7 @@ export default {
         carriers:'',
 
       },
+      capacitiesNum:0,
       rules: {
         customer_id: [
           { required: true, message: '请选择托运客户', trigger: 'change' },
@@ -307,6 +308,7 @@ export default {
       this.$$http("cratePickUpOrder", sendData).then((results) => {
         this.loadingArr.createdLoading = false;
         if (results.data.code == 0) {
+          this.sureAdd=false;
           this.$alert('线下承运单已经生成,请前往“线下承运调度”列表查看并跟进', '确认生成线下承运单', {
             confirmButtonText: '确定',
             callback: action => {
@@ -339,6 +341,12 @@ export default {
         if(this.addCarList[i].id==thisId&&i!=index){
           this.$set(this.addCarList,i,{id:"",master_driver:{},vice_driver:{},semitrailer:{}});
           break;
+        }
+      }
+
+      for(let i in this.addCarList){
+        if(this.addCarList[i].id!=""){
+          this.capacitiesNum++;
         }
       }
     },

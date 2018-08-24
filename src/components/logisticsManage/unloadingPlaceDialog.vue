@@ -102,7 +102,7 @@ export default {
         business_type: 5, //承运
         order_source: 'TMS', //业务单来源，tms建的传TMS
         short_name: '线下承运', //客户简称
-        consumer_id: 'ffa8f1758c6b4263bfb7bc9a20fa8742',
+        consumer_id: '514013af8a2b43798fa6969f18fcf8fb',
         consumer_name: '线下承运', //客户名称
         station: '' //实际站点名称
       }
@@ -226,6 +226,9 @@ export default {
   created: function() {
     let currentUrl = document.location.href.toString();
     let domainUrl = '';
+
+
+
     // if (currentUrl.match('ptms.hhtdlng.com')) { //演示环境
     //   this.addData.consumer_id = '';
     // } else if (currentUrl.match('ptms.91lng.cn')) { //预发环境

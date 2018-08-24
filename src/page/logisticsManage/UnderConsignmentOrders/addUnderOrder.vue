@@ -352,6 +352,12 @@ export default {
     },
     deleteCarByIndex:function(index){
       this.addCarList.splice(index,1);
+      this.capacitiesNum=0;
+      for(let i in this.addCarList){
+        if(this.addCarList[i].id!=""){
+          this.capacitiesNum++;
+        }
+      }
     },
     needcarNumChange:function(){
       var require=this.pickOrderParam.require_car_number>50?50:this.pickOrderParam.require_car_number;

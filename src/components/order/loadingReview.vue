@@ -85,7 +85,6 @@
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车车号:">
             {{surePound.transPowerInfo && surePound.transPowerInfo.tractor && surePound.transPowerInfo.tractor.plate_number || surePound.plate_number}}
-            <span v-if="surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name">/{{surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -99,6 +98,7 @@
         <el-col :span="10" :offset="2">
           <el-form-item label="主驾:">
             <span>{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.mobile_phone ||surePound.master_driver_phone}}</span>
+            <span v-if="surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name">/{{surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name}}</span>
           </el-form-item>
         </el-col>
         <el-col :span="10">
@@ -160,14 +160,14 @@ export default {
           { required: true, message: '请选择装车完成时间', trigger: 'change' },
         ],
         gross_weight: [
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ],
         tare_weight: [
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ],
         net_weight: [
           { required: true, message: '请输入装车净重', trigger: 'blur' },
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ]
       }
 

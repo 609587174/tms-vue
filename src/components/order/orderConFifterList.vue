@@ -502,6 +502,10 @@
       <unloadingReview  :isEdit="isEditSureDownPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
 
+    <el-dialog :title="cancleLoadTitle" center width="30%" :visible.sync="cancleLoadEx"  :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <refuseModal  :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
+    </el-dialog>
+
      <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
         <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'"  label-width="100px" :rules="rules">
           <el-row style="margin-top:15px;">
@@ -536,12 +540,14 @@
   import noData from '@/components/common/noData';
   import loadingReview from '@/components/order/loadingReview';
   import unloadingReview from '@/components/order/unloadingReview';
+  import refuseModal from '@/components/order/refuseModal';
 export default {
   name: 'orderFifterList',
    components: {
-    noData: noData,
+    noData,
     loadingReview,
     unloadingReview,
+    refuseModal,
   },
   data() {
     var onlyNum = (rule, value, callback) => {
@@ -729,6 +735,10 @@ export default {
       sureDownPoundTitle:'卸车磅单审核通过',
       isEditSureDownPound:true,
       choosedListData:{},
+
+      cancleLoadTitle:'装车磅单审核拒绝',
+      cancleLoadEx:false,
+      weightId:'',
 
 
 
@@ -1019,7 +1029,13 @@ export default {
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       }else if (type == 'refuseDownEx') { //卸车拒绝
-        console.log('row','xxx');
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '卸车磅单审核拒绝';
+      }else if(type == 'refuseLoadingEX'){//装车拒绝
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '装车磅单审核拒绝';
       }
 
     },
@@ -1043,6 +1059,9 @@ export default {
       this.$emit('searchList');
     },
     unloadingReviewSuccess:function(){
+      this.$emit('searchList');
+    },
+    refuseSuccess:function(){
       this.$emit('searchList');
     }
   },

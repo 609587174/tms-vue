@@ -491,9 +491,14 @@
       <loadingReview :isEdit="isEditSurePound" :isUpload="isUploadPound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
     </el-dialog>
 
+    <el-dialog :title="cancleLoadTitle" center width="30%" :visible.sync="cancleLoadEx"  :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <refuseModal :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
+    </el-dialog>
+
     <el-dialog :title="sureDownPoundTitle" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
       <unloadingReview  :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
+
 
      <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
         <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'"  label-width="100px" :rules="rules">
@@ -529,12 +534,14 @@
   import noData from '../../../components/common/noData';
   import loadingReview from '@/components/order/loadingReview';
   import unloadingReview from '@/components/order/unloadingReview';
+  import refuseModal from '@/components/order/refuseModal';
 export default {
   name: 'orderFifterList',
    components: {
-    noData: noData,
+    noData,
     loadingReview,
     unloadingReview,
+    refuseModal,
   },
   data() {
     var onlyNum = (rule, value, callback) => {
@@ -701,10 +708,15 @@ export default {
           methods_type: "loadingEX",
           attrPlan: true
         },
-        { 
+        {
           text: "取消运单",
           type: "danger",
           methods_type: "cancleOrder",
+          attrPlan: true
+        },{
+          text: "审核拒绝",
+          type: "danger",
+          methods_type: "refuseLoading",
           attrPlan: true
         }],
         loading_audit_failed: [],
@@ -714,6 +726,11 @@ export default {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
+        },
+        {
+          text: "审核拒绝",
+          type: "danger",
+          methods_type: "refuseUnloading"
         }],
         unloading_audit_failed: [],
         waiting_settlement: [
@@ -769,6 +786,12 @@ export default {
       isEditSureDownPound:true,
       isUploadUnloadPound:false,
       choosedListData:{},
+
+      cancleLoadTitle:'装车磅单审核拒绝',
+      cancleLoadEx:false,
+      weightId:'',
+
+
 
 
 
@@ -837,6 +860,8 @@ export default {
     },
     showPound:function(rowData){
 
+      console.log('rowData',rowData);
+
       let rowDataCopy = Object.assign({},rowData);
 
       if(rowDataCopy && rowDataCopy.section_type && rowDataCopy.section_type.key && rowDataCopy.section_type.key ==='unload'){
@@ -855,6 +880,8 @@ export default {
       this.isShowSurePound = true;
 
       this.choosedListData = rowDataCopy;
+
+      console.log('this.choosedListData',this.choosedListData);
 
       this.surePoundTitle = '查看装车磅单'
 
@@ -1118,6 +1145,16 @@ export default {
 
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      }else if(type == 'refuseLoading' ){
+        //装车审核拒绝
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '装车磅单审核拒绝';
+      }else if(type == 'refuseUnloading'){
+        //装车审核拒绝
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '卸车磅单审核拒绝';
       }
     },
     upSettlement: function(rowData) {
@@ -1139,6 +1176,9 @@ export default {
       this.$emit('searchList');
     },
     unloadingReviewSuccess:function(){
+      this.$emit('searchList');
+    },
+    refuseSuccess:function(){
       this.$emit('searchList');
     }
   },

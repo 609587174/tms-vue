@@ -167,14 +167,14 @@ export default {
           { pattern: /^\d+(\.\d+)?$/, message: '请非负的数字', trigger: 'blur' },
         ],
         gross_weight: [
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ],
         tare_weight: [
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ],
         net_weight: [
           { required: true, message: '请输入卸车净重', trigger: 'blur' },
-          { pattern: /^\d{1,2}$/, message: '请输入0-99的整数', trigger: 'blur' },
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ]
       }
 

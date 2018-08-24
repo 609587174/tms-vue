@@ -327,10 +327,10 @@ export default {
             this.isAllSelect = false;
             this.pageData.currentPage = 1;
             this.getList();
-            this.importSuccess(results.data.data.length);
-            if (results.data.data.length && this.postData.matchingType) {
-              this.matchingData(results.data.data);
-            }
+            this.importSuccess(results.data.data.success_export_nums);
+            // if (results.data.data.length && this.postData.matchingType) {
+            //   this.matchingData(results.data.data);
+            // }
 
           } else {
             if (results.data.msg) {
@@ -494,7 +494,6 @@ export default {
             //   }
             // }
           }
-          console.log('table', this.tableData);
           // if (this.isAllSelect) {
           this.$nextTick(function() {
             this.checked();

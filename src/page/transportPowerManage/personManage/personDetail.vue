@@ -456,17 +456,15 @@ export default {
           this.userData.address.city = (this.userData.area && this.userData.area.city && this.userData.area.city.area_name) ? this.userData.area.city.area_name : '';
           this.userData.address.area = (this.userData.area && this.userData.area.city && this.userData.area.city.county) ? this.userData.area.city.county.area_name : '';
 
-
-          console.log('this.userData', this.userData.address);
         }
       })
 
     },
     handleRemove: function(file, fileList) {
-      console.log(file, fileList);
+
     },
     handlePreview: function(file) {
-      console.log(file);
+
     },
     goEditDetail: function(number) {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson?activeStep=" + number, query: { id: this.userData.id, activeStep: number, operate: 'edit' } });

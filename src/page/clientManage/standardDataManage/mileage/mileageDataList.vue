@@ -80,9 +80,9 @@ export default {
   data() {
     return {
       pageLoading: false,
-      siteLoading:false,
-      fluidLoading:false,
-      shipperLoading:false,
+      siteLoading: false,
+      fluidLoading: false,
+      shipperLoading: false,
       pageData: {
         currentPage: 1,
         totalCount: '',
@@ -137,7 +137,6 @@ export default {
         fluid_site: this.searchFilters.station,
         trader: this.searchFilters.carriers
       };
-      console.log('postData',postData);
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
@@ -209,11 +208,11 @@ export default {
     handleMenuClick: function(command) {
       this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
     },
-    editMile(isEdit){
+    editMile(isEdit) {
       // if(isEdit){
 
       // }else{
-        // this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
+      // this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
       // }
 
     },

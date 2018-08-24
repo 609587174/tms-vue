@@ -52,7 +52,10 @@
               <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
               <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
             </div>
-            <div v-else>{{scope.row[item.param]}}</div>
+            <div v-else>
+              <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
+              <span v-else>{{scope.row[item.param]}}</span>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="运费合计" align="center" width="100" fixed="right">
@@ -193,18 +196,20 @@ export default {
         param: 'high_cost',
         width: ''
       }, {
-        title: '过路费（普通）',
+        title: '过路费',
         param: 'road_toll_com',
         width: ''
-      }, {
-        title: '过路费（国家）',
-        param: 'road_toll_state',
-        width: ''
-      }, {
-        title: '过桥费',
-        param: 'pontage',
-        width: ''
-      }, {
+      },
+      // {
+      //   title: '过路费（国家）',
+      //   param: 'road_toll_state',
+      //   width: ''
+      // }, {
+      //   title: '过桥费',
+      //   param: 'pontage',
+      //   width: ''
+      // },
+      {
         title: '现金油/气（有票）',
         param: 'logistics_fuel_cash',
         width: ''
@@ -285,6 +290,9 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.results) {
+            this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

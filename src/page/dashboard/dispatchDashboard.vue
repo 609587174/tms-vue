@@ -4,15 +4,15 @@
 </style>
 <template>
   <div>
-   <dashborad dispatchPage="dispatchDashboard"></dashborad>
+    <dashborad dispatchPage="dispatchDashboard"></dashborad>
   </div>
 </template>
 <script>
-import  dashborad from '@/components/dashboard/allDashboard';
+import dashborad from '@/components/dashboard/allDashboard';
 export default {
   name: 'dispatchDashboard',
   components: {
-    dashborad: dashborad
+    dashborad: dashborad,
   },
   data() {
     return {
@@ -26,6 +26,9 @@ export default {
 
   },
   created() {
+
+  },
+  watch: {
 
   }
 };

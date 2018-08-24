@@ -1,59 +1,35 @@
 <style scoped lang="less">
-.el-header p {
-  font-size: 25px;
-  text-align: center;
-  height: 60px;
-  line-height: 60px;
-  margin: 0 0;
-}
-
-.addheadcarform {
-  margin: 30px 5%;
-  .el-input {
-    width: 250px;
+.detail-main .el-form-item {
+  .unit-free {
+    right: -38px;
   }
-  .el-select {
-    width: 250px;
+  .unit-price {
+    right: -58px;
   }
-}
-
-#addClientForm {
-  border: 1px solid rgb(222, 222, 222);
-}
-
-.alone-insurance-form {
-  border: 1px solid rgb(222, 222, 222);
-  border-top: none;
-  padding: 30px 30px 0 20px;
-}
-
-.insurance-form-head {
-  background-color: #f1f1f1;
-  height: 41px;
-  line-height: 41px;
 }
 
 </style>
 <template>
   <div id="addPerson" class="detail-main">
     <el-container v-loading="pageLoading">
-      <el-header style="margin-top:15px;">
+      <el-header>
         <el-row>
-          <el-col :span="2" class="left-arrow-d"><span @click="returnToPage"><i class="icon-down-arrow"></i><span class="fs-13">返回{{returnPage}}</span></span>
+          <el-col :span="2" class="left-arrow-d">
+            <div class="go-return icon-back" @click="returnToPage"></div>
           </el-col>
           <el-col :span="20">
             <p>{{titleType}}</p>
           </el-col>
         </el-row>
       </el-header>
-      <el-main v-show="!pageLoading">
+      <el-main v-show="!pageLoading" class="mt-30">
         <transition name="el-fade-in-linear">
           <div v-if="activeStep==0">
-            <div class="detail-form-title text-center">基础人员</div>
+            <div class="detail-form-title text-center">基础信息</div>
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="customerMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="客户名称:" prop="name">
+                  <el-form-item label="托运方名称:" prop="name">
                     <el-input placeholder="请输入" type="text" v-model="customerMsgForm.name"></el-input>
                     <!-- <el-row>
                       <el-col :span="8">
@@ -95,10 +71,10 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="亏吨标准:" prop="deficiency_standard">
-                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.deficiency_standard"></el-input>KG
+                    <el-input placeholder="请输入" type="text" v-model="customerMsgForm.deficiency_standard"></el-input><span class="unit">KG</span>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="8" v-if="false">
                   <el-form-item label="营业执照:">
                     <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview
                     " :on-remove="handleRemove" :file-list="customerMsgForm.license_pic" list-type="picture">
@@ -113,7 +89,7 @@
                   <el-form-item label="社会机构代码:" prop="codeMsg">
                     <el-row>
                       <el-col :span="10">
-                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license3in1_code'&&customerMsgForm.codeMsg?true:false">
+                        <el-select v-model="customerMsgForm.code" @change="codeTab" placeholder="请选择" :disabled="customerMsgForm.code==='license_code'&&customerMsgForm.codeMsg?true:false">
                           <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                         </el-select>
                       </el-col>
@@ -142,12 +118,12 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="免费等待时长:" prop="free_hour">
-                    <el-input :autofocus="true" placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.free_hour"></el-input>小时
+                    <el-input :autofocus="true" placeholder="请输入" :disabled="isDisabled" type="text" v-model="customerMsgForm.free_hour"></el-input><span class="unit unit-free">小时</span>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="超时计算单价:" prop="overtime_price">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.overtime_price"></el-input>元/小时
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model="customerMsgForm.overtime_price"></el-input><span class="unit unit-price">元/小时</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -170,7 +146,7 @@ export default {
   name: 'addCarHeadManage',
   computed: {
     titleType: function() {
-      return this.$route.query.id ? '编辑客户' : '新增客户';
+      return this.$route.query.id ? '编辑托运方' : '新增托运方';
     },
     activeStep: function() {
       return this.$route.query.activeStep || 0;
@@ -200,20 +176,22 @@ export default {
         deficiency_standard: '',
         free_hour: '',
         overtime_price: '',
-        code: 'license3in1_code',
+        code: 'license_code',
         codeMsg: '',
         license_pic: [],
       },
       sociology: [
+        { required: true, message: '请输入机构代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
       ],
       structure: [
+        { required: true, message: '请输入机构代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{8})$/, message: '由8位数字和大写字母组成', trigger: 'blur' }
       ],
       selectData: {
         codeSelect: [
-          { id: 'license3in1_code', value: '统一社会机构代码（三合一）' },
-          { id: 'license_code', value: '组织机构代码（非三合一）' },
+          { id: 'license_code', value: '统一社会机构代码（三合一）' },
+          { id: 'organization_code', value: '组织机构代码（非三合一）' },
         ],
         addTypeSelect: [
           { id: 'OWN', value: '默认新增' },
@@ -246,6 +224,7 @@ export default {
           { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '请输入座机号或者手机号', trigger: 'blur' }
         ],
         codeMsg: [
+          { required: true, message: '请输入机构代码', trigger: 'blur' },
           { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
         ]
       },
@@ -273,7 +252,7 @@ export default {
     codeTab() {
       this.customerMsgForm.codeMsg = '';
       this.$refs['addFormSetpOne'].clearValidate();
-      if (this.customerMsgForm.code === 'license3in1_code') {
+      if (this.customerMsgForm.code === 'license_code') {
         this.rules.codeMsg = this.sociology;
       } else {
         this.rules.codeMsg = this.structure;
@@ -304,7 +283,7 @@ export default {
           deficiency_standard: '',
           free_hour: '',
           overtime_price: '',
-          code: 'license3in1_code',
+          code: 'license_code',
           codeMsg: '',
           license_pic: [],
         }
@@ -323,8 +302,8 @@ export default {
               deficiency_standard: this.customerList[i].deficiency_standard,
               free_hour: this.customerList[i].free_hour,
               overtime_price: this.customerList[i].overtime_price,
-              code: this.customerList[i].license3in1_code ? 'license3in1_code' : 'license_code',
-              codeMsg: this.customerList[i].license3in1_code ? this.customerList[i].license3in1_code : this.customerList[i].license_code,
+              code: this.customerList[i].license_code ? 'license_code' : 'organization_code',
+              codeMsg: this.customerList[i].license_code ? this.customerList[i].license_code : this.customerList[i].organization_code,
               license_pic: this.customerList[i].license_pic ? this.customerList[i].license_pic : [],
             }
           }
@@ -337,7 +316,7 @@ export default {
         if (results.data && results.data.code == 0) {
           this.detail = results.data.data;
           // this.addType = this.detail.customer_type;
-          if(this.detail.customer_type === 'PLAT'){
+          if (this.detail.customer_type === 'PLAT') {
             this.isDisabled = true;
 
           }
@@ -349,11 +328,11 @@ export default {
             deficiency_standard: this.detail.deficiency_standard,
             free_hour: this.detail.free_hour,
             overtime_price: this.detail.overtime_price,
-            code: this.detail.license_code ? 'license_code' : 'license3in1_code',
-            codeMsg: this.detail.license_code ? this.detail.license_code : this.detail.license3in1_code,
+            code: this.detail.organization_code ? 'organization_code' : 'license_code',
+            codeMsg: this.detail.organization_code ? this.detail.organization_code : this.detail.license_code,
             license_pic: this.detail.license_pic ? this.detail.license_pic : [],
           }
-          if (this.customerMsgForm.code === 'license3in1_code') {
+          if (this.customerMsgForm.code === 'license_code') {
             this.rules.codeMsg = this.sociology;
           } else {
             this.rules.codeMsg = this.structure;
@@ -394,7 +373,7 @@ export default {
                 this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: results.data.data.id } });
               } else {
                 let id = results.data.data.id;
-                this.$router.push({ path: "/clientManage/clientManageSecond/addClient", query: { activeStep: stepNum - 1, id: id } });
+                this.$router.push({ path: "/clientManage/clientManageSecond/editClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
           }).catch((err) => {
@@ -412,10 +391,10 @@ export default {
       let btnObject = btn;
       let keyArray = ['name', 'contact_name', 'contact_phone', 'detail_address', 'deficiency_standard', 'code', 'codeMsg'];
       let postData = this.pbFunc.fifterbyArr(this.customerMsgForm, keyArray);
-      if (postData.code === 'license3in1_code') {
-        postData.license3in1_code = postData.codeMsg;
-      } else if (postData.code === 'license_code') {
+      if (postData.code === 'license_code') {
         postData.license_code = postData.codeMsg;
+      } else if (postData.code === 'organization_code') {
+        postData.organization_code = postData.codeMsg;
       }
 
       // if (this.addType === "PLAT") {

@@ -697,7 +697,7 @@ export default {
 
         //初始化信息窗口
         _this.infoWindow = new SimpleInfoWindow({
-          infoTitle: '<div class="fs-16">点位置信息</div>',
+          infoTitle: '<div class="fs-16 text-center">点位置信息</div>',
           infoBody: ''
         });
         //初始化起点icon

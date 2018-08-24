@@ -9,6 +9,79 @@
  */
 
 const api = {
+  unloadBillMatch: {
+    url: '/order/section-trips/match-business-order/',
+    method: 'post',
+    desc: '匹配卸货单',
+    param: {
+      waybill_id: {
+          desc: '卸货地名称'
+      },
+      match_order_list: {
+          desc: '匹配卸车单ID列表,'
+      },
+      cancel_order_list: {
+          desc: '取消卸车单ID列表'
+      },
+    }
+  },
+  getUnloadBillList: {
+    url: '/order/business_order/',
+    method: 'get',
+    desc: '业务台账列表',
+    param: {
+
+    }
+  },
+  addUnloadBill: {
+      url: '/order/business_order/',
+      method: 'post',
+      desc: '新增卸货单',
+      param: {
+        tms_station_name: {
+            desc: '卸货地名称'
+        },
+        station: {
+            desc: '实际站点名称,'
+        },
+        consignee: {
+            desc: '收货人'
+        },
+        consignee_phone: {
+            desc: '收货人联系电话'
+        },
+        plan_arrive_time: {
+            desc: '计划到站时间'
+        },
+        plan_tonnage: {
+            desc: '计划需求吨位'
+        },
+        station_address:{
+          desc:'站点地址'
+        },
+        business_type:{
+          desc:'业务单类型'
+        },
+        order_source: {
+          desc:'业务单来源，tms建的传TMS'
+        },
+        company_id:{
+          desc:'创建该线下承运单的tms公司的id'
+        },
+        short_name: {
+          desc:'客户简称'
+        },
+        consumer_id:{
+          desc:''
+        },
+        consumer_name: {
+          desc:'客户名称'
+        },
+        station_id:{
+          desc:'站点ID'
+        }
+      }
+  },
   getLedgerList: {
     url: '/statistic/ledger/',
     method: 'get',
@@ -726,8 +799,7 @@ const api = {
     }
   },
   getCustomerDetail: {
-    url: '/carrier/plat_customer/:id/',
-    // url: '/carrier/customer/:customer_id/',
+    url: '/carrier/customer/:customer_id/',
     method: 'get',
     desc: '客户管理',
     param: {
@@ -737,8 +809,7 @@ const api = {
     }
   },
   getCustomerList: {
-    // url: '/carrier/customer/',
-    url: '/carrier/plat_customer/',
+    url: '/carrier/customer/',
     method: 'get',
     desc: '客户管理',
     param: {
@@ -1578,6 +1649,52 @@ const api = {
 
     }
   },
+  addLandmark: {
+    url: '/map/land_marks/',
+    method: 'post',
+    desc: "站点信息上传",
+    param: {
+      position_name: {
+        desc: '站点名称'
+      },
+      position_type: {
+        desc: '站点类型'
+      },
+      longitude: {
+        desc: '经度'
+      },
+      latitude: {
+        desc: '纬度'
+      },
+      address: {
+        desc: '详细地址'
+      },
+      contacts: {
+        desc: '联系人'
+      },
+      tel: {
+        desc: '联系人电话'
+      },
+      source_type: {
+        desc: '上传类型'
+      },
+      province: {
+        desc: '省级—省的全程，如四川省'
+      },
+      city: {
+        desc: '市级—市的全程，如成都市'
+      },
+      county: {
+        desc: '县级—县级全程，如高新区'
+      },
+      upload_user: {
+        desc: '上传用户，司机端上传时该参数必填'
+      },
+      position_pics: {
+        desc: '站点图片'
+      }
+    }
+  },
   getRecordsData: {
     url: '/order/delivery-order/record/',
     method: 'get',
@@ -1717,6 +1834,14 @@ const api = {
 
     }
   },
+  postPundList: {
+    url: '/order/section-trips/weight-note/',
+    method: 'post',
+    desc: "上传磅单数据",
+    param: {
+
+    }
+  },
   sureMatch: {
     url: '/order/section-trips/confirm/',
     method: 'PUT',
@@ -1729,6 +1854,14 @@ const api = {
     url: '/order/section-trips/car-seal/',
     method: 'GET',
     desc: "获取铅封数据",
+    param: {
+
+    }
+  },
+  postSeal: {
+    url: '/order/section-trips/car-seal/',
+    method: 'POST',
+    desc: "上传铅封数据",
     param: {
 
     }
@@ -1796,7 +1929,58 @@ const api = {
     param: {
 
     }
-  }
+  },
+  getFluidsFormAdd: {
+    url: '/map/land_marks/mixin_fluids/',
+    method: 'get',
+    desc: "获取bpm，tms所有的液厂数据",
+    param: {
+
+    }
+  },
+  getCustomerFormAdd: {
+    url: '/carrier/customer/',
+    method: 'GET',
+    desc: "获取承运商客户列表的接口",
+    param: {
+
+    }
+  },
+  changeStatusSection: {
+    url: '/order/section-trips/:id/change-status/',
+    method: 'put',
+    desc: "修改运单分段状态",
+    param: {
+
+    }
+  },
+  cratePickUpOrder: {
+    url: '/order/delivery-order/three-delivery/',
+    method: 'POST',
+    desc: "新增线下承运单",
+    param: {
+
+    }
+  },
+  getCarriesId: {
+    url: '/order/trader/carriers/',
+    method: 'GET',
+    desc: "获取承运商列表",
+    param: {
+
+    }
+  },
+  getQiniuKey: {
+    url: '/order/section-trips/qiniu-callback/',
+    method: 'GET',
+    desc: "获取骑牛上传key",
+    param: {
+
+    }
+  },
+
+
+
 }
 
 

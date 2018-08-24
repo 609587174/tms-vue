@@ -55,7 +55,10 @@
               <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
               <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
             </div>
-            <div v-else>{{scope.row[item.param]}}</div>
+            <div v-else>
+              <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
+              <span v-else>{{scope.row[item.param]}}</span>
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="运费合计" align="center" width="100" fixed="right">
@@ -125,11 +128,13 @@ export default {
         title: '运单号',
         param: 'waybill',
         width: ''
-      }, {
-        title: '业务单号',
-        param: 'order',
-        width: ''
-      }, {
+      },
+      //  {
+      //   title: '业务单号',
+      //   param: 'order',
+      //   width: ''
+      // },
+      {
         title: '托运方',
         param: 'company',
         width: '200'
@@ -144,7 +149,7 @@ export default {
       }, {
         title: '卸货站',
         param: 'station',
-        width: ''
+        width: '200'
       }, {
         title: '计划装车时间',
         param: 'plan_time',
@@ -217,7 +222,7 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}/${row.order_id}` });
+        this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'edit') {
         this.$router.push({ path: `/statistics/business/logistics/editLogistics`, query: { id: row.id } });
       }
@@ -250,6 +255,9 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
+          for (let i in this.tableData.data.results) {
+            this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

@@ -537,9 +537,7 @@ export default {
           vm.headCarFormStep3 = vm.getTrueObj(vm.headCarFormStep3, result.data.data);
           vm.headCarFormStep2 = vm.getTrueObj(vm.headCarFormStep2, result.data.data);
           var tractor_insurancesList = vm.headCarFormStep3.tractor_insurances;
-          console.log("ssss1", this);
           for (let i = 0; i < tractor_insurancesList.length; i++) {
-            console.log("ssss2", this);
             tractor_insurancesList[i].insurance_type = tractor_insurancesList[i].insurance_type ? tractor_insurancesList[i].insurance_type.key : "";
             tractor_insurancesList[i].insurance_method = tractor_insurancesList[i].insurance_method ? tractor_insurancesList[i].insurance_method.key : "";
             vm.Inamount['insuranceAmoutProp' + i] = 'tractor_insurances[' + i + '].amount';
@@ -612,8 +610,6 @@ export default {
           //sendData.carrier = sendData.carrier.id ? sendData.carrier.id : null;
           delete sendData.carrier;
 
-
-          console.log('sendData', sendData.attributes, vm.headCarFormStep1)
           vm.$$http('creatHeadFrom', sendData).then((result) => {
             vm.pageLoading = false;
             if (result.data.code == 0) {

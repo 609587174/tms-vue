@@ -277,7 +277,6 @@ export default {
       this.getDetail()
     },
     getDetail: function() {
-      console.log('this.capacityId', this.capacityId);
       this.$$http('getCapacityDetail', { id: this.capacityId }).then((results) => {
         if (results.data && results.data.code == 0) {
           this.headData = results.data.data;
@@ -335,7 +334,6 @@ export default {
         let p3 = this.getDriverList();
         let p4 = this.getEscortList();
         Promise.all([p3, p4]).then(results => {
-          console.log('results', results);
           // 驾驶员数据
           if (results[0][0].data.code === 0 && results[0][1].data.code === 0) {
             results[0].map((res, i) => {

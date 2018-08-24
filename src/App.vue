@@ -46,6 +46,7 @@ export default {
         // consignmentOrders: 'CONSIGNMENT_ORDER', //托运订单
         logisticsManage: 'LOGISTICS_MANAGEMENT', //物流管理
         consignmentOrders: 'LOGISTICS_DISPATCH', //物流调度
+        UnderConsignmentOrders: 'OFFLINE_LOGISTICS_DISPATCH',
         mapManage: 'MAP', //地图
         carMonitor: 'MAP_MONITOR', //地图监控
         standardMile: 'STANDARD_MILEAGE_MANAGEMENT', //标准里程
@@ -136,7 +137,6 @@ export default {
       this.$store.state.common.menuData = allowedRouter;
       this.$store.state.common.userData = { name: "测试名称" };
       if (isGoFirstPath) {
-        console.log('allowedRouter[0].children', allowedRouter);
         if (allowedRouter[0] && allowedRouter[0].children && allowedRouter[0].children.length) {
           this.$router.replace({ name: allowedRouter[0].children[0].name });
         } else {

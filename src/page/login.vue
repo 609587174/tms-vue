@@ -111,7 +111,6 @@ export default {
         getCodeText: '获取验证码',
         isLoading: false,
         isDisabled: false,
-        sendStatus: false
       },
       submitBtn: {
         btnText: '登录',
@@ -129,32 +128,24 @@ export default {
 
   },
   methods: {
-    msgBtnText(times) {
-      if (this.msgBtn.isBtnLoading) {
-        return '发送中...';
-      } else if (this.msgBtn.sendStatus) {
-        return times + "s";
-      } else if (!this.msgBtn.sendStatus && !this.msgBtn.isBtnLoading) {
-        return "发送验证码";
-      }
-    },
     getMsgCode() {
       let times = this.times;
       let intCountdown;
       if (this.ruleForm.username) {
+
         const countdown = () => {
           this.msgBtn.getCodeText = times + 's';
           if (times >= 1) {
             times--;
           } else {
-            this.msgBtn.getCodeText = this.msgBtnText();
+            this.msgBtn.getCodeText = '发送验证码';
             this.msgBtn.isDisabled = false;
             clearInterval(intCountdown);
           }
         }
         this.msgBtn.isLoading = true;
         this.msgBtn.isDisabled = true;
-        this.msgBtn.getCodeText = this.msgBtnText();
+        this.msgBtn.getCodeText = '发送中...';
         this.$$http('messageVerifyCode', {
           phone: this.ruleForm.username,
           // method_type: 'reset_password'
@@ -256,7 +247,6 @@ export default {
     },
     login() {
       this.loginAjax().then((results) => {
-        console.log('resultsxxx', results);
         this.getMunusList();
       })
     },
@@ -277,8 +267,6 @@ export default {
       this.$refs[loginFrom].validate((valid) => {
         if (!valid) {
           var callbackInfo = { errorField: "ValNum", errorMessage: "有错误" }
-          // console.log(vm);
-          // console.log(this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField)));
           this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField))[0].error = callbackInfo.errorMessage;
         } else {
           return false;
@@ -299,7 +287,6 @@ export default {
   created() {
     sessionStorage.clear();
     // this.refreshVaImg();
-    console.log('$this.$route', this.$route)
     // this.enterLogin(event);
   }
 };

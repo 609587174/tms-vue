@@ -174,13 +174,13 @@
                     <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="4" class="whiteSpan">
+                <!-- <el-col :span="4" class="whiteSpan">
                   计划装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
                     <span>{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
@@ -207,8 +207,8 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">计划到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000"  :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
-                     <span >{{Uitem.business_order.plan_arrive_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
+                    <span>{{Uitem.business_order.plan_arrive_time}}</span>
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">计划卸车:{{Uitem.business_order.plan_tonnage}}吨</el-col>
@@ -264,8 +264,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                    <span>{{props.row.arrival_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time||props.row.active_time">
+                    <span>{{props.row.arrival_time||props.row.active_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -301,6 +301,19 @@
               </el-row>
             </div>
             <div style="clear:both"></div>
+          </div>
+          <div style="width:100px;float:right;padding-left:10px;">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+              <el-col>
+                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
+                <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+              <el-col>
+                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              </el-col>
+            </el-row>
           </div>
         </template>
       </el-table-column>
@@ -359,7 +372,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
+      <el-table-column label="实际装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'&&this.nowHead!='matchHead'">
         <template slot-scope="props">
           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
                  <span >{{props.row.pick_active_time}}</span>
@@ -378,8 +391,8 @@
 
        <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time" placement="top-start" v-if="props.row.arrival_time">
-                 <span >{{props.row.arrival_time}}</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time">
+                 <span >{{props.row.arrival_time||props.row.active_time}}</span>
              </el-tooltip>
            <span v-else>无</span>
         </template>
@@ -489,6 +502,10 @@
       <unloadingReview  :isEdit="isEditSureDownPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess"></unloadingReview>
     </el-dialog>
 
+    <el-dialog :title="cancleLoadTitle" center width="30%" :visible.sync="cancleLoadEx"  :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <refuseModal  :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
+    </el-dialog>
+
      <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
         <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'"  label-width="100px" :rules="rules">
           <el-row style="margin-top:15px;">
@@ -523,12 +540,14 @@
   import noData from '@/components/common/noData';
   import loadingReview from '@/components/order/loadingReview';
   import unloadingReview from '@/components/order/unloadingReview';
+  import refuseModal from '@/components/order/refuseModal';
 export default {
   name: 'orderFifterList',
    components: {
-    noData: noData,
+    noData,
     loadingReview,
     unloadingReview,
+    refuseModal,
   },
   data() {
     var onlyNum = (rule, value, callback) => {
@@ -570,7 +589,7 @@ export default {
       tableHeadConfig:{
          'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
+        'third': [{ key: 'all', value: 'unloadHead' },{ key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
         'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
         'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
@@ -587,6 +606,7 @@ export default {
         'already_match':'matchExtend',
         'to_site':'unloadExtend',
         'reach_site':'unloadExtend',
+        'unload_driver_pending_confirmation':'unloadExtend',
         'unloading_waiting_audit':'unloadExtend',
         'unloading_audit_failed':'unloadExtend',
         'waiting_seal':'loadExtend',
@@ -641,6 +661,11 @@ export default {
           type: "success",
           methods_type: "loadingEX",
           attrPlan: true
+        },
+        {
+          text: "装车拒绝",
+          type: "danger",
+          methods_type: "refuseLoadingEX",
         }],
         loading_audit_failed: [],
         waiting_match: [],
@@ -655,6 +680,10 @@ export default {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
+        },{
+          text: "卸车拒绝",
+          type: "danger",
+          methods_type: "refuseDownEx"
         }],
         unloading_audit_failed: [],
         waiting_settlement: [
@@ -706,6 +735,10 @@ export default {
       sureDownPoundTitle:'卸车磅单审核通过',
       isEditSureDownPound:true,
       choosedListData:{},
+
+      cancleLoadTitle:'装车磅单审核拒绝',
+      cancleLoadEx:false,
+      weightId:'',
 
 
 
@@ -896,59 +929,8 @@ export default {
       //   });
       // }
     },
-    operation: function(type, rowData) {
-      if (type == 'changeSatus') {
-        this.changeSatusBox(rowData);
-        this.changeStatusParam.sectiontrip = rowData.id;
-      } else if (type == 'loadingEX') {
-        this.isShowSurePound = true;
-        this.surePoundTitle = '装车榜单审核通过';
-        this.isEditSureDownPound = true;
+    downExFun(type, rowData){
 
-        //this.choosedListData = rowData;
-
-        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
-        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
-
-          if (results.data.code == 0) {
-            let orderProcessData = results.data.data;
-            let dataObject = {};
-
-
-            if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "loading_waiting_audit") {
-              if (orderProcessData[orderProcessData.length - 1].operation == "上传装车铅封") {
-                dataObject = {
-                  ...orderProcessData[orderProcessData.length - 2],
-                  weight_note: orderProcessData[orderProcessData.length - 2].weight_id,
-                  carseal:rowData.carseal,
-                }
-              } else {
-                dataObject = {
-                  ...orderProcessData[orderProcessData.length - 1],
-                  weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
-                  carseal:rowData.carseal,
-                }
-              }
-            }
-
-            orderProcessData.map((item,i)=>{
-              if(item.type === 'to_fluid'){
-                dataObject = {
-                  ...dataObject,
-                  ...item
-                }
-              }
-            })
-
-            this.choosedListData = Object.assign({}, dataObject);
-
-          }
-        });
-
-
-      } else if (type == 'sureDownOrder') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
-      } else if (type == 'downEx') {
         this.isShowSureDownPound = true;
         this.sureDownPoundTitle = '卸车榜单审核通过';
         this.isEditSureDownPound = true;
@@ -962,26 +944,80 @@ export default {
             let orderProcessData = results.data.data;
             let dataObject = {};
 
-            if (orderProcessData.length > 0 && orderProcessData[orderProcessData.length - 1].type == "unloading_waiting_audit") {
-              dataObject = {
-                ...orderProcessData[orderProcessData.length - 1],
-                weight_note: orderProcessData[orderProcessData.length - 1].weight_id,
-                weight_active_mile: ''
-              }
-            }
 
             orderProcessData.map((item,i)=>{
+
+              if(item.type === 'unloading_waiting_audit'){
+                dataObject = {
+                  ...dataObject,
+                    ...item,
+                  weight_note: item.weight_id,
+                  weight_active_mile: ''
+                }
+              }
+
               if(item.type === 'to_fluid'){
                 dataObject = {
                   ...dataObject,
                   ...item
                 }
               }
+
             })
 
             this.choosedListData = Object.assign({}, dataObject);
           }
         });
+    },
+    loadingExFun(type, rowData){
+      this.isShowSurePound = true;
+        this.surePoundTitle = '装车榜单审核通过';
+        this.isEditSureDownPound = true;
+
+        //this.choosedListData = rowData;
+
+        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
+        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
+
+          if (results.data.code == 0) {
+            let orderProcessData = results.data.data;
+            let dataObject = {};
+
+            orderProcessData.map((item,i)=>{
+
+              if(item.type === 'waiting_seal'){
+                dataObject = {
+                  ...dataObject,
+                  ...item,
+                  weight_note: item.weight_id,
+                  carseal:rowData.carseal,
+                }
+              }
+
+              if(item.type === 'to_fluid'){
+                dataObject = {
+                  ...dataObject,
+                  ...item
+                }
+              }
+
+            })
+
+            this.choosedListData = Object.assign({}, dataObject);
+
+          }
+        });
+    },
+    operation: function(type, rowData) {
+      if (type == 'changeSatus') {
+        this.changeSatusBox(rowData);
+        this.changeStatusParam.sectiontrip = rowData.id;
+      } else if (type == 'loadingEX') {
+        this.loadingExFun(type, rowData);
+      } else if (type == 'sureDownOrder') {
+        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+      } else if (type == 'downEx') {
+        this.downExFun(type, rowData);
       } else if (type == 'sureUnload') {
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'upSettlement') {
@@ -992,7 +1028,16 @@ export default {
 
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      }else if (type == 'refuseDownEx') { //卸车拒绝
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '卸车磅单审核拒绝';
+      }else if(type == 'refuseLoadingEX'){//装车拒绝
+        this.weightId = rowData.weight_note;
+        this.cancleLoadEx = true;
+        this.cancleLoadTitle = '装车磅单审核拒绝';
       }
+
     },
     upSettlement: function(rowData) {
 
@@ -1014,6 +1059,9 @@ export default {
       this.$emit('searchList');
     },
     unloadingReviewSuccess:function(){
+      this.$emit('searchList');
+    },
+    refuseSuccess:function(){
       this.$emit('searchList');
     }
   },

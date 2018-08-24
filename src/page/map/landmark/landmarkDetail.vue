@@ -13,6 +13,9 @@
           </el-col>
         </el-row>
       </el-header>
+      <div class="text-right edit-btn-box">
+        <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
+      </div>
       <el-main v-loading="pageLoading">
         <div class="detail-list detail-form">
           <div class="detail-form-title">
@@ -220,7 +223,6 @@ export default {
         };
         this.pageLoading = true;
         this.$$http('getLandMarkDetail', postData).then((results) => {
-          console.log('results', results.data.data.results);
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
             this.detailData = results.data.data;
@@ -266,6 +268,14 @@ export default {
       }).then(() => {
         this.passCheckAjax(isSucess);
       }).catch(() => {});
+    },
+    editLandmark: function() {
+      this.$router.push({
+        path: '/mapManage/landMark/editLandmark',
+        query: {
+          id: this.id
+        }
+      });
     }
   },
   created: function() {
@@ -314,6 +324,12 @@ export default {
 .check-button {
   position: relative;
   top: -8px;
+}
+
+.edit-btn-box {
+  padding: 10px 30px 0 0;
+  position: relative;
+  top: 15px;
 }
 
 .color-26c6da {

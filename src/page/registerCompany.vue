@@ -141,15 +141,12 @@ export default {
   },
   methods: {
     agreeProtocol: function() {
-      console.log('this.dialogUserProtocol', this.dialogUserProtocol);
       this.dialogUserProtocol = false;
       this.checked = true;
     },
     onSubmit() {
-      console.log('user_id', this.user_id);
       this.registerForm.user_id = this.user_id
       this.registerForm.address = this.address.area ? this.address.area : this.address.city;
-      console.log('from',this.registerForm)
       this.$refs['registerForm'].validate((valid) => {
         if (valid) {
           if (this.checked) {

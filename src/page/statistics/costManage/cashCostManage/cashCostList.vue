@@ -137,9 +137,9 @@ export default {
         ],
         costSelect: [
           { id: '', value: '全部' },
-          { id: 'logistics_high_speed', value: '过路费（普通）' },
-          { id: 'logistics_high_speed_cash', value: '过路费（国家）' },
-          { id: 'logistics_high_speed_bridge', value: '过桥费' },
+          { id: 'logistics_high_speed', value: '过路费' },
+          // { id: 'logistics_high_speed_cash', value: '过路费（国家）' },
+          // { id: 'logistics_high_speed_bridge', value: '过桥费' },
           { id: 'logistics_fuel_cash', value: '现金油/气（有票）' },
           { id: 'logistics_fuel_cash_no_ticket', value: '现金油/气（无票）' },
           { id: 'logistics_park', value: '停车费' },

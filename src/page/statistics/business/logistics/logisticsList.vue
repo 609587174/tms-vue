@@ -57,7 +57,7 @@
             </div>
             <div v-else>
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
-                <span v-else>{{scope.row[item.param]}}</span>
+              <span v-else>{{scope.row[item.param]}}</span>
             </div>
           </template>
         </el-table-column>

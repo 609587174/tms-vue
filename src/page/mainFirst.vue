@@ -20,10 +20,12 @@
   border-right: 1px solid #dedede;
   overflow-y: auto;
 }
+
 .dashborad-menu {
   height: 42px;
   line-height: 42px;
 }
+
 .children-menu {
   background-color: #f2f5fd;
 }
@@ -156,7 +158,6 @@ export default {
   },
   computed: {
     activeMenu: function() {
-      console.log('$route', this.$route);
       return this.$route;
     },
     breadcrumbs: function() {
@@ -184,7 +185,6 @@ export default {
     if (menus) {
 
       this.menus = menus;
-      // console.log('this.menus', this.menus);
     }
   }
 };

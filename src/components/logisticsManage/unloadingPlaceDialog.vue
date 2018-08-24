@@ -115,7 +115,6 @@ export default {
   },
   methods: {
     closeBtn: function() {
-      console.log('6666')
       this.$emit('closeDialogBtn', false);
     },
     selectStation(select) {
@@ -166,7 +165,6 @@ export default {
           this.submitBtn.btnText = '确认并匹配中';
           this.submitBtn.isLoading = true;
           let postData = Object.assign(this.formRules, this.addData)
-          console.log('postData', postData, this.waybillId)
           this.$$http('addUnloadBill', postData).then((results) => {
             this.submitBtn.btnText = '确认并匹配';
             this.submitBtn.isLoading = false;
@@ -197,7 +195,6 @@ export default {
         match_order_list: [],
         cancel_order_list: []
       }
-      console.log('匹配', postData)
       postData.match_order_list.push(id);
       this.$$http('unloadBillMatch', postData).then((results) => {
         if (results.data && results.data.code == 0) {

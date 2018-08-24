@@ -64,7 +64,6 @@ export default {
       }
     };
     const checkRepassword = (rule, value, callback) => {
-      console.log('this', this);
       if (value !== this.registerForm.password) {
         callback(new Error('两次输入的密码不一致，请重新输入'));
       } else if (value.indexOf(" ") != -1) {
@@ -161,9 +160,7 @@ export default {
     linkEnd: function(userId) {
 
     },
-    showValue() {
-      console.log(this.registerForm.message_verify_code)
-    },
+    showValue() {},
     toLoginPage() {
       this.$router.push({ path: '/login' });
     },

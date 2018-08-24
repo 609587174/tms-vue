@@ -195,7 +195,6 @@ export default {
   },
   methods: {
     getImg() { //获取榜单和铅封图片
-      console.log('getImg');
       this.imgList = [];
       //获取装车榜单
       if (this.surePound.weight_note) {
@@ -247,7 +246,6 @@ export default {
             image_url: imgUrlArray.join(','),
           };
           this.$$http("postPundList", postData).then(results => {
-            console.log('results', results);
             if (results.data.code == 0) {
               this.poundReturnId = results.data.data.id;
               resolve(results)
@@ -274,7 +272,6 @@ export default {
           image_url_list: imgUrlArray,
         };
         this.$$http("postSeal", postData).then(results => {
-          console.log('results', results);
           if (results.data.code == 0) {
             this.sealReturnId = results.data.data.id;
           } else {

@@ -860,8 +860,6 @@ export default {
     },
     showPound:function(rowData){
 
-      console.log('rowData',rowData);
-
       let rowDataCopy = Object.assign({},rowData);
 
       if(rowDataCopy && rowDataCopy.section_type && rowDataCopy.section_type.key && rowDataCopy.section_type.key ==='unload'){
@@ -880,8 +878,6 @@ export default {
       this.isShowSurePound = true;
 
       this.choosedListData = rowDataCopy;
-
-      console.log('this.choosedListData',this.choosedListData);
 
       this.surePoundTitle = '查看装车磅单'
 
@@ -1070,7 +1066,6 @@ export default {
       });
     },
     operation: function(type, rowData) {
-      console.log('type, rowData',type, rowData);
       if (type == 'changeSatus') {
         this.changeSatusBox(rowData);
         this.changeStatusParam.sectiontrip = rowData.id;

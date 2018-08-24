@@ -145,8 +145,8 @@ export default {
         field: 'tractor.plate_number',
         orderStateList: '',
       },
-      allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal','loading_waiting_audit'],
-      noCanceled: ['loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished','confirm_match','abnormal'],
+      allStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'waiting_seal', 'loading_waiting_audit'],
+      noCanceled: ['loading_audit_failed', 'waiting_match', 'already_match', 'to_site', 'reach_site', 'unloading_waiting_audit', 'unloading_audit_failed', 'waiting_settlement', 'in_settlement', 'finished', 'confirm_match', 'abnormal'],
       selectData: {
         fieldSelect: [{
           value: '车号',
@@ -212,13 +212,13 @@ export default {
       delivery_list: [], //提货单拥有的运单，审核后
       haveTranspower_list: [], //提货单所拥有的运力,未审核
       renderPage_list: [], //当前页渲染的数据
-      alreadyList: {},//上一次修改的数据
-      lastSearch_list: [],//最后一次查询出来的数据
+      alreadyList: {}, //上一次修改的数据
+      lastSearch_list: [], //最后一次查询出来的数据
       add_capacities: [], //增加的运力表
       del_capacities: [], //取消的运力表
-      start_capacities: [],//初始的运力表
+      start_capacities: [], //初始的运力表
       now_capacities: [], //已经选择的运力表
-      default_del_capacities:[]//默认需要取消的运力
+      default_del_capacities: [] //默认需要取消的运力
     }
   },
   computed: {
@@ -251,8 +251,6 @@ export default {
     },
     checkRows: function(selection, row) {
       var vm = this;
-      console.log("selection", selection);
-      console.log("row", row);
 
       var addArr = [];
       selection.forEach((sItem) => {
@@ -282,7 +280,6 @@ export default {
           this.$$http('searchNoUse', postData3).then((results) => {
 
             if (results.data && results.data.code == 0) {
-              console.log("绑定的订单", results.data.data);
               vm.pageLoading = false;
               if (results.data.data.length > 0) {
                 var orderListText = "";
@@ -316,7 +313,7 @@ export default {
                   center: true,
                   showClose: false,
                   closeOnClickModal: false,
-                  closeOnPressEscape:false
+                  closeOnPressEscape: false
                 }).then(() => {
                   row.bindCheckBox = !row.bindCheckBox;
                   vm.trueAll_list.forEach((Titem) => {
@@ -382,7 +379,7 @@ export default {
                     center: true,
                     closeOnClickModal: false,
                     showClose: false,
-                    closeOnPressEscape:false
+                    closeOnPressEscape: false
                   }).then(() => {
                     vm.$refs.multipleTable.toggleRowSelection(row, true);
                   })
@@ -467,7 +464,7 @@ export default {
               addFalg = false;
             }
           });
-          if (addFalg&&item.waybill&&!(vm.allStatus.indexOf(item.waybill.status)>-1)) {
+          if (addFalg && item.waybill && !(vm.allStatus.indexOf(item.waybill.status) > -1)) {
             sendData.add_capacities.push(item.id);
           }
         });
@@ -479,13 +476,17 @@ export default {
               cancleFalg = false;
             }
           });
-          if (cancleFalg&&item.waybill&&vm.allStatus.indexOf(item.status)>-1) {
+          if (cancleFalg && item.waybill && vm.allStatus.indexOf(item.status) > -1) {
             sendData.del_capacities.push(item.capacity);
           }
         });
-        sendData.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
-        this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
-        this.add_capacities=sendData.add_capacities;
+
+
+
+        sendData.del_capacities = sendData.del_capacities.concat(this.default_del_capacities);
+        // this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
+        // this.add_capacities=sendData.add_capacities;
+
         if (sendData.del_capacities.length == 0 && sendData.add_capacities.length == 0) {
           vm.$confirm('您没有任何修改', '请注意', {
             confirmButtonText: '放弃修改',
@@ -498,81 +499,81 @@ export default {
 
           })
         }
-        vm.judgeIsDataChange(function(flage){
-          if(flage=='1'){ //如果数据和上一次对比没有改变
+        vm.judgeIsDataChange(function(flage) {
+          if (flage == '1') { //如果数据和上一次对比没有改变
             if (vm.now_capacities.length > 0) {
               if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
                 vm.pageLoading = true;
                 vm.$$http("editCarPower", sendData).then((results) => {
-                vm.pageLoading = false;
-                if (results.data.code == 0) {
-                  vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-                }
+                  vm.pageLoading = false;
+                  if (results.data.code == 0) {
+                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                  }
                 }).catch(() => {
                   vm.pageLoading = false;
                 });
+              }
+            } else {
+              vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
+                confirmButtonText: '确认提交',
+                cancelButtonText: '返回',
+                type: 'warning',
+                center: true,
+                closeOnClickModal: false,
+                showClose: false
+              }).then(() => {
+                vm.$$http("editCarPower", sendData).then((results) => {
+                  vm.pageLoading = false;
+                  if (results.data.code == 0) {
+                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                  }
+                }).catch(() => {
+                  this.pageLoading = false;
+                });
+              })
             }
           } else {
-            vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
-              confirmButtonText: '确认提交',
-              cancelButtonText: '返回',
+            vm.$confirm('订单数据已更新，请重新操作', '请注意', {
+              confirmButtonText: '确认',
+              showCancelButton: false,
               type: 'warning',
               center: true,
               closeOnClickModal: false,
-              showClose: false
-          }).then(() => {
-            vm.$$http("editCarPower", sendData).then((results) => {
-              vm.pageLoading = false;
-              if (results.data.code == 0) {
-                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-              }
-            }).catch(() => {
-              this.pageLoading = false;
-            });
-          })
-        }
-      }else{
-         vm.$confirm('订单数据已更新，请重新操作', '请注意', {
-          confirmButtonText: '确认',
-          showCancelButton: false,
-          type: 'warning',
-          center: true,
-          closeOnClickModal: false,
-          showClose: false,
-          closeOnPressEscape:false
-          }).then(() => {
-            vm.$router.go(0);
-          })
+              showClose: false,
+              closeOnPressEscape: false
+            }).then(() => {
+              vm.$router.go(0);
+            })
           }
-      });
-    }
+        });
+      }
     },
-    judgeIsDataChange:function(callbackFun){
-      var vm=this;
-      this.$$http('searchOrderHasPower', {id:this.id}).then((results) => {
+    judgeIsDataChange: function(callbackFun) {
+      var vm = this;
+      this.$$http('searchOrderHasPower', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
-          var returnFlag=true;
-          var nowData = results.data.data;//最新的列表
-          if(nowData.add_capacities.length!=this.alreadyList.add_capacities.length||nowData.del_capacities.length!=this.alreadyList.del_capacities.length){
-            returnFlag=false;
+          var returnFlag = true;
+          var nowData = results.data.data; //最新的列表
+          if (nowData.add_capacities.length != this.alreadyList.add_capacities.length || nowData.del_capacities.length != this.alreadyList.del_capacities.length) {
+            returnFlag = false;
             callbackFun(false);
-          }else{
-            for(var addIndex in vm.alreadyList.add_capacities){
-              if(nowData.add_capacities.indexOf(vm.alreadyList.add_capacities[addIndex])==-1){
+          } else {
+            for (var addIndex in vm.alreadyList.add_capacities) {
+              if (nowData.add_capacities.indexOf(vm.alreadyList.add_capacities[addIndex]) == -1) {
                 callbackFun(0);
-                returnFlag=false;
+                returnFlag = false;
                 break;
               }
-          }
-            for(var delIndex in vm.alreadyList.del_capacities){
-              if(nowData.del_capacities.indexOf(vm.alreadyList.del_capacities[delIndex])==-1){
-                returnFlag=false;
+            }
+            for (var delIndex in vm.alreadyList.del_capacities) {
+              if (nowData.del_capacities.indexOf(vm.alreadyList.del_capacities[delIndex]) == -1) {
+                returnFlag = false;
                 callbackFun(0);
                 break;
               }
             }
           }
-          if(returnFlag){
+          if (returnFlag) {
             callbackFun(1);
           }
         }
@@ -592,7 +593,6 @@ export default {
       vm.$$http('searchCapacityList', postData).then((results) => {
 
         if (results.data && results.data.code == 0) {
-          console.log("运力列表", results.data.data);
           vm.tractor_semitrailers_List = results.data.data;
         }
         getDataNum++;
@@ -614,7 +614,7 @@ export default {
         getDataNum++;
 
         if (results.data && results.data.code == 0) {
-          console.log("当前订单数据", results.data.data);
+
           vm.delivery_list = results.data.data;
         }
         if (getDataNum == 4) {
@@ -627,12 +627,12 @@ export default {
         if (getDataNum == 4) {
           vm.pageLoading = false;
         }
-        console.log('err', err);
+
       });
       let postData2 = {};
       vm.$$http('searchNoUse', postData2).then((results) => {
         if (results.data && results.data.code == 0) {
-          console.log("最近未指派的车辆数据", results.data);
+
           vm.upTo_list = results.data.data;
         }
         getDataNum++;
@@ -646,18 +646,18 @@ export default {
         if (getDataNum == 4) {
           vm.pageLoading = false;
         }
-        console.log('err', err);
+
       });
       let postData4 = {
         id: vm.id
       };
       vm.$$http('searchOrderHasPower', postData4).then((results) => {
         if (results.data && results.data.code == 0) {
-          console.log("已经添加列表上面的数据", results.data);
+
           vm.alreadyList = results.data.data;
           if (!results.data.data || !vm.alreadyList.capacities) {
             vm.alreadyList.add_capacities = [];
-             vm.alreadyList.capacities = [];
+            vm.alreadyList.capacities = [];
           }
         }
         getDataNum++;
@@ -671,7 +671,7 @@ export default {
         if (getDataNum == 4) {
           vm.pageLoading = false;
         }
-        console.log('err', err);
+
       });
 
     },
@@ -686,13 +686,13 @@ export default {
             //筛选
             if (operationArr[i].id == this.delivery_list.trips[j].capacity) {
               operationArr[i].waybill = this.delivery_list.trips[j];
-              if (this.delivery_list.trips[j].status != "canceled"&&this.delivery_list.trips[j].waybill_change_status!= "canceled") {    
-                operationArr[i].isDisable=false;
+              if (this.delivery_list.trips[j].status != "canceled" && this.delivery_list.trips[j].waybill_change_status != "canceled") {
+                operationArr[i].isDisable = false;
                 this.now_capacities.push(operationArr[i]);
                 operationArr[i].bindCheckBox = true;
                 addflag = true;
-              }else if(this.delivery_list.trips[j].waybill_change_status== "canceled"){
-                operationArr[i].isDisable=true;
+              } else if (this.delivery_list.trips[j].waybill_change_status == "canceled") {
+                operationArr[i].isDisable = true;
                 operationArr[i].bindCheckBox = false;
                 this.default_del_capacities.push(operationArr[i].id);
                 addflag = true;
@@ -772,7 +772,7 @@ export default {
 
         this.bindChekboxFunction(0, this.renderAll_list);
       } else {
-        console.log("获取数据失败,请刷新页面重试或联系管理员");
+
       }
     },
     searchThisByData: function(searchPage, type) {

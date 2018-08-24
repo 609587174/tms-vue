@@ -494,7 +494,6 @@ export default {
             //   }
             // }
           }
-          console.log('table', this.tableData);
           // if (this.isAllSelect) {
           this.$nextTick(function() {
             this.checked();

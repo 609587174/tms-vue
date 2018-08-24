@@ -221,7 +221,6 @@ export default {
             image_url: imgUrlArray.join(','),
           };
           this.$$http("postPundList", postData).then(results => {
-            console.log('results', results);
             if (results.data.code == 0) {
               this.poundReturnId = results.data.data.id;
               resolve(results)

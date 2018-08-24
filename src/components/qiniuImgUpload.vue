@@ -102,7 +102,7 @@ export default {
 
       let type = files.type.split('/')[1];
 
-      /*this.$$http('getQiniuKey', {
+      this.$$http('getQiniuKey', {
         suffix: type,
       }).then(results => {
         if (results.data && results.data.code == 0) {
@@ -113,20 +113,6 @@ export default {
           this.uploadWithSDK(token, putExtra, config, key, files);
         }
 
-      })*/
-
-      axios.get('http://driver.hhtdlng.com/api/v1/driver-side/qiniu/retrieve-token/', {
-        params: {
-          suffix: type,
-        }
-      }).then((results) => {
-        if (results.data && results.data.code == 0) {
-          let resultsData = results.data.data;
-          let key = resultsData.key;
-          let token = resultsData.token;
-
-          this.uploadWithSDK(token, putExtra, config, key, files);
-        }
       })
 
     },
@@ -140,9 +126,7 @@ export default {
       };
 
       let complete = res => {
-        console.log('this.fileList', this.fileList);
         this.fileList.push({ name: file.name, url: `http://dev-image.hhtdlng.com/${key}` })
-
       };
 
       let next = response => {

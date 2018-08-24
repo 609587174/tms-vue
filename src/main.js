@@ -17,7 +17,6 @@ Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key])
 })
 
-console.log('http',httpServer);
 Vue.prototype.pbFunc = pbFunc;
 Vue.prototype.$$http = httpServer;
 

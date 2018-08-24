@@ -159,14 +159,12 @@ export default {
         this.pageLoading = false;
 
         if (results.data && results.data.code == 0) {
-          console.log('results.data', this.matchUnloadId, this.cancelMatchUnloadId)
           this.tableData = results.data.data.data.data;
           for (let i in this.tableData) {
             this.tableData[i].is_show = this.tableData[i].is_matched;
             for (let j in this.matchUnloadId) {
 
               if (this.tableData[i].id === this.matchUnloadId[j]) {
-                // console.log('匹配',this.tableData[i].id, this.matchUnloadId[j])
                 this.tableData[i].is_show = true;
                 this.tableData[i].status = 'waiting_confirm';
               }
@@ -214,7 +212,6 @@ export default {
                 match_order_list: this.matchUnloadId,
                 cancel_order_list: this.cancelMatchUnloadId,
               }
-              console.log('提交卸货地', postData)
               this.$$http('unloadBillMatch', postData).then((results) => {
                 instance.confirmButtonLoading = false;
                 if (results.data && results.data.code == 0) {
@@ -267,7 +264,6 @@ export default {
       this.matchUnloadId = Array.from(new Set(this.matchUnloadId));
       this.cancelMatchUnloadId = Array.from(new Set(this.cancelMatchUnloadId))
       if (row.is_show === row.is_matched) {
-        console.log('点击', row.is_show, row.is_matched, row.id)
         let arr = row.is_show ? this.cancelMatchUnloadId : this.matchUnloadId;
         arr.splice(arr.findIndex(item => item.id === row.id), 1);
         if (row.is_show) {
@@ -277,8 +273,6 @@ export default {
         }
 
       }
-      console.log('匹配运单', this.cancelMatchUnloadId, this.matchUnloadId);
-
 
     },
     handleClick: function(tab, event) {
@@ -319,8 +313,10 @@ export default {
   display: inline-block;
   margin-right: 10px;
 }
-.match-btn{
+
+.match-btn {
   font-size: 13px;
   line-height: 29px;
 }
+
 </style>

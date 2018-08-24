@@ -263,38 +263,37 @@ export default {
       vm.pageLoading = true;
       this.$$http("getRecordsData", sendData).then((results) => {
         vm.pageLoading = false;
-        console.log(results);
         if (results.data.code == 0) {
           results.data.data.forEach(item => {
-            if(item.type!=='add_driver'&&item.type!=='modify'){
+            if (item.type !== 'add_driver' && item.type !== 'modify') {
               vm.allTableList[item.type + "_list"].push(item);
             }
-            if(item.type=="add_driver"){
-              item.add_driver_no.forEach(Aitem=>{
+            if (item.type == "add_driver") {
+              item.add_driver_no.forEach(Aitem => {
                 vm.allTableList.add_driver_list.push({
-                  operator:item.operator,
-                  operator_time:item.operator_time,
-                  driver_no:Aitem,
-                  msg:"新增车辆"
+                  operator: item.operator,
+                  operator_time: item.operator_time,
+                  driver_no: Aitem,
+                  msg: "新增车辆"
                 });
               });
             }
-            if(item.type=="modify"){
-              item.add_driver_no.forEach(Aitem=>{
+            if (item.type == "modify") {
+              item.add_driver_no.forEach(Aitem => {
                 vm.allTableList.modify_list.push({
-                  operator:item.operator,
-                  operator_time:item.operator_time,
-                  driver_no:Aitem,
-                  msg:"新增车辆"
+                  operator: item.operator,
+                  operator_time: item.operator_time,
+                  driver_no: Aitem,
+                  msg: "新增车辆"
                 });
-               
+
               });
-              item.del_driver_no.forEach(Aitem=>{
+              item.del_driver_no.forEach(Aitem => {
                 vm.allTableList.modify_list.push({
-                  operator:item.operator,
-                  operator_time:item.operator_time,
-                  driver_no:Aitem,
-                  msg:"删除车辆"
+                  operator: item.operator,
+                  operator_time: item.operator_time,
+                  driver_no: Aitem,
+                  msg: "删除车辆"
                 });
               });
             }

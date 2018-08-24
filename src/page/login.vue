@@ -247,7 +247,6 @@ export default {
     },
     login() {
       this.loginAjax().then((results) => {
-        console.log('resultsxxx', results);
         this.getMunusList();
       })
     },
@@ -268,8 +267,6 @@ export default {
       this.$refs[loginFrom].validate((valid) => {
         if (!valid) {
           var callbackInfo = { errorField: "ValNum", errorMessage: "有错误" }
-          // console.log(vm);
-          // console.log(this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField)));
           this.$refs.loginFrom.fields.filter((item) => (item.prop === callbackInfo.errorField))[0].error = callbackInfo.errorMessage;
         } else {
           return false;
@@ -290,7 +287,6 @@ export default {
   created() {
     sessionStorage.clear();
     // this.refreshVaImg();
-    console.log('$this.$route', this.$route)
     // this.enterLogin(event);
   }
 };

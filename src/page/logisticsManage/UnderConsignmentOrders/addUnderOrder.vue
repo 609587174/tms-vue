@@ -343,7 +343,7 @@ export default {
           break;
         }
       }
-
+      this.capacitiesNum=0;
       for(let i in this.addCarList){
         if(this.addCarList[i].id!=""){
           this.capacitiesNum++;

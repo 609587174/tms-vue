@@ -460,23 +460,23 @@ export default {
         this.now_capacities.forEach(item => {
           var addFalg = true;
           vm.start_capacities.forEach(startItem => {
-            if (item.id == startItem.id) {
+            if (item.id == startItem.capacity) {
               addFalg = false;
             }
           });
-          if (addFalg && item.waybill && !(vm.allStatus.indexOf(item.waybill.status) > -1)) {
+          if (addFalg && !(vm.allStatus.indexOf(item.waybill.status) > -1)) {
             sendData.add_capacities.push(item.id);
           }
         });
-        this.start_capacities.forEach(item => {
+       this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
-            if (item.id == nowItem.id) {
+            if (item.capacity == nowItem.id) {
               cancleFalg = false;
             }
           });
-          if (cancleFalg && item.waybill && vm.allStatus.indexOf(item.waybill.status) > -1) {
-            sendData.del_capacities.push(item.id);
+          if (cancleFalg && item.waybill_id && vm.allStatus.indexOf(item.status) > -1) {
+            sendData.del_capacities.push(item.capacity);
           }
         });
 
@@ -484,7 +484,7 @@ export default {
         this.start_capacities.forEach(item => {
           var isfalge = false;
           vm.now_capacities.forEach(nowItem => {
-            if (item.id == nowItem.id) {
+            if ((item.capacity||item.id) == nowItem.id) {
               isfalge=true;
             }
           });
@@ -497,7 +497,7 @@ export default {
         sendData.del_capacities = sendData.del_capacities.concat(this.default_del_capacities);
         // this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
         // this.add_capacities=sendData.add_capacities;
-        if (ischange&&this.start_capacities.length==this.now_capacities.length) {
+        if (!ischange&&this.start_capacities.length==this.now_capacities.length) {
           vm.$confirm('您没有任何修改', '请注意', {
             confirmButtonText: '确定',
             showCancelButton: false,
@@ -831,7 +831,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row);
+          vm.start_capacities.push(row.waybill.capacity?row.waybill:row);
         });
       });
     },

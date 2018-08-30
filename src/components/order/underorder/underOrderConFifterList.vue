@@ -1090,13 +1090,9 @@ export default {
       } else if (type == 'upUnloadPound') {
         //上传卸车磅单
         this.isShowSureDownPound = true;
-
         this.choosedListData = rowData;
-
         this.sureDownPoundTitle = '上传卸车磅单'
-
         this.isEditSureDownPound = true;
-
         this.isUploadUnloadPound  = true;
 
       } else if (type == 'cancleOrder') {

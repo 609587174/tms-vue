@@ -1240,11 +1240,6 @@ export default {
             leave_time: this.surePound.leave_time || null,
             active_mile: this.surePound.active_mile || null
           };
-          // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
-          //   sendData.status = 'waiting_settlement';
-          // } else {
-          //   sendData.status = 'waiting_match';
-          // }
 
           sendData.id = weight_id;
           //sendData.weight_id = weight_id;
@@ -1284,54 +1279,7 @@ export default {
             });
           }
         } else if (type == 'cancleLoadExUp') {
-          /*
-          var sendData = {};
-          // if (this.detailData[this.detailData.length - 1].type == "unloading_waiting_audit") {
-          //   sendData.status = 'unloading_audit_failed';
-          // } else {
-          //   sendData.status = 'loading_audit_failed';
-          // }
 
-          sendData.id = weight_id;
-          //sendData.weight_id = "";
-          sendData.is_checked = 'refuse';
-          if (this.loadPoundReason != 'other') {
-            sendData.reason = this.loadPoundReason;
-          } else {
-            sendData.reason = this.otherInput;
-          }
-          if (this.operationIsOk) {
-            this.operationIsOk = false;
-            vm.pageLoading = true;
-            if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
-              vm.buttonLoading.loadingAuditFailButton = true;
-            } else {
-              vm.buttonLoading.unloadinguditFailButton = true;
-            }
-            this.$$http("examineLoad", sendData).then(results => {
-              vm.buttonCanClick = true;
-              this.operationIsOk = true;
-              vm.pageLoading = false;
-              if (results.data.code == 0) {
-                if (vm.detailData[vm.detailData.length - 1].type == "loading_waiting_audit") {
-                  vm.buttonLoading.loadingAuditFailButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit" });
-                } else {
-                  vm.buttonLoading.unloadinguditFailButton = false;
-                  vm.$router.push({ path: "/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit" });
-                }
-                vm.$message({
-                  type: "success",
-                  message: "审核拒绝成功"
-                })
-              }
-            }).catch(() => {
-              vm.pageLoading = false;
-              vm.buttonCanClick = true;
-              vm.buttonLoading.unloadinguditFailButton = false;
-              vm.buttonLoading.loadingAuditFailButton = false;
-            });
-          }*/
 
         }
       }

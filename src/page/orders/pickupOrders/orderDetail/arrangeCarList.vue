@@ -468,7 +468,6 @@ export default {
             sendData.add_capacities.push(item.id);
           }
         });
-
         this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
@@ -481,24 +480,42 @@ export default {
           }
         });
 
+        var ischange=false;
+        this.start_capacities.forEach(item => {
+          var isfalge = false;
+          vm.now_capacities.forEach(nowItem => {
+            if (item.capacity == nowItem.id) {
+              isfalge=true;
+            }
+          });
+          if(!isfalge){
+            ischange=true;
+          }
+        });
 
 
         sendData.del_capacities = sendData.del_capacities.concat(this.default_del_capacities);
         // this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
         // this.add_capacities=sendData.add_capacities;
-
-        if (sendData.del_capacities.length == 0 && sendData.add_capacities.length == 0) {
+        if (ischange&&this.start_capacities.length==this.now_capacities.length) {
           vm.$confirm('您没有任何修改', '请注意', {
-            confirmButtonText: '放弃修改',
-            cancelButtonText: '继续修改',
+            confirmButtonText: '确定',
+            showCancelButton: false,
             type: 'warning',
             center: true,
+            closeOnClickModal: false,
+            showClose: false,
+            closeOnPressEscape: false
           }).then(() => {
-            vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
           }).catch(() => {
-
           })
+        }else{
+          vm.upchange(sendData);
         }
+      }
+    },
+    upchange:function(sendData){
+      var vm=this;
         vm.judgeIsDataChange(function(flage) {
           if (flage == '1') { //如果数据和上一次对比没有改变
             if (vm.now_capacities.length > 0) {
@@ -546,7 +563,6 @@ export default {
             })
           }
         });
-      }
     },
     judgeIsDataChange: function(callbackFun) {
       var vm = this;
@@ -815,7 +831,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill || row);
+          vm.start_capacities.push(row);
         });
       });
     },

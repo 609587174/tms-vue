@@ -460,7 +460,7 @@ export default {
         this.now_capacities.forEach(item => {
           var addFalg = true;
           vm.start_capacities.forEach(startItem => {
-            if (item.id == startItem.capacity) {
+            if (item.id == startItem.id) {
               addFalg = false;
             }
           });
@@ -471,12 +471,12 @@ export default {
         this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
-            if (item.capacity == nowItem.id) {
+            if (item.id == nowItem.id) {
               cancleFalg = false;
             }
           });
-          if (cancleFalg && item.waybill && vm.allStatus.indexOf(item.status) > -1) {
-            sendData.del_capacities.push(item.capacity);
+          if (cancleFalg && item.waybill && vm.allStatus.indexOf(item.waybill.status) > -1) {
+            sendData.del_capacities.push(item.id);
           }
         });
 
@@ -484,7 +484,7 @@ export default {
         this.start_capacities.forEach(item => {
           var isfalge = false;
           vm.now_capacities.forEach(nowItem => {
-            if (item.capacity == nowItem.id) {
+            if (item.id == nowItem.id) {
               isfalge=true;
             }
           });

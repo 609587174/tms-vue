@@ -678,7 +678,7 @@ const api = {
     }
   },
   getShipperList: {
-    url: '/map/bpm_standard_mileages/all_traders/',
+    url: '/map/standard_mileages/all_traders/',
     method: 'get',
     desc: '托运方列表',
     param: {
@@ -1434,7 +1434,7 @@ const api = {
 
   getFulid: {
     // url: '/order/fluid/',
-    url: '/map/bpm_standard_mileages/all_fluid_factories/',
+    url: '/map/standard_mileages/all_fluid_factories/',
     method: 'get',
     desc: '获取液厂',
     param: {
@@ -1515,7 +1515,7 @@ const api = {
   },
   getSiteList: {
     // url: '/map/fluid_sites/',
-    url: '/map/bpm_standard_mileages/all_fluid_sites/',
+    url: '/map/standard_mileages/all_fluid_sites/',
     method: 'get',
     desc: '获取LNG站点列表',
     param: {
@@ -1540,7 +1540,7 @@ const api = {
   },
   getStandardMileList: {
     // url: '/map/standard_mileages/',
-    url: '/map/bpm_standard_mileages/',
+    url: '/map/standard_mileages/',
     method: 'get',
     desc: '获取标准里程列表',
     param: {
@@ -1568,7 +1568,7 @@ const api = {
   },
   getStandardMileDetail: {
     // url: '/map/standard_mileages/:id/',
-    url: '/map/bpm_standard_mileages/:id/',
+    url: '/map/standard_mileages/:id/',
     method: 'get',
     desc: '标准里程详情',
     param: {

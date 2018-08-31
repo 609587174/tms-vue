@@ -10,7 +10,7 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
-                    <el-select v-model="searchFilters.carriers" @change="startSearch" clearable :loading="shipperLoading" filterable placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" @change="searchTrader" clearable :loading="shipperLoading" filterable placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -24,33 +24,37 @@
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="站点:">
-                    <el-select v-model="searchFilters.station" :loading="siteLoading" clearable filterable @change="startSearch" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.station" :loading="siteLoading" filterable remote clearable @change="startSearch" :remote-method="getSiteList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
                     </el-select>
+                    <!-- <el-select v-model="searchFilters.station" :loading="siteLoading" clearable filterable @change="startSearch" placeholder="请输入选择">
+                      <el-option v-for="(item,key) in selectData.fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
+                    </el-select> -->
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
+          <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button>
             <el-button type="primary">导出</el-button> -->
-            <!-- <el-button type="success" @click="editMile">新增</el-button> -->
+            <el-button type="success" @click="editMile">新增</el-button>
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
-                <!-- <template slot-scope="scope">
-                  <div v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</div>
-                  <div v-else>
-                    <span v-if="item.param==='carriers'">
-                      <span v-for="(row,key) in scope.row.carriers" class="text-blue">{{row.carrier_name}}<br></span>
-
-                    </span>
-                    <span v-else>{{scope.row[item.param]}}</span>
-
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title"></el-table-column>
+              <el-table-column align="center" :label="'生效托运方'">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.customer_staffs&&scope.row.customer_staffs.length">
+                    <span v-for="(row,key) in scope.row.customer_staffs" class="text-blue">{{row.carrier_name}}<br></span>
                   </div>
-                </template> -->
+                  <div v-else><span class="text-blue">{{scope.row.traders.name}}</span></div>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" :label="'添加时间'">
+                <template slot-scope="scope">
+                  {{scope.row.created_at}}
+                </template>
               </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
@@ -112,14 +116,6 @@ export default {
         title: '标准里程',
         param: 'standard_mileage',
         width: ''
-      }, {
-        title: '生效托运方',
-        param: 'traders.name',
-        width: '200'
-      }, {
-        title: '添加时间',
-        param: 'created_at',
-        width: ''
       }],
       tableData: []
     }
@@ -129,14 +125,32 @@ export default {
       this.pageData.currentPage = 1;
       this.getList();
     },
-    getList: function() {
+    searchTrader(shippeId) {
+      let shipper = '';
+      for (let i in this.selectData.shipperSelect) {
+        if (this.selectData.shipperSelect[i].id === shippeId) {
+          shipper = this.selectData.shipperSelect[i];
+        }
+      }
+      if (shipper) {
+        this.getList(shipper);
+      }
+    },
+    getList: function(shipper) {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
         fluid_factory: this.searchFilters.fluid,
         fluid_site: this.searchFilters.station,
-        trader: this.searchFilters.carriers
+        // trader: this.searchFilters.carriers
       };
+      if (shipper) {
+        if (shipper.source_type === 'ONLINE_TRADER') {
+          postData.trader = shipper.id;
+        } else if (shipper.source_type === 'OFFLINE_TRADER') {
+          postData.customer_staff_id = shipper.id;
+        }
+      }
       postData = this.pbFunc.fifterObjIsNull(postData);
 
       // postData[this.searchFilters.field] = this.searchFilters.keyword;
@@ -184,17 +198,19 @@ export default {
         this.fluidLoading = false;
       })
     },
-    getSiteList: function(query) {
+    getSiteList: function(site) {
       let postData = {
-        // page: 1,
-        // page_size: 500,
+        page: 1,
+        page_size: 100,
       }
       this.siteLoading = true;
+      if (site) {
+        postData.position_name = site;
+      }
       this.$$http('getSiteList', postData).then((results) => {
         this.siteLoading = false;
         if (results.data && results.data.code == 0) {
-          // this.fluidSiteSelect = results.data.data;
-          this.selectData.fluidSiteSelect = this.selectData.fluidSiteSelect.concat(results.data.data);
+          this.selectData.fluidSiteSelect = results.data.data;
         }
       }).catch((err) => {
         this.siteLoading = false;
@@ -208,13 +224,8 @@ export default {
     handleMenuClick: function(command) {
       this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
     },
-    editMile(isEdit) {
-      // if(isEdit){
-
-      // }else{
-      // this.$router.push({ path: "/serviceManage/standardDataManage/editMileage" });
-      // }
-
+    editMile() {
+      this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage" });
     },
     pageChange: function() {
       setTimeout(() => {

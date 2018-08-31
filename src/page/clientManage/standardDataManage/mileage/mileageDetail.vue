@@ -35,8 +35,8 @@
                     <el-col :span="12" :offset="6" class="text-center">
                       基础信息
                     </el-col>
-                    <el-col :span="6" class="text-right">
-                      <!-- <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button> -->
+                    <el-col :span="6" class="text-right" v-if="detailData.source_type==='offline'">
+                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>
@@ -85,7 +85,10 @@
                     <div class="label-list">
                       <label>生效托运方:</label>
                       <div class="detail-form-item">
-                        <span  v-html="pbFunc.dealNullData(detailData.traders&&detailData.traders.name)"></span>
+                        <div v-if="detailData.customer_staffs&&detailData.customer_staffs.length">
+                          <span v-for="(item,key) in detailData.customer_staffs" :key="key">{{item.carrier_name}}<br/></span>
+                        </div>
+                        <span v-else v-html="pbFunc.dealNullData(detailData.traders&&detailData.traders.name)"></span>
                       </div>
                     </div>
                   </el-col>
@@ -153,7 +156,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/serviceManage/standardDataManage/editMileage?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
+      this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
     },
 
   }

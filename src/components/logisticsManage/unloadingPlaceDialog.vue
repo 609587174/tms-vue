@@ -85,7 +85,7 @@ export default {
         ],
         plan_tonnage: [
           { required: true, message: '请输入计划需求吨位', trigger: 'blur' },
-          { pattern: /^([1-9]{1,2})+(.[0-9]{0,3})?$/, message: '请输入1-99且最多三位小数的数值', trigger: 'blur' },
+          { pattern: /^([1-9])+(.[0-9]{0,3})?$/, message: '请输入1-99且最多三位小数的数值', trigger: 'blur' },
 
         ],
       },

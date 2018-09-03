@@ -257,7 +257,12 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
-              this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDetail', query: { id: results.data.data.id } })
+              if(this.id){
+                this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDetail', query: { id: results.data.data.id } });
+              }else{
+                this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDataList'});
+              }
+
             }
           }).catch((err) => {
             this.saveAndReviewBtn.btnText = '保存并退出';

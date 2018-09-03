@@ -10,14 +10,14 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
-                    <el-select v-model="searchFilters.carriers" @change="searchTrader" clearable :loading="shipperLoading" filterable placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" @change="searchTrader" clearable :loading="shipperLoading" :remote-method="startSearch" filterable placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="实际液厂:">
-                    <el-select v-model="searchFilters.fluid" :loading="fluidLoading" clearable filterable @change="startSearch" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.fluid" :loading="fluidLoading" clearable filterable @change="startSearch" :remote-method="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -45,8 +45,10 @@
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title"></el-table-column>
               <el-table-column align="center" :label="'生效托运方'">
                 <template slot-scope="scope">
-                  <div v-if="scope.row.customer_staffs&&scope.row.customer_staffs.length">
-                    <span v-for="(row,key) in scope.row.customer_staffs" class="text-blue">{{row.carrier_name}}<br></span>
+                  <div v-if="scope.row.customer_staffs&&scope.row.customer_staffs.length" :title="scope.row.fluidListStr">
+                    <span v-for="(row,key) in scope.row.customer_staffs" class="text-blue"><span v-if="key<5">{{row.carrier_name}}</span>
+                    <br>
+                    </span>
                   </div>
                   <div v-else><span class="text-blue">{{scope.row.traders.name}}</span></div>
                 </template>
@@ -161,6 +163,13 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
+
+          for (let i in this.tableData) {
+            this.tableData[i].fluidListStr = '';
+            for (let j in this.tableData[i].customer_staffs) {
+              this.tableData[i].fluidListStr += this.tableData[i].customer_staffs[j].carrier_name + (j < this.tableData[i].customer_staffs.length - 1 ? '，' : '');
+            }
+          }
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

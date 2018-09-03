@@ -454,7 +454,7 @@ export default {
                   }
                   });
                 }else if(oerderStatus=='1'){//状态变更为修改
-                  vm.$confirm('当前订单已经提交机会', '请注意', {
+                  vm.$confirm('当前订单已经提交计划', '请注意', {
                   confirmButtonText: '继续修改计划',
                   cancelButtonText: '返回列表',
                   type: 'warning',

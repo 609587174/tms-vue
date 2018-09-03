@@ -412,7 +412,7 @@ export default {
         if (results.data && results.data.code == 0) {
           if(results.data.data.status.key=="determine"||results.data.data.status.key=='confirmed'){
             callFunc(1);
-          }else if(results.data.status.key=="appoint"){
+          }else if(results.data.data.status.key=="appoint"){
             callFunc(0);
           }else{
             callFunc(2);
@@ -631,8 +631,17 @@ export default {
       this.$$http('searchOrderHasPower', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           var returnFlag = true;
-          var nowData = results.data.data; //最新的列表
-          if (nowData.add_capacities.length != this.alreadyList.add_capacities.length || nowData.del_capacities.length != this.alreadyList.del_capacities.length) {
+          var nowData={};
+          if(results.data.data.add_capacities){
+             nowData= results.data.data;
+          }else{
+             nowData={
+              add_capacities:[],
+              del_capacities:[]
+             }
+          }
+           //最新的列表
+          if (nowData.add_capacities.length != vm.alreadyList.add_capacities.length || nowData.del_capacities.length != vm.alreadyList.del_capacities.length) {
             returnFlag = false;
             callbackFun(false);
           } else {
@@ -737,6 +746,7 @@ export default {
           if (!results.data.data || !vm.alreadyList.capacities) {
             vm.alreadyList.add_capacities = [];
             vm.alreadyList.capacities = [];
+            vm.alreadyList.del_capacities = [];
           }
         }
         getDataNum++;

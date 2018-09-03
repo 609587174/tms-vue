@@ -10,14 +10,14 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
-                    <el-select v-model="searchFilters.carriers" :loading="shipperLoading" clearable filterable @change="searchTrader" :remote-method="searchTrader" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" :loading="shipperLoading" clearable filterable @change="searchTrader"  :remote-method="searchTrader" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="实际液厂:">
-                    <el-select v-model="searchFilters.fluid" :loading="fluidLoading" clearable filterable @change="searchFluid" :remote-method="searchFluid" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.fluid" :loading="fluidLoading" clearable filterable @change="startSearch" :remote-method="startSearch" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -47,6 +47,7 @@
                 <template slot-scope="scope">
                   <div v-if="scope.row.customer_staffs&&scope.row.customer_staffs.length" :title="scope.row.fluidListStr">
                     <span v-for="(row,key) in scope.row.customer_staffs" class="text-blue"><span v-if="key<5">{{row.carrier_name}}<br></span>
+
                     </span>
                   </div>
                   <div v-else><span class="text-blue">{{scope.row.traders.name}}</span></div>
@@ -118,9 +119,7 @@ export default {
         param: 'standard_mileage',
         width: ''
       }],
-      tableData: [],
-      fluid: '',
-      shipper: ''
+      tableData: []
     }
   },
   methods: {
@@ -128,43 +127,31 @@ export default {
       this.pageData.currentPage = 1;
       this.getList();
     },
-    searchTrader(shipperId) {
-      let row = '';
+    searchTrader(shippeId) {
+      let shipper = '';
       for (let i in this.selectData.shipperSelect) {
-        if (this.selectData.shipperSelect[i].id === shipperId) {
-          row = this.selectData.shipperSelect[i];
+        if (this.selectData.shipperSelect[i].id === shippeId) {
+          shipper = this.selectData.shipperSelect[i];
         }
       }
-      this.shipper = row;
-      this.getList();
+      // if (shipper) {
+        this.getList(shipper);
+      // }
     },
-    searchFluid(fluidId) {
-      let row = '';
-      for (let i in this.selectData.liquidSelect) {
-        if (this.selectData.liquidSelect[i].id === fluidId) {
-          row = this.selectData.liquidSelect[i];
-        }
-      }
-      this.fluid = row;
-      this.getList();
-    },
-    getList: function(type, row) {
+    getList: function(shipper) {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        // fluid_factory: this.searchFilters.fluid,
+        fluid_factory: this.searchFilters.fluid,
         fluid_site: this.searchFilters.station,
         // trader: this.searchFilters.carriers
       };
-      if (this.shipper.source_type === 'ONLINE_TRADER') {
-        postData.trader = this.shipper.id;
-      } else if (this.shipper.source_type === 'OFFLINE_TRADER') {
-        postData.customer_staff_id = this.shipper.id;
-      }
-      if (this.fluid.source_type === 'online') {
-        postData.fluid_factory = this.fluid.id;
-      } else if (this.fluid.source_type === 'offline') {
-        postData.offline_fluid_factory = this.fluid.id;
+      if (shipper) {
+        if (shipper.source_type === 'ONLINE_TRADER') {
+          postData.trader = shipper.id;
+        } else if (shipper.source_type === 'OFFLINE_TRADER') {
+          postData.customer_staff_id = shipper.id;
+        }
       }
       postData = this.pbFunc.fifterObjIsNull(postData);
 

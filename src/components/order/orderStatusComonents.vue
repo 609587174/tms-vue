@@ -262,7 +262,7 @@ export default {
     },
     dealDataByStatus:function(dataBody){
       for(var i in dataBody){
-        if(dataBody[i].status.key=='already_match'){
+        if(dataBody[i].status.key=='already_match'||dataBody[i].status.key=='waiting_match'){
           var middleArr=[];
           for(var unIndex in dataBody[i].unload_trips){
             if(dataBody[i].unload_trips[unIndex].status.key!='canceled'){

@@ -369,13 +369,19 @@ export default {
                 message: '提交成功',
                 type: 'success'
               });
+
               if (isReview) {
-                this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: results.data.data.id } });
+                if (this.$route.query.id) {
+                  this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: results.data.data.id } });
+                } else {
+                  this.$router.push({ path: "/clientManage/clientManageSecond/privateClientManage" });
+                }
               } else {
                 let id = results.data.data.id;
                 this.$router.push({ path: "/clientManage/clientManageSecond/editClient", query: { activeStep: stepNum - 1, id: id } });
               }
             }
+
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;

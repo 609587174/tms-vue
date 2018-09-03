@@ -24,8 +24,8 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实际液厂:" prop="fluid">
-                    <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" placeholder="请输入选择" @change="chooseFluid">
-                      <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
+                    <el-select :loading="searchFluidLoading" filterable remote clearable v-model="userForm.fluid" placeholder="请输入选择" @change="chooseFluid" :remote-method="getFluidList">
+                      <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -153,15 +153,21 @@ export default {
       }
     },
 
-    getFluidList: function() {
+    getFluidList: function(fluid) {
       let postData = {
-
+        page: 1,
+        page_size: 100,
+        simplify: true,
+        position_type: 'LNG_FACTORY'
+      };
+      if (fluid) {
+        postData.position_name = fluid;
       }
       this.searchFluidLoading = true;
-      this.$$http('getFulid', postData).then((results) => {
+      this.$$http('getLandMarkList', postData).then((results) => {
         this.searchFluidLoading = false;
         if (results.data && results.data.code == 0) {
-          this.fluidFactorySelect = results.data.data;
+          this.fluidFactorySelect = results.data.data.results;
         }
       }).catch((err) => {
         this.searchFluidLoading = false;
@@ -200,22 +206,13 @@ export default {
       }).catch((err) => {
         this.carrierLoading = false;
       })
-      // this.$$http('getShipperList', postData).then((results) => {
-      //   this.carrierLoading = false;
-      //   if (results.data && results.data.code == 0) {
-      //     this.carrierSelect = results.data.data;
-      //   }
-      // }).catch((err) => {
-      //   this.carrierLoading = false;
-      // })
-
     },
 
     chooseFluid: function() {
       console.log('this.userForm.fluid', this.userForm.fluid);
       for (let i in this.fluidFactorySelect) {
         if (this.userForm.fluid === this.fluidFactorySelect[i].id) {
-          this.fluidAddress = this.fluidFactorySelect[i].actual_address;
+          this.fluidAddress = this.fluidFactorySelect[i].address;
           break;
         }
       }
@@ -241,7 +238,6 @@ export default {
         apiName = 'patchStandardMileDetail';
         postData.id = this.id;
       }
-      console.log('postData', postData)
       this.saveAndReviewBtn.isDisabled = true;
       this.$refs['editForm'].validate((valid) => {
         if (valid) {

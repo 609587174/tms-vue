@@ -385,7 +385,6 @@ export default {
             vm.listFifterData = dataBody;
           }
         }
-
       }).catch((err) => {
         console.log('err', err);
         vm.pageLoading = false;

@@ -407,6 +407,21 @@ export default {
         }
       }
     },
+    judgeIsOrderStatus:function(callFunc){
+       this.$$http('getPickOrderDetail', {id:this.id}).then((results) => {
+        if (results.data && results.data.code == 0) {
+          if(results.data.data.status.key=="determine"||results.data.data.status.key=='confirmed'){
+            callFunc(1);
+          }else if(results.data.status.key=="appoint"){
+            callFunc(0);
+          }else{
+            callFunc(2);
+          }
+        }
+      }).catch((err) => {
+        console.log('cc',err);
+      });
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.searchThisByData();
@@ -424,18 +439,64 @@ export default {
           });
           sendData.delivery_order_id = this.delivery_list.id;
           this.pageLoading = true;
-          this.$$http("addCarPower", sendData).then((results) => {
-            this.pageLoading = false;
-            if (results.data.code == 0) {
-              if (this.operationStatus == 'add') {
-                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
-              } else {
-                vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-              }
+          this.judgeIsDataChange((flage)=>{
+            if(flage=='1'){
+              this.judgeIsOrderStatus((oerderStatus)=>{
+                if(oerderStatus=='0'){//状态为变更
+                  this.$$http("addCarPower", sendData).then((results) => {
+                  this.pageLoading = false;
+                  if (results.data.code == 0) {
+                    if (this.operationStatus == 'add') {
+                      vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
+                    } else {
+                      vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                    }
+                  }
+                  });
+                }else if(oerderStatus=='1'){//状态变更为修改
+                  vm.$confirm('当前订单已经提交机会', '请注意', {
+                  confirmButtonText: '继续修改计划',
+                  cancelButtonText: '返回列表',
+                  type: 'warning',
+                  center: true,
+                  closeOnClickModal: false,
+                  showClose: false,
+                  closeOnPressEscape: false
+                  }).then(() => {
+                    vm.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}/edit` });
+                  }).catch(()=>{
+                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                  })
+                }else if(oerderStatus=='2'){//状态变更为不能修改
+                  vm.$confirm('当前订单状态已经不能新增', '请核实', {
+                  confirmButtonText: '确认',
+                  showCancelButton: false,
+                  type: 'warning',
+                  center: true,
+                  closeOnClickModal: false,
+                  showClose: false,
+                  closeOnPressEscape: false
+                  }).then(() => {
+                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=all" });
+                  })
+                }
+              });
+              
+            }else{
+              vm.$confirm('订单数据已更新，请重新操作', '请注意', {
+              confirmButtonText: '确认',
+              showCancelButton: false,
+              type: 'warning',
+              center: true,
+              closeOnClickModal: false,
+              showClose: false,
+              closeOnPressEscape: false
+              }).then(() => {
+                vm.$router.go(0);
+              })
             }
-          }).catch(() => {
-            this.pageLoading = false;
           });
+          
         } else {
           vm.$confirm('提交车辆不能为0', '请注意', {
             confirmButtonText: '确认',
@@ -544,7 +605,8 @@ export default {
                   if (results.data.code == 0) {
                     vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
                   }
-                }).catch(() => {
+                }).catch((err) => {
+                  console.log("aa",err);
                   this.pageLoading = false;
                 });
               })
@@ -594,6 +656,7 @@ export default {
           }
         }
       }).catch((err) => {
+        console.log("bb",err);
         callbackFun(0);
       });
     },
@@ -846,6 +909,12 @@ export default {
   },
   created: function() {
     this.getList();
+  },
+  watch: {
+    '$route' (to, from) {
+      //刷新参数放到这里里面去触发就可以刷新相同界面了
+      this.$router.go(0);
+    }
   }
 }
 

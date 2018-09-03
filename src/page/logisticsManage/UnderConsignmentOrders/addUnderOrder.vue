@@ -413,7 +413,7 @@ export default {
     },
     getCustomer:function(){
       this.loadingArr.customerLoading=true;
-      this.$$http("getCustomerFormAdd",{pagination:false,customer_type:'OWN'}).then((results)=>{
+      this.$$http("getCustomerFormAdd",{pagination:false}).then((results)=>{
         if(results.data.code==0){
           this.selectData.customerList=results.data.data;
         }

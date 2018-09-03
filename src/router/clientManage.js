@@ -110,6 +110,14 @@
            title: '标准里程详情',
          },
          component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDetail'], resolve)
+       }, {
+         path: 'editMileage',
+         name: 'editMileage',
+         meta: {
+           isVerificationL: false,
+           title: '编辑、新增标准里程',
+         },
+         component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/editMileage'], resolve)
        }]
      }]
    }],

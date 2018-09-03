@@ -10,7 +10,7 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
-                    <el-select v-model="searchFilters.carriers" @change="searchTrader" clearable :loading="shipperLoading" :remote-method="startSearch" filterable placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" :loading="shipperLoading" clearable filterable @change="searchTrader"  :remote-method="searchTrader" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -134,9 +134,9 @@ export default {
           shipper = this.selectData.shipperSelect[i];
         }
       }
-      if (shipper) {
+      // if (shipper) {
         this.getList(shipper);
-      }
+      // }
     },
     getList: function(shipper) {
       let postData = {

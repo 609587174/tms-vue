@@ -435,6 +435,15 @@
           </el-tooltip>
         </template>
       </el-table-column>
+
+      <el-table-column label="备注" prop="" min-width="180">
+        <template slot-scope="props">
+          <el-tooltip :content="props.row.delivery_order.mark" placement="top-start" effect="light" v-if='props.row.delivery_order.mark!=""&&props.row.delivery_order.mark'>
+            <span class="el-icon-document" style="font-size:16px;color:blue;cursor:pointer"></span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+
        <el-table-column label="状态" prop="" min-width="150" >
         <template slot-scope="props">
           <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>

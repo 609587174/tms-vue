@@ -78,7 +78,7 @@ export default {
         consignee_phone: [
           { required: true, message: '请输入收货人联系电话', trigger: 'change' },
           { required: true, message: '请输入收货人联系电话', trigger: 'blur' },
-          { pattern: /(^(\(0\d{2}\)|0\d{2}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' }
+          { pattern: /(^(\(0\d{2,3}\)|0\d{2,3}-|\s)?\d{7,8}$)|(^1\d{10}$)/, message: '手机或座机号格式不正确，请重新输入', trigger: 'blur' }
         ],
         plan_arrive_time: [
           { required: true, message: '请选择计划到站时间', trigger: 'blur' },

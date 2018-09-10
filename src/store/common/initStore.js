@@ -23,5 +23,19 @@ export default {
   selectData: {}, //全局数据
   users: {}, //用户个人信息
   menuList: [],
-  wsMsg: null //websocket
+  wsMsg: null, //websocket
+  regular:{
+    price:{
+      match:/^\d+(\.\d{1,2})?$/,
+      tips:'请输入数值且最多两位小数的数值'
+    },
+    tonnage:{
+      match:/^\d+(\.\d{1,3})?$/,
+      tips:'请输入数值且最多三位小数的数值'
+    },
+    mile:{
+      match:/^\d+(\.\d{1,1})?$/,
+      tips:'请输入数值且最多一位小数的数值'
+    }
+  }
 }

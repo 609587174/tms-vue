@@ -71,13 +71,19 @@
                 </div>
                 <div v-else>
                   <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                  <span v-else>{{scope.row[item.param]}}</span>
+                  <span v-else>
+                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                    {{scope.row[item.param]}}
+                  </span>
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="操作" align="center" width="100" fixed="right">
+            <el-table-column label="操作" align="center" width="140" fixed="right">
               <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                <div v-if="scope.row.is_adjust.key==='no'">
+                  <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                </div>
               </template>
             </el-table-column>
           </el-table>
@@ -90,13 +96,18 @@
       </el-tab-pane>
       <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
     </el-tabs>
+    <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
   </div>
 </template>
 <script>
+import cashCostAdjustmentDialog from '@/components/statistics/cashCostAdjustmentDialog';
 export default {
   name: 'cashCostList',
   computed: {
 
+  },
+  components: {
+    cashCostAdjustmentDialog: cashCostAdjustmentDialog
   },
   activated: function() {
     this.activeName = 'cashCost';
@@ -120,7 +131,7 @@ export default {
       searchFilters: {
         cost_type: '',
         is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
-        is_travel:'',
+        is_travel: '',
         keyword: '',
         field: 'plate_number',
       },
@@ -158,7 +169,9 @@ export default {
       }, {
         title: '费用时间',
         param: 'cost_date',
-        width: '180'
+        width: '180',
+        isAdjust: true,
+        adjustParam: 'cost_date'
       }, {
         title: '费用类型',
         param: 'cost_type',
@@ -195,8 +208,18 @@ export default {
         title: '添加时间',
         param: 'created_at',
         width: '180'
+      },{
+        title: '调账备注',
+        param: 'remark_adjust',
+        width: '180'
+      },{
+        title: '调账时间',
+        param: 'adjust_time',
+        width: '180'
       }],
-      tableData: []
+      tableData: [],
+      accountAdjustIsShow: false, //调账弹窗
+      adjustRow: {}, //调账信息
     }
   },
   methods: {
@@ -204,6 +227,17 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    accountAdjust(row) {
+      this.accountAdjustIsShow = true;
+      this.adjustRow = row;
     },
     importData() {
       this.$router.push({ path: `/statistics/costManage/cashCostManage/importCashCost` });

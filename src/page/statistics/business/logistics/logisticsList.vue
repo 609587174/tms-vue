@@ -57,36 +57,50 @@
             </div>
             <div v-else>
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
-              <span v-else>{{scope.row[item.param]}}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="运费合计" align="center" width="100" fixed="right">
-          <template slot-scope="scope">
-            <div>{{scope.row.waiting_charges}}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="100" fixed="right">
-          <template slot-scope="scope">
-            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
+              <span v-else>
+                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+            {{scope.row[item.param]}}
+            </span>
     </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-      </el-pagination>
-    </div>
-    <!--       </el-tab-pane>
+    </template>
+    </el-table-column>
+    <el-table-column label="运费合计" align="center" width="100" fixed="right">
+      <template slot-scope="scope">
+        <div>
+          <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_adjust}}</span></div>
+          {{scope.row.waiting_charges}}
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column label="操作" align="center" width="140" fixed="right">
+      <template slot-scope="scope">
+        <div v-if="scope.row.is_adjust.key==='no'">
+          <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+          <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+        </div>
+      </template>
+    </el-table-column>
+    </el-table>
+    <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
+  </div>
+  <div class="page-list text-center">
+    <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+    </el-pagination>
+  </div>
+  <!--       </el-tab-pane>
     </el-tabs> -->
+  <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
   </div>
 </template>
 <script>
+import logisticsAdjustmentDialog from '@/components/statistics/logisticsAdjustmentDialog';
 export default {
   name: 'logisticsList',
   computed: {
 
+  },
+  components: {
+    logisticsAdjustmentDialog: logisticsAdjustmentDialog
   },
   activated: function() {
     this.activeName = 'logistics';
@@ -125,86 +139,147 @@ export default {
         ]
       },
       thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        },
+        //  {
+        //   title: '业务单号',
+        //   param: 'order',
+        //   width: ''
+        // },
+        {
+          title: '托运方',
+          param: 'company',
+          width: '200',
+          isAdjust: true,
+          adjustParam: 'company_adjust'
+        }, {
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        }, {
+          title: '实际液厂',
+          param: 'fluid',
+          width: ''
+        }, {
+          title: '卸货站',
+          param: 'station',
+          width: '200'
+        }, {
+          title: '计划装车时间',
+          param: 'plan_time',
+          width: '180'
+        }, {
+          title: '实际装车时间',
+          param: 'activate_start',
+          width: '180'
+        }, {
+          title: '实际离站时间',
+          param: 'activate_end',
+          width: '180'
+        }, {
+          title: '装车吨位',
+          param: 'loading_quantity',
+          width: ''
+        }, {
+          title: '实收吨位',
+          param: 'actual_quantity',
+          width: ''
+        }, {
+          title: '亏吨',
+          param: 'deficiency',
+          width: ''
+        }, {
+          title: '核算吨位',
+          param: 'check_quantity',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'check_quantity_dvalue'
+        }, {
+          title: '标准里程',
+          param: 'stand_mile',
+          width: '',
+          isAdjust: true,
+          adjustParam: 'stand_mile_dvalue'
+        }, {
+          title: '实际里程',
+          param: 'actual_mile',
+          width: ''
+        }, {
+          title: '起步价',
+          param: 'label_price',
+          width: ''
+        }, {
+          title: '运费费率',
+          param: 'freight_value',
+          width: ''
+        }, {
+          title: '运费金额',
+          param: 'change_value',
+          width: ''
+        }, {
+          title: '卸车待时金额',
+          param: 'waiting_price',
+          width: ''
+        }, {
+          title: '调账备注',
+          param: 'remark_adjust',
+          width: '180'
+        }, {
+          title: '调账时间',
+          param: 'adjust_time',
+          width: '180'
+        }
+      ],
+      tableData: {
+        // data: {
+        //   results: [{
+        //     id: '0001 d9eb - dc51 - 49e d - 871 a - 6e9 e0f88d362',
+        //     is_reconciliation: {
+        //       key: 'finished',
+        //       verbose: '已对账'
+        //     },
+        //     created_at: '2018 - 06 - 14 11: 54: 42',
+        //     updated_at: '2018 - 06 - 14 11: 54: 51',
+        //     created_timestamp: '2131231',
+        //     is_deleted: 0,
+        //     waybill: 'T2018061300001',
+        //     fluid: '大叔大婶多',
+        //     carrier: '大叔大婶多',
+        //     station: '大萨达',
+        //     waybill_id: '10 dffa689143453fa87f7b4531467f63',
+        //     active_time: '2018 - 06 - 14 11: 55: 27',
+        //     leave_time: '2018 - 06 - 27 11: 55: 32',
+        //     plan_tonnage: 21.000,
+        //     actual_quantity: 21,
+        //     deficiency: 21,
+        //     deficiency_standard: 21,
+        //     check_quantity: 21,
+        //     stand_mile: 321.0,
+        //     initial_price: 231.00,
+        //     change_rate: 32.00,
+        //     difference_value: 312.00,
+        //     freight_value: 321.00,
+        //     waiting_price: 321,
+        //     waiting_charges: 3212,
+        //     unit_price: 321.000,
+        //     plan_arrive_time: '2018 - 06 - 14 11: 55: 58',
+        //     free_hour: 23.00,
+        //     overtime_price: 12.00,
+        //     plate_number: 'a1321',
+        //     company: '2 becdc62 - 01 ba - 4 fe0 - 8e f1 - 0 d31c4a34d95',
+        //     company_adjust: '啦啦啦', //托运方
+        //     check_quantity_adjust: 15.33, //核算吨位
+        //     stand_mile_adjust: 555.3, //标准里程
+        //     waiting_charges_adjust: 2333, //运费合计
+        //   }]
+        // }
+
       },
-      //  {
-      //   title: '业务单号',
-      //   param: 'order',
-      //   width: ''
-      // },
-      {
-        title: '托运方',
-        param: 'company',
-        width: '200'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '实际液厂',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '卸货站',
-        param: 'station',
-        width: '200'
-      }, {
-        title: '计划装车时间',
-        param: 'plan_time',
-        width: '180'
-      }, {
-        title: '实际装车时间',
-        param: 'activate_start',
-        width: '180'
-      }, {
-        title: '实际离站时间',
-        param: 'activate_end',
-        width: '180'
-      }, {
-        title: '装车吨位',
-        param: 'loading_quantity',
-        width: ''
-      }, {
-        title: '实收吨位',
-        param: 'actual_quantity',
-        width: ''
-      }, {
-        title: '亏吨',
-        param: 'deficiency',
-        width: ''
-      }, {
-        title: '核算吨位',
-        param: 'check_quantity',
-        width: ''
-      }, {
-        title: '标准里程',
-        param: 'stand_mile',
-        width: ''
-      }, {
-        title: '实际里程',
-        param: 'actual_mile',
-        width: ''
-      },{
-        title: '起步价',
-        param: 'label_price',
-        width: ''
-      }, {
-        title: '运费费率',
-        param: 'freight_value',
-        width: ''
-      }, {
-        title: '运费金额',
-        param: 'change_value',
-        width: ''
-      }, {
-        title: '卸车待时金额',
-        param: 'waiting_price',
-        width: ''
-      }],
-      tableData: [],
-      exportPostData: {} //导出筛选
+      exportPostData: {}, //导出筛选
+      accountAdjustIsShow: false, //调账弹窗
+      adjustRow: {}, //调账信息
     }
   },
   methods: {
@@ -212,6 +287,17 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    accountAdjust(row) {
+      this.accountAdjustIsShow = true;
+      this.adjustRow = row;
     },
     clicktabs: function(targetName) {
       if (targetName.name == 'logistics') {
@@ -256,6 +342,19 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
           for (let i in this.tableData.data.results) {
+            this.tableData.data.results[i].check_quantity_dvalue = '';
+            this.tableData.data.results[i].stand_mile_dvalue = '';
+            this.tableData.data.results[i].waiting_charges_dvalue = '';
+            if (this.tableData.data.results[i].check_quantity_adjust) {
+              this.tableData.data.results[i].check_quantity_dvalue = (parseFloat(this.tableData.data.results[i].check_quantity_adjust) * 1000 - parseFloat(this.tableData.data.results[i].check_quantity) * 1000) / 1000;
+            }
+            if (this.tableData.data.results[i].stand_mile_adjust) {
+              this.tableData.data.results[i].stand_mile_dvalue = (parseFloat(this.tableData.data.results[i].stand_mile_adjust) * 10 - parseFloat(this.tableData.data.results[i].stand_mile) * 10) / 10;
+            }
+            if (this.tableData.data.results[i].waiting_charges_adjust) {
+              this.tableData.data.results[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.results[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.results[i].waiting_charges) * 100) / 100;
+            }
+            console.log('this.tableData.data.results', this.tableData.data.results)
             this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }
           this.pageData.totalCount = results.data.data.count;
@@ -267,7 +366,7 @@ export default {
     }
   },
   created() {
-    this.getList(this.statusActive);
+    this.getList();
   }
 
 }

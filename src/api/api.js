@@ -2010,8 +2010,46 @@ const api = {
 
     }
   },
+  getRouteOfDay:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "加载当天车辆轨迹接口",
+    param: {
 
+    }
+  },
+  loadWayBillOfTruck:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "单个车下所有运单",
+    param: {
 
+    }
+  },
+  loadCoordinateOfWaybill:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "加载运单的轨迹",
+    param: {
+
+    }
+  },
+  loadTripCoordinate:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "加载液厂和站点轨迹",
+    param: {
+
+    }
+  },
+  loadAllTrip:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "加载所有液厂和站点",
+    param: {
+
+    }
+  },
 
 }
 

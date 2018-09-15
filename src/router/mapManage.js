@@ -32,6 +32,22 @@ export default {
         title: '轨迹回放',
       },
       component: (resolve) => require(['../page/map/carMonitor/routePlayback'], resolve),
+    }, {
+      path: 'overview',
+      name: 'overview',
+      meta: {
+        isVerificationL: false,
+        title: '地图预览',
+      },
+      component: (resolve) => require(['../page/map/mapDemo/overview'], resolve),
+    }, {
+      path: 'routePlaybackDetail/:id',
+      name: 'routePlaybackDetail',
+      meta: {
+        isVerificationL: false,
+        title: '地图轨迹',
+      },
+      component: (resolve) => require(['../page/map/mapDemo/routePlaybackDetail'], resolve),
     }]
   }, {
     path: 'landmark',

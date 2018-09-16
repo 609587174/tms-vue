@@ -15,6 +15,10 @@ export default {
       resultsData: '',
       infoWin: '',
       tableDom: '',
+      fluidList: [],
+      fluidLayer: '',
+      siteList: [],
+      siteLayer: '',
     }
   },
   methods: {
@@ -34,7 +38,43 @@ export default {
         blendMode: 'lighter',
         type: 'line',
         shape: 'line',
-        fitView: true
+        fitView: true,
+      });
+
+      this.fluidLayer = Loca.visualLayer({
+        container: this.map,
+        blendMode: 'lighter',
+        type: 'point',
+        shape: 'circle'
+      });
+
+      this.siteLayer = Loca.visualLayer({
+        container: this.map,
+        blendMode: 'lighter',
+        type: 'point',
+        shape: 'circle'
+      });
+
+      this.fluidLayer.setOptions({
+        style: {
+          // 默认半径单位为像素
+          radius: 1,
+          fill: '#f90d4f', //红色
+          lineWidth: 0.5,
+          stroke: '#f90d4f',
+          opacity: 0.8,
+        }
+      });
+
+      this.siteLayer.setOptions({
+        style: {
+          // 默认半径单位为像素
+          radius: 1,
+          fill: '#f9f10b', //黄色
+          lineWidth: 0.5,
+          stroke: '#f9f10b',
+          opacity: 0.8,
+        }
       });
 
       this.layer.on('mousemove', (ev) => {
@@ -122,8 +162,16 @@ export default {
           console.log('results', results);
           this.resultsData = results.data.msg;
           this.resultsData = this.resultsData.map(item => {
+            this.fluidList.push({
+              line: item.coord.line[1],
+            });
+            this.siteList.push({
+              line: item.coord.line[0],
+            });
             return item.coord;
           })
+
+          console.log('this.siteList', this.siteList, this.fluidList)
           resolve(results);
         }).catch(err => {
           this.pageLoading = false;
@@ -135,7 +183,16 @@ export default {
       this.layer.setData(this.resultsData, {
         lnglat: 'line'
       });
+      this.fluidLayer.setData(this.fluidList, {
+        lnglat: 'line'
+      });
+      this.siteLayer.setData(this.siteList, {
+        lnglat: 'line'
+      });
+
       this.layer.render();
+      this.fluidLayer.render();
+      this.siteLayer.render();
     }
   },
   created() {

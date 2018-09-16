@@ -48,6 +48,14 @@ export default {
         title: '地图轨迹',
       },
       component: (resolve) => require(['../page/map/mapDemo/routePlaybackDetail'], resolve),
+    }, {
+      path: 'routePlaybackOfStandard',
+      name: 'routePlaybackOfStandard',
+      meta: {
+        isVerificationL: false,
+        title: '地图轨迹',
+      },
+      component: (resolve) => require(['../page/map/mapDemo/routePlaybackOfStandard'], resolve),
     }]
   }, {
     path: 'landmark',

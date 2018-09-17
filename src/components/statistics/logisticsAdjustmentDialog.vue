@@ -33,7 +33,7 @@
           <el-form-item label="标准里程:" prop="stand_mile_adjust">
             <el-row>
               <el-col :span="8">
-                <div class="dialog-row-font">{{adjustRow.stand_mile}} 元</div>
+                <div class="dialog-row-font">{{adjustRow.stand_mile}} 公里</div>
               </el-col>
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.stand_mile_adjust" @change="isValue('standMile')"></el-input>
@@ -163,8 +163,10 @@ export default {
           this.differenceValue.stand_mile = (parseFloat(this.formRules.stand_mile_adjust) * 10 - parseFloat(this.adjustRow.stand_mile) * 10) / 10;
         }
       } else if (type === 'waitingCharges') {
-        if (isNaN(this.formRules.waiting_charges_adjust) || this.$store.state.common.regular.price.match.test(this.formRules.waiting_charges_adjust) || !this.formRules.waiting_charges_adjust) {
+
+        if (isNaN(this.formRules.waiting_charges_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.waiting_charges_adjust) || !this.formRules.waiting_charges_adjust) {
           this.differenceValue.waiting_charges = '';
+          console.log('运费',this.formRules.waiting_charges_adjust)
         } else {
           this.differenceValue.waiting_charges = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
         }
@@ -227,6 +229,7 @@ export default {
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　
+      this.submitBtn.isDisabled = true;
       this.differenceValue = { //差价
         check_quantity: '', //核算吨位
         stand_mile: '', //标准里程

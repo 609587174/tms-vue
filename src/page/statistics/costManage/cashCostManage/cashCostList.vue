@@ -72,7 +72,7 @@
                 <div v-else>
                   <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
                   <span v-else>
-                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
                     {{scope.row[item.param]}}
                   </span>
                 </div>
@@ -171,7 +171,7 @@ export default {
         param: 'cost_date',
         width: '180',
         isAdjust: true,
-        adjustParam: 'cost_date'
+        adjustParam: 'cost_date_adjust'
       }, {
         title: '费用类型',
         param: 'cost_type',

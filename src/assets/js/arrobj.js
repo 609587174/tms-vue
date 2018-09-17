@@ -621,3 +621,18 @@ export const format = function() {
     return fmt;
   }
 }
+/**
+ * [tab 日期比较大小]
+ * @param  {[type]} date1 [description]
+ * @param  {[type]} date2 [description]
+ * @return {[type]}       [description]
+ */
+export const compareDate = function (date1,date2){
+    var oDate1 = new Date(date1);
+    var oDate2 = new Date(date2);
+    if(oDate1.getTime() > oDate2.getTime()){
+        return false;
+    } else {
+        return true
+    }
+}

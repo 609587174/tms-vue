@@ -96,7 +96,7 @@ export default {
           postData.id = this.adjustRow.id;
           let times = new Date();
           postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          postData.is_adjust = 'no';
+          postData.is_adjust = 'yes';
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateCashCostStatistic', postData).then((results) => {
             this.submitBtn = {
@@ -133,7 +133,8 @@ export default {
         cost_date_adjust: '', //费用时间
         adjust_time: '', //调账时间
         remark_adjust: '', //调账备注
-      };　　　　　　　　
+      };　
+      this.submitBtn.isDisabled = true;　　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
       }　　

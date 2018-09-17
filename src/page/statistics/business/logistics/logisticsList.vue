@@ -58,7 +58,7 @@
             <div v-else>
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
               <span v-else>
-                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
             {{scope.row[item.param]}}
             </span>
     </div>
@@ -67,7 +67,7 @@
     <el-table-column label="运费合计" align="center" width="100" fixed="right">
       <template slot-scope="scope">
         <div>
-          <div class="adjust" v-if="scope.row.waiting_charges_adjust"><span>{{scope.row.waiting_charges_adjust}}</span></div>
+          <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
           {{scope.row.waiting_charges}}
         </div>
       </template>
@@ -354,7 +354,6 @@ export default {
             if (this.tableData.data.results[i].waiting_charges_adjust) {
               this.tableData.data.results[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.results[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.results[i].waiting_charges) * 100) / 100;
             }
-            console.log('this.tableData.data.results', this.tableData.data.results)
             this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }
           this.pageData.totalCount = results.data.data.count;

@@ -7,6 +7,7 @@ import clientManage from './clientManage'
 import setting from './setting'
 import statistics from './statistics'
 import news from './news'
+import arap from './arap'
 export default [{
   path: '',
   name: 'index',
@@ -24,6 +25,7 @@ export default [{
     clientManage,
     statistics,
     setting,
-    news
+    news,
+    arap
   ]
 }];

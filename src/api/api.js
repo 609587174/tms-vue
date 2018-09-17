@@ -9,6 +9,38 @@
  */
 
 const api = {
+  updateShipperReceivableManage: {
+    url: '/statistic/carrier-back-m/:id/',
+    method: 'patch',
+    desc: '更新托运方回款',
+    param: {
+
+    }
+  },
+  addShipperReceivableManage: {
+    url: '/statistic/carrier-back-m/',
+    method: 'post',
+    desc: '托运方回款新增',
+    param: {
+
+    }
+  },
+  getShipperReceivableManageList: {
+    url: '/statistic/carrier-back-m/',
+    method: 'get',
+    desc: '托运方回款列表',
+    param: {
+
+    }
+  },
+  getShipperReceivableList: {
+    url: '/statistic/inout-customer-pay/',
+    method: 'get',
+    desc: '托运方应收列表',
+    param: {
+
+    }
+  },
   unloadBillMatch: {
     url: '/order/section-trips/match-business-order/',
     method: 'post',

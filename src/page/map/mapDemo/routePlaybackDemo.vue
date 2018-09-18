@@ -1,10 +1,13 @@
 <template>
   <div class="out-contain">
-    <mapSearchFilter @chooseCar="chooseCar" @searchAndRender="searchAndRender" :searchFilters="searchFilters" :searchBtn.sync="searchBtn"></mapSearchFilter>
     <div class="map-loading" v-loading="pageLoading"></div>
     <div id="map-container"></div>
     <div class="bottom-operate">
       <div class="display-distance">{{distanceMile}}公里</div>
+      <div class="landmark-operate">
+        <el-button type="success" size="mini" :loading="getLandmarkBtn.isLoading" :isDisabled="getLandmarkBtn.isDisabled" @click="checkLandmark()" v-if="!isNeedGetLandmark && resultPath.length">{{getLandmarkBtn.text}}</el-button>
+        <el-button type="primary" size="mini" @click="hideLandmark()" v-if="isNeedGetLandmark">隐藏地标</el-button>
+      </div>
       <div class="startAndPause text-center"><img v-show="!isDisplay" @click="resumeDriving" src="@/assets/img/play.png" /><img v-show="isDisplay" @click="pauseDriving" src="@/assets/img/suspend.png" /></div>
       <div class="speed-control">
         <input class="speedRange" type="range" min="1000" max="200000" step="5000" v-model="speed" @change="changeSpeed">
@@ -14,14 +17,11 @@
   </div>
 </template>
 <script>
-import mapSearchFilter from '@/components/map/mapSearchFilter';
-import sideAlertTraggle from '@/components/map/sideAlertTraggle';
 import axios from 'axios';
 export default {
-  name: 'routePlaybackDetail',
+  name: 'routePlaybackDemo',
   components: {
-    mapSearchFilter,
-    sideAlertTraggle,
+
   },
   computed: {
     id: function() {
@@ -32,12 +32,29 @@ export default {
     return {
       pageLoading: false,
       map: '', //地图实列
-
+      markerList: [], //标注列表实例
+      cluster: '', //点聚合实例
       pathSimplifierIns: '', //轨迹实列
+      pathSimplifierIns_1: '', //轨迹实列
+      pathSimplifierIns_2: '', //轨迹实列
+      pathSimplifierIns_3: '', //轨迹实列
+      pathSimplifierIns_4: '', //轨迹实列
+      pathSimplifierIns_5: '', //轨迹实列
+      pathSimplifierIns_6: '', //轨迹实列
+      pathSimplifierIns_7: '', //轨迹实列
+      pathSimplifierIns_8: '', //轨迹实列
+      pathSimplifierIns_9: '', //轨迹实列
+      pathSimplifierIns_10: '', //轨迹实列
       infoWindow: '', //简单信息窗体实列
       totalDataResult: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后的总数据集合
+      dataResult: [], //接口请求返回坐标点数据，
       resultPath: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后经纬度集合
+      path: [], //接口请求返回数据，过滤后只包含经纬度信息。
       pathNavigatorStyle: {}, //巡航样式
+      totalPage: { //获取轨迹点数据分页信息
+        currentPage: 1,
+        pageSize: 1000,
+      },
       navg1: '', //巡航
       distanceMile: 0, //总里程
       speed: 0, //巡航的展示速度
@@ -47,57 +64,24 @@ export default {
       deviceDetail: '', //设备详情，获取设备详情是为了页面初始化的时候，获取绑定车辆信息carNumber
       carNumber: '', //绑定车辆信息
       masterDriver: '',
-      searchFilters: {
-        choosedCar: '', //筛选所选择的车辆
-        choosedTime: [new Date(new Date() - 24 * 3600 * 1000 * 3), new Date()], //筛选所选择的时间段，巨坑，choosedTime初始化不能使用变量。可能是用法不正确。
-        optionValue: 'time',
-        orderValue: '',
-      },
       choosedDeviceId: '', //筛选所选择的车辆所绑定的设备id，所有轨迹信息是通过设备id来获取
 
-      searchBtn: {
-        loading: false,
-        text: '搜索',
+
+      isDisplay: false,
+      landmarkList: [], //地标列表
+      isGetLandmark: false,
+      isNeedGetLandmark: false,
+      getLandmarkBtn: {
+        text: '查看地标',
+        isLoading: false,
         isDisabled: false,
       },
-      isDisplay: false,
-
+      mapCenter: '',
+      distance: '',
     }
   },
   methods: {
-    dateToStr: function(date) {
-      let dateDetail = this.pbFunc.getDateDetail(date);
-      let str = '';
-      str = dateDetail.year + '-' + dateDetail.month + '-' + dateDetail.day + ' ' + dateDetail.hour + ':' + dateDetail.minute + ':' + dateDetail.second;
-      return str;
-    },
-    chooseCar: function(data) {
-      console.log('data', data);
-      this.choosedDeviceId = data.choosedDeviceId;
-      this.carNumber = data.carNumber;
-      this.getDeviceDetail();
-    },
-    /* 页面初始化时获取设备详细信息，为了获取车牌号。carNumber */
-    getDeviceDetail: function(id) {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          id: this.choosedDeviceId
-        };
-        this.$$http('getDeviceDetail', postData).then((results) => {
-          if (results.data && results.data.code == 0) {
-            this.deviceDetail = results.data.data;
-            this.carNumber = this.deviceDetail.tractor.plate_number;
-            this.masterDriver = (this.deviceDetail.master_driver && this.deviceDetail.master_driver.name) ? this.deviceDetail.master_driver.name : '无';
-            this.searchFilters.choosedCar = this.deviceDetail.tractor.id;
-            resolve(results)
-          } else {
-            reject(results);
-          }
-        }).catch((err) => {
-          reject(err);
-        })
-      })
-    },
+
     /* 触发搜索时，需要初始化一些数据 */
     initData: function() {
       if (this.navg1) {
@@ -105,21 +89,28 @@ export default {
       }
       this.totalDataResult = [];
       this.resultPath = [];
+      this.isGetLandmark = false;
+
+      this.totalPage = {
+        currentPage: 1,
+        pageSize: 1000,
+      };
+
+      //this.pageLoading = true;
+      this.offlineAndstopLoading = true;
+
     },
 
     loadCoordinateOfWaybill: function() {
+      const fluidName = '中石化天津';
+      const siteName = '中弘诸城京博';
+      const num = 8;
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
-        axios.get(`http://namenode:8080/api/v1/loadCoordinateOfWaybill?waybill_number=${this.searchFilters.orderValue}`).then(results => {
+        axios.get(`http://namenode:8080/api/v1/loadnewcoord?fluid_name=${fluidName}&station_name=${siteName}&number=${num}`).then(results => {
           this.pageLoading = false;
           console.log('results', results);
           if (results.data && results.data.code == 200) {
-
-            let resultsData = results.data.msg[0].coord_list;
-            this.totalDataResult = resultsData;
-            this.resultPath = this.totalDataResult.map(item => {
-              return [item.longitude, item.latitude];
-            })
             resolve(results);
           } else {
             reject(results);
@@ -131,51 +122,12 @@ export default {
       })
 
     },
-    loadCoordinateOfInterval: function() {
-      console.log('this.searchFilters', this.searchFilters);
-      return new Promise((resolve, reject) => {
-        this.pageLoading = true;
-        const startTime = this.dateToStr(new Date(this.searchFilters.choosedTime[0]));
-        const endTime = this.dateToStr(new Date(this.searchFilters.choosedTime[1]));
-        axios.get(`http://namenode:8080/api/v1/loadCoordinateOfInterval?start_time=${startTime}&end_time=${endTime}&device_id=${this.choosedDeviceId}`).then(results => {
-          console.log('loadCoordinateOfInterval', results);
-          this.pageLoading = false;
-          if (results.data && results.data.code == 200) {
 
-            this.totalDataResult = results.data.msg.coord;
-            if (this.totalDataResult.length) {
-              this.resultPath = this.totalDataResult.map(item => {
-                return [item.longitude, item.latitude];
-              })
-            }
-
-            resolve(results);
-          } else {
-            reject(results);
-          }
-        }).catch(err => {
-          this.pageLoading = false;
-          reject(err);
-        })
-      })
-    },
     searchAndRender: function() {
       this.initData();
-      if (this.searchFilters.optionValue === 'order') {
-        if (this.searchFilters.orderValue) {
-
-          this.loadCoordinateOfWaybill().then(() => {
-            this.renderPath();
-          })
-        } else {
-          this.$message.error('请选择订单');
-        }
-      } else {
-        this.loadCoordinateOfInterval().then(() => {
-          this.renderPath();
-        })
-      }
-
+      this.loadCoordinateOfWaybill().then(() => {
+        this.renderPath();
+      })
     },
 
     //初始化轨迹
@@ -186,7 +138,6 @@ export default {
         map: this.map, //所属的地图实例
 
         getPath: function(pathData, pathIndex) {
-
           return pathData.path;
         },
         getHoverTitle: function(pathData, pathIndex, pointIndex) {
@@ -195,12 +146,11 @@ export default {
 
         renderOptions: {
 
-          renderAllPointsIfNumberBelow: 1000, //绘制路线节点，如不需要可设置为-1
+          renderAllPointsIfNumberBelow: -1, //绘制路线节点，如不需要可设置为-1
 
           pathLineStyle: {
             strokeStyle: 'rgb(255,0,0)',
-            lineWidth: 5,
-            dirArrowStyle: true,
+            lineWidth: 4,
           },
         },
 
@@ -269,6 +219,42 @@ export default {
     initPath: function() {
       AMapUI.loadUI(['misc/PathSimplifier', 'overlay/SimpleInfoWindow', 'misc/MarkerList', 'overlay/SimpleMarker'], (PathSimplifier, SimpleInfoWindow, MarkerList, SimpleMarker) => {
 
+        //初始化起点icon
+        this.startMarker = new SimpleMarker({
+          map: this.map,
+          iconStyle: {
+            src: require('../../../assets/img/lng_2.png'),
+            style: {
+              width: '20px',
+              height: '20px',
+            },
+            visible: true,
+          },
+          offset: new AMap.Pixel(-9, -24),
+          label: {
+            content: '中石化天津',
+            offset: new AMap.Pixel(30, 0)
+          }
+        });
+
+        //初始化终点icon
+        this.endMarker = new SimpleMarker({
+          map: this.map,
+          iconStyle: {
+            src: require('../../../assets/img/l_2.png'),
+            style: {
+              width: '20px',
+              height: '20px',
+            }
+          },
+          offset: new AMap.Pixel(-10, -26),
+          visible: true,
+          label: {
+            content: '中弘诸城京博',
+            offset: new AMap.Pixel(30, 0)
+          }
+        });
+
         if (!PathSimplifier.supportCanvas) {
           alert('当前环境不支持 Canvas！');
           return;
@@ -278,40 +264,25 @@ export default {
           infoTitle: '<div class="fs-16 text-center">点位置信息</div>',
           infoBody: ''
         });
-        //初始化起点icon
-        this.startMarker = new SimpleMarker({
-          map: this.map,
-          iconStyle: {
-            src: require('../../../assets/img/origin.png'),
-            style: {
-              width: '20px',
-              height: '25px',
-            },
-            visible: false,
-          },
-          offset: new AMap.Pixel(-9, -24),
-        });
-        //初始化终点icon
-        this.endMarker = new SimpleMarker({
-          map: this.map,
-          iconStyle: {
-            src: require('../../../assets/img/finish.png'),
-            style: {
-              width: '22px',
-              height: '27px',
-            }
-          },
-          offset: new AMap.Pixel(-10, -26),
-          visible: false,
-        });
         //初始化轨迹
         this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_1 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_2 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_3 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_4 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_5 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_6 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_7 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_8 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_9 = this.initPathSimplifier(PathSimplifier);
+        this.pathSimplifierIns_10 = this.initPathSimplifier(PathSimplifier);
         //轨迹点添加事件
         this.pathSimplifierIns.on('pointMouseover pointClick', (e, info) => {
           this.pathSimplifierEventCallback(info);
         });
         //初始化巡航样式
         this.pathNavigatorStyle = this.initPathNavigatorStyle(PathSimplifier);
+
       });
 
     },
@@ -339,7 +310,6 @@ export default {
       }
 
     },
-
     renderPath: function() {
       let allowTime = 20;
       console.log('this.resultPath', this.resultPath);
@@ -374,8 +344,21 @@ export default {
         this.startMarker.show();
         this.startMarker.setPosition(this.resultPath[0]);
 
+
         /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
         this.navg1 = this.pathSimplifierIns.createPathNavigator(0, this.pathNavigatorStyle);
+
+        /*获取查看地标的数据*/
+        this.mapCenter = this.map.getCenter();
+        let bounds = this.map.getBounds();
+        let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
+        let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
+        this.distance = Math.floor(lnglat1.distance(lnglat2));
+        if (this.isNeedGetLandmark) {
+          this.getLandMarkList().then(() => {
+            this.renderMarker();
+          });
+        }
 
         if (this.resultPath.length) {
           /* 计算里程
@@ -410,6 +393,7 @@ export default {
       }
 
     },
+
     pauseDriving: function() { //暂停
       this.isDisplay = false;
       this.navg1.pause();
@@ -448,12 +432,61 @@ export default {
     this.map = new AMap.Map('map-container', {
       zoom: 5
     });
-    this.choosedDeviceId = this.id;
     this.initPath();
-    this.getDeviceDetail();
-    this.loadCoordinateOfInterval().then(() => {
-      this.renderPath();
+
+    this.loadCoordinateOfWaybill().then(results => {
+      console.log('results', results);
+      //红，绿，蓝
+      let pathLineStyleArray = ['#47D2D0', '#4A9BF8', '#FF6B6A', '#FF6B6A', 'rgb(19,246,46)', 'rgb(135,12,205)', 'rgb(24,194,230)', 'rgb(146,9,243)']
+      if (results.data && results.data.code == 200) {
+        const resultsData = results.data.msg;
+        resultsData.map((item, index) => {
+          if (index != 2) {
+
+            const resultsArray = Object.values(item)[0][0].coord_list;
+            const resultsPathArray = resultsArray.map(pathitem => {
+              return [pathitem.longitude, pathitem.latitude];
+            })
+            const pathSimplifierInsStr = 'pathSimplifierIns_' + (index + 1);
+
+            let renderOptions = this[pathSimplifierInsStr].getRenderOptions();
+            let pathLineStyle = renderOptions.pathLineStyle;
+            pathLineStyle.strokeStyle = pathLineStyleArray[index];
+            this[pathSimplifierInsStr].setData([{
+              name: '路线2',
+              zIndex: index,
+              path: resultsPathArray
+            }])
+
+            if (index == 3) {
+              let endPoint = resultsPathArray.length - 2;
+              console.log('resultsPathArray[endPoint]', resultsPathArray[endPoint], resultsPathArray)
+              this.startMarker.setPosition(resultsPathArray[endPoint]);
+              this.endMarker.setPosition(resultsPathArray[0]);
+            }
+          }
+
+
+
+
+        })
+      }
     })
+
+
+    setTimeout(() => {
+
+
+      /*this.pathSimplifierIns_3.setData([{
+        name: '路线2',
+        zIndex: 0,
+        path: routeList_3_array
+      }]);*/
+
+
+    }, 2000)
+
+
 
   },
   beforeDestroy() {
@@ -470,7 +503,7 @@ export default {
   position: relative;
   #map-container {
     width: 100%;
-    height: 700px;
+    height: 900px;
     .amap-logo {
       right: 0px !important;
       left: auto !important;

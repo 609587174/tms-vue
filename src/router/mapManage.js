@@ -53,7 +53,7 @@ export default {
       name: 'routePlaybackOfStandard',
       meta: {
         isVerificationL: false,
-        title: '地图轨迹',
+        title: '液厂-站点轨迹',
       },
       component: (resolve) => require(['../page/map/mapDemo/routePlaybackOfStandard'], resolve),
     }]

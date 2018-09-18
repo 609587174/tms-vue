@@ -1,6 +1,30 @@
 <template>
   <div>
-    <div id="container" class="container"></div>
+    <div class="tab-screen overview">
+      <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+        <el-row :gutter="20">
+          <el-col :span="6">
+            <el-form-item label="液厂:">
+              <el-select v-model="searchFilters.fluid" multiple clearable placeholder="请选择">
+                <el-option v-for="(item,key) in fluidSelectList" :key="key" :label="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="站点:">
+              <el-select v-model="searchFilters.site" multiple clearable placeholder="请选择">
+                <el-option v-for="(item,key) in siteSelectList" :key="key" :label="item" :value="item"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-button type="primary" :isDisabled="searchBtn.loading" :isLoading="searchBtn.loading" @click="startSearch">搜索</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div class="map-loading" v-loading="pageLoading"></div>
+    </div>
+    <div id="overview-container" class="overview-container"></div>
   </div>
 </template>
 <script>
@@ -19,15 +43,31 @@ export default {
       fluidLayer: '',
       siteList: [],
       siteLayer: '',
+      searchFilters: {
+        fluid: '',
+        site: '',
+      },
+      fluidSelectList: [],
+      siteSelectList: [],
+      searchBtn: {
+        loading: false,
+      }
+
     }
   },
   methods: {
+    getFluidAndSiteList() {
+      axios.get(`http://namenode:8080/api/v1/loadlist`).then(results => {
+        if (results.data && results.data.msg) {
+          this.fluidSelectList = results.data.msg.fluids;
+          this.siteSelectList = results.data.msg.stations;
+        }
+      })
+    },
 
     initMap() {
-      this.map = Loca.create('container', {
+      this.map = Loca.create('overview-container', {
         mapStyle: 'amap://styles/midnight',
-        center: [108.149185, 33.663153],
-        features: ['bg', 'road'],
         zoom: 4
       });
 
@@ -58,7 +98,7 @@ export default {
       this.fluidLayer.setOptions({
         style: {
           // 默认半径单位为像素
-          radius: 1,
+          radius: 2,
           fill: '#f90d4f', //红色
           lineWidth: 0.5,
           stroke: '#f90d4f',
@@ -98,6 +138,19 @@ export default {
 
       this.layer.on('mouseleave', (ev) => {
         this.closeInfoWin();
+      });
+
+      this.layer.on('click', (ev) => {
+        // 事件类型
+        console.log('click', ev);
+
+        const rowData = ev.rawData;
+
+        this.$router.push({
+          path: "/mapManage/carMonitor/routePlaybackOfStandard",
+          query: { fluidName: rowData.fluid_name, siteName: rowData.station_name, planId: rowData.planid }
+        });
+
       });
 
       this.layer.setOptions({
@@ -157,21 +210,31 @@ export default {
     getData() {
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
-        axios.get(`http://namenode:8080/api/v1/loadAllTrip`).then(results => {
-          this.pageLoading = false;
+        let url = 'http://namenode:8080/api/v1/loadAllTrip';
+        let fluidStr = this.searchFilters.fluid ? `fluid_name=${this.searchFilters.fluid}` : '';
+        let siteStr = this.searchFilters.site ? `station_name=${this.searchFilters.site}` : '';
+
+        let strArray = [];
+        fluidStr.length && strArray.push(fluidStr);
+        siteStr.length && strArray.push(siteStr);
+
+        url = strArray.length ? (url + '?' + strArray.join('&')) : url;
+
+        this.fluidList = [];
+        this.siteList = [];
+        axios.get(url).then(results => {
+
           console.log('results', results);
           this.resultsData = results.data.msg;
           this.resultsData = this.resultsData.map(item => {
             this.fluidList.push({
-              line: item.coord.line[1],
+              line: item.coord.line[0],
             });
             this.siteList.push({
-              line: item.coord.line[0],
+              line: item.coord.line[1],
             });
             return item.coord;
           })
-
-          console.log('this.siteList', this.siteList, this.fluidList)
           resolve(results);
         }).catch(err => {
           this.pageLoading = false;
@@ -193,14 +256,25 @@ export default {
       this.layer.render();
       this.fluidLayer.render();
       this.siteLayer.render();
-    }
+
+    },
+    startSearch() {
+      this.searchBtn.loading = true;
+      this.getData().then(() => {
+        this.pageLoading = false;
+        this.renderLayer();
+        this.searchBtn.loading = false;
+      })
+    },
   },
   created() {
+    this.getFluidAndSiteList();
     this.getData().then(() => {
       setTimeout(() => {
+        this.pageLoading = false;
         this.initMap();
         this.renderLayer();
-      }, 2000)
+      }, 500)
     });
 
   }
@@ -208,7 +282,7 @@ export default {
 
 </script>
 <style lang="less">
-#container {
+#overview-container {
   width: 100%;
   height: 800px;
 }
@@ -221,6 +295,24 @@ export default {
   tr {
     padding: 2px 0;
   }
+}
+
+.overview {
+  .el-select {
+    width: 100%;
+  }
+}
+
+.nav-tab .tab-screen {
+  padding: 10px 20px;
+  border: 1px solid #e4e7ed;
+  border-top: 0;
+  background: #fff;
+}
+
+.map-loading {
+  position: relative;
+  top: 20px;
 }
 
 </style>

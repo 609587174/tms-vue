@@ -136,6 +136,7 @@ export default {
           }
         }]
       },
+      choosedDeviceId: '',
     }
   },
   methods: {
@@ -164,7 +165,7 @@ export default {
       return new Promise((resolve, reject) => {
         this.orderLoading = true;
         //http://192.168.0.31:8011/api/v1/loadWayBillOfTruck?device_id=21847301217
-        const url = `http://namenode:8080/api/v1/loadWayBillOfTruck?device_id=${this.deviceId}`;
+        const url = `http://namenode:8080/api/v1/loadWayBillOfTruck?device_id=${this.choosedDeviceId}`;
         axios.get(url).then(results => {
           console.log('loadWayBillOfTruck', results);
           this.orderLoading = false;
@@ -183,17 +184,18 @@ export default {
       })
     },
     carChange: function() {
-      let choosedDeviceId = '';
       let carNumber = '';
       this.searchFilters.optionValue === 'order' && this.getOrderList();
       for (let i in this.carList) {
         if (this.searchFilters.choosedCar === this.carList[i].tractor.id) {
-          choosedDeviceId = this.carList[i].device_id;
+          this.choosedDeviceId = this.carList[i].device_id;
           carNumber = this.carList[i].tractor.plate_number;
           this.$emit('chooseCar', {
-            choosedDeviceId,
+            choosedDeviceId: this.choosedDeviceId,
             carNumber
           })
+          this.getOrderList();
+          this.searchFilters.orderValue = '';
           break;
         }
       }
@@ -264,6 +266,7 @@ export default {
     },
   },
   created() {
+    this.choosedDeviceId = this.deviceId;
     this.getCarList();
     this.getOrderList();
     this.timeSpacing = this.calculateTimeSpacing();

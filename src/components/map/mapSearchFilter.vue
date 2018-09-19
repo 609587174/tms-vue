@@ -161,19 +161,15 @@ export default {
       })
     },
     getOrderList: function() {
-      console.log('loadWayBillOfTruck')
       return new Promise((resolve, reject) => {
         this.orderLoading = true;
-        //http://192.168.0.31:8011/api/v1/loadWayBillOfTruck?device_id=21847301217
-        const url = `http://namenode:8080/api/v1/loadWayBillOfTruck?device_id=${this.choosedDeviceId}`;
-        axios.get(url).then(results => {
-          console.log('loadWayBillOfTruck', results);
+        this.$$http('loadWayBillOfTruck', {
+          device_id: this.choosedDeviceId,
+        }).then(results => {
           this.orderLoading = false;
-          if (results.data && results.data.code == 200) {
-            const resultsData = results.data.msg;
-            console.log('resultsData', resultsData, typeof resultsData);
+          if (results.data && results.data.code == 0) {
+            const resultsData = results.data.data;
             this.orderList = resultsData.coord_list;
-            console.log('this.orderList', this.orderList);
             resolve(results)
           } else {
             reject(results);

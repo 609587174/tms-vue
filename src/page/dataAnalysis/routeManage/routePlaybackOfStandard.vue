@@ -13,7 +13,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 export default {
   name: 'routePlaybackOfStandard',
   components: {
@@ -83,18 +82,22 @@ export default {
     loadCoordinateOfWaybill: function() {
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
-        axios.get(`http://namenode:8080/api/v1/loadTripOfPlanId?fluid_name=${this.fluidName}&station_name=${this.siteName}&planid=${this.planId}`).then(results => {
+
+        this.$$http('loadTripOfPlanId', {
+          fluid_name: this.fluidName,
+          station_name: this.siteName,
+          planid: this.planId,
+        }).then(results => {
           this.pageLoading = false;
 
-          this.totalDataResult = results.data.msg.coord;
+          if (results.data && results.data.code == 0) {
+            this.totalDataResult = results.data.data.coord;
 
-          this.carNumber = results.data.msg.truck_no;
+            this.carNumber = results.data.data.truck_no;
 
-          this.resultPath = this.totalDataResult.map(item => {
-            return item.lnglat.split(',');
-          })
-
-          if (results.data && results.data.code == 200) {
+            this.resultPath = this.totalDataResult.map(item => {
+              return item.lnglat.split(',');
+            })
             resolve(results);
           } else {
             reject(results);

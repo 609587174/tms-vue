@@ -16,7 +16,6 @@
 <script>
 import mapSearchFilter from '@/components/map/mapSearchFilter';
 import sideAlertTraggle from '@/components/map/sideAlertTraggle';
-import axios from 'axios';
 export default {
   name: 'routePlaybackDetail',
   components: {
@@ -32,7 +31,6 @@ export default {
     return {
       pageLoading: false,
       map: '', //地图实列
-
       pathSimplifierIns: '', //轨迹实列
       infoWindow: '', //简单信息窗体实列
       totalDataResult: [], //接口一次请求1000条数据，数据大的时候需要多次请求，这里是多次请求后的总数据集合
@@ -54,14 +52,12 @@ export default {
         orderValue: '',
       },
       choosedDeviceId: '', //筛选所选择的车辆所绑定的设备id，所有轨迹信息是通过设备id来获取
-
       searchBtn: {
         loading: false,
         text: '搜索',
         isDisabled: false,
       },
       isDisplay: false,
-
     }
   },
   methods: {
@@ -72,7 +68,6 @@ export default {
       return str;
     },
     chooseCar: function(data) {
-      console.log('data', data);
       this.choosedDeviceId = data.choosedDeviceId;
       this.carNumber = data.carNumber;
       this.getDeviceDetail();
@@ -106,16 +101,15 @@ export default {
       this.totalDataResult = [];
       this.resultPath = [];
     },
-
     loadCoordinateOfWaybill: function() {
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
-        axios.get(`http://namenode:8080/api/v1/loadCoordinateOfWaybill?waybill_number=${this.searchFilters.orderValue}`).then(results => {
+        this.$$http('loadCoordinateOfWaybill', {
+          waybill_number: this.searchFilters.orderValue
+        }).then(results => {
           this.pageLoading = false;
-          console.log('results', results);
-          if (results.data && results.data.code == 200) {
-
-            let resultsData = results.data.msg[0].coord_list;
+          if (results.data && results.data.code == 0) {
+            let resultsData = results.data.data[0].coord_list;
             this.totalDataResult = resultsData;
             this.resultPath = this.totalDataResult.map(item => {
               return [item.longitude, item.latitude];
@@ -129,26 +123,25 @@ export default {
           reject(err);
         })
       })
-
     },
     loadCoordinateOfInterval: function() {
-      console.log('this.searchFilters', this.searchFilters);
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
         const startTime = this.dateToStr(new Date(this.searchFilters.choosedTime[0]));
         const endTime = this.dateToStr(new Date(this.searchFilters.choosedTime[1]));
-        axios.get(`http://namenode:8080/api/v1/loadCoordinateOfInterval?start_time=${startTime}&end_time=${endTime}&device_id=${this.choosedDeviceId}`).then(results => {
-          console.log('loadCoordinateOfInterval', results);
+        this.$$http('loadCoordinateOfInterval', {
+          start_time: startTime,
+          end_time: endTime,
+          device_id: this.choosedDeviceId,
+        }).then(results => {
           this.pageLoading = false;
-          if (results.data && results.data.code == 200) {
-
-            this.totalDataResult = results.data.msg.coord;
+          if (results.data && results.data.code == 0) {
+            this.totalDataResult = results.data.data.coord;
             if (this.totalDataResult.length) {
               this.resultPath = this.totalDataResult.map(item => {
                 return [item.longitude, item.latitude];
               })
             }
-
             resolve(results);
           } else {
             reject(results);
@@ -163,7 +156,6 @@ export default {
       this.initData();
       if (this.searchFilters.optionValue === 'order') {
         if (this.searchFilters.orderValue) {
-
           this.loadCoordinateOfWaybill().then(() => {
             this.renderPath();
           })
@@ -177,7 +169,6 @@ export default {
       }
 
     },
-
     //初始化轨迹
     initPathSimplifier: function(PathSimplifier) {
       return new PathSimplifier({
@@ -239,11 +230,8 @@ export default {
     //初始化巡航样式
     initPathNavigatorStyle: function(PathSimplifier) {
       return {
-
         loop: false, //循环播放
-
         speed: 100, //巡航速度，单位千米/小时
-
         pathNavigatorStyle: {
           width: 20,
           height: 20,
@@ -254,12 +242,10 @@ export default {
             strokeStyle: '#087ec4',
           }
         },
-
         keyPointOnSelectedPathLineStyle: {
           radius: 10,
           fillStyle: 'rgb(244,18,71)',
         }
-
       }
     },
 
@@ -339,10 +325,8 @@ export default {
       }
 
     },
-
     renderPath: function() {
       let allowTime = 20;
-      console.log('this.resultPath', this.resultPath);
       if (this.pathSimplifierIns) {
         if (this.resultPath.length) { //如果有数据
           //设置数据，绘制轨迹

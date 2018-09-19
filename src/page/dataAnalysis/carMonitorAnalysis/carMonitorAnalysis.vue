@@ -33,9 +33,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 export default {
-  name: 'routePlaybackOfDay',
+  name: 'carMonitorAnalysis',
   data() {
     return {
       map: '',
@@ -61,135 +60,6 @@ export default {
     }
   },
   methods: {
-
-    getRoutePlaybackOfDay: function() {
-      return new Promise((resolve, reject) => {
-        this.pageLoading = true;
-
-        axios.get('http://192.168.0.31:8011/api/v1/loadCoordinateOfDay').then(results => {
-          console.log('results', results);
-          if (results.data && results.data.code === '200') {
-            let resultsData = results.data.msg;
-            resultsData.map(item => {
-              let path = item.coord_list.map(pathItem => {
-                return [pathItem.longitude, pathItem.latitude]
-              })
-              console.log('path', path);
-            })
-          }
-        }).catch(err => {
-
-        })
-
-      })
-    },
-
-    //初始化轨迹
-    initPathSimplifier: function(PathSimplifier) {
-      return new PathSimplifier({
-        zIndex: 100,
-
-        map: this.map, //所属的地图实例
-
-        getPath: function(pathData, pathIndex) {
-
-          return pathData.path;
-        },
-        getHoverTitle: function(pathData, pathIndex, pointIndex) {
-          return
-        },
-
-        renderOptions: {
-
-          renderAllPointsIfNumberBelow: 1000, //绘制路线节点，如不需要可设置为-1
-
-          pathLineStyle: {
-            strokeStyle: 'rgb(255,0,0)',
-            lineWidth: 5,
-            dirArrowStyle: true,
-          },
-        },
-
-        autoSetFitView: true, //页面自适应
-
-      });
-    },
-    //轨迹点添加事件回调
-    pathSimplifierEventCallback: function(info) {
-      AMap.plugin('AMap.Geocoder', () => {
-        let lnglat = [this.totalDataResult[info.pointIndex].location.longitude, this.totalDataResult[info.pointIndex].location.latitude]
-        let geocoder = new AMap.Geocoder({
-          // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-          city: ''
-        })
-        geocoder.getAddress(lnglat, (status, data) => {
-          if (status === 'complete' && data.info === 'OK') {
-            let pointMsgStr = '';
-            let speed = this.totalDataResult[info.pointIndex].speed ? this.totalDataResult[info.pointIndex].speed : '0';
-            let addressDetail = data.regeocode.formattedAddress;
-            pointMsgStr = '<div class="fs-13 md-5">主驾驶员：' + this.masterDriver +
-              '</div><div class="fs-13 md-5">车牌号：' + this.carNumber +
-              '</div><div class="fs-13 md-5">定位时间：' + this.totalDataResult[info.pointIndex].create_time +
-              '</div><div class="fs-13 md-5">行驶速度：' + speed +
-              'km/h</div><div class="fs-13 md-5">定位地址：' + addressDetail +
-              '</div>';
-
-
-            this.infoWindow.setInfoBody(pointMsgStr);
-
-            this.infoWindow.open(this.map, info.pathData.path[info.pointIndex]);
-          }
-        })
-      })
-    },
-    //初始化巡航样式
-    initPathNavigatorStyle: function(PathSimplifier) {
-      return {
-
-        loop: false, //循环播放
-
-        speed: 100, //巡航速度，单位千米/小时
-
-        pathNavigatorStyle: {
-          width: 20,
-          height: 20,
-          content: PathSimplifier.Render.Canvas.getImageContent(require('../../../assets/img/direction_1.png')), //使用图片
-          initRotateDegree: -90,
-          pathLinePassedStyle: {
-            lineWidth: 5,
-            strokeStyle: '#087ec4',
-          }
-        },
-
-        keyPointOnSelectedPathLineStyle: {
-          radius: 10,
-          fillStyle: 'rgb(244,18,71)',
-        }
-
-      }
-    },
-
-    initPath: function() {
-      AMapUI.load(['ui/misc/PathSimplifier'], function(PathSimplifier) {
-
-        if (!PathSimplifier.supportCanvas) {
-          alert('当前环境不支持 Canvas！');
-          return;
-        }
-
-        //初始化轨迹
-        this.pathSimplifierIns = this.initPathSimplifier(PathSimplifier);
-        //轨迹点添加事件
-        this.pathSimplifierIns.on('pointMouseover pointClick', (e, info) => {
-          this.pathSimplifierEventCallback(info);
-        });
-        //初始化巡航样式
-        this.pathNavigatorStyle = this.initPathNavigatorStyle(PathSimplifier);
-
-      });
-    },
-
-
     /* 获取车辆数据 */
     getMonitorList: function() {
       return new Promise((resolve, reject) => {
@@ -258,31 +128,37 @@ export default {
         }).catch((err) => {
           reject(err);
         })
+
       })
     },
     /* 初始化标注列表，详见高德地图标注列表api */
     initMarkList: function() {
 
+      let _this = this;
       AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
-        (MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) => {
+        function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
 
-          this.map.addControl(new BasicControl.Zoom({
+          _this.map.addControl(new BasicControl.Zoom({
             position: 'lt', //left top，左上角
             showZoomNum: true //显示zoom值
           }));
 
           let jQuery = MarkerList.utils.$; //即jQuery/Zepto
 
-          this.markerList = new MarkerList({
-            map: this.map,
+          _this.markerList = new MarkerList({
+
+            map: _this.map,
+
             //从数据中读取位置, 返回lngLat
             getPosition: function(item) {
               return [item.location.longitude, item.location.latitude];
             },
+
             //数据ID，如果不提供，默认使用数组索引，即index
             getDataId: function(item, index) {
               return index;
             },
+
             getInfoWindow: function(data, context, recycledInfoWindow) {
 
               let infoTitleStr = '<div>车辆信息</div>';
@@ -295,11 +171,13 @@ export default {
               });
 
             },
+
             //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
             getMarker: function(dataItem, context, recycledMarker) {
               let src = '';
               let rotateDeg = (dataItem.direction - 90) + 'deg';
-              src = this.getIconSrc(dataItem);
+              src = _this.getIconSrc(dataItem);
+
 
               return new SimpleMarker({
                 containerClassNames: 'my-marker',
@@ -316,6 +194,8 @@ export default {
                   offset: new AMap.Pixel(30, 0)
                 }
               });
+
+
             },
 
             //marker上监听的事件
@@ -328,11 +208,11 @@ export default {
           });
 
 
-          this.markerList.on('selectedChanged', function(event, info) {
+          _this.markerList.on('selectedChanged', function(event, info) {
 
             if (info.selected) {
               let device_id = info.selected.data.device_id;
-              this.getDeviceDetail(device_id).then((results) => {
+              _this.getDeviceDetail(device_id).then((results) => {
 
                 AMap.plugin('AMap.Geocoder', function() {
 
@@ -344,8 +224,8 @@ export default {
                   geocoder.getAddress(lnglat, function(status, data) {
                     if (status === 'complete' && data.info === 'OK') {
                       results.data.data.addressDetail = data.regeocode.formattedAddress;
-                      let infoWindowDom = this.getInfoWindowDom(results, jQuery);
-                      let infoWindow = this.markerList.getInfoWindow();
+                      let infoWindowDom = _this.getInfoWindowDom(results, jQuery);
+                      let infoWindow = _this.markerList.getInfoWindow();
 
                       infoWindow.setInfoTitle(infoWindowDom.infoTitleStr);
                       infoWindow.setInfoBody(infoWindowDom.infoBodyStr);
@@ -370,6 +250,8 @@ export default {
     },
     /* 渲染infoWindow */
     getInfoWindowDom: function(results, jQuery) {
+
+      let _this = this;
       let infoWindowDom = {};
       let detailData = results.data.data;
       let carMsg = (detailData.tractor && detailData.tractor.plate_number) ? detailData.tractor.plate_number : '无';
@@ -384,32 +266,18 @@ export default {
 
       let routePlayback = () => {
         let deviceId = results.data.data.device_id;
-        this.$router.push({
-          path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
+        _this.$router.push({
+          path: `/dataAnalysis/carAnalysis/routePlaybackDetail/${deviceId}`,
         })
       };
-      let fellowOrder = () => {
-        let waybillId = (results.data.data.waybill && results.data.data.waybill.id) ? results.data.data.waybill.id : '';
-        let stepId = results.data.data.selection_trip_id ? results.data.data.selection_trip_id : '';
-        this.$router.push({
-          path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
-        })
-      }
 
-      if (waybill_vehicle_status !== '无' && (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.key !== 'free')) {
-        operatorDom = `<div><a href="javascript:void(0)" id="order-follow" class="el-button el-button--primary el-button--mini">订单跟踪</a>&nbsp;<a href="javascript:void(0)"  id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
-      } else {
-        operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
-      }
+      operatorDom = `<div><a href="javascript:void(0)" id="route-playback" class="el-button el-button--success el-button--mini">轨迹回放</a></div>`;
 
       infoWindowDom.infoTitleStr = `<div class="fs-13 md-5">车牌号:${carMsg}</div>`;
       infoWindowDom.infoBodyStr = `<div class="fs-13 md-5">挂车号：${semitrailer}</div><div class="fs-13 md-5">主驾驶：${master_driver}</div><div class="fs-13 md-5">副驾驶：${vice_driver}</div><div class="fs-13 md-5">押运员：${escort_staff}</div><div class="fs-13 md-5">任务状态：${waybill_vehicle_status}</div><div class="fs-13 md-5">GPS状态：${device_status}</div><div class="fs-13 md-5">速度：${speed}km/h</div><div class="fs-13 md-5">定位时间：${detailData.location_info.create_time}</div><div class="fs-13 ">当前位置：${detailData.addressDetail}</div><br>${operatorDom}`;
 
       /* 这里需要在vue框架下面操作dom有点无奈，使用setTimeout也不够严谨 */
       setTimeout(function() {
-        jQuery('#order-follow').click(function() {
-          fellowOrder();
-        })
         jQuery('#route-playback').click(function() {
           routePlayback();
         })
@@ -419,22 +287,24 @@ export default {
     },
     /* 生成marker并点聚合 */
     renderMarker: function() {
+
+      let _this = this;
       let renderAndCluster = function() {
         /* 生成marker，详见高德地图标注列表api */
-        this.markerList.render(this.carList);
-        this.map.plugin(["AMap.MarkerClusterer"], function() {
-          this.allMakers = this.markerList.getAllMarkers();
-          if (this.cluster) {
-            this.cluster.clearMarkers();
+        _this.markerList.render(_this.carList);
+        _this.map.plugin(["AMap.MarkerClusterer"], function() {
+          _this.allMakers = _this.markerList.getAllMarkers();
+          if (_this.cluster) {
+            _this.cluster.clearMarkers();
           }
           /* 点聚合，详见高德地图点聚合api */
-          this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+          _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
             minClusterSize: 4,
             maxZoom: 17,
           });
         });
       }
-      if (this.markerList) {
+      if (_this.markerList) {
         renderAndCluster();
       } else {
         setTimeout(() => {
@@ -443,7 +313,7 @@ export default {
 
       }
 
-      this.map.setFitView(this.allMakers);
+      _this.map.setFitView(_this.allMakers);
 
     }
   },
@@ -451,18 +321,14 @@ export default {
 
   },
   mounted() {
-    this.map = new AMap.Map('map-container', {
+    let _this = this;
+    _this.map = new AMap.Map('map-container', {
       zoom: 5
     });
-
     this.initMarkList();
-
-    /*
-    this.getMonitorList().then((data) => { //展示该数据
-      this.renderMarker();
-    })*/
-
-    this.getRoutePlaybackOfDay();
+    _this.getMonitorList().then((data) => { //展示该数据
+      _this.renderMarker();
+    })
 
   }
 };

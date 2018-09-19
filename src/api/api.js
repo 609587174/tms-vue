@@ -2010,14 +2010,6 @@ const api = {
 
     }
   },
-  getRouteOfDay:{
-    url: '/api/v1/loadCoordinateOfDay',
-    method: 'GET',
-    desc: "加载当天车辆轨迹接口",
-    param: {
-
-    }
-  },
   loadWayBillOfTruck:{
     url: '/api/v1/loadCoordinateOfDay',
     method: 'GET',
@@ -2026,30 +2018,55 @@ const api = {
 
     }
   },
+  loadWayBillOfTruck:{
+    url: '/bigdata/api/v1/loadWayBillOfTruck',
+    method: 'GET',
+    desc: "加载车辆下的所有运单",
+    param: {
+
+    }
+  },
   loadCoordinateOfWaybill:{
-    url: '/api/v1/loadCoordinateOfDay',
+    url: '/bigdata/api/v1/loadCoordinateOfWaybill',
     method: 'GET',
     desc: "加载运单的轨迹",
     param: {
 
     }
   },
-  loadTripCoordinate:{
-    url: '/api/v1/loadCoordinateOfDay',
+  loadCoordinateOfInterval:{
+    url: '/bigdata/api/v1/loadCoordinateOfInterval',
     method: 'GET',
-    desc: "加载液厂和站点轨迹",
+    desc: "按时间加载轨迹",
+    param: {
+
+    }
+  },
+  loadTripOfPlanId:{
+    url: '/bigdata/api/v1/loadTripOfPlanId',
+    method: 'GET',
+    desc: "加载液厂到站点轨迹",
     param: {
 
     }
   },
   loadAllTrip:{
-    url: '/api/v1/loadCoordinateOfDay',
+    url: '/bigdata/api/v1/loadAllTrip',
+    method: 'GET',
+    desc: "加载",
+    param: {
+
+    }
+  },
+
+  loadlist:{
+    url: '/bigdata/api/v1/loadlist',
     method: 'GET',
     desc: "加载所有液厂和站点",
     param: {
 
     }
-  },
+  }
 
 }
 

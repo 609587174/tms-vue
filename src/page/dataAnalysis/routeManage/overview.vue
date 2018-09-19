@@ -28,7 +28,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
 export default {
   name: 'standardOverview',
   data() {
@@ -57,12 +56,14 @@ export default {
   },
   methods: {
     getFluidAndSiteList() {
-      axios.get(`http://namenode:8080/api/v1/loadlist`).then(results => {
-        if (results.data && results.data.msg) {
-          this.fluidSelectList = results.data.msg.fluids;
-          this.siteSelectList = results.data.msg.stations;
+
+      this.$$http('loadlist').then(results => {
+        if (results.data && results.data.code == 0) {
+          this.fluidSelectList = results.data.data.fluids;
+          this.siteSelectList = results.data.data.stations;
         }
       })
+
     },
 
     initMap() {
@@ -119,10 +120,7 @@ export default {
 
       this.layer.on('mousemove', (ev) => {
         // 事件类型
-        console.log('ev', ev);
-
         const rawData = ev.rawData;
-
         const routeName = `${rawData.fluid_name}-${rawData.station_name}`;
         const fluidAddress = rawData.fluid_address;
         const stationName = rawData.station_name;
@@ -142,12 +140,9 @@ export default {
 
       this.layer.on('click', (ev) => {
         // 事件类型
-        console.log('click', ev);
-
         const rowData = ev.rawData;
-
         this.$router.push({
-          path: "/mapManage/carMonitor/routePlaybackOfStandard",
+          path: "/dataAnalysis/routeManage/routePlaybackOfStandard",
           query: { fluidName: rowData.fluid_name, siteName: rowData.station_name, planId: rowData.planid }
         });
 
@@ -210,22 +205,15 @@ export default {
     getData() {
       return new Promise((resolve, reject) => {
         this.pageLoading = true;
-        let url = 'http://namenode:8080/api/v1/loadAllTrip';
-        let fluidStr = this.searchFilters.fluid ? `fluid_name=${this.searchFilters.fluid}` : '';
-        let siteStr = this.searchFilters.site ? `station_name=${this.searchFilters.site}` : '';
-
-        let strArray = [];
-        fluidStr.length && strArray.push(fluidStr);
-        siteStr.length && strArray.push(siteStr);
-
-        url = strArray.length ? (url + '?' + strArray.join('&')) : url;
 
         this.fluidList = [];
         this.siteList = [];
-        axios.get(url).then(results => {
 
-          console.log('results', results);
-          this.resultsData = results.data.msg;
+        this.$$http('loadAllTrip', {
+          fluid_name: this.searchFilters.fluid,
+          station_name: this.searchFilters.site,
+        }).then(results => {
+          this.resultsData = results.data.data;
           this.resultsData = this.resultsData.map(item => {
             this.fluidList.push({
               line: item.coord.line[0],

@@ -6,6 +6,7 @@ import transportPowerManage from './transportPowerManage'
 import clientManage from './clientManage'
 import setting from './setting'
 import statistics from './statistics'
+import dataAnalysis from './dataAnalysis'
 import news from './news'
 import arap from './arap'
 export default [{
@@ -24,6 +25,7 @@ export default [{
     transportPowerManage,
     clientManage,
     statistics,
+    dataAnalysis,
     setting,
     news,
     arap

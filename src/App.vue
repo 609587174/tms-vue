@@ -81,7 +81,9 @@ export default {
         powerManage: 'PERMISSION_MANAGEMENT', //权限管理
         userSetting: 'PERSONAL_SETTINGS', //个人设置
 
-
+        dataAnalysis: 'CARRING_DATA_MANAGEMENT',
+        routeManage: 'CARRING_ROUTE_SECOND',
+        carAnalysis: 'VEHICLE_MONITOR_SECOND',
 
 
       }

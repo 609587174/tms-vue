@@ -90,6 +90,11 @@
                     <el-input placeholder="请输入" type="text" v-model="pickOrderParam.plan_tonnage"></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注:" prop="mark">
+                    <el-input placeholder="请输入" type="textarea" v-model="pickOrderParam.mark"></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </div>
             <div class="detail-form-title text-center">添加车辆</div>
@@ -123,7 +128,7 @@
               </el-row>
             </div>
             <el-row>
-              <el-col :span="6" :offset="9">
+              <el-col :span="24" style="text-align:center" >
                 <el-button type="success" @click="goOrderList">取消</el-button>
                 <el-button type="primary" @click="upOrder" style="margin-left:20px;">提交</el-button>
               </el-col>
@@ -240,10 +245,10 @@ export default {
         require_car_number: '',
         trader: '',
         plan_tonnage: '',
-        type: 'three',
-        consignment_type: 'external',
-        carriers: '',
-
+        type:'three',
+        consignment_type:'external',
+        carriers:'',
+        mark:''
       },
       capacitiesNum: 0,
       rules: {

@@ -112,7 +112,7 @@ export default {
           // 默认半径单位为像素
           radius: 1,
           fill: '#f9f10b', //黄色
-          lineWidth: 0.5,
+          lineWidth: 1,
           stroke: '#f9f10b',
           opacity: 0.8,
         }
@@ -141,10 +141,12 @@ export default {
       this.layer.on('click', (ev) => {
         // 事件类型
         const rowData = ev.rawData;
-        this.$router.push({
+
+        /*this.$router.push({
           path: "/dataAnalysis/routeManage/routePlaybackOfStandard",
           query: { fluidName: rowData.fluid_name, siteName: rowData.station_name, planId: rowData.planid }
-        });
+        });*/
+        window.open(`/#/dataAnalysis/routeManage/routePlaybackOfStandard?fluidName=${rowData.fluid_name}&siteName=${rowData.station_name}&planId=${rowData.planid}`);
 
       });
 
@@ -214,6 +216,9 @@ export default {
           station_name: this.searchFilters.site,
         }).then(results => {
           this.resultsData = results.data.data;
+          if (!this.resultsData.length) {
+            this.$message.success('无路线');
+          }
           this.resultsData = this.resultsData.map(item => {
             this.fluidList.push({
               line: item.coord.line[0],
@@ -240,7 +245,34 @@ export default {
       this.siteLayer.setData(this.siteList, {
         lnglat: 'line'
       });
-
+      console.log('this.searchFilters.fluid', this.searchFilters.fluid, this.searchFilters.site);
+      if (this.searchFilters.fluid.length || this.searchFilters.site.length) {
+        this.layer.setOptions({
+          style: {
+            lineWidth: 2,
+            curveness: 0.2,
+            stroke: 'rgba(49, 80, 189, 0.3)'
+          },
+          // 样式改变条件为 mouseenter 及 mouseleave，没有设置的属性会继承 style 中的配置
+          selectStyle: {
+            lineWidth: 4,
+            stroke: 'rgba(49, 80, 189, 1)'
+          }
+        });
+      } else {
+        this.layer.setOptions({
+          style: {
+            lineWidth: 1,
+            curveness: 0.2,
+            stroke: 'rgba(49, 80, 189, 0.3)'
+          },
+          // 样式改变条件为 mouseenter 及 mouseleave，没有设置的属性会继承 style 中的配置
+          selectStyle: {
+            lineWidth: 3,
+            stroke: 'rgba(49, 80, 189, 0.8)'
+          }
+        });
+      }
       this.layer.render();
       this.fluidLayer.render();
       this.siteLayer.render();

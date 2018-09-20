@@ -223,7 +223,9 @@ export default {
         text: '查看地标',
         isLoading: false,
         isDisabled: false,
-      }
+      },
+      mapCenter: '',
+      distance: '',
     }
   },
   methods: {
@@ -996,6 +998,12 @@ export default {
         /*对第一条线路（即索引 0）创建一个巡航器,这里就只有一条路线。*/
         _this.navg1 = _this.pathSimplifierIns.createPathNavigator(0, _this.pathNavigatorStyle);
 
+        /*获取查看地标的数据*/
+        this.mapCenter = this.map.getCenter();
+        let bounds = this.map.getBounds();
+        let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
+        let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
+        this.distance = Math.floor(lnglat1.distance(lnglat2));
         if (_this.isNeedGetLandmark) {
           _this.getLandMarkList().then(() => {
             _this.renderMarker();
@@ -1131,17 +1139,12 @@ export default {
     },
     getLandMarkList: function() {
       return new Promise((resolve, reject) => {
-        let mapCenter = this.map.getCenter();
-        let bounds = this.map.getBounds();
-        let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
-        let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
-        let distance = Math.floor(lnglat1.distance(lnglat2));
         let postData = {
           pagination: false,
           simplify: true,
-          longitude: mapCenter.lng,
-          latitude: mapCenter.lat,
-          distance: distance,
+          longitude: this.mapCenter.lng,
+          latitude: this.mapCenter.lat,
+          distance: this.distance,
         };
 
         this.getLandmarkBtn.text = '获取中';

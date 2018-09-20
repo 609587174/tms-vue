@@ -330,7 +330,7 @@
       </el-table-column>
       <el-table-column label="装车液厂" prop="" min-width="150">
         <template slot-scope="props">
-          <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
+          <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.fluid.split("-")[0]}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
           </template>
       </el-table-column>
        <el-table-column label="卸货站" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">

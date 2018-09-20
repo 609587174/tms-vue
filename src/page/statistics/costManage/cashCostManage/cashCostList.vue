@@ -71,32 +71,44 @@
                 </div>
                 <div v-else>
                   <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                  <span v-else>{{scope.row[item.param]}}</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="100" fixed="right">
-              <template slot-scope="scope">
-                <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <no-data v-if="!pageLoading && !tableData.length"></no-data>
+                  <span v-else>
+                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
+                </span>
         </div>
-        <div class="page-list text-center">
-          <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-          </el-pagination>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
-    </el-tabs>
+        </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="140" fixed="right">
+          <template slot-scope="scope">
+            <div v-if="scope.row.is_adjust.key==='no'">
+              <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div>
+          </template>
+        </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableData.length"></no-data>
+  </div>
+  <div class="page-list text-center">
+    <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+    </el-pagination>
+  </div>
+  </el-tab-pane>
+  <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
+  </el-tabs>
+  <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
   </div>
 </template>
 <script>
+import cashCostAdjustmentDialog from '@/components/statistics/cashCostAdjustmentDialog';
 export default {
   name: 'cashCostList',
   computed: {
 
+  },
+  components: {
+    cashCostAdjustmentDialog: cashCostAdjustmentDialog
   },
   activated: function() {
     this.activeName = 'cashCost';
@@ -120,7 +132,7 @@ export default {
       searchFilters: {
         cost_type: '',
         is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
-        is_travel:'',
+        is_travel: '',
         keyword: '',
         field: 'plate_number',
       },
@@ -158,7 +170,9 @@ export default {
       }, {
         title: '费用时间',
         param: 'cost_date',
-        width: '180'
+        width: '180',
+        isAdjust: true,
+        adjustParam: 'cost_date_adjust'
       }, {
         title: '费用类型',
         param: 'cost_type',
@@ -195,8 +209,18 @@ export default {
         title: '添加时间',
         param: 'created_at',
         width: '180'
+      }, {
+        title: '调账备注',
+        param: 'remark_adjust',
+        width: '180'
+      }, {
+        title: '调账时间',
+        param: 'adjust_time',
+        width: '180'
       }],
-      tableData: []
+      tableData: [],
+      accountAdjustIsShow: false, //调账弹窗
+      adjustRow: {}, //调账信息
     }
   },
   methods: {
@@ -204,6 +228,17 @@ export default {
       setTimeout(() => {
         this.getList();
       })
+    },
+    closeDialog: function(isSave) {
+      this.accountAdjustIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 调账
+    accountAdjust(row) {
+      this.accountAdjustIsShow = true;
+      this.adjustRow = row;
     },
     importData() {
       this.$router.push({ path: `/statistics/costManage/cashCostManage/importCashCost` });

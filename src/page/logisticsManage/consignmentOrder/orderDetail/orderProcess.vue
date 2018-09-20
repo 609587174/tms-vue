@@ -1174,7 +1174,7 @@ export default {
                   message: "确认卸货单成功"
                 })
               } else {
-                vm.$message.error("确认卸货单失败")
+                vm.$message.error(results.data.msg);
               }
             }).catch(() => {
               vm.pageLoading = false;

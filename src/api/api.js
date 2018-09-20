@@ -9,6 +9,38 @@
  */
 
 const api = {
+  updateShipperReceivableManage: {
+    url: '/statistic/carrier-back-m/:id/',
+    method: 'patch',
+    desc: '更新托运方回款',
+    param: {
+
+    }
+  },
+  addShipperReceivableManage: {
+    url: '/statistic/carrier-back-m/',
+    method: 'post',
+    desc: '托运方回款新增',
+    param: {
+
+    }
+  },
+  getShipperReceivableManageList: {
+    url: '/statistic/carrier-back-m/',
+    method: 'get',
+    desc: '托运方回款列表',
+    param: {
+
+    }
+  },
+  getShipperReceivableList: {
+    url: '/statistic/inout-customer-pay/',
+    method: 'get',
+    desc: '托运方应收列表',
+    param: {
+
+    }
+  },
   unloadBillMatch: {
     url: '/order/section-trips/match-business-order/',
     method: 'post',
@@ -1978,8 +2010,63 @@ const api = {
 
     }
   },
+  loadWayBillOfTruck:{
+    url: '/api/v1/loadCoordinateOfDay',
+    method: 'GET',
+    desc: "单个车下所有运单",
+    param: {
 
+    }
+  },
+  loadWayBillOfTruck:{
+    url: '/bigdata/api/v1/loadWayBillOfTruck',
+    method: 'GET',
+    desc: "加载车辆下的所有运单",
+    param: {
 
+    }
+  },
+  loadCoordinateOfWaybill:{
+    url: '/bigdata/api/v1/loadCoordinateOfWaybill',
+    method: 'GET',
+    desc: "加载运单的轨迹",
+    param: {
+
+    }
+  },
+  loadCoordinateOfInterval:{
+    url: '/bigdata/api/v1/loadCoordinateOfInterval',
+    method: 'GET',
+    desc: "按时间加载轨迹",
+    param: {
+
+    }
+  },
+  loadTripOfPlanId:{
+    url: '/bigdata/api/v1/loadTripOfPlanId',
+    method: 'GET',
+    desc: "加载液厂到站点轨迹",
+    param: {
+
+    }
+  },
+  loadAllTrip:{
+    url: '/bigdata/api/v1/loadAllTrip',
+    method: 'GET',
+    desc: "加载",
+    param: {
+
+    }
+  },
+
+  loadlist:{
+    url: '/bigdata/api/v1/loadlist',
+    method: 'GET',
+    desc: "加载所有液厂和站点",
+    param: {
+
+    }
+  }
 
 }
 

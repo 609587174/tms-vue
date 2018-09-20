@@ -73,30 +73,31 @@
                   <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
                   <span v-else>
                     <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                    {{scope.row[item.param]}}
-                  </span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" align="center" width="140" fixed="right">
-              <template slot-scope="scope">
-                <div v-if="scope.row.is_adjust.key==='no'">
-                  <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
-                  <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-                </div>
-              </template>
-            </el-table-column>
-          </el-table>
-          <no-data v-if="!pageLoading && !tableData.length"></no-data>
+                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
+                </span>
         </div>
-        <div class="page-list text-center">
-          <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-          </el-pagination>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
-    </el-tabs>
-    <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
+        </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="140" fixed="right">
+          <template slot-scope="scope">
+            <div v-if="scope.row.is_adjust.key==='no'">
+              <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div>
+          </template>
+        </el-table-column>
+        </el-table>
+        <no-data v-if="!pageLoading && !tableData.length"></no-data>
+  </div>
+  <div class="page-list text-center">
+    <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+    </el-pagination>
+  </div>
+  </el-tab-pane>
+  <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
+  </el-tabs>
+  <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
   </div>
 </template>
 <script>
@@ -208,11 +209,11 @@ export default {
         title: '添加时间',
         param: 'created_at',
         width: '180'
-      },{
+      }, {
         title: '调账备注',
         param: 'remark_adjust',
         width: '180'
-      },{
+      }, {
         title: '调账时间',
         param: 'adjust_time',
         width: '180'

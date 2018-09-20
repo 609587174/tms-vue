@@ -39,7 +39,10 @@
                 <el-col :span="6">
                   <el-form-item label="液厂:">
                     <el-select v-model="searchFilters.agreements__fluid" :loading="fluidLoading" clearable filterable @change="startSearch" placeholder="请输入选择">
-                      <el-option v-for="(item,key) in selectData.liquidSelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
+                      <el-option v-for="(item,key) in selectData.liquidSelect" :key="item.id" :label="item.fluid_name" :value="item.id">
+                        <span>{{ item.fluid_name }}</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px" v-if="item.customer_info">{{ item.customer_info.name }}</span>
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>

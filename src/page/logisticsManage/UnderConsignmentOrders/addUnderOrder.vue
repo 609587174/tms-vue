@@ -6,11 +6,13 @@
   font-size: 18px;
   line-height: 40px;
 }
-.linh40{
-  height:40px;
-  line-height:40px;
+
+.linh40 {
+  height: 40px;
+  line-height: 40px;
 }
-.cancleCarBtn{
+
+.cancleCarBtn {
   position: absolute;
   left: 0px;
   top: 0px;
@@ -18,9 +20,9 @@
   text-align: center;
   height: 40px;
   font-size: 18px;
-  cursor:pointer;
+  cursor: pointer;
 }
-    
+
 </style>
 <template>
   <div class="detail-main">
@@ -52,7 +54,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="托运客户:" prop="customer_id">
-                    <el-select v-model="pickOrderParam.customer_id" filterable placeholder="请选择"  v-loading="loadingArr.customerLoading" @change="bindTextFunc('customer')">
+                    <el-select v-model="pickOrderParam.customer_id" filterable placeholder="请选择" v-loading="loadingArr.customerLoading" @change="bindTextFunc('customer')">
                       <el-option v-for="(item,key) in selectData.customerList" :key="item.id" :label="item.name" :value="item.id">
                       </el-option>
                     </el-select>
@@ -62,9 +64,11 @@
                   <el-form-item label="实际液厂:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindTextFunc('fluid')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
+                        <span>{{ item.fluid_name }}</span>
+                        <span style="float: right; color: #8492a6; font-size: 13px" v-if="item.customer_info">{{ item.customer_info.name }}</span>
                       </el-option>
                     </el-select>
-                   <!--  <el-input placeholder="请输入" type="text" v-model="pickOrderParam.fluid"></el-input> -->
+                    <!--  <el-input placeholder="请输入" type="text" v-model="pickOrderParam.fluid"></el-input> -->
                   </el-form-item>
                   </el-form-item>
                 </el-col>
@@ -88,18 +92,17 @@
                 </el-col>
               </el-row>
             </div>
-           
             <div class="detail-form-title text-center">添加车辆</div>
-            <div class="detail-form"  v-loading="loadingArr.carloading">
+            <div class="detail-form" v-loading="loadingArr.carloading">
               <el-row v-for="(aitem,aindex) in addCarList" style="position:relative;margin-top:20px;">
-                <el-col :span="1"  class="cancleCarBtn" v-if="aindex!=0">
+                <el-col :span="1" class="cancleCarBtn" v-if="aindex!=0">
                   <i class="el-icon-error" style="color:red;" @click="deleteCarByIndex(aindex)"></i>
                 </el-col>
                 <el-col :span="5" :offset="1">
-                   <el-select v-model="addCarList[aindex].id" filterable placeholder="请选择" @change="carListChange(aindex)" style="max-width:220px;">
-                      <el-option v-for="(item,key) in selectData.renderCarLIst"  :label="item.tractor.plate_number" :value="item.id">
-                      </el-option>
-                    </el-select>
+                  <el-select v-model="addCarList[aindex].id" filterable placeholder="请选择" @change="carListChange(aindex)" style="max-width:220px;">
+                    <el-option v-for="(item,key) in selectData.renderCarLIst" :label="item.tractor.plate_number" :value="item.id">
+                    </el-option>
+                  </el-select>
                 </el-col>
                 <el-col :span="5" class="linh40">
                   挂车号:{{aitem.semitrailer.plate_number}}
@@ -114,7 +117,7 @@
                 </el-col>
               </el-row>
               <el-row style="position:relative;margin-top:20px;" v-if="addCarList.length<50">
-                <el-col :span="1"  class="cancleCarBtn" style="font-size:22px;">
+                <el-col :span="1" class="cancleCarBtn" style="font-size:22px;">
                   <i class="el-icon-circle-plus" style="color:#85ce61;" @click="addACar"></i>
                 </el-col>
               </el-row>
@@ -129,7 +132,7 @@
         </div>
       </el-main>
     </el-container>
-   <el-dialog title="确认生成线下承运单" :visible.sync="sureAdd" center width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;"  v-loading="loadingArr.createdLoading">
+    <el-dialog title="确认生成线下承运单" :visible.sync="sureAdd" center width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" v-loading="loadingArr.createdLoading">
       <el-form label-width="125px" status-icon>
         <el-row justify="center">
           <el-col :span="18">
@@ -184,7 +187,7 @@ export default {
   name: 'addUnderOrder',
   data() {
     var needNumVa = (rule, value, callback) => {
-      if (!value.match(/^[0-9]\d{0,1}$/) || value == '0'||value>50) {
+      if (!value.match(/^[0-9]\d{0,1}$/) || value == '0' || value > 50) {
         callback(new Error("只能是1-50的正整数"));
       } else {
         callback();
@@ -198,10 +201,10 @@ export default {
       }
     };
     var discountVa = (rule, value, callback) => {
-      if(value==""){
-       callback();
-      }else{
-       if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
+      if (value == "") {
+        callback();
+      } else {
+        if (parseInt(value) > parseInt(this.pickOrderParam.unit_price)) {
           callback(new Error("不能大于采购价"));
         } else if (!((value + "").match(/^\d+(\.\d+)?$/) || value == '' || value == null)) {
           callback(new Error("只能输入数字"));
@@ -215,20 +218,20 @@ export default {
       sureAdd: false,
       loadingArr: {
         supplierLoading: false,
-        carloading:false,
-        fluidLoading:false,
-        customerLoading:false,
-        createdLoading:false
+        carloading: false,
+        fluidLoading: false,
+        customerLoading: false,
+        createdLoading: false
       },
-      bindText:{
-        fluidName:"",
-        customerName:"",
+      bindText: {
+        fluidName: "",
+        customerName: "",
       },
-      addCarList:[{
-        id:"",
-        master_driver:{},
-        vice_driver:{},
-        semitrailer:{}
+      addCarList: [{
+        id: "",
+        master_driver: {},
+        vice_driver: {},
+        semitrailer: {}
       }],
       pickOrderParam: {
         customer_id: "",
@@ -237,12 +240,12 @@ export default {
         require_car_number: '',
         trader: '',
         plan_tonnage: '',
-        type:'three',
-        consignment_type:'external',
-        carriers:'',
+        type: 'three',
+        consignment_type: 'external',
+        carriers: '',
 
       },
-      capacitiesNum:0,
+      capacitiesNum: 0,
       rules: {
         customer_id: [
           { required: true, message: '请选择托运客户', trigger: 'change' },
@@ -264,10 +267,10 @@ export default {
         ],
       },
       selectData: {
-        carList:[],
-        renderCarLIst:[],
-        fluidList:[],
-        customerList:[]
+        carList: [],
+        renderCarLIst: [],
+        fluidList: [],
+        customerList: []
       }
     };
   },
@@ -277,105 +280,107 @@ export default {
     }
   },
   methods: {
-    bindTextFunc:function(type){
-      if(type=='fluid'){
-        for(let i in this.selectData.fluidList){
-          if(this.selectData.fluidList[i].id==this.pickOrderParam.fluid){
-            this.bindText.fluidName=this.selectData.fluidList[i].fluid_name;
+    bindTextFunc: function(type) {
+      if (type == 'fluid') {
+        for (let i in this.selectData.fluidList) {
+          if (this.selectData.fluidList[i].id == this.pickOrderParam.fluid) {
+            this.bindText.fluidName = this.selectData.fluidList[i].fluid_name;
             break;
           }
         }
-      }else if(type=='customer'){
-        for(let i in this.selectData.customerList){
-          if(this.selectData.customerList[i].id==this.pickOrderParam.customer_id){
-            this.bindText.customerName=this.selectData.customerList[i].name ;
+
+      } else if (type == 'customer') {
+        for (let i in this.selectData.customerList) {
+          if (this.selectData.customerList[i].id == this.pickOrderParam.customer_id) {
+            this.bindText.customerName = this.selectData.customerList[i].name;
             break;
           }
         }
+        // this.getFluid();
       }
     },
-    sendRe:function(){
-      var vm=this;
+    sendRe: function() {
+      var vm = this;
       var sendData = this.pbFunc.deepcopy(this.pickOrderParam);
       this.loadingArr.createdLoading = true;
-      let capacities=[];
-      for(let i in this.addCarList){
-        if(this.addCarList[i].id!=""){
+      let capacities = [];
+      for (let i in this.addCarList) {
+        if (this.addCarList[i].id != "") {
           capacities.push(this.addCarList[i].id);
         }
       }
-      sendData.capacities=capacities;
+      sendData.capacities = capacities;
       this.$$http("cratePickUpOrder", sendData).then((results) => {
         this.loadingArr.createdLoading = false;
         if (results.data.code == 0) {
-          this.sureAdd=false;
+          this.sureAdd = false;
           this.$alert('线下承运单已经生成,请前往“线下承运调度”列表查看并跟进', '确认生成线下承运单', {
             confirmButtonText: '确定',
             callback: action => {
               vm.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/underOrdersList" });
             }
-          }); 
-        }else{
-           this.$alert('由于网络不稳定等原因，订单无法生成，请刷新重试', '生成线下承运单失败', {
+          });
+        } else {
+          this.$alert('由于网络不稳定等原因，订单无法生成，请刷新重试', '生成线下承运单失败', {
             confirmButtonText: '确定',
             callback: action => {
-              
+
             }
-          }); 
+          });
         }
       }).catch(() => {
         this.loadingArr.createdLoading = false;
       });
     },
-    addACar:function(){
-      this.addCarList.push({id:"",master_driver:{},vice_driver:{},semitrailer:{}});
+    addACar: function() {
+      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
     },
-    carListChange:function(index){
-      var thisId=this.addCarList[index].id;
-      for(let carIndex in this.selectData.carList){
-        if(this.addCarList[index].id==this.selectData.carList[carIndex].id){
-          this.$set(this.addCarList,index,this.pbFunc.deepcopy(this.selectData.carList[carIndex]));
+    carListChange: function(index) {
+      var thisId = this.addCarList[index].id;
+      for (let carIndex in this.selectData.carList) {
+        if (this.addCarList[index].id == this.selectData.carList[carIndex].id) {
+          this.$set(this.addCarList, index, this.pbFunc.deepcopy(this.selectData.carList[carIndex]));
         }
       }
-      for(let i in this.addCarList){
-        if(this.addCarList[i].id==thisId&&i!=index){
-          this.$set(this.addCarList,i,{id:"",master_driver:{},vice_driver:{},semitrailer:{}});
+      for (let i in this.addCarList) {
+        if (this.addCarList[i].id == thisId && i != index) {
+          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
           break;
         }
       }
-      this.capacitiesNum=0;
-      for(let i in this.addCarList){
-        if(this.addCarList[i].id!=""){
+      this.capacitiesNum = 0;
+      for (let i in this.addCarList) {
+        if (this.addCarList[i].id != "") {
           this.capacitiesNum++;
         }
       }
     },
-    deleteCarByIndex:function(index){
-      this.addCarList.splice(index,1);
-      this.capacitiesNum=0;
-      for(let i in this.addCarList){
-        if(this.addCarList[i].id!=""){
+    deleteCarByIndex: function(index) {
+      this.addCarList.splice(index, 1);
+      this.capacitiesNum = 0;
+      for (let i in this.addCarList) {
+        if (this.addCarList[i].id != "") {
           this.capacitiesNum++;
         }
       }
     },
-    needcarNumChange:function(){
-      var require=this.pickOrderParam.require_car_number>50?50:this.pickOrderParam.require_car_number;
-      if(!isNaN(parseInt(require))){
-        if(require>this.addCarList.length){
-          var middleArr=[];
-          for(var i=0;i<require-this.addCarList.length;i++){
-            middleArr.push({id:"",master_driver:{},vice_driver:{},semitrailer:{}});
+    needcarNumChange: function() {
+      var require = this.pickOrderParam.require_car_number > 50 ? 50 : this.pickOrderParam.require_car_number;
+      if (!isNaN(parseInt(require))) {
+        if (require > this.addCarList.length) {
+          var middleArr = [];
+          for (var i = 0; i < require - this.addCarList.length; i++) {
+            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
           }
-          this.addCarList=this.addCarList.concat(middleArr);
-        }else if(require<this.addCarList.length){
-          var delNum=this.addCarList.length-require;
-          var middleArr=this.pbFunc.deepcopy(this.addCarList);
-          for(var  j=this.addCarList.length-1;j>0;j--){
-            if(this.addCarList[j].id==""){
+          this.addCarList = this.addCarList.concat(middleArr);
+        } else if (require < this.addCarList.length) {
+          var delNum = this.addCarList.length - require;
+          var middleArr = this.pbFunc.deepcopy(this.addCarList);
+          for (var j = this.addCarList.length - 1; j > 0; j--) {
+            if (this.addCarList[j].id == "") {
               delNum--;
-              this.addCarList.splice(j,1);
-              if(delNum==0){
+              this.addCarList.splice(j, 1);
+              if (delNum == 0) {
                 break;
               }
             }
@@ -390,60 +395,60 @@ export default {
       this.$refs['addPickOrderForm'].validate((valid) => {
         if (valid) {
           this.sureAdd = true;
-        }else{
+        } else {
           this.$alert('请根据填写界面红字处提醒，对不合规数据进行修改后再次提交', '无法生成', {
             confirmButtonText: '确定',
             callback: action => {
-            
+
             }
           });
         }
       });
-    }, 
-    getFluid:function(){
-      this.loadingArr.fluidLoading=true;
-      this.$$http("getFluidsFormAdd",{}).then((results)=>{
-        if(results.data.code==0){
-          this.selectData.fluidList=results.data.data;
+    },
+    getFluid: function() {
+      this.loadingArr.fluidLoading = true;
+      this.$$http("getFluidsFormAdd", {}).then((results) => {
+        if (results.data.code == 0) {
+          this.selectData.fluidList = results.data.data;
         }
-        this.loadingArr.fluidLoading=false;
-      }).catch(()=>{
-        this.loadingArr.fluidLoading=false;
+        this.loadingArr.fluidLoading = false;
+      }).catch(() => {
+        this.loadingArr.fluidLoading = false;
       });
     },
-    getCustomer:function(){
-      this.loadingArr.customerLoading=true;
-      this.$$http("getCustomerFormAdd",{pagination:false}).then((results)=>{
-        if(results.data.code==0){
-          this.selectData.customerList=results.data.data;
+    getCustomer: function() {
+      this.loadingArr.customerLoading = true;
+      this.$$http("getCustomerFormAdd", { pagination: false }).then((results) => {
+        if (results.data.code == 0) {
+          this.selectData.customerList = results.data.data;
         }
-        this.loadingArr.customerLoading=false;
-      }).catch(()=>{
-        this.loadingArr.customerLoading=false;
-      });      
+        this.loadingArr.customerLoading = false;
+      }).catch(() => {
+        this.loadingArr.customerLoading = false;
+      });
     },
     getCarData: function() {
-      this.loadingArr.carloading=true;
-      this.$$http('searchCapacityList',{pagination:false,complete_status:true}).then((results)=>{
-        this.loadingArr.carloading=false;
-        if(results.data.code==0){
-          this.selectData.carList=results.data.data;
-          this.selectData.renderCarLIst=results.data.data;
+      this.loadingArr.carloading = true;
+      this.$$http('searchCapacityList', { pagination: false, complete_status: true }).then((results) => {
+        this.loadingArr.carloading = false;
+        if (results.data.code == 0) {
+          this.selectData.carList = results.data.data;
+          this.selectData.renderCarLIst = results.data.data;
         }
-      }).catch((err)=>{
-        this.loadingArr.carloading=false;
+      }).catch((err) => {
+        this.loadingArr.carloading = false;
       });
     },
-    getCarriesId:function(){
-      this.$$http('updateCompany',{id:this.users.carrier.id}).then((results)=>{
-        if(results.data.code==0){
-          this.$$http('getCarriesId',{credit_code:results.data.data.license_code}).then((reData)=>{
-            if(reData.data.code==0){
-              this.pickOrderParam.carriers=[reData.data.data.data[0].id];
+    getCarriesId: function() {
+      this.$$http('updateCompany', { id: this.users.carrier.id }).then((results) => {
+        if (results.data.code == 0) {
+          this.$$http('getCarriesId', { credit_code: results.data.data.license_code }).then((reData) => {
+            if (reData.data.code == 0) {
+              this.pickOrderParam.carriers = [reData.data.data.data[0].id];
             }
           });
         }
-      }).catch(()=>{  
+      }).catch(() => {
 
       });
     },

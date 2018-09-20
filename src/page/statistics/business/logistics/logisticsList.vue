@@ -59,7 +59,8 @@
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
               <span v-else>
                 <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-            {{scope.row[item.param]}}
+                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <span v-else v-html="scope.row[item.param]"></span>
             </span>
     </div>
     </template>

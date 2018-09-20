@@ -12,10 +12,10 @@
               <el-option v-for="(item,key) in carrierSelect" :key="key" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="付款日期:" prop="payment_datetime">
+          <el-form-item label="回款日期:" prop="payment_datetime">
             <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" :picker-options="pickerOptionsDate" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
-          <el-form-item label="付款金额:" prop="amount">
+          <el-form-item label="回款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
           </el-form-item>
           <el-form-item label="备注:" prop="desc">

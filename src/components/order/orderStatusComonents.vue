@@ -254,7 +254,7 @@ export default {
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel='export';
-      axios.get('http://tms.hhtdlng.com/order/section-trips/', {
+      axios.get('/order/section-trips/', {
         method: 'get',
         responseType: 'blob',
         headers: {

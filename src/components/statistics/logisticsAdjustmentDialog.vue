@@ -10,7 +10,7 @@
           <el-form-item label="托运方:">
             <el-row>
               <el-col :span="8">
-                <div class="dialog-row-font">{{adjustRow.carrier}}</div>
+                <div class="dialog-row-font">{{adjustRow.company}}</div>
               </el-col>
               <el-col :span="11">
                 <el-select v-model="formRules.company_adjust" :loading="carrierLoading" filterable clearable @change="isValue" placeholder="请输入选择">

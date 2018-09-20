@@ -24,7 +24,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="生效托运方:" prop="customer_staff_ids">
-                    <el-select filterable :loading="carrierLoading" multiple v-model="userForm.customer_staff_ids" placeholder="请选择">
+                    <el-select filterable :loading="carrierLoading" multiple v-model="userForm.customer_staff_ids" @change="getFluidList(userForm.customer_staff_ids)" placeholder="请选择">
                       <el-option v-for="(item,key) in carrierSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -33,8 +33,13 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实际液厂:" prop="fluid">
-                    <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" placeholder="请输入选择" @change="chooseFluid">
-                      <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.fluid_name" :value="item.id"></el-option>
+                    <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" :disabled="mileEdit" placeholder="请输入选择" @change="chooseFluid">
+                      <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.fluid_name" :value="item.id">
+                        <div>
+                          <span>{{ item.fluid_name }}</span>
+                          <span style="float: right; color: #8492a6; font-size: 13px" v-if="item.customer_info">{{ item.customer_info.name }}</span>
+                        </div>
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -48,7 +53,7 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="站点:" prop="customer_station_id">
-                    <el-select v-model="userForm.customer_station_id" :loading="searchSiteLoading" filterable remote clearable @change="chooseSite" :remote-method="getSiteList" placeholder="请输入选择">
+                    <el-select v-model="userForm.customer_station_id" :loading="searchSiteLoading" :disabled="mileEdit" filterable remote clearable @change="chooseSite" :remote-method="getSiteList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -60,7 +65,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="标准里程:" prop="mile">
-                    <el-input placeholder="请输入" type="text" v-model="userForm.mile"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model="userForm.mile" :disabled="mileEdit"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -142,7 +147,8 @@ export default {
       fluidFactorySelect: [],
       fluidSiteSelect: [],
       carrierSelect: [],
-      detailData: {}
+      detailData: {},
+      mileEdit: true
     }
   },
   methods: {
@@ -155,11 +161,13 @@ export default {
     },
 
     getFluidList: function(ids) {
-      let postData = {
-        customer_staff_ids:ids.join(',')
+      if (ids && ids.length) {
+        this.mileEdit = false;
+      } else {
+        this.mileEdit = true;
       }
       this.searchFluidLoading = true;
-      this.$$http('getFulid', postData).then((results) => {
+      this.$$http('getFulid', {}).then((results) => {
         this.searchFluidLoading = false;
         if (results.data && results.data.code == 0) {
           this.fluidFactorySelect = results.data.data;
@@ -204,7 +212,7 @@ export default {
     },
 
     chooseFluid: function() {
-      console.log('this.userForm.fluid', this.userForm.fluid);
+
       for (let i in this.fluidFactorySelect) {
         if (this.userForm.fluid === this.fluidFactorySelect[i].id) {
           this.fluidAddress = this.fluidFactorySelect[i].actual_address;
@@ -291,6 +299,8 @@ export default {
           }
           this.fluidAddress = this.detailData.fluid_factory.actual_address;
           this.siteAddress = this.detailData.fluid_site.address;
+
+          this.getFluidList(this.userForm.customer_staff_ids, true);
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -298,7 +308,7 @@ export default {
     },
   },
   created: function() {
-    // this.getFluidList();
+    this.getFluidList();
     this.getSiteList();
     this.getCarrierList();
     if (this.id) {

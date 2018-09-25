@@ -2074,8 +2074,17 @@ const api = {
     param: {
 
     }
-  }
-
+  },
+  highSpeedList:{
+    url: '/carrier/high_speed/',
+    method: 'GET',
+    desc: "高速费公司列表",
+    param: {
+      name: {
+        desc: '油气公司名称',
+      },
+    }
+  },
 }
 
 

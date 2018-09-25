@@ -122,58 +122,78 @@ let supplierManage = {
     title: '供应商管理',
   },
   component: (resolve) => require(['../page/clientManage/supplierManage/supplierManage'], resolve),
-  redirect: '/clientManage/supplierManage/energyManageList',
+  redirect: '/clientManage/supplierManage/energyManage/energyManageList',
   children: [{
-      path: 'energyManageList',
-      name: 'energyManageList',
+      path: 'energyManage',
+      name: 'energyManage',
       meta: {
         isVerificationL: false,
         title: '油气费管理',
       },
-      component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageList'], resolve),
+      component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManage'], resolve),
       children: [{
-        path: 'energyManageChange',
-        name: 'energyManageChange',
-        meta: {
-          isVerificationL: false,
-          title: '油气费新增或编辑',
+          path: 'energyManageList',
+          name: 'energyManageList',
+          meta: {
+            isVerificationL: false,
+            title: '油气费管理列表',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageList'], resolve),
         },
-        component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageChange'], resolve),
-      }, {
-        path: 'energyManageDetalis',
-        name: 'energyManageDetalis',
-        meta: {
-          isVerificationL: false,
-          title: '油气费详情',
-        },
-        component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageDetalis'], resolve),
-      }]
+        {
+          path: 'energyManageChange',
+          name: 'energyManageChange',
+          meta: {
+            isVerificationL: false,
+            title: '油气费新增或编辑',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageChange'], resolve),
+        }, {
+          path: 'energyManageDetalis',
+          name: 'energyManageDetalis',
+          meta: {
+            isVerificationL: false,
+            title: '油气费详情',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageDetalis'], resolve),
+        }
+      ]
     },
     {
-      path: 'tollfeeManageList',
-      name: 'tollfeeManageList',
+      path: 'tollfeeManage',
+      name: 'tollfeeManage',
       meta: {
         isVerificationL: false,
         title: '高速费管理',
       },
-      component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageList'], resolve),
+      component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManage'], resolve),
       children: [{
-        path: 'tollfeeManageChange',
-        name: 'tollfeeManageChange',
-        meta: {
-          isVerificationL: false,
-          title: '高速费新增或编辑',
+          path: 'tollfeeManageList',
+          name: 'tollfeeManageList',
+          meta: {
+            isVerificationL: false,
+            title: '高速费管理列表',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManagelist'], resolve),
         },
-        component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageChange'], resolve),
-      }, {
-        path: 'tollfeeManageDetalis',
-        name: 'tollfeeManageDetalis',
-        meta: {
-          isVerificationL: false,
-          title: '高速费详情',
-        },
-        component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageDetalis'], resolve),
-      }]
+        {
+          path: 'tollfeeManageChange',
+          name: 'tollfeeManageChange',
+          meta: {
+            isVerificationL: false,
+            title: '高速费新增或编辑',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageChange'], resolve),
+        }, {
+          path: 'tollfeeManageDetalis',
+          name: 'tollfeeManageDetalis',
+          meta: {
+            isVerificationL: false,
+            title: '高速费详情',
+          },
+          component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageDetalis'], resolve),
+        }
+      ]
     }
   ]
 };

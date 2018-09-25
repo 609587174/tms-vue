@@ -47,13 +47,13 @@ const api = {
     desc: '匹配卸货单',
     param: {
       waybill_id: {
-          desc: '卸货地名称'
+        desc: '卸货地名称'
       },
       match_order_list: {
-          desc: '匹配卸车单ID列表,'
+        desc: '匹配卸车单ID列表,'
       },
       cancel_order_list: {
-          desc: '取消卸车单ID列表'
+        desc: '取消卸车单ID列表'
       },
     }
   },
@@ -66,53 +66,53 @@ const api = {
     }
   },
   addUnloadBill: {
-      url: '/order/business_order/',
-      method: 'post',
-      desc: '新增卸货单',
-      param: {
-        tms_station_name: {
-            desc: '卸货地名称'
-        },
-        station: {
-            desc: '实际站点名称,'
-        },
-        consignee: {
-            desc: '收货人'
-        },
-        consignee_phone: {
-            desc: '收货人联系电话'
-        },
-        plan_arrive_time: {
-            desc: '计划到站时间'
-        },
-        plan_tonnage: {
-            desc: '计划需求吨位'
-        },
-        station_address:{
-          desc:'站点地址'
-        },
-        business_type:{
-          desc:'业务单类型'
-        },
-        order_source: {
-          desc:'业务单来源，tms建的传TMS'
-        },
-        company_id:{
-          desc:'创建该线下承运单的tms公司的id'
-        },
-        short_name: {
-          desc:'客户简称'
-        },
-        consumer_id:{
-          desc:''
-        },
-        consumer_name: {
-          desc:'客户名称'
-        },
-        station_id:{
-          desc:'站点ID'
-        }
+    url: '/order/business_order/',
+    method: 'post',
+    desc: '新增卸货单',
+    param: {
+      tms_station_name: {
+        desc: '卸货地名称'
+      },
+      station: {
+        desc: '实际站点名称,'
+      },
+      consignee: {
+        desc: '收货人'
+      },
+      consignee_phone: {
+        desc: '收货人联系电话'
+      },
+      plan_arrive_time: {
+        desc: '计划到站时间'
+      },
+      plan_tonnage: {
+        desc: '计划需求吨位'
+      },
+      station_address: {
+        desc: '站点地址'
+      },
+      business_type: {
+        desc: '业务单类型'
+      },
+      order_source: {
+        desc: '业务单来源，tms建的传TMS'
+      },
+      company_id: {
+        desc: '创建该线下承运单的tms公司的id'
+      },
+      short_name: {
+        desc: '客户简称'
+      },
+      consumer_id: {
+        desc: ''
+      },
+      consumer_name: {
+        desc: '客户名称'
+      },
+      station_id: {
+        desc: '站点ID'
       }
+    }
   },
   getLedgerList: {
     url: '/statistic/ledger/',
@@ -2010,7 +2010,7 @@ const api = {
 
     }
   },
-  loadWayBillOfTruck:{
+  loadWayBillOfTruck: {
     url: '/api/v1/loadCoordinateOfDay',
     method: 'GET',
     desc: "单个车下所有运单",
@@ -2018,7 +2018,7 @@ const api = {
 
     }
   },
-  loadWayBillOfTruck:{
+  loadWayBillOfTruck: {
     url: '/bigdata/api/v1/loadWayBillOfTruck',
     method: 'GET',
     desc: "加载车辆下的所有运单",
@@ -2026,7 +2026,7 @@ const api = {
 
     }
   },
-  loadCoordinateOfWaybill:{
+  loadCoordinateOfWaybill: {
     url: '/bigdata/api/v1/loadCoordinateOfWaybill',
     method: 'GET',
     desc: "加载运单的轨迹",
@@ -2034,7 +2034,7 @@ const api = {
 
     }
   },
-  loadCoordinateOfInterval:{
+  loadCoordinateOfInterval: {
     url: '/bigdata/api/v1/loadCoordinateOfInterval',
     method: 'GET',
     desc: "按时间加载轨迹",
@@ -2042,7 +2042,7 @@ const api = {
 
     }
   },
-  loadTripOfPlanId:{
+  loadTripOfPlanId: {
     url: '/bigdata/api/v1/loadTripOfPlanId',
     method: 'GET',
     desc: "加载液厂到站点轨迹",
@@ -2050,7 +2050,7 @@ const api = {
 
     }
   },
-  loadAllTrip:{
+  loadAllTrip: {
     url: '/bigdata/api/v1/loadAllTrip',
     method: 'GET',
     desc: "加载",
@@ -2059,10 +2059,18 @@ const api = {
     }
   },
 
-  loadlist:{
+  loadlist: {
     url: '/bigdata/api/v1/loadlist',
     method: 'GET',
     desc: "加载所有液厂和站点",
+    param: {
+
+    }
+  },
+  searchEnergyList: {
+    url: '/carrier/oilgas/',
+    method: 'GET',
+    desc: "加油气公司列表",
     param: {
 
     }

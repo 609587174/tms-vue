@@ -70,6 +70,11 @@ export default {
         statistics: 'DATA_STATISTICS', //数据统计
         business: 'BUSINESS_STATISTICS', //物流数据
         costManage: 'EXPENSE_MANAGEMENT', //费用管理
+
+        supplierManage: 'SUPPLIER_MANAGEMENT_SECOND', //供应商管理
+        energyManageList: 'OIL_GAS_COMPANY_MANAGEMENT', //加油气公司管理
+        tollfeeManageList: 'HIGHWAY_COMPANY_MANAGEMENT', //高速公司管理
+
         ledger: 'BUSINESS_ACCOUNT_SECOND', //业务台账
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         arap: 'PAYMENT_MANAGEMENT', //应收应付

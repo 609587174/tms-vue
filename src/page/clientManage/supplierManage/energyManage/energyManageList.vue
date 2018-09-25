@@ -6,7 +6,7 @@
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="油气费管理" name="energy">
-          
+          asd
         </el-tab-pane>
         <el-tab-pane label="高速费管理" name="tollfee">
 

@@ -17,20 +17,47 @@
         </el-col>
       </el-row>
       <el-main v-loading="pageLoading">
-        <transition name="el-fade-in-linear">
             <el-form class="addTailcarform" label-width="150px" ref="energyManageFrom" :rules="rules" :model="energyManageFrom" status-icon :label-position="'left'">
-              
+                <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="加油气公司:" prop="name">
+                    <el-input :autofocus="true" placeholder="请输入" type="text" v-model="energyManageFrom.name"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                <el-form-item label="类型:" prop="type">
+                  <el-select v-model="energyManageFrom.type"  placeholder="请选择" prop="contact_name">
+                    <el-option v-for="(item,key) in selectData.typeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+                  </el-select>
+                </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="80">
+                <el-col :span="8">
+                  <el-form-item label="联系人:" prop="contact_name">
+                    <el-input  placeholder="请输入" type="text" v-model="energyManageFrom.contact_name"></el-input>
+                  </el-form-item>
+                </el-col>
+                 <el-col :span="8">
+                  <el-form-item label="联系方式:" prop="contact_phone">
+                    <el-input placeholder="请输入" type="num" v-model="energyManageFrom.contact_phone"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="地址:" prop="detail_address">
+                     <el-input  placeholder="请输入客户名称" type="text" v-model="energyManageFrom.detail_address"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
             </el-form>
             <div class="detail-btn">
               <el-row>
                 <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" >取消</el-button>
-                  <el-button type="primary" >保存</el-button>
+                  <el-button type="success" @click="operation('cancle')">取消</el-button>
+                  <el-button type="primary" @click="operation('save')">保存</el-button>
                 </el-col>
               </el-row>
             </div>
-        </transition>
-        
       </el-main>
     </el-container>
   </div>
@@ -39,28 +66,44 @@
 export default {
   name: 'energyManageChange',
   data() {
+    var phoneVa = (rule, value, callback) => {
+      if (value.match(/^\d{3,4}-?\d{7,8}$/)||value.match(/^[1][3,4,5,7,8][0-9]{9}$/)||value=="") {
+        callback();
+      } else {
+        callback(new Error("应为11位手机号或12位座机号"));
+      }
+    };
     return {
       titleType: "新增加油气费公司",
       editable: false,
       pageLoading: false,
       energyManageFrom:{
-
+        
       },
+      energyManageFromArr:['name','type','contact_name','contact_phone','detail_address'],
       rules: {
-
-      }
+        name:[
+          { required: true, message: '加油气公司为1~20个字符', trigger: 'blur' },
+          { min: 1, max: 20, message: '为1~20个字符', trigger: 'blur' }
+        ],
+        contact_phone:[
+          { validator:phoneVa , trigger: 'blur' },
+        ]
+      },
+      energyId:"",
     }
   },
   created() {
+    if(this.$route.query.energyId){
+      this.energyId=this.$route.query.energyId;
+      this.getInitData();
+    }
+  },
   
-  },
-  goDetalis:function(){
-
-  },
   computed: {
     selectData: function() {
       return {
-        
+        typeSelect:[{verbose:"油",key:"OIL"},{verbose:"气",key:"GAS"}]
       }
     },
     returnPage: function() {
@@ -71,8 +114,33 @@ export default {
     VaDate:function(){
       
     },
-    updateFrom: function(operation, formName) {
-      
+    goDetalis:function(){
+      if(this.$route.query.operate === 'edit'){
+        this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageDetalis?energyId=" + this.energyId });
+      }else{
+        this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageList" });
+      }
+    },
+    updateFrom: function() {
+      this.validatorFrom('energyManageFrom',(results)=>{
+        if(results){
+          var sendData = this.pbFunc.deepcopy(this.energyManageFrom);
+          sendData = this.pbFunc.fifterObjIsNull(sendData);
+          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr);
+          sendData.id=this.energyId;
+          this.$$http('updateEnergy', sendData).then((result) => {
+            vm.pageLoading = false;
+            if (result.data.code == 0) {
+              vm.goDetalis();
+            }
+          }).catch(() => {
+            this.pageLoading = false;
+          });
+        }
+      });
+    },
+    getInitData:function(){
+
     },
     validatorFrom: function(formName, callback) {
       this.$refs[formName].validate((valid) => {
@@ -84,8 +152,37 @@ export default {
         }
       });
     },
-    createFrom: function(operation, formName) {
-      
+    createFrom: function() {
+      this.validatorFrom('energyManageFrom',(results)=>{
+        if(results){
+          var sendData = this.pbFunc.deepcopy(this.energyManageFrom);
+          sendData = this.pbFunc.fifterObjIsNull(sendData);
+          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr)
+          this.$$http('creatEnergy', sendData).then((result) => {
+            vm.pageLoading = false;
+            if (result.data.code == 0) {
+              vm.goDetalis();
+            }
+          }).catch(() => {
+            this.pageLoading = false;
+          });
+        }
+      });
+    },
+    operation:function(type){
+      if(type=="cancle"){
+        if(this.$route.query.operate === 'edit'){
+          this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageDetalis?energyId=" + this.energyId });
+        }else{
+          this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageList" });
+        }
+      }else if(type=="save"){
+        if(this.$route.query.operate === 'edit'){
+          this.updateFrom();
+        }else{
+          this.createFrom();
+        }
+      }
     },
   }
 }

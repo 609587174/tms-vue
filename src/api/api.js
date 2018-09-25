@@ -2085,6 +2085,14 @@ const api = {
       },
     }
   },
+  highSpeedDetail:{
+    url: '/carrier/high_speed/:id/',
+    method: 'GET',
+    desc: "高速费公司详情",
+    param: {
+
+    }
+  },
 }
 
 

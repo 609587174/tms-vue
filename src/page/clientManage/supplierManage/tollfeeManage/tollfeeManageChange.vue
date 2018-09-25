@@ -17,20 +17,16 @@
         </el-col>
       </el-row>
       <el-main v-loading="pageLoading">
-        <transition name="el-fade-in-linear">
-            <el-form class="addTailcarform" label-width="150px" ref="tollfeeManageFrom" :rules="rules" :model="tollfeeManageFrom" status-icon :label-position="'left'">
-              
-            </el-form>
-            <div class="detail-btn">
-              <el-row>
-                <el-col :span="12" :offset="6" class="text-center">
-                  <el-button type="success" >取消</el-button>
-                  <el-button type="primary" >保存</el-button>
-                </el-col>
-              </el-row>
-            </div>
-        </transition>
-        
+        <el-form class="addTailcarform" label-width="150px" ref="tollfeeManageFrom" :rules="rules" :model="tollfeeManageFrom" status-icon :label-position="'left'">
+        </el-form>
+        <div class="detail-btn">
+          <el-row>
+            <el-col :span="12" :offset="6" class="text-center">
+              <el-button type="success">取消</el-button>
+              <el-button type="primary">保存</el-button>
+            </el-col>
+          </el-row>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -38,12 +34,18 @@
 <script>
 export default {
   name: 'tollfeeManageChange',
+  computed: {
+    id() {
+      return this.$route.query.id;
+    },
+    titleType() {
+      return this.$route.query.id ? '编辑高速费公司' : '新增高速费公司'
+    }
+  },
   data() {
     return {
-      titleType: "新增高速费公司",
-      editable: false,
       pageLoading: false,
-      tollfeeManageFrom:{
+      tollfeeManageFrom: {
 
       },
       rules: {
@@ -51,30 +53,14 @@ export default {
       }
     }
   },
-  created() {
-  
-  },
-  goDetalis:function(){
-
-  },
-  computed: {
-    selectData: function() {
-      return {
-        
-      }
-    },
-    returnPage: function() {
-      return (this.$route.query.operate === 'edit') ? '详情页' : '列表页';
-    },
-  },
   methods: {
-    VaDate:function(){
-      
+    VaDat() {
+
     },
-    updateFrom: function(operation, formName) {
-      
+    updateFrom(operation, formName) {
+
     },
-    validatorFrom: function(formName, callback) {
+    validatorFrom(formName, callback) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           callback(true);
@@ -84,10 +70,20 @@ export default {
         }
       });
     },
-    createFrom: function(operation, formName) {
-      
+    createFrom(operation, formName) {
+
     },
-  }
+    goDetalis() {
+      if (this.id) {
+        this.$router.push({ path: `/clientManage/supplierManage/tollfeeManage/tollfeeManageDetalis/${this.id}` });
+      } else {
+        this.$router.push({ path: "/clientManage/supplierManage/tollfeeManage/tollfeeManageList" });
+      }
+    }
+  },
+  created() {
+
+  },
 }
 
 </script>

@@ -185,7 +185,7 @@ let supplierManage = {
           },
           component: (resolve) => require(['../page/clientManage/supplierManage/tollfeeManage/tollfeeManageChange'], resolve),
         }, {
-          path: 'tollfeeManageDetalis',
+          path: 'tollfeeManageDetalis/:id',
           name: 'tollfeeManageDetalis',
           meta: {
             isVerificationL: false,

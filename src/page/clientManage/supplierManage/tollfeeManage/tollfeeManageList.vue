@@ -125,22 +125,19 @@ export default {
       })
     },
     addList() {
-      this.$router.push({ path: '/clientManage/supplierManage/tollfeeManageChange' });
+      this.$router.push({ path: '/clientManage/supplierManage/tollfeeManage/tollfeeManageChange' });
     },
     handleMenuClick(row) {
       console.log('row', row);
       if (row.operator === 'check') {
         this.$router.push({
-          path: '/clientManage/supplierManage/tollfeeManageList/tollfeeManageDetalis',
-          param: {
-            id: row.id
-          }
+          path: `/clientManage/supplierManage/tollfeeManage/tollfeeManageDetalis/${row.id}`,
         });
       }
     }
   },
 
-  created: function() {
+  created() {
     this.startSearch();
   }
 }

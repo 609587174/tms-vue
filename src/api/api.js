@@ -2091,7 +2091,7 @@ const api = {
 
     }
   },
-  highSpeedList:{
+  highSpeedList: {
     url: '/carrier/high_speed/',
     method: 'GET',
     desc: "高速费公司列表",
@@ -2101,7 +2101,7 @@ const api = {
       },
     }
   },
-  highSpeedDetail:{
+  highSpeedDetail: {
     url: '/carrier/high_speed/:id/',
     method: 'GET',
     desc: "高速费公司详情",
@@ -2109,6 +2109,30 @@ const api = {
 
     }
   },
+  creatEnergy: {
+    url: '/carrier/oilgas/',
+    method: 'POST',
+    desc: "新增油气费",
+    param: {
+
+    }
+  },
+  updateEnergy: {
+    url: '/carrier/oilgas/:id/',
+    method: 'PUT',
+    desc: "修改油气费",
+    param: {
+
+    }
+  },
+  energyDetalis: {
+    url: '/carrier/oilgas/:id/',
+    method: 'GET',
+    desc: "油气费详情",
+    param: {
+
+    }
+  }
 }
 
 

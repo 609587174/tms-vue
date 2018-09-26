@@ -111,12 +111,9 @@ export default {
     },
   },
   methods: {
-    VaDate:function(){
-      
-    },
     goDetalis:function(){
       if(this.$route.query.operate === 'edit'){
-        this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageDetalis?energyId=" + this.energyId });
+        this.$router.push({ path: `/clientManage/supplierManage/energyManage/energyManageDetalis/${this.energyId}` });
       }else{
         this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageList" });
       }
@@ -129,9 +126,9 @@ export default {
           sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr);
           sendData.id=this.energyId;
           this.$$http('updateEnergy', sendData).then((result) => {
-            vm.pageLoading = false;
+            this.pageLoading = false;
             if (result.data.code == 0) {
-              vm.goDetalis();
+              this.goDetalis();
             }
           }).catch(() => {
             this.pageLoading = false;
@@ -140,7 +137,16 @@ export default {
       });
     },
     getInitData:function(){
-
+      this.pageLoading = true;
+      this.$$http('energyDetalis', { id: this.energyId }).then((results) => {
+        this.pageLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.energyManageFrom = results.data.data;
+          this.energyManageFrom.type=this.energyManageFrom.type.key;
+        }
+      }).catch((err) => {
+        this.pageLoading = false;
+      })
     },
     validatorFrom: function(formName, callback) {
       this.$refs[formName].validate((valid) => {
@@ -159,9 +165,9 @@ export default {
           sendData = this.pbFunc.fifterObjIsNull(sendData);
           sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr)
           this.$$http('creatEnergy', sendData).then((result) => {
-            vm.pageLoading = false;
+            this.pageLoading = false;
             if (result.data.code == 0) {
-              vm.goDetalis();
+              this.goDetalis();
             }
           }).catch(() => {
             this.pageLoading = false;

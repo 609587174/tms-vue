@@ -132,10 +132,10 @@ export default {
 
     },
     jumpPage:function(scope){
-      this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageDetalis?energyId=" + scope.rowData.id });
+      this.$router.push({ path: `/clientManage/supplierManage/energyManage/energyManageDetalis/${scope.rowData.id}` });
     },
     addEnergy:function(){
-      this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageChange?operator='add'" });
+      this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageChange?operate=add" });
     },
     handleClick:function(targetName){
       if (targetName.name == 'tollfee') {

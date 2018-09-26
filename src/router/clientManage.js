@@ -149,7 +149,7 @@ let supplierManage = {
           },
           component: (resolve) => require(['../page/clientManage/supplierManage/energyManage/energyManageChange'], resolve),
         }, {
-          path: 'energyManageDetalis',
+          path: 'energyManageDetalis/:id',
           name: 'energyManageDetalis',
           meta: {
             isVerificationL: false,

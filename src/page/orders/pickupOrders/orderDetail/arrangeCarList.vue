@@ -126,6 +126,20 @@
         </el-tab-pane>
       </el-tabs>
     </div>
+    <el-dialog title="注意:" :visible.sync="juageAddDialog" width="50%" :center="'center'" @close="juageAddDialogClose">
+      <div style="margin:15px 5%">车号{{judgeAddRow.tractor&&judgeAddRow.tractor.plate_number}} 有司机未确认订单:</div>
+      <el-table :data="judgeAddData" style="width:90%;margin-left:5%" border size="small">
+        <el-table-column property="delivery_order_number" label="订单号" width="150"></el-table-column>
+        <el-table-column property="willbill_number" label="运单号" width="200"></el-table-column>
+        <el-table-column property="status.verbose" label="状态"></el-table-column>
+        <el-table-column property="delivery_order_create_time" label="日期"></el-table-column>
+      </el-table>
+      <div style="margin:25px 5%">继续操作可能导致司机上传磅单错误，是否继续添加进本订单？</div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="juageAddDialogClose">取 消</el-button>
+        <el-button type="primary" @click="sureChosse">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -135,6 +149,7 @@ export default {
     return {
       activeName: 'first',
       pageLoading: false,
+      juageAddDialog:false,
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -218,7 +233,10 @@ export default {
       del_capacities: [], //取消的运力表
       start_capacities: [], //初始的运力表
       now_capacities: [], //已经选择的运力表
-      default_del_capacities: [] //默认需要取消的运力
+      default_del_capacities: [], //默认需要取消的运力
+
+      judgeAddData:{},//选择车辆时,当前车如果背有未确认的运单时候需要展示的数据源
+      judgeAddRow:{}//缓存的即将要被添加的数据
     }
   },
   computed: {
@@ -230,6 +248,31 @@ export default {
     }
   },
   methods: {
+    sureChosse:function(){
+      this.$refs.multipleTable.toggleRowSelection(this.judgeAddRow, true);
+      this.trueAll_list.forEach((Titem) => {
+        if (Titem.id == this.judgeAddRow.id) {
+          Titem.bindCheckBox = true;
+        }
+      });
+      this.juageAddDialog=false;
+    },
+    juageAddDialogClose:function(){
+      this.juageAddDialog = false;
+      this.$refs.multipleTable.toggleRowSelection(this.judgeAddRow, false);
+        var new_now_capacities1 = [];
+        this.now_capacities.forEach((item, index) => {
+          if (item.id != this.judgeAddRow.id) {
+            new_now_capacities1.push(item);
+          }
+        });
+        this.now_capacities = new_now_capacities1;
+        this.trueAll_list.forEach((Titem) => {
+          if (Titem.id == this.judgeAddRow.id) {
+            Titem.bindCheckBox = false;
+          }
+        });
+    },
     checkSelectable: function(row) {
       return !row.isDisable
     },
@@ -277,73 +320,76 @@ export default {
           let postData3 = {
             transport_id: row.id
           };
-          this.$$http('checkHasOrder', postData3).then((results) => {
+          this.$$http('searchNoUse', postData3).then((results) => {
 
             if (results.data && results.data.code == 0) {
               vm.pageLoading = false;
-              if (results.data.data.length > 0) {
-                // var orderListText = "";
-                // results.data.data.forEach((item) => {
-                //   orderListText += item + ",";
-                // });
-                // const h = this.$createElement;
-                // vm.$confirm({
-                //   title: '请注意',
-                //   message: h('p', null, [
-                //     h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
-                //     h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
-                //   ]),
-                //   showCancelButton: true,
-                //   confirmButtonText: '继续添加',
-                //   cancelButtonText: '返回',
-                //   beforeClose: (action, instance, done) => {
-                //     if (action === 'confirm') {
-                //       done();
+              if (results.data.data.trips_driver_unconfirm_list.length ==0&&results.data.data.delivery_list.length>0) {
+                var orderListText = "";
+                results.data.data.forEach((item) => {
+                  orderListText += item + ",";
+                });
+                const h = this.$createElement;
+                vm.$confirm({
+                  title: '请注意',
+                  message: h('p', null, [
+                    h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
+                    h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
+                  ]),
+                  showCancelButton: true,
+                  confirmButtonText: '继续添加',
+                  cancelButtonText: '返回',
+                  beforeClose: (action, instance, done) => {
+                    if (action === 'confirm') {
+                      done();
 
-                //     } else {
+                    } else {
 
-                //       done();
-                //     }
-                //   }
-                // })
-                // vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
-                //   confirmButtonText: '继续添加',
-                //   cancelButtonText: '返回',
-                //   type: 'warning',
-                //   center: true,
-                //   showClose: false,
-                //   closeOnClickModal: false,
-                //   closeOnPressEscape: false
-                // }).then(() => {
-                //   row.bindCheckBox = !row.bindCheckBox;
-                //   vm.trueAll_list.forEach((Titem) => {
-                //     if (Titem.id == row.id) {
-                //       Titem.bindCheckBox = true;
-                //     }
+                      done();
+                    }
+                  }
+                })
+                vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
+                  confirmButtonText: '继续添加',
+                  cancelButtonText: '返回',
+                  type: 'warning',
+                  center: true,
+                  showClose: false,
+                  closeOnClickModal: false,
+                  closeOnPressEscape: false
+                }).then(() => {
+                  row.bindCheckBox = !row.bindCheckBox;
+                  vm.trueAll_list.forEach((Titem) => {
+                    if (Titem.id == row.id) {
+                      Titem.bindCheckBox = true;
+                    }
 
-                //   });
-                // }).catch(() => {
-                //   vm.$refs.multipleTable.toggleRowSelection(row, false);
-                //   var new_now_capacities1 = [];
-                //   vm.now_capacities.forEach((item, index) => {
-                //     if (item.id != row.id) {
-                //       new_now_capacities1.push(item);
-                //     }
-                //   });
-                //   vm.now_capacities = new_now_capacities1;
-                //   vm.trueAll_list.forEach((Titem) => {
-                //     if (Titem.id == row.id) {
-                //       Titem.bindCheckBox = false;
-                //     }
-                //   });
-                // });
-              } else {
+                  });
+                }).catch(() => {
+                  vm.$refs.multipleTable.toggleRowSelection(row, false);
+                  var new_now_capacities1 = [];
+                  vm.now_capacities.forEach((item, index) => {
+                    if (item.id != row.id) {
+                      new_now_capacities1.push(item);
+                    }
+                  });
+                  vm.now_capacities = new_now_capacities1;
+                  vm.trueAll_list.forEach((Titem) => {
+                    if (Titem.id == row.id) {
+                      Titem.bindCheckBox = false;
+                    }
+                  });
+                });
+              } else if(results.data.data.trips_driver_unconfirm_list.length !=0){
+                 vm.juageAddDialog=true;
+                 vm.judgeAddData=results.data.data.trips_driver_unconfirm_list;
+                 vm.judgeAddRow=row;
+              }else if (results.data.data.trips_driver_unconfirm_list.length ==0&&results.data.data.delivery_list.length==0) {
                 row.bindCheckBox = !row.bindCheckBox;
                 vm.trueAll_list.forEach((Titem) => {
                   if (Titem.id == row.id) {
                     Titem.bindCheckBox = true;
                   }
-
                 });
               }
             }

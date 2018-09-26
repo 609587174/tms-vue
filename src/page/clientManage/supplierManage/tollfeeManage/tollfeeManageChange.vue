@@ -87,7 +87,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入高速公司名称', trigger: 'blur' },
-          { pattern: /^([\u4E00-\u9FA5A-Za-z0-9]{1,20})$/gi, message: '姓名为1～20个汉字', trigger: 'blur' }
+          { min: 1, max: 20, message: '为1~20个字符', trigger: 'blur' }
         ],
         contact_phone: [
           { pattern: /^\d{3,4}-?\d{7,8}$/, message: '请输入手机号或者座机号', trigger: 'blur' }

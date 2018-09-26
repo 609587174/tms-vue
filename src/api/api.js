@@ -9,6 +9,22 @@
  */
 
 const api = {
+  getOilGasPaymentList: {
+    url: '/statistic/oilgas-pay-m/',
+    method: 'get',
+    desc: '加油气付款管理',
+    param: {
+
+    }
+  },
+  getOilGasMeetList: {
+    url: '/statistic/inout-oilgas-pay/',
+    method: 'get',
+    desc: '加油气应付列表',
+    param: {
+
+    }
+  },
   updateShipperReceivableManage: {
     url: '/statistic/carrier-back-m/:id/',
     method: 'patch',

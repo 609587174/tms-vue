@@ -146,9 +146,17 @@ export default {
         title: '外油/气',
         param: 'ex_oil',
         width: ''
+      },{
+        title: '外油/气量',
+        param: 'ex_nums',
+        width: ''
       }, {
         title: '公司油/气',
         param: 'com_oil',
+        width: ''
+      }, {
+        title: '公司油/气量',
+        param: 'com_nums',
         width: ''
       }, {
         title: '高速费',

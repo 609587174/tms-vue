@@ -79,6 +79,8 @@ export default {
         dataAnalysis: 'DATA_ANALYSIS', //数据分析
         arap: 'PAYMENT_MANAGEMENT', //应收应付
         shipperReceivableManage: 'TRADER_PAY_MANAGEMENT_SECOND', //托运方应收管理
+        // supplierMeetManage: 'TRADER_PAY_MANAGEMENT_SECOND', //供应商应付管理
+
         setting: 'SETTINGS', //设置
         company: 'CARRIER_SETTINGS', //公司主页
         organizationalStructure: 'ORGANIZE_STRUCTURE_SETTINGS', //组织架构

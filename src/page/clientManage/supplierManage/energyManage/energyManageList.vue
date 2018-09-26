@@ -97,7 +97,7 @@ export default {
       tableData:[],
       selectData: {
         fieldSelect: [
-          { id: 'name', value: '加油器公司' },
+          { id: 'name', value: '加油气公司' },
         ]
       },
     }

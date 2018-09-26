@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看详情</el-button>
+              <el-button size="mini" type="primary" @click="jumpPage({operator:'show',rowData:scope.row})">查看</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -145,7 +145,7 @@ export default {
     pageChange: function() {
       setTimeout(() => {
         this.pageStatus = true;
-        this.getList();
+        this.searchList();
       })
     }
   },

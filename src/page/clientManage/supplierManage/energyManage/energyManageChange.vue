@@ -178,7 +178,7 @@ export default {
     operation:function(type){
       if(type=="cancle"){
         if(this.$route.query.operate === 'edit'){
-          this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageDetalis?energyId=" + this.energyId });
+          this.$router.push({ path: `/clientManage/supplierManage/energyManage/energyManageDetalis/${this.energyId}` });
         }else{
           this.$router.push({ path: "/clientManage/supplierManage/energyManage/energyManageList" });
         }

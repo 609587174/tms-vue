@@ -40,9 +40,8 @@
                 <el-row :gutter="10">
                   <el-col :span="8" v-for="(itemRender,Rindex) in renderInfo">
                     <div class="label-list">
-                      <label><span class="text-red">{{itemRender.title}}</span>:</label>
-                      <div class="detail-form-item" v-if="itemRender.second">{{detailData[itemRender.valueKey][itemRender.second]}}</div>
-                      <div class="detail-form-item" v-else>{{detailData[itemRender.valueKey]}}</div>
+                      <label><span>{{itemRender.title}}</span>:</label>
+                      <div class="detail-form-item" >{{detailData[itemRender.valueKey]}}</div>
                     </div>
                   </el-col>
                 </el-row>
@@ -90,6 +89,7 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
+          this.detailData.type=this.detailData.type&&this.detailData.type.verbose;
         }
       }).catch((err) => {
         this.pageLoading = false;

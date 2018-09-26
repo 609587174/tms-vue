@@ -131,15 +131,7 @@ export default {
         },
         component: (resolve) => require(['../page/transportPowerManage/personManage/addPerson'], resolve)
       },
-      {
-        path: 'importPersonManage',
-        name: "importPersonManage",
-        meta: {
-          title: '人员导入',
-          isVerificationL: false
-        },
-        component: (resolve) => require(['../page/transportPowerManage/personManage/importPersonManage'], resolve)
-      }, {
+     {
         path: 'personDetail',
         name: 'personDetail',
         meta: {

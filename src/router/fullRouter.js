@@ -9,6 +9,7 @@ import statistics from './statistics'
 import dataAnalysis from './dataAnalysis'
 import news from './news'
 import arap from './arap'
+import importData from './imports'
 export default [{
   path: '',
   name: 'index',
@@ -28,6 +29,7 @@ export default [{
     dataAnalysis,
     setting,
     news,
-    arap
+    arap,
+    importData,
   ]
 }];

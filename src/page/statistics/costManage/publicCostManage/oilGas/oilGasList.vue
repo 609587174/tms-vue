@@ -217,7 +217,7 @@ export default {
       })
     },
     importData() {
-      this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/importOilGas` });
+      this.$router.push({ path: `/imports/importData/${'oilGas'}` });
     },
     exportData() {
 

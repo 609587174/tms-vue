@@ -28,6 +28,10 @@ export default {
         exportType:'highfree'
       },
       thTableList: [{
+        title: '高速公司',
+        param: 'high_company',
+        width: ''
+      },{
         title: '卡号类别',
         param: 'cost_type.verbose',
         width: ''

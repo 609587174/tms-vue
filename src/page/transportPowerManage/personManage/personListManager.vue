@@ -175,7 +175,7 @@ export default {
       this.$router.push({ path: "/transportPowerManage/personManage/addPerson", query: { operate: 'add' } });
     },
     importList: function() {
-      this.$router.push({ path: "/transportPowerManage/personManage/importPersonManage" });
+      this.$router.push({ path: `/imports/importData/${'personManage'}` });
     },
     exportList: function() {
 

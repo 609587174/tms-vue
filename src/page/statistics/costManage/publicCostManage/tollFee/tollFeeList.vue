@@ -168,6 +168,10 @@ export default {
         ]
       },
       thTableList: [{
+        title: '高速公司',
+        param: 'high_company',
+        width: '200'
+      },{
         title: '车号',
         param: 'plate_number',
         width: ''
@@ -222,7 +226,7 @@ export default {
       })
     },
     importData() {
-      this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/importTollFee` });
+      this.$router.push({ path: `/imports/importData/${'tollFee'}` });
     },
     exportData() {
 

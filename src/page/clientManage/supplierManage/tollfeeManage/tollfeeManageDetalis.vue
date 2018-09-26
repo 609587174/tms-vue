@@ -10,7 +10,7 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-        <el-tab-pane label="油气费详情" name="first">
+        <el-tab-pane label="高速费详情" name="first">
           <div class="detail-main" v-loading="pageLoading">
             <el-container v-show="!pageLoading">
               <el-header>

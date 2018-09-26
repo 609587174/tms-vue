@@ -26,11 +26,11 @@
       </el-tab-pane>
       </el-tabs>
       <div class="operation-btn text-right">
-        <el-button type="primary" @click="exportList">导出</el-button>
+        <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
         <el-button type="success" @click="addEnergy">新增</el-button>
       </div>
-      <div class="table-list" v-loading="pageLoading">
-        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading">
+      <div class="table-list" v-loading="pageLoading" >
+        <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -39,6 +39,7 @@
             </template>
           </el-table-column>
         </el-table>
+        <noData v-if="!pageLoading && tableData.length==0"></noData>
       </div>
       <div class="page-list text-center">
         <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
@@ -48,9 +49,13 @@
   </div>
 </template>
 <script>
+import noData from '@/components/common/noData';
 export default {
   name: 'tollfeeManageList',
   computed: {
+  },
+  components: {
+    noData,
   },
   data() {
     return {

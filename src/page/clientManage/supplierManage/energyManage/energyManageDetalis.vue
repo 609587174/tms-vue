@@ -41,7 +41,8 @@
                   <el-col :span="8" v-for="(itemRender,Rindex) in renderInfo">
                     <div class="label-list">
                       <label><span>{{itemRender.title}}</span>:</label>
-                      <div class="detail-form-item" >{{detailData[itemRender.valueKey]}}</div>
+                      <div class="detail-form-item" v-if="detailData[itemRender.valueKey]">{{detailData[itemRender.valueKey]}}</div>
+                      <div class="detail-form-item" v-else>无</div>
                     </div>
                   </el-col>
                 </el-row>

@@ -17,7 +17,7 @@
         </el-col>
       </el-row>
       <el-main v-loading="pageLoading">
-            <el-form class="addTailcarform" label-width="150px" ref="energyManageFrom" :rules="rules" :model="energyManageFrom" status-icon :label-position="'left'">
+            <el-form class="addTailcarform" label-width="100px" ref="energyManageFrom" :rules="rules" :model="energyManageFrom" status-icon :label-position="'right'">
                 <el-row :gutter="80">
                 <el-col :span="8">
                   <el-form-item label="加油气公司:" prop="name">
@@ -45,7 +45,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="地址:" prop="detail_address">
-                     <el-input  placeholder="请输入客户名称" type="text" v-model="energyManageFrom.detail_address"></el-input>
+                     <el-input  placeholder="请输入" type="text" v-model="energyManageFrom.detail_address"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -67,7 +67,7 @@ export default {
   name: 'energyManageChange',
   data() {
     var phoneVa = (rule, value, callback) => {
-      if (value.match(/^\d{3,4}-?\d{7,8}$/)||value.match(/^[1][3,4,5,7,8][0-9]{9}$/)||value=="") {
+      if (value==""||value==null||value.match(/^\d{3,4}-?\d{7,8}$/)||value.match(/^[1][3,4,5,7,8][0-9]{9}$/)) {
         callback();
       } else {
         callback(new Error("应为11位手机号或12位座机号"));
@@ -78,7 +78,7 @@ export default {
       editable: false,
       pageLoading: false,
       energyManageFrom:{
-        
+        contact_phone:""
       },
       energyManageFromArr:['name','type','contact_name','contact_phone','detail_address'],
       rules: {
@@ -97,6 +97,7 @@ export default {
     if(this.$route.query.energyId){
       this.energyId=this.$route.query.energyId;
       this.getInitData();
+      this.titleType="编辑加油气费公司"
     }
   },
   

@@ -116,7 +116,7 @@ export default {
 
     },
     handleClick() {
-      this.$router.push({ path: '/clientManage/supplierManage/energyManageList' });
+      this.$router.push({ path: '/clientManage/supplierManage/energyManage/energyManageList' });
     },
     pageChange() {
       setTimeout(() => {

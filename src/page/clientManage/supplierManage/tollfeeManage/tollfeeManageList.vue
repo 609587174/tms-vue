@@ -2,9 +2,9 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="油气费管理" name="energy">
+        <el-tab-pane label="加油气公司" name="energy">
         </el-tab-pane>
-        <el-tab-pane label="高速费管理" name="tollfee">
+        <el-tab-pane label="高速公司" name="tollfee">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">

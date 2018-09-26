@@ -277,16 +277,16 @@ export default {
           let postData3 = {
             transport_id: row.id
           };
-          this.$$http('searchNoUse', postData3).then((results) => {
+          this.$$http('checkHasOrder', postData3).then((results) => {
 
             if (results.data && results.data.code == 0) {
               vm.pageLoading = false;
               if (results.data.data.length > 0) {
-                var orderListText = "";
-                results.data.data.forEach((item) => {
-                  orderListText += item + ",";
-                });
-                const h = this.$createElement;
+                // var orderListText = "";
+                // results.data.data.forEach((item) => {
+                //   orderListText += item + ",";
+                // });
+                // const h = this.$createElement;
                 // vm.$confirm({
                 //   title: '请注意',
                 //   message: h('p', null, [
@@ -306,37 +306,37 @@ export default {
                 //     }
                 //   }
                 // })
-                vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
-                  confirmButtonText: '继续添加',
-                  cancelButtonText: '返回',
-                  type: 'warning',
-                  center: true,
-                  showClose: false,
-                  closeOnClickModal: false,
-                  closeOnPressEscape: false
-                }).then(() => {
-                  row.bindCheckBox = !row.bindCheckBox;
-                  vm.trueAll_list.forEach((Titem) => {
-                    if (Titem.id == row.id) {
-                      Titem.bindCheckBox = true;
-                    }
+                // vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
+                //   confirmButtonText: '继续添加',
+                //   cancelButtonText: '返回',
+                //   type: 'warning',
+                //   center: true,
+                //   showClose: false,
+                //   closeOnClickModal: false,
+                //   closeOnPressEscape: false
+                // }).then(() => {
+                //   row.bindCheckBox = !row.bindCheckBox;
+                //   vm.trueAll_list.forEach((Titem) => {
+                //     if (Titem.id == row.id) {
+                //       Titem.bindCheckBox = true;
+                //     }
 
-                  });
-                }).catch(() => {
-                  vm.$refs.multipleTable.toggleRowSelection(row, false);
-                  var new_now_capacities1 = [];
-                  vm.now_capacities.forEach((item, index) => {
-                    if (item.id != row.id) {
-                      new_now_capacities1.push(item);
-                    }
-                  });
-                  vm.now_capacities = new_now_capacities1;
-                  vm.trueAll_list.forEach((Titem) => {
-                    if (Titem.id == row.id) {
-                      Titem.bindCheckBox = false;
-                    }
-                  });
-                });
+                //   });
+                // }).catch(() => {
+                //   vm.$refs.multipleTable.toggleRowSelection(row, false);
+                //   var new_now_capacities1 = [];
+                //   vm.now_capacities.forEach((item, index) => {
+                //     if (item.id != row.id) {
+                //       new_now_capacities1.push(item);
+                //     }
+                //   });
+                //   vm.now_capacities = new_now_capacities1;
+                //   vm.trueAll_list.forEach((Titem) => {
+                //     if (Titem.id == row.id) {
+                //       Titem.bindCheckBox = false;
+                //     }
+                //   });
+                // });
               } else {
                 row.bindCheckBox = !row.bindCheckBox;
                 vm.trueAll_list.forEach((Titem) => {

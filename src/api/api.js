@@ -1601,6 +1601,15 @@ const api = {
 
     }
   },
+  checkHasOrder: {
+    url: '/order/delivery-order/check-trip-driver-unconfirm/',
+    method: 'get',
+    desc: '运力判断是否有司机未确认的运单',
+    param: {
+
+
+    }
+  },
   searchDeliveryOrder: {
     url: '/order/delivery-order/list-capacity/',
     method: 'get',
@@ -2181,7 +2190,7 @@ const api = {
 
     }
   },
-  fixHighSpeed:{
+  fixHighSpeed: {
     url: '/carrier/high_speed/:id/',
     method: 'PUT',
     desc: "修改高速费公司",
@@ -2203,7 +2212,7 @@ const api = {
       },
     }
   },
-  addHighSpeed:{
+  addHighSpeed: {
     url: '/carrier/high_speed/',
     method: 'POST',
     desc: "修改高速费公司",

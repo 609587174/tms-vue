@@ -2132,7 +2132,51 @@ const api = {
     param: {
 
     }
-  }
+  },
+  fixHighSpeed:{
+    url: '/carrier/high_speed/:id/',
+    method: 'PUT',
+    desc: "修改高速费公司",
+    param: {
+      name: {
+        desc: '供应商名称',
+      },
+      type: {
+        desc: '供应商类型',
+      },
+      contact_name: {
+        desc: '联系人',
+      },
+      contact_phone: {
+        desc: '联系人电话',
+      },
+      detail_address: {
+        desc: '地址',
+      },
+    }
+  },
+  addHighSpeed:{
+    url: '/carrier/high_speed/',
+    method: 'POST',
+    desc: "修改高速费公司",
+    param: {
+      name: {
+        desc: '供应商名称',
+      },
+      type: {
+        desc: '供应商类型',
+      },
+      contact_name: {
+        desc: '联系人',
+      },
+      contact_phone: {
+        desc: '联系人电话',
+      },
+      detail_address: {
+        desc: '地址',
+      },
+    }
+  },
 }
 
 

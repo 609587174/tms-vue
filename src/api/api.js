@@ -9,10 +9,58 @@
  */
 
 const api = {
+  updateHighSpeedPayment: {
+    url: '/statistic/highspeed-pay-m/:id/',
+    method: 'patch',
+    desc: '更新高速公司付款',
+    param: {
+
+    }
+  },
+  addHighSpeedPayment: {
+    url: '/statistic/highspeed-pay-m/',
+    method: 'post',
+    desc: '新增高速公司付款',
+    param: {
+
+    }
+  },
+  getHighSpeedPaymentList: {
+    url: '/statistic/highspeed-pay-m/',
+    method: 'get',
+    desc: '高速公司付款管理',
+    param: {
+
+    }
+  },
+  updateOilGasPayment: {
+    url: '/statistic/oilgas-pay-m/:id/',
+    method: 'patch',
+    desc: '更新加油气付款',
+    param: {
+
+    }
+  },
+  addOilGasPayment: {
+    url: '/statistic/oilgas-pay-m/',
+    method: 'post',
+    desc: '新增加油气付款',
+    param: {
+
+    }
+  },
   getOilGasPaymentList: {
     url: '/statistic/oilgas-pay-m/',
     method: 'get',
     desc: '加油气付款管理',
+    param: {
+
+    }
+  },
+  getHighSpeedMeetList: {
+    url: '/statistic/inout-highspeed-pay/',
+    method: 'get',
+    desc: '高速公司应付列表',
     param: {
 
     }

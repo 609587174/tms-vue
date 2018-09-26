@@ -1,4 +1,3 @@
-
 <style scoped lang="less">
 .nav-tab-setting {
   position: relative;
@@ -53,7 +52,8 @@
         <el-button type="success" @click="arapDialogEdit('add')">新增</el-button>
       </div>
       <el-tabs v-model="receivableActive" @tab-click="receivableClick">
-        <el-tab-pane label="加油气付款" name="oilGasPayment">
+        <el-tab-pane label="加油气付款" name="oilGasPayment"></el-tab-pane>
+        <el-tab-pane label="高速付款" name="highSpeedPayment">
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
@@ -80,18 +80,17 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="高速付款" name="highSpeedPayment"></el-tab-pane>
       </el-tabs>
     </div>
-    <oil-gas-payment-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></oil-gas-payment-dialog>
+    <high-speed-payment-dialog :arap-dialog="arapDialog" v-on:closeDialogBtn="closeDialog" :arap-row="arapRow"></high-speed-payment-dialog>
   </div>
 </template>
 <script>
-import oilGasPaymentDialog from '@/components/arap/oilGasPaymentDialog';
+import highSpeedPaymentDialog from '@/components/arap/highSpeedPaymentDialog';
 export default {
-  name: 'oilGasPayment',
+  name: 'highSpeedPayment',
   components: {
-    oilGasPaymentDialog: oilGasPaymentDialog
+    highSpeedPaymentDialog: highSpeedPaymentDialog
   },
   computed: {
 
@@ -105,7 +104,7 @@ export default {
         pageSize: 10,
       },
       activeName: 'payment',
-      receivableActive: 'oilGasPayment',
+      receivableActive: 'highSpeedPayment',
       searchPostData: {}, //搜索参数
       searchFilters: {
         field: 'company',
@@ -113,20 +112,16 @@ export default {
       payerTime: [], //付款时间
       selectData: {
         fieldSelect: [
-          { id: 'company', value: '加油气公司' },
+          { id: 'company', value: '高速公司' },
         ]
       },
       thTableList: [{
-        title: '加油气公司',
+        title: '高速公司',
         param: 'company_name',
         width: '200'
       }, {
         title: '付款金额',
         param: 'amount',
-        width: ''
-      },{
-        title: '返利金额',
-        param: 'rebate',
         width: ''
       }, {
         title: '付款日期',
@@ -186,7 +181,7 @@ export default {
 
       this.pageLoading = true;
 
-      this.$$http('getOilGasPaymentList', postData).then((results) => {
+      this.$$http('getHighSpeedPaymentList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
@@ -200,13 +195,13 @@ export default {
     handleClick: function(tab, event) {
       if (tab.name === 'highSpeed') {
         this.$router.push({ path: "/arap/supplierMeetManage/highSpeedMeetLsit" });
-      }else if(tab.name === 'oilGas') {
-        this.$router.push({ path: "/arap/supplierMeetManage/oilGasMeetList" });
+      } else if (tab.name === 'oilgas') {
+        this.$router.push({ path: "/arap/supplierMeetManage/oilGasMeetLsit" });
       }
     },
     receivableClick(tab, event) {
-      if (tab.name === 'highSpeedPayment') {
-        this.$router.push({ path: "/arap/supplierMeetManage/highSpeedPayment" });
+      if (tab.name === 'oilGasPayment') {
+        this.$router.push({ path: "/arap/supplierMeetManage/oilGasPayment" });
       }
     },
     pageChange: function() {
@@ -217,7 +212,7 @@ export default {
   },
   activated() {
     this.activeName = 'payment';
-    this.receivableActive = 'oilGasPayment';
+    this.receivableActive = 'highSpeedPayment';
   },
   created: function() {
     this.getList();

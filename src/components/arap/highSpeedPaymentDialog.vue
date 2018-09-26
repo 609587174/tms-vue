@@ -7,8 +7,8 @@
     <el-dialog :title="title" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
-          <el-form-item label="加油气公司:" prop="ogcompany">
-            <el-select v-model="formRules.ogcompany" :loading="selectLoading" filterable clearable placeholder="请输入选择" @change="selectShipper">
+          <el-form-item label="高速公司:" prop="hscompany">
+            <el-select v-model="formRules.hscompany" :loading="selectLoading" filterable clearable placeholder="请输入选择" @change="selectShipper">
               <el-option v-for="(item,key) in selectList" :key="key" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -17,9 +17,6 @@
           </el-form-item>
           <el-form-item label="付款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
-          </el-form-item>
-          <el-form-item label="返利金额:" prop="rebate">
-            <el-input placeholder="请输入" v-model="formRules.rebate"></el-input>
           </el-form-item>
           <el-form-item label="备注:" prop="desc">
             <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model="formRules.desc"></el-input>
@@ -35,7 +32,7 @@
 </template>
 <script>
 export default {
-  name: 'oilGasPaymentDialog',
+  name: 'highSpeedPaymentDialog',
   props: {
     arapDialog: {
       type: Object,
@@ -51,11 +48,10 @@ export default {
   data: function() {
     return {
       formRules: {
-        ogcompany: '', //加油气公司
+        hscompany: '', //高速公司
         carrier_name: '',
         payment_datetime: '', //付款日期
         amount: '', //付款金额
-        rebate:'',
         desc: '', //调账备注
       },
       pickerOptionsDate: {
@@ -64,7 +60,7 @@ export default {
         }
       },
       rules: {
-        ogcompany: [
+        hscompany: [
           { required: true, message: '请选择加油气公司', trigger: 'blur' },
         ],
         payment_datetime: [
@@ -72,10 +68,6 @@ export default {
         ],
         amount: [
           { required: true, message: '请输入付款金额', trigger: 'blur' },
-          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
-        ],
-        rebate:[
-          { required: true, message: '请输入返利金额', trigger: 'blur' },
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         desc: [
@@ -105,7 +97,7 @@ export default {
         pagination: false
       }
       this.selectLoading = true;
-      this.$$http('searchEnergyList', postData).then((results) => {
+      this.$$http('highSpeedList', postData).then((results) => {
         this.selectLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectList = results.data.data;
@@ -135,12 +127,12 @@ export default {
             isLoading: true
           }
           let postData = this.formRules;
-          let apiName = 'addOilGasPayment';
+          let apiName = 'addHighSpeedPayment';
           if (this.arapDialog.type === 'update') {
             postData.id = this.arapRow.id;
-            apiName = 'updateOilGasPayment';
+            apiName = 'updateHighSpeedPayment';
           } else {
-            apiName = 'addOilGasPayment';
+            apiName = 'addHighSpeedPayment';
           }
           // postData.company = this.companyUser.carrier.id;
           // console.log('托运方', postData)
@@ -179,18 +171,16 @@ export default {
   watch: {
     arapDialog(curVal, oldVal) {　
       this.formRules = {
-        ogcompany: '', //加油气公司
+        hscompany: '', //高速公司
         payment_datetime: '', //付款日期
         amount: '', //付款金额
-        rebate:'',
         desc: '', //调账备注
       };　　
       if (curVal.type === 'update') {
         this.formRules = {
-          ogcompany: this.arapRow.ogcompany, //加油气公司
+          hscompany: this.arapRow.hscompany, //高速公司
           payment_datetime: this.arapRow.payment_datetime, //付款日期
           amount: this.arapRow.amount, //付款金额
-          rebate:this.arapRow.rebate, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
         this.title = '修改付款事项';

@@ -6,7 +6,8 @@
   <div>
     <div class="nav-tab">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="加油气应付报表" name="oilGas">
+        <el-tab-pane label="加油气应付报表" name="oilGas"></el-tab-pane>
+        <el-tab-pane label="高速公司应付报表" name="highSpeed">
           <div class="tab-screen">
             <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
               <el-row :gutter="0">
@@ -54,7 +55,6 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="高速公司应付报表" name="highSpeed"></el-tab-pane>
         <el-tab-pane label="付款管理" name="payment"></el-tab-pane>
       </el-tabs>
     </div>
@@ -62,7 +62,7 @@
 </template>
 <script>
 export default {
-  name: 'oilGasMeetList',
+  name: 'highSpeedMeetLsit',
 
   computed: {
 
@@ -75,21 +75,21 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
-      activeName: 'oilGas',
+      activeName: 'highSpeed',
       searchPostData: {}, //搜索参数
       searchFilters: {
         field: 'name',
       },
       selectData: {
         fieldSelect: [
-          { id: 'name', value: '加油气公司' },
+          { id: 'name', value: '高速公司' },
         ],
         supplierSelect: [], //供应商
       },
       startTime: '', //开始日期
       endTime: '', //结束日期
       thTableList: [{
-        title: '加油气公司',
+        title: '高速公司',
         param: 'name',
         width: '200'
       }, {
@@ -100,15 +100,11 @@ export default {
         title: '消费金额',
         param: 'consumption_price_sum',
         width: ''
-      },{
+      }, {
         title: '付款金额',
         param: 'total_amount',
         width: ''
       }, {
-        title: '返利金额',
-        param: 'return_amount',
-        width: ''
-      },  {
         title: '期末余额',
         param: 'last_amount',
         width: ''
@@ -147,7 +143,7 @@ export default {
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-      this.$$http('getOilGasMeetList', postData).then((results) => {
+      this.$$http('getHighSpeedMeetList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.tableData = results.data.data.results;
@@ -169,9 +165,9 @@ export default {
       }).catch((err) => {})
     },
     handleClick: function(tab, event) {
-      if (tab.name === 'highSpeed') {
-        this.$router.push({ path: "/arap/supplierMeetManage/highSpeedMeetLsit" });
-      }else if(tab.name === 'payment') {
+      if (tab.name === 'oilGas') {
+        this.$router.push({ path: "/arap/supplierMeetManage/oilGasMeetList" });
+      } else if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/supplierMeetManage/oilGasPayment" });
       }
     },
@@ -190,7 +186,7 @@ export default {
     }
   },
   activated() {
-    this.activeName = 'oilGas'
+    this.activeName = 'highSpeed'
   },
   created: function() {
     this.pbFunc.format();

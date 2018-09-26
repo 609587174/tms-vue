@@ -224,7 +224,7 @@ export default {
         }, {
           title: '现金油/气量（有票）',
           param: 'logistics_fuel_cash',
-          width: ''
+          width: '160'
         }, {
           title: '现金油/气（无票）',
           param: 'logistics_fuel_cash_no_ticket',
@@ -232,7 +232,7 @@ export default {
         }, {
           title: '现金油/气量（无票）',
           param: 'logistics_fuel_cash_no_ticket',
-          width: ''
+          width: '160'
         }, {
           title: '检测费',
           param: 'detection_cost',

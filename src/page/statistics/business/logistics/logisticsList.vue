@@ -6,8 +6,6 @@
 </style>
 <template>
   <div class="nav-tab">
-    <!--   <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-      <el-tab-pane label="物流费用统计" name="logistics"> -->
     <div class="tab-screen border-top">
       <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
         <el-row :gutter="0">
@@ -33,7 +31,24 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="是否对账:">
+              <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
+        <el-row :gutter="10">
+          <el-col :span="6">
+            <el-form-item label="是否开票:">
+              <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       </el-form>
     </div>
     <div class="operation-btn">
@@ -42,55 +57,68 @@
           一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
         </el-col>
         <el-col :span="4" class="text-right">
+          <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
+          <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
           <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
           <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
         </el-col>
       </el-row>
     </div>
     <div class="table-list">
-      <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
+      <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55">
+        </el-table-column>
         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
           <template slot-scope="scope">
             <div v-if="item.param === 'waybill'">
               <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
               <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
             </div>
+            <div v-else-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'">{{scope.row[item.param].verbose}}</div>
             <div v-else>
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
-              <span v-else>
-                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
+              <div v-else>
+                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]">
+                  <span>{{scope.row[item.adjustParam]}}</span>
+                </div>
                 <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
                 <span v-else v-html="scope.row[item.param]"></span>
-            </span>
+              </div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="运费合计" align="center" width="100" fixed="right">
+          <template slot-scope="scope">
+            <div>
+              <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+              {{scope.row.waiting_charges}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" width="140" fixed="right">
+          <template slot-scope="scope">
+            <!-- <div v-if="scope.row.is_adjust.key==='no'">
+              <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div> -->
+            <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+              <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+              <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+            </div>
+            <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+              <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
     </div>
-    </template>
-    </el-table-column>
-    <el-table-column label="运费合计" align="center" width="100" fixed="right">
-      <template slot-scope="scope">
-        <div>
-          <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
-          {{scope.row.waiting_charges}}
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" align="center" width="140" fixed="right">
-      <template slot-scope="scope">
-        <div v-if="scope.row.is_adjust.key==='no'">
-          <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
-          <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-        </div>
-      </template>
-    </el-table-column>
-    </el-table>
-    <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
-  </div>
-  <div class="page-list text-center">
-    <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-    </el-pagination>
-  </div>
-  <!--       </el-tab-pane>
-    </el-tabs> -->
-  <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
+    <div class="page-list text-center">
+      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+      </el-pagination>
+    </div>
+    <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
   </div>
 </template>
 <script>
@@ -123,7 +151,8 @@ export default {
       activeTime: [], //实际装车时间
       searchPostData: {}, //搜索参数
       searchFilters: {
-        is_reconciliation: [],
+        is_reconciliation: '',
+        is_invoice: '',
         keyword: '',
         field: 'waybill',
       },
@@ -132,6 +161,11 @@ export default {
           { id: '', value: '全部' },
           { id: 'unfinished', value: '未对账' },
           { id: 'finished', value: '已对账' }
+        ],
+        isInvoiceSelect: [
+          { id: '', value: '全部' },
+          { id: 'yes', value: '已开票' },
+          { id: 'no', value: '未开票' }
         ],
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
@@ -216,6 +250,14 @@ export default {
           param: 'freight_value',
           width: ''
         }, {
+          title: '气差金额',
+          param: 'difference_value',
+          width: ''
+        }, {
+          title: '分卸费',
+          param: 'lcl_cost',
+          width: ''
+        }, {
           title: '运费金额',
           param: 'change_value',
           width: ''
@@ -224,66 +266,121 @@ export default {
           param: 'waiting_price',
           width: ''
         }, {
-          title: '调账备注',
-          param: 'remark_adjust',
-          width: '180'
+          title: '是否对账',
+          param: 'is_reconciliation',
+          width: ''
+        }, {
+          title: '是否开票',
+          param: 'is_invoice',
+          width: ''
         }, {
           title: '调账时间',
           param: 'adjust_time',
           width: '180'
-        }
+        }, {
+          title: '调账备注',
+          param: 'remark_adjust',
+          width: '180'
+        },
       ],
-      tableData: {
-        // data: {
-        //   results: [{
-        //     id: '0001 d9eb - dc51 - 49e d - 871 a - 6e9 e0f88d362',
-        //     is_reconciliation: {
-        //       key: 'finished',
-        //       verbose: '已对账'
-        //     },
-        //     created_at: '2018 - 06 - 14 11: 54: 42',
-        //     updated_at: '2018 - 06 - 14 11: 54: 51',
-        //     created_timestamp: '2131231',
-        //     is_deleted: 0,
-        //     waybill: 'T2018061300001',
-        //     fluid: '大叔大婶多',
-        //     carrier: '大叔大婶多',
-        //     station: '大萨达',
-        //     waybill_id: '10 dffa689143453fa87f7b4531467f63',
-        //     active_time: '2018 - 06 - 14 11: 55: 27',
-        //     leave_time: '2018 - 06 - 27 11: 55: 32',
-        //     plan_tonnage: 21.000,
-        //     actual_quantity: 21,
-        //     deficiency: 21,
-        //     deficiency_standard: 21,
-        //     check_quantity: 21,
-        //     stand_mile: 321.0,
-        //     initial_price: 231.00,
-        //     change_rate: 32.00,
-        //     difference_value: 312.00,
-        //     freight_value: 321.00,
-        //     waiting_price: 321,
-        //     waiting_charges: 3212,
-        //     unit_price: 321.000,
-        //     plan_arrive_time: '2018 - 06 - 14 11: 55: 58',
-        //     free_hour: 23.00,
-        //     overtime_price: 12.00,
-        //     plate_number: 'a1321',
-        //     company: '2 becdc62 - 01 ba - 4 fe0 - 8e f1 - 0 d31c4a34d95',
-        //     company_adjust: '啦啦啦', //托运方
-        //     check_quantity_adjust: 15.33, //核算吨位
-        //     stand_mile_adjust: 555.3, //标准里程
-        //     waiting_charges_adjust: 2333, //运费合计
-        //   }]
-        // }
-
-      },
+      tableData: {},
+      multipleSelection: [], //所选数据 
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
     }
   },
   methods: {
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    },
+    // 全部对账
+    getUnReconciliations() {
+      let postData = {
+        is_reconciliation: this.searchPostData.is_reconciliation
+      };
+      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+        postData.leave_time_start = this.leaveTime[0];
+        postData.leave_time_end = this.leaveTime[1];
+      }
+      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }
+      postData.batch = 'unfinished';
+      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData = this.pbFunc.fifterObjIsNull(postData);
+      this.reconciliationsBtn.isDisabled = true;
+      this.reconciliationsBtn.isLoading = true;
+      this.$$http('getConsignmentStatisticsList', postData).then((results) => {
+        this.reconciliationsBtn.isDisabled = false;
+        this.reconciliationsBtn.isLoading = false;
+        if (results.data && results.data.code == 0) {
+          this.reconciliations(true, '', results.data);
+        }
+      }).catch((err) => {
+        this.reconciliationsBtn.isDisabled = false;
+        this.reconciliationsBtn.isLoading = false;
+      })
+    },
+    // 批量对账、开票弹窗
+    batchReconciliation(type) {
+      let ids = [];
+      let price = 0;
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished' && type === 'reconciliation') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+        }
+        if (this.multipleSelection[i].is_invoice.key === 'no' && this.multipleSelection[i].is_reconciliation.key === 'finished' && type === 'invoice') {
+          ids.push(this.multipleSelection[i].id);
+          price += parseFloat(this.multipleSelection[i].waiting_charges) * 100;
+        }
+      }
+      this.reconciliations(true, ids, price / 100, type);
+    },
+    // 单个/批量 对账  开票
+    reconciliations(isAll, ids, price, type) {
+      let content = '';
+      let postData = {};
+      let title = '';
+      if (type === 'reconciliation') {
+        postData.is_reconciliation = 'finished';
+        title = '对账';
+      } else if (type === 'invoice') {
+        postData.is_invoice = 'yes';
+        title = '开票';
+      }
+      if (isAll) {
+        if (ids.length) {
+          content = '未' + title + '共有' + ids.length + '单，优惠后总额合计' + price + '元，是否要对所选运单进行批量' + title + '？';
+          postData.id = ids;
+
+        } else {
+          this.$message({
+            message: '请勾选未' + title + '数据',
+            type: 'warning'
+          });
+        }
+      } else {
+        content = '是否确认' + title + '？';
+        postData.id = ids.split(',');
+      }
+
+      if (ids.length) {
+        this.$confirm(content, "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$$http('batchPurchseStatisticsStatus', postData).then((results) => {
+            if (results.data && results.data.code == 0) {
+              this.getList();
+            }
+          })
+        }).catch(() => {});
+      }
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
@@ -324,7 +421,8 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
-        is_reconciliation: this.searchPostData.is_reconciliation
+        is_reconciliation: this.searchPostData.is_reconciliation,
+        is_invoice: this.searchPostData.is_invoice,
       };
       if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
         postData.leave_time_start = this.leaveTime[0];

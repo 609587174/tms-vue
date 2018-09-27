@@ -24,7 +24,7 @@ export default {
         deleteDataApi: 'deleteCashCostTemporaryData' //清空临时表apiName
       },
       postData: {
-        matchingType: 'CashCostManage', //匹配运单apiName
+        matchingType: 'CashCostManage', //匹配运单type
         exportType: 'cash' //导出模板类型参数
       },
       thTableList: [{

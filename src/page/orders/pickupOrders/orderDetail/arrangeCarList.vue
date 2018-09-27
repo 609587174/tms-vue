@@ -126,7 +126,7 @@
         </el-tab-pane>
       </el-tabs>
     </div>
-    <el-dialog title="注意:" :visible.sync="juageAddDialog" width="50%" :center="'center'" @close="juageAddDialogClose">
+    <el-dialog title="注意:" :visible.sync="juageAddDialog" width="50%" :center="'center'" :show-close="closeModel" :close-on-click-modal="closeModel" :close-on-press-escape="closeModel">
       <div style="margin:15px 5%">车号{{judgeAddRow.tractor&&judgeAddRow.tractor.plate_number}} 有司机未确认订单:</div>
       <el-table :data="judgeAddData" style="width:90%;margin-left:5%" border size="small">
         <el-table-column property="delivery_order_number" label="订单号" width="150"></el-table-column>
@@ -150,6 +150,7 @@ export default {
       activeName: 'first',
       pageLoading: false,
       juageAddDialog:false,
+      closeModel:false,
       pageData: {
         currentPage: 1,
         totalPage: 1,

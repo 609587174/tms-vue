@@ -53,10 +53,10 @@
     </div>
     <div class="operation-btn">
       <el-row>
-        <el-col :span="20" class="total-data">
+        <el-col :span="18" class="total-data">
           一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
         </el-col>
-        <el-col :span="4" class="text-right">
+        <el-col :span="6" class="text-right">
           <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
           <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
           <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
@@ -154,7 +154,7 @@ export default {
         is_reconciliation: '',
         is_invoice: '',
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
         isReconciliationsSelect: [

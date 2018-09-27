@@ -108,7 +108,7 @@ export default {
       searchFilters: {
         is_reconciliation: [],
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
         isReconciliationsSelect: [
@@ -123,96 +123,97 @@ export default {
         ]
       },
       thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '托运方',
-        param: 'company',
-        width: '200'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '运单开始时间',
-        param: 'active_time',
-        width: '180'
-      }, {
-        title: '卸货完成时间',
-        param: 'leave_time',
-        width: '180'
-      }, {
-        title: '外油/气',
-        param: 'ex_oil',
-        width: ''
-      },{
-        title: '外油/气量',
-        param: 'ex_nums',
-        width: ''
-      }, {
-        title: '公司油/气',
-        param: 'com_oil',
-        width: ''
-      }, {
-        title: '公司油/气量',
-        param: 'com_nums',
-        width: ''
-      }, {
-        title: '高速费',
-        param: 'high_cost',
-        width: ''
-      }, {
-        title: '过路费',
-        param: 'road_toll_com',
-        width: ''
-      },
-      //  {
-      //   title: '过路费（国家）',
-      //   param: 'road_toll_state',
-      //   width: ''
-      // }, {
-      //   title: '过桥费',
-      //   param: 'pontage',
-      //   width: ''
-      // },
-       {
-        title: '现金油/气（有票）',
-        param: 'logistics_fuel_cash',
-        width: ''
-      }, {
-        title: '现金油/气（无票）',
-        param: 'logistics_fuel_cash_no_ticket',
-        width: ''
-      }, {
-        title: '检测费',
-        param: 'detection_cost',
-        width: ''
-      }, {
-        title: '维修费',
-        param: 'maintenance_cost',
-        width: ''
-      }, {
-        title: '停车费',
-        param: 'parking_fee',
-        width: ''
-      }, {
-        title: '其它费用',
-        param: 'other_cost',
-        width: ''
-      }, {
-        title: '主驾',
-        param: 'master_driver',
-        width: ''
-      }, {
-        title: '副驾',
-        param: 'vice_driver',
-        width: ''
-      }, {
-        title: '押运员',
-        param: 'escort_staff',
-        width: ''
-      }],
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        }, {
+          title: '托运方',
+          param: 'company',
+          width: '200'
+        }, {
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        }, {
+          title: '运单开始时间',
+          param: 'active_time',
+          width: '180'
+        }, {
+          title: '卸货完成时间',
+          param: 'leave_time',
+          width: '180'
+        }, {
+          title: '外油/气',
+          param: 'ex_oil',
+          width: ''
+        }, {
+          title: '外油/气量',
+          param: 'ex_nums',
+          width: ''
+        }, {
+          title: '公司油/气',
+          param: 'com_oil',
+          width: ''
+        }, {
+          title: '公司油/气量',
+          param: 'com_nums',
+          width: ''
+        }, {
+          title: '高速费',
+          param: 'high_cost',
+          width: ''
+        }, {
+          title: '过路费',
+          param: 'road_toll_com',
+          width: ''
+        },
+        //  {
+        //   title: '过路费（国家）',
+        //   param: 'road_toll_state',
+        //   width: ''
+        // }, {
+        //   title: '过桥费',
+        //   param: 'pontage',
+        //   width: ''
+        // },
+        {
+          title: '现金油/气（有票）',
+          param: 'logistics_fuel_cash',
+          width: ''
+        }, {
+          title: '现金油/气（无票）',
+          param: 'logistics_fuel_cash_no_ticket',
+          width: ''
+        }, {
+          title: '检测费',
+          param: 'detection_cost',
+          width: ''
+        }, {
+          title: '维修费',
+          param: 'maintenance_cost',
+          width: ''
+        }, {
+          title: '停车费',
+          param: 'parking_fee',
+          width: ''
+        }, {
+          title: '其它费用',
+          param: 'other_cost',
+          width: ''
+        }, {
+          title: '主驾',
+          param: 'master_driver',
+          width: ''
+        }, {
+          title: '副驾',
+          param: 'vice_driver',
+          width: ''
+        }, {
+          title: '押运员',
+          param: 'escort_staff',
+          width: ''
+        }
+      ],
       tableData: [],
       exportPostData: {}, //导出筛选
     }

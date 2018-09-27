@@ -109,7 +109,7 @@ export default {
       searchPostData: {}, //搜索参数
       searchFilters: {
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
         isReconciliationsSelect: [

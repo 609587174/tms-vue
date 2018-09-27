@@ -261,7 +261,7 @@ export default {
       let master_driver = (detailData.master_driver && detailData.master_driver.name) ? detailData.master_driver.name : '无';
       let vice_driver = (detailData.vice_driver && detailData.vice_driver.name) ? detailData.vice_driver.name : '无';
       let escort_staff = (detailData.escort_staff && detailData.escort_staff.name) ? detailData.escort_staff.name : '无';
-      let speed = (detailData.map_data && detailData.map_data.speed) ? detailData.map_data.speed : 0;
+      let speed = (detailData.location_info && detailData.location_info.speed) ? detailData.location_info.speed : 0;
       let operatorDom = '';
 
       let routePlayback = () => {

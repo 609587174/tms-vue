@@ -70,6 +70,11 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="装车完成时间:">
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="实际离站时间:">
                     <el-date-picker v-model="editMsgForm.activate_end" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
@@ -220,6 +225,7 @@ export default {
         plate_number: '', //车牌号
         station: '', //站点
         is_reconciliation: '',
+        work_end_time: '',
         is_invoice: '',
         remark: '' //备注
       },
@@ -311,6 +317,7 @@ export default {
             station: this.detail.station, //站点
             is_reconciliation: this.detail.is_reconciliation.verbose,
             is_invoice: this.detail.is_invoice.verbose,
+            work_end_time: this.detail.work_end_time,
             remark: '' //备注
           }
         }
@@ -350,7 +357,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'change_value', 'freight_value','difference_value','lcl_cost', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'work_end_time', 'change_value', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

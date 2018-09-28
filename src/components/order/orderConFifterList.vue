@@ -1151,7 +1151,7 @@ export default {
     upSettlement: function(rowData) {
 
       this.UpSettlementForm={
-        arrival_time:rowData.arrival_time||"",
+        arrival_time:rowData.active_time||"",
         weight_audit_time:rowData.weight_audit_time||"",
         net_weight:rowData.net_weight||"",
         active_mile:rowData.weight_active_mile||"",

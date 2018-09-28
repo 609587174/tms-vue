@@ -264,6 +264,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
+      sendData.truck_group = this.groupParam;
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel = 'export';

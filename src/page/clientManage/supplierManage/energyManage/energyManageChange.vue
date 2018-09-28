@@ -124,7 +124,8 @@ export default {
         if(results){
           var sendData = this.pbFunc.deepcopy(this.energyManageFrom);
           sendData = this.pbFunc.fifterObjIsNull(sendData);
-          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr);
+          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr,'empty');
+          sendData.type==""&&delete sendData.type;
           sendData.id=this.energyId;
           this.$$http('updateEnergy', sendData).then((result) => {
             this.pageLoading = false;
@@ -164,7 +165,8 @@ export default {
         if(results){
           var sendData = this.pbFunc.deepcopy(this.energyManageFrom);
           sendData = this.pbFunc.fifterObjIsNull(sendData);
-          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr)
+          sendData = this.pbFunc.fifterbyArr(sendData, this.energyManageFromArr,'empty');
+          sendData.type==""&&delete sendData.type;
           this.$$http('creatEnergy', sendData).then((result) => {
             this.pageLoading = false;
             if (result.data.code == 0) {

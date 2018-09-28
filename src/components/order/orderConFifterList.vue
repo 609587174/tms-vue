@@ -94,6 +94,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: 13px;
+  line-height:18px;
 }
 
 .el-icon-location {
@@ -168,7 +169,7 @@
             </div>
             <div v-if="expendShowConfig[props.row.status.key]=='matchExtend'">
               <el-row style="margin:5px 0;" :gutter="20">
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   液厂: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.fluid" placement="top-start">
                     <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
@@ -183,13 +184,31 @@
                 </el-col> -->
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
+                      <div slot="content" style="width:180px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.pick_active_time}}</el-col>
+                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
+                        </el-row>
+                      </div>
+                      <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                  <span v-else>无</span>
+                  <span v-else>{{props.row.pick_active_time}}</span>
                 </el-col>
-                <el-col :span="4">
-                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a>
+                <el-col :span="4" class="whiteSpan">
+                  实际装车吨位: 
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
+                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
+                  <span v-else>{{props.row.pick_active_tonnage}}</span>
                 </el-col>
                 <el-col :span="4">
                   主车: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
@@ -222,38 +241,66 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际装车时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                    <span>{{props.row.pick_active_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
+                      <div slot="content" style="width:180px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.pick_active_time}}</el-col>
+                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
+                        </el-row>
+                      </div>
+                      <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                  <span v-else>无</span>
+                  <span v-else>{{props.row.pick_active_time}}</span>
                 </el-col>
-                <el-col :span="4">
-                  实际装车吨位: {{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a>
+                <el-col :span="4" class="whiteSpan">
+                  实际装车吨位: 
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
+                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
+                  <span v-else>{{props.row.pick_active_tonnage}}吨</span>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
                   <span v-else>无</span>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   车队: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   卸货站: {{props.row.business_order.station}}
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="4" class="whiteSpan">
                   卸货地: <span v-if="props.row.business_order.station_address.length<10">{{props.row.business_order.station_address}}</span>
                   <el-tooltip class="item" effect="light" :content="props.row.business_order.station_address" placement="top-start">
                     <span>{{props.row.business_order.station_address.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="4">
-                  实际卸车吨位: {{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a>
+                <el-col :span="4" class="whiteSpan">
+                  实际卸车吨位: 
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.active_tonnage}}吨</el-col>
+                          <el-col><span v-if="props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity">新数据:{{props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity}}吨 </span></el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
+                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
                   </el-tooltip>
+                  <span v-else>{{props.row.active_tonnage}}吨</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
@@ -271,18 +318,47 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   离站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.weight_audit_time" placement="top-start" v-if="props.row.weight_audit_time">
-                    <span>{{props.row.weight_audit_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time">
+                      <div slot="content" style="width:180px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.weight_audit_time}}</el-col>
+                          <el-col><span v-if="props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time">新数据:{{props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time}}</span></el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.weight_audit_time">{{props.row.weight_audit_time}} <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                  <span v-else>无</span>
+                  <span v-else>{{props.row.weight_audit_time}}</span>
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
-                <el-col :span="4">
-                  标准里程: <span v-if="props.row.standard_mile">{{props.row.standard_mile}}</span><span v-else>0</span>km
+                <el-col :span="4" class="whiteSpan">
+                  标准里程: 
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_standard_mile">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.standard_mile}}km</el-col>
+                          <el-col v-if="props.row.last_standard_mile">新数据:{{props.row.last_standard_mile}}km</el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.standard_mile">{{props.row.standard_mile}}km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
+                 <span v-else>{{props.row.standard_mile}}km</span>
                 </el-col>
-                <el-col :span="4">
-                  实际里程: <span v-if="props.row.weight_active_mile">{{props.row.weight_active_mile}}</span><span v-else>0</span>km
+                <el-col :span="4" class="whiteSpan">
+                  实际里程: 
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_active_mile">
+                      <div slot="content" style="width:120px;">
+                        <el-row>
+                          <el-col>原数据:{{props.row.weight_active_mile}}km</el-col>
+                          <el-col v-if="props.row.last_weight_active_mile">新数据:{{props.row.last_weight_active_mile||'0'}}km</el-col>
+                        </el-row>
+                      </div>
+                    <span v-if="props.row.weight_active_mile">{{props.row.weight_active_mile}}km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>0km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
+                  <span v-else>{{props.row.weight_active_mile}}km</span>
                 </el-col>
                 <el-col :span="4">
                   收货人: {{props.row.business_order.consignee}}

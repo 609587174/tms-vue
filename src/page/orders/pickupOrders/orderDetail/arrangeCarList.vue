@@ -132,9 +132,10 @@
         <el-table-column property="delivery_order_number" label="订单号" width="150"></el-table-column>
         <el-table-column property="willbill_number" label="运单号" width="200"></el-table-column>
         <el-table-column property="status.verbose" label="状态"></el-table-column>
-        <el-table-column property="delivery_order_create_time" label="日期"></el-table-column>
+        <el-table-column property="type.verbose" label="类型"></el-table-column>
+        <el-table-column property="delivery_order_create_time" label="日期" min-width="150px"></el-table-column>
       </el-table>
-      <div style="margin:25px 5%">继续操作可能导致司机上传磅单错误，是否继续添加进本订单？</div>
+      <div style="margin:25px 5%">继续操作可能导致司机上传磅单和后续流程错误，是否继续添加进本订单？</div>
       <div slot="footer" class="dialog-footer">
         <el-button @click="juageAddDialogClose">取 消</el-button>
         <el-button type="primary" @click="sureChosse">确 定</el-button>

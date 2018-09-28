@@ -582,14 +582,21 @@ export const fifterObjIsNull = function(Obj) {
   return object;
 };
 
-export const fifterbyArr = function(Obj, fifterArr ,isNull) {
+export const fifterbyArr = function(Obj, fifterArr, isNull) {
   var object = deepcopy(Obj);
   var newObj = {};
-  if(isNull){
-    for (let i = 0; i < fifterArr.length; i++) {
-      newObj[fifterArr[i]] = object[fifterArr[i]];
+  if (isNull) {
+    if (isNull == 'empty') {
+      for (let i = 0; i < fifterArr.length; i++) {
+        newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : "";
+      }
+    } else {
+      for (let i = 0; i < fifterArr.length; i++) {
+        newObj[fifterArr[i]] = object[fifterArr[i]];
+      }
     }
-  }else{
+
+  } else {
     for (let i = 0; i < fifterArr.length; i++) {
       newObj[fifterArr[i]] = object[fifterArr[i]] ? object[fifterArr[i]] : null;
     }
@@ -627,12 +634,12 @@ export const format = function() {
  * @param  {[type]} date2 [description]
  * @return {[type]}       [description]
  */
-export const compareDate = function (date1,date2){
-    var oDate1 = new Date(date1);
-    var oDate2 = new Date(date2);
-    if(oDate1.getTime() > oDate2.getTime()){
-        return false;
-    } else {
-        return true
-    }
+export const compareDate = function(date1, date2) {
+  var oDate1 = new Date(date1);
+  var oDate2 = new Date(date2);
+  if (oDate1.getTime() > oDate2.getTime()) {
+    return false;
+  } else {
+    return true
+  }
 }

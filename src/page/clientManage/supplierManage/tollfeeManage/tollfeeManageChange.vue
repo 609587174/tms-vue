@@ -121,6 +121,8 @@ export default {
       let postData = Object.assign({}, this.tollfeeManageFrom);
       let apiName = 'addHighSpeed';
 
+      postData.type || delete postData.type;
+
       if (this.id) {
         postData.id = this.id;
         apiName = 'fixHighSpeed';

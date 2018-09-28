@@ -16,6 +16,7 @@
   position: absolute;
   left: 100px;
   top: 10px;
+  color: #f56c6c;
 }
 
 </style>

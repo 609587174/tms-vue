@@ -9,6 +9,14 @@
  */
 
 const api = {
+  batchLogisticStatisticsStatus: {
+    url: '/statistic/batch-update-logistic/',
+    method: 'post',
+    desc: '单个、批量开票对账',
+    param: {
+
+    }
+  },
   updateHighSpeedPayment: {
     url: '/statistic/highspeed-pay-m/:id/',
     method: 'patch',

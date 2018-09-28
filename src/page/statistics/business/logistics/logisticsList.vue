@@ -298,35 +298,35 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    // 全部对账
-    getUnReconciliations() {
-      let postData = {
-        is_reconciliation: this.searchPostData.is_reconciliation
-      };
-      if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
-        postData.leave_time_start = this.leaveTime[0];
-        postData.leave_time_end = this.leaveTime[1];
-      }
-      if (this.activeTime instanceof Array && this.activeTime.length > 0) {
-        postData.active_time_start = this.activeTime[0];
-        postData.active_time_end = this.activeTime[1];
-      }
-      postData.batch = 'unfinished';
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
-      postData = this.pbFunc.fifterObjIsNull(postData);
-      this.reconciliationsBtn.isDisabled = true;
-      this.reconciliationsBtn.isLoading = true;
-      this.$$http('getConsignmentStatisticsList', postData).then((results) => {
-        this.reconciliationsBtn.isDisabled = false;
-        this.reconciliationsBtn.isLoading = false;
-        if (results.data && results.data.code == 0) {
-          this.reconciliations(true, '', results.data);
-        }
-      }).catch((err) => {
-        this.reconciliationsBtn.isDisabled = false;
-        this.reconciliationsBtn.isLoading = false;
-      })
-    },
+    // // 全部对账
+    // getUnReconciliations() {
+    //   let postData = {
+    //     is_reconciliation: this.searchPostData.is_reconciliation
+    //   };
+    //   if (this.leaveTime instanceof Array && this.leaveTime.length > 0) {
+    //     postData.leave_time_start = this.leaveTime[0];
+    //     postData.leave_time_end = this.leaveTime[1];
+    //   }
+    //   if (this.activeTime instanceof Array && this.activeTime.length > 0) {
+    //     postData.active_time_start = this.activeTime[0];
+    //     postData.active_time_end = this.activeTime[1];
+    //   }
+    //   postData.batch = 'unfinished';
+    //   postData[this.searchPostData.field] = this.searchPostData.keyword;
+    //   postData = this.pbFunc.fifterObjIsNull(postData);
+    //   this.reconciliationsBtn.isDisabled = true;
+    //   this.reconciliationsBtn.isLoading = true;
+    //   this.$$http('getConsignmentStatisticsList', postData).then((results) => {
+    //     this.reconciliationsBtn.isDisabled = false;
+    //     this.reconciliationsBtn.isLoading = false;
+    //     if (results.data && results.data.code == 0) {
+    //       this.reconciliations(true, '', results.data);
+    //     }
+    //   }).catch((err) => {
+    //     this.reconciliationsBtn.isDisabled = false;
+    //     this.reconciliationsBtn.isLoading = false;
+    //   })
+    // },
     // 批量对账、开票弹窗
     batchReconciliation(type) {
       let ids = [];
@@ -377,7 +377,7 @@ export default {
           cancelButtonText: "取消",
           type: "warning"
         }).then(() => {
-          this.$$http('batchPurchseStatisticsStatus', postData).then((results) => {
+          this.$$http('batchLogisticStatisticsStatus', postData).then((results) => {
             if (results.data && results.data.code == 0) {
               this.getList();
             }

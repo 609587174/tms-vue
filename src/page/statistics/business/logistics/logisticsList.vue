@@ -456,6 +456,7 @@ export default {
             }
             if (this.tableData.data.results[i].waiting_charges_adjust) {
               this.tableData.data.results[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.results[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.results[i].waiting_charges) * 100) / 100;
+              this.tableData.data.results[i].waiting_charges_dvalue = (this.tableData.data.results[i].waiting_charges_dvalue).toFixed(2);
             }
             this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }

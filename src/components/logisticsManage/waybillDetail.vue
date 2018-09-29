@@ -102,9 +102,9 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>液厂地址:</label>
-                  <div class="detail-form-item"><span v-if="detailData.delivery_order&&detailData.delivery_order.fluid_address.length<13">{{detailData.delivery_order.fluid_address}}</span>
+                  <div class="detail-form-item"><span v-if="detailData.delivery_order.fluid_address&&detailData.delivery_order.fluid_address.length<13">{{detailData.delivery_order.fluid_address}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="detailData.delivery_order.fluid_address" placement="top-start">
-                    <a>{{detailData.delivery_order.fluid_address.slice(0,11)}}....</a>
+                    <a>{{detailData.delivery_order.fluid_address&&detailData.delivery_order.fluid_address.slice(0,11)}}....</a>
                   </el-tooltip></div>
                 </div>
               </el-col>
@@ -214,7 +214,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>站点地址:</label>
-                  <div class="detail-form-item"><span v-if="item.business_order&&item.business_order.station_address.length<13">{{item.business_order.station_address}}</span>
+                  <div class="detail-form-item"><span v-if="item.business_order.station_address&&item.business_order.station_address.length<13">{{item.business_order.station_address}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="item.business_order.station_address" placement="top-start">
                     <a>{{item.business_order.station_address.slice(0,10)}}....</a>
                   </el-tooltip></div>

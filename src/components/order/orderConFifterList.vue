@@ -609,7 +609,7 @@
         </el-row>
         </el-form>
         <span slot="footer" class="dialog-footer" style="text-align: center;">
-          <el-button @click="isShowSureDownPound = false">取 消</el-button>
+          <el-button @click="isUpSettlement = false">取 消</el-button>
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span>
      </el-dialog>

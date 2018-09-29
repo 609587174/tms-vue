@@ -124,9 +124,13 @@ export default {
           type: 'error'
         });
       };
-
+      let currentUrl = document.location.href.toString();
       let complete = res => {
-        this.fileList.push({ name: file.name, url: `http://dev-image.hhtdlng.com/${key}` })
+        if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`) && !currentUrl.match(`testtms.91lng.cn`)) {
+          this.fileList.push({ name: file.name, url: `http://images.91lng.cn/${key}` })
+        } else {
+          this.fileList.push({ name: file.name, url: `http://dev-image.hhtdlng.com/${key}` })
+        }
       };
 
       let next = response => {

@@ -63,7 +63,7 @@
               <el-row :gutter="40">
 
                 <el-col :span="8">
-                  <el-form-item label="实际装车时间:">
+                  <el-form-item label="实际到厂时间:">
                     <el-date-picker v-model="editMsgForm.active_time" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>

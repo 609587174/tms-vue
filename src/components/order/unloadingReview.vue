@@ -1,8 +1,22 @@
+<!-- 卸车榜单审核组件 -->
+<!--
+  本组件成灾功能：
+  1:纯展示不能审核：isEdit = false;
+  2:可以审核不能上传装车榜单图片isedit = ture ; isUpload = false;
+  3:可以审核并能上传装车榜单图片isedit = ture ; isUpload = ture;
+ -->
 <style scoped lang="less">
 .loading-review-container {
   /deep/ .el-date-editor.el-input {
     width: 100%;
   }
+}
+
+.checked-box {
+  position: absolute;
+  left: 100px;
+  top: 10px;
+  color: #f56c6c;
 }
 
 </style>
@@ -129,7 +143,9 @@
         </el-col>
       </el-row>
     </el-form>
-    <div slot="footer" class="dialog-footer" style="text-align: center;" v-if="isEdit">
+    <div slot="footer" class="dialog-footer" style="text-align: center; position: relative;" v-if="isEdit">
+      <el-checkbox v-model="checked" class="checked-box" v-if="isShowAccountCheck
+">同时提交结算</el-checkbox>
       <el-button @click="$emit('close')">取 消</el-button>
       <el-button type="primary" @click="sendRe()" :loading="buttonLoading">确 定</el-button>
     </div>
@@ -176,7 +192,8 @@ export default {
           { required: true, message: '请输入卸车净重', trigger: 'blur' },
           { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
         ]
-      }
+      },
+      checked: false,
 
     };
   },
@@ -186,6 +203,7 @@ export default {
     cancel: Function,
     isEdit: Boolean,
     isUpload: Boolean,
+    isShowAccountCheck: Boolean,
   },
   computed: {
     imgReviewSrc: function() {
@@ -255,13 +273,37 @@ export default {
       this.$$http("examineLoad", sendData).then(results => {
         this.buttonLoading = false;
         if (results.data.code == 0) {
-          this.$message({
-            type: "success",
-            message: "审核通过成功"
-          });
 
-          this.$emit('successCallback');
-          this.$emit('close');
+          if (this.checked) {
+            const postData = {
+              arrival_time: this.surePound.active_time,
+              weight_audit_time: this.surePound.leave_time,
+              net_weight: this.surePound.net_weight,
+              active_mile: this.surePound.weight_active_mile,
+              status: 'in_settlement',
+              id: this.surePound.id
+            }
+            console.log('postData', postData);
+            this.$$http('changeOrderStatus', postData).then((results) => {
+              if (results.data.code == 0) {
+                this.$message({
+                  message: '审核通过并结算成功',
+                  type: 'success'
+                });
+                this.$emit('successCallback');
+                this.$emit('close');
+              }
+            })
+          } else {
+            this.$message({
+              type: "success",
+              message: "审核通过成功"
+            });
+            this.$emit('successCallback');
+            this.$emit('close');
+          }
+
+
         }
       }).catch((err) => {
         this.buttonLoading = false;
@@ -300,12 +342,15 @@ export default {
 
     this.surePound = Object.assign({}, this.surePoundData);
 
+    console.log('this.surePound', this.surePound);
+
     !this.isUpload && this.getImg();
   },
   watch: {
     surePoundData: {
       handler(val, oldVal) {
         this.surePound = Object.assign({}, this.surePoundData);
+        console.log('this.surePound', this.surePound);
         !this.isUpload && this.getImg();
         this.poundUpload = {
           fileList: [],

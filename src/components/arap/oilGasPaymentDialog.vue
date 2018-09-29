@@ -7,16 +7,19 @@
     <el-dialog :title="title" :visible="arapDialog.isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="110px" :rules="rules" :model="formRules" status-icon ref="formRules">
-          <el-form-item label="托运方:" prop="carrier_id">
-            <el-select v-model="formRules.carrier_id" :loading="carrierLoading" filterable clearable placeholder="请输入选择" @change="selectShipper">
-              <el-option v-for="(item,key) in carrierSelect" :key="key" :label="item.name" :value="item.id"></el-option>
+          <el-form-item label="加油气公司:" prop="ogcompany">
+            <el-select v-model="formRules.ogcompany" :loading="selectLoading" filterable clearable placeholder="请输入选择" @change="selectShipper">
+              <el-option v-for="(item,key) in selectList" :key="key" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="回款日期:" prop="payment_datetime">
+          <el-form-item label="付款日期:" prop="payment_datetime">
             <el-date-picker v-model="formRules.payment_datetime" type="date" placeholder="选择日期" :picker-options="pickerOptionsDate" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
           </el-form-item>
-          <el-form-item label="回款金额:" prop="amount">
+          <el-form-item label="付款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
+          </el-form-item>
+          <el-form-item label="返利金额:">
+            <el-input placeholder="请输入" v-model="formRules.rebate"></el-input>
           </el-form-item>
           <el-form-item label="备注:" prop="desc">
             <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model="formRules.desc"></el-input>
@@ -32,7 +35,7 @@
 </template>
 <script>
 export default {
-  name: 'shipperReceivableDialog',
+  name: 'oilGasPaymentDialog',
   props: {
     arapDialog: {
       type: Object,
@@ -48,10 +51,11 @@ export default {
   data: function() {
     return {
       formRules: {
-        carrier_id: '', //供应商
+        ogcompany: '', //加油气公司
         carrier_name: '',
         payment_datetime: '', //付款日期
         amount: '', //付款金额
+        rebate: '',
         desc: '', //调账备注
       },
       pickerOptionsDate: {
@@ -60,8 +64,8 @@ export default {
         }
       },
       rules: {
-        carrier_id: [
-          { required: true, message: '请选择承运商', trigger: 'blur' },
+        ogcompany: [
+          { required: true, message: '请选择加油气公司', trigger: 'blur' },
         ],
         payment_datetime: [
           { required: true, message: '请选择日期', trigger: 'blur' },
@@ -79,8 +83,8 @@ export default {
         isDisabled: false,
         isLoading: false
       },
-      carrierSelect: [], //承运商列表
-      carrierLoading: false,
+      selectList: [], //承运商列表
+      selectLoading: false,
       title: '新增回款事项',
       companyUser: {}
     }
@@ -96,21 +100,21 @@ export default {
       let postData = {
         pagination: false
       }
-      this.carrierLoading = true;
-      this.$$http('getCustomerList', postData).then((results) => {
-        this.carrierLoading = false;
+      this.selectLoading = true;
+      this.$$http('searchEnergyList', postData).then((results) => {
+        this.selectLoading = false;
         if (results.data && results.data.code == 0) {
-          this.carrierSelect = results.data.data;
+          this.selectList = results.data.data;
         }
       }).catch((err) => {
-        this.carrierLoading = false;
+        this.selectLoading = false;
       })
     },
     selectShipper(value) {
       if (value) {
-        for (let i in this.carrierSelect) {
-          if (this.carrierSelect[i].id === value) {
-            this.formRules.carrier_name = this.carrierSelect[i].name;
+        for (let i in this.selectList) {
+          if (this.selectList[i].id === value) {
+            this.formRules.carrier_name = this.selectList[i].name;
             break;
           }
         }
@@ -127,18 +131,19 @@ export default {
             isLoading: true
           }
           let postData = this.formRules;
-          let apiName = 'addShipperReceivableManage';
+          let apiName = 'addOilGasPayment';
           if (this.arapDialog.type === 'update') {
             postData.id = this.arapRow.id;
-            apiName = 'updateShipperReceivableManage';
+            apiName = 'updateOilGasPayment';
+            postData.rebate = postData.rebate ? postData.rebate : 0.00;
           } else {
-            apiName = 'addShipperReceivableManage';
+            apiName = 'addOilGasPayment';
+            postData = this.pbFunc.fifterObjIsNull(postData);
           }
-          postData.company = this.companyUser.carrier.id;
+          // postData.company = this.companyUser.carrier.id;
           // console.log('托运方', postData)
           // let times = new Date();
           // postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          // postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
             this.submitBtn = {
               btnText: '保存',
@@ -171,23 +176,23 @@ export default {
   watch: {
     arapDialog(curVal, oldVal) {　
       this.formRules = {
-        carrier_id: '', //供应商
-        carrier_name: '',
+        ogcompany: '', //加油气公司
         payment_datetime: '', //付款日期
         amount: '', //付款金额
+        rebate: '',
         desc: '', //调账备注
       };　　
       if (curVal.type === 'update') {
         this.formRules = {
-          carrier_id: this.arapRow.carrier_id, //供应商
-          carrier_name: this.arapRow.carrier_name, //供应商
+          ogcompany: this.arapRow.ogcompany, //加油气公司
           payment_datetime: this.arapRow.payment_datetime, //付款日期
           amount: this.arapRow.amount, //付款金额
+          rebate: this.arapRow.rebate, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
-        this.title = '修改回款事项';
+        this.title = '修改付款事项';
       } else {
-        this.title = '新增回款事项';
+        this.title = '新增付款事项';
       }　　　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　
@@ -196,7 +201,7 @@ export default {
     },
   },
   created: function() {
-    this.companyUser = this.pbFunc.getLocalData('users', true);
+    // this.companyUser = this.pbFunc.getLocalData('users', true);
     this.pbFunc.format();
     this.getCarrier();
   }

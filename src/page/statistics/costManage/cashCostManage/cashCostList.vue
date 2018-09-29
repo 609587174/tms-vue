@@ -81,10 +81,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center" width="140" fixed="right">
           <template slot-scope="scope">
-            <div v-if="scope.row.is_adjust.key==='no'">
-              <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
-              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-            </div>
+            <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
           </template>
         </el-table-column>
         </el-table>
@@ -241,7 +239,7 @@ export default {
       this.adjustRow = row;
     },
     importData() {
-      this.$router.push({ path: `/statistics/costManage/cashCostManage/importCashCost` });
+      this.$router.push({ path: `/imports/importData/${'cashCost'}` });
     },
     exportData() {
 

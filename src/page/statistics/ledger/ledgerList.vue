@@ -20,7 +20,7 @@
         </el-row>
         <el-row :gutter="10">
           <el-col :span="8">
-            <el-form-item label="实际装车时间:" label-width="105px">
+            <el-form-item label="实际到厂时间:" label-width="105px">
               <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
@@ -105,11 +105,11 @@ export default {
       },
       activeName: 'logistics',
       leaveTime: [], //实际离站时间
-      activeTime: [], //实际装车时间
+      activeTime: [], //实际到厂时间
       searchPostData: {}, //搜索参数
       searchFilters: {
         keyword: '',
-        field: 'waybill',
+        field: 'plate_number',
       },
       selectData: {
         isReconciliationsSelect: [
@@ -124,128 +124,149 @@ export default {
         ]
       },
       thTableList: [{
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '托运方',
-        param: 'company',
-        width: '200'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '实际液厂',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '卸货站',
-        param: 'station',
-        width: ''
-      }, {
-        title: '实际装车时间',
-        param: 'activate_start',
-        width: '180'
-      }, {
-        title: '卸货完成时间',
-        param: 'activate_end',
-        width: '180'
-      }, {
-        title: '装车吨位',
-        param: 'loading_quantity',
-        width: ''
-      }, {
-        title: '实收吨位',
-        param: 'actual_quantity',
-        width: ''
-      }, {
-        title: '亏吨',
-        param: 'deficiency',
-        width: ''
-      }, {
-        title: '核算吨位',
-        param: 'check_quantity',
-        width: ''
-      }, {
-        title: '实际里程',
-        param: 'actual_mile',
-        width: ''
-      },  {
-        title: '标准里程',
-        param: 'stand_mile',
-        width: ''
-      }, {
-        title: '运费金额',
-        param: 'change_value',
-        width: ''
-      }, {
-        title: '卸车待时金额',
-        param: 'waiting_price',
-        width: ''
-      }, {
-        title: '外油/气',
-        param: 'ex_oil',
-        width: ''
-      }, {
-        title: '公司油/气',
-        param: 'com_oil',
-        width: ''
-      }, {
-        title: '高速费',
-        param: 'high_cost',
-        width: ''
-      }, {
-        title: '过路费',
-        param: 'road_toll_com',
-        width: ''
-      },
-      // {
-      //   title: '过路费（国家）',
-      //   param: 'road_toll_state',
-      //   width: ''
-      // }, {
-      //   title: '过桥费',
-      //   param: 'pontage',
-      //   width: ''
-      // },
-      {
-        title: '现金油/气（有票）',
-        param: 'logistics_fuel_cash',
-        width: ''
-      }, {
-        title: '现金油/气（无票）',
-        param: 'logistics_fuel_cash_no_ticket',
-        width: ''
-      }, {
-        title: '检测费',
-        param: 'detection_cost',
-        width: ''
-      }, {
-        title: '维修费',
-        param: 'maintenance_cost',
-        width: ''
-      }, {
-        title: '停车费',
-        param: 'parking_fee',
-        width: ''
-      }, {
-        title: '其他费用',
-        param: 'other_cost',
-        width: ''
-      }, {
-        title: '主驾',
-        param: 'master_driver',
-        width: ''
-      }, {
-        title: '副驾',
-        param: 'vice_driver',
-        width: ''
-      }, {
-        title: '押运员',
-        param: 'escort_staff',
-        width: ''
-      }],
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        }, {
+          title: '托运方',
+          param: 'company',
+          width: '200'
+        }, {
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        }, {
+          title: '实际液厂',
+          param: 'fluid',
+          width: ''
+        }, {
+          title: '卸货站',
+          param: 'station',
+          width: ''
+        }, {
+          title: '实际到厂时间',
+          param: 'activate_start',
+          width: '180'
+        }, {
+          title: '装车完成时间',
+          param: 'work_end_time',
+          width: '180'
+        }, {
+          title: '卸货完成时间',
+          param: 'activate_end',
+          width: '180'
+        }, {
+          title: '装车吨位',
+          param: 'loading_quantity',
+          width: ''
+        }, {
+          title: '实收吨位',
+          param: 'actual_quantity',
+          width: ''
+        }, {
+          title: '亏吨',
+          param: 'deficiency',
+          width: ''
+        }, {
+          title: '核算吨位',
+          param: 'check_quantity',
+          width: ''
+        }, {
+          title: '实际里程',
+          param: 'actual_mile',
+          width: ''
+        }, {
+          title: '标准里程',
+          param: 'stand_mile',
+          width: ''
+        }, {
+          title: '运费金额',
+          param: 'change_value',
+          width: ''
+        }, {
+          title: '卸车待时金额',
+          param: 'waiting_price',
+          width: ''
+        }, {
+          title: '外油/气',
+          param: 'ex_oil',
+          width: ''
+        }, {
+          title: '外油/气量',
+          param: 'ex_nums',
+          width: ''
+        }, {
+          title: '公司油/气',
+          param: 'com_oil',
+          width: ''
+        }, {
+          title: '公司油/气量',
+          param: 'com_nums',
+          width: ''
+        }, {
+          title: '高速费',
+          param: 'high_cost',
+          width: ''
+        }, {
+          title: '过路费',
+          param: 'road_toll_com',
+          width: ''
+        },
+        // {
+        //   title: '过路费（国家）',
+        //   param: 'road_toll_state',
+        //   width: ''
+        // }, {
+        //   title: '过桥费',
+        //   param: 'pontage',
+        //   width: ''
+        // },
+        {
+          title: '现金油/气（有票）',
+          param: 'logistics_fuel_cash',
+          width: ''
+        }, {
+          title: '现金油/气量（有票）',
+          param: 'cash_nums',
+          width: '160'
+        }, {
+          title: '现金油/气（无票）',
+          param: 'logistics_fuel_cash_no_ticket',
+          width: ''
+        }, {
+          title: '现金油/气量（无票）',
+          param: 'cash_no_ticket_nums',
+          width: '160'
+        }, {
+          title: '检测费',
+          param: 'detection_cost',
+          width: ''
+        }, {
+          title: '维修费',
+          param: 'maintenance_cost',
+          width: ''
+        }, {
+          title: '停车费',
+          param: 'parking_fee',
+          width: ''
+        }, {
+          title: '其他费用',
+          param: 'other_cost',
+          width: ''
+        }, {
+          title: '主驾',
+          param: 'master_driver',
+          width: ''
+        }, {
+          title: '副驾',
+          param: 'vice_driver',
+          width: ''
+        }, {
+          title: '押运员',
+          param: 'escort_staff',
+          width: ''
+        }
+      ],
       tableData: [],
       exportPostData: {} //导出筛选
     }

@@ -9,6 +9,78 @@
  */
 
 const api = {
+  batchLogisticStatisticsStatus: {
+    url: '/statistic/batch-update-logistic/',
+    method: 'post',
+    desc: '单个、批量开票对账',
+    param: {
+
+    }
+  },
+  updateHighSpeedPayment: {
+    url: '/statistic/highspeed-pay-m/:id/',
+    method: 'patch',
+    desc: '更新高速公司付款',
+    param: {
+
+    }
+  },
+  addHighSpeedPayment: {
+    url: '/statistic/highspeed-pay-m/',
+    method: 'post',
+    desc: '新增高速公司付款',
+    param: {
+
+    }
+  },
+  getHighSpeedPaymentList: {
+    url: '/statistic/highspeed-pay-m/',
+    method: 'get',
+    desc: '高速公司付款管理',
+    param: {
+
+    }
+  },
+  updateOilGasPayment: {
+    url: '/statistic/oilgas-pay-m/:id/',
+    method: 'patch',
+    desc: '更新加油气付款',
+    param: {
+
+    }
+  },
+  addOilGasPayment: {
+    url: '/statistic/oilgas-pay-m/',
+    method: 'post',
+    desc: '新增加油气付款',
+    param: {
+
+    }
+  },
+  getOilGasPaymentList: {
+    url: '/statistic/oilgas-pay-m/',
+    method: 'get',
+    desc: '加油气付款管理',
+    param: {
+
+    }
+  },
+  getHighSpeedMeetList: {
+    url: '/statistic/inout-highspeed-pay/',
+    method: 'get',
+    desc: '高速公司应付列表',
+    param: {
+
+    }
+  },
+  getOilGasMeetList: {
+    url: '/statistic/inout-oilgas-pay/',
+    method: 'get',
+    desc: '加油气应付列表',
+    param: {
+
+    }
+  },
   updateShipperReceivableManage: {
     url: '/statistic/carrier-back-m/:id/',
     method: 'patch',
@@ -47,13 +119,13 @@ const api = {
     desc: '匹配卸货单',
     param: {
       waybill_id: {
-          desc: '卸货地名称'
+        desc: '卸货地名称'
       },
       match_order_list: {
-          desc: '匹配卸车单ID列表,'
+        desc: '匹配卸车单ID列表,'
       },
       cancel_order_list: {
-          desc: '取消卸车单ID列表'
+        desc: '取消卸车单ID列表'
       },
     }
   },
@@ -66,53 +138,53 @@ const api = {
     }
   },
   addUnloadBill: {
-      url: '/order/business_order/',
-      method: 'post',
-      desc: '新增卸货单',
-      param: {
-        tms_station_name: {
-            desc: '卸货地名称'
-        },
-        station: {
-            desc: '实际站点名称,'
-        },
-        consignee: {
-            desc: '收货人'
-        },
-        consignee_phone: {
-            desc: '收货人联系电话'
-        },
-        plan_arrive_time: {
-            desc: '计划到站时间'
-        },
-        plan_tonnage: {
-            desc: '计划需求吨位'
-        },
-        station_address:{
-          desc:'站点地址'
-        },
-        business_type:{
-          desc:'业务单类型'
-        },
-        order_source: {
-          desc:'业务单来源，tms建的传TMS'
-        },
-        company_id:{
-          desc:'创建该线下承运单的tms公司的id'
-        },
-        short_name: {
-          desc:'客户简称'
-        },
-        consumer_id:{
-          desc:''
-        },
-        consumer_name: {
-          desc:'客户名称'
-        },
-        station_id:{
-          desc:'站点ID'
-        }
+    url: '/order/business_order/',
+    method: 'post',
+    desc: '新增卸货单',
+    param: {
+      tms_station_name: {
+        desc: '卸货地名称'
+      },
+      station: {
+        desc: '实际站点名称,'
+      },
+      consignee: {
+        desc: '收货人'
+      },
+      consignee_phone: {
+        desc: '收货人联系电话'
+      },
+      plan_arrive_time: {
+        desc: '计划到站时间'
+      },
+      plan_tonnage: {
+        desc: '计划需求吨位'
+      },
+      station_address: {
+        desc: '站点地址'
+      },
+      business_type: {
+        desc: '业务单类型'
+      },
+      order_source: {
+        desc: '业务单来源，tms建的传TMS'
+      },
+      company_id: {
+        desc: '创建该线下承运单的tms公司的id'
+      },
+      short_name: {
+        desc: '客户简称'
+      },
+      consumer_id: {
+        desc: ''
+      },
+      consumer_name: {
+        desc: '客户名称'
+      },
+      station_id: {
+        desc: '站点ID'
       }
+    }
   },
   getLedgerList: {
     url: '/statistic/ledger/',
@@ -1537,6 +1609,15 @@ const api = {
 
     }
   },
+  checkHasOrder: {
+    url: '/order/delivery-order/check-trip-driver-unconfirm/',
+    method: 'get',
+    desc: '运力判断是否有司机未确认的运单',
+    param: {
+
+
+    }
+  },
   searchDeliveryOrder: {
     url: '/order/delivery-order/list-capacity/',
     method: 'get',
@@ -2010,7 +2091,7 @@ const api = {
 
     }
   },
-  loadWayBillOfTruck:{
+  loadWayBillOfTruck: {
     url: '/api/v1/loadCoordinateOfDay',
     method: 'GET',
     desc: "单个车下所有运单",
@@ -2018,7 +2099,7 @@ const api = {
 
     }
   },
-  loadWayBillOfTruck:{
+  loadWayBillOfTruck: {
     url: '/bigdata/api/v1/loadWayBillOfTruck',
     method: 'GET',
     desc: "加载车辆下的所有运单",
@@ -2026,7 +2107,7 @@ const api = {
 
     }
   },
-  loadCoordinateOfWaybill:{
+  loadCoordinateOfWaybill: {
     url: '/bigdata/api/v1/loadCoordinateOfWaybill',
     method: 'GET',
     desc: "加载运单的轨迹",
@@ -2034,7 +2115,7 @@ const api = {
 
     }
   },
-  loadCoordinateOfInterval:{
+  loadCoordinateOfInterval: {
     url: '/bigdata/api/v1/loadCoordinateOfInterval',
     method: 'GET',
     desc: "按时间加载轨迹",
@@ -2042,7 +2123,7 @@ const api = {
 
     }
   },
-  loadTripOfPlanId:{
+  loadTripOfPlanId: {
     url: '/bigdata/api/v1/loadTripOfPlanId',
     method: 'GET',
     desc: "加载液厂到站点轨迹",
@@ -2050,7 +2131,7 @@ const api = {
 
     }
   },
-  loadAllTrip:{
+  loadAllTrip: {
     url: '/bigdata/api/v1/loadAllTrip',
     method: 'GET',
     desc: "加载",
@@ -2059,15 +2140,108 @@ const api = {
     }
   },
 
-  loadlist:{
+  loadlist: {
     url: '/bigdata/api/v1/loadlist',
     method: 'GET',
     desc: "加载所有液厂和站点",
     param: {
 
     }
-  }
+  },
+  searchEnergyList: {
+    url: '/carrier/oilgas/',
+    method: 'GET',
+    desc: "加油气公司列表",
+    param: {
 
+    }
+  },
+  highSpeedList: {
+    url: '/carrier/high_speed/',
+    method: 'GET',
+    desc: "高速费公司列表",
+    param: {
+      name: {
+        desc: '油气公司名称',
+      },
+    }
+  },
+  highSpeedDetail: {
+    url: '/carrier/high_speed/:id/',
+    method: 'GET',
+    desc: "高速费公司详情",
+    param: {
+
+    }
+  },
+  creatEnergy: {
+    url: '/carrier/oilgas/',
+    method: 'POST',
+    desc: "新增油气费",
+    param: {
+
+    }
+  },
+  updateEnergy: {
+    url: '/carrier/oilgas/:id/',
+    method: 'PUT',
+    desc: "修改油气费",
+    param: {
+
+    }
+  },
+  energyDetalis: {
+    url: '/carrier/oilgas/:id/',
+    method: 'GET',
+    desc: "油气费详情",
+    param: {
+
+    }
+  },
+  fixHighSpeed: {
+    url: '/carrier/high_speed/:id/',
+    method: 'PUT',
+    desc: "修改高速费公司",
+    param: {
+      name: {
+        desc: '供应商名称',
+      },
+      type: {
+        desc: '供应商类型',
+      },
+      contact_name: {
+        desc: '联系人',
+      },
+      contact_phone: {
+        desc: '联系人电话',
+      },
+      detail_address: {
+        desc: '地址',
+      },
+    }
+  },
+  addHighSpeed: {
+    url: '/carrier/high_speed/',
+    method: 'POST',
+    desc: "修改高速费公司",
+    param: {
+      name: {
+        desc: '供应商名称',
+      },
+      type: {
+        desc: '供应商类型',
+      },
+      contact_name: {
+        desc: '联系人',
+      },
+      contact_phone: {
+        desc: '联系人电话',
+      },
+      detail_address: {
+        desc: '地址',
+      },
+    }
+  },
 }
 
 

@@ -30,6 +30,11 @@
             <el-form class="addheaduserform detail-form" label-width="120px" ref="addFormSetpOne" :rules="rules" :model="editMsgForm" status-icon>
               <el-row :gutter="40">
                 <el-col :span="8">
+                  <el-form-item label="高速公司:">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.high_company" :disabled="isDisabled"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="车号:">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
@@ -46,8 +51,6 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.card_number"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="费用时间:">
                     <el-date-picker v-model="editMsgForm.cost_date" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
@@ -63,8 +66,6 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.service_charge"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="共计金额:">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.total_money"></el-input>
@@ -114,6 +115,7 @@ export default {
       pageLoading: false,
       isDisabled: true,
       editMsgForm: {
+        high_company: '',
         plate_number: '', // 车牌号
         cost_type: '', // 类别
         cost_date: '', // 费用时间
@@ -174,10 +176,10 @@ export default {
       this.$router.push({ path: "/statistics/costManage/publicCostManage/tollFee/tollFeeList" });
       // }
     },
-    getWaybillData(){
+    getWaybillData() {
       let postData = {
-        datetime:this.detail.cost_date,
-        plate_number:this.detail.plate_number
+        datetime: this.detail.cost_date,
+        plate_number: this.detail.plate_number
         // datetime:'2018-06-13 22:10:15',
         // plate_number:'鲁HH5555'
       }
@@ -193,6 +195,7 @@ export default {
           this.detail = results.data.data;
 
           this.editMsgForm = {
+            high_company: this.detail.high_company,
             plate_number: this.detail.plate_number, // 车牌号
             cost_type: this.detail.cost_type.key, // 类别
             cost_date: this.detail.cost_date, // 费用时间
@@ -243,9 +246,9 @@ export default {
       let btnObject = btn;
       let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      for(let i in this.waybillList){
+      for (let i in this.waybillList) {
         // console.log('运单号',this.waybillList[i].waybill_number,this.editMsgForm.waybill)
-        if(this.waybillList[i].waybill_number===this.editMsgForm.waybill){
+        if (this.waybillList[i].waybill_number === this.editMsgForm.waybill) {
           postData.waybill_id = this.waybillList[i].id;
         }
       }

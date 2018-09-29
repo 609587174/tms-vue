@@ -50,7 +50,9 @@
             <el-col :span="8">
               <div class="label-list">
                 <label>公司地址:</label>
-                <div class="detail-form-item" v-if="companyData.area">{{companyData.area.area_name}}{{companyData.area.city.area_name}}{{companyData.area.city.county.area_name}}{{companyData.detail_address}}</div>
+                <div class="detail-form-item" v-if="companyData.area">
+                <span v-if="companyData.area">{{companyData.area.area_name}}</span><span v-if="companyData.area&&companyData.area.city">{{companyData.area.city.area_name}}</span><span v-if="companyData.area&&companyData.area.city&&companyData.area.city.county">{{companyData.area.city.county.area_name}}</span>{{companyData.detail_address}}
+                </div>
               </div>
             </el-col>
             <el-col :span="8">

@@ -10,7 +10,7 @@
 <script>
 import importData from '@/components/common/importData'
 export default {
-  name: 'importTollFee',
+  name: 'importOilGas',
   components: {
     importData: importData,
   },

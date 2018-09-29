@@ -31,16 +31,14 @@
               <el-button slot="append" icon="el-icon-search" @click="searchList"></el-button>
             </el-input>
           </el-col>
-
           <el-col :span="6" :offset="2">
             <el-form-item label="分组:" label-width="50px">
-              <el-select @change="searchList" v-model="groupParam" placeholder="请选择" >
+              <el-select @change="searchList" v-model="groupParam" placeholder="请选择">
                 <el-option v-for="item in selectData.groupOptions" :key="item.id" :label="item.group_name" :value="item.id">
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
-
         </el-row>
         <el-row :gutter="20" style="" class="searchSection">
           <el-col :span="8" class="searchSection">
@@ -64,23 +62,24 @@
             </el-form-item>
           </el-col>
           <el-col :span="8" v-if="status!='first'&&status!='second'">
-            <el-form-item label="实际卸货时间:" label-width="105px">
+            <el-form-item label="实际到站时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_active_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
-      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder"  :loading="exportLoading">导出</el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder" :loading="exportLoading" v-if="status !== 'seven'">导出</el-button>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="loadingAllDialog = true" v-if="status == 'seven'">导出</el-button>
     </div>
-    <div class="nav-tab-setting mt-25" >
+    <div class="nav-tab-setting mt-25">
       <el-tabs v-model="fifterName" @tab-click="clickFifter">
         <el-tab-pane v-for="(item,index) in statusList[status]" :label="item.value" :name="item.key" v-loading="pageLoading">
           <div class="tab-content padding-clear-top" v-if="item.key==fifterName">
             <keep-alive>
-              <orderConFifter :ListData="listFifterData" :firstMenu="status"  :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
+              <orderConFifter :ListData="listFifterData" :firstMenu="status" :secondMenu="fifterName" @changeTabs="changeTabs" :expandStatus="expandStatus" @searchList="searchList"></orderConFifter>
             </keep-alive>
           </div>
         </el-tab-pane>
@@ -90,6 +89,18 @@
       <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if=" pageData.totalPage>1">
       </el-pagination>
     </div>
+    <el-dialog center width="30%" :visible.sync="loadingAllDialog" :lock-scroll="false" :modal-append-to-body="false">
+      <div>
+        <div class="text-center md-40">
+          <el-radio v-model="loadingAllRadio" label="1">导出卸车完成数据</el-radio>
+          <el-radio v-model="loadingAllRadio" label="2">导出所有数据</el-radio>
+        </div>
+        <div class="text-center">
+          <el-button @click="loadingAllDialog = false">取 消</el-button>
+          <el-button type="primary" @click="exportOrder" :loading="exportLoading">确 定</el-button>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -131,13 +142,13 @@ export default {
       },
       expandStatus: true,
       pageLoading: false,
-      exportLoading:false,
+      exportLoading: false,
       fifterName: "all",
-      groupParam:"",
+      groupParam: "",
       statusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'all', value: '全部' }, {key:'unload_driver_pending_confirmation',value:'司机未确认'},{ key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
+        'third': [{ key: 'all', value: '全部' }, { key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
         'fifth': [{ key: '"all', value: '全部' }, { key: 'canceing', value: '运单取消中' }, { key: 'editing', value: '运单修改中' }, { key: 'bading', value: '车辆变更中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
@@ -146,7 +157,7 @@ export default {
       allStatusList: {
         'first': [{ key: 'all', value: '全部' }, { key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'all', value: '全部' }, { key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
-        'third': [{ key: 'all', value: '全部' }, {key:'unload_driver_pending_confirmation',value:'司机未确认'},{ key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
+        'third': [{ key: 'all', value: '全部' }, { key: 'unload_driver_pending_confirmation', value: '司机未确认' }, { key: 'to_site', value: '前往卸货地' }, { key: 'reach_site', value: '已到卸货地' }, { key: 'unloading_waiting_audit', value: '已卸车待审核' }, { key: 'unloading_audit_failed', value: '卸车审核失败' }],
         'fourth': [{ key: 'all', value: '全部' }, { key: 'waiting_settlement', value: '待提交结算' }, { key: 'in_settlement', value: '结算中' }],
         'fifth': [{ key: 'all', value: '全部' }, { key: 'canceling', value: '运单取消中' }, { key: 'modifying', value: '运单修改中' }, { key: 'abnormal', value: '车辆变更中' }],
         'sxith': [{ key: 'all', value: '全部' }, { key: 'finished', value: '已完成' }, { key: 'canceled', value: '已取消' }],
@@ -169,12 +180,12 @@ export default {
           { id: 'waybill_number', value: '运单号' },
           { id: 'order_station', value: '卸货站点' },
         ],
-        carrier_type_select:[
+        carrier_type_select: [
           { id: 'own', value: '自有承运商(自有)' },
           { id: 'external', value: '外部承运商(合作)' },
         ],
-        groupOptions : [
-          {id: "",group_name: '全部'}
+        groupOptions: [
+          { id: "", group_name: '全部' }
         ]
       },
       searchStatus: false,
@@ -189,22 +200,24 @@ export default {
         keyword: "",
         field: "truck_no",
       },
+      loadingAllDialog: false,
+      loadingAllRadio: '2',
     };
   },
   props: {
     status: String,
     countParam: Object,
-    secondActiveName:String
+    secondActiveName: String
   },
 
   methods: {
     changeTabs: function(name) {
       this.$emit("changeTab", name);
     },
-    changeExtendsStatus:function(){
-      this.expandStatus=!this.expandStatus;
+    changeExtendsStatus: function() {
+      this.expandStatus = !this.expandStatus;
     },
-    exportOrder:function(){
+    exportOrder: function() {
       var sendData = {};
       var vm = this;
       this.exportLoading = true;
@@ -221,8 +234,8 @@ export default {
           sendData.search = 'all_change';
         } else if (this.status == 'sxith') {
           sendData.search = 'all_finish';
-        }else if (this.status == 'seven') {
-          sendData.search = '';
+        } else if (this.status == 'seven') {
+          sendData.search = this.loadingAllRadio == '1' ? 'settlement_finish' : '';
         }
       } else {
         if (this.fifterName == 'canceling' || this.fifterName == 'modifying' || this.fifterName == 'abnormal') {
@@ -231,7 +244,7 @@ export default {
           sendData.status = this.fifterName;
         }
       }
-        sendData.type='three';
+      sendData.type = 'three';
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
@@ -253,7 +266,7 @@ export default {
       }
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
-      sendData.export_excel='export';
+      sendData.export_excel = 'export';
       axios.get('/order/section-trips/', {
         method: 'get',
         responseType: 'blob',
@@ -268,7 +281,8 @@ export default {
         // let fileName = res.headers['content-disposition'].match(/fushun(\S*)xls/)[0];
         // fileDownload(res.data, fileName);
         //如果用方法一 ，这里需要安装 npm install js-file-download --save ,然后引用 var fileDownload = require('js-file-download')，使用详情见github;
-        this.exportLoading = false;　　　
+        this.exportLoading = false;　
+        this.loadingAllDialog = false;　　
         if (res.data && res.status == 200) {
           // let blob = new Blob([res.data], { type: "application/vnd.ms-excel" });
           let objectUrl = URL.createObjectURL(res.data);
@@ -321,7 +335,7 @@ export default {
           sendData.search = 'all_change';
         } else if (this.status == 'sxith') {
           sendData.search = 'all_finish';
-        }else if (this.status == 'seven') {
+        } else if (this.status == 'seven') {
           sendData.search = '';
         }
       } else {
@@ -331,7 +345,7 @@ export default {
           sendData.status = this.fifterName;
         }
       }
-      sendData.type='three';
+      sendData.type = 'three';
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {
         sendData.unload_active_time_end = this.timeParam.unload_active_time[1];
         sendData.unload_active_time_start = this.timeParam.unload_active_time[0]; //实际卸货
@@ -351,7 +365,7 @@ export default {
       if (this.fifterParam.field) {
         sendData[this.fifterParam.field] = this.fifterParam.keyword;
       }
-      sendData.truck_group=this.groupParam;
+      sendData.truck_group = this.groupParam;
       sendData.pageSize = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;
@@ -403,7 +417,7 @@ export default {
                   });
                 });
                 //dataBody[0].transPowerInfo = transPowerInfo.data.data.results[0];
-                 vm.listFifterData=vm.dealDataByStatus(dataBody);
+                vm.listFifterData = vm.dealDataByStatus(dataBody);
               } else {
                 vm.listFifterData = dataBody;
               }
@@ -420,16 +434,16 @@ export default {
         vm.pageLoading = false;
       });
     },
-    dealDataByStatus:function(dataBody){
-      for(var i in dataBody){
-        if(dataBody[i].status.key=='already_match'||dataBody[i].status.key=='waiting_match'){
-          var middleArr=[];
-          for(var unIndex in dataBody[i].unload_trips){
-            if(dataBody[i].unload_trips[unIndex].status.key!='canceled'){
+    dealDataByStatus: function(dataBody) {
+      for (var i in dataBody) {
+        if (dataBody[i].status.key == 'already_match' || dataBody[i].status.key == 'waiting_match') {
+          var middleArr = [];
+          for (var unIndex in dataBody[i].unload_trips) {
+            if (dataBody[i].unload_trips[unIndex].status.key != 'canceled') {
               middleArr.push(dataBody[i].unload_trips[unIndex]);
             }
           }
-          dataBody[i].unload_trips=middleArr;
+          dataBody[i].unload_trips = middleArr;
         }
       }
       return dataBody;
@@ -439,7 +453,7 @@ export default {
       //重新查询一次数据
       this.searchList(targetName);
       //this.$emit("changeTab", this.status);
-      this.$emit("childchangeTabs", { first: this.status, second:targetName.name });
+      this.$emit("childchangeTabs", { first: this.status, second: targetName.name });
     },
     fifterData: function(listData) {
       this.listFifterData = listData;
@@ -485,7 +499,7 @@ export default {
     this.assemblyData(this.countParam);
   },
   created() {
-    this.fifterName=this.secondActiveName;
+    this.fifterName = this.secondActiveName;
     //this.listFifterData = this.listData;
     this.getGroups();
     this.searchList();

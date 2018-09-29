@@ -35,5 +35,48 @@
       }
       ]
     },
+    {
+      path: 'supplierMeetManage',
+      name: "supplierMeetManage",
+      redirect: '/arap/supplierMeetManage/oilGasMeetList',
+      meta: {
+        title: '供应商应付管理',
+        isVerificationL: true
+      },
+      component: (resolve) => require(['../page/arap/supplierMeetManage/supplierMeetManage'], resolve),
+      children: [{
+        path: 'oilGasMeetList',
+        name: "oilGasMeetList",
+        meta: {
+          title: '加油气应付报表',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/arap/supplierMeetManage/oilGasMeetList'], resolve)
+      },{
+        path: 'highSpeedMeetLsit',
+        name: "highSpeedMeetLsit",
+        meta: {
+          title: '高速公司应付报表',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/arap/supplierMeetManage/highSpeedMeetLsit'], resolve)
+      },{
+        path: 'oilGasPayment',
+        name: "oilGasPayment",
+        meta: {
+          title: '加油气付款',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/arap/supplierMeetManage/oilGasPayment'], resolve)
+      },{
+        path: 'highSpeedPayment',
+        name: "highSpeedPayment",
+        meta: {
+          title: '高速付款',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/arap/supplierMeetManage/highSpeedPayment'], resolve)
+      }]
+    },
   ]
 }

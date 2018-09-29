@@ -49,8 +49,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实际液厂:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
@@ -66,11 +64,14 @@
                     <el-date-picker v-model="editMsgForm.plan_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="实际装车时间:">
+                  <el-form-item label="实际到厂时间:">
                     <el-date-picker v-model="editMsgForm.activate_start" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="装车完成时间:">
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -83,8 +84,6 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="实收吨位:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
@@ -100,8 +99,6 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.check_quantity"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="标准里程:" prop="stand_mile">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_mile"></el-input>
@@ -117,11 +114,19 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.label_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运输费率:" prop="freight_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.freight_value"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="气差金额:" prop="difference_value">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.difference_value"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="分卸费:" prop="lcl_cost">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.lcl_cost"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -134,8 +139,26 @@
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.waiting_price"></el-input>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="40">
+                <el-col :span="8">
+                  <el-form-item label="是否对账:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_reconciliation"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否开票:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_invoice"></el-input>
+                  </el-form-item>
+                </el-col>
+                <!-- <el-col :span="8">
+                  <el-form-item label="调账时间:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="调账备注:">
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
+                  </el-form-item>
+                </el-col> -->
                 <el-col :span="8">
                   <el-form-item label="运费合计:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
@@ -194,11 +217,16 @@ export default {
         actual_mile: '', //实际里程
         label_price: '', //起步价
         freight_value: '', //运输费率
+        difference_value: '', //气差金额
+        lcl_cost: '', //分卸费
         change_value: '', //运费金额
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
         plate_number: '', //车牌号
         station: '', //站点
+        is_reconciliation: '',
+        work_end_time: '',
+        is_invoice: '',
         remark: '' //备注
       },
 
@@ -207,7 +235,7 @@ export default {
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
         ],
         stand_mile: [
-         { pattern: this.$store.state.common.regular.mile.match, message: this.$store.state.common.regular.mile.tips, trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.mile.match, message: this.$store.state.common.regular.mile.tips, trigger: 'blur' },
         ],
         label_price: [
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
@@ -221,8 +249,14 @@ export default {
         waiting_price: [
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
+        lcl_cost: [
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+        ],
+        difference_value: [
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+        ],
         actual_mile: [
-         { pattern: this.$store.state.common.regular.mile.match, message: this.$store.state.common.regular.mile.tips, trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.mile.match, message: this.$store.state.common.regular.mile.tips, trigger: 'blur' },
         ],
       },
       saveBasicAndReviewBtn: {
@@ -275,10 +309,15 @@ export default {
             label_price: this.detail.label_price, //起步价
             freight_value: this.detail.freight_value, //运输费率
             change_value: this.detail.change_value, //运费金额
+            difference_value: this.detail.difference_value, //气差金额
+            lcl_cost: this.detail.lcl_cost, //分卸费
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
             plate_number: this.detail.plate_number, //车牌号
             station: this.detail.station, //站点
+            is_reconciliation: this.detail.is_reconciliation.verbose,
+            is_invoice: this.detail.is_invoice.verbose,
+            work_end_time: this.detail.work_end_time,
             remark: '' //备注
           }
         }
@@ -318,7 +357,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'change_value', 'freight_value', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'work_end_time', 'change_value', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

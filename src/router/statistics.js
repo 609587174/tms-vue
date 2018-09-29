@@ -124,14 +124,6 @@
            isVerificationL: false
          },
          component: (resolve) => require(['../page/statistics/costManage/cashCostManage/cashCostWaybillDetail'], resolve)
-       }, {
-         path: 'importCashCost',
-         name: "importCashCost",
-         meta: {
-           title: '现金费用导入',
-           isVerificationL: false
-         },
-         component: (resolve) => require(['../page/statistics/costManage/cashCostManage/importCashCost'], resolve)
        }]
      }, {
        path: 'publicCostManage',
@@ -173,14 +165,6 @@
              isVerificationL: false
            },
            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail'], resolve)
-         }, {
-           path: 'importTollFee',
-           name: "importTollFee",
-           meta: {
-             title: '高速费导入',
-             isVerificationL: false
-           },
-           component: (resolve) => require(['../page/statistics/costManage/publicCostManage/tollFee/importTollFee'], resolve)
          }]
        }, {
          path: 'oilGas',
@@ -214,14 +198,6 @@
              isVerificationL: false
            },
            component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail'], resolve)
-         }, {
-           path: 'importOilGas',
-           name: "importOilGas",
-           meta: {
-             title: '油/气费导入',
-             isVerificationL: false
-           },
-           component: (resolve) => require(['../page/statistics/costManage/publicCostManage/oilGas/importOilGas'], resolve)
          }]
        }]
      }]

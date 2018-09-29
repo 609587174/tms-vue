@@ -18,7 +18,7 @@
           <el-form-item label="付款金额:" prop="amount">
             <el-input placeholder="请输入" v-model="formRules.amount"></el-input>
           </el-form-item>
-          <el-form-item label="返利金额:" prop="rebate">
+          <el-form-item label="返利金额:">
             <el-input placeholder="请输入" v-model="formRules.rebate"></el-input>
           </el-form-item>
           <el-form-item label="备注:" prop="desc">
@@ -55,7 +55,7 @@ export default {
         carrier_name: '',
         payment_datetime: '', //付款日期
         amount: '', //付款金额
-        rebate:'',
+        rebate: '',
         desc: '', //调账备注
       },
       pickerOptionsDate: {
@@ -72,10 +72,6 @@ export default {
         ],
         amount: [
           { required: true, message: '请输入付款金额', trigger: 'blur' },
-          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
-        ],
-        rebate:[
-          { required: true, message: '请输入返利金额', trigger: 'blur' },
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
         ],
         desc: [
@@ -139,14 +135,15 @@ export default {
           if (this.arapDialog.type === 'update') {
             postData.id = this.arapRow.id;
             apiName = 'updateOilGasPayment';
+            postData.rebate = postData.rebate ? postData.rebate : 0.00;
           } else {
             apiName = 'addOilGasPayment';
+            postData = this.pbFunc.fifterObjIsNull(postData);
           }
           // postData.company = this.companyUser.carrier.id;
           // console.log('托运方', postData)
           // let times = new Date();
           // postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
-          // postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
             this.submitBtn = {
               btnText: '保存',
@@ -182,7 +179,7 @@ export default {
         ogcompany: '', //加油气公司
         payment_datetime: '', //付款日期
         amount: '', //付款金额
-        rebate:'',
+        rebate: '',
         desc: '', //调账备注
       };　　
       if (curVal.type === 'update') {
@@ -190,7 +187,7 @@ export default {
           ogcompany: this.arapRow.ogcompany, //加油气公司
           payment_datetime: this.arapRow.payment_datetime, //付款日期
           amount: this.arapRow.amount, //付款金额
-          rebate:this.arapRow.rebate, //付款金额
+          rebate: this.arapRow.rebate, //付款金额
           desc: this.arapRow.desc, //调账备注
         };
         this.title = '修改付款事项';

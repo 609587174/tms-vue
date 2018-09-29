@@ -14,7 +14,6 @@ import router from '../router'
 /* 接口超时时长设置 */
 let timeout = 20000;
 
-
 /* 配置访问url */
 let domainUrl = '';
 export const getDomainUrl = function(prefix = '') { //掐指一算五个环境

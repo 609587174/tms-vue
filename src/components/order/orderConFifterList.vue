@@ -289,19 +289,19 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                  实际卸车吨位: 
-                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity">
-                      <div slot="content" style="width:120px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.active_tonnage}}吨</el-col>
-                          <el-col><span v-if="props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity">新数据:{{props.row.unload_trips&&props.row.unload_trips[0].last_actual_quantity}}吨 </span></el-col>
-                        </el-row>
-                      </div>
-                    <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
-                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
-                  </el-tooltip>
-                  <span v-else>{{props.row.active_tonnage}}吨</span>
-                </el-col>
+                          实际卸车吨位: 
+                          <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_actual_quantity">
+                              <div slot="content" style="width:120px;">
+                                <el-row>
+                                  <el-col>原数据:{{props.row.active_tonnage}}吨</el-col>
+                                  <el-col><span v-if="props.row.last_actual_quantity">新数据:{{props.row.last_actual_quantity}}吨 </span></el-col>
+                                </el-row>
+                              </div>
+                            <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
+                            <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
+                          </el-tooltip>
+                          <span v-else>{{props.row.active_tonnage}}吨</span>
+                        </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
@@ -317,19 +317,19 @@
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                  离站时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time">
-                      <div slot="content" style="width:180px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.weight_audit_time}}</el-col>
-                          <el-col><span v-if="props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time">新数据:{{props.row.unload_trips&&props.row.unload_trips[0].last_weight_audit_time}}</span></el-col>
-                        </el-row>
-                      </div>
-                    <span v-if="props.row.weight_audit_time">{{props.row.weight_audit_time}} <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                  </el-tooltip>
-                  <span v-else>{{props.row.weight_audit_time}}</span>
-                </el-col>
+                          离站时间:
+                          <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_audit_time">
+                              <div slot="content" style="width:180px;">
+                                <el-row>
+                                  <el-col>原数据:{{props.row.weight_audit_time}}</el-col>
+                                  <el-col><span v-if="props.row.last_weight_audit_time">新数据:{{props.row.last_weight_audit_time}}</span></el-col>
+                                </el-row>
+                              </div>
+                            <span v-if="props.row.weight_audit_time">{{props.row.weight_audit_time}} <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                            <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                          </el-tooltip>
+                          <span v-else>{{props.row.weight_audit_time}}</span>
+                        </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
                 <el-col :span="4" class="whiteSpan">

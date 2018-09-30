@@ -208,7 +208,7 @@
                     <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                  <span v-else>{{props.row.pick_active_tonnage}}</span>
+                  <span v-else>{{props.row.pick_active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a></span>
                 </el-col>
                 <el-col :span="4">
                   主车: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
@@ -265,7 +265,7 @@
                     <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                  <span v-else>{{props.row.pick_active_tonnage}}吨</span>
+                  <span v-else>{{props.row.pick_active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a></span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
@@ -300,7 +300,7 @@
                             <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
                             <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
                           </el-tooltip>
-                          <span v-else>{{props.row.active_tonnage}}吨</span>
+                          <span v-else>{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a></span>
                         </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:

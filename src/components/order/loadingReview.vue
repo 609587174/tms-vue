@@ -167,7 +167,7 @@ export default {
         ],
         net_weight: [
           { required: true, message: '请输入装车净重', trigger: 'blur' },
-          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
+          { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
         ]
       }
 

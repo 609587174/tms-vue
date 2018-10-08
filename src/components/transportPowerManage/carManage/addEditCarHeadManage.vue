@@ -551,7 +551,6 @@ export default {
           vm.pageLoading = false;
         };
       }).catch(function(err) {
-        console.log('err', err);
         vm.pageLoading = false;
       });
     },
@@ -769,9 +768,11 @@ export default {
 
 .addheadcarform {
   margin: 30px 5%;
+
   .el-input {
     width: 100%;
   }
+
   .el-select {
     width: 100%;
   }

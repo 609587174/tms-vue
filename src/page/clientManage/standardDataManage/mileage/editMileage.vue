@@ -1,7 +1,5 @@
 <!-- editMileage.vue -->
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div id="addPerson" class="detail-main">
@@ -246,7 +244,6 @@ export default {
           this.saveAndReviewBtn.btnText = '提交中';
           this.saveAndReviewBtn.isLoading = true;
           this.$$http(apiName, postData).then((results) => {
-            console.log('results', results);
             this.saveAndReviewBtn.btnText = '保存并退出';
             this.saveAndReviewBtn.isLoading = false;
             this.saveAndReviewBtn.isDisabled = false;
@@ -279,7 +276,6 @@ export default {
       //postData[this.searchFilters.field] = this.searchFilters.keyword;
       this.pageLoading = true;
       this.$$http('getStandardMileDetail', postData).then((results) => {
-        console.log('results', results.data.data);
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;

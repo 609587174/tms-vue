@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.el-table {
+  .el-table {
   /deep/ .el-table__fixed-header-wrapper tr th .el-checkbox__inner {
     display: none;
   }
@@ -150,8 +150,8 @@ export default {
     return {
       activeName: 'first',
       pageLoading: false,
-      juageAddDialog:false,
-      closeModel:false,
+      juageAddDialog: false,
+      closeModel: false,
       pageData: {
         currentPage: 1,
         totalPage: 1,
@@ -237,8 +237,8 @@ export default {
       now_capacities: [], //已经选择的运力表
       default_del_capacities: [], //默认需要取消的运力
 
-      judgeAddData:{},//选择车辆时,当前车如果背有未确认的运单时候需要展示的数据源
-      judgeAddRow:{}//缓存的即将要被添加的数据
+      judgeAddData: {}, //选择车辆时,当前车如果背有未确认的运单时候需要展示的数据源
+      judgeAddRow: {} //缓存的即将要被添加的数据
     }
   },
   computed: {
@@ -250,30 +250,30 @@ export default {
     }
   },
   methods: {
-    sureChosse:function(){
+    sureChosse: function() {
       this.$refs.multipleTable.toggleRowSelection(this.judgeAddRow, true);
       this.trueAll_list.forEach((Titem) => {
         if (Titem.id == this.judgeAddRow.id) {
           Titem.bindCheckBox = true;
         }
       });
-      this.juageAddDialog=false;
+      this.juageAddDialog = false;
     },
-    juageAddDialogClose:function(){
+    juageAddDialogClose: function() {
       this.juageAddDialog = false;
       this.$refs.multipleTable.toggleRowSelection(this.judgeAddRow, false);
-        var new_now_capacities1 = [];
-        this.now_capacities.forEach((item, index) => {
-          if (item.id != this.judgeAddRow.id) {
-            new_now_capacities1.push(item);
-          }
-        });
-        this.now_capacities = new_now_capacities1;
-        this.trueAll_list.forEach((Titem) => {
-          if (Titem.id == this.judgeAddRow.id) {
-            Titem.bindCheckBox = false;
-          }
-        });
+      var new_now_capacities1 = [];
+      this.now_capacities.forEach((item, index) => {
+        if (item.id != this.judgeAddRow.id) {
+          new_now_capacities1.push(item);
+        }
+      });
+      this.now_capacities = new_now_capacities1;
+      this.trueAll_list.forEach((Titem) => {
+        if (Titem.id == this.judgeAddRow.id) {
+          Titem.bindCheckBox = false;
+        }
+      });
     },
     checkSelectable: function(row) {
       return !row.isDisable
@@ -326,7 +326,7 @@ export default {
 
             if (results.data && results.data.code == 0) {
               vm.pageLoading = false;
-              if (results.data.data.trips_driver_unconfirm_list.length ==0&&results.data.data.delivery_list.length>0) {
+              if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length > 0) {
                 var orderListText = "";
                 results.data.data.forEach((item) => {
                   orderListText += item + ",";
@@ -382,11 +382,11 @@ export default {
                     }
                   });
                 });
-              } else if(results.data.data.trips_driver_unconfirm_list.length !=0){
-                 vm.juageAddDialog=true;
-                 vm.judgeAddData=results.data.data.trips_driver_unconfirm_list;
-                 vm.judgeAddRow=row;
-              }else if (results.data.data.trips_driver_unconfirm_list.length ==0&&results.data.data.delivery_list.length==0) {
+              } else if (results.data.data.trips_driver_unconfirm_list.length != 0) {
+                vm.juageAddDialog = true;
+                vm.judgeAddData = results.data.data.trips_driver_unconfirm_list;
+                vm.judgeAddRow = row;
+              } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length == 0) {
                 row.bindCheckBox = !row.bindCheckBox;
                 vm.trueAll_list.forEach((Titem) => {
                   if (Titem.id == row.id) {
@@ -455,19 +455,19 @@ export default {
         }
       }
     },
-    judgeIsOrderStatus:function(callFunc){
-       this.$$http('getPickOrderDetail', {id:this.id}).then((results) => {
+    judgeIsOrderStatus: function(callFunc) {
+      this.$$http('getPickOrderDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
-          if(results.data.data.status.key=="determine"||results.data.data.status.key=='confirmed'){
+          if (results.data.data.status.key == "determine" || results.data.data.status.key == 'confirmed') {
             callFunc(1);
-          }else if(results.data.data.status.key=="appoint"){
+          } else if (results.data.data.status.key == "appoint") {
             callFunc(0);
-          }else{
+          } else {
             callFunc(2);
           }
         }
       }).catch((err) => {
-        console.log('cc',err);
+        console.log('cc', err);
       });
     },
     startSearch: function() {
@@ -487,64 +487,64 @@ export default {
           });
           sendData.delivery_order_id = this.delivery_list.id;
           this.pageLoading = true;
-          this.judgeIsDataChange((flage)=>{
-            if(flage=='1'){
-              this.judgeIsOrderStatus((oerderStatus)=>{
-                if(oerderStatus=='0'){//状态为变更
+          this.judgeIsDataChange((flage) => {
+            if (flage == '1') {
+              this.judgeIsOrderStatus((oerderStatus) => {
+                if (oerderStatus == '0') { //状态为变更
                   this.$$http("addCarPower", sendData).then((results) => {
-                  this.pageLoading = false;
-                  if (results.data.code == 0) {
-                    if (this.operationStatus == 'add') {
-                      vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
-                    } else {
-                      vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                    this.pageLoading = false;
+                    if (results.data.code == 0) {
+                      if (this.operationStatus == 'add') {
+                        vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=appoint" });
+                      } else {
+                        vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                      }
                     }
-                  }
                   });
-                }else if(oerderStatus=='1'){//状态变更为修改
+                } else if (oerderStatus == '1') { //状态变更为修改
                   vm.$confirm('当前订单已经提交计划', '请注意', {
-                  confirmButtonText: '继续修改计划',
-                  cancelButtonText: '返回列表',
-                  type: 'warning',
-                  center: true,
-                  closeOnClickModal: false,
-                  showClose: false,
-                  closeOnPressEscape: false
+                    confirmButtonText: '继续修改计划',
+                    cancelButtonText: '返回列表',
+                    type: 'warning',
+                    center: true,
+                    closeOnClickModal: false,
+                    showClose: false,
+                    closeOnPressEscape: false
                   }).then(() => {
                     vm.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${this.id}/edit` });
-                  }).catch(()=>{
+                  }).catch(() => {
                     vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
                   })
-                }else if(oerderStatus=='2'){//状态变更为不能修改
+                } else if (oerderStatus == '2') { //状态变更为不能修改
                   vm.$confirm('当前订单状态已经不能新增', '请核实', {
-                  confirmButtonText: '确认',
-                  showCancelButton: false,
-                  type: 'warning',
-                  center: true,
-                  closeOnClickModal: false,
-                  showClose: false,
-                  closeOnPressEscape: false
+                    confirmButtonText: '确认',
+                    showCancelButton: false,
+                    type: 'warning',
+                    center: true,
+                    closeOnClickModal: false,
+                    showClose: false,
+                    closeOnPressEscape: false
                   }).then(() => {
                     vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=all" });
                   })
                 }
               });
-              
-            }else{
+
+            } else {
               vm.$confirm('订单数据已更新，请重新操作', '请注意', {
-              confirmButtonText: '确认',
-              showCancelButton: false,
-              type: 'warning',
-              center: true,
-              closeOnClickModal: false,
-              showClose: false,
-              closeOnPressEscape: false
+                confirmButtonText: '确认',
+                showCancelButton: false,
+                type: 'warning',
+                center: true,
+                closeOnClickModal: false,
+                showClose: false,
+                closeOnPressEscape: false
               }).then(() => {
                 vm.$router.go(0);
               })
             }
           });
-          
+
         } else {
           vm.$confirm('提交车辆不能为0', '请注意', {
             confirmButtonText: '确认',
@@ -577,7 +577,7 @@ export default {
             sendData.add_capacities.push(item.id);
           }
         });
-       this.start_capacities.forEach(item => {
+        this.start_capacities.forEach(item => {
           var cancleFalg = true;
           vm.now_capacities.forEach(nowItem => {
             if (item.capacity == nowItem.id) {
@@ -589,16 +589,16 @@ export default {
           }
         });
 
-        var ischange=false;
+        var ischange = false;
         this.start_capacities.forEach(item => {
           var isfalge = false;
           vm.now_capacities.forEach(nowItem => {
-            if ((item.capacity||item.id) == nowItem.id) {
-              isfalge=true;
+            if ((item.capacity || item.id) == nowItem.id) {
+              isfalge = true;
             }
           });
-          if(!isfalge){
-            ischange=true;
+          if (!isfalge) {
+            ischange = true;
           }
         });
 
@@ -606,7 +606,7 @@ export default {
         sendData.del_capacities = sendData.del_capacities.concat(this.default_del_capacities);
         // this.del_capacities=sendData.del_capacities.concat(this.default_del_capacities);
         // this.add_capacities=sendData.add_capacities;
-        if (!ischange&&this.start_capacities.length==this.now_capacities.length) {
+        if (!ischange && this.start_capacities.length == this.now_capacities.length) {
           vm.$confirm('您没有任何修改', '请注意', {
             confirmButtonText: '确定',
             showCancelButton: false,
@@ -615,80 +615,77 @@ export default {
             closeOnClickModal: false,
             showClose: false,
             closeOnPressEscape: false
-          }).then(() => {
-          }).catch(() => {
-          })
-        }else{
+          }).then(() => {}).catch(() => {})
+        } else {
           vm.upchange(sendData);
         }
       }
     },
-    upchange:function(sendData){
-      var vm=this;
-        vm.judgeIsDataChange(function(flage) {
-          if (flage == '1') { //如果数据和上一次对比没有改变
-            if (vm.now_capacities.length > 0) {
-              if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
-                vm.pageLoading = true;
-                vm.$$http("editCarPower", sendData).then((results) => {
-                  vm.pageLoading = false;
-                  if (results.data.code == 0) {
-                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-                  }
-                }).catch(() => {
-                  vm.pageLoading = false;
-                });
-              }
-            } else {
-              vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
-                confirmButtonText: '确认提交',
-                cancelButtonText: '返回',
-                type: 'warning',
-                center: true,
-                closeOnClickModal: false,
-                showClose: false
-              }).then(() => {
-                vm.$$http("editCarPower", sendData).then((results) => {
-                  vm.pageLoading = false;
-                  if (results.data.code == 0) {
-                    vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
-                  }
-                }).catch((err) => {
-                  console.log("aa",err);
-                  this.pageLoading = false;
-                });
-              })
+    upchange: function(sendData) {
+      var vm = this;
+      vm.judgeIsDataChange(function(flage) {
+        if (flage == '1') { //如果数据和上一次对比没有改变
+          if (vm.now_capacities.length > 0) {
+            if (sendData.del_capacities.length > 0 || sendData.add_capacities.length > 0) {
+              vm.pageLoading = true;
+              vm.$$http("editCarPower", sendData).then((results) => {
+                vm.pageLoading = false;
+                if (results.data.code == 0) {
+                  vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                }
+              }).catch(() => {
+                vm.pageLoading = false;
+              });
             }
           } else {
-            vm.$confirm('订单数据已更新，请重新操作', '请注意', {
-              confirmButtonText: '确认',
-              showCancelButton: false,
+            vm.$confirm('修改后车辆为0,状态会置为待指派', '请注意', {
+              confirmButtonText: '确认提交',
+              cancelButtonText: '返回',
               type: 'warning',
               center: true,
               closeOnClickModal: false,
-              showClose: false,
-              closeOnPressEscape: false
+              showClose: false
             }).then(() => {
-              vm.$router.go(0);
+              vm.$$http("editCarPower", sendData).then((results) => {
+                vm.pageLoading = false;
+                if (results.data.code == 0) {
+                  vm.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=determine" });
+                }
+              }).catch((err) => {
+                this.pageLoading = false;
+              });
             })
           }
-        });
+        } else {
+          vm.$confirm('订单数据已更新，请重新操作', '请注意', {
+            confirmButtonText: '确认',
+            showCancelButton: false,
+            type: 'warning',
+            center: true,
+            closeOnClickModal: false,
+            showClose: false,
+            closeOnPressEscape: false
+          }).then(() => {
+            vm.$router.go(0);
+          })
+        }
+      });
     },
     judgeIsDataChange: function(callbackFun) {
       var vm = this;
       this.$$http('searchOrderHasPower', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
           var returnFlag = true;
-          var nowData={};
-          if(results.data.data.add_capacities){
-             nowData= results.data.data;
-          }else{
-             nowData={
-              add_capacities:[],
-              del_capacities:[]
-             }
+          var nowData = {};
+          if (results.data.data.add_capacities) {
+            nowData = results.data.data;
+          } else {
+            nowData = {
+              add_capacities: [],
+              del_capacities: []
+            }
           }
-           //最新的列表
+          //最新的列表
           if (nowData.add_capacities.length != vm.alreadyList.add_capacities.length || nowData.del_capacities.length != vm.alreadyList.del_capacities.length) {
             returnFlag = false;
             callbackFun(false);
@@ -713,7 +710,6 @@ export default {
           }
         }
       }).catch((err) => {
-        console.log("bb",err);
         callbackFun(0);
       });
     },
@@ -952,7 +948,7 @@ export default {
       setTimeout(function() {
         rowsArr.forEach(row => {
           vm.$refs.multipleTable.toggleRowSelection(row, true);
-          vm.start_capacities.push(row.waybill.capacity?row.waybill:row);
+          vm.start_capacities.push(row.waybill.capacity ? row.waybill : row);
         });
       });
     },
@@ -969,7 +965,7 @@ export default {
     this.getList();
   },
   watch: {
-    '$route' (to, from) {
+    '$route'(to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.$router.go(0);
     }

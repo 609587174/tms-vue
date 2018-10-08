@@ -6,7 +6,7 @@
   3:可以审核并能上传装车榜单图片isedit = ture ; isUpload = ture;
  -->
 <style scoped lang="less">
-.loading-review-container {
+  .loading-review-container {
   /deep/ .el-date-editor.el-input {
     width: 100%;
   }
@@ -283,7 +283,6 @@ export default {
               status: 'in_settlement',
               id: this.surePound.id
             }
-            console.log('postData', postData);
             this.$$http('changeOrderStatus', postData).then((results) => {
               if (results.data.code == 0) {
                 this.$message({
@@ -342,15 +341,12 @@ export default {
 
     this.surePound = Object.assign({}, this.surePoundData);
 
-    console.log('this.surePound', this.surePound);
-
     !this.isUpload && this.getImg();
   },
   watch: {
     surePoundData: {
       handler(val, oldVal) {
         this.surePound = Object.assign({}, this.surePoundData);
-        console.log('this.surePound', this.surePound);
         !this.isUpload && this.getImg();
         this.poundUpload = {
           fileList: [],
@@ -358,7 +354,7 @@ export default {
           limit: 1,
         };
       },
-      deep: true　
+      deep: true
     },
   }
 };

@@ -128,7 +128,6 @@ export default {
       this.$router.push({ path: '/clientManage/supplierManage/tollfeeManage/tollfeeManageChange' });
     },
     handleMenuClick(row) {
-      console.log('row', row);
       if (row.operator === 'check') {
         this.$router.push({
           path: `/clientManage/supplierManage/tollfeeManage/tollfeeManageDetalis/${row.id}`,
@@ -144,6 +143,4 @@ export default {
 
 </script>
 <style scoped lang="less">
-
-
 </style>

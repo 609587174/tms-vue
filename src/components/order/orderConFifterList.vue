@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.listTableAll {
+  .listTableAll {
   text-align: left;
   font-size: 13px;
 }
@@ -185,26 +185,26 @@
                 <el-col :span="4" class="whiteSpan">
                   实际到厂时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
-                      <div slot="content" style="width:180px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.pick_active_time}}</el-col>
-                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
-                        </el-row>
-                      </div>
-                      <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <div slot="content" style="width:180px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.pick_active_time}}</el-col>
+                        <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
+                      </el-row>
+                    </div>
+                    <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
                   <span v-else>{{props.row.pick_active_time}}</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                  实际装车吨位: 
+                  实际装车吨位:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
-                      <div slot="content" style="width:120px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
-                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
-                        </el-row>
-                      </div>
+                    <div slot="content" style="width:120px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
+                        <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
+                      </el-row>
+                    </div>
                     <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
@@ -242,26 +242,26 @@
                 <el-col :span="4" class="whiteSpan">
                   实际到厂时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">
-                      <div slot="content" style="width:180px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.pick_active_time}}</el-col>
-                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
-                        </el-row>
-                      </div>
-                      <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <div slot="content" style="width:180px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.pick_active_time}}</el-col>
+                        <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_time">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_time}}</el-col>
+                      </el-row>
+                    </div>
+                    <span v-if="props.row.pick_active_time">{{props.row.pick_active_time}}<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
                   <span v-else>{{props.row.pick_active_time}}</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                  实际装车吨位: 
+                  实际装车吨位:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">
-                      <div slot="content" style="width:120px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
-                          <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
-                        </el-row>
-                      </div>
+                    <div slot="content" style="width:120px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.pick_active_tonnage}}吨</el-col>
+                        <el-col v-if="props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage">新数据:{{props.row.pickup_trip&&props.row.pickup_trip.last_active_tonnage}}吨</el-col>
+                      </el-row>
+                    </div>
                     <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无<img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
@@ -289,19 +289,19 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                          实际卸车吨位: 
-                          <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_actual_quantity">
-                              <div slot="content" style="width:120px;">
-                                <el-row>
-                                  <el-col>原数据:{{props.row.active_tonnage}}吨</el-col>
-                                  <el-col><span v-if="props.row.last_actual_quantity">新数据:{{props.row.last_actual_quantity}}吨 </span></el-col>
-                                </el-row>
-                              </div>
-                            <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
-                            <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
-                          </el-tooltip>
-                          <span v-else>{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a></span>
-                        </el-col>
+                  实际卸车吨位:
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_actual_quantity">
+                    <div slot="content" style="width:120px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.active_tonnage}}吨</el-col>
+                        <el-col><span v-if="props.row.last_actual_quantity">新数据:{{props.row.last_actual_quantity}}吨 </span></el-col>
+                      </el-row>
+                    </div>
+                    <span v-if="props.row.active_tonnage">{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a> <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
+                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span></span>
+                  </el-tooltip>
+                  <span v-else>{{props.row.active_tonnage}}吨<a style="line-height:0px;height:0px;padding-left:0px;color:rgb(64, 158, 255);cursor:pointer" type="text" @click="showDownPound(props.row)">(磅)</a></span>
+                </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
                   <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
@@ -317,44 +317,44 @@
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                          离站时间:
-                          <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_audit_time">
-                              <div slot="content" style="width:180px;">
-                                <el-row>
-                                  <el-col>原数据:{{props.row.weight_audit_time}}</el-col>
-                                  <el-col><span v-if="props.row.last_weight_audit_time">新数据:{{props.row.last_weight_audit_time}}</span></el-col>
-                                </el-row>
-                              </div>
-                            <span v-if="props.row.weight_audit_time">{{props.row.weight_audit_time}} <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                            <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                          </el-tooltip>
-                          <span v-else>{{props.row.weight_audit_time}}</span>
-                        </el-col>
+                  离站时间:
+                  <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_audit_time">
+                    <div slot="content" style="width:180px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.weight_audit_time}}</el-col>
+                        <el-col><span v-if="props.row.last_weight_audit_time">新数据:{{props.row.last_weight_audit_time}}</span></el-col>
+                      </el-row>
+                    </div>
+                    <span v-if="props.row.weight_audit_time">{{props.row.weight_audit_time}} <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                    <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
+                  <span v-else>{{props.row.weight_audit_time}}</span>
+                </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
                 <el-col :span="4" class="whiteSpan" v-if="false">
-                  标准里程: 
+                  标准里程:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_standard_mile">
-                      <div slot="content" style="width:120px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.standard_mile}}km</el-col>
-                          <el-col v-if="props.row.last_standard_mile">新数据:{{props.row.last_standard_mile}}km</el-col>
-                        </el-row>
-                      </div>
+                    <div slot="content" style="width:120px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.standard_mile}}km</el-col>
+                        <el-col v-if="props.row.last_standard_mile">新数据:{{props.row.last_standard_mile}}km</el-col>
+                      </el-row>
+                    </div>
                     <span v-if="props.row.standard_mile">{{props.row.standard_mile}}km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>无 <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
-                 <span v-else>{{props.row.standard_mile}}km</span>
+                  <span v-else>{{props.row.standard_mile}}km</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
-                  实际里程: 
+                  实际里程:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_weight_active_mile">
-                      <div slot="content" style="width:120px;">
-                        <el-row>
-                          <el-col>原数据:{{props.row.weight_active_mile}}km</el-col>
-                          <el-col v-if="props.row.last_weight_active_mile">新数据:{{props.row.last_weight_active_mile||'0'}}km</el-col>
-                        </el-row>
-                      </div>
+                    <div slot="content" style="width:120px;">
+                      <el-row>
+                        <el-col>原数据:{{props.row.weight_active_mile}}km</el-col>
+                        <el-col v-if="props.row.last_weight_active_mile">新数据:{{props.row.last_weight_active_mile||'0'}}km</el-col>
+                      </el-row>
+                    </div>
                     <span v-if="props.row.weight_active_mile">{{props.row.weight_active_mile}}km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                     <span v-else>0km <img style="margin-left:5px;vertical-align:top" src="@/assets/img/tipGroup_4.png" alt="" ></span>
                   </el-tooltip>
@@ -397,24 +397,24 @@
       <el-table-column label="运单号" prop="waybill.waybill_number" min-width="150">
         <template slot-scope="props">
           <div :title="props.row.waybill.waybill_number" class="whiteSpan">
-            <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a >
-        </div>
-      </template>
+            <a style="color:#409EFF" @click="gotoDetalis(props.row)"><span style="cursor:pointer;">运单号:{{props.row.waybill.waybill_number}}</span></a>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column label="业务单号" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
-                 <span >{{props.row.business_order.order_number}}</span>
-            </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.business_order.order_number" placement="top-start" v-if="props.row.business_order.order_number">
+            <span >{{props.row.business_order.order_number}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
       <el-table-column label="装车液厂" prop="" min-width="150">
         <template slot-scope="props">
           <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.fluid}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
-          </template>
+        </template>
       </el-table-column>
-       <el-table-column label="卸货站" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
+      <el-table-column label="卸货站" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
           <span v-if="props.row.plan_time">{{props.row.business_order.station}}</span><span v-else>无</span>
         </template>
@@ -422,10 +422,10 @@
       <el-table-column label="计划装车时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
           <div class="whiteSpan">
-            <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
-                 <span >{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+            <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.delivery_order.plan_time" placement="top-start" v-if="props.row.delivery_order&&props.row.delivery_order.plan_time">
+              <span >{{props.row.delivery_order.plan_time.split(" ")[0]}}</span>
+            </el-tooltip>
+            <span v-else>无</span>
           </div>
         </template>
       </el-table-column>
@@ -436,42 +436,36 @@
       </el-table-column>
       <el-table-column label="计划到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
-                 <span >{{props.row.plan_time}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+            <span >{{props.row.plan_time}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
-
       <el-table-column label="计划卸车吨位" prop="" min-width="150" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
           <span v-if="props.row.plan_tonnage">{{props.row.plan_tonnage}}吨</span><span v-else>无</span>
         </template>
       </el-table-column>
-
       <el-table-column label="实际到厂时间" prop="" min-width="180" v-if="this.nowHead!='unloadHead'&&this.nowHead!='matchHead'">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
-                 <span >{{props.row.pick_active_time}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.pick_active_time" placement="top-start" v-if="props.row.pick_active_time">
+            <span >{{props.row.pick_active_time}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
-
-
-
       <el-table-column label="实际装车吨位" prop="" min-width="150" v-if="this.nowHead!='unloadHead'">
         <template slot-scope="props">
           <span v-if="props.row.pick_active_tonnage">{{props.row.pick_active_tonnage}}吨</span><span v-else>无</span>
         </template>
       </el-table-column>
-
-       <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
+      <el-table-column label="实际到站时间" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light" :open-delay="1000"  :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time">
-                 <span >{{props.row.arrival_time||props.row.active_time}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.arrival_time||props.row.active_time" placement="top-start" v-if="props.row.arrival_time">
+            <span >{{props.row.arrival_time||props.row.active_time}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
       <el-table-column label="实际卸车吨位" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
@@ -480,49 +474,49 @@
         </template>
       </el-table-column>
       <el-table-column label="卸车信息" prop="" min-width="150" v-if="this.nowHead=='matchHead'">
-       <template slot-scope="props">
-        <el-tooltip class="item" effect="light"  placement="right">
-          <div slot="content" style="width:250px;">
-            <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" v-bind:class="{unloadList:Uindex!=0}">
-              <el-col style="margin-top:10px;">站点:{{Uitem.business_order.station}}</el-col>
-              <el-col style="margin-top:10px;" >计划吨位:<span v-if="Uitem.business_order.plan_tonnage">{{Uitem.business_order.plan_tonnage}}吨</span></el-col>
-              <el-col style="margin-top:10px;" class="whiteSpan">
-              计划到站时间:
-              <el-tooltip class="item" effect="light" :open-delay="1000"  :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
-                 <span >{{Uitem.business_order.plan_arrive_time}}</span>
-             </el-tooltip>
-            <span v-else>无</span>
-            </el-col>
-            </el-row>
-          </div>
-          <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.unload_trips"><span v-if="props.row.unload_trips.length>1&&Uindex!=props.row.unload_trips.length-1">{{Uitem.business_order.station}}/</span><span v-else>{{Uitem.business_order.station}}</span></span></div>
-        </el-tooltip>
+        <template slot-scope="props">
+          <el-tooltip class="item" effect="light" placement="right">
+            <div slot="content" style="width:250px;">
+              <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" v-bind:class="{unloadList:Uindex!=0}">
+                <el-col style="margin-top:10px;">站点:{{Uitem.business_order.station}}</el-col>
+                <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.business_order.plan_tonnage">{{Uitem.business_order.plan_tonnage}}吨</span></el-col>
+                <el-col style="margin-top:10px;" class="whiteSpan">
+                  计划到站时间:
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="Uitem.business_order.plan_arrive_time" placement="top-start" v-if="Uitem.business_order.plan_arrive_time">
+                    <span >{{Uitem.business_order.plan_arrive_time}}</span>
+                  </el-tooltip>
+                  <span v-else>无</span>
+                </el-col>
+              </el-row>
+            </div>
+            <div class="whiteSpan"><span v-for="(Uitem,Uindex) in props.row.unload_trips"><span v-if="props.row.unload_trips.length>1&&Uindex!=props.row.unload_trips.length-1">{{Uitem.business_order.station}}/</span><span v-else>{{Uitem.business_order.station}}</span></span></div>
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
-          <el-tooltip class="item" effect="light"  placement="right">
+          <el-tooltip class="item" effect="light" placement="right">
             <div slot="content" style="width:130px;">
               <el-row>
                 <el-col>车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
-                <span v-else>无</span></el-col>
+                  <span v-else>无</span></el-col>
                 <el-col>挂车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer">{{props.row.transPowerInfo.semitrailer.plate_number}}</span>
-                <span v-else>无</span></el-col>
+                  <span v-else>无</span></el-col>
                 <el-col>主驾:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span>
-                <span v-else>无</span></el-col>
+                  <span v-else>无</span></el-col>
                 <el-col>主驾电话:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
-                <span v-else>无</span></el-col>
+                  <span v-else>无</span></el-col>
                 <el-col>副驾:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.vice_driver&&props.row.transPowerInfo.vice_driver.name">{{props.row.transPowerInfo.vice_driver.name}}</span>
-                <span v-else>无</span ></el-col>
+                  <span v-else>无</span></el-col>
                 <el-col>押运:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.escort_staff&&props.row.transPowerInfo.escort_staff.name">{{props.row.transPowerInfo.escort_staff.name}}</span>
-                <span v-else>无</span></el-col>
+                  <span v-else>无</span></el-col>
               </el-row>
             </div>
             <span v-if="props.row.transPowerInfo&&props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
           </el-tooltip>
         </template>
       </el-table-column>
-       <el-table-column label="状态" prop="" min-width="150" >
+      <el-table-column label="状态" prop="" min-width="150">
         <template slot-scope="props">
           <span v-if="props.row.interrupt_status.key=='canceling'||props.row.interrupt_status.key=='modifying'||props.row.interrupt_status.key=='abnormal'">{{props.row.interrupt_status.verbose}}</span>
           <span v-else>{{props.row.status.verbose}}</span>
@@ -530,25 +524,21 @@
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">
-
           <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
-              <el-col v-if="key==0">
-               <el-button v-if="props.row.waybill.change_status.key=='canceled'"  :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
-                <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
-                <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
-              </el-col>
-            </el-row>
-
-            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
-              <el-col v-if="key==0">
-                <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
-              </el-col>
+            <el-col v-if="key==0">
+              <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
+              <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+            </el-col>
+          </el-row>
+          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
+            <el-col v-if="key==0">
+              <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+            </el-col>
           </el-row>
         </template>
       </el-table-column>
     </el-table>
-
-
     <el-dialog title="提交变更" :visible.sync="changeSatusShow" width="25%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;">
       <el-form class="change_Status" label-width="80px" ref="changeStatusForm" style="width:80%;margin-left:10%">
         <el-form-item label="变更类型:" label-width="80px">
@@ -557,8 +547,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
-          <el-select v-model="changeStatusParam.changeStatusFied"  placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding" filterable>
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id" ></el-option>
+          <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding" filterable>
+            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -573,33 +563,28 @@
     <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
-
-
     <el-dialog :title="surePoundTitle" center :visible.sync="isShowSurePound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
       <loadingReview :isEdit="isEditSurePound" :isUpload="isUploadPound" :surePoundData="choosedListData" @close="isShowSurePound=false" @successCallback="loadingReviewSuccess"></loadingReview>
     </el-dialog>
-
     <el-dialog :title="sureDownPoundTitle" center :visible.sync="isShowSureDownPound" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <unloadingReview  :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></unloadingReview>
+      <unloadingReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></unloadingReview>
     </el-dialog>
-
-    <el-dialog :title="cancleLoadTitle" center width="30%" :visible.sync="cancleLoadEx"  :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <refuseModal  :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
+    <el-dialog :title="cancleLoadTitle" center width="30%" :visible.sync="cancleLoadEx" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <refuseModal :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
     </el-dialog>
-
-     <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" >
-        <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'"  label-width="100px" :rules="rules">
-          <el-row style="margin-top:15px;">
+    <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'" label-width="100px" :rules="rules">
+        <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
-            <el-form-item label="实际到站时间:" prop="" >
+            <el-form-item label="实际到站时间:" prop="">
               <el-date-picker v-model="UpSettlementForm.arrival_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
-            <el-form-item label="离站时间:" prop="" >
+            <el-form-item label="离站时间:" prop="">
               <el-date-picker v-model="UpSettlementForm.weight_audit_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label="卸车净重(吨):" prop="net_weight" >
+            <el-form-item label="卸车净重(吨):" prop="net_weight">
               <el-input placeholder="请输入" type="text" v-model="UpSettlementForm.net_weight"></el-input>
             </el-form-item>
             <el-form-item label="实际里程:" prop="active_mile">
@@ -607,24 +592,24 @@
             </el-form-item>
           </el-col>
         </el-row>
-        </el-form>
-        <span slot="footer" class="dialog-footer" style="text-align: center;">
+      </el-form>
+      <span slot="footer" class="dialog-footer" style="text-align: center;">
           <el-button @click="isUpSettlement = false">取 消</el-button>
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span>
-     </el-dialog>
+    </el-dialog>
   </div>
 </template>
 <script>
-  let landmarkMap;
-  let positionMark;
-  import noData from '@/components/common/noData';
-  import loadingReview from '@/components/order/loadingReview';
-  import unloadingReview from '@/components/order/unloadingReview';
-  import refuseModal from '@/components/order/refuseModal';
+let landmarkMap;
+let positionMark;
+import noData from '@/components/common/noData';
+import loadingReview from '@/components/order/loadingReview';
+import unloadingReview from '@/components/order/unloadingReview';
+import refuseModal from '@/components/order/refuseModal';
 export default {
   name: 'orderFifterList',
-   components: {
+  components: {
     noData,
     loadingReview,
     unloadingReview,
@@ -639,26 +624,26 @@ export default {
       }
     };
     return {
-      noDataObj:{
-        imgUrl:require("../../assets/img/tms_no_data.png")
+      noDataObj: {
+        imgUrl: require("../../assets/img/tms_no_data.png")
       },
-      upSettlementLoading:false,
+      upSettlementLoading: false,
       lockFalg: false,
-      delayTime:500,
-      showMap:false,
-      loadPosition:{},
-      isUpSettlement:false,
-      ListDataSearch:false,
-      UpSettlementForm:{
-        arrival_time:"",
-        weight_audit_time:"",
-        net_weight:"",
-        active_mile:""
+      delayTime: 500,
+      showMap: false,
+      loadPosition: {},
+      isUpSettlement: false,
+      ListDataSearch: false,
+      UpSettlementForm: {
+        arrival_time: "",
+        weight_audit_time: "",
+        net_weight: "",
+        active_mile: ""
       },
 
-      fifterStatus:['driver_pending_confirmation','to_fluid','reach_fluid','loading_waiting_audit','loading_audit_failed','waiting_match','confirm_match','already_match','waiting_seal'],
-      buttonModyfiyAll:{
-         canceling: [{
+      fifterStatus: ['driver_pending_confirmation', 'to_fluid', 'reach_fluid', 'loading_waiting_audit', 'loading_audit_failed', 'waiting_match', 'confirm_match', 'already_match', 'waiting_seal'],
+      buttonModyfiyAll: {
+        canceling: [{
           text: "确认取消",
           type: "danger",
           attrPlan: true,
@@ -667,43 +652,43 @@ export default {
         abnormal: [],
         modifying: []
       },
-      tableHeadConfig:{
-         'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
+      tableHeadConfig: {
+        'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' },{ key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
+        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
         'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
         'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
         'seven': [{ key: 'all', value: 'unloadHead' }]
       },
-      expendShowConfig:{
-        'driver_pending_confirmation':'loadExtend',
-        'to_fluid':'loadExtend',
-        'reach_fluid':'loadExtend',
-        'loading_waiting_audit':'loadExtend',
-        'loading_audit_failed':'loadExtend',
-        'waiting_match':'matchExtend',
-        'confirm_match':'matchExtend',
-        'already_match':'matchExtend',
-        'to_site':'unloadExtend',
-        'reach_site':'unloadExtend',
-        'unload_driver_pending_confirmation':'unloadExtend',
-        'unloading_waiting_audit':'unloadExtend',
-        'unloading_audit_failed':'unloadExtend',
-        'waiting_seal':'loadExtend',
-        'waiting_settlement':'unloadExtend',
-        'in_settlement':'unloadExtend',
-        'canceing':'matchExtend',
-        'modifying':'matchExtend',
-        'abnormal':'loadExtend',
-        'finished':'unloadExtend',
-        'canceled':'loadExtend'
+      expendShowConfig: {
+        'driver_pending_confirmation': 'loadExtend',
+        'to_fluid': 'loadExtend',
+        'reach_fluid': 'loadExtend',
+        'loading_waiting_audit': 'loadExtend',
+        'loading_audit_failed': 'loadExtend',
+        'waiting_match': 'matchExtend',
+        'confirm_match': 'matchExtend',
+        'already_match': 'matchExtend',
+        'to_site': 'unloadExtend',
+        'reach_site': 'unloadExtend',
+        'unload_driver_pending_confirmation': 'unloadExtend',
+        'unloading_waiting_audit': 'unloadExtend',
+        'unloading_audit_failed': 'unloadExtend',
+        'waiting_seal': 'loadExtend',
+        'waiting_settlement': 'unloadExtend',
+        'in_settlement': 'unloadExtend',
+        'canceing': 'matchExtend',
+        'modifying': 'matchExtend',
+        'abnormal': 'loadExtend',
+        'finished': 'unloadExtend',
+        'canceled': 'loadExtend'
       },
       rules: {
         net_weight: [
           { validator: onlyNum, trigger: 'blur' }
         ],
-        active_mile:[
+        active_mile: [
           { validator: onlyNum, trigger: 'blur' }
         ]
       },
@@ -712,46 +697,44 @@ export default {
           text: "变更",
           type: "primary",
           methods_type: "changeSatus",
-        },{
+        }, {
           text: "上传装车磅单",
           type: "success",
           methods_type: "upLoadPound",
         }],
-        confirm_match:[{ //待匹配卸货单
+        confirm_match: [{ //待匹配卸货单
           text: "查看卸货地",
           type: "success",
           methods_type: "sureUnload",
           attrPlan: true
         }],
-        to_fluid: [
-        {
+        to_fluid: [{
           text: "变更",
           type: "primary",
           methods_type: "changeSatus"
         }],
-        waiting_seal:[
-        {
+        waiting_seal: [{
           text: "变更",
           type: "primary",
           methods_type: "changeSatus"
         }],
-        reach_fluid: [
-        {
+        reach_fluid: [{
           text: "变更",
           type: "primary",
           methods_type: "changeSatus"
         }],
         loading_waiting_audit: [{
-          text: "装车审核",
-          type: "success",
-          methods_type: "loadingEX",
-          attrPlan: true
-        },
-        {
-          text: "装车拒绝",
-          type: "danger",
-          methods_type: "refuseLoadingEX",
-        }],
+            text: "装车审核",
+            type: "success",
+            methods_type: "loadingEX",
+            attrPlan: true
+          },
+          {
+            text: "装车拒绝",
+            type: "danger",
+            methods_type: "refuseLoadingEX",
+          }
+        ],
         loading_audit_failed: [],
         waiting_match: [],
         confirm_match: [{
@@ -765,27 +748,28 @@ export default {
           text: "卸车审核",
           type: "primary",
           methods_type: "downEx"
-        },{
+        }, {
           text: "卸车拒绝",
           type: "danger",
           methods_type: "refuseDownEx"
         }],
         unloading_audit_failed: [],
         waiting_settlement: [
-        // {
-        //   text: "调整数据",
-        //   type: "success",
-        //   methods_type: "changeData",
-        //   attrPlan: true
-        // },
-        {
-          text: "提交结算",
-          type: "primary",
-          methods_type: "upSettlement",
-        }],
+          // {
+          //   text: "调整数据",
+          //   type: "success",
+          //   methods_type: "changeData",
+          //   attrPlan: true
+          // },
+          {
+            text: "提交结算",
+            type: "primary",
+            methods_type: "upSettlement",
+          }
+        ],
 
         in_settlement: [],
-         finished: [{ //已完成
+        finished: [{ //已完成
           text: "查看详情",
           type: "primary",
           methods_type: "showDetalis",
@@ -795,7 +779,7 @@ export default {
           type: "primary",
           methods_type: "showDetalis",
         }],
-        unload_driver_pending_confirmation:[{
+        unload_driver_pending_confirmation: [{
           text: "上传卸车磅单",
           type: "primary",
           methods_type: "upUnloadPound",
@@ -815,37 +799,37 @@ export default {
       changeSatusCarList: [],
       changeSatusPerList: [],
       seletPadding: false,
-      returnId:[],
+      returnId: [],
 
 
-      isShowSurePound:false,
-      surePoundTitle:'装车磅单审核通过',
-      isEditSurePound:true,
-      isUploadPound:false,
+      isShowSurePound: false,
+      surePoundTitle: '装车磅单审核通过',
+      isEditSurePound: true,
+      isUploadPound: false,
 
-      isShowSureDownPound:false,
-      sureDownPoundTitle:'卸车磅单审核通过',
-      isEditSureDownPound:true,
-      isUploadUnloadPound:false,
-      isShowAccountCheck:false,
-      choosedListData:{},
+      isShowSureDownPound: false,
+      sureDownPoundTitle: '卸车磅单审核通过',
+      isEditSureDownPound: true,
+      isUploadUnloadPound: false,
+      isShowAccountCheck: false,
+      choosedListData: {},
 
-      cancleLoadTitle:'装车磅单审核拒绝',
-      cancleLoadEx:false,
-      weightId:'',
+      cancleLoadTitle: '装车磅单审核拒绝',
+      cancleLoadEx: false,
+      weightId: '',
 
 
 
     };
   },
-  props: ['ListData','firstMenu','secondMenu','expandStatus'],
+  props: ['ListData', 'firstMenu', 'secondMenu', 'expandStatus'],
   computed: {
 
-    nowHead:function(){
-      var returnHead="";
-      this.tableHeadConfig[this.firstMenu].forEach((item)=>{
-        if(item.key==this.secondMenu){
-          returnHead=item.value;
+    nowHead: function() {
+      var returnHead = "";
+      this.tableHeadConfig[this.firstMenu].forEach((item) => {
+        if (item.key == this.secondMenu) {
+          returnHead = item.value;
         }
       });
       return returnHead;
@@ -863,48 +847,48 @@ export default {
     // });
   },
   methods: {
-    upSettlementTrue:function(){
+    upSettlementTrue: function() {
       var vm = this;
       this.$refs['isUpSettlementForm'].validate((valid) => {
         if (valid) {
-           var sendData = this.UpSettlementForm;
-            vm.upSettlementLoading=true;
+          var sendData = this.UpSettlementForm;
+          vm.upSettlementLoading = true;
 
-            sendData.status = "in_settlement";
-            this.$$http('changeOrderStatus', sendData).then((results) => {
-              vm.upSettlementLoading=false;
-              if (results.data.code == 0) {
-                this.isUpSettlement=false;
-                this.$message({
-                  message: '提交结算成功',
-                  type: 'success'
-                });
-                vm.$emit('searchList');
-              }
-            }).catch(() => {
-              vm.upSettlementLoading=false;
-            });
-          }
+          sendData.status = "in_settlement";
+          this.$$http('changeOrderStatus', sendData).then((results) => {
+            vm.upSettlementLoading = false;
+            if (results.data.code == 0) {
+              this.isUpSettlement = false;
+              this.$message({
+                message: '提交结算成功',
+                type: 'success'
+              });
+              vm.$emit('searchList');
+            }
+          }).catch(() => {
+            vm.upSettlementLoading = false;
+          });
+        }
       });
     },
     expandArr: function() {
-      if(this.expandStatus){
-        this.returnId=[];
-        this.ListData.forEach((item)=>{
+      if (this.expandStatus) {
+        this.returnId = [];
+        this.ListData.forEach((item) => {
           this.returnId.push(item.id);
         });
-      }else{
-        this.returnId=[];
+      } else {
+        this.returnId = [];
       }
     },
     gotoDetalis: function(rowData) {
       this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
     },
-    showPound:function(rowData){
+    showPound: function(rowData) {
 
-      let rowDataCopy = Object.assign({},rowData);
+      let rowDataCopy = Object.assign({}, rowData);
 
-      if(rowDataCopy && rowDataCopy.section_type && rowDataCopy.section_type.key && rowDataCopy.section_type.key ==='unload'){
+      if (rowDataCopy && rowDataCopy.section_type && rowDataCopy.section_type.key && rowDataCopy.section_type.key === 'unload') {
         rowDataCopy.weight_note = rowDataCopy.pickup_weight_note;
         rowDataCopy.active_time = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.active_time || rowDataCopy.active_time;
         rowDataCopy.work_start_time = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.work_start_time || rowDataCopy.work_start_time;
@@ -912,7 +896,7 @@ export default {
         rowDataCopy.gross_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.gross_weight || rowDataCopy.gross_weight;
         rowDataCopy.tare_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.tare_weight || rowDataCopy.tare_weight;
         rowDataCopy.net_weight = rowDataCopy.pickup_trip && rowDataCopy.pickup_trip.net_weight || rowDataCopy.net_weight;
-        rowDataCopy.carseal = rowDataCopy.pickup_carseal  || rowDataCopy.carseal;
+        rowDataCopy.carseal = rowDataCopy.pickup_carseal || rowDataCopy.carseal;
       }
 
       this.isShowSurePound = true;
@@ -922,64 +906,64 @@ export default {
       this.isUploadPound = false;
 
     },
-    showDownPound:function(rowData){
+    showDownPound: function(rowData) {
 
       this.isShowSureDownPound = true;
       this.choosedListData = rowData;
       this.sureDownPoundTitle = '查看卸车车磅单'
       this.isEditSureDownPound = false;
-      this.isUploadUnloadPound  = false;
+      this.isUploadUnloadPound = false;
       this.isShowAccountCheck = false;
 
     },
-    showMapDetalis:function(type,id){
-     var vm=this;
-     if(type=="load"){
-        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.coordinate.longitude;
-            vm.loadPosition.latitude=pointObj.coordinate.latitude;
-            vm.loadPosition.position=pointObj.coordinate.address;
+    showMapDetalis: function(type, id) {
+      var vm = this;
+      if (type == "load") {
+        this.$$http('getFulidDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.coordinate.longitude;
+            vm.loadPosition.latitude = pointObj.coordinate.latitude;
+            vm.loadPosition.position = pointObj.coordinate.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
-      }else if(type=="unload"){
-        this.$$http('getStationDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.location.longitude;
-            vm.loadPosition.latitude=pointObj.location.latitude;
-            vm.loadPosition.position=pointObj.address;
+      } else if (type == "unload") {
+        this.$$http('getStationDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.location.longitude;
+            vm.loadPosition.latitude = pointObj.location.latitude;
+            vm.loadPosition.position = pointObj.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
       }
     },
-    openDigo:function(obj){
-      var vm=this;
-      setTimeout(()=>{
+    openDigo: function(obj) {
+      var vm = this;
+      setTimeout(() => {
         landmarkMap = new AMap.Map('map-container', {
           zoom: 10,
         });
-      // /*创建点标记*/
+        // /*创建点标记*/
         positionMark = new AMap.Marker({
-            map:landmarkMap,
-          });
-         positionMark.setLabel({
-            content: vm.loadPosition.position,
-            offset: new AMap.Pixel(30, 0)
-         });
+          map: landmarkMap,
+        });
+        positionMark.setLabel({
+          content: vm.loadPosition.position,
+          offset: new AMap.Pixel(30, 0)
+        });
         let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
-      },100);
+      }, 100);
     },
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
@@ -987,8 +971,8 @@ export default {
     upStatus: function() {
       var sendData = {};
       var vm = this;
-      if(this.changeStatusParam.changeStatusFied&&this.changeStatusParam.changeStatusType){
-         sendData.content = this.changeStatusParam.changeStatusFied;
+      if (this.changeStatusParam.changeStatusFied && this.changeStatusParam.changeStatusType) {
+        sendData.content = this.changeStatusParam.changeStatusFied;
         sendData.change_type = this.changeStatusParam.changeStatusType;
         sendData.desc = this.changeStatusParam.changeSatusDesc;
         sendData.sectiontrip = this.changeStatusParam.sectiontrip;
@@ -998,7 +982,7 @@ export default {
         }).catch(() => {
 
         });
-      }else{
+      } else {
 
       }
     },
@@ -1021,87 +1005,97 @@ export default {
       //   });
       // }
     },
-    downExFun(type, rowData){
+    downExFun(type, rowData) {
 
-        this.isShowSureDownPound = true;
-        this.sureDownPoundTitle = '卸车榜单审核通过';
-        this.isEditSureDownPound = true;
-        this.isUploadUnloadPound  = false;
-        this.isShowAccountCheck = true;
+      this.isShowSureDownPound = true;
+      this.sureDownPoundTitle = '卸车榜单审核通过';
+      this.isEditSureDownPound = true;
+      this.isUploadUnloadPound = false;
+      this.isShowAccountCheck = true;
 
-        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
-        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
+      /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
+      this.$$http("orderProcess", { id: rowData.id }).then((results) => {
 
-          if (results.data.code == 0) {
-            let orderProcessData = results.data.data;
-            let dataObject = {};
+        if (results.data.code == 0) {
+          let orderProcessData = results.data.data;
+          let dataObject = {};
 
 
-            orderProcessData.map((item,i)=>{
+          orderProcessData.map((item, i) => {
 
-              if(item.type === 'unloading_waiting_audit'){
-                dataObject = {
-                  ...dataObject,
-                    ...item,
-                  weight_note: item.weight_id,
-                  weight_active_mile: '',
-                  id:rowData.id,
-                }
+            if (item.type === 'unloading_waiting_audit') {
+              dataObject = {
+                ...dataObject,
+                ...item,
+                weight_note: item.weight_id,
+                weight_active_mile: '',
+                id: rowData.id,
               }
+            }
 
-              if(item.type === 'to_fluid'){
-                dataObject = {
-                  ...dataObject,
-                  ...item
-                }
+            if (item.type === 'to_fluid') {
+              dataObject = {
+                ...dataObject,
+                ...item
               }
+            }
 
-            })
+          })
 
-            this.choosedListData = Object.assign({}, dataObject);
-          }
-        });
+          this.choosedListData = Object.assign({}, dataObject);
+        }
+      });
     },
-    loadingExFun(type, rowData){
+    loadingExFun(type, rowData) {
       this.isShowSurePound = true;
-        this.surePoundTitle = '装车榜单审核通过';
-        this.isEditSureDownPound = true;
-        this.isUploadPound = false;
+      this.surePoundTitle = '装车榜单审核通过';
+      this.isEditSureDownPound = true;
+      this.isUploadPound = false;
 
-        //this.choosedListData = rowData;
+      //this.choosedListData = rowData;
 
-        /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
-        this.$$http("orderProcess", {id:rowData.id}).then((results) => {
+      /* 列表上数据和进程数据不一致，因为审核通过后才会把进程数据同步到列表。需要获取进程数据，审核进程数据 */
+      this.$$http("orderProcess", { id: rowData.id }).then((results) => {
 
-          if (results.data.code == 0) {
-            let orderProcessData = results.data.data;
-            let dataObject = {};
+        if (results.data.code == 0) {
+          let orderProcessData = results.data.data;
 
-            orderProcessData.map((item,i)=>{
+          let dataObject = {};
 
-              if(item.type === 'waiting_seal'){
+          orderProcessData.map((item, i) => {
+
+            if (item.type === 'waiting_seal') {
+              dataObject = {
+                ...dataObject,
+                ...item,
+                weight_note: item.weight_id,
+                carseal: rowData.carseal,
+              }
+            }
+
+            if (item.type === 'loading_waiting_audit') {
+              if (item.weight_id) {
                 dataObject = {
                   ...dataObject,
                   ...item,
                   weight_note: item.weight_id,
-                  carseal:rowData.carseal,
-
                 }
               }
+            }
 
-              if(item.type === 'to_fluid'){
-                dataObject = {
-                  ...dataObject,
-                  ...item
-                }
+            if (item.type === 'to_fluid') {
+              dataObject = {
+                ...dataObject,
+                ...item
               }
+            }
 
-            })
+          })
 
-            this.choosedListData = Object.assign({}, dataObject);
+          this.choosedListData = Object.assign({}, dataObject);
 
-          }
-        });
+        }
+      });
     },
     operation: function(type, rowData) {
       if (type == 'changeSatus') {
@@ -1123,61 +1117,61 @@ export default {
 
       } else if (type == 'showDetalis') { //查看详情
         this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
-      }else if (type == 'refuseDownEx') { //卸车拒绝
+      } else if (type == 'refuseDownEx') { //卸车拒绝
         this.weightId = rowData.weight_note;
         this.cancleLoadEx = true;
         this.cancleLoadTitle = '卸车磅单审核拒绝';
-      }else if(type == 'refuseLoadingEX'){//装车拒绝
+      } else if (type == 'refuseLoadingEX') { //装车拒绝
         this.weightId = rowData.weight_note;
         this.cancleLoadEx = true;
         this.cancleLoadTitle = '装车磅单审核拒绝';
-      }else if(type === 'upLoadPound'){
+      } else if (type === 'upLoadPound') {
         //上传装车磅单
         this.isShowSurePound = true;
         this.choosedListData = rowData;
         this.surePoundTitle = '上传装车磅单'
         this.isEditSurePound = true;
         this.isUploadPound = true;
-      }else if(type==='upUnloadPound'){
+      } else if (type === 'upUnloadPound') {
         //上传卸车磅单
         this.isShowSureDownPound = true;
         this.choosedListData = rowData;
         this.sureDownPoundTitle = '上传卸车磅单'
         this.isEditSureDownPound = true;
-        this.isUploadUnloadPound  = true;
+        this.isUploadUnloadPound = true;
         this.isShowAccountCheck = true;
       }
 
     },
     upSettlement: function(rowData) {
 
-      this.UpSettlementForm={
-        arrival_time:rowData.active_time||"",
-        weight_audit_time:rowData.weight_audit_time||"",
-        net_weight:rowData.net_weight||"",
-        active_mile:rowData.weight_active_mile||"",
-        id:rowData.id
-      },
-      this.isUpSettlement=true;
+      this.UpSettlementForm = {
+          arrival_time: rowData.active_time || "",
+          weight_audit_time: rowData.weight_audit_time || "",
+          net_weight: rowData.net_weight || "",
+          active_mile: rowData.weight_active_mile || "",
+          id: rowData.id
+        },
+        this.isUpSettlement = true;
       //this.upSettlementTrue();
     },
     changeSatusBox: function(rowData) {
       //判断各种数据弹窗
       this.changeSatusShow = true;
     },
-    loadingReviewSuccess:function(){
+    loadingReviewSuccess: function() {
       this.$emit('searchList');
     },
-    unloadingReviewSuccess:function(){
+    unloadingReviewSuccess: function() {
       this.$emit('searchList');
     },
-    refuseSuccess:function(){
+    refuseSuccess: function() {
       this.$emit('searchList');
     }
   },
   created() {
-    if(this.expandStatus){
-      this.ListData.forEach((item)=>{
+    if (this.expandStatus) {
+      this.ListData.forEach((item) => {
         this.returnId.push(item.id)
       });
     }
@@ -1199,21 +1193,21 @@ export default {
           });
         }
       },
-      deep: true　
+      deep: true
     },
-    ListData:{
+    ListData: {
       handler(val, oldVal) {
         this.expandArr();
-        setTimeout(()=>{
-          this.ListDataSearch=true;
+        setTimeout(() => {
+          this.ListDataSearch = true;
         })
 
       },
-      deep:true
+      deep: true
     },
-    expandStatus:{
+    expandStatus: {
       handler(val, oldVal) {
-        setTimeout(()=>{
+        setTimeout(() => {
           this.expandArr();
         })
       },

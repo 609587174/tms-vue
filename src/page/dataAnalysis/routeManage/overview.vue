@@ -245,7 +245,6 @@ export default {
       this.siteLayer.setData(this.siteList, {
         lnglat: 'line'
       });
-      console.log('this.searchFilters.fluid', this.searchFilters.fluid, this.searchFilters.site);
       if (this.searchFilters.fluid.length || this.searchFilters.site.length) {
         this.layer.setOptions({
           style: {
@@ -312,6 +311,7 @@ export default {
   color: #fff;
   font-size: 13px;
   background-color: rgba(20, 20, 20, 0.8);
+
   tr {
     padding: 2px 0;
   }

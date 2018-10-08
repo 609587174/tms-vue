@@ -9,12 +9,12 @@
         <el-button type="primary" size="mini" @click="hideLandmark()" v-if="isNeedGetLandmark">隐藏地标</el-button>
       </div>
       <div class="startAndPause text-center"><img v-show="!isDisplay" @click="resumeDriving" src="@/assets/img/play.png" /><img v-show="isDisplay" @click="pauseDriving" src="@/assets/img/suspend.png" /></div>
-      <div class="speed-control">
-        <input class="speedRange" type="range" min="1000" max="200000" step="5000" v-model="speed" @change="changeSpeed">
-        <span>{{speed}}km/h</span>
+        <div class="speed-control">
+          <input class="speedRange" type="range" min="1000" max="200000" step="5000" v-model="speed" @change="changeSpeed">
+          <span>{{speed}}km/h</span>
+        </div>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import axios from 'axios';
@@ -109,7 +109,6 @@ export default {
         this.pageLoading = true;
         axios.get(`http://namenode:8080/api/v1/loadnewcoord?fluid_name=${fluidName}&station_name=${siteName}&number=${num}`).then(results => {
           this.pageLoading = false;
-          console.log('results', results);
           if (results.data && results.data.code == 200) {
             resolve(results);
           } else {
@@ -501,9 +500,11 @@ export default {
 .out-contain {
 
   position: relative;
+
   #map-container {
     width: 100%;
     height: 900px;
+
     .amap-logo {
       right: 0px !important;
       left: auto !important;
@@ -516,12 +517,14 @@ export default {
       display: none;
     }
   }
+
   .map-loading {
     position: absolute;
     height: 50px;
     width: 100%;
     left: 0;
     top: 140px;
+
     /deep/ .el-loading-mask {
       background-color: rgba(250, 250, 250, 0);
     }
@@ -533,6 +536,7 @@ export default {
     background-color: #fff;
     position: relative;
     font-size: 14px;
+
     .display-distance {
       position: absolute;
       top: 0;
@@ -540,16 +544,19 @@ export default {
       line-height: 50px;
       width: 100px;
     }
+
     .landmark-operate {
       position: absolute;
       top: 11px;
       left: 110px;
       width: 100px;
     }
+
     .startAndPause {
       width: 50px;
       padding-top: 9px;
       margin: 0 auto;
+
       img {
         cursor: pointer;
       }

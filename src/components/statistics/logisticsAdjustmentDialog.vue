@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <div>
@@ -166,7 +164,6 @@ export default {
 
         if (isNaN(this.formRules.waiting_charges_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.waiting_charges_adjust) || !this.formRules.waiting_charges_adjust) {
           this.differenceValue.waiting_charges = '';
-          console.log('运费',this.formRules.waiting_charges_adjust)
         } else {
           this.differenceValue.waiting_charges = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
         }
@@ -217,7 +214,7 @@ export default {
     },
   },
   watch: {
-    accountAdjustIsShow(curVal, oldVal) {　
+    accountAdjustIsShow(curVal, oldVal) {
       this.formRules = {
         company_adjust: '', //托运方
         check_quantity_adjust: '', //核算吨位
@@ -225,10 +222,10 @@ export default {
         waiting_charges_adjust: '', //运费合计
         adjust_time: '', //调账时间
         remark_adjust: '', //调账备注
-      };　　　　　　　　
+      };
       if (this.$refs['formRules']) {
-        this.$refs['formRules'].clearValidate();　　　　
-      }　　
+        this.$refs['formRules'].clearValidate();
+      }
       this.submitBtn.isDisabled = true;
       this.differenceValue = { //差价
         check_quantity: '', //核算吨位

@@ -10,7 +10,7 @@
               <el-row :gutter="20">
                 <el-col :span="6">
                   <el-form-item label="托运方:">
-                    <el-select v-model="searchFilters.carriers" :loading="shipperLoading" clearable filterable @change="searchTrader"  :remote-method="searchTrader" placeholder="请输入选择">
+                    <el-select v-model="searchFilters.carriers" :loading="shipperLoading" clearable filterable @change="searchTrader" :remote-method="searchTrader" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -50,7 +50,6 @@
                 <template slot-scope="scope">
                   <div v-if="scope.row.customer_staffs&&scope.row.customer_staffs.length" :title="scope.row.fluidListStr">
                     <span v-for="(row,key) in scope.row.customer_staffs" class="text-blue"><span v-if="key<5">{{row.carrier_name}}<br></span>
-
                     </span>
                   </div>
                   <div v-else><span class="text-blue">{{scope.row.traders.name}}</span></div>
@@ -137,8 +136,9 @@ export default {
           shipper = this.selectData.shipperSelect[i];
         }
       }
+      this.startSearch();
       // if (shipper) {
-        this.getList(shipper);
+      // this.getList(shipper);
       // }
     },
     getList: function(shipper) {

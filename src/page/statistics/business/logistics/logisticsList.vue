@@ -81,7 +81,7 @@
                 <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]">
                   <span>{{scope.row[item.adjustParam]}}</span>
                 </div>
-                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
                 <span v-else v-html="scope.row[item.param]"></span>
               </div>
             </div>
@@ -209,7 +209,7 @@ export default {
           title: '实际到厂时间',
           param: 'activate_start',
           width: '180'
-        },{
+        }, {
           title: '装车完成时间',
           param: 'work_end_time',
           width: '180'
@@ -254,6 +254,10 @@ export default {
           param: 'freight_value',
           width: ''
         }, {
+          title: '标准运价',
+          param: 'stand_freight',
+          width: ''
+        }, {
           title: '气差金额',
           param: 'difference_value',
           width: ''
@@ -278,6 +282,14 @@ export default {
           param: 'is_invoice',
           width: ''
         }, {
+          title: '备注',
+          param: 'remark',
+          width: '170'
+        }, {
+          title: '对账时间',
+          param: 'reconciliation_time',
+          width: '180'
+        }, {
           title: '调账时间',
           param: 'adjust_time',
           width: '180'
@@ -285,7 +297,11 @@ export default {
           title: '调账备注',
           param: 'remark_adjust',
           width: '180'
-        },
+        }, {
+          title: '开票时间',
+          param: 'invoice_time',
+          width: '180'
+        }
       ],
       tableData: {},
       multipleSelection: [], //所选数据 

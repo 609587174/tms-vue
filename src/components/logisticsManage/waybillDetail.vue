@@ -420,7 +420,7 @@
             </el-col>
            
 
-            <el-col :span="8" v-if="false">
+            <el-col :span="8">
                 <div class="label-list">
                   <label>标准里程:</label>
                    <div class="detail-form-item" >

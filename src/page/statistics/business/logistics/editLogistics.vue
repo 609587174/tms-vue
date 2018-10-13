@@ -31,32 +31,32 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="运单号:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waybill"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waybill"></el-input>
                   </el-form-item>
                 </el-col>
                 <!-- <el-col :span="8">
                   <el-form-item label="业务单号:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.order"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.order"></el-input>
                   </el-form-item>
                 </el-col> -->
                 <el-col :span="8">
                   <el-form-item label="托运方:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.company"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.company"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="车号:">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
+                    <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实际液厂:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="卸货站:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.station"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.station"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -66,7 +66,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实际到厂时间:">
-                    <el-date-picker v-model="editMsgForm.activate_start" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.activate_start" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="暂无"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -76,22 +76,22 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实际离站时间:">
-                    <el-date-picker v-model="editMsgForm.activate_end" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.activate_end" :disabled="isDisabled" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="暂无"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="装车吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实收吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="亏吨:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.deficiency"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -120,6 +120,11 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="标准运价:">
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.stand_freight"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="气差金额:" prop="difference_value">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.difference_value"></el-input>
                   </el-form-item>
@@ -141,12 +146,12 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否对账:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_reconciliation"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_reconciliation"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="是否开票:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_invoice"></el-input>
+                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_invoice"></el-input>
                   </el-form-item>
                 </el-col>
                 <!-- <el-col :span="8">
@@ -162,6 +167,26 @@
                 <el-col :span="8">
                   <el-form-item label="运费合计:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.waiting_charges"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="对账时间:">
+                    <el-input placeholder="暂无" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.reconciliation_time"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="调账时间:">
+                    <el-input placeholder="暂无" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.adjust_time"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="开票时间:">
+                    <el-input placeholder="暂无" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.invoice_time"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="调账备注:">
+                    <el-input placeholder="暂无" type="textarea" resize="none" :rows="3" :disabled="isDisabled" v-model.trim="editMsgForm.remark_adjust"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -227,7 +252,12 @@ export default {
         is_reconciliation: '',
         work_end_time: '',
         is_invoice: '',
-        remark: '' //备注
+        remark: '', //备注
+        stand_freight: '',
+        invoice_time: '',
+        reconciliation_time: '',
+        remark_adjust: '',
+        adjust_time: '',
       },
 
       rules: {
@@ -318,7 +348,12 @@ export default {
             is_reconciliation: this.detail.is_reconciliation.verbose,
             is_invoice: this.detail.is_invoice.verbose,
             work_end_time: this.detail.work_end_time,
-            remark: '' //备注
+            remark: this.detail.remark, //备注
+            invoice_time: this.detail.invoice_time,
+            reconciliation_time: this.detail.reconciliation_time,
+            remark_adjust: this.detail.remark_adjust,
+            adjust_time: this.detail.adjust_time,
+            stand_freight: this.detail.stand_freight
           }
         }
       })

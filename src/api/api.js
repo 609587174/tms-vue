@@ -9,6 +9,14 @@
  */
 
 const api = {
+  getFreightTradersList: {
+    url: '/carrier/trans_fee/freight_traders/',
+    method: 'get',
+    desc: '获取运费约定所有贸易商',
+    param: {
+
+    }
+  },
   batchLogisticStatisticsStatus: {
     url: '/statistic/batch-update-logistic/',
     method: 'post',

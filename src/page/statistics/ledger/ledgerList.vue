@@ -180,6 +180,10 @@ export default {
           param: 'stand_mile',
           width: ''
         }, {
+          title: '标准运价',
+          param: 'stand_freight',
+          width: ''
+        }, {
           title: '运费金额',
           param: 'change_value',
           width: ''

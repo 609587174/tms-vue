@@ -208,7 +208,7 @@ export default {
         // need_all: true
       };
       this.shipperLoading = true;
-      this.$$http('getShipperList', postData).then((results) => {
+      this.$$http('getFreightTradersList', postData).then((results) => {
         this.shipperLoading = false;
         if (results.data && results.data.code == 0) {
           this.selectData.shipperSelect = this.selectData.shipperSelect.concat(results.data.data);

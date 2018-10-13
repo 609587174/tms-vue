@@ -291,8 +291,8 @@
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际卸货时间:
-                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.active_time" placement="top-start" v-if="props.row.active_time">
-                    <span>{{props.row.active_time}}</span>
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.work_end_time" placement="top-start" v-if="props.row.work_end_time">
+                    <span>{{props.row.work_end_time}}</span>
                   </el-tooltip>
                   <span v-else>无</span>
                 </el-col>
@@ -318,7 +318,7 @@
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
-                <el-col :span="4" class="whiteSpan" v-if="false">
+                <el-col :span="4" class="whiteSpan">
                   标准里程:
                   <el-tooltip class="item" effect="light" :open-delay="1000" placement="top-start" v-if="props.row.last_standard_mile">
                     <div slot="content" style="width:120px;">

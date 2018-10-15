@@ -178,8 +178,8 @@
               <el-button type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
+          <el-row v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
+            <el-col >
               <el-button type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
             </el-col>
           </el-row>
@@ -341,17 +341,19 @@ export default {
       } else {
         type = 'edit';
       }
-      this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+      //this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}` });
+      window.open(`#/orders/pickupOrders/orderDetail/orderDetailTab/${row.id}/${type}`, '_blank')
     },
     operation: function(type, rowData) {
       var vm = this;
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
-
+        //this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
         this.upPlanMethod();
       } else if (type == 'changePlan') {
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
+        window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit`, '_blank')
+        //this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
         //传入一个订单号跳转订单详情-车辆指派页面
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面
@@ -361,7 +363,8 @@ export default {
         } else {
           type = 'edit';
         }
-        this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}` });
+        //this.$router.push({ path: `/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}` });
+        window.open(`#/orders/pickupOrders/orderDetail/orderDetailTab/${rowData.id}/${type}`, '_blank')
         //vm.$emit("refreshList",'determine');
       } else if (type == 'upPlan') {
         var sendData = {

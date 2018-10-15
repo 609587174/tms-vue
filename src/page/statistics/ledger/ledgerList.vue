@@ -284,7 +284,8 @@ export default {
 
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/ledger/ledgerWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/ledger/ledgerWaybillDetail/${row.waybill_id}`, '_blank')
+        //this.$router.push({ path: `/statistics/ledger/ledgerWaybillDetail/${row.waybill_id}` });
       }
     },
     startSearch() {

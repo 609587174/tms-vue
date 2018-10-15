@@ -255,9 +255,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}`, '_blank')
+        //this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/costManage/cashCostManage/editCashCost`, query: { id: row.id } });
+        window.open(`#/statistics/costManage/cashCostManage/editCashCost?id=${row.id }`, '_blank')
+        //this.$router.push({ path: `/statistics/costManage/cashCostManage/editCashCost`, query: { id: row.id } });
       }
     },
     startSearch() {

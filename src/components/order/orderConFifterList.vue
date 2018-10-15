@@ -882,7 +882,8 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      //this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      window.open(`#/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
     },
     showPound: function(rowData) {
 
@@ -1104,11 +1105,13 @@ export default {
       } else if (type == 'loadingEX') {
         this.loadingExFun(type, rowData);
       } else if (type == 'sureDownOrder') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+        window.open(`#/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+        //this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'downEx') {
         this.downExFun(type, rowData);
       } else if (type == 'sureUnload') {
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
+        window.open(`#/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}`, '_blank')
+        //this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderProcess/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'upSettlement') {
         this.upSettlement(rowData);
       } else if (type == 'sureCancle') {
@@ -1116,7 +1119,8 @@ export default {
       } else if (type == 'solveFault') {
 
       } else if (type == 'showDetalis') { //查看详情
-        this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+        window.open(`#/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
+        //this.$router.push({ path: `/logisticsManage/consignmentOrders/orderDetail/orderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'refuseDownEx') { //卸车拒绝
         this.weightId = rowData.weight_note;
         this.cancleLoadEx = true;

@@ -266,16 +266,18 @@ export default {
 
       let routePlayback = () => {
         let deviceId = results.data.data.device_id;
-        _this.$router.push({
-          path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
-        })
+        // _this.$router.push({
+        //   path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
+        // })
+        window.open(`#/mapManage/carMonitor/routePlayback/${deviceId}`, '_blank')
       };
       let fellowOrder = () => {
         let waybillId = (results.data.data.waybill && results.data.data.waybill.id) ? results.data.data.waybill.id : '';
         let stepId = results.data.data.selection_trip_id ? results.data.data.selection_trip_id : '';
-        _this.$router.push({
-          path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
-        })
+        // _this.$router.push({
+        //   path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
+        // });
+        window.open(`#/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`, '_blank')
       }
 
       if (waybill_vehicle_status !== '无' && (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.key !== 'free')) {

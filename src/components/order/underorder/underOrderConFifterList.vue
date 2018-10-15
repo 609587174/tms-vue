@@ -917,7 +917,8 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      //this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      window.open(`#/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
     },
     showPound: function(rowData) {
 

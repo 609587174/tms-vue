@@ -234,10 +234,12 @@ export default {
       }
     },
     handleMenuClick: function(command) {
-      this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
+      window.open(`#/clientManage/standardDataManage/mileage/mileageDetail?id=${command.id}`, '_blank')
+      //this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
     },
     editMile() {
-      this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage" });
+      //this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage" });
+      window.open(`#/clientManage/standardDataManage/mileage/editMileage`, '_blank')
     },
     pageChange: function() {
       setTimeout(() => {

@@ -235,7 +235,8 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}`, '_blank')
+        //this.$router.push({ path: `/statistics/costManage/costImport/costImportWaybillDetail/${row.waybill_id}` });
       }
       // else if (tpye === 'edit') {
       //   this.$router.push({ path: `/statistics/business/income/editIncome`, query: { id: row.id } });

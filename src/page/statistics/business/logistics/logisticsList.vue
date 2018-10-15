@@ -6,7 +6,9 @@
 </style>
 <template>
   <div class="nav-tab">
-    <div class="tab-screen border-top">
+    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tab-pane label="物流数据" name="logistics">
+    <div class="tab-screen">
       <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
         <el-row :gutter="0">
           <el-col :span="12">
@@ -119,6 +121,10 @@
       </el-pagination>
     </div>
     <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
+    </el-tab-pane>
+    <el-tab-pane label="车辆数据" name="carList">
+    </el-tab-pane>
+  </el-tabs>
   </div>
 </template>
 <script>
@@ -313,6 +319,11 @@ export default {
   methods: {
     handleSelectionChange(val) {
       this.multipleSelection = val;
+    },
+    handleClick(targetName){
+      if (targetName.name == 'carList') {
+        this.$router.push({ path: "/statistics/business/logistics/carList" });
+      }
     },
     // // 全部对账
     // getUnReconciliations() {

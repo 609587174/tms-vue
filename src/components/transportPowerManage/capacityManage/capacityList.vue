@@ -617,6 +617,8 @@ export default {
     this.getDriverList();
     this.getEscortList();
     this.init();
+
+
   },
   activated: function() {
 

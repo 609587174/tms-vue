@@ -64,13 +64,20 @@
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
           <el-table-column v-for="(item,key) in thTableList" :key="key"  align="center" :label="item.title" :width="item.width">
             <template slot-scope="props">
-              <el-tooltip class="item" effect="light" :open-delay="1000" :content="item.showHidden&&props.row[item.param]" placement="top-start" v-if="props.row[item.param]">
+              <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row[item.param]" placement="top-start" v-if="item.showHidden&&props.row[item.param]">
                <el-row v-if="item.splitTip">
                 <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
                </el-row>
                <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
                <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
               </el-tooltip>
+              <div v-else>
+              <el-row v-if="item.splitTip">
+                <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
+               </el-row>
+               <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
+               <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
+             </div>
             </template>
           </el-table-column>
         </el-table>
@@ -122,16 +129,16 @@ export default {
       },
       thTableList: [
           {param:"plate_number",title:"车号",width:"100"},
-          {param:"work_end_time",title:"装车日期",width:"160"},
-          {param:"activate_end_time",title:"卸车日期",width:"160"},
+          {param:"work_end_time",title:"装车日期",width:"160",showHidden:true},
+          {param:"activate_end_time",title:"卸车日期",width:"160",showHidden:true},
           {param:"fluid",title:"液厂",width:"150",showHidden:true},
           {param:"station",title:"卸货地",width:"160",splitTip:",",showHidden:true},
           {param:"loading_quantity",title:"装车吨位",width:"150"},
           {param:"actual_quantity",title:"卸车吨位",width:"150"},
           {param:"deficiency",title:"亏吨",width:"150"},
-          {param:"plan_time",title:"计划到站时间",width:"160"},
-          {param:"activate_start",title:"实际到站时间",width:"160"},
-          {param:"activate_end",title:"实际离站时间",width:"160"},
+          {param:"plan_time",title:"计划到站时间",width:"160",showHidden:true},
+          {param:"activate_start",title:"实际到站时间",width:"160",showHidden:true},
+          {param:"activate_end",title:"实际离站时间",width:"160",showHidden:true},
           {param:"remark",title:"备注",width:"150",showHidden:true},
           {param:"stand_mile",title:"标准里程",width:"100"},
           {param:"actual_mile",title:"实际里程",width:"100"},

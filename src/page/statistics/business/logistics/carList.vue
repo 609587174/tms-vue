@@ -2,7 +2,16 @@
 /deep/ .total-data {
   line-height: 40px;
 }
-
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  line-height:18px;
+}
+/deep/ .total-data {
+  line-height: 40px;
+}
 </style>
 <template>
   <div class="nav-tab">
@@ -43,14 +52,26 @@
 
     <div class="operation-btn">
       <el-row>
-        <el-col :span="6" class="text-right">
+      <el-col :span="18" class="total-data">
+          一共{{total}}单，总里程 {{totalMile}} 公里
+        </el-col>
+        <el-col :span="6" class="text-right" >
           <el-button type="primary" plain>导出</el-button>
         </el-col>
       </el-row>
     </div>
     <div class="table-list" v-loading="pageLoading" >
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          <el-table-column v-for="(item,key) in thTableList" :key="key"  align="center" :label="item.title" :width="item.width">
+            <template slot-scope="props">
+              <el-tooltip class="item" effect="light" :open-delay="1000" :content="item.showHidden&&props.row[item.param]" placement="top-start" v-if="props.row[item.param]">
+               <el-row v-if="item.splitTip">
+                <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
+               </el-row>
+               <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
+               <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
+              </el-tooltip>
+            </template>
           </el-table-column>
         </el-table>
         <noData v-if="!pageLoading && tableData.length==0"></noData>
@@ -85,13 +106,11 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
+
+      searchStatus: false,
       activeLoadTime:[],
       activeUnloadTime:[],
-      exportType: {
-        type: 'logistic',
-        filename: '物流费用统计'
-      },
-      activeName: 'logistics',
+      activeName: 'carList',
       searchFilters: {
         keyword: '',
         field: 'plate_number',
@@ -102,27 +121,28 @@ export default {
         ]
       },
       thTableList: [
-          {param:"",title:"车号",width:""},
-          {param:"",title:"装车日期",width:""},
-          {param:"",title:"卸车日期",width:""},
-          {param:"",title:"液厂",width:""},
-          {param:"",title:"卸货地",width:"",splitTip:","},
-          {param:"",title:"装车吨位",width:""},
-          {param:"",title:"卸车吨位",width:""},
-          {param:"",title:"亏吨",width:""},
-          {param:"",title:"计划到站时间",width:""},
-          {param:"",title:"实际到站时间",width:""},
-          {param:"",title:"实际离站时间",width:""},
-          {param:"",title:"待时",width:""},
-          {param:"",title:"备注",width:""},
-          {param:"",title:"标准里程",width:""},
-          {param:"",title:"实际里程",width:""},
-          {param:"",title:"运单类型",width:""},
-          {param:"",title:"所属运单",width:"",splitTip:","},
-          {param:"",title:"分管调度",width:""},
+          {param:"plate_number",title:"车号",width:"100"},
+          {param:"work_end_time",title:"装车日期",width:"160"},
+          {param:"activate_end_time",title:"卸车日期",width:"160"},
+          {param:"fluid",title:"液厂",width:"150",showHidden:true},
+          {param:"station",title:"卸货地",width:"160",splitTip:",",showHidden:true},
+          {param:"loading_quantity",title:"装车吨位",width:"150"},
+          {param:"actual_quantity",title:"卸车吨位",width:"150"},
+          {param:"deficiency",title:"亏吨",width:"150"},
+          {param:"plan_time",title:"计划到站时间",width:"160"},
+          {param:"activate_start",title:"实际到站时间",width:"160"},
+          {param:"activate_end",title:"实际离站时间",width:"160"},
+          {param:"remark",title:"备注",width:"150",showHidden:true},
+          {param:"stand_mile",title:"标准里程",width:"100"},
+          {param:"actual_mile",title:"实际里程",width:"100"},
+          {param:"type",title:"运单类型",width:"100",dictionaries:{'three':"承运单","online":"贸易单"}},
+          {param:"waybill",title:"所属运单",width:"160"},
+          {param:"operation",title:"分管调度",width:"100"},
       ],
-      tableData: {},
-   
+      tableData: [],
+      total:"0",
+      totalMile:"0",
+      saveSendData:{}
     }
   },
   methods: {
@@ -133,14 +153,47 @@ export default {
     },
     pageChange() {
       setTimeout(() => {
+        this.searchStatus = true;
         this.getList();
       })
     },
     getList(){
-
+      var sendData={};
+      sendData[this.searchFilters.field] = this.searchFilters.keyword;
+      if (this.activeLoadTime instanceof Array && this.activeLoadTime.length > 0) {
+        sendData.work_end_time_start = this.activeLoadTime[0];
+        sendData.work_end_time_end = this.activeLoadTime[1]; //实际卸货
+      }
+      if (this.activeUnloadTime instanceof Array && this.activeUnloadTime.length > 0) {
+        sendData.activate_end_time_start = this.activeUnloadTime[0]; //计划卸货
+        sendData.activate_end_time_end = this.activeUnloadTime[1];
+      }
+      if (this.searchStatus) {
+        sendData = this.saveSendData;
+        sendData.page = this.pageData.currentPage;
+      } else {
+        this.saveSendData = sendData;
+        this.pageData.currentPage = 1;
+        sendData.page = this.pageData.currentPage;
+      }
+      sendData.pageSize = this.pageData.pageSize;
+      this.pageLoading=true;
+      this.$$http("statisticDispatchList", sendData).then((results) => {
+        this.pageLoading=false;
+        this.searchStatus=false;
+        if(results.data&&results.data.code==0){
+          this.tableData=results.data.data.results;
+          this.pageData.totalCount = results.data.data.count;
+          this.total=results.data&&results.data.data.total_count;
+          this.totalMile=results.data&&results.data.data.total_actual_mile;
+        }
+      }).catch(()=>{
+        this.pageLoading=false;
+        //弹出失败
+      });
     },
     startSearch(){
-
+      this.getList();
     },
   },
   created() {

@@ -2250,6 +2250,14 @@ const api = {
       },
     }
   },
+  statisticDispatchList: {
+    url: '/statistic/dispatch/',
+    method: 'GET',
+    desc: "调度统计列表页",
+    param: {
+
+    }
+  },
 }
 
 

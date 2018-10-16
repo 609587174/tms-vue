@@ -40,7 +40,8 @@
           一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charges?tableData.data.waiting_charges:0}}元，报销费用合计{{tableData.data&&tableData.data.income?tableData.data.income:0}}元，行程外费用合计{{tableData.data&&tableData.data.extra_fee?tableData.data.extra_fee:0}}元
         </el-col>
         <el-col :span="4" class="text-right">
-          <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button>
+          <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button> -->
+          <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('ledger')">{{exportBtn.text}}</el-button>
         </el-col>
       </el-row>
     </div>
@@ -54,13 +55,41 @@
             </div>
             <div v-else>
               <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
-              <span v-else>{{scope.row[item.param]}}</span>
+              <div v-else>
+                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]">
+                  <span>{{scope.row[item.adjustParam]}}</span>
+                </div>
+                <!-- <span v-if="!item.isHover" v-html="scope.row[item.param]"></span> -->
+                <div v-if="item.isHover&&scope.row[item.hoverParam].length" class="cursor-pointer">
+                  <el-popover trigger="hover" placement="bottom">
+                    <el-table :data="scope.row[item.hoverParam]" stripe style="width: 100%" size="mini">
+                      <el-table-column v-for="(hoverItem,i) in hoverThTableList" :key="i" :prop="hoverItem.param" align="center" :label="hoverItem.title" :width="140"></el-table-column>
+                    </el-table>
+                    <div slot="reference" class="name-wrapper">
+                      {{scope.row[item.param]}}
+                    </div>
+                  </el-popover>
+                </div>
+                <div v-else v-html="scope.row[item.param]"></div>
+              </div>
+              <!-- <span v-else>{{scope.row[item.param]}}</span> &&scope.row[item.adjustParam]!=scope.row[item.param]-->
             </div>
           </template>
         </el-table-column>
         <el-table-column label="运费合计" align="center" width="100" fixed="right">
           <template slot-scope="scope">
+            <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
             <div>{{scope.row.waiting_charges}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="现金费用合计" align="center" width="110" fixed="right">
+          <template slot-scope="scope">
+            <div>{{scope.row.cash_total}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="对公费用合计" align="center" width="110" fixed="right">
+          <template slot-scope="scope">
+            <div>{{scope.row.com_total}}</div>
           </template>
         </el-table-column>
         <el-table-column label="报销费用合计" align="center" width="120" fixed="right">
@@ -123,6 +152,13 @@ export default {
           { id: 'company', value: '托运方' },
         ]
       },
+      hoverThTableList: [{
+        title: '费用类型',
+        param: 'fee_type',
+      }, {
+        title: '金额',
+        param: 'money'
+      }],
       thTableList: [{
           title: '运单号',
           param: 'waybill',
@@ -130,7 +166,9 @@ export default {
         }, {
           title: '托运方',
           param: 'company',
-          width: '200'
+          width: '200',
+          isAdjust: true,
+          adjustParam: 'company_adjust'
         }, {
           title: '车号',
           param: 'plate_number',
@@ -178,7 +216,9 @@ export default {
         }, {
           title: '标准里程',
           param: 'stand_mile',
-          width: ''
+          width: '',
+          isAdjust: true,
+          adjustParam: 'stand_mile_differ'
         }, {
           title: '标准运价',
           param: 'stand_freight',
@@ -194,7 +234,9 @@ export default {
         }, {
           title: '外油/气',
           param: 'ex_oil',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'ex_oil_hover'
         }, {
           title: '外油/气量',
           param: 'ex_nums',
@@ -202,7 +244,9 @@ export default {
         }, {
           title: '公司油/气',
           param: 'com_oil',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'com_oil_hover'
         }, {
           title: '公司油/气量',
           param: 'com_nums',
@@ -210,11 +254,15 @@ export default {
         }, {
           title: '高速费',
           param: 'high_cost',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'high_cost_hover'
         }, {
           title: '过路费',
           param: 'road_toll_com',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'road_toll_com_hover'
         },
         // {
         //   title: '过路费（国家）',
@@ -228,7 +276,9 @@ export default {
         {
           title: '现金油/气（有票）',
           param: 'logistics_fuel_cash',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'logistics_fuel_cash_hover'
         }, {
           title: '现金油/气量（有票）',
           param: 'cash_nums',
@@ -236,7 +286,9 @@ export default {
         }, {
           title: '现金油/气（无票）',
           param: 'logistics_fuel_cash_no_ticket',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'logistics_fuel_cash_no_ticket_hover'
         }, {
           title: '现金油/气量（无票）',
           param: 'cash_no_ticket_nums',
@@ -244,19 +296,27 @@ export default {
         }, {
           title: '检测费',
           param: 'detection_cost',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'detection_cost_hover'
         }, {
           title: '维修费',
           param: 'maintenance_cost',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'maintenance_cost_hover'
         }, {
           title: '停车费',
           param: 'parking_fee',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'parking_fee_hover'
         }, {
           title: '其他费用',
           param: 'other_cost',
-          width: ''
+          width: '',
+          isHover: true,
+          hoverParam: 'other_cost_hover'
         }, {
           title: '主驾',
           param: 'master_driver',
@@ -271,11 +331,197 @@ export default {
           width: ''
         }
       ],
+      exportTable: [{
+        title: '运单号',
+        id: 138
+      }, {
+        title: '托运方',
+        id: 139
+      }, {
+        title: '调账托运方',
+        id: 205
+      }, {
+        title: '实际到厂时间',
+        id: 143
+      }, {
+        title: '卸货完成时间',
+        id: 144
+      }, {
+        title: '车牌号',
+        id: 140
+      }, {
+        title: '实际液厂',
+        id: 141
+      }, {
+        title: '站点名称',
+        id: 142
+      }, {
+        title: '装车吨位',
+        id: 145
+      }, {
+        title: '实收吨位',
+        id: 146
+      }, {
+        title: '亏吨',
+        id: 147
+      }, {
+        title: '核算吨位',
+        id: 148
+      }, {
+        title: '调账核算吨位差值',
+        id: 200
+      }, {
+        title: '标准里程',
+        id: 150
+      }, {
+        title: '调账标准里程差值',
+        id: 204
+      }, {
+        title: '实际里程',
+        id: 170
+      }, {
+        title: '气差金额',
+        id: 198
+      }, {
+        title: '分卸费',
+        id: 197
+      }, {
+        title: '运费金额',
+        id: 169
+      }, {
+        title: '卸车待时金额',
+        id: 149
+      }, {
+        title: '标准运价',
+        id: 187
+      }, {
+        title: '高速费',
+        id: 162
+      }, {
+        title: '外油/气量',
+        id: 178
+      }, {
+        title: '外油/气',
+        id: 151
+      }, {
+        title: '公司油/气量',
+        id: 179
+      }, {
+        title: '公司油/气',
+        id: 152
+      }, {
+        title: '过路费',
+        id: 153
+      }, {
+        title: '现金油/气(有票)量',
+        id: 180
+      }, {
+        title: '现金油/气(有票)',
+        id: 156
+      }, {
+        title: '现金油/气(无票)量',
+        id: 181
+      }, {
+        title: '现金油/气(无票)',
+        id: 157
+      }, {
+        title: '检测费',
+        id: 158
+      }, {
+        title: '维修费',
+        id: 159
+      }, {
+        title: '停车费',
+        id: 160
+      }, {
+        title: '其他费用',
+        id: 161
+      }, {
+        title: '主驾',
+        id: 163
+      }, {
+        title: '副驾驶',
+        id: 164
+      }, {
+        title: '押运',
+        id: 165
+      }, {
+        title: '运费合计',
+        id: 166
+      }, {
+        title: '调账运费合计差值',
+        id: 202
+      }, {
+        title: '现金费用合计',
+        id: 195
+      }, {
+        title: '对公费用合计',
+        id: 196
+      }, {
+        title: '报销费用合计',
+        id: 167
+      }, {
+        title: '行程外费用',
+        id: 168
+      }],
       tableData: [],
-      exportPostData: {} //导出筛选
+      exportPostData: {}, //导出筛选
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData(type) {
+      let postData = {
+        filename: '业务台账',
+        page_arg: type,
+        ids: []
+      };
+      for (let i in this.exportTable) {
+        postData.ids.push(this.exportTable[i].id);
+      }
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportLedgerData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
@@ -318,7 +564,18 @@ export default {
           this.tableData = results.data;
           for (let i in this.tableData.data.results) {
             this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
+            // this.tableData.data.results[i].ex_oil_hover = [{
+            //   fee_type: '过路费',
+            //   money: 100
+            // }, {
+            //   fee_type: '过路费',
+            //   money: 100
+            // }, {
+            //   fee_type: '过路费',
+            //   money: 100
+            // }]
           }
+          console.log('table', this.tableData.data.results)
           this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {

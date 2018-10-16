@@ -61,8 +61,8 @@
         <el-col :span="6" class="text-right">
           <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
           <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-          <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button>
-          <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+          <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button> -->
+          <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
         </el-col>
       </el-row>
     </div>
@@ -309,14 +309,161 @@ export default {
           width: '180'
         }
       ],
+      exportTable: [{
+        title: '运单号',
+        id: 91
+      }, {
+        title: '托运方',
+        id: 93
+      }, {
+        title: '调账托运方',
+        id: 188
+      }, {
+        title: '车牌号',
+        id: 94
+      }, {
+        title: '实际液厂',
+        id: 95
+      }, {
+        title: '站点名称',
+        id: 96
+      }, {
+        title: '计划装车时间',
+        id: 97
+      }, {
+        title: '实际到厂时间',
+        id: 98
+      }, {
+        title: '实际离站时间',
+        id: 99
+      }, {
+        title: '装车吨位',
+        id: 100
+      }, {
+        title: '实收吨位',
+        id: 101
+      }, {
+        title: '亏吨',
+        id: 102
+      }, {
+        title: '核算吨位',
+        id: 103
+      }, {
+        title: '调账核算吨位差值',
+        id: 189
+      }, {
+        title: '标准里程',
+        id: 104
+      }, {
+        title: '实际里程',
+        id: 192
+      }, {
+        title: '调账标准里程差值',
+        id: 191
+      }, {
+        title: '运费费率',
+        id: 106
+      }, {
+        title: '标准运价',
+        id: 185
+      }, {
+        title: '气差金额',
+        id: 174
+      }, {
+        title: '分卸费',
+        id: 173
+      }, {
+        title: '运费金额',
+        id: 108
+      }, {
+        title: '卸车待时金额',
+        id: 109
+      }, {
+        title: '是否对账',
+        id: 176
+      }, {
+        title: '是否开票',
+        id: 175
+      }, {
+        title: '对账时间',
+        id: 184
+      }, {
+        title: '调账时间',
+        id: 172
+      }, {
+        title: '调账备注',
+        id: 171
+      }, {
+        title: '开票时间',
+        id: 183
+      }, {
+        title: '运费合计',
+        id: 107
+      }, {
+        title: '调账运费合计差值',
+        id: 190
+      }],
       tableData: {},
       multipleSelection: [], //所选数据 
       exportPostData: {}, //导出筛选
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
+      exportBtn: {
+        text: '导出',
+        isLoading: false,
+        isDisabled: false,
+      },
     }
   },
   methods: {
+    postDataFilter(postData) {
+      for (let i in postData) {
+        if (i === 'page' || i === 'page_size') {
+          delete postData[i];
+        }
+      }
+      return postData;
+    },
+    exportTableData(type) {
+      let postData = {
+        filename: '物流数据',
+        page_arg: type,
+        ids: []
+      };
+      for (let i in this.exportTable) {
+        postData.ids.push(this.exportTable[i].id);
+      }
+      this.exportPostData = this.postDataFilter(this.exportPostData);
+      let newPostData = Object.assign(this.exportPostData, postData);
+      this.exportBtn = {
+        text: '导出中',
+        isLoading: true,
+        isDisabled: true,
+      }
+      this.$$http('exportLogisticData', newPostData).then((results) => {
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+        if (results.data && results.data.code == 0) {
+          window.open(results.data.data.filename);
+          this.$message({
+            message: '导出成功',
+            type: 'success'
+          });
+        } else {
+          this.$message.error('导出失败');
+        }
+      }).catch((err) => {
+        this.$message.error('导出失败');
+        this.exportBtn = {
+          text: '导出',
+          isLoading: false,
+          isDisabled: false,
+        }
+      })
+    },
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },

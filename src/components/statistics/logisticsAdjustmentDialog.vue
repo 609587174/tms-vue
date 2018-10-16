@@ -25,7 +25,7 @@
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.check_quantity_adjust" @change="isValue('checkQuantity')"></el-input>
               </el-col>
-              <el-col :span="5">差值：{{differenceValue.check_quantity}}</el-col>
+              <el-col :span="5">差值：{{differenceValue.check_quantity_differ}}</el-col>
             </el-row>
           </el-form-item>
           <el-form-item label="标准里程:" prop="stand_mile_adjust">
@@ -36,7 +36,7 @@
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.stand_mile_adjust" @change="isValue('standMile')"></el-input>
               </el-col>
-              <el-col :span="5">差值：{{differenceValue.stand_mile}}</el-col>
+              <el-col :span="5">差值：{{differenceValue.stand_mile_differ}}</el-col>
             </el-row>
           </el-form-item>
           <el-form-item label="运费合计:" prop="waiting_charges_adjust">
@@ -47,7 +47,7 @@
               <el-col :span="11">
                 <el-input placeholder="请输入" v-model="formRules.waiting_charges_adjust" @change="isValue('waitingCharges')"></el-input>
               </el-col>
-              <el-col :span="5">差值：{{differenceValue.waiting_charges}}</el-col>
+              <el-col :span="5">差值：{{differenceValue.waiting_charges_differ}}</el-col>
             </el-row>
           </el-form-item>
           <el-form-item label="备注:">
@@ -110,9 +110,9 @@ export default {
       carrierSelect: [], //客户列表
       carrierLoading: false,
       differenceValue: { //差价
-        check_quantity: '', //核算吨位
-        stand_mile: '', //标准里程
-        waiting_charges: '', //运费合计
+        check_quantity_differ: '', //核算吨位
+        stand_mile_differ: '', //标准里程
+        waiting_charges_differ: '', //运费合计
       }
 
     }
@@ -150,22 +150,22 @@ export default {
       }
       if (type === 'checkQuantity') {
         if (isNaN(this.formRules.check_quantity_adjust) || !this.$store.state.common.regular.tonnage.match.test(this.formRules.check_quantity_adjust) || !this.formRules.check_quantity_adjust) {
-          this.differenceValue.check_quantity = '';
+          this.differenceValue.check_quantity_differ = '';
         } else {
-          this.differenceValue.check_quantity = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
+          this.differenceValue.check_quantity_differ = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
         }
       } else if (type === 'standMile') {
         if (isNaN(this.formRules.stand_mile_adjust) || !this.$store.state.common.regular.mile.match.test(this.formRules.stand_mile_adjust) || !this.formRules.stand_mile_adjust) {
-          this.differenceValue.stand_mile = '';
+          this.differenceValue.stand_mile_differ = '';
         } else {
-          this.differenceValue.stand_mile = (parseFloat(this.formRules.stand_mile_adjust) * 10 - parseFloat(this.adjustRow.stand_mile) * 10) / 10;
+          this.differenceValue.stand_mile_differ = (parseFloat(this.formRules.stand_mile_adjust) * 10 - parseFloat(this.adjustRow.stand_mile) * 10) / 10;
         }
       } else if (type === 'waitingCharges') {
 
         if (isNaN(this.formRules.waiting_charges_adjust) || !this.$store.state.common.regular.price.match.test(this.formRules.waiting_charges_adjust) || !this.formRules.waiting_charges_adjust) {
-          this.differenceValue.waiting_charges = '';
+          this.differenceValue.waiting_charges_differ = '';
         } else {
-          this.differenceValue.waiting_charges = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
+          this.differenceValue.waiting_charges_differ = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
         }
       }
     },
@@ -183,6 +183,7 @@ export default {
           let times = new Date();
           postData.adjust_time = times.Format("yyyy-MM-dd hh:mm:ss");
           postData.is_adjust = 'yes';
+          postData = Object.assign(this.differenceValue, postData);
           postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http('updateLogisticStatistic', postData).then((results) => {
             this.submitBtn = {
@@ -228,9 +229,9 @@ export default {
       }
       this.submitBtn.isDisabled = true;
       this.differenceValue = { //差价
-        check_quantity: '', //核算吨位
-        stand_mile: '', //标准里程
-        waiting_charges: '', //运费合计
+        check_quantity_differ: '', //核算吨位
+        stand_mile_differ: '', //标准里程
+        waiting_charges_differ: '', //运费合计
       }
 
     },

@@ -12,7 +12,7 @@ import { getLocalData } from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 20000;
+let timeout = 60000;
 
 /* 配置访问url */
 let domainUrl = '';

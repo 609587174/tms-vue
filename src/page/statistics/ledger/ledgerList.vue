@@ -224,6 +224,12 @@ export default {
           param: 'stand_freight',
           width: ''
         }, {
+          title: '气差金额',
+          param: 'lcl_cost',
+        }, {
+          title: '分卸费',
+          param: 'difference_value',
+        }, {
           title: '运费金额',
           param: 'change_value',
           width: ''

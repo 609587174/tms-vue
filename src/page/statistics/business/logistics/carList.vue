@@ -55,9 +55,9 @@
       <el-col :span="18" class="total-data">
           一共{{total}}单，总里程 {{totalMile}} 公里
         </el-col>
-        <el-col :span="6" class="text-right" >
+        <!-- <el-col :span="6" class="text-right" >
           <el-button type="primary" plain>导出</el-button>
-        </el-col>
+        </el-col> -->
       </el-row>
     </div>
     <div class="table-list" v-loading="pageLoading" >
@@ -131,13 +131,13 @@ export default {
           {param:"plate_number",title:"车号",width:"100"},
           {param:"work_end_time",title:"装车日期",width:"160",showHidden:true},
           {param:"activate_end_time",title:"卸车日期",width:"160",showHidden:true},
-          {param:"fluid",title:"液厂",width:"150",showHidden:true},
+          {param:"fluid",title:"实际液厂",width:"150",showHidden:true},
           {param:"station",title:"卸货地",width:"160",splitTip:",",showHidden:true},
           {param:"loading_quantity",title:"装车吨位",width:"150"},
           {param:"actual_quantity",title:"卸车吨位",width:"150"},
           {param:"deficiency",title:"亏吨",width:"150"},
-          {param:"plan_time",title:"计划到站时间",width:"160",showHidden:true},
-          {param:"activate_start",title:"实际到站时间",width:"160",showHidden:true},
+          {param:"plan_time",title:"计划装车时间",width:"160",showHidden:true},
+          {param:"activate_start",title:"实际到厂时间",width:"160",showHidden:true},
           {param:"activate_end",title:"实际离站时间",width:"160",showHidden:true},
           {param:"remark",title:"备注",width:"150",showHidden:true},
           {param:"stand_mile",title:"标准里程",width:"100"},

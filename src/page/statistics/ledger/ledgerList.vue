@@ -37,7 +37,7 @@
     <div class="operation-btn">
       <el-row>
         <el-col :span="20" class="total-data">
-          一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charges?tableData.data.waiting_charges:0}}元，报销费用合计{{tableData.data&&tableData.data.income?tableData.data.income:0}}元，行程外费用合计{{tableData.data&&tableData.data.extra_fee?tableData.data.extra_fee:0}}元
+          一共{{tableDataObj.waybill?tableDataObj.waybill:0}}单，运费总计{{tableDataObj.waiting_charges?tableDataObj.waiting_charges:0}}元，报销费用合计{{tableDataObj.income?tableDataObj.income:0}}元，行程外费用合计{{tableDataObj.extra_fee?tableDataObj.extra_fee:0}}元
         </el-col>
         <el-col :span="4" class="text-right">
           <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLedgerData'"></export-button> -->
@@ -46,7 +46,7 @@
       </el-row>
     </div>
     <div class="table-list">
-      <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}">
+      <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableDataObj.len}">
         <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
           <template slot-scope="scope">
             <div v-if="item.param === 'waybill'">
@@ -103,7 +103,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
+      <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
     </div>
     <div class="page-list text-center">
       <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
@@ -127,6 +127,14 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
+        waybill: '', //业务台账单数
+        waiting_charges: '', //运费合计
+        income: '', //报销费用合计
+        extra_fee: '', //行程费用合计
       },
       exportType: {
         type: 'ledger',
@@ -208,7 +216,9 @@ export default {
         }, {
           title: '核算吨位',
           param: 'check_quantity',
-          width: ''
+          width: '',
+          isAdjust: true,
+          adjustParam: 'check_quantity_differ'
         }, {
           title: '实际里程',
           param: 'actual_mile',
@@ -581,8 +591,15 @@ export default {
             //   money: 100
             // }]
           }
-          console.log('table', this.tableData.data.results)
-          this.pageData.totalCount = results.data.data.count;
+          this.tableDataObj = {
+              len: this.tableData.data.results.length, //长度
+              data: this.tableData.data.results, //内容
+              waybill: this.tableData.data.waybill, //业务台账单数
+              waiting_charges: this.tableData.data.waiting_charges, //运费合计
+              income: this.tableData.data.income, //报销费用合计
+              extra_fee: this.tableData.data.extra_fee, //行程费用合计
+            },
+            this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
         this.pageLoading = false;

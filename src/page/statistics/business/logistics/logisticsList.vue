@@ -7,124 +7,124 @@
 <template>
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="物流数据" name="logistics">
-    <div class="tab-screen">
-      <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-        <el-row :gutter="0">
-          <el-col :span="12">
-            <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-              <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-              </el-select>
-              <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
-            </el-input>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="8">
-            <el-form-item label="实际到厂时间:" label-width="105px">
-              <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="8">
-            <el-form-item label="实际离站时间:" label-width="105px">
-              <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="是否对账:">
-              <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
-                <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="10">
-          <el-col :span="6">
-            <el-form-item label="是否开票:">
-              <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
-                <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      </el-form>
-    </div>
-    <div class="operation-btn">
-      <el-row>
-        <el-col :span="18" class="total-data">
-          一共{{tableData.data&&tableData.data.waybill?tableData.data.waybill:0}}单，运费总计{{tableData.data&&tableData.data.waiting_charg?tableData.data.waiting_charg:0}}元
-        </el-col>
-        <el-col :span="6" class="text-right">
-          <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
-          <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
-          <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button> -->
-          <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="table-list">
-      <el-table :data="tableData.data?tableData.data.results:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':tableData.data&&!tableData.data.results.length}" @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55">
-        </el-table-column>
-        <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
-          <template slot-scope="scope">
-            <div v-if="item.param === 'waybill'">
-              <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
-              <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
-            </div>
-            <div v-else-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'">{{scope.row[item.param].verbose}}</div>
-            <div v-else>
-              <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
-              <div v-else>
-                <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]">
-                  <span>{{scope.row[item.adjustParam]}}</span>
+      <el-tab-pane label="物流数据" name="logistics">
+        <div class="tab-screen">
+          <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+            <el-row :gutter="0">
+              <el-col :span="12">
+                <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                  <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                    <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                  <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                </el-input>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col :span="8">
+                <el-form-item label="实际到厂时间:" label-width="105px">
+                  <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="实际离站时间:" label-width="105px">
+                  <el-date-picker v-model="leaveTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="是否对账:">
+                  <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                    <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="10">
+              <el-col :span="6">
+                <el-form-item label="是否开票:">
+                  <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
+                    <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          </el-form>
+        </div>
+        <div class="operation-btn">
+          <el-row>
+            <el-col :span="18" class="total-data">
+              一共{{tableDataObj.waybill?tableDataObj.waybill:0}}单，运费总计{{tableDataObj.waiting_charg?tableDataObj.waiting_charg:0}}元
+            </el-col>
+            <el-col :span="6" class="text-right">
+              <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
+              <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
+              <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button> -->
+              <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData('logistic')">{{exportBtn.text}}</el-button>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="table-list">
+          <el-table :data="tableDataObj.data?tableDataObj.data:[]" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableDataObj.len}" @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="55">
+            </el-table-column>
+            <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+              <template slot-scope="scope">
+                <div v-if="item.param === 'waybill'">
+                  <!-- <router-link v-if="detailLink" :to="{path: detailLink, query: { id: scope.row.id }}">{{scope.row.waybill}}</router-link> -->
+                  <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                 </div>
-                <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                <span v-else v-html="scope.row[item.param]"></span>
-              </div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="运费合计" align="center" width="100" fixed="right">
-          <template slot-scope="scope">
-            <div>
-              <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
-              {{scope.row.waiting_charges}}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="140" fixed="right">
-          <template slot-scope="scope">
-            <!-- <div v-if="scope.row.is_adjust.key==='no'">
+                <div v-else-if="item.param ==='is_invoice'||item.param ==='is_reconciliation'">{{scope.row[item.param].verbose}}</div>
+                <div v-else>
+                  <span v-if="item.param ==='station'" v-html="scope.row[item.param]"></span>
+                  <div v-else>
+                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]">
+                      <span>{{scope.row[item.adjustParam]}}</span>
+                    </div>
+                    <div v-if="item.param==='remark_adjust'||item.param==='remark'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                    <span v-else v-html="scope.row[item.param]"></span>
+                  </div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="运费合计" align="center" width="100" fixed="right">
+              <template slot-scope="scope">
+                <div>
+                  <div class="adjust" v-if="scope.row.waiting_charges_dvalue"><span>{{scope.row.waiting_charges_dvalue}}</span></div>
+                  {{scope.row.waiting_charges}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" align="center" width="140" fixed="right">
+              <template slot-scope="scope">
+                <!-- <div v-if="scope.row.is_adjust.key==='no'">
               <el-button type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
               <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
             </div> -->
-            <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-              <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
-              <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
-            </div>
-            <div v-if="scope.row.is_reconciliation.key==='unfinished'">
-              <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
-              <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <no-data v-if="!pageLoading && !tableData.data.results.length"></no-data>
-    </div>
-    <div class="page-list text-center">
-      <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-      </el-pagination>
-    </div>
-    <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
-    </el-tab-pane>
-    <el-tab-pane label="车辆数据" name="carList">
-    </el-tab-pane>
-  </el-tabs>
+                <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
+                  <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+                  <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
+                </div>
+                <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                  <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
+                  <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                </div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
+        </div>
+        <div class="page-list text-center">
+          <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+          </el-pagination>
+        </div>
+        <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
+      </el-tab-pane>
+      <el-tab-pane label="车辆数据" name="carList">
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -147,6 +147,12 @@ export default {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
+      },
+      tableDataObj: {
+        len: '', //长度
+        data: [], //内容
+        waybill: '', //物流单数
+        waiting_charg: '', //运费合计
       },
       exportType: {
         type: 'logistic',
@@ -334,6 +340,9 @@ export default {
         title: '实际到厂时间',
         id: 98
       }, {
+        title: '装车完成时间',
+        id:177
+      }, {
         title: '实际离站时间',
         id: 99
       }, {
@@ -467,7 +476,7 @@ export default {
     handleSelectionChange(val) {
       this.multipleSelection = val;
     },
-    handleClick(targetName){
+    handleClick(targetName) {
       if (targetName.name == 'carList') {
         this.$router.push({ path: "/statistics/business/logistics/carList" });
       }
@@ -636,7 +645,13 @@ export default {
             }
             this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }
-          this.pageData.totalCount = results.data.data.count;
+          this.tableDataObj = {
+              len: this.tableData.data.results.length, //长度
+              data: this.tableData.data.results, //内容
+              waybill: this.tableData.data.waybill, //物流单数
+              waiting_charg: this.tableData.data.waiting_charg, //运费合计
+            },
+            this.pageData.totalCount = results.data.data.count;
         }
       }).catch((err) => {
         this.pageLoading = false;

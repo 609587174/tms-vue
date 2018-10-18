@@ -370,6 +370,9 @@ export default {
         title: '调账标准里程差值',
         id: 191
       }, {
+        title: '起步价',
+        id: 105
+      }, {
         title: '运费费率',
         id: 106
       }, {

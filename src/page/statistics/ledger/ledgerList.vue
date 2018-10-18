@@ -80,9 +80,26 @@
           <template slot-scope="scope">
             <div class="adjust" v-if="scope.row.waiting_charges_differ"><span>{{scope.row.waiting_charges_differ}}</span></div>
             <div>{{scope.row.waiting_charges}}</div>
+            <!-- ===={{totalTableList.length}} -->
           </template>
         </el-table-column>
-        <el-table-column label="现金费用合计" align="center" width="110" fixed="right">
+
+        <el-table-column v-for="(totalItem,key) in totalTableList"  :prop="totalItem.param" align="center" fixed="right" :label="totalItem.title" :width="totalItem.width?totalItem.width:140">
+          <template slot-scope="scope">
+            <div v-if="totalItem.isHover&&scope.row[totalItem.hoverParam].length" class="cursor-pointer">
+                  <el-popover trigger="hover" placement="top">
+                    <el-table :data="scope.row[totalItem.hoverParam]" stripe style="width: 100%" size="mini">
+                      <el-table-column v-for="(hoverItem,i) in hoverThTableList" :key="i" :prop="hoverItem.param" align="center" :label="hoverItem.title" :width="140"></el-table-column>
+                    </el-table>
+                    <div slot="reference" class="name-wrapper">
+                      {{scope.row[totalItem.param]}}
+                    </div>
+                  </el-popover>
+                </div>
+            <div v-else>{{scope.row[totalItem.param]}}</div>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="现金费用合计" align="center" width="110" fixed="right">
           <template slot-scope="scope">
             <div>{{scope.row.cash_total}}</div>
           </template>
@@ -101,7 +118,7 @@
           <template slot-scope="scope">
             <div>{{scope.row.extra_fee}}</div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <no-data v-if="!pageLoading && !tableDataObj.len"></no-data>
     </div>
@@ -166,6 +183,31 @@ export default {
       }, {
         title: '金额',
         param: 'money'
+      }],
+      totalTableList: [{
+        title: '现金费用合计',
+        param: 'cash_total',
+        width: '110',
+        isHover: true,
+        hoverParam: 'cash_total_hover'
+      }, {
+        title: '对公费用合计',
+        param: 'com_total',
+        width: '110',
+        isHover: true,
+        hoverParam: 'com_total_hover'
+      }, {
+        title: '报销费用合计',
+        param: 'income',
+        width: '120',
+        isHover: true,
+        hoverParam: 'income_hover'
+      }, {
+        title: '行程外费用',
+        param: 'extra_fee',
+        width: '100',
+        isHover: true,
+        hoverParam: 'extra_fee_hover'
       }],
       thTableList: [{
           title: '运单号',
@@ -235,10 +277,10 @@ export default {
           width: ''
         }, {
           title: '气差金额',
-          param: 'lcl_cost',
+          param: 'difference_value',
         }, {
           title: '分卸费',
-          param: 'difference_value',
+          param: 'lcl_cost',
         }, {
           title: '运费金额',
           param: 'change_value',

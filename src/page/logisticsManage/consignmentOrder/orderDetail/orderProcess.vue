@@ -223,7 +223,7 @@
                                 <label>液厂地址:</label>
                                 <div class="detail-form-item" style="height:24px">
                                   <el-tooltip class="item" effect="dark" :content="item.fluid_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                    <el-button type="text" style="height:24px;line-height:24px;padding-left:0">{{item.fluid_address}}</el-button>
+                                    <div>{{item.fluid_address}}</div>
                                   </el-tooltip>
                                 </div>
                               </div>
@@ -317,9 +317,9 @@
                             <el-col :span="8">
                               <div class="label-list">
                                 <label>站点地址:</label>
-                                <div class="detail-form-item" style="height:24px">
+                                <div class="detail-form-item">
                                   <el-tooltip class="item" effect="dark" :content="item.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                    <span>{{item.station_address}}</span>
+                                    <div>{{item.station_address}}</div>
                                   </el-tooltip>
                                 </div>
                               </div>
@@ -424,7 +424,9 @@
                                   <el-col :span="8">
                                     <div class="label-list">
                                       <label>站点地址:</label>
-                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station_address)"></div>
+                                      <el-tooltip class="item" effect="dark" :content="Mitem.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;line-height: 20px;">
+                                        <div>{{Mitem.station_address}}</div>
+                                      </el-tooltip>
                                     </div>
                                   </el-col>
                                   <el-col :span="8">
@@ -567,7 +569,7 @@
                           </el-row>
                         </div>
                         <div v-if="item.type === 'already_match'">
-                          <div v-for="(Aitem,Akey) in item.already_matchArr" v-bind:class="{ garyColor: Aitem.status!='new',padds:Akey==0,borderB:item.already_matchArr.length>1&&Akey!=item.already_matchArr.length-1 }" style="border-left:none;border-right:none;">
+                          <div v-for="(Aitem,Akey) in item.already_matchArr" v-bind:class="{ garyColor: Aitem.status!='new',borderB:item.already_matchArr.length>1&&Akey!=item.already_matchArr.length-1 }" style="border-left:none;border-right:none;">
                             <el-row style="padding:15px 0;">
                               <el-col :span="22">
                                 <el-row :gutter="40">
@@ -594,7 +596,11 @@
                                   <el-col :span="8">
                                     <div class="label-list">
                                       <label>站点地址:</label>
-                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Aitem.station_address)"></div>
+                                      <div class="detail-form-item">
+                                        <el-tooltip class="item" effect="dark" :content="Aitem.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                          <div>{{Aitem.station_address}}</div>
+                                        </el-tooltip>
+                                      </div>
                                     </div>
                                   </el-col>
                                   <el-col :span="8">
@@ -622,7 +628,7 @@
                             </el-row>
                           </div>
                           <el-row :gutter="40">
-                            <el-col :span="8">
+                            <el-col :span="7">
                               <div class="label-list">
                                 <label>操作人:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>

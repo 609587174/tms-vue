@@ -319,7 +319,7 @@
                                 <label>站点地址:</label>
                                 <div class="detail-form-item" style="height:24px">
                                   <el-tooltip class="item" effect="dark" :content="item.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
-                                    <span>{{item.station_address}}</span>
+                                    <div>{{item.station_address}}</div>
                                   </el-tooltip>
                                 </div>
                               </div>
@@ -424,7 +424,11 @@
                                   <el-col :span="8">
                                     <div class="label-list">
                                       <label>站点地址:</label>
-                                      <div class="detail-form-item" v-html="pbFunc.dealNullData(Mitem.station_address)"></div>
+                                      <div class="detail-form-item" >
+                                        <el-tooltip class="item" effect="dark" :content="Mitem.station_address" placement="top-start" style="width:100%;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">
+                                          <div>{{Mitem.station_address}}</div>
+                                        </el-tooltip>
+                                      </div>
                                     </div>
                                   </el-col>
                                   <el-col :span="8">
@@ -567,7 +571,7 @@
                           </el-row>
                         </div>
                         <div v-if="item.type === 'already_match'">
-                          <div v-for="(Aitem,Akey) in item.already_matchArr" v-bind:class="{ garyColor: Aitem.status!='new',padds:Akey==0,borderB:item.already_matchArr.length>1&&Akey!=item.already_matchArr.length-1 }" style="border-left:none;border-right:none;">
+                          <div v-for="(Aitem,Akey) in item.already_matchArr" v-bind:class="{ garyColor: Aitem.status!='new',borderB:item.already_matchArr.length>1&&Akey!=item.already_matchArr.length-1 }" style="border-left:none;border-right:none;">
                             <el-row style="padding:15px 0;">
                               <el-col :span="22">
                                 <el-row :gutter="40">

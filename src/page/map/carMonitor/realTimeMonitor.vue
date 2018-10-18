@@ -15,6 +15,13 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="分组:">
+              <el-select v-model="searchFilters.group" @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in groupOptions" :key="key" :label="item.group_name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -49,8 +56,13 @@ export default {
         keyword: '',
         field: '',
         waybillStatus: '',
+        group:''
       },
       typeSelect: [],
+      groupOptions:[{
+        id:'',
+        group_name:'全部'
+      }],
 
     };
   },
@@ -60,6 +72,19 @@ export default {
     }
   },
   methods: {
+    /* 获取车辆分组 */
+    getGroups: function() {
+      this.$$http('getGroups').then(results => {
+        if (results.data.code === 0) {
+          this.groupList = results.data.data.results;
+          results.data.data.results.map((n, i) => {
+            this.groupOptions.push(n);
+          });
+        }
+      }).catch(error => {
+
+      });
+    },
     /* 获取车辆数据 */
     getMonitorList: function() {
       return new Promise((resolve, reject) => {
@@ -72,6 +97,9 @@ export default {
         }
         if (this.searchFilters.waybillStatus) {
           postData.waybill_vehicle_status = this.searchFilters.waybillStatus;
+        }
+        if (this.searchFilters.group) {
+          postData.group = this.searchFilters.group;
         }
         this.$$http('realTimeMonitor', postData).then((results) => {
           this.pageLoading = false;
@@ -266,16 +294,18 @@ export default {
 
       let routePlayback = () => {
         let deviceId = results.data.data.device_id;
-        _this.$router.push({
-          path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
-        })
+        // _this.$router.push({
+        //   path: `/mapManage/carMonitor/routePlayback/${deviceId}`,
+        // })
+        window.open(`#/mapManage/carMonitor/routePlayback/${deviceId}`, '_blank')
       };
       let fellowOrder = () => {
         let waybillId = (results.data.data.waybill && results.data.data.waybill.id) ? results.data.data.waybill.id : '';
         let stepId = results.data.data.selection_trip_id ? results.data.data.selection_trip_id : '';
-        _this.$router.push({
-          path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
-        })
+        // _this.$router.push({
+        //   path: `/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`,
+        // });
+        window.open(`#/logisticsManage/consignmentOrders/orderDetail/routePlayback/${stepId}/${waybillId}`, '_blank')
       }
 
       if (waybill_vehicle_status !== '无' && (detailData.waybill_vehicle_status && detailData.waybill_vehicle_status.key !== 'free')) {
@@ -340,6 +370,7 @@ export default {
       zoom: 5
     });
     this.initMarkList();
+    this.getGroups();
     _this.getMonitorList().then((data) => { //展示该数据
       _this.renderMarker();
     })

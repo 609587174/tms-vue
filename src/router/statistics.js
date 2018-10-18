@@ -25,30 +25,41 @@
        },
        component: (resolve) => require(['../page/statistics/business/logistics/logistics'], resolve),
        children: [{
-         path: 'logisticsList',
-         name: "logisticsList",
-         meta: {
-           title: '物流费用列表',
-           isVerificationL: false
+           path: 'logisticsList',
+           name: "logisticsList",
+           meta: {
+             title: '物流费用列表',
+             isVerificationL: false
+           },
+           component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
          },
-         component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
-       }, {
-         path: 'editLogistics',
-         name: "editLogistics",
-         meta: {
-           title: '物流费用编辑',
-           isVerificationL: false
+         {
+           path: 'carList',
+           name: "carList",
+           meta: {
+             title: '车辆数据列表',
+             isVerificationL: false
+           },
+           component: (resolve) => require(['../page/statistics/business/logistics/carList'], resolve)
          },
-         component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
-       }, {
-         path: 'logisticsWaybillDetail/:willId',
-         name: "logisticsWaybillDetail",
-         meta: {
-           title: '运单详情',
-           isVerificationL: false
-         },
-         component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
-       }]
+         {
+           path: 'editLogistics',
+           name: "editLogistics",
+           meta: {
+             title: '物流费用编辑',
+             isVerificationL: false
+           },
+           component: (resolve) => require(['../page/statistics/business/logistics/editLogistics'], resolve)
+         }, {
+           path: 'logisticsWaybillDetail/:willId',
+           name: "logisticsWaybillDetail",
+           meta: {
+             title: '运单详情',
+             isVerificationL: false
+           },
+           component: (resolve) => require(['../page/statistics/business/logistics/logisticsWaybillDetail'], resolve)
+         }
+       ]
      }]
    }, {
      path: 'costManage',

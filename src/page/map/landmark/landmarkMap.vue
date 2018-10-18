@@ -271,7 +271,7 @@ export default {
         '</div><div class="fs-13 md-5">审核状态：' + data.confirm_status.verbose +
         '</div><div class="fs-13 md-5">上传来源：' + data.source_type.verbose +
         '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary el-button--mini" href="/#/mapManage/landMark/landmarkDetail/' + data.id + '">查看</a></div>';
+        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary el-button--mini" href="/#/mapManage/landMark/landmarkDetail/' + data.id + '" target="_blank">查看</a></div>';
 
       return infoBodyStr;
     },

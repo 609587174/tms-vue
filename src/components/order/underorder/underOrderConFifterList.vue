@@ -917,7 +917,8 @@ export default {
       }
     },
     gotoDetalis: function(rowData) {
-      this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      //this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+      window.open(`#/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}`, '_blank')
     },
     showPound: function(rowData) {
 
@@ -1198,7 +1199,8 @@ export default {
 
 
       } else if (type == 'showDetalis') { //查看详情
-        this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
+        window.open(`#/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}`)
+        //this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}` });
       } else if (type == 'refuseLoading') {
         //装车审核拒绝
         this.weightId = rowData.weight_note;

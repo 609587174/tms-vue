@@ -1,7 +1,10 @@
 <style scoped lang="less">
-  .el-table {
-  /deep/ .el-table__fixed-header-wrapper tr th .el-checkbox__inner {
-    display: none;
+.el-table {
+  /deep/ .el-table__fixed-header-wrapper {
+    top: 1px;
+    tr th .el-checkbox__inner {
+      display: none;
+    }
   }
   /deep/ tr td .cell {
     text-align: center;
@@ -965,7 +968,7 @@ export default {
     this.getList();
   },
   watch: {
-    '$route'(to, from) {
+    '$route' (to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.$router.go(0);
     }

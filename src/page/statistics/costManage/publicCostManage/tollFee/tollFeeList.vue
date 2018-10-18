@@ -249,9 +249,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}`, '_blank')
+        //this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/editTollFee`, query: { id: row.id } });
+        window.open(`#/statistics/costManage/publicCostManage/tollFee/editTollFee?id=${row.id}`, '_blank')
+        //this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/editTollFee`, query: { id: row.id } });
       }
     },
     startSearch() {

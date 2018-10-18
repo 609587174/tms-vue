@@ -12,7 +12,7 @@ import { getLocalData } from '../assets/js/cache'
 import router from '../router'
 
 /* 接口超时时长设置 */
-let timeout = 20000;
+let timeout = 60000;
 
 /* 配置访问url */
 let domainUrl = '';
@@ -91,7 +91,7 @@ axios.interceptors.response.use(response => {
   removePending(response.config); //在一个ajax响应后再执行一下取消操作，把已经完成的请求从pending中移除
   return response;
 }, error => {
-  return error; //返回一个空对象，主要是防止控制台报错
+  return Promise.reject(error); //返回一个空对象，主要是防止控制台报错
 });
 
 
@@ -104,7 +104,7 @@ const errorState = function(error) {
         errorMsg = '参数错误';
         break;
       case 401:
-        errorMsg = '未授权，请重新登录';
+        errorMsg = '未授权或登录过期，请重新登录';
         break;
       case 403:
         errorMsg = '拒绝访问';
@@ -139,12 +139,18 @@ const errorState = function(error) {
       default:
         errorMsg = `连接出错(${error.response.status})!`;
     }
+  }else if(error.code === 'ECONNABORTED'){
+    errorMsg = '接口超时，请检查网络再刷新重试!'
   } else {
     errorMsg = '连接服务器失败!'
   }
-  Message.error(errorMsg);
+  if(!axios.isCancel(error)){//如果是主动取消，则不报错误信息，（在切换路由的时候会主动取消请求）
+    Message.error(errorMsg);
+  }
+  if(error && error.response && error.response.status === 401){
+    router.push({ path: "/login" });
+  }
 }
-
 
 /* 根据后端接口文档统一处理错误信息 */
 const successState = function(response) {

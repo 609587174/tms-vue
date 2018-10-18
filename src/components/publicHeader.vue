@@ -103,7 +103,7 @@ export default {
 }
 
 .el-header img {
-  margin-top: 15px;
+  margin-top: 12px;;
 }
 
 .text-right {

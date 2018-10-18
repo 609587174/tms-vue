@@ -168,16 +168,7 @@ export default {
       })
 
     },
-    getSupplier: function() {
-      let postData = {
-        need_all: true,
-      }
-      this.$$http('searchSupplierList', postData).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.selectData.supplierSelect = results.data.data;
-        }
-      }).catch((err) => {})
-    },
+
     handleClick: function(tab, event) {
       if (tab.name === 'payment') {
         this.$router.push({ path: "/arap/shipperReceivableManage/receivableManage" });

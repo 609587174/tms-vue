@@ -160,16 +160,6 @@ export default {
       })
 
     },
-    getSupplier: function() {
-      let postData = {
-        need_all: true,
-      }
-      this.$$http('searchSupplierList', postData).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.selectData.supplierSelect = results.data.data;
-        }
-      }).catch((err) => {})
-    },
     handleClick: function(tab, event) {
       if (tab.name === 'oilGas') {
         this.$router.push({ path: "/arap/supplierMeetManage/oilGasMeetList" });
@@ -199,7 +189,6 @@ export default {
     this.pbFunc.format();
     this.payerDate();
     this.getList();
-    this.getSupplier();
   }
 }
 

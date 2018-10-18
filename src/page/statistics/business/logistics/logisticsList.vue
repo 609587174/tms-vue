@@ -341,7 +341,7 @@ export default {
         id: 98
       }, {
         title: '装车完成时间',
-        id:177
+        id: 177
       }, {
         title: '实际离站时间',
         id: 99
@@ -393,6 +393,9 @@ export default {
       }, {
         title: '是否开票',
         id: 175
+      }, {
+        title: '备注',
+        id: 186
       }, {
         title: '对账时间',
         id: 184

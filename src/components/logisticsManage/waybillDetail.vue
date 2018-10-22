@@ -304,7 +304,7 @@
                       <div v-if="!item.weight_active_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_active_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_active_mile}}</span>
                   </div>
@@ -334,7 +334,7 @@
                       <div v-if="!item.weight_audit_time">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_audit_time" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_audit_time}}</span>
                   </div>
@@ -418,7 +418,7 @@
                 <div class="detail-form-item"><span v-if="item.initial_price>0">{{item.initial_price}}元+</span><span>{{item.change_rate}}元/吨/每公里</span></div>
               </div>
             </el-col>
-           
+
 
             <el-col :span="8">
                 <div class="label-list">
@@ -438,7 +438,7 @@
                       <div v-if="!item.standard_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_standard_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.standard_mile}}km</span>
                   </div>

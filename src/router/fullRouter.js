@@ -10,6 +10,7 @@ import dataAnalysis from './dataAnalysis'
 import news from './news'
 import arap from './arap'
 import importData from './imports'
+import basicDataManage from './basicDataManage'
 export default [{
   path: '',
   name: 'index',
@@ -23,6 +24,7 @@ export default [{
     orders,
     logisticsManage,
     mapManage,
+    basicDataManage,
     transportPowerManage,
     clientManage,
     statistics,
@@ -30,6 +32,6 @@ export default [{
     setting,
     news,
     arap,
-    importData,
+    importData
   ]
 }];

@@ -51,7 +51,7 @@
       width: 11.5%;
     }
     .el-table__row {
-     
+
       position: relative;
     }
     .el-table__row td:nth-child(1) .cell {
@@ -220,7 +220,7 @@
           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
                  <span >{{props.row.plan_time.split(" ")[0]}}</span>
              </el-tooltip>
-           <span v-else>无</span> 
+           <span v-else>无</span>
         </template>
       </el-table-column>
 
@@ -277,14 +277,14 @@ export default {
   },
   props:['expandStatus','ListData'],
   computed: {
-    
+
   },
   methods: {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
-     
+
     },
     rowClick:function(row, event, column){
-      
+
     },
     getRowKeys: function(row) {
       return row.id;
@@ -348,12 +348,12 @@ export default {
       var vm = this;
       if (type == "addCar") {
         //传入一个订单号跳转订单详情-车辆指派页面
-        //this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
-        window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add` });
+        // window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/add`, '_blank')
         this.upPlanMethod();
       } else if (type == 'changePlan') {
-        window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit`, '_blank')
-        //this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
+        // window.open(`#/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit`, '_blank')
+        this.$router.push({ path: `/orders/pickupOrders/orderDetail/arrangeCarTab/arrangeCarList/${rowData.id}/edit` });
         //传入一个订单号跳转订单详情-车辆指派页面
       } else if (type == 'showDetalis') {
         //传入一个订单号跳转订单详情-车辆指派页面

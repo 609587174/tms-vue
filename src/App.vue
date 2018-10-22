@@ -59,6 +59,11 @@ export default {
         standardMile: 'STANDARD_MILEAGE_MANAGEMENT', //标准里程
         landmark: 'LANDMARK_INFO', //地标管理
         routeManage: 'ROUTE_MANAGEMENT', //路线管理
+
+        basicDataManage:'BASE_DATA_MANAGEMENT',//基础数据管理
+        shipperManage:'CUSTOMER_MANAGEMENT_SECOND',//托运方管理
+        standardDataSet:'STANDARD_MILEAGE_MANAGEMENT',//标准数据设置
+
         transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
         capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
         carManage: 'TRUCK_MANAGEMENT', //车辆管理
@@ -91,6 +96,8 @@ export default {
         dataAnalysis: 'CARRING_DATA_MANAGEMENT',
         routeManage: 'CARRING_ROUTE_SECOND',
         carAnalysis: 'VEHICLE_MONITOR_SECOND',
+
+
 
 
       }

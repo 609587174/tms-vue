@@ -136,10 +136,10 @@ export default {
           shipper = this.selectData.shipperSelect[i];
         }
       }
-      this.startSearch();
-      // if (shipper) {
-      // this.getList(shipper);
-      // }
+      if (shipper) {
+        this.pageData.currentPage = 1;
+        this.getList(shipper);
+      }
     },
     getList: function(shipper) {
       let postData = {

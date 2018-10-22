@@ -158,7 +158,8 @@ export default {
           { id: 'logistics_other', value: '其它费用' },
         ],
         fieldSelect: [
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
+          { id: 'lot', value: '批次' }
         ]
       },
       thTableList: [{
@@ -196,6 +197,10 @@ export default {
         param: 'is_travel',
         width: ''
       }, {
+        title: '批次',
+        param: 'lot',
+        width: ''
+      }, {
         title: '匹配状态',
         param: 'is_matching',
         width: ''
@@ -204,6 +209,18 @@ export default {
         param: 'waybill',
         width: ''
       }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
+        width: '180'
+      },{
+        title: '实际液厂',
+        param: 'fluid',
+        width: ''
+      },{
+        title: '装车吨位',
+        param: 'loading_quantity',
+        width: ''
+      },{
         title: '添加时间',
         param: 'created_at',
         width: '180'

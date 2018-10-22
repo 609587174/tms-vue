@@ -203,6 +203,18 @@ export default {
         param: 'waybill',
         width: ''
       }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
+        width: '180'
+      }, {
+        title: '实际液厂',
+        param: 'fluid',
+        width: ''
+      }, {
+        title: '装车吨位',
+        param: 'loading_quantity',
+        width: ''
+      }, {
         title: '添加时间',
         param: 'created_at',
         width: '180'

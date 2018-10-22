@@ -13,7 +13,7 @@ export default {
     redirect: '/logisticsManage/consignmentOrders/ordersList',
     meta: {
       isVerificationL: true,
-      title: '平台承运调度'
+      title: '平台运单'
     },
     component: (resolve) => require(['../page/logisticsManage/consignmentOrder/consignmentOrders'], resolve),
     children: [{
@@ -67,7 +67,7 @@ export default {
     component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/UnderConsignmentOrders'], resolve),
     meta: {
       isVerificationL: true,
-      title: '线下承运调度'
+      title: '线下运单'
     },
     redirect: '/logisticsManage/UnderConsignmentOrders/UnderOrdersList',
     children: [{

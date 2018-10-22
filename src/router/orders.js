@@ -3,7 +3,7 @@ export default {
   name: 'orders',
   meta: {
     isVerificationL: true,
-    title: '订单',
+    title: '订单管理',
     iconName: 'icon-order',
   },
   component: (resolve) => require(['../page/orders/orders'], resolve),
@@ -13,7 +13,7 @@ export default {
     redirect: '/orders/pickupOrders/ordersList',
     meta: {
       isVerificationL: true,
-      title: '提货订单',
+      title: '平台订单',
     },
     component: (resolve) => require(['../page/orders/pickupOrders/pickupOrders'], resolve),
     children: [{

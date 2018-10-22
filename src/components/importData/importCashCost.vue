@@ -59,6 +59,10 @@ export default {
         title: '是否为行程内费用',
         param: 'is_travel.verbose',
         width: ''
+      }, {
+        title: '批次',
+        param: 'lot',
+        width: ''
       }],
     };
   },

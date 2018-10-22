@@ -77,11 +77,6 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="装车完成时间:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.work_end_time"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
                   <el-form-item label="是否匹配运单:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_matching"></el-input>
                   </el-form-item>

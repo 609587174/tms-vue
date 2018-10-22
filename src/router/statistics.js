@@ -66,7 +66,7 @@
      name: "costManage",
      redirect: '/statistics/costManage/costImport/costImportList',
      meta: {
-       title: '费用管理',
+       title: '成本费用',
        isVerificationL: false
      },
      component: (resolve) => require(['../page/statistics/costManage/costManage'], resolve),

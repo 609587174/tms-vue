@@ -19,7 +19,7 @@
             <el-header>
               <el-row>
                 <el-col :span="3">
-                  <router-link :to="{path: '/clientManage/standardDataManage/mileage/mileageDataList'}">
+                  <router-link :to="{path: '/basicDataManage/standardDataSet/mileage/mileageDataList'}">
                     <div class="go-return icon-back"></div>
                   </router-link>
                 </el-col>
@@ -126,7 +126,7 @@ export default {
   },
   computed: {
     id: function() {
-      return this.$route.query.id;
+      return this.$route.params.id;
     }
   },
   methods: {
@@ -156,7 +156,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
+      this.$router.push({ path: "/basicDataManage/standardDataSet/mileage/editMileage?activeStep=" + number, query: { id: this.detailData.id, activeStep: number } });
     },
 
   }

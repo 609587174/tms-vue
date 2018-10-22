@@ -75,68 +75,85 @@ export default {
         },
         component: (resolve) => require(['../page/basicDataManage/standardDataSet/freight/freightDetail'], resolve)
       }]
-    },
-  {
-    path: 'mileage',
-    name: 'mileage',
-    meta: {
-      isVerificationL: false,
-      title: '标准里程',
-    },
-    component: (resolve) => require(['../page/basicDataManage/standardDataSet/mileage/mileage'], resolve),
-    children: [{
-      path: 'mileageDataList',
-      name: 'mileageDataList',
+    },{
+      path: 'mileage',
+      name: 'mileage',
       meta: {
         isVerificationL: false,
-        title: '标准里程列表',
+        title: '标准里程',
       },
-      component: (resolve) => require(['../page//basicDataManage/standardDataSet/mileage/mileageDataList'], resolve)
+      component: (resolve) => require(['../page/basicDataManage/standardDataSet/mileage/mileage'], resolve),
+      children: [{
+        path: 'mileageDataList',
+        name: 'mileageDataList',
+        meta: {
+          isVerificationL: false,
+          title: '标准里程列表',
+        },
+        component: (resolve) => require(['../page/basicDataManage/standardDataSet/mileage/mileageDataList'], resolve)
+      },{
+        path: 'mileageDetail/:id',
+        name: 'mileageDetail',
+        meta: {
+          isVerificationL: false,
+          title: '标准里程详情',
+        },
+        component: (resolve) => require(['../page/basicDataManage/standardDataSet/mileage/mileageDetail'], resolve)
+      },{
+        path: 'editMileage',
+        name: 'editMileage',
+        meta: {
+          isVerificationL: false,
+          title: '编辑、新增标准里程',
+        },
+        component: (resolve) => require(['../page/basicDataManage/standardDataSet/mileage/editMileage'], resolve)
+      }]
+    }]
+  },{
+    path: 'capacityManage',
+    name: 'capacityManage',
+    meta: {
+      isVerificationL: true,
+      title: '运力',
+      iconName: 'icon-transport',
     },
-    //  {
-    //   path: 'mileageDetail',
-    //   name: 'mileageDetail',
-    //   meta: {
-    //     isVerificationL: false,
-    //     title: '标准里程详情',
-    //   },
-    //   component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/mileageDetail'], resolve)
-    // }, {
-    //   path: 'editMileage',
-    //   name: 'editMileage',
-    //   meta: {
-    //     isVerificationL: false,
-    //     title: '编辑、新增标准里程',
-    //   },
-    //   component: (resolve) => require(['../page/clientManage/standardDataManage/mileage/editMileage'], resolve)
-    // }
-    ]
-  }
-  ]
-    // children: [{
-    //   path: 'shipperManageList',
-    //   name: 'shipperManageList',
-    //   meta: {
-    //     isVerificationL: false,
-    //     title: '托运方列表',
-    //   },
-    //   component: (resolve) => require(['../page/basicDataManage/shipperManage/shipperManageList'], resolve)
-    // },{
-    //   path: 'shipperDetail/:id',
-    //   name: 'shipperDetail',
-    //   meta: {
-    //     isVerificationL: false,
-    //     title: '托运方详情',
-    //   },
-    //   component: (resolve) => require(['../page/basicDataManage/shipperManage/shipperDetail'], resolve)
-    // },{
-    //   path: 'editShipper',
-    //   name: 'editShipper',
-    //   meta: {
-    //     isVerificationL: false,
-    //     title: '托运方编辑',
-    //   },
-    //   component: (resolve) => require(['../page/basicDataManage/shipperManage/editShipper'], resolve)
-    // }]
+    component: (resolve) => require(['../page/basicDataManage/capacityManage/capacityManage'], resolve),
+    children: [{
+      path: 'transportManage',
+      name: 'transportManage',
+      redirect: '/basicDataManage/capacityManage/transportManage/transportList',
+      meta: {
+        isVerificationL: true,
+        title: '运力管理',
+      },
+      component: (resolve) => require(['../page/basicDataManage/capacityManage/transportManage/transportManage'], resolve),
+      children: [{
+        path: 'capacityList',
+        name: 'capacityList',
+        meta: {
+          isVerificationL: false,
+          title: '运力列表',
+        },
+        component: (resolve) => require(['../basicDataManage/capacityManage/transportManage/transportList'], resolve)
+      },
+      // {
+      //   path: 'capacityDetail',
+      //   name: 'capacityDetail',
+      //   meta: {
+      //     isVerificationL: false,
+      //     title: '运力详情',
+      //   },
+      //   component: (resolve) => require(['../components/transportPowerManage/capacityManage/capacityDetail'], resolve)
+      // }, {
+      //   path: 'editCapacity/:id/:activeStep/',
+      //   name: 'editCapacity',
+      //   meta: {
+      //     isVerificationL: false,
+      //     title: '编辑绑定信息',
+      //   },
+      //   component: (resolve) => require(['../components/transportPowerManage/capacityManage/editCapacity'], resolve)
+      // }
+      ]
+    }]
   }]
 }

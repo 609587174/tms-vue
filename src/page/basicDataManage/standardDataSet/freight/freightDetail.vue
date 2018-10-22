@@ -19,7 +19,7 @@
             <el-header>
               <el-row>
                 <el-col :span="3">
-                  <router-link :to="{path: '/clientManage/standardDataManage/freight/freightDataList'}">
+                  <router-link :to="{path: '/basicDataManage/standardDataSet/freight/freightDataList'}">
                     <div class="go-return icon-back"></div>
                   </router-link>
                 </el-col>

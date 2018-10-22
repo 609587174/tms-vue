@@ -152,9 +152,9 @@ export default {
   methods: {
     returnToPage: function() {
       if (this.id) {
-        this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDetail', query: { id: this.id } })
+        this.$router.push({ path: '/basicDataManage/standardDataSet/mileage/mileageDetail', query: { id: this.id } })
       } else {
-        this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDataList' })
+        this.$router.push({ path: '/basicDataManage/standardDataSet/mileage/mileageDataList' })
       }
     },
 
@@ -253,9 +253,9 @@ export default {
                 type: 'success'
               });
               if (this.id) {
-                this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDetail', query: { id: results.data.data.id } });
+                this.$router.push({ path: `/basicDataManage/standardDataSet/mileage/mileageDetail/${results.data.data.id}` });
               } else {
-                this.$router.push({ path: '/clientManage/standardDataManage/mileage/mileageDataList' });
+                this.$router.push({ path: '/basicDataManage/standardDataSet/mileage/mileageDataList' });
               }
 
             }

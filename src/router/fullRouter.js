@@ -2,8 +2,8 @@ import dashboard from './dashboard'
 import orders from './orders'
 import logisticsManage from './logisticsManage'
 import mapManage from './mapManage'
-import transportPowerManage from './transportPowerManage'
-import clientManage from './clientManage'
+// import transportPowerManage from './transportPowerManage'
+// import clientManage from './clientManage'
 import setting from './setting'
 import statistics from './statistics'
 import dataAnalysis from './dataAnalysis'
@@ -25,8 +25,8 @@ export default [{
     logisticsManage,
     mapManage,
     basicDataManage,
-    transportPowerManage,
-    clientManage,
+    // transportPowerManage,
+    // clientManage,
     statistics,
     dataAnalysis,
     setting,

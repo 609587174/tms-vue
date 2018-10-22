@@ -234,7 +234,7 @@ export default {
     },
     handleClick: function(tab, event) {
       if (tab.name === 'mileage') {
-        this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDataList" });
+        this.$router.push({ path: "/basicDataManage/standardDataSet/mileage/mileageDataList" });
       }
     },
     handleMenuClick: function(command) {

@@ -230,16 +230,16 @@ export default {
     },
     handleClick: function(tab, event) {
       if (tab.name === 'freight') {
-        this.$router.push({ path: "/clientManage/standardDataManage/freight/freightDataList" });
+        this.$router.push({ path: "/basicDataManage/standardDataSet/freight/freightDataList" });
       }
     },
     handleMenuClick: function(command) {
-      window.open(`#/clientManage/standardDataManage/mileage/mileageDetail?id=${command.id}`, '_blank')
+      window.open(`#/basicDataManage/standardDataSet/mileage/mileageDetail/${command.id}`, '_blank')
       //this.$router.push({ path: "/clientManage/standardDataManage/mileage/mileageDetail", query: { id: command.id } });
     },
     editMile() {
       //this.$router.push({ path: "/clientManage/standardDataManage/mileage/editMileage" });
-      window.open(`#/clientManage/standardDataManage/mileage/editMileage`, '_blank')
+      window.open(`#/basicDataManage/standardDataSet/mileage/editMileage`, '_blank')
     },
     pageChange: function() {
       setTimeout(() => {

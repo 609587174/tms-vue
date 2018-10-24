@@ -556,11 +556,11 @@ export default {
     },
     returnToPage: function() {
       if (this.$route.query.operate === 'edit') {
-
-        this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage", query: { headId: this.$route.query.headId } });
+        // this.$router.push({ path: "/transportPowerManage/carManage/showCarHeadManage", query: { headId: this.$route.query.headId } });
+        this.$router.push({ path: `/basicDataManage/capacityManage/carManage/tractorDetail/${this.$route.query.headId}` });
 
       } else {
-        this.$router.push({ path: "/transportPowerManage/carManage/carHeadManage" });
+        this.$router.push({ path: "/basicDataManage/capacityManage/carManage/tractorManage" });
       }
     },
     getTrueObj: function(obj, getobj) {

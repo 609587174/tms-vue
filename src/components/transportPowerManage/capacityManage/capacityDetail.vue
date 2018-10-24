@@ -12,7 +12,7 @@
             <el-header>
               <el-row>
                 <el-col :span="3">
-                  <router-link :to="{path: '/transportPowerManage/capacityManage/capacityList'}">
+                  <router-link :to="{path: '/basicDataManage/capacityManage/transportManage/capacityList'}">
                     <div class="go-return icon-back"></div>
                   </router-link>
                 </el-col>
@@ -182,7 +182,7 @@
           <el-header>
             <el-row>
               <el-col :span="3">
-                <router-link :to="{path: '/transportPowerManage/capacityManage/capacityList'}">
+                <router-link :to="{path: '/basicDataManage/capacityManage/transportManage/capacityList'}">
                   <div class="go-return icon-back"></div>
                 </router-link>
               </el-col>
@@ -264,8 +264,8 @@ export default {
 
   },
   created() {
-    this.id = this.$route.query.capacityId;
-    this.activeTab = this.$route.query.activeTab;
+    this.id = this.$route.params.id;
+    this.activeTab = this.$route.params.activeTab;
     if (this.activeTab === 'first') {
       this.getDetail();
     } else if (this.activeTab === 'second') {
@@ -361,7 +361,7 @@ export default {
       });
     },
     goEditDetail: function(number, data) {
-      this.$router.push({ path: `/transportPowerManage/capacityManage/editCapacity/${data.id}/${number}/` });
+      this.$router.push({ path: `/basicDataManage/capacityManage/transportManage/editCapacity/${data.id}/${number}/` });
     },
   }
 }

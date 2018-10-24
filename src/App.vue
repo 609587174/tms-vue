@@ -63,11 +63,12 @@ export default {
         basicDataManage:'BASE_DATA_MANAGEMENT',//基础数据管理
         shipperManage:'CUSTOMER_MANAGEMENT_SECOND',//托运方管理
         standardDataSet:'STANDARD_MILEAGE_MANAGEMENT',//标准数据设置
+        capacityManage:'CAPACITY_MANAGEMENT',//运力管理
 
-        transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
-        capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
-        carManage: 'TRUCK_MANAGEMENT', //车辆管理
-        personManage: 'STAFF_MANAGEMENT', //人员管理
+        // transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
+        // capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
+        // carManage: 'TRUCK_MANAGEMENT', //车辆管理
+        // personManage: 'STAFF_MANAGEMENT', //人员管理
         deviceManage: 'DEVICE_MANAGEMENT', //设备管理
         clientManage: 'CUSTOMER_MANAGEMENT', //客户管理
         standardDataManage: 'STANDARD_MILEAGE_MANAGEMENT', //标准数据管理

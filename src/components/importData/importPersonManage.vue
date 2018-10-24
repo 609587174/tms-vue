@@ -4,7 +4,7 @@
 </style>
 <template>
   <div>
-    <import-data :import-title="'人员导入'" :table-list="thTableList" :back-link="'/transportPowerManage/personManage/personListManage'" :api-name-data="apiNameData" :post-data="postData"></import-data>
+    <import-data :import-title="'人员导入'" :table-list="thTableList" :back-link="'/basicDataManage/capacityManage/personManage/personListManage'" :api-name-data="apiNameData" :post-data="postData"></import-data>
   </div>
 </template>
 <script>

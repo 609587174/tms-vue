@@ -10,6 +10,7 @@
 .linh40 {
   height: 40px;
   line-height: 40px;
+  font-size:14px;
 }
 
 .cancleCarBtn {
@@ -22,7 +23,19 @@
   font-size: 18px;
   cursor: pointer;
 }
-
+.waitMatch{
+  cursor:pointer;
+  margin-left:15px;
+  color:#409EFF;
+}
+.alreayMatch{
+  cursor:pointer;
+  margin-left:15px;
+  color:#F56C6C;
+}
+.unloadList {
+  margin-top: 30px;
+}
 </style>
 <template>
   <div class="detail-main">
@@ -109,13 +122,34 @@
                     </el-option>
                   </el-select>
                 </el-col>
-                <el-col :span="5" class="linh40">
+                <el-col :span="5" style="font-size:14px;line-height:40px;">
+                <el-tooltip placment="right-end">
+                  <div slot="content" style="width:250px;">
+                    <div>可预先匹配卸货地，司机、调度等角色可在装车阶段查看卸货地信息。</div>
+                    <div>装车审核通过后，系统自动匹配卸货地，也可在此时变更卸货地。</div>
+                  </div>
+                  <span><img style="margin-left:5px;vertical-align:middle" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                </el-tooltip>
+                  预匹配卸货地:
+                  <span v-if="aitem.unloadInfo.length==0" class="waitMatch" @click="changeUnload(aitem.id)">匹配卸货地</span>
+                  <el-tooltip placement="right-end" v-else>
+                    <div slot="content" style="width:250px;"> 
+                      <el-row v-for="(unloadItem,unloadIndex) in aitem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
+                        <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
+                        <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
+                        <el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
+                      </el-row>
+                    </div>
+                    <span  class="alreayMatch" @click="changeUnload(aitem.id)">已选卸货地</span>
+                  </el-tooltip>
+                </el-col>
+                <el-col :span="4" class="linh40">
                   挂车号:{{aitem.semitrailer.plate_number}}
                 </el-col>
-                <el-col :span="5" class="linh40">
+                <el-col :span="4" class="linh40">
                   主驾:<span>{{aitem.master_driver.name}}</span><span style="margin-left:10px;">{{aitem.master_driver.mobile_phone}}</span>
                 </el-col>
-                <el-col :span="5" class="linh40">
+                <el-col :span="4" class="linh40">
                   副驾/押运:
                   <span v-if="aitem.vice_driver"><span>{{aitem.vice_driver.name}}</span><span style="margin-left:10px;">{{aitem.vice_driver.mobile_phone}}</span></span>
                   <span v-if="!aitem.vice_driver&&aitem.escort_staff"><span>{{aitem.escort_staff.name}}</span><span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span></span>
@@ -185,11 +219,37 @@
        <el-button type="primary" @click="sendRe">确认</el-button>
       </span>
     </el-dialog>
+    <el-dialog title="匹配卸货单" :visible.sync="unloadMatchDiago" center width="80%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;"  :close-on-click-modal="lockFalg"  :close-on-press-escape="lockFalg" :show-close="lockFalg">
+      <div class="table-list">
+        <el-table :data="renderUnloadArr" stripe style="width: 100%" size="mini" max-height="350">
+          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" class="match-btn"  v-if="!(aCarMatchId.indexOf(scope.row.id)>-1)" @click="matchUnload(scope.row,'match')">匹配</el-button>
+              <el-button type="text" size="mini" class="match-btn"  v-if="aCarMatchId.indexOf(scope.row.id)>-1" @click="matchUnload(scope.row,'cancle')">取消匹配</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <el-row style="margin-top:25px;">
+        <el-col :span="4"><el-button type="success" @click="addUnloading">新增卸货单</el-button></el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer" style="text-align: center;">
+       <el-button @click="closeUnloadMatch">取  消</el-button>
+       <el-button type="primary" @click="sureUnloadMatch">确认匹配</el-button>
+      </span>
+    </el-dialog>
+    <unloading-place-dialog :unloading-place-is-show="unloadingPlaceIsShow" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog>
   </div>
 </template>
 <script>
+import unloadingPlaceDialog from '@/components/logisticsManage/unloadingPlaceDialog';
 export default {
   name: 'addUnderOrder',
+   components: {
+    unloadingPlaceDialog: unloadingPlaceDialog
+  },
   data() {
     var needNumVa = (rule, value, callback) => {
       if (!value.match(/^[0-9]\d{0,1}$/) || value == '0' || value > 50) {
@@ -221,12 +281,15 @@ export default {
     return {
       lockFalg: false,
       sureAdd: false,
+      unloadMatchDiago:false,
+      unloadingPlaceIsShow:false,
       loadingArr: {
         supplierLoading: false,
         carloading: false,
         fluidLoading: false,
         customerLoading: false,
-        createdLoading: false
+        createdLoading: false,
+        unloadLoading:false
       },
       bindText: {
         fluidName: "",
@@ -236,8 +299,22 @@ export default {
         id: "",
         master_driver: {},
         vice_driver: {},
-        semitrailer: {}
+        semitrailer: {},
+        unloadInfo:[],
       }],
+      allUnloadArr:[],
+      renderUnloadArr:[],
+      aCarMatchId:[],
+      thTableList: [
+        {title: '卸货单编号',param: 'order_number',width: ''}, 
+        {title: '卸货单状态',param: 'status_display',width: ''}, 
+        {title: '站点',param: 'station',width: ''}, 
+        {title: '站点地址',param: 'station_address',width: ''}, 
+        {title: '计划到站时间',param: 'plan_arrive_time',width: '180'}, 
+        {title: '计划吨位',param: 'plan_tonnage',width: ''}, 
+        {title: '收货人',param: 'consignee', width: ''}, 
+        {title: '收货电话',param: 'consignee_phone',width: ''},
+      ],
       pickOrderParam: {
         customer_id: "",
         fluid: "",
@@ -276,7 +353,9 @@ export default {
         renderCarLIst: [],
         fluidList: [],
         customerList: []
-      }
+      },
+      opearId:"",
+      saveInfo:[],
     };
   },
   computed: {
@@ -284,7 +363,98 @@ export default {
       return this.pbFunc.getLocalData('users', true);
     }
   },
+
   methods: {
+    addUnloading:function(){
+      this.unloadingPlaceIsShow = true;
+    },
+    matchUnload:function(unloadData,status){
+      let thisCar={};
+      for(let caritem in this.addCarList){
+          if(this.addCarList[caritem].id==this.opearId){
+          thisCar=this.addCarList[caritem];
+        }
+      }
+      if(status==='match'){
+        this.aCarMatchId.push(unloadData.id);
+        thisCar.unloadInfo.push(unloadData);
+      }else if(status==='cancle'){
+        var middleArr=[];
+        var middleIDarr=[];
+          thisCar.unloadInfo.forEach((item,index)=>{
+            if(!(item.id===unloadData.id)){
+              middleArr.push(item);
+            }
+          });
+          this.aCarMatchId.forEach((idItem,idIndex)=>{
+            if(!(idItem==unloadData.id)){
+              middleIDarr.push(idItem);
+            }
+          });
+          thisCar.unloadInfo=middleArr;
+          this.aCarMatchId=middleIDarr;
+        }
+    },
+    sureUnloadMatch:function(){
+      //this.aCarMatchId=[];
+      this.unloadMatchDiago=false;
+    },
+    closeUnloadMatch:function(){
+      //this.aCarMatchId=[];
+      this.unloadMatchDiago=false;
+      if(this.opearId){
+        for(let caritem in this.addCarList){
+          if(this.addCarList[caritem].id==this.opearId){
+            this.addCarList[caritem].unloadInfo=this.saveInfo;
+          }
+        }
+      }
+    },
+    changeUnload:function(bindId){
+      if(bindId){
+        this.renderUnloadArr=[];
+        this.fifterRnderUnload(bindId);
+        this.opearId=bindId;
+        for(let i in this.addCarList){
+          if(this.addCarList[i].id===bindId){
+            this.saveInfo=this.addCarList[i].unloadInfo;
+          }
+        }
+        this.unloadMatchDiago=true;
+      }else{
+        this.$alert('请先选择车辆', {
+            confirmButtonText: '确定',
+            callback: action => {
+              
+            }
+        });
+      }
+      
+    },
+    fifterRnderUnload:function(bindId){
+      var middleArr=[];
+        // this.addCarList.forEach((aloneCarUnload)=>{
+        //   if(bindId!=aloneCarUnload.id){
+        //     aloneCarUnload.unloadInfo.forEach((alone)=>{
+        //       middleArr.push(alone.id);
+        //     });
+        //   }
+        // });
+        this.allUnloadArr.forEach((unloadItem)=>{
+          var addFalge=true;
+          if(this.aCarMatchId.indexOf(unloadItem.id)>-1){
+            addFalge=false;
+          }
+          if(addFalge){
+            this.renderUnloadArr.push(unloadItem);
+          }
+        });
+        this.addCarList.forEach((caritem)=>{
+          if(caritem.id==bindId){
+            this.renderUnloadArr=caritem.unloadInfo.concat(this.renderUnloadArr);
+          }
+        });
+    },
     bindTextFunc: function(type) {
       if (type == 'fluid') {
         for (let i in this.selectData.fluidList) {
@@ -338,18 +508,20 @@ export default {
       });
     },
     addACar: function() {
-      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
+      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
     },
     carListChange: function(index) {
       var thisId = this.addCarList[index].id;
       for (let carIndex in this.selectData.carList) {
         if (this.addCarList[index].id == this.selectData.carList[carIndex].id) {
+          let thisUnload=this.addCarList[index].unloadInfo;
           this.$set(this.addCarList, index, this.pbFunc.deepcopy(this.selectData.carList[carIndex]));
+          this.$set(this.addCarList[index],'unloadInfo',thisUnload);
         }
       }
       for (let i in this.addCarList) {
         if (this.addCarList[i].id == thisId && i != index) {
-          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
+          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
           break;
         }
       }
@@ -375,7 +547,7 @@ export default {
         if (require > this.addCarList.length) {
           var middleArr = [];
           for (var i = 0; i < require - this.addCarList.length; i++) {
-            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {} });
+            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
           }
           this.addCarList = this.addCarList.concat(middleArr);
         } else if (require < this.addCarList.length) {
@@ -392,6 +564,17 @@ export default {
           }
         }
       }
+    },
+    closeDialog: function(isSave, unloadId,unloadData) {
+      this.unloadingPlaceIsShow = false;
+
+      if (isSave) {
+        this.getAllUnloadOrder(unloadId);
+      }
+      if (unloadId) {
+        this.aCarMatchId.push(unloadId);
+      }
+
     },
     goOrderList: function() {
       this.$router.push({ path: "/logisticsManage/UnderConsignmentOrders/underOrdersList" });
@@ -433,7 +616,6 @@ export default {
       });
     },
     getCarData: function() {
-      this.loadingArr.carloading = true;
       this.$$http('searchCapacityList', { pagination: false, complete_status: true }).then((results) => {
         this.loadingArr.carloading = false;
         if (results.data.code == 0) {
@@ -457,12 +639,42 @@ export default {
 
       });
     },
+    getAllUnloadOrder:function(id){
+      let postData={
+        status:'waiting_related',
+        need_all:true,
+      };
+      this.loadingArr.unloadLoading = true;
+      this.$$http('getUnloadBillList', postData).then((results) => {
+        this.loadingArr.unloadLoading = false;
+        if(results.data.code==0){
+          this.allUnloadArr=results.data.data.data.data;
+          if(id){
+            this.allUnloadArr.forEach((uItem,uIndex)=>{
+              if(uItem.id==id){
+                for(let caritem in this.addCarList){
+                  if(this.addCarList[caritem].id==this.opearId){
+                    this.addCarList[caritem].unloadInfo.push(uItem);
+                  }
+                }
+              }
+            });
+          }
+        }else{
+          this.$message.error('获取卸货单失败');
+        }
+      }).catch(()=>{
+        this.loadingArr.unloadLoading = false;
+        this.$message.error('获取卸货单失败');
+      });
+    }
   },
   created() {
     this.getCarData();
     this.getCustomer();
     this.getFluid();
     this.getCarriesId();
+    this.getAllUnloadOrder();
   }
 };
 

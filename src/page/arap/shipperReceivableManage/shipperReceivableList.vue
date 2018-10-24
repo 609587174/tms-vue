@@ -196,7 +196,6 @@ export default {
     this.pbFunc.format();
     this.payerDate();
     this.getList();
-    this.getSupplier();
   }
 }
 

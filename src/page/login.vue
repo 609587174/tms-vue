@@ -230,6 +230,15 @@ export default {
               message: '登录成功',
               type: 'success'
             });
+
+
+            //growingio 发送用户name
+            let currentUrl = document.location.href.toString();
+            if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`) && !currentUrl.match(`testtms.91lng.cn`)) { //正式环境
+              gio('setUserId', this.ruleForm.username);
+            }
+
+
             this.$emit('login');
           } else {
             this.$alert('还没有设置权限！请联系管理员', '请注意', {

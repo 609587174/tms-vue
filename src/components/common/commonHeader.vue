@@ -76,6 +76,13 @@ export default {
                 message: '退出成功',
                 type: 'success'
               });
+
+              //growingio 发送用户name
+              let currentUrl = document.location.href.toString();
+              if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`) && !currentUrl.match(`testtms.91lng.cn`)) { //正式环境
+                gio('clearUserId');
+              }
+
             }
           }).catch((err) => {
             //this.$message.error('退出失败');

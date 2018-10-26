@@ -121,7 +121,8 @@ export default {
         param: 'standard_mileage',
         width: ''
       }],
-      tableData: []
+      tableData: [],
+      shipperObj:''
     }
   },
   methods: {
@@ -129,17 +130,16 @@ export default {
       this.pageData.currentPage = 1;
       this.getList();
     },
-    searchTrader(shippeId) {
-      let shipper = '';
+    searchTrader(shipperId) {
       for (let i in this.selectData.shipperSelect) {
-        if (this.selectData.shipperSelect[i].id === shippeId) {
-          shipper = this.selectData.shipperSelect[i];
+        if (this.selectData.shipperSelect[i].id === shipperId) {
+          this.shipperObj = this.selectData.shipperSelect[i];
         }
       }
+      if (!shipperId) {
+        this.shipperObj = '';
+      }
       this.startSearch();
-      // if (shipper) {
-      // this.getList(shipper);
-      // }
     },
     getList: function(shipper) {
       let postData = {
@@ -149,11 +149,11 @@ export default {
         fluid_site: this.searchFilters.station,
         // trader: this.searchFilters.carriers
       };
-      if (shipper) {
-        if (shipper.source_type === 'ONLINE_TRADER') {
-          postData.trader = shipper.id;
-        } else if (shipper.source_type === 'OFFLINE_TRADER') {
-          postData.customer_staff_id = shipper.id;
+      if (this.shipperObj) {
+        if (this.shipperObj.source_type === 'ONLINE_TRADER') {
+          postData.trader = this.shipperObj.id;
+        } else if (this.shipperObj.source_type === 'OFFLINE_TRADER') {
+          postData.customer_staff_id = this.shipperObj.id;
         }
       }
       postData = this.pbFunc.fifterObjIsNull(postData);

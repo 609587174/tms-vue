@@ -9,6 +9,54 @@
  */
 
 const api = {
+  getThreePartyCapacityList: {
+    url: '/truck/third_tractor_semitrailers/',
+    method: 'get',
+    desc: '三方运力列表',
+    param: {
+
+    }
+  },
+  establishCarrierRelation: {
+    url: '/carrier/coop_carriers/coop_carriers_connect/',
+    method: 'post',
+    desc: '创建承运商关联',
+    param: {
+
+    }
+  },
+  updateCarrier: {
+    url: '/carrier/coop_carriers/:id/',
+    method: 'PATCH',
+    desc: '更新承运商详情',
+    param: {
+
+    }
+  },
+  addCarrierMsg:{
+    url: '/carrier/coop_carriers/',
+    method: 'post',
+    desc: '承运商管理创建',
+    param: {
+
+    }
+  },
+  getCarrierDetail: {
+    url: '/carrier/coop_carriers/:carrier_id/',
+    method: 'get',
+    desc: '承运商详情',
+    param: {
+
+    }
+  },
+  getCarrierList: {
+    url: '/carrier/coop_carriers/',
+    method: 'get',
+    desc: '承运商管理列表',
+    param: {
+
+    }
+  },
   getFreightTradersList: {
     url: '/carrier/trans_fee/freight_traders/',
     method: 'get',

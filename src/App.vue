@@ -64,6 +64,7 @@ export default {
         shipperManage:'CUSTOMER_MANAGEMENT_SECOND',//托运方管理
         standardDataSet:'STANDARD_MILEAGE_MANAGEMENT',//标准数据设置
         capacityManage:'CAPACITY_MANAGEMENT',//运力管理
+        supplierManage:'OIL_GAS_COMPANY_MANAGEMENT',//供应商管理
 
         // transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
         // capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理

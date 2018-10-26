@@ -244,5 +244,137 @@ export default {
         component: (resolve) => require(['../components/transportPowerManage/carManage/showCarTailManage'], resolve)
       }]
     }]
+  },{
+    path: 'threePartyCapacity',
+    name: 'threePartyCapacity',
+    meta: {
+      isVerificationL: true,
+      title: '三方运力',
+    },
+    component: (resolve) => require(['../page/basicDataManage/threePartyCapacity/threePartyCapacity'], resolve),
+    redirect: '/basicDataManage/threePartyCapacity/threePartyCapacityList',
+    children: [{
+      path: 'threePartyCapacityList',
+      name: 'threePartyCapacityList',
+      meta: {
+        isVerificationL: false,
+        title: '三方运力',
+      },
+      component: (resolve) => require(['../page/basicDataManage/threePartyCapacity/threePartyCapacityList'], resolve),
+    }]
+  },{
+    path: 'supplierManage',
+    name: 'supplierManage',
+    meta: {
+      isVerificationL: true,
+      title: '供应商管理',
+    },
+    component: (resolve) => require(['../page/basicDataManage/supplierManage/supplierManage'], resolve),
+    redirect: '/basicDataManage/supplierManage/energyManage/energyManageList',
+    children: [{
+        path: 'energyManage',
+        name: 'energyManage',
+        meta: {
+          isVerificationL: false,
+          title: '油气费管理',
+        },
+        component: (resolve) => require(['../page/basicDataManage/supplierManage/energyManage/energyManage'], resolve),
+        children: [{
+            path: 'energyManageList',
+            name: 'energyManageList',
+            meta: {
+              isVerificationL: false,
+              title: '油气费管理列表',
+            },
+            component: (resolve) => require(['../page/basicDataManage/supplierManage/energyManage/energyManageList'], resolve),
+          },
+          {
+            path: 'energyManageChange',
+            name: 'energyManageChange',
+            meta: {
+              isVerificationL: false,
+              title: '油气费新增或编辑',
+            },
+            component: (resolve) => require(['../page/basicDataManage/supplierManage/energyManage/energyManageChange'], resolve),
+          }, {
+            path: 'energyManageDetalis/:id',
+            name: 'energyManageDetalis',
+            meta: {
+              isVerificationL: false,
+              title: '油气费详情',
+            },
+            component: (resolve) => require(['../page/basicDataManage/supplierManage/energyManage/energyManageDetalis'], resolve),
+          }
+        ]
+    },{
+      path: 'tollfeeManage',
+      name: 'tollfeeManage',
+      meta: {
+        isVerificationL: false,
+        title: '高速费管理',
+      },
+      component: (resolve) => require(['../page/basicDataManage/supplierManage/tollfeeManage/tollfeeManage'], resolve),
+      children: [{
+          path: 'tollfeeManageList',
+          name: 'tollfeeManageList',
+          meta: {
+            isVerificationL: false,
+            title: '高速费管理列表',
+          },
+          component: (resolve) => require(['../page/basicDataManage/supplierManage/tollfeeManage/tollfeeManagelist'], resolve),
+        },
+        {
+          path: 'tollfeeManageChange',
+          name: 'tollfeeManageChange',
+          meta: {
+            isVerificationL: false,
+            title: '高速费新增或编辑',
+          },
+          component: (resolve) => require(['../page/basicDataManage/supplierManage/tollfeeManage/tollfeeManageChange'], resolve),
+        }, {
+          path: 'tollfeeManageDetalis/:id',
+          name: 'tollfeeManageDetalis',
+          meta: {
+            isVerificationL: false,
+            title: '高速费详情',
+          },
+          component: (resolve) => require(['../page/basicDataManage/supplierManage/tollfeeManage/tollfeeManageDetalis'], resolve),
+        }
+      ]
+    },{
+      path: 'carrierManage',
+      name: 'carrierManage',
+      meta: {
+        isVerificationL: false,
+        title: '承运商管理',
+      },
+      component: (resolve) => require(['../page/basicDataManage/supplierManage/carrierManage/carrierManage'], resolve),
+      children: [{
+          path: 'carrierManageList',
+          name: 'carrierManageList',
+          meta: {
+            isVerificationL: false,
+            title: '承运商管理列表',
+          },
+          component: (resolve) => require(['../page/basicDataManage/supplierManage/carrierManage/carrierManagelist'], resolve),
+      },{
+        path: 'editCarrier',
+        name: 'editCarrier',
+        meta: {
+          isVerificationL: false,
+          title: '承运商新增或编辑',
+        },
+        component: (resolve) => require(['../page/basicDataManage/supplierManage/carrierManage/editCarrier'], resolve),
+      },{
+        path: 'carrierDetail/:id',
+        name: 'carrierDetail',
+        meta: {
+          isVerificationL: false,
+          title: '承运商',
+        },
+        component: (resolve) => require(['../page/basicDataManage/supplierManage/carrierManage/carrierDetail'], resolve),
+      }
+      ]
+    }]
   }]
 }

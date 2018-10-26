@@ -9,6 +9,30 @@
  */
 
 const api = {
+  threeDetectionCapacity:{
+    url: '/truck/third_tractor_semitrailers/params_checking/',
+    method: 'POST',
+    desc: '三方运力检测',
+    param: {
+
+    }
+  },
+  updateThreePartyCapacity: {
+    url: '/truck/third_tractor_semitrailers/:id/',
+    method: 'PATCH',
+    desc: '三方运力更新',
+    param: {
+
+    }
+  },
+  addThreePartyCapacity: {
+    url: '/truck/third_tractor_semitrailers/',
+    method: 'post',
+    desc: '三方运力新增',
+    param: {
+
+    }
+  },
   getThreePartyCapacityList: {
     url: '/truck/third_tractor_semitrailers/',
     method: 'get',

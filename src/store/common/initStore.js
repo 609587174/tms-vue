@@ -1,6 +1,7 @@
 /**
  * Created by wansan on 2017/10/10.
  */
+import regularReg from '../../assets/js/regular.js'
 export default {
   inintString: "",
   inintObject: {},
@@ -37,5 +38,18 @@ export default {
       match:/^(\-|\+)?\d+(\.\d{1,1})?$/,
       tips:'请输入数值且最多一位小数的数值'
     },
+    name:{
+      match:/^[\u4e00-\u9fa5]{2,10}$/,
+      tips:'请输入2~10个汉字'
+    },
+    idNumber:{
+      // match:regularReg.idCardVa,
+      match:/^([1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$)|(^[1-9]\d{5}\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{2})$/,
+      tips:'请输入正确的身份证号码'
+    },
+    phone:{
+      match:/^1\d{10}$/,
+      tips:'请输入正确的手机号码'
+    }
   }
 }

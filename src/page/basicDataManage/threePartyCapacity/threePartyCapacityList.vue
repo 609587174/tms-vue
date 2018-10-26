@@ -135,7 +135,7 @@ export default {
     },
     goEditDetail() {
       // this.$router.push({ path: '/basicDataManage/supplierManage/carrierManage/editCarrier' });
-      window.open(`#/basicDataManage/supplierManage/carrierManage/editCarrier`, '_blank')
+      window.open(`#/basicDataManage/threePartyCapacity/editThreePartyCapacity`, '_blank')
     },
     handleClick: function(tab, event) {
 

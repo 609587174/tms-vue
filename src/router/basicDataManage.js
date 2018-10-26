@@ -261,6 +261,14 @@ export default {
         title: '三方运力',
       },
       component: (resolve) => require(['../page/basicDataManage/threePartyCapacity/threePartyCapacityList'], resolve),
+    },{
+      path: 'editThreePartyCapacity',
+      name: 'editThreePartyCapacity',
+      meta: {
+        isVerificationL: false,
+        title: '三方运力编辑',
+      },
+      component: (resolve) => require(['../page/basicDataManage/threePartyCapacity/editThreePartyCapacity'], resolve),
     }]
   },{
     path: 'supplierManage',

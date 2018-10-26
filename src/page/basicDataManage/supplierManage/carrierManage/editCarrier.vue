@@ -355,8 +355,6 @@ export default {
               //   let id = results.data.data.id;
               //   this.$router.push({ path: "/basicDataManage/carrierManage/editCarrier", query: { activeStep: stepNum - 1, id: id } });
               // }
-            }else if(results.data && results.data.code == 600 && results.data.data){
-              this.relation(results.data.data.carrier_id,results.data.msg)
             }
           }).catch((err) => {
             btnObject.btnText = btnTextCopy;

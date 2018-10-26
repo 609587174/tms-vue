@@ -15,7 +15,7 @@
 </style>
 <template>
   <div class="loading-review-container">
-    <el-form ref="examinePoundForm" :model="surePound" :rules="rules" status-icon :label-position="'right'" label-width="100px">
+    <el-form ref="examinePoundForm" :model="upSettleForm" :rules="rules" status-icon :label-position="'right'" label-width="100px">
       <!-- <el-row v-if="!isUpload">
         <el-col :span="20" :offset="2">
           <el-row style="min-height: 131px;">
@@ -32,32 +32,97 @@
           </el-col>
         </el-col>
       </el-row> -->
-      <el-row v-if="isUpload">
-        <el-col :span="4" :offset="1">
-          <qiniuImgUpload :fileList.sync="poundUpload.fileList" :uploadTitle="poundUpload.uploadTitle" :limit="poundUpload.limit"></qiniuImgUpload>
+      <el-row v-if="isUpload" justify="space-around" type="flex">
+        <el-col :span="4" >
+          <upSettlementImg :fileList.sync="poundUpload.fileList" :hideUpimg="false":Title="poundUpload.Title" :limit="poundUpload.limit"  :imgView="imgReviewSrc" :imgInfo="imgList.length>0?imgList[0]:{}"
+            @imgChange="imgChange" :type="'load'"></upSettlementImg>
         </el-col>
-        <el-col :span="4" :offset="1">
-          <qiniuImgUpload :fileList.sync="sealUpload.fileList" :uploadTitle="sealUpload.uploadTitle" :limit="sealUpload.limit" :type="upSettlement"></qiniuImgUpload>
+        <el-col :span="4" v-for="(item,index) in sealImgList">
+          <upSettlementImg :fileList.sync="sealUpload.fileList" :hideUpimg="true" :Title="sealUpload.Title" :limit="sealUpload.limit"  :imgView="sealImgReviewSrc" :imgInfo="item"></upSettlementImg>
         </el-col>
-        <el-col :span="4" :offset="2">
-          <qiniuImgUpload :fileList.sync="unPoundUpload.fileList" :uploadTitle="unPoundUpload.uploadTitle" :limit="unPoundUpload.limit"></qiniuImgUpload>
+        <el-col :span="4" >
+          <upSettlementImg :fileList.sync="unPoundUpload.fileList" :hideUpimg="false" :Title="unPoundUpload.Title" :limit="unPoundUpload.limit"  :imgView="unImgReviewSrc" :imgInfo="unImgList.length>0?unImgList[0]:{}" @imgChange="imgChange" :type="'unload'"></upSettlementImg>
         </el-col>
 
       </el-row>
-      <el-row>
-        <el-col :span="10" :offset="2">
-          <el-form-item label="计划装车时间:">
-            {{surePound.plan_time}}
-          </el-form-item>
+      <el-row style="margin-top:20px;" justify="space-around" type="flex">
+        <el-col :span="10" >
+          <el-row>
+            <el-col>
+              <el-form-item label="实际到厂时间:" label-width="120px" prop="pick_active_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.pick_active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="装液开始时间:" label-width="120px" prop="pickup_work_start_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.pickup_work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="装液完成时间:" label-width="120px" prop="pickup_work_end_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.pickup_work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="装车毛重(吨):" label-width="120px" prop="pickup_gross_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.pickup_gross_weight"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="装车皮重(吨):" label-width="120px" prop="pickup_tare_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.pickup_tare_weight"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="装车净重(吨):" label-width="120px" prop="pickup_net_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.pickup_net_weight"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
-        <el-col :span="10">
-          <el-form-item label="实际到厂时间:" label-width="120px" prop="active_time">
-            <el-date-picker v-if="isEdit" v-model="surePound.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-            <span v-if="!isEdit">{{surePound.active_time || '无'}}</span>
-          </el-form-item>
+        <el-col :span="10" >
+          <el-row>
+            <el-col>
+              <el-form-item label="实际到站时间:" label-width="120px" prop="active_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="卸车完成时间:" label-width="120px" prop="work_end_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.work_end_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="离站时间:" label-width="120px" prop="leave_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.leave_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="实际里程(km):" label-width="120px" prop="active_mile">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.active_mile"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="卸车毛重(吨):" label-width="120px" prop="gross_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.gross_weight"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="卸车皮重(吨):" label-width="120px" prop="tare_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.tare_weight"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col>
+              <el-form-item label="卸车净重(吨):" label-width="120px" prop="net_weight">
+                <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="upSettleForm.net_weight"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-col>
       </el-row>
-      <el-row>
+      </el-row>
+       
+      <!-- <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车液厂:">
             {{surePound.delivery_order && surePound.delivery_order.fluid_name || surePound.fluid}}
@@ -66,7 +131,6 @@
         <el-col :span="10">
           <el-form-item label="装液开始时间:" label-width="120px">
             <el-date-picker v-if="isEdit" v-model="surePound.work_start_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-            <span v-if="!isEdit">{{surePound.work_start_time || '无'}}</span>
           </el-form-item>
         </el-col>
       </el-row>
@@ -95,35 +159,7 @@
             <span v-if="!isEdit">{{surePound.gross_weight || '无'}}</span>
           </el-form-item>
         </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="10" :offset="2">
-          <el-form-item label="主驾:">
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.name ||surePound.master_driver}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.master_driver && surePound.transPowerInfo.master_driver.mobile_phone ||surePound.master_driver_phone}}</span>
-            <span v-if="surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name">/{{surePound.transPowerInfo && surePound.transPowerInfo.group && surePound.transPowerInfo.group.group_name}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item label="装车皮重(吨):" label-width="120px" prop="tare_weight">
-            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.tare_weight"></el-input>
-            <span v-if="!isEdit">{{surePound.tare_weight || '无'}}</span>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="10" :offset="2">
-          <el-form-item label="副驾/押运:">
-            <span>{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name || surePound.copilot_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.mobile_phone || surePound.copilot_driver_phone}}</span>
-            <br v-if="(surePound.transPowerInfo && surePound.transPowerInfo.vice_driver && surePound.transPowerInfo.vice_driver.name) || surePound.copilot_name"> <span>{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.name || surePound.supercargo_name}}&nbsp;&nbsp;{{surePound.transPowerInfo && surePound.transPowerInfo.escort_staff && surePound.transPowerInfo.escort_staff.mobile_phone || surePound.supercargo_phone}}</span>
-          </el-form-item>
-        </el-col>
-        <el-col :span="10">
-          <el-form-item label="装车净重(吨):" label-width="120px" prop="net_weight">
-            <el-input v-if="isEdit" placeholder="请输入" type="text" v-model="surePound.net_weight"></el-input>
-            <span v-if="!isEdit">{{surePound.net_weight || '无'}}</span>
-          </el-form-item>
-        </el-col>
-      </el-row>
+      </el-row> -->
     </el-form>
     <div slot="footer" class="dialog-footer" style="text-align: center;" v-if="isEdit">
       <el-button @click="$emit('close')">取 消</el-button>
@@ -132,36 +168,52 @@
   </div>
 </template>
 <script>
-import qiniuImgUpload from '@/components/qiniuImgUpload'; //引入骑牛图片上传组件
+import upSettlementImg from '@/components/upSettlementImg'; //引入骑牛图片上传组件
 export default {
   name: 'loadingReview',
   data() {
     return {
       buttonLoading: false,
       imgList: [],
-      surePound: {},
+      unImgList:[],
+      sealImgList:[],
+      upSettleForm: {
+        pick_active_time:"",
+        pickup_work_start_time:"",
+        pickup_work_end_time:"",
+        pickup_gross_weight:"",
+        pickup_tare_weight:"",
+        pickup_net_weight:"",
+        active_time:"",
+        leave_time:"",
+        work_end_time:"",
+        gross_weight:"",
+        tare_weight:"",
+        net_weight:"",
+        active_mile:"",
+      },
 
       poundUpload: {
         fileList: [],
-        uploadTitle: '装车榜单',
+        Title: '装车榜单',
         limit: 1,
+        change:false,
       },
-      poundReturnId: '',
       sealUpload: {
         fileList: [],
-        uploadTitle: '铅封',
+        Title: '铅封',
         limit: 3,
       },
-      poundUpload: {
+      unPoundUpload: {
         fileList: [],
-        uploadTitle: '卸车榜单',
+        Title: '卸车榜单',
         limit: 1,
+        change:false,
       },
-      sealReturnId: '',
 
       rules: {
         active_time: [
-          { required: true, message: '请选择实际到厂时间', trigger: 'change' },
+          { required: true, message: '请选择实际到站时间', trigger: 'change' },
         ],
         work_end_time: [
           { required: true, message: '请选择装车完成时间', trigger: 'change' },
@@ -175,14 +227,22 @@ export default {
         net_weight: [
           { required: true, message: '请输入装车净重', trigger: 'blur' },
           { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
-        ]
+        ],
+        pickup_gross_weight: [
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
+        ],
+        pickup_tare_weight: [
+          { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
+        ],
+        pickup_net_weight: [
+          { required: true, message: '请输入装车净重', trigger: 'blur' },
+          { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
+        ],
       }
-
-
     };
   },
   components: {
-    qiniuImgUpload,
+    upSettlementImg,
   },
   props: {
     surePoundData: Object,
@@ -198,13 +258,36 @@ export default {
         imgListArray.push(this.imgList[i].url);
       }
       return `/imgReview?imgList=${imgListArray.join(',')}`;
-    }
+    },
+    unImgReviewSrc:function() {
+      let imgListArray = [];
+      for (let i in this.unImgList) {
+        imgListArray.push(this.unImgList[i].url);
+      }
+      return `/imgReview?imgList=${imgListArray.join(',')}`;
+    },
+    sealImgReviewSrc:function() {
+      let imgListArray = [];
+      for (let i in this.sealImgList) {
+        imgListArray.push(this.sealImgList[i].url);
+      }
+      return `/imgReview?imgList=${imgListArray.join(',')}`;
+    },
   },
   methods: {
+    imgChange:function(changeInfo){
+      if(changeInfo.type=='load'){
+        this.poundUpload.change=true;
+        this.poundUpload.fileList=changeInfo.fileList;
+      }else if(changeInfo.type=='unLoadImg'){
+        this.unPoundUpload.change=true;
+        this.unPoundUpload.fileList=changeInfo.fileList;
+      }
+    },
     getImg() { //获取榜单和铅封图片
       this.imgList = [];
       //获取装车榜单
-      if (this.surePound.weight_note) {
+      if (this.surePound.pickup_weight_note) {
         this.$$http('getPundList', { id: this.surePound.weight_note }).then((results) => {
           if (results.data.code === 0) {
             let imageUrlArray = results.data.data.data;
@@ -212,7 +295,7 @@ export default {
               if (item.image_url) {
                 this.imgList.push({
                   url: item.image_url,
-                  title: '磅单'
+                  title: '装车磅单'
                 });
               }
             })
@@ -220,15 +303,15 @@ export default {
         });
       }
       //获取铅封
-      if (this.surePound.carseal) {
-        this.$$http('getSeal', { id: this.surePound.carseal }).then((results) => {
+      if (this.surePound.pickup_carseal) {
+        this.$$http('getSeal', { id: this.surePound.pickup_carseal }).then((results) => {
           let imageUrlArray = results.data.data.data;
           imageUrlArray.map((item, j) => {
             if (item.image_url_list) {
               let imageList = item.image_url_list;
               let imageNum = item.seal_no_list;
               imageList.map((imgItem, k) => {
-                this.imgList.push({
+                this.sealImgList.push({
                   url: imgItem,
                   title: '铅封号：',
                   num: imageNum && imageNum[k] ? imageNum[k] : '无'
@@ -239,6 +322,22 @@ export default {
         });
       }
 
+      //获取卸车榜单
+        if (this.surePound.weight_note) {
+          let qustArray = [];
+          this.unImgList = [];
+          this.$$http("getPundList", { id: this.surePound.weight_note }).then(results => {
+            if (results.data.code == 0) {
+              let imageUrlArray = results.data.data.data;
+              imageUrlArray.map((img, i) => {
+                this.unImgList.push({
+                  url: img.image_url,
+                  title: '卸车磅单'
+                });
+              })
+            }
+          });
+        }
     },
     //上传装车榜单
     uploadPoundImg() {
@@ -249,12 +348,11 @@ export default {
             imgUrlArray.push(this.poundUpload.fileList[i].url);
           }
           let postData = {
-            section_trip: this.surePoundData.id,
+            section_trip: this.surePoundData.pickup_trip.id,
             image_url: imgUrlArray.join(','),
           };
           this.$$http("postPundList", postData).then(results => {
             if (results.data.code == 0) {
-              this.poundReturnId = results.data.data.id;
               resolve(results)
             } else {
               reject(results);
@@ -267,53 +365,48 @@ export default {
       })
 
     },
-    //上传铅封榜单
-    uploadSealImg() {
-      if (this.sealUpload.fileList.length) {
-        let imgUrlArray = [];
-        for (let i in this.sealUpload.fileList) {
-          imgUrlArray.push(this.sealUpload.fileList[i].url);
-        }
-        let postData = {
-          section_trip: this.surePoundData.id,
-          image_url_list: imgUrlArray,
-        };
-        this.$$http("postSeal", postData).then(results => {
-          if (results.data.code == 0) {
-            this.sealReturnId = results.data.data.id;
-          } else {
-            this.$message({
-              type: "error",
-              message: "铅封上传失败"
-            });
+
+    upUnloadPoundImg() {
+      return new Promise((resolve, reject) => {
+        if (this.unPoundUpload.fileList.length) {
+          let imgUrlArray = [];
+          for (let i in this.unPoundUpload.fileList) {
+            imgUrlArray.push(this.unPoundUpload.fileList[i].url);
           }
-        })
-      }
+          let postData = {
+            section_trip: this.surePoundData.id,
+            image_url: imgUrlArray.join(','),
+          };
+          this.$$http("postPundList", postData).then(results => {
+            if (results.data.code == 0) {
+              resolve(results)
+            } else {
+              reject(results);
+            }
+          }).catch(err => {
+            reject(err);
+          })
+        }
+
+      })
+
+    },
+     cancle(){
+      this.$emit('close');
+      this.unPoundUpload.fileList=[];
+      this.poundUpload.fileList=[];
     },
     //审核通过ajax
     sendReAjax() {
-
-      if (!this.surePound.weight_note && !this.poundReturnId) return;
-
-      let sendData = {
-        active_time: this.surePound.active_time,
-        work_start_time: this.surePound.work_start_time,
-        work_end_time: this.surePound.work_end_time,
-        gross_weight: this.surePound.gross_weight,
-        tare_weight: this.surePound.tare_weight,
-        net_weight: this.surePound.net_weight,
-        leave_time: this.surePound.leave_time || null,
-        active_mile: this.surePound.active_mile || null,
-        is_checked: 'pass',
-        id: this.isUpload ? this.poundReturnId : this.surePound.weight_note,
-      };
-
-      this.$$http("examineLoad", sendData).then(results => {
+      let sendData = this.upSettleForm;
+      sendData.id=this.surePound.id;
+      sendData.status='in_settlement';
+      this.$$http("changeOrderStatus", sendData).then(results => {
         this.buttonLoading = false;
         if (results.data.code == 0) {
           this.$message({
             type: "success",
-            message: "审核通过成功"
+            message: "提交结算成功"
           });
 
           this.$emit('successCallback');
@@ -325,29 +418,16 @@ export default {
     },
     sendRe() { //审核通过
 
-      if (this.isUpload && !this.poundUpload.fileList.length) {
-        this.$message({
-          type: "success",
-          message: "请上传磅单",
-        });
-        return;
-      };
-
       this.$refs['examinePoundForm'].validate(valid => {
-
         if (!valid) return;
-
         this.buttonLoading = true;
-
-        if (this.isUpload) {
-          this.uploadSealImg();
-          this.uploadPoundImg().then(results => {
-            this.sendReAjax();
-          });
-        } else {
+          if(this.poundUpload.change){
+            this.uploadPoundImg();
+          }
+          if(this.unPoundUpload.change){
+            this.upUnloadPoundImg();
+          }
           this.sendReAjax();
-        }
-
       })
 
 
@@ -356,8 +436,22 @@ export default {
   },
   created() {
     this.surePound = Object.assign({}, this.surePoundData);
-
-    !this.isUpload && this.getImg();
+    this.upSettleForm={
+        pick_active_time:this.surePound.pickup_trip.pick_active_time||null,
+        pickup_work_start_time:this.surePound.pickup_trip.work_start_time||null,
+        pickup_work_end_time:this.surePound.pickup_trip.work_end_time||null,
+        pickup_gross_weight:this.surePound.pickup_trip.gross_weight||null,
+        pickup_tare_weight:this.surePound.pickup_trip.tare_weight||null,
+        pickup_net_weight:this.surePound.pickup_trip.net_weight||null,
+        active_time:this.surePound.arrival_time||null,
+        leave_time:this.surePound.leave_time||null,
+        work_end_time:this.surePound.work_end_time||null,
+        gross_weight:this.surePound.gross_weight||null,
+        tare_weight:this.surePound.tare_weight||null,
+        net_weight:this.surePound.net_weight||null,
+        active_mile:this.surePound.weight_active_mile||null,
+      },
+    this.getImg();
 
   },
   watch: {
@@ -367,22 +461,22 @@ export default {
         //数据再次初始化
         this.surePound = Object.assign({}, val);
 
-        !this.isUpload && this.getImg();
+        this.getImg();
 
         this.poundUpload = {
           fileList: [],
-          uploadTitle: '上传榜单',
+          Title: '装车榜单',
           limit: 1,
         };
 
         this.sealUpload = {
           fileList: [],
-          uploadTitle: '上传铅封',
-          limit: 2,
+          Title: '铅封',
+          limit: 1,
         };
         this.unPoundUpload = {
           fileList: [],
-          uploadTitle: '上传磅单',
+          Title: '卸车磅单',
           limit: 1,
         };
       },

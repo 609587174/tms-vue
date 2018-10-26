@@ -598,7 +598,7 @@
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span> -->
         
-        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isShowSureDownPound = false" @successCallback="unloadingReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
+        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
     </el-dialog>
   </div>
 </template>
@@ -852,28 +852,28 @@ export default {
   },
   methods: {
     upSettlementTrue: function() {
-      var vm = this;
-      this.$refs['isUpSettlementForm'].validate((valid) => {
-        if (valid) {
-          var sendData = this.UpSettlementForm;
-          vm.upSettlementLoading = true;
+      // var vm = this;
+      // this.$refs['isUpSettlementForm'].validate((valid) => {
+      //   if (valid) {
+      //     var sendData = this.UpSettlementForm;
+      //     vm.upSettlementLoading = true;
 
-          sendData.status = "in_settlement";
-          this.$$http('changeOrderStatus', sendData).then((results) => {
-            vm.upSettlementLoading = false;
-            if (results.data.code == 0) {
-              this.isUpSettlement = false;
-              this.$message({
-                message: '提交结算成功',
-                type: 'success'
-              });
-              vm.$emit('searchList');
-            }
-          }).catch(() => {
-            vm.upSettlementLoading = false;
-          });
-        }
-      });
+      //     sendData.status = "in_settlement";
+      //     this.$$http('changeOrderStatus', sendData).then((results) => {
+      //       vm.upSettlementLoading = false;
+      //       if (results.data.code == 0) {
+      //         this.isUpSettlement = false;
+      //         this.$message({
+      //           message: '提交结算成功',
+      //           type: 'success'
+      //         });
+      //         vm.$emit('searchList');
+      //       }
+      //     }).catch(() => {
+      //       vm.upSettlementLoading = false;
+      //     });
+      //   }
+      // });
     },
     expandArr: function() {
       if (this.expandStatus) {
@@ -1180,6 +1180,9 @@ export default {
       this.$emit('searchList');
     },
     refuseSuccess: function() {
+      this.$emit('searchList');
+    },
+    upSettlementReviewSuccess:function(){
       this.$emit('searchList');
     }
   },

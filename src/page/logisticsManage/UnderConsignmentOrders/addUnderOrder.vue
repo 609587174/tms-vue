@@ -122,7 +122,7 @@
                     </el-option>
                   </el-select>
                 </el-col>
-                <el-col :span="5" style="font-size:14px;line-height:40px;">
+                <!-- <el-col :span="5" style="font-size:14px;line-height:40px;">
                 <el-tooltip placment="right-end">
                   <div slot="content" style="width:250px;">
                     <div>可预先匹配卸货地，司机、调度等角色可在装车阶段查看卸货地信息。</div>
@@ -142,7 +142,7 @@
                     </div>
                     <span  class="alreayMatch" @click="changeUnload(aitem.id)">已选卸货地</span>
                   </el-tooltip>
-                </el-col>
+                </el-col> -->
                 <el-col :span="4" class="linh40">
                   挂车号:{{aitem.semitrailer.plate_number}}
                 </el-col>

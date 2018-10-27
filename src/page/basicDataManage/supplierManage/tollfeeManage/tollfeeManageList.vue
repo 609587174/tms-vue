@@ -39,7 +39,7 @@
             </el-pagination>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="承运商管理" name="carrierManage"></el-tab-pane>
+        <el-tab-pane label="承运商" name="carrierManage"></el-tab-pane>
       </el-tabs>
     </div>
   </div>
@@ -143,7 +143,9 @@ export default {
       }
     }
   },
-
+  activated() {
+    this.activeName = 'tollfee'
+  },
   created() {
     this.startSearch();
   }

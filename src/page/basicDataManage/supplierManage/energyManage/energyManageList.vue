@@ -24,7 +24,7 @@
         <el-tab-pane label="高速公司" name="tollfee">
 
         </el-tab-pane>
-        <el-tab-pane label="承运商管理" name="carrierManage"></el-tab-pane>
+        <el-tab-pane label="承运商" name="carrierManage"></el-tab-pane>
       </el-tabs>
       <div class="operation-btn text-right">
         <!-- <el-button type="primary" @click="exportList">导出</el-button> -->
@@ -159,7 +159,9 @@ export default {
       })
     }
   },
-
+  activated() {
+    this.activeName = 'energy'
+  },
   created: function() {
     this.searchList();
   }

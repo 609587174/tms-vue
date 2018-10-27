@@ -119,7 +119,11 @@ export default {
       window.open(`#/basicDataManage/supplierManage/carrierManage/editCarrier`, '_blank')
     },
     handleClick: function(tab, event) {
-
+      if(tab.name === 'energy'){
+        this.$router.push({ path: '/basicDataManage/supplierManage/energyManage/energyManageList' });
+      }else if (tab.name == 'tollfee') {
+        this.$router.push({ path: "/basicDataManage/supplierManage/tollfeeManage/tollfeeManageList" });
+      }
     },
     startSearch() {
       this.pageData.currentPage = 1;
@@ -148,6 +152,9 @@ export default {
         this.pageLoading = false;
       })
 
+    },
+    activated() {
+      this.activeName = 'carrierManage'
     },
     handleMenuClick(row) {
       // this.$router.push({ path: '/basicDataManage/carrierManage/carrierDetail', query: { id: row.id } });

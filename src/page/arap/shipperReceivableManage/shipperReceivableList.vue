@@ -22,7 +22,7 @@
               <el-row :gutter="30">
                 <el-col :span="8">
                   <el-form-item label="开始日期:">
-                    <el-date-picker v-model="activeTime" type="datetimerange" @change="startSearch" :clearable="false" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['16:00:00','16:00:00']"></el-date-picker>
+                    <el-date-picker v-model="activeTime" type="datetimerange" :clearable="false" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['16:00:00','16:00:00']"></el-date-picker>
                     <!-- <el-row :gutter="0">
                       <el-col :span="11">
                         <el-date-picker v-model="startTime" type="month" placeholder="选择开始月" :clearable="false" value-format="yyyy-MM-dd HH:mm:ss" @change="dateSelect"></el-date-picker>
@@ -150,7 +150,11 @@ export default {
         // active_time_start: this.startTime,
         // active_time_end: this.endTime,
       };
-      if (this.activeTime.length) {
+      if (this.activeTime&&this.activeTime.length) {
+        postData.active_time_start = this.activeTime[0];
+        postData.active_time_end = this.activeTime[1];
+      }else{
+        this.activeTime = [this.startTime, this.endTime];
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }

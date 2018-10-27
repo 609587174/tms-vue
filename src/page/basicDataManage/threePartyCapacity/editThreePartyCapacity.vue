@@ -303,7 +303,8 @@ export default {
             });
           }else if(results.data && results.data.code == 600){
             this.isDetectionCapacity = true;
-            this.detectionCapacityDetail = results.data.data.tractor_semitrailer;
+            this.detectionCapacityDetail = JSON.parse(results.data.data.tractor_semitrailer);
+            console.log(this.detectionCapacityDetail)
             if(type === 'master_driver'){
               this.detectionCapacityTitle.title = this.detectionCapacityDetail.master_driver.name
             }else if(type === 'vice_driver'){

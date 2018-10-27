@@ -9,10 +9,26 @@
  */
 
 const api = {
+  relationThreePartyCapacity:{
+    url: '/truck/third_tractor_semitrailers/connect/',
+    method: 'POST',
+    desc: '三方运力关联',
+    param: {
+
+    }
+  },
   threeDetectionCapacity:{
     url: '/truck/third_tractor_semitrailers/params_checking/',
     method: 'POST',
     desc: '三方运力检测',
+    param: {
+
+    }
+  },
+  threePartyCapacityDetail: {
+    url: '/truck/third_tractor_semitrailers/:tractor_semitrailer_id/',
+    method: 'get',
+    desc: '三方运力详情',
     param: {
 
     }

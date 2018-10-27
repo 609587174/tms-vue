@@ -38,7 +38,7 @@
                       基础信息
                     </el-col>
                     <el-col :span="6" class="text-right">
-                      <el-button type="primary" v-if="detailData.editable" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
+                      <el-button type="primary" size="mini" @click="goEditDetail(0)">编辑该条</el-button>
                     </el-col>
                   </el-row>
                 </div>

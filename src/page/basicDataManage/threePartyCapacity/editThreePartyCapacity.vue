@@ -56,12 +56,12 @@
               <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="主驾驶:" prop="master_driver_name">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.master_driver_name" @blur="detectionCapacity('master_driver')"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.master_driver_name"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="电话:" prop="master_driver_mobile_phone">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.master_driver_mobile_phone"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.master_driver_mobile_phone" @blur="detectionCapacity('master_driver')"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -132,7 +132,7 @@
         </transition>
       </el-main>
     </el-container>
-    <detection-capacity-dialog :is-show="isDetectionCapacity" :row="detectionCapacityDetail"></detection-capacity-dialog>
+    <detection-capacity-dialog :is-show="isDetectionCapacity" :titleObj="detectionCapacityTitle" :row="detectionCapacityDetail" v-on:closeDialogBtn="closeDialog"></detection-capacity-dialog>
   </div>
 </template>
 <script>
@@ -144,10 +144,10 @@ export default {
   },
   computed: {
     id() {
-      return this.$route.params.id;
+      return this.$route.query.id;
     },
     titleType() {
-      return this.$route.params.id ? '编辑三方运力' : '新增三方运力'
+      return this.$route.query.id ? '编辑三方运力' : '新增三方运力'
     }
   },
   data() {
@@ -159,6 +159,10 @@ export default {
       activeStep:0,
       isDisabled:true,
       detectionCapacityDetail:{},
+      detectionCapacityTitle:{
+        type:'',
+        title:'',
+      },
       editMsgForm: {
         tractor_plate_number: '',//牵引车牌号
         carrier:'',//所属公司
@@ -255,21 +259,32 @@ export default {
       let postData = {};
       if(type === 'tractor'&&this.editMsgForm.tractor_plate_number){
         postData.tractor_plate_number = this.editMsgForm.tractor_plate_number;
+        this.detectionCapacityTitle={
+          type:'牵引车牌号',
+          title:this.editMsgForm.tractor_plate_number
+        }
       }else if(type === 'trailer'&&this.editMsgForm.semitrailer_plate_number){
         postData.semitrailer_plate_number = this.editMsgForm.semitrailer_plate_number;
-      }else if(type === 'master_driver'&&this.editMsgForm.master_driver_mobile_phone&&(this.editMsgForm.master_driver_mobile_phone).match(this.$store.state.common.regular.phone.match)){
+        this.detectionCapacityTitle={
+          type:'挂车牌号',
+          title:this.editMsgForm.semitrailer_plate_number
+        }
+      }else if(type === 'master_driver'&&this.editMsgForm.master_driver_mobile_phone&&(this.editMsgForm.master_driver_mobile_phone).match(this.$store.state.common.regular.phone.match)){//
+        this.detectionCapacityTitle.type='主驾';
         postData = {
           master_driver:{
             mobile_phone:this.editMsgForm.master_driver_mobile_phone
           }
         }
       }else if(type === 'vice_driver'&&this.editMsgForm.vice_driver_mobile_phone&&(this.editMsgForm.vice_driver_mobile_phone).match(this.$store.state.common.regular.phone.match)){
+        this.detectionCapacityTitle.type='副驾';
         postData = {
           vice_driver:{
             mobile_phone:this.editMsgForm.vice_driver_mobile_phone
           }
         }
       }else if(type === 'escort_staff'&&this.editMsgForm.escort_staff_mobile_phone&&(this.editMsgForm.escort_staff_mobile_phone).match(this.$store.state.common.regular.phone.match)){
+        this.detectionCapacityTitle.type='押运员';
         postData = {
           escort_staff:{
             mobile_phone:this.editMsgForm.escort_staff_mobile_phone
@@ -287,7 +302,15 @@ export default {
               type: 'warning'
             });
           }else if(results.data && results.data.code == 600){
-
+            this.isDetectionCapacity = true;
+            this.detectionCapacityDetail = results.data.data.tractor_semitrailer;
+            if(type === 'master_driver'){
+              this.detectionCapacityTitle.title = this.detectionCapacityDetail.master_driver.name
+            }else if(type === 'vice_driver'){
+              this.detectionCapacityTitle.title = this.detectionCapacityDetail.vice_driver.name
+            }else if(type === 'escort_staff'){
+              this.detectionCapacityTitle.title = this.detectionCapacityDetail.escort_staff.name
+            }
           }
         }).catch((err) => {
         })
@@ -337,12 +360,12 @@ export default {
         if (valid) {
           /* 如果id存在则为编辑 */
           if (this.id) {
-            postData.customer_id = this.id;
+            postData.id = this.id;
             apiName = 'updateThreePartyCapacity';
           }
           btnObject.btnText = '正在提交';
           btnObject.isLoading = true;
-          //postData = this.pbFunc.fifterObjIsNull(postData);
+          postData = this.pbFunc.fifterObjIsNull(postData);
           this.$$http(apiName, postData).then((results) => {
             btnObject.btnText = btnTextCopy;
             btnObject.isLoading = false;
@@ -354,10 +377,10 @@ export default {
               });
               if (isReview) {
                 if (this.$route.query.id) {
-                  this.$router.push({ path: `/basicDataManage/threePartyCapacity/clientDetail/${results.data.data.id }` });
+                  this.$router.push({ path: `/basicDataManage/threePartyCapacity/threePartyCapacityDetail/${results.data.data.id }` });
                 } else {
                   this.$router.push({ path: "/basicDataManage/threePartyCapacity/threePartyCapacityList" });
-                }
+                }s
               } else {
                 let id = results.data.data.id;
                 this.$router.push({ path: "/basicDataManage/threePartyCapacity/editThreePartyCapacity", query: { activeStep: stepNum - 1, id: id } });
@@ -376,21 +399,33 @@ export default {
     },
     getDetail() {
       const postData = {
-        id: this.id,
+        tractor_semitrailer_id: this.id,
       }
       this.pageLoading = true;
-      this.$$http('highSpeedDetail', postData).then((results) => {
+      this.$$http('threePartyCapacityDetail', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {
           this.detailData = results.data.data;
-          this.editMsgForm = {
-            name: this.detailData.name,
-            type: this.detailData.type && this.detailData.type.key,
-            contact_name: this.detailData.contact_name,
-            contact_phone: this.detailData.contact_phone,
-            detail_address: this.detailData.detail_address,
-          }
 
+          this.editMsgForm = {
+            tractor_plate_number: this.detailData.tractor.plate_number,//牵引车牌号
+            carrier:this.detailData.tractor.carrier.id,//所属公司
+            transport_weight: this.detailData.semitrailer.transport_weight,//装载质量
+            fuel_type: this.detailData.tractor.fuel_type.key,//牵引车燃料类型
+            semitrailer_plate_number: this.detailData.semitrailer.plate_number,//挂车车牌
+            master_driver_name: this.detailData.master_driver?this.detailData.master_driver.name:'',//主驾驶姓名
+            master_driver_mobile_phone: this.detailData.master_driver?this.detailData.master_driver.mobile_phone:'',//主驾驶电话
+            master_driver_id_number: this.detailData.master_driver?this.detailData.master_driver.id_number:'',//主身份证
+            master_driver_qualification_certificate_number: this.detailData.master_driver?this.detailData.master_driver.qualification_certificate_number:'',//主驾驶资格证
+            vice_driver_name: this.detailData.vice_driver?this.detailData.vice_driver.name:'',//主驾驶姓名
+            vice_driver_mobile_phone: this.detailData.vice_driver?this.detailData.vice_driver.mobile_phone:'',//副驾驶电话
+            vice_driver_id_number: this.detailData.vice_driver?this.detailData.vice_driver.id_number:'',//副驾驶身份证
+            vice_driver_qualification_certificate_number: this.detailData.vice_driver?this.detailData.vice_driver.qualification_certificate_number:'',//副驾驶资格证
+            escort_staff_name: this.detailData.escort_staff?this.detailData.escort_staff.name:'',//押运员姓名
+            escort_staff_mobile_phone: this.detailData.escort_staff?this.detailData.escort_staff.mobile_phone:'',//押运员电话
+            escort_staff_id_number: this.detailData.escort_staff?this.detailData.escort_staff.id_number:'',//押运员身份证
+            escort_staff_qualification_certificate_number: this.detailData.escort_staff?this.detailData.escort_staff.qualification_certificate_number:'',//押运员资格证
+          }
         }
       }).catch((err) => {
         this.pageLoading = false;
@@ -398,8 +433,7 @@ export default {
     },
     getCarrierList() {
       let postData = {
-        page: 1,
-        page_size: 100
+        pagination:false
       };
       this.carrierPageLoading = true;
 
@@ -407,7 +441,7 @@ export default {
 
         this.carrierPageLoading = false;
         if (results.data && results.data.code == 0) {
-          this.carrierList = results.data.data.results;
+          this.carrierList = results.data.data;
         }
       }).catch((err) => {
         this.carrierPageLoading = false;
@@ -416,9 +450,9 @@ export default {
     },
     returnToPage() {
       if (this.id) {
-        this.$router.push({ path: `/basicDataManage/supplierManage/tollfeeManage/tollfeeManageDetalis/${this.id}` });
+        this.$router.push({ path: `/basicDataManage/threePartyCapacity/threePartyCapacityDetail/${this.id}` });
       } else {
-        this.$router.push({ path: "/basicDataManage/supplierManage/tollfeeManage/tollfeeManageList" });
+        this.$router.push({ path: "/basicDataManage/threePartyCapacity/threePartyCapacityList" });
       }
     }
   },
@@ -463,7 +497,10 @@ export default {
     }
   },
   created() {
-    this.id && this.getDetail();
+    if(this.id){
+      this.getDetail();
+    }
+
     this.getCarrierList();
   },
 }

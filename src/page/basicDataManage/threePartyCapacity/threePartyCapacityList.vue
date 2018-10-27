@@ -31,12 +31,11 @@
       </div>
       <div class="table-list">
         <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title">
+          <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width">
+          </el-table-column>
+          <el-table-column label="完善状态" align="center" width="140">
             <template slot-scope="scope">
-              <div v-if="item.param === 'carrier_name'" class="order-color">
-                <router-link :to="{path: `/basicDataManage/carrierManage/carrierDetail/${scope.row.id }/`}">{{scope.row.carrier_name}}</router-link>
-              </div>
-              <div v-else><span v-if="item.param_two">{{scope.row[item.param][item.param_two]}}</span><span v-else>{{scope.row[item.param]}}</span></div>
+              <div>{{scope.complete_status?'已完善':'未完善'}}</div>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -77,8 +76,8 @@ export default {
       },
       selectData: {
         perfectSelect: [
-          { id: 'own', value: '未完善' },
-          { id: 'external', value: '已完善' }
+          { id: false, value: '未完善' },
+          { id: true, value: '已完善' }
         ],
         fieldSelect: [
           { id: 'tractor_plate_number', value: '牵引车号' },
@@ -106,7 +105,7 @@ export default {
       }, {
         title: '主驾身份证号',
         param: 'master_driver.id_number',
-        width: ''
+        width: '180'
       }, {
         title: '主驾电话号码',
         param: 'master_driver.mobile_phone',
@@ -118,10 +117,6 @@ export default {
       }, {
         title: '押运员',
         param: 'escort_staff.name',
-        width: ''
-      }, {
-        title: '完善状态',
-        param: 'complete_status',
         width: ''
       }],
       tableData: []
@@ -171,7 +166,7 @@ export default {
     },
     handleMenuClick(row) {
       // this.$router.push({ path: '/basicDataManage/carrierManage/carrierDetail', query: { id: row.id } });
-      window.open(`#/basicDataManage/supplierManage/carrierManage/carrierDetail/${row.id}/`, '_blank')
+      window.open(`#/basicDataManage/threePartyCapacity/threePartyCapacityDetail/${row.id}/`, '_blank')
 
     }
   },

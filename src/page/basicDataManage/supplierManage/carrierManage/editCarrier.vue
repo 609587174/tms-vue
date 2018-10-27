@@ -67,12 +67,12 @@
                       <el-col :span="10">
                         <div class="code">
                           <el-select v-model="editMsgForm.code" placeholder="请选择" @change="codeTab" :disabled="editMsgForm.code==='license_code'&&detail.license_code?true:false">
-                            <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                            <el-option v-for="(item,key) in selectData.codeSelect" :key="key" :disabled="isDisabled" :label="item.value" :value="item.id"></el-option>
                           </el-select>
                         </div>
                       </el-col>
                       <el-col :span="11">
-                        <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.codeMsg"></el-input>
+                        <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.codeMsg"></el-input>
                       </el-col>
                     </el-row>
                   </el-form-item>
@@ -182,6 +182,7 @@ export default {
         code: 'license_code',
         codeMsg: '',
       },
+      isDisabled:false,
       sociology: [
         { required: true, message: '请输入统一社会信用代码', trigger: 'blur' },
         { pattern: /^([A-Z0-9]{18})$/, message: '由18位数字和大写字母组成', trigger: 'blur' }
@@ -307,6 +308,9 @@ export default {
             code: this.detail.license_code ? 'license_code' : 'organization_code',
             codeMsg: this.detail.license_code ? this.detail.license_code : this.detail.organization_code,
 
+          }
+          if(this.editMsgForm.codeMsg){
+            this.isDisabled = true;
           }
           if (this.editMsgForm.code === 'license_code') {
             this.rules.codeMsg = this.sociology;

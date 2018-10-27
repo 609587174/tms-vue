@@ -49,12 +49,12 @@
               </el-row>
             </el-form>
           </div>
-          <div class="operation-btn text-right" v-if="false">
-            <el-button type="primary" plain @click="importList">导入</el-button>
-            <el-button type="primary">导出</el-button>
-            <el-button type="success" @click="addPerson">新增</el-button>
+          <div class="operation-btn text-right">
+       <!--      <el-button type="primary" plain @click="importList">导入</el-button>
+            <el-button type="primary">导出</el-button> -->
+            <el-button type="success" @click="addFreight">新增</el-button>
           </div>
-          <div class="table-list mt-25">
+          <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" max-height="600" v-loading="pageLoading" border :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :width="item.width?item.width:140" :label="item.title">
                 <template slot-scope="scope">
@@ -169,6 +169,9 @@ export default {
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
+    },
+    addFreight(){
+      window.open(`#/basicDataManage/standardDataSet/freight/editFreight`, '_blank')
     },
     getList: function() {
       let postData = {

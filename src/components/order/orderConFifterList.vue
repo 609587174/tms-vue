@@ -1045,6 +1045,13 @@ export default {
               }
             }
 
+            if(item.type === 'waiting_match'&&item.auto_audit){
+              dataObject={
+                ...dataObject,
+                isHideUpSettle:true,
+              }
+            }
+
           })
 
           this.choosedListData = Object.assign({}, dataObject);

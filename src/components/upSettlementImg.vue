@@ -12,7 +12,7 @@
     <el-col >
       <div style="text-align:center">{{imgInfo.title}}{{imgInfo.num}}</div>
     </el-col>
-    <el-col>
+    <el-col style="margin-top:15px;">
     <router-link target="_blank" :to="imgView">
       <img :src="imgInfo.url" style='width:100%;max-height:100px' v-loading="imgLoading"></img>
     </router-link>

@@ -288,7 +288,7 @@ export default {
       this.imgList = [];
       //获取装车榜单
       if (this.surePound.pickup_weight_note) {
-        this.$$http('getPundList', { id: this.surePound.weight_note }).then((results) => {
+        this.$$http('getPundList', { id: this.surePound.pickup_weight_note }).then((results) => {
           if (results.data.code === 0) {
             let imageUrlArray = results.data.data.data;
             imageUrlArray.map((item, j) => {
@@ -306,6 +306,7 @@ export default {
       if (this.surePound.pickup_carseal) {
         this.$$http('getSeal', { id: this.surePound.pickup_carseal }).then((results) => {
           let imageUrlArray = results.data.data.data;
+          this.sealImgList=[];
           imageUrlArray.map((item, j) => {
             if (item.image_url_list) {
               let imageList = item.image_url_list;
@@ -444,7 +445,7 @@ export default {
         pickup_tare_weight:this.surePound.pickup_trip.tare_weight||null,
         pickup_net_weight:this.surePound.pickup_trip.net_weight||null,
         active_time:this.surePound.arrival_time||null,
-        leave_time:this.surePound.leave_time||null,
+        leave_time:this.surePound.weight_audit_time||null,
         work_end_time:this.surePound.work_end_time||null,
         gross_weight:this.surePound.gross_weight||null,
         tare_weight:this.surePound.tare_weight||null,

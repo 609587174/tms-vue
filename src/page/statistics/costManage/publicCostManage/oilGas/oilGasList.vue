@@ -163,7 +163,9 @@ export default {
         //   { id: 'unfinished', value: '其它费用' },
         // ],
         fieldSelect: [
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
+          { id: 'company', value: '公司名称' },
+          { id: 'waybill', value: '运单号' },
         ]
       },
       thTableList: [{

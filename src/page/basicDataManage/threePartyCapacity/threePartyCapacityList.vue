@@ -35,7 +35,7 @@
           </el-table-column>
           <el-table-column label="完善状态" align="center" width="140">
             <template slot-scope="scope">
-              <div>{{scope.complete_status?'已完善':'未完善'}}</div>
+              <div>{{scope.row.complete_status?'已完善':'未完善'}}</div>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150" fixed="right">
@@ -96,7 +96,7 @@ export default {
         width: ''
       }, {
         title: '车辆所属',
-        param: 'group.group_name',
+        param: 'tractor.carrier.name',
         width: ''
       }, {
         title: '主驾驶',

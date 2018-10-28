@@ -69,7 +69,7 @@
                   <el-col :span="8">
                     <div class="label-list">
                       <label>装载质量:</label>
-                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.semitrailer&&detailData.semitrailer.transport_weight)"></div>
+                      <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.semitrailer&&detailData.semitrailer.transport_weight?detailData.semitrailer.transport_weight+' 吨':'')"></div>
                     </div>
                   </el-col>
                 </el-row>

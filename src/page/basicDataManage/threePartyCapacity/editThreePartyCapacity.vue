@@ -27,7 +27,7 @@
                 <el-col :span="8">
                   <el-form-item label="所属车辆:" prop="carrier">
                     <!-- <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.carrier"></el-input> -->
-                    <el-select v-model="editMsgForm.carrier" placeholder="请选择" :loading="carrierPageLoading">
+                    <el-select v-model="editMsgForm.carrier" placeholder="请输入选择" clearable filterable :loading="carrierPageLoading">
                       <el-option v-for="(item,key) in carrierList" :key="key" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -49,7 +49,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="装载质量:" prop="transport_weight">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.transport_weight"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.transport_weight"></el-input><span class="unit">吨</span>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -187,10 +187,10 @@ export default {
           { required: true, message: '请输入牵引车牌', trigger: 'blur' },
         ],
         carrier:[
-          { required: true, message: '请选择车辆所属', trigger: 'blur' },
+          { required: true, message: '请选择车辆所属', trigger: 'change' },
         ],
         fuel_type:[
-          { required: true, message: '请选择燃料类型', trigger: 'blur' },
+          { required: true, message: '请选择燃料类型', trigger: 'change' },
         ],
         semitrailer_plate_number:[
           { required: true, message: '请输入挂车牌', trigger: 'blur' },

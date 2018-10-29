@@ -35,9 +35,6 @@
       <el-row :gutter="22">
         <el-col :span="5">
           <div class="nav-tab-setting">
-            <div class="add-user-btn">
-              <el-button type="success" size="medium" @click="staffsDialog('add')">新增员工</el-button>
-            </div>
             <el-tabs v-model="departmentActive">
               <el-tab-pane label="部门" name="department">
                 <div class="department-list">
@@ -54,6 +51,9 @@
         </el-col>
         <el-col :span="19">
           <div class="nav-tab-setting nav-tab-width">
+            <div class="add-user-btn">
+              <el-button type="success" size="medium" @click="staffsDialog('add')">新增员工</el-button>
+            </div>
             <el-tabs v-model="staffsActive" @tab-click="staffClick">
               <el-tab-pane v-for="(item,key) in positionTableData" :key="key" :label="item.role_name" :name="item.id">
                 <div class="position-list">

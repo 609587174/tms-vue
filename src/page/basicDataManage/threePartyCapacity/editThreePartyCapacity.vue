@@ -182,6 +182,7 @@ export default {
       rules: {
         tractor_plate_number:[
           { required: true, message: '请输入牵引车牌', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.plateNumber.match, message: this.$store.state.common.regular.plateNumber.tips, trigger: 'blur' },
         ],
         carrier:[
           { required: true, message: '请选择车辆所属', trigger: 'change' },
@@ -191,6 +192,7 @@ export default {
         ],
         semitrailer_plate_number:[
           { required: true, message: '请输入挂车牌', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.trailerNumber.match, message: this.$store.state.common.regular.trailerNumber.tips, trigger: 'blur' },
         ],
         transport_weight:[
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },

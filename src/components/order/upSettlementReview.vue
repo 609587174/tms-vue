@@ -279,7 +279,7 @@ export default {
       if(changeInfo.type=='load'){
         this.poundUpload.change=true;
         this.poundUpload.fileList=changeInfo.fileList;
-      }else if(changeInfo.type=='unLoadImg'){
+      }else if(changeInfo.type=='unload'){
         this.unPoundUpload.change=true;
         this.unPoundUpload.fileList=changeInfo.fileList;
       }

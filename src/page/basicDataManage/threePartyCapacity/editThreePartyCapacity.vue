@@ -25,7 +25,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="所属车辆:" prop="carrier">
+                  <el-form-item label="车辆所属:" prop="carrier">
                     <!-- <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.carrier"></el-input> -->
                     <el-select v-model="editMsgForm.carrier" placeholder="请输入选择" clearable filterable :loading="carrierPageLoading">
                       <el-option v-for="(item,key) in carrierList" :key="key" :label="item.name" :value="item.id"></el-option>

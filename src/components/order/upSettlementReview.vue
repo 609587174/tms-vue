@@ -49,8 +49,8 @@
         <el-col :span="10" >
           <el-row>
             <el-col>
-              <el-form-item label="实际到厂时间:" label-width="120px" prop="pick_active_time">
-                <el-date-picker v-if="isEdit" v-model="upSettleForm.pick_active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+              <el-form-item label="实际到厂时间:" label-width="120px" prop="pickup_active_time">
+                <el-date-picker v-if="isEdit" v-model="upSettleForm.pickup_active_time" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col>
@@ -178,7 +178,7 @@ export default {
       unImgList:[],
       sealImgList:[],
       upSettleForm: {
-        pick_active_time:"",
+        pickup_active_time:"",
         pickup_work_start_time:"",
         pickup_work_end_time:"",
         pickup_gross_weight:"",
@@ -444,7 +444,7 @@ export default {
         pickup_gross_weight:this.surePound.pickup_trip.gross_weight||null,
         pickup_tare_weight:this.surePound.pickup_trip.tare_weight||null,
         pickup_net_weight:this.surePound.pickup_trip.net_weight||null,
-        active_time:this.surePound.arrival_time||null,
+        active_time:this.surePound.active_time||null,
         leave_time:this.surePound.weight_audit_time||null,
         work_end_time:this.surePound.work_end_time||null,
         gross_weight:this.surePound.gross_weight||null,

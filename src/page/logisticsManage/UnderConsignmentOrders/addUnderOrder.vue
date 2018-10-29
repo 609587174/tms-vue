@@ -36,6 +36,12 @@
 .unloadList {
   margin-top: 30px;
 }
+.whiteSpan {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 </style>
 <template>
   <div class="detail-main">
@@ -143,6 +149,11 @@
                     <span  class="alreayMatch" @click="changeUnload(aitem.id)">已选卸货地</span>
                   </el-tooltip>
                 </el-col> -->
+                <el-col :span="4" class="linh40 whiteSpan" >
+                  车辆所属:<el-tooltip class="item" effect="light" :open-delay="1000" :content="aitem.tractor.carrier.name" placement="top-start" v-if="aitem.tractor.carrier">
+                    <span >{{aitem.tractor.carrier.name}}</span>
+                  </el-tooltip>
+                </el-col>
                 <el-col :span="4" class="linh40">
                   挂车号:{{aitem.semitrailer.plate_number}}
                 </el-col>
@@ -301,6 +312,7 @@ export default {
         vice_driver: {},
         semitrailer: {},
         unloadInfo:[],
+        tractor:{carrier:{}}
       }],
       allUnloadArr:[],
       renderUnloadArr:[],
@@ -508,7 +520,7 @@ export default {
       });
     },
     addACar: function() {
-      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
+      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
     },
     carListChange: function(index) {
       var thisId = this.addCarList[index].id;
@@ -521,7 +533,7 @@ export default {
       }
       for (let i in this.addCarList) {
         if (this.addCarList[i].id == thisId && i != index) {
-          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
+          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
           break;
         }
       }
@@ -547,7 +559,7 @@ export default {
         if (require > this.addCarList.length) {
           var middleArr = [];
           for (var i = 0; i < require - this.addCarList.length; i++) {
-            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[] });
+            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
           }
           this.addCarList = this.addCarList.concat(middleArr);
         } else if (require < this.addCarList.length) {

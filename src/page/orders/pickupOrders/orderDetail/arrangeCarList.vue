@@ -202,7 +202,7 @@ export default {
       }, 
       {
         title: '车辆所属',
-        param: 'carrier_name',
+        param: 'tractor.carrier.name',
         width: ''
       },
       {

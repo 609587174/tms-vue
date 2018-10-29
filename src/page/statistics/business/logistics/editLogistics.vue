@@ -136,7 +136,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="运费金额:" prop="change_value">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.change_value"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_value"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -398,7 +398,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time','loading_quantity','actual_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price', 'remark']
+      let keyArray = ['plan_time','loading_quantity','actual_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price','change_value', 'remark']
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

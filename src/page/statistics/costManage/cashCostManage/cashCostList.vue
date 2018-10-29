@@ -160,7 +160,7 @@ export default {
         fieldSelect: [
           { id: 'plate_number', value: '车号' },
           { id: 'lot', value: '批次' },
-          { id: 'waybill', value: '批次' },
+          { id: 'waybill', value: '运单号' },
         ]
       },
       thTableList: [{

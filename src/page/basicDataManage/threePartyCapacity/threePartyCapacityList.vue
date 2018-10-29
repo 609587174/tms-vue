@@ -144,6 +144,7 @@ export default {
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
+        own_capacity: true,
         complete_status: this.searchPostData.complete_status
       };
       postData[this.searchPostData.field] = this.searchPostData.keyword;

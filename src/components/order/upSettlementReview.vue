@@ -438,7 +438,7 @@ export default {
   created() {
     this.surePound = Object.assign({}, this.surePoundData);
     this.upSettleForm={
-        pick_active_time:this.surePound.pickup_trip.pick_active_time||null,
+        pickup_active_time:this.surePound.pickup_trip.active_time||null,
         pickup_work_start_time:this.surePound.pickup_trip.work_start_time||null,
         pickup_work_end_time:this.surePound.pickup_trip.work_end_time||null,
         pickup_gross_weight:this.surePound.pickup_trip.gross_weight||null,

@@ -76,6 +76,7 @@
               <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>
+                  <el-button type="primary" plain size="mini" @click="deleteFreight(scope.row.id)">删除</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -166,6 +167,32 @@ export default {
     }
   },
   methods: {
+    deleteFreight(id){
+      this.$confirm('确定删除该运费约定？', "提醒", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+      .then(() => {
+        this.$$http('deleteFreight', { trans_fee_id: id }).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.$message({
+              message: '删除运费成功',
+              type: 'success'
+            });
+            this.startSearch();
+          }
+        }).catch((err) => {
+          this.$message.error('删除运费失败');
+        })
+      })
+      .catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消删除运费'
+        });
+      });
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();

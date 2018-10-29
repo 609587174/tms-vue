@@ -563,10 +563,12 @@ export const fifterObjIsNull = function(Obj) {
         if (value.length == 0) {
           delete object[i];
           continue;
-        }
-      } else {
-        for (let j = 0; j < value.length; j++) {
-          value[j] = fifterObjIsNull(value[j]);
+        }else {
+          for (let j = 0; j < value.length; j++) {
+            if (value[j] && typeof value[j] === 'object') {
+              value[j] = fifterObjIsNull(value[j]);
+            }
+          }
         }
       }
       value = fifterObjIsNull(value);

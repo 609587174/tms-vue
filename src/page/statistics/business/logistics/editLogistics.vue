@@ -398,7 +398,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time', 'check_quantity', 'stand_mile','loading_quantity', 'actual_mile', 'label_price', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time', 'check_quantity', 'actual_quantity','stand_mile','loading_quantity', 'actual_mile', 'label_price', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

@@ -9,6 +9,30 @@
  */
 
 const api = {
+  deleteFreight:{
+    url: '/carrier/trans_fee/:trans_fee_id/',
+    method: 'delete',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  updateFreight:{
+    url: '/carrier/trans_fee/:id/',
+    method: 'put',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  addFreight:{
+    url: '/carrier/trans_fee/',
+    method: 'POST',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
   relationThreePartyCapacity:{
     url: '/truck/third_tractor_semitrailers/connect/',
     method: 'POST',

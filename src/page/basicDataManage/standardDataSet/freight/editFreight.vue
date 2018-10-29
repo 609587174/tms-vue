@@ -93,8 +93,8 @@
               </el-row>
               <el-row :gutter="40" class="mt-30">
                 <el-col :span="10" :offset="2">
-                  <el-form-item label="生效托运方:" prop="company">
-                    <el-select v-model="editMsgForm.company" :loading="shipperLoading" filterable clearable placeholder="请输入选择">
+                  <el-form-item label="生效托运方:" prop="companies">
+                    <el-select v-model="editMsgForm.companies" :loading="shipperLoading" filterable clearable multiple placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -106,6 +106,8 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="10" :offset="2">
                   <el-form-item label="生效时间:" prop="effective_time">
                     <el-date-picker v-model="editMsgForm.effective_time" type="datetime" @change="dateSelect('satrt')" placeholder="请选择" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
@@ -169,7 +171,7 @@ export default {
         index:0
       }],
       editMsgForm: {
-        company:'',
+        companies:'',
         actual_fluids:'',
         effective_time:'',
         dead_time:''
@@ -196,7 +198,7 @@ export default {
         width: ''
       }],
       rules: {
-        company:[
+        companies:[
           { required: true, message: '请选择托运方', trigger: 'blur' },
         ],
         actual_fluids:[
@@ -229,7 +231,8 @@ export default {
       //   this.endTime = this.endTime + '-' + days + ' 23:59:59';
       // }
       let isSize = this.pbFunc.compareDate(this.editMsgForm.effective_time, this.editMsgForm.dead_time);
-      if (!isSize) {
+      // console.log()
+      if (!isSize&&this.editMsgForm.effective_time&&this.editMsgForm.dead_time) {
       //   this.startSearch();
       // } else {
         this.$message.error('失效时间小于生效时间');
@@ -338,15 +341,15 @@ export default {
             type: 'error',
             duration:'5000'
           });
-        }else if(record.change_number&&!(record.change_number).match(this.$store.state.common.regular.variableRate.match)){
+        }else if(record.change_number&&!(record.change_number).match(this.$store.state.common.regular.variableValue.match)){
           this.$message({
-            message: '变动值仅支持正数且最多三位小数的数值',
+            message: '变动值仅支持正数且最多五位小数的数值',
             type: 'error',
             duration:'5000'
           });
         }else if(!record.initial_price&&!record.change_rate){
           this.$message({
-            message: '起步价和变动费率至少要填一个',
+            message: '起步价和变动费率至少填写一个',
             type: 'error',
             duration:'5000'
           });
@@ -377,11 +380,11 @@ export default {
       // if (btnType === 'next') {
       //   this.editAjax(postData, formName, btnObject, 2);
       // } else if (btnType === 'out') {
-      if(this.recordsData.length&&!this.recordsData[0].isEdit){
+      if(this.recordsData.length&&!this.editRecordsList.isEdit&&!this.recordsData[this.recordsData.length-1].isEdit){
         this.editAjax(postData, formName, btnObject, null, true);
       }else{
         this.$message({
-          message: '至少添加一条以上运费约定',
+          message: '至少添加一条以上运费约定或点击保存',
           type: 'error',
           duration:'5000'
         });
@@ -441,7 +444,7 @@ export default {
           this.detailData = results.data.data;
 
           this.editMsgForm.actual_fluids = [];
-          this.editMsgForm.company = this.detailData.company.id;
+          this.editMsgForm.companies = [this.detailData.company.id];
           if(this.detailData.agreements&&this.detailData.agreements.length){
             this.editMsgForm.effective_time = this.detailData.agreements[0].effective_time;
             this.editMsgForm.dead_time = this.detailData.agreements[0].dead_time;

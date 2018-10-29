@@ -132,7 +132,7 @@
         </transition>
       </el-main>
     </el-container>
-    <detection-capacity-dialog :is-show="isDetectionCapacity" :titleObj="detectionCapacityTitle" :row="detectionCapacityDetail" v-on:closeDialogBtn="closeDialog"></detection-capacity-dialog>
+    <detection-capacity-dialog :is-show="isDetectionCapacity" :error-msg="detectionCapacityTitle" :row="detectionCapacityDetail" v-on:closeDialogBtn="closeDialog"></detection-capacity-dialog>
   </div>
 </template>
 <script>
@@ -159,10 +159,7 @@ export default {
       activeStep:0,
       isDisabled:true,
       detectionCapacityDetail:{},
-      detectionCapacityTitle:{
-        type:'',
-        title:'',
-      },
+      detectionCapacityTitle:'',
       editMsgForm: {
         tractor_plate_number: '',//牵引车牌号
         carrier:'',//所属公司
@@ -259,32 +256,29 @@ export default {
       let postData = {};
       if(type === 'tractor'&&this.editMsgForm.tractor_plate_number){
         postData.tractor_plate_number = this.editMsgForm.tractor_plate_number;
-        this.detectionCapacityTitle={
-          type:'牵引车牌号',
-          title:this.editMsgForm.tractor_plate_number
-        }
+        // this.detectionCapacityTitle={
+        //   type:'牵引车牌号',
+        //   title:this.editMsgForm.tractor_plate_number
+        // }
       }else if(type === 'trailer'&&this.editMsgForm.semitrailer_plate_number){
         postData.semitrailer_plate_number = this.editMsgForm.semitrailer_plate_number;
-        this.detectionCapacityTitle={
-          type:'挂车牌号',
-          title:this.editMsgForm.semitrailer_plate_number
-        }
+        // this.detectionCapacityTitle={
+        //   type:'挂车牌号',
+        //   title:this.editMsgForm.semitrailer_plate_number
+        // }
       }else if(type === 'master_driver'&&this.editMsgForm.master_driver_mobile_phone&&(this.editMsgForm.master_driver_mobile_phone).match(this.$store.state.common.regular.phone.match)){//
-        this.detectionCapacityTitle.type='主驾';
         postData = {
           master_driver:{
             mobile_phone:this.editMsgForm.master_driver_mobile_phone
           }
         }
       }else if(type === 'vice_driver'&&this.editMsgForm.vice_driver_mobile_phone&&(this.editMsgForm.vice_driver_mobile_phone).match(this.$store.state.common.regular.phone.match)){
-        this.detectionCapacityTitle.type='副驾';
         postData = {
           vice_driver:{
             mobile_phone:this.editMsgForm.vice_driver_mobile_phone
           }
         }
       }else if(type === 'escort_staff'&&this.editMsgForm.escort_staff_mobile_phone&&(this.editMsgForm.escort_staff_mobile_phone).match(this.$store.state.common.regular.phone.match)){
-        this.detectionCapacityTitle.type='押运员';
         postData = {
           escort_staff:{
             mobile_phone:this.editMsgForm.escort_staff_mobile_phone
@@ -304,14 +298,15 @@ export default {
           }else if(results.data && results.data.code == 600){
             this.isDetectionCapacity = true;
             this.detectionCapacityDetail = JSON.parse(results.data.data.tractor_semitrailer);
+            this.detectionCapacityTitle = results.data.msg;
             console.log(this.detectionCapacityDetail)
-            if(type === 'master_driver'){
-              this.detectionCapacityTitle.title = this.detectionCapacityDetail.master_driver.name
-            }else if(type === 'vice_driver'){
-              this.detectionCapacityTitle.title = this.detectionCapacityDetail.vice_driver.name
-            }else if(type === 'escort_staff'){
-              this.detectionCapacityTitle.title = this.detectionCapacityDetail.escort_staff.name
-            }
+            // if(type === 'master_driver'){
+            //   this.detectionCapacityTitle.title = this.detectionCapacityDetail.master_driver.name
+            // }else if(type === 'vice_driver'){
+            //   this.detectionCapacityTitle.title = this.detectionCapacityDetail.vice_driver.name
+            // }else if(type === 'escort_staff'){
+            //   this.detectionCapacityTitle.title = this.detectionCapacityDetail.escort_staff.name
+            // }
           }
         }).catch((err) => {
         })
@@ -386,6 +381,16 @@ export default {
                 let id = results.data.data.id;
                 this.$router.push({ path: "/basicDataManage/threePartyCapacity/editThreePartyCapacity", query: { activeStep: stepNum - 1, id: id } });
               }
+            }else if(results.data && results.data.code == 400){
+              this.$message({
+                message: results.data.msg,
+                type: 'warning'
+              });
+            }else if(results.data && results.data.code == 600){
+              this.isDetectionCapacity = true;
+              this.detectionCapacityDetail = JSON.parse(results.data.data.tractor_semitrailer);
+              this.detectionCapacityTitle = results.data.msg;
+
             }
 
           }).catch((err) => {

@@ -194,7 +194,7 @@ export default {
       selectData: {
         codeSelect: [
           { id: 'license_code', value: '统一社会信用代码（三合一）' },
-          { id: 'organization_code', value: '组织机构代码（非三合一）' },
+          // { id: 'organization_code', value: '组织机构代码（非三合一）' },
         ],
         carrierTypeSelect: [
           { id: 'own', value: '自有承运' },

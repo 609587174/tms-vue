@@ -1,5 +1,8 @@
 <style scoped lang="less">
   .adjustment-dialog-form{
+    .title{
+      line-height: 20px;
+    }
     width:80%;
     .el-form-item{
       margin-bottom:0;
@@ -11,7 +14,7 @@
   <div>
     <el-dialog title="提醒" :visible="isShow" width="30%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="adjustment-dialog-form">
-        <div class="text-center">{{titleObj.type}} <span class="text-blue">{{titleObj.title}}</span> 已存在完善运力，运力如下：</div>
+        <div class="text-center title">{{errorMsg}}运力如下：</div>
         <el-form class="adjustment-dialog-content mt-30" label-width="60px" :rules="rules" :model="formRules" status-icon ref="formRules">
           <el-row :gutter="10">
             <el-col :span="12">
@@ -31,7 +34,7 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="mt-30 text-red fs-12 text-center">运力信息将直接引用，若运力信息不对，请联系车辆调度修改</div>
+        <div class="mt-30 text-red fs-12 text-center title">运力信息将直接引用，若运力信息不对，请联系车辆调度修改</div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeBtn">取消</el-button>
@@ -53,8 +56,8 @@ export default {
       type: Object,
       required: true
     },
-    titleObj:{
-      type: Object,
+    errorMsg:{
+      type: String,
       required: true
     }
   },

@@ -915,7 +915,7 @@ export default {
 
       this.isShowSureDownPound = true;
       this.choosedListData = rowData;
-      this.sureDownPoundTitle = '查看卸车车磅单'
+      this.sureDownPoundTitle = '查看卸车磅单'
       this.isEditSureDownPound = false;
       this.isUploadUnloadPound = false;
       this.isShowAccountCheck = false;

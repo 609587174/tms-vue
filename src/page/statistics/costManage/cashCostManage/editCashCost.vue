@@ -46,6 +46,8 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="数量:" prop="nums">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.nums"></el-input>
@@ -61,19 +63,11 @@
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.at_amount"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
                 <el-col :span="8">
                   <el-form-item label="税额:" prop="tax_amount">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.tax_amount"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="行程外费用:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_travel"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="批次:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.lot"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -83,30 +77,9 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="运单号:" prop="waybill">
-                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择" @change="selectWaybill">
-                      <!-- <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option> -->
-                      <el-option v-for="(item,key) in waybillList" :key="item.id" :label="item.waybill_number" :value="item.waybill_number">
-                        <span style="float: left">{{ item.waybill_number }}</span>
-                        <span class="option-span" v-if="item.work_end_time">{{ item.work_end_time }}</span>
-                        <span class="option-span" v-if="item.fluid">{{ item.fluid }}</span>
-                        <span class="option-span" v-if="item.loading_quantity">{{ item.loading_quantity }}</span>
-                      </el-option>
+                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="装车完成时间:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.work_end_time"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="实际液厂:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="装车吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -150,12 +123,6 @@ export default {
         tax_amount: '', //税额
         is_matching: '', // 是否匹配运单
         waybill: '', // 运单号
-        is_travel: '',
-        work_end_time: '',
-        fluid: '',
-        loading_quantity: '',
-        is_travel: '',
-        lot: ''
       },
       waybillList: [], //运单号列表
       rules: {
@@ -222,19 +189,10 @@ export default {
       this.$router.push({ path: "/statistics/costManage/cashCostManage/cashCostList" });
       // }
     },
-    selectWaybill(waybill) {
-      for (let i in this.waybillList) {
-        if (this.waybillList[i].waybill_number === waybill) {
-          this.editMsgForm.work_end_time = this.waybillList[i].work_end_time;
-          this.editMsgForm.fluid = this.waybillList[i].fluid;
-          this.editMsgForm.loading_quantity = this.waybillList[i].loading_quantity;
-        }
-      }
-    },
-    getWaybillData() {
+    getWaybillData(){
       let postData = {
-        datetime: this.detail.cost_date,
-        plate_number: this.detail.plate_number
+        datetime:this.detail.cost_date,
+        plate_number:this.detail.plate_number
         // datetime:'2018-06-13 22:10:15',
         // plate_number:'鲁HH5555'
       }
@@ -258,11 +216,6 @@ export default {
             tax_amount: this.detail.tax_amount, //税额
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
             waybill: this.detail.waybill, // 运单号
-            work_end_time: this.detail.work_end_time,
-            fluid: this.detail.fluid,
-            loading_quantity: this.detail.loading_quantity,
-            is_travel: this.detail.is_travel.verbose,
-            lot: this.detail.lot
           }
           this.getWaybillData();
         }
@@ -304,8 +257,8 @@ export default {
       let btnObject = btn;
       let keyArray = ['waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
-      for (let i in this.waybillList) {
-        if (this.waybillList[i].waybill_number === this.editMsgForm.waybill) {
+      for(let i in this.waybillList){
+        if(this.waybillList[i].waybill_number===this.editMsgForm.waybill){
           postData.waybill_id = this.waybillList[i].id;
         }
       }

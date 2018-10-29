@@ -78,30 +78,9 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="运单号:" prop="waybill">
-                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择" @change="selectWaybill">
-                      <!-- <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option> -->
-                      <el-option v-for="(item,key) in waybillList" :key="item.id" :label="item.waybill_number" :value="item.waybill_number">
-                        <span style="float: left">{{ item.waybill_number }}</span>
-                        <span class="option-span" v-if="item.work_end_time">{{ item.work_end_time }}</span>
-                        <span class="option-span" v-if="item.fluid">{{ item.fluid }}</span>
-                        <span class="option-span" v-if="item.loading_quantity">{{ item.loading_quantity }}</span>
-                      </el-option>
+                    <el-select v-model="editMsgForm.waybill" filterable clearable placeholder="请输入选择">
+                      <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="装车完成时间:">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.work_end_time"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="实际液厂:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="装车吨位:">
-                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -146,9 +125,6 @@ export default {
         total_money: '', //共计金额
         is_matching: '', // 是否匹配运单
         waybill: '', // 运单号
-        work_end_time: '',
-        fluid: '',
-        loading_quantity: ''
       },
       waybillList: [], //运单号列表
       rules: {
@@ -200,16 +176,6 @@ export default {
       this.$router.push({ path: "/statistics/costManage/publicCostManage/tollFee/tollFeeList" });
       // }
     },
-    selectWaybill(waybill) {
-      for (let i in this.waybillList) {
-        if (this.waybillList[i].waybill_number === waybill) {
-          this.editMsgForm.work_end_time = this.waybillList[i].work_end_time;
-          this.editMsgForm.fluid = this.waybillList[i].fluid;
-          this.editMsgForm.loading_quantity = this.waybillList[i].loading_quantity;
-        }
-      }
-
-    },
     getWaybillData() {
       let postData = {
         datetime: this.detail.cost_date,
@@ -239,9 +205,6 @@ export default {
             total_money: this.detail.total_money, //共计金额
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
             waybill: this.detail.waybill, // 运单号
-            work_end_time: this.detail.work_end_time,
-            fluid: this.detail.fluid,
-            loading_quantity: this.detail.loading_quantity
           }
           this.getWaybillData();
         }

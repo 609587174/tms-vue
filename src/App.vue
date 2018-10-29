@@ -78,6 +78,7 @@ export default {
         statistics: 'DATA_STATISTICS', //数据统计
         business: 'BUSINESS_STATISTICS', //物流数据
         costManage: 'EXPENSE_MANAGEMENT', //费用管理
+        dispatchCar:'DISPATCHER_STATISTICS_SECOND',
 
         supplierManage: 'SUPPLIER_MANAGEMENT_SECOND', //供应商管理
         energyManageList: 'OIL_GAS_COMPANY_MANAGEMENT', //加油气公司管理

@@ -350,7 +350,7 @@ export default {
               });
               // if (isReview) {
                 if (this.id) {
-                  this.$router.push({ path: `/basicDataManage/carrierManage/carrierDetail/${this.id }/` });
+                  this.$router.push({ path: `/basicDataManage/supplierManage/carrierManage/carrierDetail/${this.id }/` });
                 } else {
                   this.$router.push({ path: "/basicDataManage/supplierManage/carrierManage/carrierManagelist" });
                 }

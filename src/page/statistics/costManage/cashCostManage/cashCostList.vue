@@ -159,7 +159,8 @@ export default {
         ],
         fieldSelect: [
           { id: 'plate_number', value: '车号' },
-          { id: 'lot', value: '批次' }
+          { id: 'lot', value: '批次' },
+          { id: 'waybill', value: '批次' },
         ]
       },
       thTableList: [{
@@ -192,7 +193,7 @@ export default {
         title: '税额',
         param: 'tax_amount',
         width: ''
-      }, 
+      },
       {
         title: '行程内费用',
         param: 'is_travel',

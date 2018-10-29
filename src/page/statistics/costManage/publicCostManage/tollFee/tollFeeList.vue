@@ -86,7 +86,6 @@
                     <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
                     <span v-else>{{scope.row[item.param]}}</span>
                   </div>
-
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="100" fixed="right">
@@ -164,14 +163,16 @@ export default {
         //   { id: 'unfinished', value: '其它费用' },
         // ],
         fieldSelect: [
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
+          { id: 'high_company', value: '公司名称' },
+          { id: 'waybill', value: '运单号' },
         ]
       },
       thTableList: [{
         title: '高速公司',
         param: 'high_company',
         width: '200'
-      },{
+      }, {
         title: '车号',
         param: 'plate_number',
         width: ''
@@ -207,9 +208,21 @@ export default {
         title: '匹配状态',
         param: 'is_matching',
         width: ''
-      },  {
+      }, {
         title: '运单号',
         param: 'waybill',
+        width: ''
+      }, {
+        title: '装车完成时间',
+        param: 'work_end_time',
+        width: '180'
+      }, {
+        title: '实际液厂',
+        param: 'fluid',
+        width: ''
+      }, {
+        title: '装车吨位',
+        param: 'loading_quantity',
         width: ''
       }, {
         title: '添加时间',
@@ -260,7 +273,7 @@ export default {
       this.pageData.currentPage = 1;
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
-      if(this.pbFunc.objSize(this.$route.query)){
+      if (this.pbFunc.objSize(this.$route.query)) {
         this.$router.push({ path: this.$route.path })
       }
     },

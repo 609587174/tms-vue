@@ -71,7 +71,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="装车完成时间:">
-                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
+                    <el-date-picker v-model="editMsgForm.work_end_time" type="datetime" :disabled="isDisabled" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -80,13 +80,13 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="装车吨位:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
+                  <el-form-item label="装车吨位:" prop="loading_quantity">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="实收吨位:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -120,8 +120,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="标准运价:">
-                    <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.stand_freight"></el-input>
+                  <el-form-item label="标准运价:" prop="stand_freight">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.stand_freight"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -136,7 +136,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="运费金额:" prop="change_value">
-                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.change_value"></el-input>
+                    <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.change_value"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -288,6 +288,12 @@ export default {
         actual_mile: [
           { pattern: this.$store.state.common.regular.mile.match, message: this.$store.state.common.regular.mile.tips, trigger: 'blur' },
         ],
+        loading_quantity: [
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
+        ],
+        stand_freight: [
+          { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -392,7 +398,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'work_end_time', 'change_value', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time', 'check_quantity', 'actual_quantity','stand_mile','loading_quantity', 'actual_mile', 'label_price', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

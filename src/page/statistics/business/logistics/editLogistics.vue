@@ -60,7 +60,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="计划装车时间:" prop="plan_time">
+                  <el-form-item label="计划装车时间:">
                     <el-date-picker v-model="editMsgForm.plan_time" type="datetime" default-time="12:00:00" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期时间"></el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -85,7 +85,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实收吨位:">
+                  <el-form-item label="实收吨位:" prop="actual_quantity">
                     <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.actual_quantity"></el-input>
                   </el-form-item>
                 </el-col>
@@ -398,7 +398,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['plan_time', 'check_quantity', 'actual_quantity','stand_mile','loading_quantity', 'actual_mile', 'label_price', 'freight_value', 'difference_value', 'lcl_cost', 'waiting_price', 'remark'];
+      let keyArray = ['plan_time','loading_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price', 'remark']
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

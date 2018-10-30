@@ -13,7 +13,7 @@ export default {
     redirect: '/mapManage/carMonitor/realTimeMonitor',
     meta: {
       isVerificationL: true,
-      title: '地图监控',
+      title: '车辆监控',
     },
     component: (resolve) => require(['../page/map/carMonitor/carMonitor'], resolve),
     children: [{
@@ -39,7 +39,7 @@ export default {
     redirect: '/mapManage/landmark/landmarkList',
     meta: {
       isVerificationL: true,
-      title: '地标管理',
+      title: '地标及路线',
     },
     component: (resolve) => require(['../page/map/landmark/landmark'], resolve),
     children: [{

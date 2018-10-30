@@ -460,10 +460,11 @@ export default {
     goDetalis: function() {
       if (this.$route.query.operate === 'edit') {
         this.$router.push({
-          path: `/transportPowerManage/carManage/showCarTailManage?tailId=${ this.tailId }`
+          path: `/basicDataManage/capacityManage/carManage/carTailDetail/${ this.tailId }`
         });
+        // window.open(`#/basicDataManage/capacityManage/carManage/carTailDetail/${scope.rowData.id}`, '_blank')
       } else {
-        this.$router.push({ path: "/transportPowerManage/carManage/carTailManage" });
+        this.$router.push({ path: "/basicDataManage/capacityManage/carManage/carTailManage" });
       }
     },
     addInsuranceListForm: function(addInsuanceFrom) {
@@ -524,7 +525,7 @@ export default {
                   vm.addInsuranceListForm();
                 }
                 vm.$router.push({
-                  path: "/transportPowerManage/carManage/addEditCarTailManage",
+                  path: "/basicDataManage/capacityManage/carManage/editCarTailManage",
                   query: {
                     tailId: vm.tailId,
                     activeStep: nextStep,
@@ -610,7 +611,7 @@ export default {
                 });
                 let nextStep = Number(this.activeStep) + 1;
                 this.$router.push({
-                  path: "/transportPowerManage/carManage/addEditCarTailManage",
+                  path: "/basicDataManage/capacityManage/carManage/editCarTailManage",
                   query: {
                     tailId: this.tailId,
                     activeStep: nextStep,

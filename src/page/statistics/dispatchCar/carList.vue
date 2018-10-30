@@ -16,10 +16,6 @@
 <template>
   <div class="nav-tab">
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-    <el-tab-pane label="物流数据" name="logistics">
-   
-    
-    </el-tab-pane>
     <el-tab-pane label="车辆数据" name="carList">
        <div class="tab-screen">
       <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>

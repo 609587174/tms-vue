@@ -12,7 +12,7 @@
       name: "shipperReceivableManage",
       redirect: '/arap/shipperReceivableManage/shipperReceivableList',
       meta: {
-        title: '托运方应收管理',
+        title: '托运方应收',
         isVerificationL: true
       },
       component: (resolve) => require(['../page/arap/shipperReceivableManage/shipperReceivableManage'], resolve),
@@ -40,7 +40,7 @@
       name: "supplierMeetManage",
       redirect: '/arap/supplierMeetManage/oilGasMeetList',
       meta: {
-        title: '供应商应付管理',
+        title: '供应商应付',
         isVerificationL: true
       },
       component: (resolve) => require(['../page/arap/supplierMeetManage/supplierMeetManage'], resolve),

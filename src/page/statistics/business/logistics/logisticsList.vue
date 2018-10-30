@@ -122,8 +122,8 @@
         </div>
         <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
       </el-tab-pane>
-      <el-tab-pane label="车辆数据" name="carList">
-      </el-tab-pane>
+      <!-- <el-tab-pane label="车辆数据" name="carList">
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

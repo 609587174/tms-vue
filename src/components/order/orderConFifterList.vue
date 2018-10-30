@@ -573,7 +573,7 @@
       <refuseModal :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
     </el-dialog>
     <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'" label-width="100px" :rules="rules">
+      <!--  --><!-- <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'" label-width="100px" :rules="rules">
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <el-form-item label="实际到站时间:" prop="">
@@ -596,7 +596,9 @@
       <span slot="footer" class="dialog-footer" style="text-align: center;">
           <el-button @click="isUpSettlement = false">取 消</el-button>
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
-        </span>
+        </span> -->
+        
+        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
     </el-dialog>
   </div>
 </template>
@@ -606,6 +608,7 @@ let positionMark;
 import noData from '@/components/common/noData';
 import loadingReview from '@/components/order/loadingReview';
 import unloadingReview from '@/components/order/unloadingReview';
+import upSettlementReview from '@/components/order/upSettlementReview';
 import refuseModal from '@/components/order/refuseModal';
 export default {
   name: 'orderFifterList',
@@ -614,6 +617,7 @@ export default {
     loadingReview,
     unloadingReview,
     refuseModal,
+    upSettlementReview,
   },
   data() {
     var onlyNum = (rule, value, callback) => {
@@ -848,28 +852,28 @@ export default {
   },
   methods: {
     upSettlementTrue: function() {
-      var vm = this;
-      this.$refs['isUpSettlementForm'].validate((valid) => {
-        if (valid) {
-          var sendData = this.UpSettlementForm;
-          vm.upSettlementLoading = true;
+      // var vm = this;
+      // this.$refs['isUpSettlementForm'].validate((valid) => {
+      //   if (valid) {
+      //     var sendData = this.UpSettlementForm;
+      //     vm.upSettlementLoading = true;
 
-          sendData.status = "in_settlement";
-          this.$$http('changeOrderStatus', sendData).then((results) => {
-            vm.upSettlementLoading = false;
-            if (results.data.code == 0) {
-              this.isUpSettlement = false;
-              this.$message({
-                message: '提交结算成功',
-                type: 'success'
-              });
-              vm.$emit('searchList');
-            }
-          }).catch(() => {
-            vm.upSettlementLoading = false;
-          });
-        }
-      });
+      //     sendData.status = "in_settlement";
+      //     this.$$http('changeOrderStatus', sendData).then((results) => {
+      //       vm.upSettlementLoading = false;
+      //       if (results.data.code == 0) {
+      //         this.isUpSettlement = false;
+      //         this.$message({
+      //           message: '提交结算成功',
+      //           type: 'success'
+      //         });
+      //         vm.$emit('searchList');
+      //       }
+      //     }).catch(() => {
+      //       vm.upSettlementLoading = false;
+      //     });
+      //   }
+      // });
     },
     expandArr: function() {
       if (this.expandStatus) {
@@ -911,7 +915,7 @@ export default {
 
       this.isShowSureDownPound = true;
       this.choosedListData = rowData;
-      this.sureDownPoundTitle = '查看卸车车磅单'
+      this.sureDownPoundTitle = '查看卸车磅单'
       this.isEditSureDownPound = false;
       this.isUploadUnloadPound = false;
       this.isShowAccountCheck = false;
@@ -1041,6 +1045,13 @@ export default {
               }
             }
 
+            if(item.type === 'waiting_match'&&item.auto_audit){
+              dataObject={
+                ...dataObject,
+                isHideUpSettle:true,
+              }
+            }
+
           })
 
           this.choosedListData = Object.assign({}, dataObject);
@@ -1149,13 +1160,19 @@ export default {
     },
     upSettlement: function(rowData) {
 
-      this.UpSettlementForm = {
-          arrival_time: rowData.active_time || "",
-          weight_audit_time: rowData.weight_audit_time || "",
-          net_weight: rowData.net_weight || "",
-          active_mile: rowData.weight_active_mile || "",
-          id: rowData.id
-        },
+      // this.UpSettlementForm = {
+      //     arrival_time: rowData.active_time || "",
+      //     weight_audit_time: rowData.weight_audit_time || "",
+      //     net_weight: rowData.net_weight || "",
+      //     active_mile: rowData.weight_active_mile || "",
+      //     id: rowData.id
+      //   },
+        
+        this.choosedListData = rowData;
+        this.sureDownPoundTitle = '提交结算'
+        this.isEditSureDownPound = true;
+        this.isUploadUnloadPound = true;
+        this.isShowAccountCheck = true;
         this.isUpSettlement = true;
       //this.upSettlementTrue();
     },
@@ -1170,6 +1187,9 @@ export default {
       this.$emit('searchList');
     },
     refuseSuccess: function() {
+      this.$emit('searchList');
+    },
+    upSettlementReviewSuccess:function(){
       this.$emit('searchList');
     }
   },

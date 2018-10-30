@@ -2,14 +2,15 @@ import dashboard from './dashboard'
 import orders from './orders'
 import logisticsManage from './logisticsManage'
 import mapManage from './mapManage'
-import transportPowerManage from './transportPowerManage'
-import clientManage from './clientManage'
+// import transportPowerManage from './transportPowerManage'
+// import clientManage from './clientManage'
 import setting from './setting'
 import statistics from './statistics'
 import dataAnalysis from './dataAnalysis'
 import news from './news'
 import arap from './arap'
 import importData from './imports'
+import basicDataManage from './basicDataManage'
 export default [{
   path: '',
   name: 'index',
@@ -23,13 +24,14 @@ export default [{
     orders,
     logisticsManage,
     mapManage,
-    transportPowerManage,
-    clientManage,
+    basicDataManage,
+    // transportPowerManage,
+    // clientManage,
     statistics,
     dataAnalysis,
     setting,
     news,
     arap,
-    importData,
+    importData
   ]
 }];

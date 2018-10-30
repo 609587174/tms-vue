@@ -33,15 +33,7 @@
            },
            component: (resolve) => require(['../page/statistics/business/logistics/logisticsList'], resolve)
          },
-         {
-           path: 'carList',
-           name: "carList",
-           meta: {
-             title: '车辆数据列表',
-             isVerificationL: false
-           },
-           component: (resolve) => require(['../page/statistics/business/logistics/carList'], resolve)
-         },
+         
          {
            path: 'editLogistics',
            name: "editLogistics",
@@ -66,7 +58,7 @@
      name: "costManage",
      redirect: '/statistics/costManage/costImport/costImportList',
      meta: {
-       title: '费用管理',
+       title: '成本费用',
        isVerificationL: false
      },
      component: (resolve) => require(['../page/statistics/costManage/costManage'], resolve),
@@ -238,5 +230,24 @@
        },
        component: (resolve) => require(['../page/statistics/ledger/ledgerWaybillDetail'], resolve)
      }]
-   }]
+   },{
+      path: 'dispatchCar',
+      name: "dispatchCar",
+      meta: {
+        title: '调度统计',
+        isVerificationL: false
+      },
+      component: (resolve) => require(['../page/statistics/dispatchCar/dispatchCar'], resolve),
+      redirect: '/statistics/dispatchCar/carList',
+      children:[{
+        path: 'carList',
+        name: "carList",
+        meta: {
+          title: '车辆数据',
+          isVerificationL: false
+        },
+        component: (resolve) => require(['../page/statistics/dispatchCar/carList'], resolve)
+      }]
+    }
+   ]
  }

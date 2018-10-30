@@ -77,6 +77,21 @@
 }
 // 设置里的tab
 .nav-tab-setting {
+    position: relative;
+    .public-btn {
+      position: absolute;
+      top: -15px;
+      right: 11px;
+      z-index: 1;
+      display: inline-block;
+    }
+    .el-tabs__header {
+      .el-tabs__nav .el-tabs__item {
+        /deep/ &.is-active {
+          background: #f2f5fe;
+        }
+      }
+    }
     .tab-content {
         padding: 10px 20px;
 

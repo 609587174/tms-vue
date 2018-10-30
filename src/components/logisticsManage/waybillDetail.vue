@@ -82,7 +82,7 @@
               <el-col :span="8">
                 <div class="label-list">
                   <label>承运方:</label>
-                  <div class="detail-form-item" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></div>
+                  <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.delivery_order.carriers[0].carrier_name)"></div>
                 </div>
               </el-col>
             </el-row>
@@ -304,7 +304,7 @@
                       <div v-if="!item.weight_active_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_active_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_active_mile}}</span>
                   </div>
@@ -334,7 +334,7 @@
                       <div v-if="!item.weight_audit_time">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_weight_audit_time" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.weight_audit_time}}</span>
                   </div>
@@ -395,6 +395,16 @@
                 </div>
               </div>
             </el-col>
+
+            <el-col :span="8">
+              <div class="label-list">
+                <label>车辆所属:</label>
+                <div class="detail-form-item">
+                  <span v-if="detailData.delivery_order&&detailData.delivery_order.carriers" v-html="pbFunc.dealNullData(transPowerData.tractor.carrier.name)"></span>
+                </div>
+              </div>
+            </el-col>
+
           </el-row>
         </div>
         <div class="detail-list detail-form" v-for="(item,index) in unloadArr" :key="item.id">
@@ -418,7 +428,7 @@
                 <div class="detail-form-item"><span v-if="item.initial_price>0">{{item.initial_price}}元+</span><span>{{item.change_rate}}元/吨/每公里</span></div>
               </div>
             </el-col>
-           
+
 
             <el-col :span="8">
                 <div class="label-list">
@@ -438,7 +448,7 @@
                       <div v-if="!item.standard_mile">无
                          <img style="margin-left:5px;vertical-align:top" v-if="item.last_standard_mile" src="@/assets/img/tipGroup_4.png" alt="" >
                       </div>
-                     
+
                     </el-tooltip>
                     <span v-else>{{item.standard_mile}}km</span>
                   </div>

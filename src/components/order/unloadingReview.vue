@@ -144,7 +144,7 @@
       </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer" style="text-align: center; position: relative;" v-if="isEdit">
-      <el-checkbox v-model="checked" class="checked-box" v-if="isShowAccountCheck
+      <el-checkbox v-model="checked" class="checked-box" v-if="isShowAccountCheck&&(!surePound.isHideUpSettle)
 ">同时提交结算</el-checkbox>
       <el-button @click="$emit('close')">取 消</el-button>
       <el-button type="primary" @click="sendRe()" :loading="buttonLoading">确 定</el-button>

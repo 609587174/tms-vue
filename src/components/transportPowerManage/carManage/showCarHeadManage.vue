@@ -20,7 +20,7 @@
       <el-header>
         <el-row>
           <el-col :span="3">
-            <router-link :to="{path: '/transportPowerManage/carManage'}">
+            <router-link :to="{path: '/basicDataManage/capacityManage/carManage/tractorManage'}">
               <div class="go-return icon-back"></div>
             </router-link>
           </el-col>
@@ -379,7 +379,7 @@ export default {
   },
   computed: {
     headId: function() {
-      return this.$route.query.headId;
+      return this.$route.params.id;
     }
   },
   methods: {
@@ -404,7 +404,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarHeadManage?activeStep=" + number + "&headId=" + this.headId+"&operate=edit" });
+      this.$router.push({ path: "/basicDataManage/capacityManage/carManage/editTractorManage?activeStep=" + number + "&headId=" + this.headId+"&operate=edit" });
     },
 
   }

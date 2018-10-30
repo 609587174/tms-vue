@@ -447,6 +447,8 @@ export default {
     }
     if (currentUrl.match('ptms.hhtdlng.com')) {
       getUrl('Temp');
+      this.driverCodeImg = `http://www.pgyer.com/app/qrcode/newDriverNewTemp`;
+      this.appUrl.driverAppUrl = `https://www.pgyer.com/newDriverNewTemp`;
     } else if (currentUrl.match('ptms.91lng.cn')) {
       getUrl('Prepare');
     } else if (currentUrl.match('tms.hhtdlng.com')) {

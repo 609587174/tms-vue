@@ -59,10 +59,18 @@ export default {
         standardMile: 'STANDARD_MILEAGE_MANAGEMENT', //标准里程
         landmark: 'LANDMARK_INFO', //地标管理
         routeManage: 'ROUTE_MANAGEMENT', //路线管理
-        transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
-        capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
-        carManage: 'TRUCK_MANAGEMENT', //车辆管理
-        personManage: 'STAFF_MANAGEMENT', //人员管理
+
+        basicDataManage:'BASE_DATA_MANAGEMENT',//基础数据管理
+        shipperManage:'CUSTOMER_MANAGEMENT_SECOND',//托运方管理
+        standardDataSet:'STANDARD_MILEAGE_MANAGEMENT',//标准数据设置
+        capacityManage:'CAPACITY_MANAGEMENT',//运力管理
+        supplierManage:'OIL_GAS_COMPANY_MANAGEMENT',//供应商管理
+        threePartyCapacity:'THIRD_CAPACITY_SECOND',
+
+        // transportPowerManage: 'CAPACITY_MANAGEMENT', //运力
+        // capacityManage: 'CAPACITY_MANAGEMENT_SECOND', //运力管理
+        // carManage: 'TRUCK_MANAGEMENT', //车辆管理
+        // personManage: 'STAFF_MANAGEMENT', //人员管理
         deviceManage: 'DEVICE_MANAGEMENT', //设备管理
         clientManage: 'CUSTOMER_MANAGEMENT', //客户管理
         standardDataManage: 'STANDARD_MILEAGE_MANAGEMENT', //标准数据管理
@@ -70,6 +78,7 @@ export default {
         statistics: 'DATA_STATISTICS', //数据统计
         business: 'BUSINESS_STATISTICS', //物流数据
         costManage: 'EXPENSE_MANAGEMENT', //费用管理
+        dispatchCar:'DISPATCHER_STATISTICS_SECOND',
 
         supplierManage: 'SUPPLIER_MANAGEMENT_SECOND', //供应商管理
         energyManageList: 'OIL_GAS_COMPANY_MANAGEMENT', //加油气公司管理
@@ -91,6 +100,8 @@ export default {
         dataAnalysis: 'CARRING_DATA_MANAGEMENT',
         routeManage: 'CARRING_ROUTE_SECOND',
         carAnalysis: 'VEHICLE_MONITOR_SECOND',
+
+
 
 
       }

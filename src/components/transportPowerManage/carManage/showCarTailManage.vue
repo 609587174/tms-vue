@@ -17,7 +17,7 @@
       <el-header>
         <el-row>
           <el-col :span="3">
-            <router-link :to="{path: '/transportPowerManage/carManage/carTailManage'}">
+            <router-link :to="{path: '/basicDataManage/capacityManage/carManage/carTailManage'}">
               <div class="go-return icon-back"></div>
             </router-link>
           </el-col>
@@ -314,7 +314,7 @@ export default {
   },
   computed: {
     tailId: function() {
-      return this.$route.query.tailId;
+      return this.$route.params.id;
     }
   },
   methods: {
@@ -341,7 +341,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/transportPowerManage/carManage/addEditCarTailManage?activeStep=" + number + "&tailId=" + this.tailId + "&operate=edit" });
+      this.$router.push({ path: "/basicDataManage/capacityManage/carManage/editCarTailManage?activeStep=" + number + "&tailId=" + this.tailId + "&operate=edit" });
     },
 
   }

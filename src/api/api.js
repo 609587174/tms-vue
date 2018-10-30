@@ -9,6 +9,118 @@
  */
 
 const api = {
+  deleteFreight:{
+    url: '/carrier/trans_fee/:trans_fee_id/',
+    method: 'delete',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  updateFreight:{
+    url: '/carrier/trans_fee/:id/',
+    method: 'put',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  addFreight:{
+    url: '/carrier/trans_fee/',
+    method: 'POST',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
+  relationThreePartyCapacity:{
+    url: '/truck/third_tractor_semitrailers/connect/',
+    method: 'POST',
+    desc: '三方运力关联',
+    param: {
+
+    }
+  },
+  threeDetectionCapacity:{
+    url: '/truck/third_tractor_semitrailers/params_checking/',
+    method: 'POST',
+    desc: '三方运力检测',
+    param: {
+
+    }
+  },
+  threePartyCapacityDetail: {
+    url: '/truck/third_tractor_semitrailers/:tractor_semitrailer_id/',
+    method: 'get',
+    desc: '三方运力详情',
+    param: {
+
+    }
+  },
+  updateThreePartyCapacity: {
+    url: '/truck/third_tractor_semitrailers/:id/',
+    method: 'PATCH',
+    desc: '三方运力更新',
+    param: {
+
+    }
+  },
+  addThreePartyCapacity: {
+    url: '/truck/third_tractor_semitrailers/',
+    method: 'post',
+    desc: '三方运力新增',
+    param: {
+
+    }
+  },
+  getThreePartyCapacityList: {
+    url: '/truck/third_tractor_semitrailers/',
+    method: 'get',
+    desc: '三方运力列表',
+    param: {
+
+    }
+  },
+  establishCarrierRelation: {
+    url: '/carrier/coop_carriers/coop_carriers_connect/',
+    method: 'post',
+    desc: '创建承运商关联',
+    param: {
+
+    }
+  },
+  updateCarrier: {
+    url: '/carrier/coop_carriers/:id/',
+    method: 'PATCH',
+    desc: '更新承运商详情',
+    param: {
+
+    }
+  },
+  addCarrierMsg:{
+    url: '/carrier/coop_carriers/',
+    method: 'post',
+    desc: '承运商管理创建',
+    param: {
+
+    }
+  },
+  getCarrierDetail: {
+    url: '/carrier/coop_carriers/:carrier_id/',
+    method: 'get',
+    desc: '承运商详情',
+    param: {
+
+    }
+  },
+  getCarrierList: {
+    url: '/carrier/coop_carriers/',
+    method: 'get',
+    desc: '承运商管理列表',
+    param: {
+
+    }
+  },
   getFreightTradersList: {
     url: '/carrier/trans_fee/freight_traders/',
     method: 'get',

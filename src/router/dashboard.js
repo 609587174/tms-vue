@@ -13,7 +13,7 @@ export default {
     name: 'dispatchDashboard',
     meta: {
       isVerificationL: false,
-      title: '调度概览',
+      title: '车辆调度概览',
     },
     component: (resolve) => require(['../page/dashboard/dispatchDashboard'], resolve),
   }, {
@@ -21,7 +21,7 @@ export default {
     name: 'importStatisticsDashboard',
     meta: {
       isVerificationL: false,
-      title: '导入统计概览',
+      title: '数据统计概览',
     },
     component: (resolve) => require(['../page/dashboard/importStatisticsDashboard'], resolve),
   }]

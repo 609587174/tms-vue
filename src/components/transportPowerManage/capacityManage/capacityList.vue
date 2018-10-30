@@ -1,6 +1,6 @@
 <template>
   <div class="nav-tab">
-    <div class="tab-screen border-top">
+    <div class="tab-screen">
       <el-form class="search-filters-form" label-width="80px" :model="filterParam" status-icon label-position="left">
         <el-row :gutter="0">
           <el-col :span="12">
@@ -447,15 +447,17 @@ export default {
     },
     jumpPage: function(scope) {
       if (scope.operator == "edit") {} else if (scope.operator == "show") {
-        this.$router.push({
-          path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
-            scope.rowData.id + '&activeTab=first'
-        });
+        // this.$router.push({
+        //   path: "/basicDataManage/capacityManage/transportManage/capacityDetail?capacityId=" +
+        //     scope.rowData.id + '&activeTab=first'
+        // });
+         window.open(`#/basicDataManage/capacityManage/transportManage/capacityDetail/${scope.rowData.id}/first`, '_blank')
       } else if (scope.operator == "operation") {
-        this.$router.push({
-          path: "/transportPowerManage/capacityManage/capacityDetail?capacityId=" +
-            scope.rowData.id + '&activeTab=second'
-        });
+        // this.$router.push({
+        //   path: "/basicDataManage/capacityManage/transportManage/capacityDetail?capacityId=" +
+        //     scope.rowData.id + '&activeTab=second'
+        // });
+        window.open(`#/basicDataManage/capacityManage/transportManage/capacityDetail/${scope.rowData.id}/second`, '_blank')
       }
     },
     pageChange: function() {

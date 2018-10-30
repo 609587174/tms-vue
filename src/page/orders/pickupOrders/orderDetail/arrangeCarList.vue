@@ -199,7 +199,13 @@ export default {
         title: '挂车',
         param: 'semitrailer.plate_number',
         width: '250'
-      }, {
+      }, 
+      {
+        title: '车辆所属',
+        param: 'tractor.carrier.name',
+        width: ''
+      },
+      {
         title: '司机',
         param: 'master_driver.name',
         width: ''

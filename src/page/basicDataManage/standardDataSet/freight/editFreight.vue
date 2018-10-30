@@ -39,7 +39,7 @@
                           <template slot-scope="scope">
                             <div v-if="scope.row.isEdit">
                               <div v-if="item.param==='start_mileage'">
-                                {{scope.row.start_mileage}}=={{scope.row.record_count}}<span v-if="scope.row.record_count>1">（含）</span>
+                                {{scope.row.start_mileage}}<span v-if="scope.row.record_count>1">（不含）</span>
                               </div>
                               <div v-if="item.param==='end_mileage'">
                                 <el-row>
@@ -47,7 +47,7 @@
                                     <el-input placeholder="请输入" size="small" type="text" v-model.trim="scope.row.end_mileage"></el-input>
                                     <!-- <span>{{}}</span> -->
                                   </el-col>
-                                  <el-col :span="6"><span class="end-mileage-unit">(不含)</span></el-col>
+                                  <el-col :span="6"><span class="end-mileage-unit">(含)</span></el-col>
                                 </el-row>
                               </div>
                               <div v-if="item.param==='initial_price'">
@@ -65,8 +65,8 @@
                             </div>
                             <div v-else>
                               {{scope.row[item.param]}}
-                              <span v-if="item.param==='start_mileage'&&scope.row.record_count>1">（含）{{scope.row.index}}</span>
-                              <span v-if="item.param==='end_mileage'">（不含）</span>
+                              <span v-if="item.param==='start_mileage'&&scope.row.record_count>1">（不含）</span>
+                              <span v-if="item.param==='end_mileage'">（含）</span>
                             </div>
                             <!-- <div class="fee-list" v-if="item.param==='start_mileage'||">
                               {{scope.row[item.param]}}<span v-if="item.param==='start_mileage'">（不含）</span><span v-if="item.param==='end_mileage'"></span>
@@ -94,7 +94,7 @@
               <el-row :gutter="40" class="mt-30">
                 <el-col :span="10" :offset="2">
                   <el-form-item label="生效托运方:" prop="companies">
-                    <el-select v-model="editMsgForm.companies" :loading="shipperLoading" filterable clearable multiple placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.companies" :loading="shipperLoading" filterable clearable :multiple="isMultiple" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -152,6 +152,7 @@ export default {
       shipperLoading:false,
       fluidLoading:false,
       activeStep:0,
+      isMultiple:true,
       records:{
         record_count:'',
         start_mileage:'',
@@ -247,16 +248,26 @@ export default {
     },
     addRecords(){
       let len = (this.recordsData.length)-1;
-      this.recordsData.push({
-        record_count:this.recordsData[len].record_count+1,
-        start_mileage:this.recordsData[len].end_mileage,
-        end_mileage:'',
-        initial_price:'',
-        change_rate:'',
-        change_number:'',
-        isEdit:true,
-        index:this.recordsData.length
-      });
+      for(let i in this.recordsData){
+        if(this.recordsData[i].isEdit){
+          this.$message({
+            message: '请点击保存',
+            type: 'error',
+            duration:'5000'
+          });
+          return false;
+        }
+      }
+        this.recordsData.push({
+          record_count:this.recordsData[len].record_count+1,
+          start_mileage:this.recordsData[len].end_mileage,
+          end_mileage:'',
+          initial_price:'',
+          change_rate:'',
+          change_number:'',
+          isEdit:true,
+          index:this.recordsData.length
+        });
     },
     deleteRecords(row){
       let len = this.recordsData.length;
@@ -264,7 +275,7 @@ export default {
         this.recordsData[parseInt(row.index)+1].start_mileage = this.recordsData[parseInt(row.index)-1].end_mileage;
       }
       for(let i in this.recordsData){
-        if(this.recordsData[i].id === row.id){
+        if(this.recordsData[i].index === row.index){
           this.recordsData.splice(i, 1);
         }
       }
@@ -276,9 +287,10 @@ export default {
       if(this.editRecordsList.isEdit){
         this.saveBtn(this.editRecordsList,row,true);
       }else{
-        console.log('news')
+        console.log('news',row.id)
         for(let i in this.recordsData){
-          if(this.recordsData[i].id === row.id){
+          if(this.recordsData[i].index === row.index){
+            console.log('this.recordsData[i].id');
             // this.recordsData[i].isEdit = true;
             this.$set(this.recordsData,i,{
               record_count:this.recordsData[i].record_count,
@@ -400,6 +412,7 @@ export default {
           /* 如果id存在则为编辑 */
           if (this.id) {
             postData.id = this.id;
+            postData.companies = [postData.companies]
             apiName = 'updateFreight';
           }
           btnObject.btnText = '正在提交';
@@ -444,7 +457,7 @@ export default {
           this.detailData = results.data.data;
 
           this.editMsgForm.actual_fluids = [];
-          this.editMsgForm.companies = [this.detailData.company.id];
+          this.editMsgForm.companies = this.detailData.company.id;
           if(this.detailData.agreements&&this.detailData.agreements.length){
             this.editMsgForm.effective_time = this.detailData.agreements[0].effective_time;
             this.editMsgForm.dead_time = this.detailData.agreements[0].dead_time;
@@ -506,6 +519,7 @@ export default {
   created() {
     if(this.id){
       this.getDetail();
+      this.isMultiple = false;
     }
     this.getFluidList();
     this.getShipperList();

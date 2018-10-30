@@ -57,12 +57,12 @@
         <el-table :data="tableData" stripe style="width: 100%" size="mini" :class="{'tabal-height-500':!tableData.length}" v-loading="pageLoading">
           <el-table-column label="牵引车车牌号" align="center" width="140">
             <template slot-scope="scope">
-              <a :href="'/#/transportPowerManage/carManage/showCarHeadManage?headId=' + scope.row.tractor.id" target="blank">{{scope.row.tractor.plate_number}}</a>
+              <a :href="`/#/basicDataManage/capacityManage/carManage/tractorDetail/${scope.row.tractor.id}/`" target="_blank">{{scope.row.tractor.plate_number}}</a>
             </template>
           </el-table-column>
           <el-table-column label="当前绑定挂车" align="center" width="140">
             <template slot-scope="scope">
-              <a v-if="scope.row.semitrailer" :href="'/#/transportPowerManage/carManage/showCarTailManage?tailId=' + scope.row.semitrailer.id" target="blank">{{scope.row.semitrailer.plate_number}}</a>
+              <a v-if="scope.row.semitrailer" :href="`/#/basicDataManage/capacityManage/carManage/carTailDetail/${scope.row.semitrailer.id}`" target="_blank">{{scope.row.semitrailer.plate_number}}</a>
               <span v-if="!scope.row.semitrailer">-</span>
             </template>
           </el-table-column>
@@ -84,7 +84,7 @@
           </el-table-column>
           <el-table-column label="主驾驶" align="center" width="140">
             <template slot-scope="scope">
-              <a v-if="scope.row.master_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.master_driver.id" target="blank">{{scope.row.master_driver.name}}</a>
+              <a v-if="scope.row.master_driver" :href="`/#/basicDataManage/capacityManage/personManage/personDetail/${ scope.row.master_driver.id}`" target="_blank">{{scope.row.master_driver.name}}</a>
               <span v-if="!scope.row.master_driver">-</span>
             </template>
           </el-table-column>
@@ -96,13 +96,13 @@
           </el-table-column>
           <el-table-column label="副驾驶" align="center" width="140">
             <template slot-scope="scope">
-              <a v-if="scope.row.vice_driver" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.vice_driver.id" target="blank">{{scope.row.vice_driver.name}}</a>
+              <a v-if="scope.row.vice_driver" :href="`/#/basicDataManage/capacityManage/personManage/personDetail/${ scope.row.vice_driver.id}`" target="_blank">{{scope.row.vice_driver.name}}</a>
               <span v-if="!scope.row.vice_driver">-</span>
             </template>
           </el-table-column>
           <el-table-column label="押运员" align="center" width="140">
             <template slot-scope="scope">
-              <a v-if="scope.row.escort_staff" :href="'/#/transportPowerManage/personManage/personDetail?id=' + scope.row.escort_staff.id" target="blank">{{scope.row.escort_staff.name}}</a>
+              <a v-if="scope.row.escort_staff" :href="`/#/basicDataManage/capacityManage/personManage/personDetail/${ scope.row.escort_staff.id}`" target="_blank">{{scope.row.escort_staff.name}}</a>
               <span v-if="!scope.row.escort_staff">-</span>
             </template>
           </el-table-column>
@@ -415,6 +415,7 @@ export default {
       let param = dealObjectValue(filterParamCopy);
       param.keyword = null;
       param.field = null;
+      param.own_capacity=true;
       this.$$http("searchCapacityList", dealObjectValue(param))
         .then(function(result) {
           var resultData;

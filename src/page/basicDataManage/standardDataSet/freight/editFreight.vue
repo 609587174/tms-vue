@@ -258,16 +258,16 @@ export default {
           return false;
         }
       }
-        this.recordsData.push({
-          record_count:this.recordsData[len].record_count+1,
-          start_mileage:this.recordsData[len].end_mileage,
-          end_mileage:'',
-          initial_price:'',
-          change_rate:'',
-          change_number:'',
-          isEdit:true,
-          index:this.recordsData.length
-        });
+      this.recordsData.push({
+        record_count:this.recordsData[len].record_count+1,
+        start_mileage:this.recordsData[len].end_mileage,
+        end_mileage:'',
+        initial_price:'',
+        change_rate:'',
+        change_number:'',
+        isEdit:true,
+        index:this.recordsData.length
+      });
     },
     deleteRecords(row){
       let len = this.recordsData.length;

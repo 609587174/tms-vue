@@ -75,7 +75,7 @@
                         </el-table-column>
                         <el-table-column label="操作" align="center" width="140" fixed="right">
                           <template slot-scope="scope">
-                              <el-button type="danger" plain size="mini" v-if="scope.row.record_count>1&&!scope.row.isEdit" @click="deleteRecords(scope.row)">删除</el-button>
+                              <el-button type="danger" plain size="mini" v-if="scope.row.record_count>1&&!scope.row.isEdit||scope.row.record_count>1&&(scope.row.index==recordsData.length-1)" @click="deleteRecords(scope.row)">删除</el-button>
                               <el-button type="primary" plain size="mini" @click="saveBtn(scope.row)" v-if="scope.row.isEdit">保存</el-button>
                               <el-button type="primary" size="mini" @click="editRecords(scope.row)" v-if="!scope.row.isEdit">编辑</el-button>
                           </template>

@@ -48,16 +48,16 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="数量:" prop="nums">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.nums"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.nums"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税前金额:" prop="pre_tax_amount">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
+                  <el-form-item label="含税金额:" prop="pre_tax_amount">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税后金额:" prop="at_amount">
+                  <el-form-item label="无税金额:" prop="at_amount">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.at_amount"></el-input>
                   </el-form-item>
                 </el-col>
@@ -181,6 +181,10 @@ export default {
         waybill: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
+        pre_tax_amount: [
+          { required: true, message: '请输入税前金额', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -302,7 +306,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['waybill'];
+      let keyArray = ['nums','pre_tax_amount','waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for (let i in this.waybillList) {
         if (this.waybillList[i].waybill_number === this.editMsgForm.waybill) {

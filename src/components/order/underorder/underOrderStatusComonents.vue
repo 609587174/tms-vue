@@ -31,6 +31,16 @@
    content: " ";
    background-color:white;
 }
+.tagerLable{
+  margin-left:10px;background-color:#4a9bf8;color:white;
+ margin-top:3px;
+  .el-icon-close {
+    color:white;
+  }
+}
+/deep/ .el-tag .el-icon-close{
+  color:white;
+}
 </style>
 <template>
   <div>
@@ -96,7 +106,17 @@
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder" :loading="exportLoading" v-if="status !== 'seven'">导出</el-button>
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="loadingAllDialog = true" v-if="status == 'seven'">导出</el-button>
     </div>
-    <div class="nav-tab-setting mt-25">
+    <div class="nav-tab-setting mt-25" style="position:relative">
+      <div style="position:absolute;left:275px;top:0;z-index:500;width:600px;height:40px;">
+        <el-row align="middle" type="flex" :gutter="3" style="height:100%;">
+          <el-col :key="tag.key" v-for="tag in tagArr" >
+            <el-tag  closable :disable-transitions="false" @close="handleClose(tag)" class="tagerLable" style="" size="mini"> 
+              {{tag.value}}
+            </el-tag>
+          </el-col>
+        </el-row>
+        
+      </div>
       <el-tabs v-model="status">
        <el-tab-pane  :name="status" v-loading="pageLoading">
         <div slot="label" style="height:36px">
@@ -178,6 +198,7 @@ export default {
       pageLoading: false,
       exportLoading: false,
       groupParam: "",
+      tagArr:[],
       statusList: {
         'first': [{ key: 'driver_pending_confirmation', value: '司机未确认' }, { key: 'to_fluid', value: '前往装车' }, { key: 'reach_fluid', value: '已到装货地' }, { key: 'loading_waiting_audit', value: '已装车待审核' }, { key: 'loading_audit_failed', value: '装车审核拒绝' }],
         'second': [{ key: 'waiting_match', value: '待匹配卸货单' }, { key: 'confirm_match', value: "已匹配待确认" }, { key: 'already_match', value: '已匹配已确认' }],
@@ -255,6 +276,11 @@ export default {
     }
   },
   methods: {
+    handleClose:function(tag) {
+      this.fifterNameArr.splice(this.fifterNameArr.indexOf(tag), 1);
+      this.tagArr.splice(this.fifterNameArr.indexOf(tag), 1)
+      this.secondMenuChange();
+    },
     changeTabs: function(name) {
       this.$emit("changeTab", name);
     },
@@ -266,6 +292,15 @@ export default {
       //重新查询一次数据
       
       //this.$emit("changeTabs", this.status);
+      let middleTagArr=[];
+      this.fifterNameArr.forEach(item=>{
+        this.statusList[this.status].forEach(tagItem=>{
+          if(tagItem.key==item){
+            middleTagArr.push(tagItem);
+          }
+        })
+      });
+      this.tagArr=middleTagArr;
       this.$emit("childchangeTabs", { first: this.status, second:this.fifterName });
       if(this.fifterNameArr.length==0){
         this.listFifterData=[];
@@ -535,12 +570,19 @@ export default {
           fifterName+=(item.key);
         }
         this.fifterNameArr.push(item.key);
+        this.tagArr.push(item);
       })
     }else{
-      // this.fifterName = this.secondActiveName;
+      let middleTagArr=[];
       this.secondActiveName.split(",").forEach(Sitem=>{
         this.fifterNameArr.push(Sitem);
+        this.statusList[this.status].forEach(tagItem=>{
+          if(tagItem.key==Sitem){
+            middleTagArr.push(tagItem);
+          }
+        })
       })
+      this.tagArr=middleTagArr;
     }
     //this.listFifterData = this.listData;
     this.getGroups();

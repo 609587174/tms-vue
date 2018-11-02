@@ -238,7 +238,7 @@ export default {
             isDisabled: true,
             isLoading: true
           }
-          let postData = this.formRules;
+          let postData = this.refuseFormRules;
           postData.id = this.row.id;
           postData.verify = 'refused';
           // postData = this.pbFunc.fifterObjIsNull(postData);

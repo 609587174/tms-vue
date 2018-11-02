@@ -158,7 +158,7 @@ export default {
         field: 'plate_number',
       },
       toExamineTabList:[{
-        title:'未审核',
+        title:'待审核',
         name:'no'
       },{
         title:'全部',
@@ -190,7 +190,7 @@ export default {
           { id: 'logistics_fuel_cash_no_ticket', value: '现金油/气（无票）' },
           { id: 'logistics_park', value: '停车费' },
           { id: 'logistics_maintain', value: '维修费' },
-          { id: 'logistics_detector', value: '检测费' },
+          { id: 'logistics_detector', value: '年审费' },
           { id: 'logistics_other', value: '其它费用' },
         ],
         fieldSelect: [

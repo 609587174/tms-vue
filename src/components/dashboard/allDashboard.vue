@@ -83,13 +83,13 @@ export default {
               {key:'unloading_waiting_audit_count',value:'待审核卸车磅单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit',dimension:"单"},
               {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement',dimension:"单"},
             ],
-            'searchShow':false,
-            'type':'dispatch_centre_schedule',
-            'title':'待办事项',
-            'urlSend':'getDashboard',
+            'searchShow':false,//是否展示搜索
+            'type':'dispatch_centre_schedule',//当前概览的分类
+            'title':'待办事项',//框框的文字提示
+            'urlSend':'getDashboard',//请求的api名字
           }
         ],
-        'importStatisticsDashboard':[
+        'importStatisticsDashboard':[//第一个对象为第一列模块，第二个对象为下面一个模块
           {//导入统计概览
           'dashboardSqureData':[
               {key:'match_cash_cost_count',value:'已匹配(现金费用)',goUrl:'/statistics/costManage/cashCostManage/cashCostList?is_matching=yes',dimension:"笔"},
@@ -98,9 +98,9 @@ export default {
             'searchShow':true,
             'type':'import_dashborad_cash_cost',
             'title':'数据概览',
-            'searchData':[],
+            'searchData':[],//当searchShow为true时候需要此参数记录查询时间
             'urlSend':'getTmsDashboard',
-            'sendTimeName':'costTime'
+            'sendTimeName':'costTime'//跳转的时候传递当前时间的时候url带的参数名
           },
           {//导入统计概览
           'dashboardSqureData':[
@@ -129,11 +129,11 @@ export default {
     }
   },
   methods: {
-    clickExtendTable:function(backItem,isOnlySearch){
+    clickExtendTable:function(backItem,isOnlySearch){//点击方块的时候
       var vm=this;
       if(this.extendgetData&&(this.extendgetData.key==backItem.key)&&!isOnlySearch){
         vm.$set(this,'tableShowSatus',!this.tableShowSatus);
-        vm.extendgetData={};
+        vm.extendgetData={};//展开table的数据
       }else{
         if(backItem.extendTable){
           this.allDashboard[this.dispatchPage].forEach(item=>{
@@ -203,7 +203,7 @@ export default {
       //   this.pageLoading=false;
       // });
       if(this.extendgetData&&this.tableShowSatus){
-        this.clickExtendTable(this.extendgetData,true);
+        this.clickExtendTable(this.extendgetData,true);//如果说点击了搜索，但是当前展开状态为true的话，再次展开上次的table
       }
       Promise.all(promises).then(result => {
         if(result.length==searchArr.length){

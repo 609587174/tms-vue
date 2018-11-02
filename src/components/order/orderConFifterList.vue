@@ -659,11 +659,9 @@ export default {
       tableHeadConfig: {
         'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
-        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
-        'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
-        'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
-        'seven': [{ key: 'all', value: 'unloadHead' }]
+        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' },{ key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' },{ key: 'finished', value: 'unloadHead' }],
+        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' },{ key: 'canceled', value: 'unloadHead' }],
+        'fifth': [{ key: 'all', value: 'unloadHead' }]
       },
       expendShowConfig: {
         'driver_pending_confirmation': 'loadExtend',

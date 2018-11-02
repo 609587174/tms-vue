@@ -94,7 +94,7 @@
               <el-table-column label="操作" align="center" width="140" fixed="right">
                 <template slot-scope="scope">
                   <el-button type="success" v-if="scope.row.verify.key==='wait_verify'" size="mini" @click="costReview(scope.row)">审核</el-button>
-                  <div v-else>
+                  <div v-else-if="scope.row.verify.key==='passed'">
                     <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
                     <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
                   </div>

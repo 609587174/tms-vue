@@ -110,6 +110,20 @@
                   </el-form-item>
                 </el-col>
               </el-row>
+              <el-row :gutter="40">
+                <el-form-item label="照片:">
+                  <el-row :getter="20">
+                    <!-- <el-col :span="2" :offset="1" :key="item"> -->
+                      <div v-for="item in imgList" class="ml-25">
+                        <router-link target="_blank" :to="imgSrc">
+                          <img :src="item" style='width:90px;height:100px'></img>
+                        </router-link>
+                        <!-- <div class="text-center">{{item.title}}{{item.num}}</div> -->
+                      </div>
+                    <!-- </el-col> -->
+                  </el-row>
+                </el-form-item>
+              </el-row>
             </el-form>
             <div class="detail-btn">
               <el-row>
@@ -211,6 +225,8 @@ export default {
           { id: 'logistics_other', value: '其它费用' },
         ]
       },
+      imgList:[],
+      imgSrc:'',
     }
   },
   created() {
@@ -219,6 +235,13 @@ export default {
     }
   },
   methods: {
+    imgReviewSrc: function() {
+      let imgListArray = [];
+      for (let i in this.imgList) {
+        imgListArray.push(this.imgList[i]);
+      }
+      return `/imgReview?imgList=${imgListArray.join(',')}`;
+    },
     returnToPage: function() {
       // if (this.$route.query.id) {
       //   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
@@ -268,6 +291,8 @@ export default {
             is_travel: this.detail.is_travel.verbose,
             lot: this.detail.lot
           }
+          this.imgList = this.detail.image_url_list;
+          this.imgSrc = this.imgReviewSrc();
           this.getWaybillData();
         }
       })

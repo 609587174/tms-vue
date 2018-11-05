@@ -15,7 +15,7 @@
                 <el-form-item label="车号:">{{row.plate_number}}</el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="数量(升):">
+                <el-form-item label="数量:">
                   <el-input placeholder="请输入" type="text" v-model.trim="formRules.nums"></el-input>
                 </el-form-item>
               </el-col>

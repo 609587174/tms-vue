@@ -692,6 +692,7 @@ export default {
                 }
               }
             });
+            this.fifterRnderUnload(this.opearId);
           }
         }else{
           this.$message.error('获取卸货单失败');

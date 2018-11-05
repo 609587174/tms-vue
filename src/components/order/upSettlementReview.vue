@@ -195,7 +195,7 @@ export default {
 
       poundUpload: {
         fileList: [],
-        Title: '装车榜单',
+        Title: '装车磅单',
         limit: 1,
         change:false,
       },
@@ -206,7 +206,7 @@ export default {
       },
       unPoundUpload: {
         fileList: [],
-        Title: '卸车榜单',
+        Title: '卸车磅单',
         limit: 1,
         change:false,
       },
@@ -466,7 +466,7 @@ export default {
 
         this.poundUpload = {
           fileList: [],
-          Title: '装车榜单',
+          Title: '装车磅单',
           limit: 1,
         };
 

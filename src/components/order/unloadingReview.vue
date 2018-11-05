@@ -166,7 +166,7 @@ export default {
 
       poundUpload: {
         fileList: [],
-        uploadTitle: '上传榜单',
+        uploadTitle: '上传磅单',
         limit: 1,
       },
       poundReturnId: '',
@@ -350,7 +350,7 @@ export default {
         !this.isUpload && this.getImg();
         this.poundUpload = {
           fileList: [],
-          uploadTitle: '上传榜单',
+          uploadTitle: '上传磅单',
           limit: 1,
         };
       },

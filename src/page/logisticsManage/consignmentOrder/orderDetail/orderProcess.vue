@@ -742,9 +742,9 @@
                   <el-col :span="2" :offset="1">
                     <div v-if="detailData.length>1">
                       <div v-for="(item,key) in allButton[detailData[detailData.length-1].type]">
-                        <el-button style="margin-top:20px;width:100%" :type="item.type" v-if="item.text=='提交结算'" :loading="buttonLoading.settlementButton" @click="orderOperation(item.methods)">{{item.text}}</el-button>
-                        <el-button style="margin-top:20px;width:100%" :type="item.type" v-if="item.text=='确认卸货地'" :loading="buttonLoading.sureUnload" @click="orderOperation(item.methods)">{{item.text}}</el-button>
-                        <el-button style="margin-top:20px;width:100%" :type="item.type" v-if="item.text!='确认卸货地'&&item.text!='提交结算'" @click="orderOperation(item.methods)">{{item.text}}</el-button>
+                        <el-button style="margin-top:20px;width:100%;min-width:100px;" :type="item.type" v-if="item.text=='提交结算'" :loading="buttonLoading.settlementButton" @click="orderOperation(item.methods)">{{item.text}}</el-button>
+                        <el-button style="margin-top:20px;width:100%;min-width:100px;" :type="item.type" v-if="item.text=='确认卸货地'" :loading="buttonLoading.sureUnload" @click="orderOperation(item.methods)">{{item.text}}</el-button>
+                        <el-button style="margin-top:20px;width:100%;min-width:100px;" :type="item.type" v-if="item.text!='确认卸货地'&&item.text!='提交结算'" @click="orderOperation(item.methods)">{{item.text}}</el-button>
                       </div>
                     </div>
                   </el-col>

@@ -86,13 +86,11 @@ export default {
         'all_count':{}
       },
       defaultSecond:{
-        first:'loading_waiting_audit',
-        second:'confirm_match',
-        third:'unloading_waiting_audit',
+        first:'all',
+        second:'all',
+        third:'all',
         fourth:'all',
         fifth:'all',
-        sxith:'all',
-        seven:'all'
       },
       timeParam: [],
       listFifterData: [],

@@ -108,9 +108,9 @@
     </div>
 
     <div class="nav-tab-setting mt-25" style="position:relative">
-      <div style="position:absolute;left:275px;top:0;z-index:500;width:600px;height:40px;">
-        <el-row align="middle" type="flex" :gutter="3" style="height:100%;">
-          <el-col :key="tag.key" v-for="tag in tagArr" >
+      <div style="position:absolute;left:285px;z-index:500;width:600px;height:40px;top:-5px;">
+        <el-row :gutter="3" style="height:100%;">
+          <el-col :key="tag.key" v-for="tag in tagArr" :span="5">
             <el-tag  closable :disable-transitions="false" @close="handleClose(tag)" class="tagerLable" style="" size="mini"> 
               {{tag.value}}
             </el-tag>
@@ -280,8 +280,8 @@ export default {
   },
   methods: {
     handleClose:function(tag) {
-      this.fifterNameArr.splice(this.fifterNameArr.indexOf(tag), 1);
-      this.tagArr.splice(this.fifterNameArr.indexOf(tag), 1)
+      this.fifterNameArr.splice(this.fifterNameArr.indexOf(tag.key), 1);
+      this.tagArr.splice(this.fifterNameArr.indexOf(tag.key), 1)
       this.secondMenuChange();
     },
     secondMenuChange:function(){
@@ -316,6 +316,18 @@ export default {
       setTimeout(()=>{
         this.exportLoading = true;
       },200);
+
+      if(this.status=='first'){
+        sendData.search='all_truck_loaded';
+      }else if(this.status=='second'){
+        sendData.search='all_match';
+      }else if(this.status=='third'){
+        sendData.search='all_unload';
+      }else if(this.status=='fourth'){
+        sendData.search='all_change';
+      }else if(this.status=='fifth'){
+        sendData.search='';
+      }
       if (this.fifterName.indexOf('canceling')>0|this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
         sendData.interrupt_status = this.fifterName;
       } else {
@@ -417,14 +429,22 @@ export default {
       var sendData = {};
       var vm = this;
       this.pageLoading = true;
-      if (this.status == 'fifth'&&this.fifterName=="all") {
-          sendData.search = '';
-      }else{
-         if (this.fifterName.indexOf('canceling')>0||this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
-          sendData.interrupt_status = this.fifterName;
-        } else {
-          sendData.child_search = this.fifterName;
-        }
+      if(this.status=='first'){
+        sendData.search='all_truck_loaded';
+      }else if(this.status=='second'){
+        sendData.search='all_match';
+      }else if(this.status=='third'){
+        sendData.search='all_unload';
+      }else if(this.status=='fourth'){
+        sendData.search='all_change';
+      }else if(this.status=='fifth'){
+        sendData.search='';
+      }
+
+      if (this.fifterName.indexOf('canceling')>0||this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
+        sendData.interrupt_status = this.fifterName;
+      } else {
+        sendData.child_search = this.fifterName;
       }
       sendData.type = 'online';
       if (this.timeParam.unload_active_time instanceof Array && this.timeParam.unload_active_time.length > 0) {

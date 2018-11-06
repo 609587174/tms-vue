@@ -32,7 +32,17 @@
           </el-col>
         </el-col>
       </el-row> -->
-      <el-row v-if="isUpload" justify="space-around" type="flex">
+      <el-row v-if="setpTipInfo.length>0">
+        <el-col :span="20" :offset="2" style="text-align:center;color:#F56C6C">
+          请注意，改单与
+            <span v-for="(item,index) in setpTipInfo">
+              {{item.order_number}}({{item.station}})
+              <span v-if="index!=setpTipInfo.length-1">/</span>
+            </span>
+            合为分卸单,请注意填写卸车信息！
+        </el-col>
+      </el-row>
+      <el-row v-if="isUpload" justify="space-around" type="flex" style="margin-top:10px;">
         <el-col :span="4" >
           <upSettlementImg :fileList.sync="poundUpload.fileList" :hideUpimg="false":Title="poundUpload.Title" :limit="poundUpload.limit"  :imgView="imgReviewSrc" :imgInfo="imgList.length>0?imgList[0]:{}"
             @imgChange="imgChange" :type="'load'"></upSettlementImg>
@@ -192,7 +202,7 @@ export default {
         net_weight:"",
         active_mile:"",
       },
-
+      setpTipInfo:[],
       poundUpload: {
         fileList: [],
         Title: '装车磅单',
@@ -250,6 +260,7 @@ export default {
     cancel: Function,
     isEdit: Boolean,
     isUpload: Boolean,
+    checkStep:String
   },
   computed: {
     imgReviewSrc: function() {
@@ -430,13 +441,21 @@ export default {
           }
           this.sendReAjax();
       })
-
-
-
+    },
+    getCheckStep() {
+      var sendData={};
+      sendData.id=this.surePoundData.id;
+      this.$$http('getCheckStep',sendData).then(results=>{
+        if(results.data.code==0){
+          this.setpTipInfo=results.data.data;
+        }
+      });
     }
   },
   created() {
     this.surePound = Object.assign({}, this.surePoundData);
+    this.getImg();
+    this.checkStep=='check'&&this.getCheckStep();
     this.upSettleForm={
         pickup_active_time:this.surePound.pickup_trip.active_time||null,
         pickup_work_start_time:this.surePound.pickup_trip.work_start_time||null,
@@ -451,8 +470,8 @@ export default {
         tare_weight:this.surePound.tare_weight||null,
         net_weight:this.surePound.net_weight||null,
         active_mile:this.surePound.weight_active_mile||null,
-      },
-    this.getImg();
+    }
+    
 
   },
   watch: {
@@ -463,7 +482,7 @@ export default {
         this.surePound = Object.assign({}, val);
 
         this.getImg();
-
+        this.checkStep=='check'&&this.getCheckStep();
         this.poundUpload = {
           fileList: [],
           Title: '装车磅单',

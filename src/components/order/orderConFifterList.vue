@@ -608,7 +608,7 @@
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span> -->
         
-        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
+        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck" :checkStep="'check'"></upSettlementReview>
     </el-dialog>
   </div>
 </template>

@@ -2386,6 +2386,14 @@ const api = {
 
     }
   },
+  getCheckStep:{
+    url: '/order/section-trips/:id/check-order/',
+    method: 'GET',
+    desc: "分段获取业务单",
+    param: {
+
+    }
+  }
 }
 
 

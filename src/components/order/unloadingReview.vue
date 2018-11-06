@@ -23,7 +23,17 @@
 <template>
   <div class="loading-review-container">
     <el-form ref="examinePoundForm" :model="surePound" :rules="rules" status-icon :label-position="'right'" label-width="100px">
-      <el-row v-if="!isUpload">
+      <el-row v-if="setpTipInfo.length>0">
+        <el-col :span="20" :offset="2" style="text-align:center;color:#F56C6C">
+          请注意，改单与
+            <span v-for="(item,index) in setpTipInfo">
+              {{item.order_number}}({{item.station}})
+              <span v-if="index!=setpTipInfo.length-1">/</span>
+            </span>
+            合为分卸单,请注意卸车信息填写！
+        </el-col>
+      </el-row>
+      <el-row v-if="!isUpload" style="margin-top:10px;">
         <el-col :span="20" :offset="2">
           <el-row style="min-height: 110px;">
             <el-col :span="5" :offset="1" v-for="item in imgList" :key="item.id">
@@ -170,7 +180,7 @@ export default {
         limit: 1,
       },
       poundReturnId: '',
-
+      setpTipInfo:[],
       rules: {
         active_time: [
           { required: true, message: '请选择实际到厂时间', trigger: 'change' },
@@ -204,6 +214,7 @@ export default {
     isEdit: Boolean,
     isUpload: Boolean,
     isShowAccountCheck: Boolean,
+    checkStep:String
   },
   computed: {
     imgReviewSrc: function() {
@@ -335,19 +346,31 @@ export default {
 
       })
 
+    },
+    getCheckStep() {
+      var sendData={};
+      sendData.id=this.surePoundData.id;
+      this.$$http('getCheckStep',sendData).then(results=>{
+        if(results.data.code==0){
+          this.setpTipInfo=results.data.data;
+        }
+      });
     }
   },
+
   created() {
 
     this.surePound = Object.assign({}, this.surePoundData);
 
     !this.isUpload && this.getImg();
+    this.isedit&&this.getCheckStep();
   },
   watch: {
     surePoundData: {
       handler(val, oldVal) {
         this.surePound = Object.assign({}, this.surePoundData);
         !this.isUpload && this.getImg();
+        this.isedit&&this.getCheckStep();
         this.poundUpload = {
           fileList: [],
           uploadTitle: '上传磅单',

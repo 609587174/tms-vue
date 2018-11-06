@@ -389,14 +389,14 @@
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
               <el-col>
                 <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
                 <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
                 <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
-            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]"  style="margin-top:10px;">
               <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
@@ -534,14 +534,14 @@
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">
-          <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
+          <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'">
             <el-col v-if="key==0">
               <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
               <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
           </el-row>
-          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
+          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" >
             <el-col v-if="key==0">
               <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
@@ -553,12 +553,12 @@
       <el-form class="change_Status" label-width="80px" ref="changeStatusForm" style="width:80%;margin-left:10%">
         <el-form-item label="变更类型:" label-width="80px">
           <el-select v-model="changeStatusParam.changeStatusType" placeholder="请选择变更类型">
-            <el-option v-for="(item,key) in changeSatusTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+            <el-option v-for="(item,key) in changeSatusTypeSelect"  :label="item.verbose" :value="item.key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
           <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding" filterable>
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
+            <el-option v-for="(item,key) in changeSatusCarList" :label="item.tractor.plate_number" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -670,7 +670,7 @@ export default {
         'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
         'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' },{ key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' },{ key: 'finished', value: 'unloadHead' }],
-        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' },{ key: 'canceled', value: 'unloadHead' }],
+        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'unloadHead' }, { key: 'modifying', value: 'unloadHead' }, { key: 'abnormal', value: 'unloadHead' },{ key: 'canceled', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }]
       },
       expendShowConfig: {
@@ -836,14 +836,15 @@ export default {
   },
   props: ['ListData', 'firstMenu', 'secondMenu', 'expandStatus'],
   computed: {
-
     nowHead: function() {
       var returnHead = "";
-      this.tableHeadConfig[this.firstMenu].forEach((item) => {
-        if (item.key == this.secondMenu) {
-          returnHead = item.value;
-        }
-      });
+      if(this.firstMenu=='first'){
+        returnHead="loadHead";
+      }else if(this.firstMenu=='second'){
+        returnHead="matchHead";
+      }else{
+        returnHead="unloadHead";
+      }
       return returnHead;
     }
   },

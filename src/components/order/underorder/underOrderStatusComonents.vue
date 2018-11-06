@@ -265,8 +265,8 @@ export default {
       var returnFiferName="";
       this.fifterNameArr.forEach((item,index)=>{
         if(item!="all"){
-          if(this.fifterNameArr.length>1&&index!=this.fifterNameArr.length-1){
-            returnFiferName+=(item+',');
+          if(returnFiferName!=""){
+            returnFiferName+=(","+item);
           }else{
             returnFiferName+=item;
           }
@@ -323,9 +323,7 @@ export default {
       }else if(this.status=='fifth'){
         sendData.search='';
       }
-      if (this.fifterName.indexOf('canceling')>0|this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
-        sendData.interrupt_status = this.fifterName;
-      } else {
+      if(this.fifterName){
         sendData.child_search = this.fifterName;
       }
       sendData.type = 'three';
@@ -420,9 +418,7 @@ export default {
       }else if(this.status=='fifth'){
         sendData.search='';
       }
-      if (this.fifterName.indexOf('canceling')>0|this.fifterName.indexOf('modifying')>0||this.fifterName.indexOf('abnormal')>0) {
-        sendData.interrupt_status = this.fifterName;
-      } else {
+      if(this.fifterName){
         sendData.child_search = this.fifterName;
       }
       sendData.type = 'three';

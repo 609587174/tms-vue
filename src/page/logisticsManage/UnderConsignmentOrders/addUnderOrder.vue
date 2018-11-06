@@ -378,6 +378,7 @@ export default {
       },
       opearId:"",
       saveInfo:[],
+      saveInfoID:[]
     };
   },
   computed: {
@@ -428,6 +429,7 @@ export default {
         for(let caritem in this.addCarList){
           if(this.addCarList[caritem].id==this.opearId){
             this.addCarList[caritem].unloadInfo=this.saveInfo;
+            this.aCarMatchId=this.saveInfoID
           }
         }
       }
@@ -439,7 +441,8 @@ export default {
         this.opearId=bindId;
         for(let i in this.addCarList){
           if(this.addCarList[i].id===bindId){
-            this.saveInfo=this.addCarList[i].unloadInfo;
+            this.saveInfo=this.pbFunc.deepcopy(this.addCarList[i].unloadInfo);
+            this.saveInfoID=this.pbFunc.deepcopy(this.aCarMatchId);
           }
         }
         this.unloadMatchDiago=true;

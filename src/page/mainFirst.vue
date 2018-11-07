@@ -96,6 +96,9 @@
 .main-content{
   min-width:850px;
 }
+.el-main{
+  overflow: hidden;
+}
 </style>
 <template>
   <div>

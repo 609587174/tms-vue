@@ -34,7 +34,7 @@
       </el-row> -->
       <el-row v-if="setpTipInfo.length>0">
         <el-col :span="20" :offset="2" style="text-align:center;color:#F56C6C">
-          请注意，改单与
+          请注意，该单与
             <span v-for="(item,index) in setpTipInfo">
               {{item.order_number}}({{item.station}})
               <span v-if="index!=setpTipInfo.length-1">/</span>

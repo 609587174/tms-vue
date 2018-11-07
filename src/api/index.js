@@ -27,7 +27,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`tms.hhtdlng.com`) && !currentUrl.match(`devtms.hhtdlng.com`) && !currentUrl.match(`vtms.hhtdlng.com`)) { //测试环境
     domainUrl = `${prefix}api.hhtdlng.com/tms`;
   } else if (currentUrl.match(`tms.91lng.cn`) && !currentUrl.match(`ptms.91lng.cn`) && !currentUrl.match(`testtms.91lng.cn`)) { //正式环境
-    domainUrl = `${prefix}tms.91lng.cn`;
+    domainUrl = `${prefix}api.91lng.com/tms`;
   } else if (currentUrl.match(`devtms.hhtdlng.com`)) { //开发环境
     domainUrl = `${prefix}devtms.hhtdlng.com`;
   } else if (currentUrl.match(`testtms.91lng.cn`)) { //开发环境

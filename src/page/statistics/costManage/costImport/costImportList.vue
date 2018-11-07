@@ -169,6 +169,10 @@ export default {
           param: 'high_cost',
           width: ''
         }, {
+          title: '服务费',
+          param: 'service_charge',
+          width: ''
+        }, {
           title: '过路费',
           param: 'road_toll_com',
           width: ''

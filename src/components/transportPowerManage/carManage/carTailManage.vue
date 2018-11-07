@@ -53,7 +53,7 @@
         <no-data v-if="!pageLoading && !tableData.length"></no-data>
       </div>
       <div class="page-list text-center">
-        <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalPage" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
+        <el-pagination background layout="prev, pager, next,jumper" :page-count="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
         </el-pagination>
       </div>
     </div>
@@ -79,6 +79,7 @@ export default {
       pageData: {
         currentPage: 1,
         totalPage: 1,
+        totalCount:'',
         pageSize: 10,
       },
       exportType: {
@@ -158,7 +159,9 @@ export default {
         vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
+          vm.pageData.totalCount = result.data.data.count;
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
+          console.log('vm.pageData.totalPage ',vm.pageData.totalPage );
           vm.pageLoading = false;
         }
       }).catch(function(error) {

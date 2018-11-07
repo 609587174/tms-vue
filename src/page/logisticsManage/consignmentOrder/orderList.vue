@@ -85,10 +85,10 @@ export default {
         'all_count':{}
       },
       defaultSecond:{
-        first:'all',
-        second:'all',
-        third:'all',
-        fourth:'all',
+        first:'loading_waiting_audit',
+        second:'confirm_match',
+        third:'unloading_waiting_audit,waiting_settlement',
+        fourth:'canceling,modifying,abnormal',
         fifth:'all',
       },
       timeParam: [],

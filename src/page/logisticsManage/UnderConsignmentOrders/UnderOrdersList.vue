@@ -86,10 +86,10 @@ export default {
         'all_count':{}
       },
       defaultSecond:{
-        first:'all',
-        second:'all',
-        third:'all',
-        fourth:'all',
+        first:'loading_waiting_audit,driver_pending_confirmation',
+        second:'waiting_match',
+        third:'unloading_waiting_audit,waiting_settlement,unload_driver_pending_confirmation',
+        fourth:'canceling,modifying,abnormal',
         fifth:'all',
       },
       timeParam: [],

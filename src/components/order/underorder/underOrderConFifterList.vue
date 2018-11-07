@@ -155,19 +155,19 @@
               </el-row>
               <el-row style="margin-top:20px;">
                 <el-col :span="4" class="whiteSpan">
-                  <el-tooltip class="item" effect="light" placement="bottom-start">
+                  <el-tooltip class="item" effect="light" placement="bottom-start" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
                     <div slot="content" style="width:250px;"> 
-                      <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}" v-if="props.row.pre_business_order_list.length>0">
+                      <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}" >
                         <el-col >业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
                         <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                         <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
                         <el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
                       </el-row>
-                      <span v-else>无</span>
                     </div>
                     <div class="whiteSpan">预匹配卸货地:<span v-for="(Uitem,Uindex) in props.row.pre_business_order_list"><span v-if="props.row.pre_business_order_list.length>1&&Uindex!=props.row.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
                   </el-tooltip>
+                  <span v-else>预匹配卸货地:无</span>
                 </el-col>
                 <el-col :span="4">
                   挂车号: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer">{{props.row.transPowerInfo.semitrailer.plate_number}}</span>

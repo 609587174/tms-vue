@@ -441,7 +441,7 @@ export default {
           document.body.appendChild(link);
           link.click()
         }
-      }).catch(function(res) {
+      }).catch((res)=>{
         this.exportLoading = false;
       });
       // this.$$http("searchConOrderList", sendData).then((results) => {

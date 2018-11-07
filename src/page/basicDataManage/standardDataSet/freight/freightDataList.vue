@@ -16,6 +16,9 @@
       line-height: 32px;
 
       border-bottom: 1px solid #e4e7ed;
+      &:last-child{
+        border-bottom: 0;
+      }
     }
   }
 }

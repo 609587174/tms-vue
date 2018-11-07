@@ -93,55 +93,63 @@
     -o-transform: rotate(45deg);
   }
 }
-
+.main-content{
+  min-width:850px;
+}
+.el-main{
+  overflow: hidden;
+}
 </style>
 <template>
-  <el-container>
-    <common-header :type="'loginAfter'"></common-header>
+  <div>
     <el-container>
-      <el-aside style="width: 190px;">
-        <el-menu class="g-side" router>
-          <el-row style="margin-top:30px;">
-            <el-col>
-              <div class="munu-logo">MENU</div>
-            </el-col>
-          </el-row>
-          <template v-for="(route, index) in menus">
-            <template v-if="route.children && dealChildren(route.children).length">
-              <el-submenu :key="index" :index="route.name" class="menu-title">
-                <template slot="title">
-                  <div class="menu-title-cloumn" :class="[{ 'choosed-cloumn' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }]">
-                    <i :class="[{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }, route.meta.iconName]"></i>
-                    <span :class="{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }">{{route.meta.title||"无名字"}}</span>
-                  </div>
-                </template>
-                <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute" class="children-menu">
-                  <div class="child-menu-title"><i class="chooed-diamond" v-if="breadcrumbs[2] && breadcrumbs[2].name === cRoute.name"></i><span :class="{ 'color-303133' : (breadcrumbs[2] && breadcrumbs[2].name === cRoute.name)  }">{{cRoute.meta.title||"无名字"}}</span></div>
+      <common-header :type="'loginAfter'"></common-header>
+      <el-container>
+        <el-aside style="width: 190px;">
+          <el-menu class="g-side" router>
+            <el-row style="margin-top:30px;">
+              <el-col>
+                <div class="munu-logo">MENU</div>
+              </el-col>
+            </el-row>
+            <template v-for="(route, index) in menus">
+              <template v-if="route.children && dealChildren(route.children).length">
+                <el-submenu :key="index" :index="route.name" class="menu-title">
+                  <template slot="title">
+                    <div class="menu-title-cloumn" :class="[{ 'choosed-cloumn' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }]">
+                      <i :class="[{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }, route.meta.iconName]"></i>
+                      <span :class="{ 'color-4a9bf8' : (breadcrumbs[1] && breadcrumbs[1].name === route.name) }">{{route.meta.title||"无名字"}}</span>
+                    </div>
+                  </template>
+                  <el-menu-item v-for="(cRoute, cIndex) in dealChildren(route.children)" :key="cIndex" :index="cRoute.path" :route="cRoute" class="children-menu">
+                    <div class="child-menu-title"><i class="chooed-diamond" v-if="breadcrumbs[2] && breadcrumbs[2].name === cRoute.name"></i><span :class="{ 'color-303133' : (breadcrumbs[2] && breadcrumbs[2].name === cRoute.name)  }">{{cRoute.meta.title||"无名字"}}</span></div>
+                  </el-menu-item>
+                </el-submenu>
+              </template>
+              <template v-else>
+                <el-menu-item :route="route" :index="route.name" class="menu-title dashborad-menu">
+                  <template slot="title">
+                    <div class="menu-title-cloumn" :class="{ 'choosed-cloumn' : activeMenu.name === route.name }">
+                      <i :class="[{ 'color-4a9bf8' : activeMenu.name === route.name }, route.meta.iconName]"></i>
+                      <span :class="{ 'color-4a9bf8' : activeMenu.name === route.name }">{{route.meta.title||"无名字"}}</span>
+                    </div>
+                  </template>
                 </el-menu-item>
-              </el-submenu>
+              </template>
             </template>
-            <template v-else>
-              <el-menu-item :route="route" :index="route.name" class="menu-title dashborad-menu">
-                <template slot="title">
-                  <div class="menu-title-cloumn" :class="{ 'choosed-cloumn' : activeMenu.name === route.name }">
-                    <i :class="[{ 'color-4a9bf8' : activeMenu.name === route.name }, route.meta.iconName]"></i>
-                    <span :class="{ 'color-4a9bf8' : activeMenu.name === route.name }">{{route.meta.title||"无名字"}}</span>
-                  </div>
-                </template>
-              </el-menu-item>
-            </template>
+          </el-menu>
+        </el-aside>
+        <el-main>
+          <template>
+            <div style="margin-top: 63px;" class="main-content">
+              <router-view></router-view>
+            </div>
           </template>
-        </el-menu>
-      </el-aside>
-      <el-main>
-        <template>
-          <div style="margin-top: 63px;">
-            <router-view></router-view>
-          </div>
-        </template>
-      </el-main>
+        </el-main>
+      </el-container>
     </el-container>
-  </el-container>
+  </div>
+
 </template>
 <script>
 import commonHeader from '@/components/common/commonHeader'

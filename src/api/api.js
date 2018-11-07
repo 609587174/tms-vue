@@ -9,6 +9,22 @@
  */
 
 const api = {
+  cashExpenseEeview:{
+    url: '/statistic/cash-cost/:id/',
+    method: 'PATCH',
+    desc: '现金费用审核',
+    param: {
+
+    }
+  },
+  deleteFreight:{
+    url: '/carrier/trans_fee/:trans_fee_id/',
+    method: 'delete',
+    desc: '运费约定新增',
+    param: {
+
+    }
+  },
   deleteFreight:{
     url: '/carrier/trans_fee/:trans_fee_id/',
     method: 'delete',
@@ -2370,6 +2386,14 @@ const api = {
 
     }
   },
+  getCheckStep:{
+    url: '/order/section-trips/:id/check-order/',
+    method: 'GET',
+    desc: "分段获取业务单",
+    param: {
+
+    }
+  }
 }
 
 

@@ -52,7 +52,17 @@
 
   text-align: center;
 }
-
+.unloadList{
+  margin-top:20px;
+}
+.pre_unInfo{
+  line-height:40px;
+  font-size:14px;
+  position: absolute;
+  left:105px;
+  margin-top:12px;
+  text-align:left;
+}
 </style>
 <template>
   <div>
@@ -86,7 +96,7 @@
     </div>
     <div class="nav-tab-setting detail-tab mt-25">
       <div class="operation-btn text-right">
-        <el-row :gutter="0">
+        <el-row :gutter="0" style="position:relative;">
           <!--  <el-col :span="4">
           <el-form-item label="状态:">
             <el-select v-model="searchFilters.orderStateList" @change="startSearch" placeholder="请选择">
@@ -94,6 +104,26 @@
             </el-select>
           </el-form-item>
         </el-col> -->
+          <el-col :span="6"  class="pre_unInfo" v-if="delivery_list.pre_business_order_list&&delivery_list.pre_business_order_list.length>0">
+            <el-tooltip class="item" effect="light" placement="left-end">
+            <div slot="content" style="width:250px;">
+              <el-row v-for="(Uitem,Uindex) in delivery_list.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
+                <el-col >业务单号:{{Uitem.order_number}}</el-col>
+                <el-col style="margin-top:10px;">站点:{{Uitem.station}}</el-col>
+                <el-col style="margin-top:10px;">需求液厂:{{Uitem.actual_fluid_name}}</el-col>
+                <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.plan_tonnage">{{Uitem.plan_tonnage}}吨</span></el-col>
+                <el-col style="margin-top:10px;" class="whiteSpan">
+                  计划到站时间:
+                  <el-tooltip class="item" effect="light" :open-delay="1000" :content="Uitem.plan_arrive_time" placement="top-start" v-if="Uitem.plan_arrive_time">
+                    <span >{{Uitem.plan_arrive_time}}</span>
+                  </el-tooltip>
+                  <span v-else>无</span>
+                </el-col>
+              </el-row>
+            </div>
+            <div class="whiteSpan">预匹配卸货站点:<span v-for="(Uitem,Uindex) in delivery_list.pre_business_order_list"><span v-if="delivery_list.pre_business_order_list&&delivery_list.pre_business_order_list.length>1&&Uindex!=delivery_list.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
+          </el-tooltip>
+          </el-col>
           <el-col :span="3" :offset="19" style="line-height:40px;font-size:14px;" v-if="delivery_list.status && delivery_list.status.key!='canceled'">
             需求车数{{now_capacities.length}}/{{delivery_list.require_car_number}}
           </el-col>
@@ -104,6 +134,7 @@
           <el-col :span="4" :offset="20" v-if="delivery_list.status && delivery_list.status.key=='canceled'">当前订单已经取消,不可操作</el-col>
         </el-row>
       </div>
+      <div class="nav-tab-setting">
       <el-tabs v-model="activeName" @tab-click="clicktabs" :filter-method="filterHandler">
         <el-tab-pane label="列表" name="first">
           <div class="table-list border-top-clear">
@@ -128,6 +159,7 @@
           </div>
         </el-tab-pane>
       </el-tabs>
+    </div>
     </div>
     <el-dialog title="注意:" :visible.sync="juageAddDialog" width="50%" :center="'center'" :show-close="closeModel" :close-on-click-modal="closeModel" :close-on-press-escape="closeModel">
       <div style="margin:15px 5%">车号{{judgeAddRow.tractor&&judgeAddRow.tractor.plate_number}} 有司机未确认订单:</div>
@@ -305,7 +337,6 @@ export default {
     },
     checkRows: function(selection, row) {
       var vm = this;
-
       var addArr = [];
       selection.forEach((sItem) => {
         var addflag = true;
@@ -327,86 +358,120 @@ export default {
           }
         });
         if (sendJudge) {
-          //如果是勾选,那么判断是否在别的订单。
-          let postData3 = {
-            transport_id: row.id
-          };
-          this.$$http('searchNoUse', postData3).then((results) => {
+          //如果当前为勾选
+          let nextStatus=true;//判断是否是预匹配
+          if(this.delivery_list.pre_business_order_list&&this.delivery_list.pre_business_order_list.length>0){
+            if(this.now_capacities.length>1){
+              nextStatus=false;
+            }
+          }
+          if(nextStatus){
+            //判断是否在别的订单。
+            let postData3 = {
+              transport_id: row.id
+            };
+            this.$$http('searchNoUse', postData3).then((results) => {
 
-            if (results.data && results.data.code == 0) {
-              vm.pageLoading = false;
-              if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length > 0) {
-                var orderListText = "";
-                results.data.data.forEach((item) => {
-                  orderListText += item + ",";
-                });
-                const h = this.$createElement;
-                vm.$confirm({
-                  title: '请注意',
-                  message: h('p', null, [
-                    h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
-                    h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
-                  ]),
-                  showCancelButton: true,
-                  confirmButtonText: '继续添加',
-                  cancelButtonText: '返回',
-                  beforeClose: (action, instance, done) => {
-                    if (action === 'confirm') {
-                      done();
+              if (results.data && results.data.code == 0) {
+                vm.pageLoading = false;
+                if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length > 0) {
+                  var orderListText = "";
+                  results.data.data.forEach((item) => {
+                    orderListText += item + ",";
+                  });
+                  const h = this.$createElement;
+                  vm.$confirm({
+                    title: '请注意',
+                    message: h('p', null, [
+                      h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
+                      h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
+                    ]),
+                    showCancelButton: true,
+                    confirmButtonText: '继续添加',
+                    cancelButtonText: '返回',
+                    beforeClose: (action, instance, done) => {
+                      if (action === 'confirm') {
+                        done();
 
-                    } else {
+                      } else {
 
-                      done();
+                        done();
+                      }
                     }
-                  }
-                })
-                vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
-                  confirmButtonText: '继续添加',
-                  cancelButtonText: '返回',
-                  type: 'warning',
-                  center: true,
-                  showClose: false,
-                  closeOnClickModal: false,
-                  closeOnPressEscape: false
-                }).then(() => {
+                  })
+                  vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
+                    confirmButtonText: '继续添加',
+                    cancelButtonText: '返回',
+                    type: 'warning',
+                    center: true,
+                    showClose: false,
+                    closeOnClickModal: false,
+                    closeOnPressEscape: false
+                  }).then(() => {
+                    row.bindCheckBox = !row.bindCheckBox;
+                    vm.trueAll_list.forEach((Titem) => {
+                      if (Titem.id == row.id) {
+                        Titem.bindCheckBox = true;
+                      }
+
+                    });
+                  }).catch(() => {
+                    vm.$refs.multipleTable.toggleRowSelection(row, false);
+                    var new_now_capacities1 = [];
+                    vm.now_capacities.forEach((item, index) => {
+                      if (item.id != row.id) {
+                        new_now_capacities1.push(item);
+                      }
+                    });
+                    vm.now_capacities = new_now_capacities1;
+                    vm.trueAll_list.forEach((Titem) => {
+                      if (Titem.id == row.id) {
+                        Titem.bindCheckBox = false;
+                      }
+                    });
+                  });
+                } else if (results.data.data.trips_driver_unconfirm_list.length != 0) {
+                  vm.juageAddDialog = true;
+                  vm.judgeAddData = results.data.data.trips_driver_unconfirm_list;
+                  vm.judgeAddRow = row;
+                } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length == 0) {
                   row.bindCheckBox = !row.bindCheckBox;
                   vm.trueAll_list.forEach((Titem) => {
                     if (Titem.id == row.id) {
                       Titem.bindCheckBox = true;
                     }
-
                   });
-                }).catch(() => {
-                  vm.$refs.multipleTable.toggleRowSelection(row, false);
-                  var new_now_capacities1 = [];
-                  vm.now_capacities.forEach((item, index) => {
-                    if (item.id != row.id) {
-                      new_now_capacities1.push(item);
-                    }
-                  });
-                  vm.now_capacities = new_now_capacities1;
+                }
+              }
+            }).catch((err) => {
+              vm.pageLoading = false;
+            });
+          }else{
+            vm.$confirm('预匹配卸货地订单只能匹配一辆车', '请注意', {
+                  confirmButtonText: '确认',
+                  type: 'warning',
+                  showCancelButton: false,
+                  center: true,
+                  closeOnClickModal: false,
+                  showClose: false,
+                  closeOnPressEscape: false
+               }).then(() => {
+                vm.$refs.multipleTable.toggleRowSelection(row, false);
+                var new_now_capacities1 = [];
+                vm.now_capacities.forEach((item, index) => {
+                  if (item.id != row.id) {
+                    new_now_capacities1.push(item);
+                  }
+                });
+                vm.now_capacities = new_now_capacities1;
                   vm.trueAll_list.forEach((Titem) => {
                     if (Titem.id == row.id) {
                       Titem.bindCheckBox = false;
                     }
                   });
-                });
-              } else if (results.data.data.trips_driver_unconfirm_list.length != 0) {
-                vm.juageAddDialog = true;
-                vm.judgeAddData = results.data.data.trips_driver_unconfirm_list;
-                vm.judgeAddRow = row;
-              } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length == 0) {
-                row.bindCheckBox = !row.bindCheckBox;
-                vm.trueAll_list.forEach((Titem) => {
-                  if (Titem.id == row.id) {
-                    Titem.bindCheckBox = true;
-                  }
-                });
-              }
-            }
-          }).catch((err) => {
-            vm.pageLoading = false;
-          });
+              })
+          }
+          
         } else {
           //如果是取消勾选,判断当前车辆是否能取消勾选
           if (row.waybill.waybill) {

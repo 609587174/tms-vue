@@ -88,7 +88,7 @@ export default {
 
     },
     closePreview() {
-      this.zoomNum = 1;
+      this.zoomNum = 1.8;
       this.rotateDeg = 0;
       this.imgObject.showPreview = false;
     },

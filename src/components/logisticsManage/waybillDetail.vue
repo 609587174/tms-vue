@@ -496,7 +496,7 @@
           <el-row :gutter="40">
             <el-col :span="8">
               <div class="label-list">
-                <label>装车榜单:</label>
+                <label>装车磅单:</label>
                 <div class="detail-form-item">
                   <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看榜单</span>
                 </div>
@@ -504,7 +504,7 @@
             </el-col>
             <el-col :span="8" v-if="orderId">
               <div class="label-list">
-                <label>卸车榜单:</label>
+                <label>卸车磅单:</label>
                 <div class="detail-form-item">
                   <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看榜单</span>
                 </div>

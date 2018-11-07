@@ -280,7 +280,7 @@ export default {
       }).catch(() => {
         this.pageLoading = false;
       });
-      this.getCountList();
+      // this.getCountList();
     },
     clickFifter: function(targetName) {
       //this.historyStatus = targetName.name;
@@ -296,23 +296,23 @@ export default {
         this.searchList();
       });
     },
-    getCountList: function() {
-      var renderStatus = this.pbFunc.deepcopy(this.allStatusName);
-      this.$$http("getCount", {}).then(results => {
-        if (results.data.code == 0) {
-          var dataBody = results.data.data;
-          for (var i in dataBody) {
-            if (dataBody[i] > 99) {
-              dataBody[i] = '99+';
-            }
-            renderStatus[i] += "(" + dataBody[i] + ")";
-          }
-          this.statusName = renderStatus;
-        }
-      }).catch(() => {
+    // getCountList: function() {
+    //   var renderStatus = this.pbFunc.deepcopy(this.allStatusName);
+    //   this.$$http("getCount", {}).then(results => {
+    //     if (results.data.code == 0) {
+    //       var dataBody = results.data.data;
+    //       for (var i in dataBody) {
+    //         if (dataBody[i] > 99) {
+    //           dataBody[i] = '99+';
+    //         }
+    //         renderStatus[i] += "(" + dataBody[i] + ")";
+    //       }
+    //       this.statusName = renderStatus;
+    //     }
+    //   }).catch(() => {
 
-      });
-    }
+    //   });
+    // }
   },
   created() {
     if (this.thisFifterName != this.fifterName) {

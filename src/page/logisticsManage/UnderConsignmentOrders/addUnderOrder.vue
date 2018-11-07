@@ -122,13 +122,13 @@
                 <el-col :span="1" class="cancleCarBtn" v-if="aindex!=0">
                   <i class="el-icon-error" style="color:red;" @click="deleteCarByIndex(aindex)"></i>
                 </el-col>
-                <el-col :span="5" :offset="1">
+                <el-col :span="4" :offset="1">
                   <el-select v-model="addCarList[aindex].id" filterable placeholder="请选择" @change="carListChange(aindex)" style="max-width:220px;">
                     <el-option v-for="(item,key) in selectData.renderCarLIst" :label="item.tractor.plate_number" :value="item.id">
                     </el-option>
                   </el-select>
                 </el-col>
-                <!-- <el-col :span="5" style="font-size:14px;line-height:40px;">
+                <el-col :span="5" style="font-size:14px;line-height:40px;" :offset="1">
                 <el-tooltip placment="right-end">
                   <div slot="content" style="width:250px;">
                     <div>可预先匹配卸货地，司机、调度等角色可在装车阶段查看卸货地信息。</div>
@@ -141,30 +141,42 @@
                   <el-tooltip placement="right-end" v-else>
                     <div slot="content" style="width:250px;"> 
                       <el-row v-for="(unloadItem,unloadIndex) in aitem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
+                        <el-col >业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
+                        <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                         <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
                         <el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
                       </el-row>
                     </div>
                     <span  class="alreayMatch" @click="changeUnload(aitem.id)">已选卸货地</span>
                   </el-tooltip>
-                </el-col> -->
-                <el-col :span="4" class="linh40 whiteSpan" >
+                </el-col>
+                <el-col :span="5" class="linh40 whiteSpan" >
                   车辆所属:<el-tooltip class="item" effect="light" :open-delay="1000" :content="aitem.tractor.carrier.name" placement="top-start" v-if="aitem.tractor.carrier">
                     <span >{{aitem.tractor.carrier.name}}</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="4" class="linh40">
-                  挂车号:{{aitem.semitrailer.plate_number}}
+                <el-col :span="5" style="font-size:14px;line-height:40px;" v-if="aitem.id">
+                  <el-tooltip placement="right-end">
+                    <div slot="content" style="width:250px;"> 
+                      <el-row style="margin-bottom:15px;">
+                        <el-col style="margin-top:10px;">挂车号:{{aitem.semitrailer.plate_number}}</el-col>
+                        <el-col style="margin-top:10px;">主驾:<span>{{aitem.master_driver.name}}</span><span style="margin-left:10px;">{{aitem.master_driver.mobile_phone}}</span></el-col>
+                        <el-col style="margin-top:10px;">副驾/押运:
+                          <span v-if="aitem.vice_driver"><span>{{aitem.vice_driver.name}}</span>
+                            <span style="margin-left:10px;">{{aitem.vice_driver.mobile_phone}}</span>
+                          </span>
+                          <span v-if="!aitem.vice_driver&&aitem.escort_staff"><span>{{aitem.escort_staff.name}}</span>
+                            <span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span>
+                          </span>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <span  style="color:#409EFF;cursor:pointer">车辆信息</span>
+                  </el-tooltip>
                 </el-col>
-                <el-col :span="4" class="linh40">
-                  主驾:<span>{{aitem.master_driver.name}}</span><span style="margin-left:10px;">{{aitem.master_driver.mobile_phone}}</span>
-                </el-col>
-                <el-col :span="4" class="linh40">
-                  副驾/押运:
-                  <span v-if="aitem.vice_driver"><span>{{aitem.vice_driver.name}}</span><span style="margin-left:10px;">{{aitem.vice_driver.mobile_phone}}</span></span>
-                  <span v-if="!aitem.vice_driver&&aitem.escort_staff"><span>{{aitem.escort_staff.name}}</span><span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span></span>
-                </el-col>
+
+                
               </el-row>
               <el-row style="position:relative;margin-top:20px;" v-if="addCarList.length<50">
                 <el-col :span="1" class="cancleCarBtn" style="font-size:22px;">
@@ -368,6 +380,7 @@ export default {
       },
       opearId:"",
       saveInfo:[],
+      saveInfoID:[]
     };
   },
   computed: {
@@ -418,6 +431,7 @@ export default {
         for(let caritem in this.addCarList){
           if(this.addCarList[caritem].id==this.opearId){
             this.addCarList[caritem].unloadInfo=this.saveInfo;
+            this.aCarMatchId=this.saveInfoID
           }
         }
       }
@@ -429,7 +443,8 @@ export default {
         this.opearId=bindId;
         for(let i in this.addCarList){
           if(this.addCarList[i].id===bindId){
-            this.saveInfo=this.addCarList[i].unloadInfo;
+            this.saveInfo=this.pbFunc.deepcopy(this.addCarList[i].unloadInfo);
+            this.saveInfoID=this.pbFunc.deepcopy(this.aCarMatchId);
           }
         }
         this.unloadMatchDiago=true;
@@ -490,10 +505,21 @@ export default {
       var vm = this;
       var sendData = this.pbFunc.deepcopy(this.pickOrderParam);
       this.loadingArr.createdLoading = true;
-      let capacities = [];
+      let capacities = {};
       for (let i in this.addCarList) {
         if (this.addCarList[i].id != "") {
-          capacities.push(this.addCarList[i].id);
+          var unloadIdString="";
+          if(this.addCarList[i].unloadInfo.length>0){
+            this.addCarList[i].unloadInfo.forEach((item,index)=>{
+              if(this.addCarList[i].unloadInfo.length>1&&index!=this.addCarList[i].unloadInfo.length-1){
+                unloadIdString+=(item.id+",");
+              }else{
+                unloadIdString+=item.id
+              }
+              
+            });
+          }
+          capacities[this.addCarList[i].id]=unloadIdString;
         }
       }
       sendData.capacities = capacities;
@@ -671,6 +697,7 @@ export default {
                 }
               }
             });
+            this.fifterRnderUnload(this.opearId);
           }
         }else{
           this.$message.error('获取卸货单失败');

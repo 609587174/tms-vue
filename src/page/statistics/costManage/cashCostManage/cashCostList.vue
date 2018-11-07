@@ -5,108 +5,128 @@
 
 </style>
 <template>
-  <div class="nav-tab">
-    <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
-      <el-tab-pane label="费用导入统计" name="costImport"></el-tab-pane>
-      <el-tab-pane label="现金费用管理" name="cashCost">
-        <div class="tab-screen">
-          <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
-            <el-row :gutter="0">
-              <el-col :span="12">
-                <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
-                  <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                  <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
-                </el-input>
-              </el-col>
-            </el-row>
-            <el-row :gutter="10">
-              <el-col :span="8">
-                <el-form-item label="费用时间:" label-width="105px">
-                  <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="匹配状态:">
-                  <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="费用类型:">
-                  <el-select v-model="searchFilters.cost_type" filterable @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="行程内费用:" label-width="100px">
-                  <el-select v-model="searchFilters.is_travel" filterable @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.isTravelSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <div class="operation-btn">
-          <el-row>
-            <!-- <el-col :span="16" class="total-data">
-            </el-col> -->
-            <el-col :span="24" class="text-right">
-              <el-button type="primary" plain @click="importData">导入</el-button>
-              <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
-            </el-col>
-          </el-row>
-        </div>
-        <div class="table-list">
-          <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-            <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
-              <template slot-scope="scope">
-                <div v-if="item.param === 'waybill'">
-                  <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
-                </div>
-                <div v-else>
-                  <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                  <span v-else>
-                    <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
-                <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                <span v-else v-html="scope.row[item.param]"></span>
-                </span>
-        </div>
-        </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="140" fixed="right">
-          <template slot-scope="scope">
-            <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
-            <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-        </el-table>
-        <no-data v-if="!pageLoading && !tableData.length"></no-data>
-  </div>
-  <div class="page-list text-center">
-    <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-    </el-pagination>
-  </div>
-  </el-tab-pane>
-  <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
-  </el-tabs>
-  <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
+  <div>
+    <div class="nav-tab">
+      <el-tabs v-model="activeName" type="card" @tab-click="clicktabs">
+        <el-tab-pane label="费用导入统计" name="costImport"></el-tab-pane>
+        <el-tab-pane label="现金费用管理" name="cashCost">
+          <div class="tab-screen">
+            <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+              <el-row :gutter="0">
+                <el-col :span="12">
+                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                    <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+              <el-row :gutter="10">
+                <el-col :span="8">
+                  <el-form-item label="费用时间:">
+                    <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="匹配状态:">
+                    <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="费用类型:">
+                    <el-select v-model="searchFilters.cost_type" filterable @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.costSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+
+              </el-row>
+              <el-row :gutter="10">
+
+                <el-col :span="6">
+                  <el-form-item label="行程内费用:" label-width="100px">
+                    <el-select v-model="searchFilters.is_travel" filterable @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.isTravelSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label="审核状态:" v-if="toExamineName==='all'">
+                    <el-select v-model="searchFilters.verify" filterable @change="startSearch" placeholder="请选择">
+                      <el-option v-for="(item,key) in selectData.toExamineSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="对公费用管理" name="publicCost"></el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="nav-tab-setting mt-25">
+      <div class="public-btn">
+        <el-button type="primary" plain @click="importData">导入</el-button>
+      </div>
+      <el-tabs v-model="toExamineName" @tab-click="toExamineTab">
+        <el-tab-pane v-for="(item,key) in toExamineTabList" :label="item.title" :key="key" :name="item.name">
+          <div class="table-list">
+            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
+              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+                <template slot-scope="scope">
+                  <div v-if="item.param === 'waybill'">
+                    <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+                  </div>
+                  <div v-else>
+                    <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'||item.param==='verify'">{{scope.row[item.param].verbose}}</span>
+                    <span v-else>
+                      <div class="adjust" v-if="item.isAdjust&&scope.row[item.adjustParam]&&scope.row[item.adjustParam]!=scope.row[item.param]"><span>{{scope.row[item.adjustParam]}}</span></div>
+                  <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                  <span v-else v-html="scope.row[item.param]"></span>
+                  </span>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" align="center" width="140" fixed="right">
+                <template slot-scope="scope">
+                  <el-button type="success" v-if="scope.row.verify.key==='wait_verify'" size="mini" @click="costReview(scope.row)">审核</el-button>
+                  <div v-else-if="scope.row.verify.key==='passed'">
+                    <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+                    <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                  </div>
+
+                </template>
+              </el-table-column>
+            </el-table>
+            <no-data v-if="!pageLoading && !tableData.length"></no-data>
+          </div>
+          <div class="page-list text-center">
+            <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            </el-pagination>
+          </div>
+        </el-tab-pane>
+        <!-- <el-tab-pane label="挂车管理" name="second"></el-tab-pane> -->
+        <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
+        <cost-review-dialog v-on:closeDialogBtn="toExamineCloseDialog" :row="toExamineRow" :is-show="toExamineIsShow"></cost-review-dialog>
+      </el-tabs>
+    </div>
   </div>
 </template>
 <script>
 import cashCostAdjustmentDialog from '@/components/statistics/cashCostAdjustmentDialog';
+import costReviewDialog from '@/components/statistics/costReviewDialog';
 export default {
   name: 'cashCostList',
   computed: {
 
   },
   components: {
-    cashCostAdjustmentDialog: cashCostAdjustmentDialog
+    cashCostAdjustmentDialog: cashCostAdjustmentDialog,
+    costReviewDialog:costReviewDialog
   },
   activated: function() {
     this.activeName = 'cashCost';
@@ -114,11 +134,13 @@ export default {
   data() {
     return {
       pageLoading: false,
+      toExamineIsShow:false,
       pageData: {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
       },
+      toExamineName:'no',
       exportBtn: {
         text: '导出',
         isLoading: false,
@@ -132,8 +154,16 @@ export default {
         is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
         is_travel: '',
         keyword: '',
+        verify:'',
         field: 'plate_number',
       },
+      toExamineTabList:[{
+        title:'待审核',
+        name:'no'
+      },{
+        title:'全部',
+        name:'all'
+      }],
       selectData: {
         isMatchSelect: [
           { id: '', value: '全部' },
@@ -145,6 +175,12 @@ export default {
           { id: 'yes', value: '是' },
           { id: 'no', value: '否' }
         ],
+        toExamineSelect: [
+          { id: '', value: '全部' },
+          { id: 'wait_verify', value: '待审核' },
+          { id: 'passed', value: '审核通过' },
+          { id: 'refused', value: '审核拒绝' },
+        ],
         costSelect: [
           { id: '', value: '全部' },
           { id: 'logistics_high_speed', value: '过路费' },
@@ -154,7 +190,7 @@ export default {
           { id: 'logistics_fuel_cash_no_ticket', value: '现金油/气（无票）' },
           { id: 'logistics_park', value: '停车费' },
           { id: 'logistics_maintain', value: '维修费' },
-          { id: 'logistics_detector', value: '检测费' },
+          { id: 'logistics_detector', value: '年审费' },
           { id: 'logistics_other', value: '其它费用' },
         ],
         fieldSelect: [
@@ -182,11 +218,11 @@ export default {
         param: 'nums',
         width: ''
       }, {
-        title: '无税金额',
+        title: '含税金额',
         param: 'pre_tax_amount',
         width: ''
       }, {
-        title: '含税金额',
+        title: '无税金额',
         param: 'at_amount',
         width: ''
       }, {
@@ -234,17 +270,43 @@ export default {
         title: '调账时间',
         param: 'adjust_time',
         width: '180'
+      }, {
+        title: '审核状态',
+        param: 'verify',
+        width: ''
       }],
       tableData: [],
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
+      toExamineRow:{},//审核信息
     }
   },
   methods: {
+    toExamineTab(tabs){
+      this.searchFilters={
+        cost_type: '',
+        is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
+        is_travel: '',
+        keyword: '',
+        verify:'',
+        field: 'plate_number',
+      }
+      this.startSearch();
+    },
     pageChange() {
       setTimeout(() => {
         this.getList();
       })
+    },
+    toExamineCloseDialog(isSave){
+      this.toExamineIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    costReview(row) {
+      this.toExamineIsShow = true;
+      this.toExamineRow = row;
     },
     closeDialog: function(isSave) {
       this.accountAdjustIsShow = false;
@@ -296,7 +358,11 @@ export default {
         cost_type: this.searchPostData.cost_type,
         is_matching: this.searchPostData.is_matching,
         is_travel: this.searchPostData.is_travel,
+        verify:this.searchPostData.verify
       };
+      if(this.toExamineName === 'no'){
+        postData.verify = 'wait_verify';
+      }
       if (this.costTime instanceof Array && this.costTime.length > 0) {
         postData.cost_date_start = this.costTime[0];
         postData.cost_date_end = this.costTime[1];

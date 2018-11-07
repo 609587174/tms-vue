@@ -155,8 +155,20 @@
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;">
-                <el-col :span="4">
-                  卸货区域:
+                <el-col :span="4" class="whiteSpan">
+                  <el-tooltip class="item" effect="light" placement="right" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
+                    <div slot="content" style="width:250px;"> 
+                      <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}">
+                        <el-col >业务单号:{{unloadItem.order_number}}</el-col>
+                        <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
+                        <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
+                        <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
+                        <el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
+                      </el-row>
+                    </div>
+                    <div class="whiteSpan">预匹配卸货地:<span v-for="(Uitem,Uindex) in props.row.pre_business_order_list"><span v-if="props.row.pre_business_order_list.length>1&&Uindex!=props.row.pre_business_order_list.length-1">{{Uitem.station}}/</span><span v-else>{{Uitem.station}}</span></span></div>
+                  </el-tooltip>
+                  <span v-else>预匹配卸货地:无</span>
                 </el-col>
                 <el-col :span="4">
                   挂车号: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer">{{props.row.transPowerInfo.semitrailer.plate_number}}</span>
@@ -379,14 +391,14 @@
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
               <el-col>
                 <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
                 <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
                 <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
-            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]"  style="margin-top:10px;">
               <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
@@ -524,14 +536,14 @@
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">
-          <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
+          <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'">
             <el-col v-if="key==0">
               <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
               <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
           </el-row>
-          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
+          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" >
             <el-col v-if="key==0">
               <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
@@ -543,12 +555,12 @@
       <el-form class="change_Status" label-width="80px" ref="changeStatusForm" style="width:80%;margin-left:10%">
         <el-form-item label="变更类型:" label-width="80px">
           <el-select v-model="changeStatusParam.changeStatusType" placeholder="请选择变更类型">
-            <el-option v-for="(item,key) in changeSatusTypeSelect" :key="key" :label="item.verbose" :value="item.key"></el-option>
+            <el-option v-for="(item,key) in changeSatusTypeSelect"  :label="item.verbose" :value="item.key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
           <el-select v-model="changeStatusParam.changeStatusFied" placeholder="请选择" v-if="changeStatusParam.changeStatusType=='truck'||changeStatusParam.changeStatusType==''" v-loading="seletPadding" filterable>
-            <el-option v-for="(item,key) in changeSatusCarList" :key="key" :label="item.tractor.plate_number" :value="item.id"></el-option>
+            <el-option v-for="(item,key) in changeSatusCarList" :label="item.tractor.plate_number" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="备注:" label-width="80px">
@@ -598,7 +610,7 @@
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span> -->
         
-        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
+        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck" :checkStep="'check'"></upSettlementReview>
     </el-dialog>
   </div>
 </template>
@@ -659,11 +671,9 @@ export default {
       tableHeadConfig: {
         'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }],
-        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }],
-        'fifth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'matchHead' }, { key: 'modifying', value: 'matchHead' }, { key: 'abnormal', value: 'loadHead' }],
-        'sxith': [{ key: 'all', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
-        'seven': [{ key: 'all', value: 'unloadHead' }]
+        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' },{ key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' },{ key: 'finished', value: 'unloadHead' }],
+        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'unloadHead' }, { key: 'modifying', value: 'unloadHead' }, { key: 'abnormal', value: 'unloadHead' },{ key: 'canceled', value: 'unloadHead' }],
+        'fifth': [{ key: 'all', value: 'unloadHead' }]
       },
       expendShowConfig: {
         'driver_pending_confirmation': 'loadExtend',
@@ -828,14 +838,15 @@ export default {
   },
   props: ['ListData', 'firstMenu', 'secondMenu', 'expandStatus'],
   computed: {
-
     nowHead: function() {
       var returnHead = "";
-      this.tableHeadConfig[this.firstMenu].forEach((item) => {
-        if (item.key == this.secondMenu) {
-          returnHead = item.value;
-        }
-      });
+      if(this.firstMenu=='first'){
+        returnHead="loadHead";
+      }else if(this.firstMenu=='second'){
+        returnHead="matchHead";
+      }else{
+        returnHead="unloadHead";
+      }
       return returnHead;
     }
   },
@@ -1013,7 +1024,7 @@ export default {
     downExFun(type, rowData) {
 
       this.isShowSureDownPound = true;
-      this.sureDownPoundTitle = '卸车榜单审核通过';
+      this.sureDownPoundTitle = '卸车磅单审核通过';
       this.isEditSureDownPound = true;
       this.isUploadUnloadPound = false;
       this.isShowAccountCheck = true;
@@ -1060,7 +1071,7 @@ export default {
     },
     loadingExFun(type, rowData) {
       this.isShowSurePound = true;
-      this.surePoundTitle = '装车榜单审核通过';
+      this.surePoundTitle = '装车磅单审核通过';
       this.isEditSureDownPound = true;
       this.isUploadPound = false;
 

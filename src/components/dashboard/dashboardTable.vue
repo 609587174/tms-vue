@@ -45,7 +45,7 @@ export default {
           pathParam+=`&&${time.timeParam}=${this.sendTime[0]},${this.sendTime[1]}`
         }
         if(item.statusType){
-          pathParam+=`&&${time.statusType}=${this.sendStatusType}`
+          pathParam+=`&${time.statusType}=${this.sendStatusType}`
         }
         this.$router.push({ path: `{item.goTopage}`+pathParam });
       }

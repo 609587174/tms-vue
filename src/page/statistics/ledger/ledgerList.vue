@@ -316,6 +316,10 @@ export default {
           isHover: true,
           hoverParam: 'high_cost_hover'
         }, {
+          title: '服务费',
+          param: 'service_charge',
+          width: ''
+        }, {
           title: '过路费',
           param: 'road_toll_com',
           width: '',
@@ -456,6 +460,9 @@ export default {
         title: '高速费',
         id: 162
       }, {
+        title: '服务费',
+        id:207
+      },{
         title: '外油/气量',
         id: 178
       }, {

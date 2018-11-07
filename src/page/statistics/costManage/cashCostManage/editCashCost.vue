@@ -48,16 +48,16 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="数量:" prop="nums">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.nums"></el-input>
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.nums"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税前金额:" prop="pre_tax_amount">
-                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
+                  <el-form-item label="含税金额:" prop="pre_tax_amount">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.pre_tax_amount"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="税后金额:" prop="at_amount">
+                  <el-form-item label="无税金额:" prop="at_amount">
                     <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.at_amount"></el-input>
                   </el-form-item>
                 </el-col>
@@ -109,6 +109,20 @@
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
                   </el-form-item>
                 </el-col>
+              </el-row>
+              <el-row :gutter="40">
+                <el-form-item label="照片:">
+                  <el-row :getter="20">
+                    <!-- <el-col :span="2" :offset="1" :key="item"> -->
+                      <div v-for="item in imgList" class="ml-25">
+                        <router-link target="_blank" :to="imgSrc">
+                          <img :src="item" style='width:90px;height:100px'></img>
+                        </router-link>
+                        <!-- <div class="text-center">{{item.title}}{{item.num}}</div> -->
+                      </div>
+                    <!-- </el-col> -->
+                  </el-row>
+                </el-form-item>
               </el-row>
             </el-form>
             <div class="detail-btn">
@@ -181,6 +195,10 @@ export default {
         waybill: [
           { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
+        pre_tax_amount: [
+          { required: true, message: '请输入税前金额', trigger: 'blur' },
+          { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+        ],
       },
       saveBasicAndReviewBtn: {
         isLoading: false,
@@ -207,6 +225,8 @@ export default {
           { id: 'logistics_other', value: '其它费用' },
         ]
       },
+      imgList:[],
+      imgSrc:'',
     }
   },
   created() {
@@ -215,6 +235,13 @@ export default {
     }
   },
   methods: {
+    imgReviewSrc: function() {
+      let imgListArray = [];
+      for (let i in this.imgList) {
+        imgListArray.push(this.imgList[i]);
+      }
+      return `/imgReview?imgList=${imgListArray.join(',')}`;
+    },
     returnToPage: function() {
       // if (this.$route.query.id) {
       //   this.$router.push({ path: "/consignmentCenter/carrierManage/carrierDetail", query: { id: this.$route.query.id } });
@@ -264,6 +291,8 @@ export default {
             is_travel: this.detail.is_travel.verbose,
             lot: this.detail.lot
           }
+          this.imgList = this.detail.image_url_list;
+          this.imgSrc = this.imgReviewSrc();
           this.getWaybillData();
         }
       })
@@ -302,7 +331,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['waybill'];
+      let keyArray = ['nums','pre_tax_amount','waybill'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for (let i in this.waybillList) {
         if (this.waybillList[i].waybill_number === this.editMsgForm.waybill) {

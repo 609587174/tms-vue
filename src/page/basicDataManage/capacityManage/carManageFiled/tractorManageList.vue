@@ -56,7 +56,7 @@
             <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+            <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalPage>1">
             </el-pagination>
           </div>
         </el-tab-pane>
@@ -93,6 +93,7 @@ export default {
         currentPage: 1,
         totalPage: 1,
         pageSize: 10,
+        totalCount:'',
       },
       thTableList: [{
         title: '牵引车车牌号',
@@ -172,6 +173,7 @@ export default {
         vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
+          vm.pageData.totalCount = result.data.data.count;
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }

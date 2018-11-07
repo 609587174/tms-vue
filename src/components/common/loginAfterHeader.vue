@@ -49,6 +49,7 @@
   float: left;
   border-bottom: 1px solid rgb(222, 222, 222);
   padding-left: 50px;
+  min-width: 950px;
 }
 
 .usermenu {
@@ -172,7 +173,16 @@
     font-weight: 600;
   }
 }
-
+.users{
+  display:inline-block;
+  max-width:70px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  line-height: 15px;
+  position:relative;
+  top:3px;
+}
 </style>
 <template>
   <!-- <div style="height: 60px;width: 100;"> -->
@@ -224,7 +234,7 @@
               <span class="ml-25 mr-25 text-stance fs-18">|</span>
               <i class="icon-user"></i>
               <el-dropdown trigger="click" @command="logout">
-                <span class="el-dropdown-link">Hi，{{users.nick_name}}<i class="el-icon-arrow-down el-icon--right"></i></span>
+                <span class="el-dropdown-link">Hi，<span class="users" :title="users.nick_name">{{users.nick_name}}</span><i class="el-icon-arrow-down el-icon--right"></i></span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item>退出</el-dropdown-item>
                 </el-dropdown-menu>

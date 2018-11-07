@@ -87,6 +87,7 @@ export default {
         currentPage: 1,
         totalPage: 1,
         pageSize: 10,
+        totalCount:'',
       },
       exportType: {
         type: 'semitrailers',
@@ -173,6 +174,7 @@ export default {
         vm.pageStatus = false;
         if (result.data.code == 0) {
           vm.tableData = result.data.data.results;
+          vm.pageData.totalCount = result.data.data.count;
           vm.pageData.totalPage = Math.ceil(result.data.data.count / vm.pageData.pageSize);
           vm.pageLoading = false;
         }

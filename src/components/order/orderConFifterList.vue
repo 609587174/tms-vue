@@ -159,8 +159,9 @@
                   <el-tooltip class="item" effect="light" placement="right">
                     <div slot="content" style="width:250px;"> 
                       <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}">
-                        <el-col >站点:{{unloadItem.station}}</el-col>
-                        <el-col >需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
+                        <el-col >业务单号:{{unloadItem.order_number}}</el-col>
+                        <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
+                        <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                         <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
                         <el-col style="margin-top:10px;">到站时间:{{unloadItem.plan_arrive_time}}</el-col>
                       </el-row>

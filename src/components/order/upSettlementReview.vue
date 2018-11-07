@@ -450,13 +450,9 @@ export default {
           this.setpTipInfo=results.data.data;
         }
       });
-    }
-  },
-  created() {
-    this.surePound = Object.assign({}, this.surePoundData);
-    this.getImg();
-    this.checkStep=='check'&&this.getCheckStep();
-    this.upSettleForm={
+    },
+    initUpSettleForm(){
+      this.upSettleForm={
         pickup_active_time:this.surePound.pickup_trip.active_time||null,
         pickup_work_start_time:this.surePound.pickup_trip.work_start_time||null,
         pickup_work_end_time:this.surePound.pickup_trip.work_end_time||null,
@@ -470,9 +466,14 @@ export default {
         tare_weight:this.surePound.tare_weight||null,
         net_weight:this.surePound.net_weight||null,
         active_mile:this.surePound.weight_active_mile||null,
+      }
     }
-    
-
+  },
+  created() {
+    this.surePound = Object.assign({}, this.surePoundData);
+    this.getImg();
+    this.checkStep=='check'&&this.getCheckStep();
+    this.initUpSettleForm();
   },
   watch: {
     //这个组件主要应用于弹窗中，弹窗的打开不会触发弹窗内的组件的重新渲染，所以这里监控surePoundData的变化，初始化数据
@@ -480,7 +481,7 @@ export default {
       handler(val, oldVal) {
         //数据再次初始化
         this.surePound = Object.assign({}, val);
-
+        this.initUpSettleForm();
         this.getImg();
         this.checkStep=='check'&&this.getCheckStep();
         this.poundUpload = {

@@ -15,7 +15,7 @@
       border: none;
     }
   }
-} 
+}
 .nav-tab-setting /deep/ .el-tabs__header .el-tabs__nav .el-tabs__item {
   height:44px;
 }
@@ -126,7 +126,7 @@
           </el-col>
         </el-row>
       </el-form>
-      
+
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
       <el-button type="primary" style="position:absolute;right:80px;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
       <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="exportOrder" :loading="exportLoading" v-if="status !== 'seven'">导出</el-button>
@@ -150,7 +150,7 @@
           <div class="tab-content padding-clear-top" style="padding-top:1px!important;">
             <el-row :gutter="3" style="height:100%;margin-top:10px;">
               <el-col>
-                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium"> 
+                <el-tag :key="tag.key" v-for="(tag,index) in tagArr" closable :disable-transitions="false" class="tagerLable" @close="handleClose(tag)" v-bind:class="{'ml-12':index!=0}" style="" size="medium">
                 {{tag.value}}
                 </el-tag>
               </el-col>
@@ -182,6 +182,7 @@
 </template>
 <script>
 import axios from 'axios';
+import { getDomainUrl } from '@/api/index';
 export default {
   name: 'orderStatusComonents',
   components: {
@@ -390,7 +391,8 @@ export default {
       sendData.page = this.pageData.currentPage;
       sendData.pageSize = this.pageData.pageSize;
       sendData.export_excel = 'export';
-      axios.get('/order/section-trips/', {
+      let domainUrl = getDomainUrl('http://');
+      axios.get(domainUrl+'/order/section-trips/', {
         method: 'get',
         responseType: 'blob',
         headers: {
@@ -412,7 +414,7 @@ export default {
           let link = document.createElement('a');
           link.style.display = 'none';
           link.href = objectUrl;
-          link.setAttribute('download', '托运订单.xlsx');
+          link.setAttribute('download', '平台运单.xlsx');
           document.body.appendChild(link);
           link.click()　　　　　
         }

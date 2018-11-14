@@ -35,7 +35,7 @@ export const getDomainUrl = function(prefix = '') { //掐指一算五个环境
   } else if (currentUrl.match(`vtms.hhtdlng.com`)) { //开发环境
     domainUrl = `${prefix}api.hhtdlng.com/tms`;
   } else {
-    domainUrl = `${prefix}api.hhtdlng.com/tms`; //本地开发环境
+    domainUrl = `${prefix}devtms.hhtdlng.com`; //本地开发环境
   }
   return domainUrl;
 }

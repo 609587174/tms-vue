@@ -12,32 +12,49 @@
 .g-side {
   position: fixed;
   z-index: 90;
-  top: 60px;
+  top: 10px;
   left: 0;
   box-sizing: border-box;
-  width: 230px;
   height: 100%;
   border-right: 1px solid #dedede;
+  padding-top: 50px;
+  padding-bottom: 0px;
   overflow-y: auto;
+  .children-menu {
+    background-color: #fff;
+  }
+  >li{
+    width: 63px;
+    &:last-child{
+      margin-bottom:60px;
+    }
+  }
+  transition: width 0.1s;
+    -moz-transition: width 0.1s; /* Firefox 4 */
+  -webkit-transition: width 0.1s; /* Safari 和 Chrome */
+  -o-transition: width 0.1s; /* Opera */
 }
-
+.max-side{
+  //width: 230px;
+  .children-menu {
+    background-color: #f2f5fd;
+  }
+   li{
+    width: 229px;
+  }
+}
 .dashborad-menu {
   height: 42px;
   line-height: 42px;
 }
 
-.children-menu {
-  background-color: #f2f5fd;
-}
+
 
 .munu-logo {
   padding-left: 25px;
   color: rgb(222, 222, 222);
   padding-bottom: 5px;
 }
-
-
-
 .menu-title {
   padding: 0 !important;
   color: #90929a;
@@ -99,16 +116,57 @@
 .el-main{
   overflow: hidden;
 }
+.max-side-width{
+  width:229px!important;
+  transition: width 0.1s;
+  -moz-transition: width 0.1s; /* Firefox 4 */
+  -webkit-transition: width 0.1s; /* Safari 和 Chrome */
+  -o-transition: width 0.1s; /* Opera */
+}
+.min-side-width{
+  width: 63px!important;
+  transition: width 0.1s;
+  -moz-transition: width 0.1s; /* Firefox 4 */
+  -webkit-transition: width 0.1s; /* Safari 和 Chrome */
+  -o-transition: width 0.1s; /* Opera */
+}
+.shrink-btn{
+  height: 48px;
+  background: #fff;
+  border-top: 1px solid #e4e7ed;
+  border-right: 1px solid #e4e7ed;
+  position: fixed;
+  bottom: 0px;
+  z-index: 90;
+  line-height: 48px;
+  text-align: center;
+  color: #7C8F9F;
+  font-size: 14px;
+  img{
+    margin-left:5px;
+  }
+  &.max-side-width{
+    img{
+      transform: rotate(180deg);
+      -webkit-transform: rotate(180deg);
+      -moz-transform: rotate(180deg);
+      -o-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+    }
+  }
+  //left:50%;
+  //margin-left: -30px;
+}
 </style>
 <template>
   <div>
-    <el-container>
-      <common-header :type="'loginAfter'"></common-header>
+    <!-- <el-container> -->
+      <common-header :type="'loginAfter'" :is-collapse="isCollapse"></common-header>
       <el-container>
-        <el-aside style="width: 190px;">
-          <el-menu class="g-side" router>
+        <el-aside :class="isCollapse?'min-side-width':'max-side-width'">
+          <el-menu class="g-side" :class="isCollapse?'':'max-side'" router :collapse="isCollapse">
             <el-row style="margin-top:30px;">
-              <el-col>
+              <el-col v-if="!isCollapse">
                 <div class="munu-logo">MENU</div>
               </el-col>
             </el-row>
@@ -138,27 +196,38 @@
               </template>
             </template>
           </el-menu>
+          <div class="shrink-btn cursor-pointer" @click="isShrink" :class="isCollapse?'min-side-width':'max-side-width'">
+            <div v-if="isCollapse">
+              展开<img src="../assets/img/open.svg">
+            </div>
+            <div v-else>
+              收起<img src="../assets/img/open.svg">
+            </div>
+          </div>
         </el-aside>
         <el-main>
           <template>
-            <div style="margin-top: 63px;" class="main-content">
+            <div styles="margin-top: 63px;" class="main-content">
               <router-view></router-view>
             </div>
           </template>
         </el-main>
       </el-container>
-    </el-container>
+    <!-- </el-container> -->
   </div>
 
 </template>
 <script>
 import commonHeader from '@/components/common/commonHeader'
+import Lodash from 'lodash'
 export default {
   data() {
     return {
       user: { name: "aa" },
       menus: [],
-
+      isCollapse:false,
+      pcW:document.body.offsetWidth,
+      minPcW:1400
     };
   },
   components: {
@@ -173,7 +242,7 @@ export default {
     }
   },
   methods: {
-
+    // const v=this
 
     dealChildren: function(children) {
       let childrenMenu = [];
@@ -186,10 +255,28 @@ export default {
     },
     isChoosed: function(menu) {
       return false;
+    },
+    isCollapseW(){
+      let pcW = document.body.offsetWidth;
+      console.log('宽度',pcW);
+    },
+    isShrink(){
+      this.isCollapse = !this.isCollapse;
+      this.pbFunc.setLocalData('isCollapse',this.isCollapse,true);
     }
+  },
+  mounted:function(){
+    // const that = this
+    // window.onresize = _.debounce(() => {
+    //     // console.log("onresize:" + that.pcW)
+    //     that.pcW = document.body.offsetWidth;
+    //     this.isCollapse = this.pcW<this.minPcW?true:false;
+    //   }, 400)
   },
   created: function() {
     let menus = this.$store.state.common.menuData;
+    this.isCollapse = this.pbFunc.getLocalData('isCollapse', true);
+    // this.isCollapse = this.pcW<this.minPcW?true:false;
     if (menus) {
 
       this.menus = menus;

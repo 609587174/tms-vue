@@ -153,12 +153,14 @@ export default {
           this.differenceValue.check_quantity_differ = '';
         } else {
           this.differenceValue.check_quantity_differ = (parseFloat(this.formRules.check_quantity_adjust) * 1000 - parseFloat(this.adjustRow.check_quantity) * 1000) / 1000;
+          this.differenceValue.check_quantity_differ = (this.differenceValue.check_quantity_differ).toFixed(3);
         }
       } else if (type === 'standMile') {
         if (isNaN(this.formRules.stand_mile_adjust) || !this.$store.state.common.regular.mile.match.test(this.formRules.stand_mile_adjust) || !this.formRules.stand_mile_adjust) {
           this.differenceValue.stand_mile_differ = '';
         } else {
           this.differenceValue.stand_mile_differ = (parseFloat(this.formRules.stand_mile_adjust) * 10 - parseFloat(this.adjustRow.stand_mile) * 10) / 10;
+          this.differenceValue.stand_mile_differ = (this.differenceValue.stand_mile_differ).toFixed(1);
         }
       } else if (type === 'waitingCharges') {
 
@@ -166,6 +168,7 @@ export default {
           this.differenceValue.waiting_charges_differ = '';
         } else {
           this.differenceValue.waiting_charges_differ = (parseFloat(this.formRules.waiting_charges_adjust) * 100 - parseFloat(this.adjustRow.waiting_charges) * 100) / 100;
+          this.differenceValue.waiting_charges_differ = (this.differenceValue.waiting_charges_differ).toFixed(2);
         }
       }
     },

@@ -152,7 +152,7 @@ export default {
   methods: {
     returnToPage: function() {
       if (this.id) {
-        this.$router.push({ path: '/basicDataManage/standardDataSet/mileage/mileageDetail', query: { id: this.id } })
+        this.$router.push({ path: `/basicDataManage/standardDataSet/mileage/mileageDetail/${this.id }/` })
       } else {
         this.$router.push({ path: '/basicDataManage/standardDataSet/mileage/mileageDataList' })
       }

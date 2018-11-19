@@ -9,6 +9,14 @@
  */
 
 const api = {
+  exportCashAudit:{
+    url: '/exports/cash/',
+    method: 'get',
+    desc: '导出现金费用审核',
+    param: {
+
+    }
+  },
   cashExpenseEeview:{
     url: '/statistic/cash-cost/:id/',
     method: 'PATCH',

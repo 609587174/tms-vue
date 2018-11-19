@@ -5,5 +5,18 @@ let dealNullData = data =>{
     return data
   }
 }
-
-export { dealNullData }
+let dateFilter = (value) => {
+  let dates = [];
+  if (value) {
+    dates = value.split(' ');
+  }
+  return dates.length ? dates[0] : value;
+};
+let hourFilter = (value) => {
+  let dates = [];
+  if (value) {
+    dates = value.split(':');
+  }
+  return dates.length ? dates[0] : value;
+};
+export { dealNullData,dateFilter,hourFilter }

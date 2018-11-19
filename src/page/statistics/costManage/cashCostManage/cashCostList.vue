@@ -54,11 +54,17 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
-                  <el-form-item label="审核状态:" v-if="toExamineName==='all'">
+                <el-col :span="6" v-if="toExamineName==='all'">
+                  <el-form-item label="审核状态:">
                     <el-select v-model="searchFilters.verify" filterable @change="startSearch" placeholder="请选择">
                       <el-option v-for="(item,key) in selectData.toExamineSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                     </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" v-if="toExamineName==='all'">
+                  <el-form-item label="审核通过时间:" label-width="100px">
+                    <el-date-picker v-model="verifyTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                    </el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -71,6 +77,7 @@
     <div class="nav-tab-setting mt-25">
       <div class="public-btn">
         <el-button type="primary" plain @click="importData">导入</el-button>
+        <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportCashAudit'"></export-button>
       </div>
       <el-tabs v-model="toExamineName" @tab-click="toExamineTab">
         <el-tab-pane v-for="(item,key) in toExamineTabList" :label="item.title" :key="key" :name="item.name">
@@ -81,6 +88,7 @@
                   <div v-if="item.param === 'waybill'">
                     <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
                   </div>
+                  <div v-else-if="item.param === 'verify_time'">{{scope.row[item.param] | hourFilter}}</div>
                   <div v-else>
                     <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'||item.param==='verify'">{{scope.row[item.param].verbose}}</span>
                     <span v-else>
@@ -148,6 +156,7 @@ export default {
       },
       costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
       activeName: 'cashCost',
+      verifyTime:[],
       searchPostData: {}, //搜索参数
       searchFilters: {
         cost_type: '',
@@ -274,11 +283,20 @@ export default {
         title: '审核状态',
         param: 'verify',
         width: ''
+      }, {
+        title: '审核通过时间',
+        param: 'verify_time',
+        width: ''
       }],
       tableData: [],
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
       toExamineRow:{},//审核信息
+      exportType: {
+        type: 'cash',
+        filename: '客户回款'
+      },
+      exportPostData: {}, //导出筛选
     }
   },
   methods: {
@@ -367,10 +385,14 @@ export default {
         postData.cost_date_start = this.costTime[0];
         postData.cost_date_end = this.costTime[1];
       }
+      if(this.verifyTime instanceof Array && this.verifyTime.length > 0){
+        postData.verify_time_start = this.verifyTime[0];
+        postData.verify_time_end = this.verifyTime[1];
+      }
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
-
+      this.exportPostData = postData;
       this.$$http('getCashCostStatisticList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

@@ -14,6 +14,7 @@
 @import './assets/css/elementReset';
 @import './assets/css/news.less'; //消息通知
 
+
 </style>
 <template>
   <router-view id="app" @login="loginDirect" @logout="logoutDirect"></router-view>
@@ -24,16 +25,9 @@ import staticData from './api/getStaticData.js';
 import userPath from './router/fullRouter';
 import noData from '@/components/common/noData';
 import exportButton from '@/components/common/exportButton';
-
 Vue.component("noData", noData);
 Vue.component("exportButton", exportButton);
-Vue.filter('dateFilter', function(value) {
-  let dates = [];
-  if (value) {
-    dates = value.split(' ');
-  }
-  return dates.length ? dates[0] : value;
-})
+
 export default {
   name: 'App',
   data() {

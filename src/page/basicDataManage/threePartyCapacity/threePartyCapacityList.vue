@@ -89,15 +89,15 @@ export default {
       thTableList: [{
         title: '牵引车号',
         param: 'tractor.plate_number',
-        width: ''
+        width: '140'
       }, {
         title: '当前绑定挂车号',
         param: 'semitrailer.plate_number',
-        width: ''
+        width: '160'
       }, {
         title: '车辆所属',
         param: 'tractor.carrier.name',
-        width: ''
+        width: '180'
       }, {
         title: '主驾驶',
         param: 'master_driver.name',
@@ -109,7 +109,7 @@ export default {
       }, {
         title: '主驾电话号码',
         param: 'master_driver.mobile_phone',
-        width: ''
+        width: '160'
       }, {
         title: '副驾驶',
         param: 'vice_driver.name',

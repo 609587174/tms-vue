@@ -782,7 +782,7 @@ export default {
           //最新的列表
           if (nowData.add_capacities.length != vm.alreadyList.add_capacities.length || nowData.del_capacities.length != vm.alreadyList.del_capacities.length) {
             returnFlag = false;
-            callbackFun(false);
+            callbackFun(0);
           } else {
             for (var addIndex in vm.alreadyList.add_capacities) {
               if (nowData.add_capacities.indexOf(vm.alreadyList.add_capacities[addIndex]) == -1) {

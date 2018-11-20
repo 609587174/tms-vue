@@ -48,11 +48,11 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="车号:" prop="plate_number">
-                    <!-- <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input> -->
-                    <el-select v-model="editMsgForm.plate_number" :loading="tractorLoading" filterable remote clearable  @change="getTractorList" @blur="selectId('tractor')" :remote-method="getTractorList" placeholder="请输入选择">
+                  <el-form-item label="车号:">
+                    <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
+                   <!--  <el-select v-model="editMsgForm.plate_number" :loading="tractorLoading" filterable remote clearable  @change="getTractorList" @blur="selectId('tractor')" :remote-method="getTractorList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.tractorSelect" :key="item.id" :label="item.plate_number" :value="item.plate_number"></el-option>
-                    </el-select>
+                    </el-select> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -255,7 +255,6 @@ export default {
         waiting_price: '', //卸车待时金额
         waiting_charges: '', //运费合计
         plate_number: '', //车牌号
-        plate_number_id:'',
         station: '', //站点
         is_reconciliation: '',
         work_end_time: '',
@@ -271,9 +270,6 @@ export default {
       rules: {
         company:[
           { required: true, message: '请选择托运方', trigger: 'change' },
-        ],
-        plate_number:[
-          { required: true, message: '请选择车牌号', trigger: 'change' },
         ],
         check_quantity: [
           { pattern: this.$store.state.common.regular.tonnage.match, message: this.$store.state.common.regular.tonnage.tips, trigger: 'blur' },
@@ -322,16 +318,14 @@ export default {
       detail: {},
       customerList: [],
       shipperLoading:false,
-      tractorLoading:false,
       selectData:{
         shipperSelect:[],//托运方
-        tractorSelect:[],//牵引车
       }
     }
   },
   created() {
     this.getShipperList();
-    this.getTractorList();
+    // this.getTractorList();
     if (this.id) {
       this.getDetail();
     }
@@ -385,26 +379,26 @@ export default {
       })
 
     },
-    getTractorList: function(query) {
-      let postData = {
-        page: 1,
-        page_size:100
-      };
-      if(query){
-        postData.plate_number = query;
-      }
-      this.tractorLoading = true;
+    // getTractorList: function(query) {
+    //   let postData = {
+    //     page: 1,
+    //     page_size:100
+    //   };
+    //   if(query){
+    //     postData.plate_number = query;
+    //   }
+    //   this.tractorLoading = true;
 
-      this.$$http('searchHeadCarList', postData).then((results) => {
-        this.tractorLoading = false;
-        if (results.data && results.data.code == 0) {
-          this.selectData.tractorSelect = results.data.data.results;
-        }
-      }).catch((err) => {
-        this.tractorLoading = false;
-      })
+    //   this.$$http('searchHeadCarList', postData).then((results) => {
+    //     this.tractorLoading = false;
+    //     if (results.data && results.data.code == 0) {
+    //       this.selectData.tractorSelect = results.data.data.results;
+    //     }
+    //   }).catch((err) => {
+    //     this.tractorLoading = false;
+    //   })
 
-    },
+    // },
     getDetail: function() {
       this.$$http('getLogisticStatisticDetail', { id: this.id }).then((results) => {
         if (results.data && results.data.code == 0) {
@@ -481,7 +475,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['company_id','company','plate_number','plate_number_id','plan_time','loading_quantity','actual_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price','change_value', 'remark']
+      let keyArray = ['company_id','company','plan_time','loading_quantity','actual_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price','change_value', 'remark']
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

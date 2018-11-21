@@ -649,7 +649,8 @@ export default {
             //   this.tableData.data.results[i].waiting_charges_dvalue = (parseFloat(this.tableData.data.results[i].waiting_charges_adjust) * 100 - parseFloat(this.tableData.data.results[i].waiting_charges) * 100) / 100;
             //   this.tableData.data.results[i].waiting_charges_dvalue = (this.tableData.data.results[i].waiting_charges_dvalue).toFixed(2);
             // }
-            this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
+            this.tableData.data.results[i].station = (this.tableData.data.results[i].station.join(',')).replace(',', '<br/>');
+            // this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }
           this.tableDataObj = {
               len: this.tableData.data.results.length, //长度

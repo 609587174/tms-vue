@@ -427,7 +427,7 @@ export default {
             waiting_price: this.detail.waiting_price, //卸车待时金额
             waiting_charges: this.detail.waiting_charges, //运费合计
             plate_number: this.detail.plate_number, //车牌号
-            station: this.detail.station, //站点
+            station: (this.detail.station).join(','), //站点
             is_reconciliation: this.detail.is_reconciliation.verbose,
             is_invoice: this.detail.is_invoice.verbose,
             work_end_time: this.detail.work_end_time,

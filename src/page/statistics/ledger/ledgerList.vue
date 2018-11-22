@@ -628,7 +628,8 @@ export default {
         if (results.data && results.data.code == 0) {
           this.tableData = results.data;
           for (let i in this.tableData.data.results) {
-            this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
+            this.tableData.data.results[i].station = (this.tableData.data.results[i].station.join(',')).replace(/,/g, '<br/>');
+            // this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
             // this.tableData.data.results[i].ex_oil_hover = [{
             //   fee_type: '过路费',
             //   money: 100

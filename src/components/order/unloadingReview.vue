@@ -339,6 +339,8 @@ export default {
         if (this.isUpload) {
           this.uploadPoundImg().then(results => {
             this.sendReAjax();
+          }).catch(()=>{
+            this.buttonLoading = false;
           });
         } else {
           this.sendReAjax();

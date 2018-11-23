@@ -467,6 +467,7 @@ export default {
         //     });
         //   }
         // });
+        this.renderUnloadArr=[];
         this.allUnloadArr.forEach((unloadItem)=>{
           var addFalge=true;
           if(this.aCarMatchId.indexOf(unloadItem.id)>-1){

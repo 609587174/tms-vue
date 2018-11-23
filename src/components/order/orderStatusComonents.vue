@@ -220,7 +220,7 @@ export default {
         }]
       },
       fifterNameArr:[],
-      expandStatus: true,
+      expandStatus: false,
       pageLoading: false,
       exportLoading: false,
       checkboxGroup6:[],

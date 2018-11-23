@@ -60,6 +60,11 @@
                   {{scope.row.created_at}}
                 </template>
               </el-table-column>
+              <el-table-column align="center" :label="'启用状态'">
+                <template slot-scope="scope">
+                  {{scope.row.is_active.verbose}}
+                </template>
+              </el-table-column>
               <el-table-column label="操作" align="center">
                 <template slot-scope="scope">
                   <el-button type="primary" size="mini" @click="handleMenuClick({operator:'check',id:scope.row.id})">查看</el-button>

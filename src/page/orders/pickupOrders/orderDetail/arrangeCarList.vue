@@ -368,37 +368,57 @@ export default {
           if(nextStatus){
             //判断是否在别的订单。
             let postData3 = {
-              transport_id: row.id
-            };
+              transport_id: row.id,
+              delivery_order_id:this.id
+            }; 
             this.$$http('searchNoUse', postData3).then((results) => {
 
               if (results.data && results.data.code == 0) {
                 vm.pageLoading = false;
-                if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length > 0) {
+                if(results.data.data.interrupt_waybill_number.length>0){
+                  this.$alert(row.tractor.plate_number+'正变更在运单'+results.data.data.interrupt_waybill_number[0]+'下，请不要重复操作，需托运方相关人员确认！', '请注意', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        vm.$refs.multipleTable.toggleRowSelection(row, false);
+                        var new_now_capacities1 = [];
+                        vm.now_capacities.forEach((item, index) => {
+                          if (item.id != row.id) {
+                            new_now_capacities1.push(item);
+                          }
+                        });
+                        vm.now_capacities = new_now_capacities1;
+                        vm.trueAll_list.forEach((Titem) => {
+                          if (Titem.id == row.id) {
+                            Titem.bindCheckBox = false;
+                          }
+                        });
+                    }
+                  });
+                } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length > 0) {
                   var orderListText = "";
                   results.data.data.forEach((item) => {
                     orderListText += item + ",";
                   });
-                  const h = this.$createElement;
-                  vm.$confirm({
-                    title: '请注意',
-                    message: h('p', null, [
-                      h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
-                      h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
-                    ]),
-                    showCancelButton: true,
-                    confirmButtonText: '继续添加',
-                    cancelButtonText: '返回',
-                    beforeClose: (action, instance, done) => {
-                      if (action === 'confirm') {
-                        done();
+                  // const h = this.$createElement;
+                  // vm.$confirm({
+                  //   title: '请注意',
+                  //   message: h('p', null, [
+                  //     h('span', null, '车号 ' + row.tractor.plate_number + " 已存在于订单"),
+                  //     h('i', { style: 'color: teal' }, orderListText + "是否继续添加进入订单")
+                  //   ]),
+                  //   showCancelButton: true,
+                  //   confirmButtonText: '继续添加',
+                  //   cancelButtonText: '返回',
+                  //   beforeClose: (action, instance, done) => {
+                  //     if (action === 'confirm') {
+                  //       done();
 
-                      } else {
+                  //     } else {
 
-                        done();
-                      }
-                    }
-                  })
+                  //       done();
+                  //     }
+                  //   }
+                  // })
                   vm.$confirm('车号 ' + row.tractor.plate_number + " 已存在于订单" + orderListText + "是否继续添加进入订单", '提示', {
                     confirmButtonText: '继续添加',
                     cancelButtonText: '返回',
@@ -434,7 +454,7 @@ export default {
                   vm.juageAddDialog = true;
                   vm.judgeAddData = results.data.data.trips_driver_unconfirm_list;
                   vm.judgeAddRow = row;
-                } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length == 0) {
+                } else if (results.data.data.trips_driver_unconfirm_list.length == 0 && results.data.data.delivery_list.length == 0 && results.data.data.interrupt_waybill_number.length==0)  {
                   row.bindCheckBox = !row.bindCheckBox;
                   vm.trueAll_list.forEach((Titem) => {
                     if (Titem.id == row.id) {
@@ -762,7 +782,7 @@ export default {
           //最新的列表
           if (nowData.add_capacities.length != vm.alreadyList.add_capacities.length || nowData.del_capacities.length != vm.alreadyList.del_capacities.length) {
             returnFlag = false;
-            callbackFun(false);
+            callbackFun(0);
           } else {
             for (var addIndex in vm.alreadyList.add_capacities) {
               if (nowData.add_capacities.indexOf(vm.alreadyList.add_capacities[addIndex]) == -1) {

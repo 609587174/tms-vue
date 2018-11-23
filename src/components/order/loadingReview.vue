@@ -336,6 +336,8 @@ export default {
           this.uploadSealImg();
           this.uploadPoundImg().then(results => {
             this.sendReAjax();
+          }).catch(()=>{
+            this.buttonLoading = false;
           });
         } else {
           this.sendReAjax();

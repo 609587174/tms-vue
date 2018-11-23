@@ -182,7 +182,7 @@ export default {
       listFifterData: [],
       rules: {},
       activeName: 'first',
-      expandStatus: true,
+      expandStatus: false,
       timeParam:[
 
       ],

@@ -888,10 +888,13 @@ export default {
     },
     expandArr: function() {
       if (this.expandStatus) {
-        this.returnId = [];
+        //this.returnId = [];
+        let middleArr=[];
         this.ListData.forEach((item) => {
-          this.returnId.push(item.id);
+          middleArr.push(item.id);
         });
+        this.$set(this,'returnId',middleArr);
+        this.changeExpand();
       } else {
         this.returnId = [];
       }
@@ -1020,6 +1023,7 @@ export default {
 
       //   });
       // }
+      console.log("asas");
     },
     downExFun(type, rowData) {
 
@@ -1206,9 +1210,11 @@ export default {
   },
   created() {
     if (this.expandStatus) {
+      var middleArr=[];
       this.ListData.forEach((item) => {
-        this.returnId.push(item.id)
+        middleArr.push(item.id)
       });
+      this.$set(this,'returnId',middleArr);
     }
   },
   watch: {
@@ -1244,6 +1250,7 @@ export default {
       handler(val, oldVal) {
         setTimeout(() => {
           this.expandArr();
+          this.changeExpand();
         })
       },
     }

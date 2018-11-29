@@ -146,24 +146,40 @@ export default {
         section_trip_id: this.tripId,
         business_order_id:row.id
       }
-      this.$$http('isCancelBusiness', postData).then((results) => {
-        if (results.data && results.data.code == 0) {
-          if(!results.data.data.whether_cancel){
-            this.$confirm('匹配的业务单状态已改变，请重新匹配', '提示', {
-              confirmButtonText: '确定',
-              showCancelButton:false,
-              closeOnClickModal: false,
-              type: 'warning'
-            }).then(() => {
-              this.getList();
-            }).catch(() => {
-              this.getList();
-            });
-          }else{
-            this.matchUnload(row);
+      if(row.status ==='waiting_related'){
+        this.matchUnload(row);
+      }else{
+        this.$$http('isCancelBusiness', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            if(!results.data.data.whether_cancel){
+              this.$confirm('匹配的业务单状态已改变，请重新匹配', '提示', {
+                confirmButtonText: '确定',
+                showCancelButton:false,
+                closeOnClickModal: false,
+                type: 'warning'
+              }).then(() => {
+                this.getList();
+              }).catch(() => {
+                this.getList();
+              });
+            }else{
+              this.matchUnload(row);
+            }
           }
-        }
-      }).catch((err) => {})
+        }).catch((err) => {})
+      }
+    },
+    subUnloadBillError(msg){
+      this.$confirm(msg, '提示', {
+        confirmButtonText: '确定',
+        showCancelButton:false,
+        closeOnClickModal: false,
+        type: 'warning'
+      }).then(() => {
+        this.getList();
+      }).catch(() => {
+        this.getList();
+      });
     },
     startSearch: function() {
       this.pageData.currentPage = 1;
@@ -246,7 +262,12 @@ export default {
                   this.getList();
                   this.cancelMatchUnloadId = [];
                   this.matchUnloadId = [];
-                } else {
+                } else if(results.data && results.data.code == -1) {
+                  done();
+                  this.getList();
+                  this.cancelMatchUnloadId = [];
+                  this.matchUnloadId = [];
+                }else{
                   setTimeout(() => {
                     instance.confirmButtonText = '确定';
                     instance.confirmButtonLoading = false;

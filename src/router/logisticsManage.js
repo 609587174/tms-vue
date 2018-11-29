@@ -106,7 +106,7 @@ export default {
         },
         component: (resolve) => require(['../page/logisticsManage/UnderConsignmentOrders/underOrderProcess'], resolve),
       }, {
-        path: 'unloadBill/:waybillId',
+        path: 'unloadBill/:waybillId/:tripId',
         name: 'unloadBill',
         meta: {
           isVerificationL: false,

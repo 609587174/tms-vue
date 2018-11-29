@@ -9,6 +9,14 @@
  */
 
 const api = {
+  isCancelBusiness:{
+    url: '/order/section-trips/check-order-cancel/',
+    method: 'post',
+    desc: '判断该卸货单是否可以被取消',
+    param: {
+
+    }
+  },
   exportCashAudit:{
     url: '/exports/cash/',
     method: 'get',

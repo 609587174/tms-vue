@@ -37,8 +37,8 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="100">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" class="match-btn" v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'" @click="matchUnload(scope.row)">匹配</el-button>
-                  <el-button type="text" size="mini" class="match-btn" v-if="scope.row.is_show&&(isMatch(scope.row.status))" @click="matchUnload(scope.row)">取消匹配</el-button>
+                  <el-button type="text" size="mini" class="match-btn" v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'" @click="isCancelBusiness(scope.row)">匹配</el-button>
+                  <el-button type="text" size="mini" class="match-btn" v-if="scope.row.is_show&&(isMatch(scope.row.status))" @click="isCancelBusiness(scope.row)">取消匹配</el-button>
                   <!-- <el-button v-if="!scope.row.is_matched" type="danger" size="mini" @click="">删除</el-button> -->
                 </template>
               </el-table-column>
@@ -65,6 +65,9 @@ export default {
   computed: {
     waybillId() {
       return this.$route.params.waybillId;
+    },
+    tripId() {
+      return this.$route.params.tripId;
     }
   },
   data() {
@@ -138,6 +141,46 @@ export default {
     }
   },
   methods: {
+    isCancelBusiness(row){
+      let postData = {
+        section_trip_id: this.tripId,
+        business_order_id:row.id
+      }
+      if(row.status ==='waiting_related'){
+        this.matchUnload(row);
+      }else{
+        this.$$http('isCancelBusiness', postData).then((results) => {
+          if (results.data && results.data.code == 0) {
+            if(!results.data.data.whether_cancel){
+              this.$confirm('匹配的业务单状态已改变，请重新匹配', '提示', {
+                confirmButtonText: '确定',
+                showCancelButton:false,
+                closeOnClickModal: false,
+                type: 'warning'
+              }).then(() => {
+                this.getList();
+              }).catch(() => {
+                this.getList();
+              });
+            }else{
+              this.matchUnload(row);
+            }
+          }
+        }).catch((err) => {})
+      }
+    },
+    subUnloadBillError(msg){
+      this.$confirm(msg, '提示', {
+        confirmButtonText: '确定',
+        showCancelButton:false,
+        closeOnClickModal: false,
+        type: 'warning'
+      }).then(() => {
+        this.getList();
+      }).catch(() => {
+        this.getList();
+      });
+    },
     startSearch: function() {
       this.pageData.currentPage = 1;
       this.getList();
@@ -219,7 +262,12 @@ export default {
                   this.getList();
                   this.cancelMatchUnloadId = [];
                   this.matchUnloadId = [];
-                } else {
+                } else if(results.data && results.data.code == -1) {
+                  done();
+                  this.getList();
+                  this.cancelMatchUnloadId = [];
+                  this.matchUnloadId = [];
+                }else{
                   setTimeout(() => {
                     instance.confirmButtonText = '确定';
                     instance.confirmButtonLoading = false;

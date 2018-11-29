@@ -344,7 +344,6 @@ export default {
         fluid: "",
         plan_time: '',
         require_car_number: '',
-        trader: '',
         plan_tonnage: '',
         type:'three',
         consignment_type:'external',

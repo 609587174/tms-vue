@@ -482,7 +482,7 @@
       </el-table-column>
       <el-table-column label="实际卸车吨位" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
         <template slot-scope="props">
-          <span v-if="props.row.pick_active_time">{{props.row.active_tonnage}}</span><span v-else>无</span>
+          <span v-if="props.row.unload_active_tonnage">{{props.row.unload_active_tonnage}}</span><span v-else>无</span>
         </template>
       </el-table-column>
       <el-table-column label="卸车信息" prop="" min-width="150" v-if="this.nowHead=='matchHead'">
@@ -888,10 +888,13 @@ export default {
     },
     expandArr: function() {
       if (this.expandStatus) {
-        this.returnId = [];
+        //this.returnId = [];
+        let middleArr=[];
         this.ListData.forEach((item) => {
-          this.returnId.push(item.id);
+          middleArr.push(item.id);
         });
+        this.$set(this,'returnId',middleArr);
+        this.changeExpand();
       } else {
         this.returnId = [];
       }
@@ -1020,6 +1023,7 @@ export default {
 
       //   });
       // }
+      console.log("asas");
     },
     downExFun(type, rowData) {
 
@@ -1206,9 +1210,11 @@ export default {
   },
   created() {
     if (this.expandStatus) {
+      var middleArr=[];
       this.ListData.forEach((item) => {
-        this.returnId.push(item.id)
+        middleArr.push(item.id)
       });
+      this.$set(this,'returnId',middleArr);
     }
   },
   watch: {
@@ -1244,6 +1250,7 @@ export default {
       handler(val, oldVal) {
         setTimeout(() => {
           this.expandArr();
+          this.changeExpand();
         })
       },
     }

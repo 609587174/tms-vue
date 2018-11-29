@@ -156,7 +156,7 @@
               <el-row style="margin-top:20px;">
                 <el-col :span="4" class="whiteSpan">
                   <el-tooltip class="item" effect="light" placement="bottom-start" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
-                    <div slot="content" style="width:250px;"> 
+                    <div slot="content" style="width:250px;">
                       <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}" >
                         <el-col >业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
@@ -594,7 +594,7 @@
           <el-button @click="isUpSettlement = false">取 消</el-button>
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span> -->
-        
+
         <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck"></upSettlementReview>
     </el-dialog>
   </div>
@@ -1165,11 +1165,11 @@ export default {
         this.upSettlement(rowData);
       } else if (type == 'changeUnload') {
         //变更卸货地
-        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/' + rowData.waybill.id)
+        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/' + rowData.waybill.id + '/' + rowData.id)
         // this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'waitingMatch') {
         //匹配卸货地
-        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/' + rowData.waybill.id)
+        window.open('#/logisticsManage/UnderConsignmentOrders/unloadBill/' + rowData.waybill.id + '/' + rowData.id)
         // this.$router.push({ path: `/logisticsManage/UnderConsignmentOrders/unloadBill/${rowData.waybill.id}` });
       } else if (type == 'upUnloadPound') {
         //上传卸车磅单

@@ -498,15 +498,18 @@
               <div class="label-list">
                 <label>装车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">点击查看榜单</span>
+                  <span class="text-blue cursor-pointer" v-on:click="showImg(loadingInfo.weight_note_id)">查看磅单</span>
                 </div>
               </div>
             </el-col>
-            <el-col :span="8" v-if="orderId">
+            <el-col :span="8">
               <div class="label-list">
                 <label>卸车磅单:</label>
                 <div class="detail-form-item">
-                  <span class="text-blue cursor-pointer" v-on:click="showImg(unloadInfo.weight_note_id)">点击查看榜单</span>
+                  <div v-for="(item,key) in unloadArr" :key="item.id">
+                    <span class="text-blue cursor-pointer" v-if="item.weight_note_id" v-on:click="showImg(item.weight_note_id)">查看磅单（{{item.destination}}）</span>
+                  </div>
+                  <div v-if="!unloadArr.length">无</div>
                 </div>
               </div>
             </el-col>

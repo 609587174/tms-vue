@@ -1,7 +1,8 @@
 #!/bin/bash
-echo "测试发布"
-USER=app
+echo "测试"
+USER=root
 HOST=39.104.57.105
-DIR=/www/front/tms_front
-rm -rf ./dist && npm run build && rsync -avz --delete dist/ ${USER}@${HOST}:${DIR}
+DIR=/www/test/tms_front
+echo ${USER}@${HOST}:${DIR}
+rm -rf ./dist && npm run build && rsync -avz dist/* ${USER}@${HOST}:${DIR}/
 echo "测试环境发布成功"

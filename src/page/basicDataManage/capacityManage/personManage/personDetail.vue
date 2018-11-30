@@ -349,6 +349,7 @@
           </el-row>
           <!-- </el-form> -->
         </div>
+        
         <div class="detail-list detail-form">
           <div class="detail-form-title ">
             <el-row :gutter="10">
@@ -434,6 +435,7 @@ export default {
   },
   created() {
     this.getDetail();
+
   },
   computed: {
     id: function() {
@@ -455,7 +457,6 @@ export default {
 
           this.userData.address.city = (this.userData.area && this.userData.area.city && this.userData.area.city.area_name) ? this.userData.area.city.area_name : '';
           this.userData.address.area = (this.userData.area && this.userData.area.city && this.userData.area.city.county) ? this.userData.area.city.county.area_name : '';
-
         }
       })
 

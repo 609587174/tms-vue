@@ -13,7 +13,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <div class="text-right edit-btn-box">
+      <div class="text-right edit-btn-box" v-if="detailData.position_type && (detailData.position_type.key === 'LNG_FACTORY' || detailData.position_type.key === 'DELIVER_POSITION')">
         <el-button type="primary" @click="editLandmark()" size="mini">编辑</el-button>
       </div>
       <el-main v-loading="pageLoading">

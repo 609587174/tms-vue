@@ -58,6 +58,10 @@
         <el-table-column type="selection" width="55" :selectable="checkboxInit">
         </el-table-column>
         <el-table-column v-for="(item,key) in tableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:(tableList.length>6?140:'')">
+          <template slot-scope="scope">
+            <!-- <div v-if="item.dateType==='date'">{{scope.row[item.param]|dateFilter}}</div> -->
+            <div :class="item.isEllipsis?'td-hover':''" :title="item.isEllipsis?scope.row[item.param]:''">{{scope.row[item.param]}}</div>
+          </template>
           <!-- <template slot-scope="scope">
             <div v-if="item.param === 'waybill'">
               <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
@@ -71,7 +75,7 @@
             <div class="text-red" v-else>{{scope.row.status.verbose}}</div>
           </template>
         </el-table-column>
-        <el-table-column label="备注" align="center" width="240" fixed="right">
+        <el-table-column label="说明" align="center" width="240" fixed="right">
           <template slot-scope="scope">
             <div class="text-red">{{scope.row.remark}}</div>
           </template>

@@ -55,6 +55,11 @@ export default {
         title: '是否为行程内费用',
         param: 'is_travel.verbose',
         width: ''
+      }, {
+        title: '备注',
+        param: 'comment',
+        width: '170',
+        isEllipsis:true
       }],
     };
   },

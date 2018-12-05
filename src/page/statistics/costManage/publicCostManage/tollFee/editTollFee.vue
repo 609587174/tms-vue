@@ -72,6 +72,16 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="行程内费用:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_travel"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="交易地点:">
+                    <el-input placeholder="请输入" type="text" v-model.trim="editMsgForm.trading_places"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="是否匹配运单:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_matching"></el-input>
                   </el-form-item>
@@ -102,6 +112,11 @@
                 <el-col :span="8">
                   <el-form-item label="装车吨位:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注:">
+                    <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.comment"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -144,11 +159,14 @@ export default {
         consume_price: '', //消费金额
         service_charge: '', // 服务费
         total_money: '', //共计金额
+        is_travel:'',
+        trading_places:'',
         is_matching: '', // 是否匹配运单
         waybill: '', // 运单号
         work_end_time: '',
         fluid: '',
-        loading_quantity: ''
+        loading_quantity: '',
+        comment:''
       },
       waybillList: [], //运单号列表
       rules: {
@@ -237,11 +255,14 @@ export default {
             consume_price: this.detail.consume_price, //消费金额
             service_charge: this.detail.service_charge, // 服务费
             total_money: this.detail.total_money, //共计金额
+            is_travel:this.detail.is_travel.verbose,
+            trading_places:this.detail.trading_places,
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
             waybill: this.detail.waybill, // 运单号
             work_end_time: this.detail.work_end_time,
             fluid: this.detail.fluid,
-            loading_quantity: this.detail.loading_quantity
+            loading_quantity: this.detail.loading_quantity,
+            comment:this.detail.comment
           }
           this.getWaybillData();
         }
@@ -281,7 +302,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill'];
+      let keyArray = ['cost_type', 'card_number', 'consume_price  ', 'at_amount', 'service_charge', 'waybill','trading_places','comment'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for (let i in this.waybillList) {
         // console.log('运单号',this.waybillList[i].waybill_number,this.editMsgForm.waybill)

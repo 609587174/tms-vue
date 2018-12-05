@@ -37,8 +37,9 @@ export default {
         width: '180'
       }, {
         title: '费用类型',
-        param: 'cost_type.verbose',
-        width: ''
+        param: 'cost_type',
+        width: '',
+        isSecondLevel: true
       }, {
         title: '数量',
         param: 'nums',

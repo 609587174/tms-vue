@@ -33,8 +33,9 @@ export default {
         width: ''
       },{
         title: '卡号类别',
-        param: 'cost_type.verbose',
-        width: ''
+        param: 'cost_type',
+        width: '',
+        isSecondLevel:true
       }, {
         title: '卡号',
         param: 'card_number',
@@ -57,8 +58,9 @@ export default {
         width: ''
       }, {
         title: '是否为行程内费用',
-        param: 'is_travel.verbose',
-        width: ''
+        param: 'is_travel',
+        width: '',
+        isSecondLevel:true
       }, {
         title: '交易地点',
         param: 'trading_places',

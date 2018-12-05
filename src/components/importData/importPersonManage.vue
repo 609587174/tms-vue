@@ -32,8 +32,9 @@ export default {
         width: ''
       }, {
         title: '从业类型',
-        param: 'work_type.verbose',
-        width: '180'
+        param: 'work_type',
+        width: '180',
+        isSecondLevel: true
       }, {
         title: '电话号码',
         param: 'mobile_phone',

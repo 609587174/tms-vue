@@ -380,7 +380,10 @@
             <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
               <el-col>
                 <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
-                <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+
+                <el-button v-if="props.row.status.key=='loading_audit_failed'&&props.row.pick_loading_audit_failed_cancel==true" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" >{{item.text}}</el-button>
+
+                <el-button v-if="(!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'))&&(props.row.status.key!='loading_audit_failed')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
             <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key" style="margin-top:10px;">
@@ -525,7 +528,9 @@
           <el-row v-for="(item,key) in buttonAll[props.row.status.key]" :key="key" v-if="props.row.interrupt_status.key=='normal'">
             <el-col v-if="key==0">
               <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
-              <el-button v-else :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
+              <el-button v-if="props.row.status.key=='loading_audit_failed'&&props.row.pick_loading_audit_failed_cancel==true" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" >{{item.text}}</el-button>
+
+                <el-button v-if="!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')&&props.row.status.key!='loading_audit_failed'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
           </el-row>
           <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" :key="key">
@@ -794,7 +799,14 @@ export default {
             attrPlan: true
           }
         ],
-        loading_audit_failed: [],
+        loading_audit_failed: [
+          { //
+            text: "取消运单",
+            type: "danger",
+            methods_type: "cancleOrder",
+            attrPlan: true
+          }
+        ],
         to_site: [],
         reach_site: [],
         unloading_waiting_audit: [{

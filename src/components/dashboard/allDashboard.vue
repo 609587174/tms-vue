@@ -81,7 +81,7 @@ export default {
               {key:'loading_waiting_audit_count',value:'待审核装车磅单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=first&secondActiveName=loading_waiting_audit',dimension:"单"},
               {key:'confirm_match_count',value:'待确认卸货单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=second&secondActiveName=confirm_match',dimension:"单"},
               {key:'unloading_waiting_audit_count',value:'待审核卸车磅单',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=unloading_waiting_audit',dimension:"单"},
-              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=fourth&secondActiveName=waiting_settlement',dimension:"单"},
+              {key:'waiting_settlement_count',value:'待提交结算',goUrl:'/logisticsManage/consignmentOrders/ordersList?goTo=third&secondActiveName=waiting_settlement',dimension:"单"},
             ],
             'searchShow':false,//是否展示搜索
             'type':'dispatch_centre_schedule',//当前概览的分类

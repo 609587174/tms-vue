@@ -35,7 +35,18 @@
                 <el-form-item label="费用时间:">{{row.cost_date}}</el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="运单号:">{{row.waybill}}</el-form-item>
+                <el-form-item label="运单号:" prop="waybill">
+                  <el-select v-model="formRules.waybill" filterable clearable placeholder="请输入选择" @change="selectWaybill">
+                    <!-- <el-option v-for="(item,key) in waybillList" :key="key" :label="item.waybill_number" :value="item.waybill_number"></el-option> -->
+                    <el-option v-for="(item,key) in waybillList" :key="item.id" :label="item.waybill_number" :value="item.waybill_number">
+                      <span style="float: left">{{ item.waybill_number }}</span>
+                      <span class="option-span" v-if="item.work_end_time">{{ item.work_end_time }}</span>
+                      <span class="option-span" v-if="item.fluid">{{ item.fluid }}</span>
+                      <span class="option-span" v-if="item.loading_quantity">{{ item.loading_quantity }}</span>
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="运单号:">{{row.waybill}}</el-form-item> -->
               </el-col>
             </el-row>
             <el-row :getter="20">
@@ -110,6 +121,7 @@ export default {
       formRules: {
         nums: '', //数量
         pre_tax_amount: '', //税前金额
+        waybill:''
       },
       refuseFormRules: {
         refuse_note: '', //拒绝理由
@@ -122,6 +134,9 @@ export default {
         pre_tax_amount:[
           { required: true, message: '请输入税前金额', trigger: 'blur' },
           { pattern: this.$store.state.common.regular.price.match, message: this.$store.state.common.regular.price.tips, trigger: 'blur' },
+        ],
+        waybill: [
+          { required: true, message: '请选择运单号', trigger: 'blur' }
         ],
       },
       refuseRules:{
@@ -146,7 +161,8 @@ export default {
         isShow:true,
         width:'50%',
         title:'费用审核'
-      }
+      },
+      waybillList:[],//运单列表
     }
   },
   computed: {
@@ -161,6 +177,28 @@ export default {
   methods: {
     closeBtn: function() {
       this.$emit('closeDialogBtn', false);
+    },
+    selectWaybill(waybill) {
+      for (let i in this.waybillList) {
+        if (this.waybillList[i].waybill_number === waybill) {
+          this.editMsgForm.work_end_time = this.waybillList[i].work_end_time;
+          this.editMsgForm.fluid = this.waybillList[i].fluid;
+          this.editMsgForm.loading_quantity = this.waybillList[i].loading_quantity;
+        }
+      }
+    },
+    getWaybillData(row) {
+      let postData = {
+        datetime: row.cost_date,
+        plate_number: row.plate_number
+        // datetime:'2018-06-13 22:10:15',
+        // plate_number:'鲁HH5555'
+      }
+      this.$$http('getWaybillData', postData).then((results) => {
+        if (results.data && results.data.code == 0) {
+          this.waybillList = results.data.data;
+        }
+      })
     },
     switchWindowBtn(type){
       if(type){
@@ -254,7 +292,8 @@ export default {
     isShow(curVal, oldVal) {　
       this.formRules = {
         nums: this.row.nums,
-        pre_tax_amount: this.row.pre_tax_amount
+        pre_tax_amount: this.row.pre_tax_amount,
+        waybill:this.row.waybill
       };　
       this.refuseFormRules={
         refuse_note: '', //拒绝理由
@@ -265,6 +304,7 @@ export default {
         width:'50%',
         title:'费用审核'
       }
+      this.getWaybillData(this.row)
       // this.submitBtn.isDisabled = true;　　　　　　　
       if (this.$refs['formRules']) {
         this.$refs['formRules'].clearValidate();　　　　

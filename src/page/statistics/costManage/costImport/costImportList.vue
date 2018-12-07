@@ -195,7 +195,7 @@ export default {
           param: 'logistics_fuel_cash_no_ticket',
           width: ''
         }, {
-          title: '检测费',
+          title: '年审费',
           param: 'detection_cost',
           width: ''
         }, {

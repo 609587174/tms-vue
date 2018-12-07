@@ -62,6 +62,11 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="行程内费用:">
+                    <el-input placeholder="请输入" type="text" :disabled="isDisabled" v-model.trim="editMsgForm.is_travel"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="是否匹配运单:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.is_matching"></el-input>
                   </el-form-item>
@@ -92,6 +97,11 @@
                 <el-col :span="8">
                   <el-form-item label="装车吨位:">
                     <el-input placeholder="请输入" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.loading_quantity"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注:">
+                    <el-input placeholder="请输入" type="textarea" resize="none" :rows="3" v-model.trim="editMsgForm.comment"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -132,11 +142,13 @@ export default {
         consumption_price: '', //消费金额
         nums: '', // 数量
         unit_price: '', //单价
+        is_travel:'',
         is_matching: '', // 是否匹配运单
         waybill: '', // 运单号id
         work_end_time: '',
         fluid: '',
-        loading_quantity: ''
+        loading_quantity: '',
+        comment:''
       },
       waybillList: [], //运单号列表
       rules: {
@@ -226,11 +238,13 @@ export default {
             consumption_price: this.detail.consumption_price, //消费金额
             nums: this.detail.nums, // 数量
             unit_price: this.detail.unit_price, //单价
+            is_travel:this.detail.is_travel.verbose,
             is_matching: this.detail.is_matching.verbose, // 是否匹配运单
             waybill: this.detail.waybill, // 运单号
             work_end_time: this.detail.work_end_time,
             fluid: this.detail.fluid,
-            loading_quantity: this.detail.loading_quantity
+            loading_quantity: this.detail.loading_quantity,
+            comment: this.detail.comment
           }
           this.getWaybillData();
         }
@@ -270,7 +284,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill'];
+      let keyArray = ['company', 'nums', 'unit_price', 'consumption_price', 'waybill','comment'];
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray);
       for (let i in this.waybillList) {
         if (this.waybillList[i].waybill_number === this.editMsgForm.waybill) {

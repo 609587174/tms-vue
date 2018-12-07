@@ -84,7 +84,10 @@
                   </div>
                   <div v-else>
                     <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                    <span v-else>{{scope.row[item.param]}}</span>
+                    <div v-else-if="item.param==='comment'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                    <div v-else>
+                      {{scope.row[item.param]}}
+                    </div>
                   </div>
                 </template>
               </el-table-column>
@@ -179,11 +182,11 @@ export default {
       }, {
         title: '卡号类别',
         param: 'cost_type',
-        width: ''
+        width: '100'
       }, {
         title: '卡号',
         param: 'card_number',
-        width: ''
+        width: '160'
       }, {
         title: '费用时间',
         param: 'cost_date',
@@ -204,6 +207,14 @@ export default {
         title: '行程内费用',
         param: 'is_travel',
         width: ''
+      }, {
+        title: '交易地点',
+        param: 'trading_places',
+        width: ''
+      }, {
+        title: '备注',
+        param: 'comment',
+        width: '170'
       }, {
         title: '匹配状态',
         param: 'is_matching',

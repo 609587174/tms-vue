@@ -85,7 +85,10 @@
                   </div>
                   <div v-else>
                     <span v-if="item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                    <span v-else>{{scope.row[item.param]}}</span>
+                    <div v-else-if="item.param==='comment'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
+                    <div v-else>
+                      {{scope.row[item.param]}}
+                    </div>
                   </div>
                 </template>
               </el-table-column>
@@ -196,6 +199,10 @@ export default {
         title: '行程内费用',
         param: 'is_travel',
         width: ''
+      },{
+        title: '备注',
+        param: 'comment',
+        width: '170'
       }, {
         title: '匹配状态',
         param: 'is_matching',
@@ -254,9 +261,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
+        // this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}`, '_blank')
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
+        // this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
+        window.open(`#/statistics/costManage/publicCostManage/oilGas/editOilGas?id=${row.id}`, '_blank')
       }
     },
     startSearch() {

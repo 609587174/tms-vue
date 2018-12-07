@@ -356,7 +356,7 @@ export default {
           param: 'cash_no_ticket_nums',
           width: '160'
         }, {
-          title: '检测费',
+          title: '年审费',
           param: 'detection_cost',
           width: '',
           isHover: true,

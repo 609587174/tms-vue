@@ -261,9 +261,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
+        // this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}` });
+        window.open(`#/statistics/costManage/publicCostManage/oilGas/oilGasWaybillDetail/${row.waybill_id}`, '_blank')
       } else if (tpye === 'edit') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
+        // this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/editOilGas`, query: { id: row.id } });
+        window.open(`#/statistics/costManage/publicCostManage/oilGas/editOilGas?id=${row.id}`, '_blank')
       }
     },
     startSearch() {

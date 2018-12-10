@@ -107,7 +107,7 @@
                   <el-button type="success" size="mini" plain v-if="scope.row.is_adjust&&scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
                   <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
                 </div>
-                <div v-if="scope.row.is_reconciliation.key==='unfinished'">
+                <div v-if="scope.row.is_reconciliation&&scope.row.is_reconciliation.key==='unfinished'">
                   <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
                   <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
                 </div>
@@ -197,7 +197,7 @@ export default {
           isAdjust: true,
           adjustParam: 'company_adjust'
         },
-         {
+        {
           title: '车号',
           param: 'plate_number',
           width: ''
@@ -613,7 +613,7 @@ export default {
 
     },
     getList() {
-      console.log('post',this.searchPostData);
+      console.log('post', this.searchPostData);
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
@@ -628,7 +628,7 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchPostData.field] = (this.searchPostData.keyword?this.searchPostData.keyword.toString():'');
+      postData[this.searchPostData.field] = (this.searchPostData.keyword ? this.searchPostData.keyword.toString() : '');
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
@@ -656,9 +656,9 @@ export default {
 
           this.tableDataObj = {
               len: this.tableData.data.results.length, //长度
-              data: this.tableData.data&&this.tableData.data.results?this.tableData.data.results:[], //内容
-              waybill: this.tableData.data&&this.tableData.data.waybill?this.tableData.data.waybill:0, //物流单数
-              waiting_charg: this.tableData.data&&this.tableData.data.waiting_charg?this.tableData.data.waiting_charg:0, //运费合计
+              data: this.tableData.data && this.tableData.data.results ? this.tableData.data.results : [], //内容
+              waybill: this.tableData.data && this.tableData.data.waybill ? this.tableData.data.waybill : 0, //物流单数
+              waiting_charg: this.tableData.data && this.tableData.data.waiting_charg ? this.tableData.data.waiting_charg : 0, //运费合计
             },
             this.pageData.totalCount = results.data.data.count;
         }

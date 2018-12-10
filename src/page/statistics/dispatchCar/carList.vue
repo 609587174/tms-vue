@@ -42,6 +42,60 @@
               </el-date-picker>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="装车吨位:">
+              <el-row>
+                <el-col :span="11">
+                  <el-select v-model="searchFilters.loading_quantity_start" filterable @change="startSearch" placeholder="最小吨位">
+                    <el-option v-for="(item,key) in selectData.minTonnage" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="2" class="text-center">至</el-col>
+                <el-col :span="11">
+                  <el-select v-model="searchFilters.loading_quantity_end" filterable @change="startSearch" placeholder="最大吨位">
+                    <el-option v-for="(item,key) in selectData.maxTonnage" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :span="8">
+            <el-form-item label="卸车吨位:">
+              <el-row>
+                <el-col :span="11">
+                  <el-select v-model="searchFilters.actual_quantity_start" filterable @change="startSearch" placeholder="最小吨位">
+                    <el-option v-for="(item,key) in selectData.minTonnage" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="2" class="text-center">至</el-col>
+                <el-col :span="11">
+                  <el-select v-model="searchFilters.actual_quantity_end" filterable @change="startSearch" placeholder="最大吨位">
+                    <el-option v-for="(item,key) in selectData.maxTonnage" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
+                <!-- <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
+                  <el-option v-for="(item,key) in selectData.groupSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                </el-select> -->
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="分组:">
+              <el-select v-model="searchFilters.group" filterable @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.groupSelect" :key="key" :label="item.group_name" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="路单审核:">
+              <el-select v-model="searchFilters.audit" filterable @change="startSearch" placeholder="请选择">
+                <el-option v-for="(item,key) in selectData.waybillSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -49,7 +103,7 @@
     <div class="operation-btn">
       <el-row>
       <el-col :span="18" class="total-data">
-          一共{{total}}单，总里程 {{totalMile}} 公里
+          <!-- 一共{{total}}单，总里程 {{totalMile}} 公里，装车吨位{{}}吨，卸车吨位{{}}吨，实际里程{{}}公里 -->
         </el-col>
         <!-- <el-col :span="6" class="text-right" >
           <el-button type="primary" plain>导出</el-button>
@@ -74,6 +128,11 @@
                <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
                <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" align="center" width="100" fixed="right">
+            <template slot-scope="scope">
+              <el-button type="primary" v-if="!scope.row.audit" size="mini" @click="auditOrder">审核</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -114,38 +173,122 @@ export default {
       activeLoadTime:[],
       activeUnloadTime:[],
       activeName: 'carList',
+      searchPostData: {}, //搜索参数
       searchFilters: {
         keyword: '',
         field: 'plate_number',
+        group:'',
+        audit:'',
+        loading_quantity_start:0,
+        loading_quantity_end:30,
+        actual_quantity_start:0,
+        actual_quantity_end:30
       },
       selectData: {
         fieldSelect: [
-          { id: 'plate_number', value: '车号' }
-        ]
+          { id: 'plate_number', value: '车号' },
+          { id: 'fluid', value: '实际液厂' },
+          { id: 'station', value: '卸货地' }
+        ],
+        waybillSelect: [
+          { id: '', value: '全部' },
+          { id: 'True', value: '已审核' },
+          { id: 'False', value: '未审核' }
+        ],
+        groupSelect: [],
+        minTonnage:[],
+        maxTonnage:[],
       },
       thTableList: [
-          {param:"plate_number",title:"车号",width:"100"},
-          {param:"work_end_time",title:"装车日期",width:"160",showHidden:true},
-          {param:"activate_end_time",title:"卸车日期",width:"160",showHidden:true},
-          {param:"fluid",title:"实际液厂",width:"150",showHidden:true},
-          {param:"station",title:"卸货地",width:"160",splitTip:",",showHidden:true},
-          {param:"loading_quantity",title:"装车吨位",width:"150"},
-          {param:"actual_quantity",title:"卸车吨位",width:"150"},
-          {param:"deficiency",title:"亏吨",width:"150"},
-          {param:"plan_time",title:"计划装车时间",width:"160",showHidden:true},
-          {param:"activate_start",title:"实际到厂时间",width:"160",showHidden:true},
-          {param:"activate_end",title:"实际离站时间",width:"160",showHidden:true},
-          {param:"remark",title:"备注",width:"150",showHidden:true},
-          {param:"stand_mile",title:"标准里程",width:"100"},
-          {param:"actual_mile",title:"实际里程",width:"100"},
-          {param:"type",title:"运单类型",width:"100",dictionaries:{'three':"承运单","online":"贸易单"}},
-          {param:"waybill",title:"所属运单",width:"160"},
-          {param:"operation",title:"分管调度",width:"100"},
+        {
+          param:"plate_number",
+          title:"车号",
+          width:"100"
+        },{
+          param:"group",
+          title:"车队",
+          width:"100"
+        },{
+          param:"work_end_time",
+          title:"装车日期",
+          width:"160",
+          showHidden:true
+        },{
+          param:"activate_end_time",
+          title:"卸车日期",
+          width:"160",
+          showHidden:true
+        },{
+          param:"fluid",
+          title:"实际液厂",
+          width:"150",
+          showHidden:true
+        },{
+          param:"station",
+          title:"卸货地",
+          width:"160",
+          splitTip:",",
+          showHidden:true
+        },{
+          param:"loading_quantity",
+          title:"装车吨位",
+          width:"150"
+        },{
+          param:"actual_quantity",
+          title:"卸车吨位",
+          width:"150"
+        },{
+          param:"deficiency",
+          title:"亏吨",
+          width:"150"
+        },{
+          param:"plan_time",
+          title:"计划装车时间",
+          width:"160",
+          showHidden:true
+        },{
+          param:"activate_start",
+          title:"实际到厂时间",
+          width:"160",
+          showHidden:true
+        },{
+          param:"activate_end",
+          title:"实际离站时间",
+          width:"160",
+          showHidden:true
+        },{
+          param:"remark",
+          title:"备注",
+          width:"150",
+          showHidden:true
+        },{
+          param:"stand_mile",
+          title:"标准里程",
+          width:"100"
+        },{
+          param:"actual_mile",
+          title:"实际里程",
+          width:"100"
+        },{
+          param:"type",
+          title:"运单类型",
+          width:"100",
+          dictionaries:{'three':"承运单","online":"贸易单"}
+        },{
+          param:"waybill",
+          title:"所属运单",
+          width:"160"
+        },{
+          param:"operation",
+          title:"分管调度",
+          width:"100"
+        },
       ],
       tableData: [],
       total:"0",
       totalMile:"0",
-      saveSendData:{}
+      saveSendData:{},
+
     }
   },
   methods: {
@@ -157,12 +300,60 @@ export default {
     pageChange() {
       setTimeout(() => {
         this.searchStatus = true;
+
         this.getList();
       })
     },
+    getGroups: function() {
+      this.$$http('getGroups').then(results => {
+        if (results.data.code === 0) {
+          this.selectData.groupSelect = [{
+            id: '',
+            group_name: '全部'
+          }];
+          this.groupList = results.data.data.results;
+          results.data.data.results.map((n, i) => {
+            this.selectData.groupSelect.push(n);
+          });
+        }
+      }).catch(error => {
+
+      });
+    },
+    tonnageList(num){
+      for(let i=0;i<=num;i++){
+        if(i!==0){
+          this.selectData.maxTonnage.push({
+            id:i,
+            value:i
+          })
+        }
+        if(i<num){
+          this.selectData.minTonnage.push({
+            id:i,
+            value:i
+          })
+        }
+      }
+      console.log(this.selectData.minTonnage,this.selectData.maxTonnage)
+    },
+    auditOrder(){
+      this.$confirm("是否确定审核？", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        // this.isDeletdStaff(row, isDeleted);
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消审核'
+        });
+      });
+    },
     getList(){
       var sendData={};
-      sendData[this.searchFilters.field] = this.searchFilters.keyword;
+      sendData[this.searchPostData.field] = this.searchPostData.keyword;
       if (this.activeLoadTime instanceof Array && this.activeLoadTime.length > 0) {
         sendData.work_end_time_start = this.activeLoadTime[0];
         sendData.work_end_time_end = this.activeLoadTime[1]; //实际卸货
@@ -179,8 +370,16 @@ export default {
         this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
+      sendData.loading_quantity_start = this.searchPostData.loading_quantity_start;
+      sendData.loading_quantity_end = this.searchPostData.loading_quantity_end;
+      sendData.actual_quantity_start = this.searchPostData.actual_quantity_start;
+      sendData.actual_quantity_end = this.searchPostData.actual_quantity_end;
+      sendData.audit = this.searchPostData.audit;
+      sendData.group = this.searchPostData.group;
+
       sendData.pageSize = this.pageData.pageSize;
       this.pageLoading=true;
+      sendData = this.pbFunc.fifterObjIsNull(sendData);
       this.$$http("statisticDispatchList", sendData).then((results) => {
         this.pageLoading=false;
         this.searchStatus=false;
@@ -196,11 +395,29 @@ export default {
       });
     },
     startSearch(){
+      this.pageData.currentPage = 1;
+      this.searchPostData = this.searchFilters;
+      console.log('searchFilters',this.searchFilters,this.searchPostData)
+      if(this.searchPostData.loading_quantity_start >= this.searchPostData.loading_quantity_end){
+        this.$message({
+          type: 'error',
+          message: '装车吨位最大吨位不得小于或等于最小吨位'
+        });
+        return false;
+      }else if(this.searchPostData.actual_quantity_start >= this.searchPostData.actual_quantity_end){
+        this.$message({
+          type: 'error',
+          message: '卸车吨位最大吨位不得小于或等于最小吨位'
+        });
+        return false;
+      }
       this.getList();
     },
   },
   created() {
-    this.getList();
+    this.tonnageList(30),
+    this.getGroups();
+    this.startSearch();
 
   }
 

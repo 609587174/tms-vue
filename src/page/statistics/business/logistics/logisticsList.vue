@@ -107,7 +107,7 @@
                   <el-button type="success" size="mini" plain v-if="scope.row.is_adjust&&scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
                   <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
                 </div>
-                <div v-if="scope.row.is_reconciliation&&scope.row.is_reconciliation.key==='unfinished'">
+                <div v-if="scope.row.is_reconciliation.key==='unfinished'">
                   <el-button type="primary" plain size="mini" @click="reconciliations(false,scope.row.id,'','reconciliation')">对账</el-button>
                   <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
                 </div>

@@ -9,6 +9,14 @@
  */
 
 const api = {
+  auditcheduling:{
+    url: '/statistic/dispatch/:id/',
+    method: 'patch',
+    desc: '审核调度统计',
+    param: {
+
+    }
+  },
   isCancelBusiness:{
     url: '/order/section-trips/check-order-cancel/',
     method: 'post',

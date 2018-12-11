@@ -132,7 +132,8 @@
           </el-table-column>
           <el-table-column label="操作" align="center" width="100" fixed="right">
             <template slot-scope="scope">
-              <el-button type="primary" v-if="!scope.row.audit" size="mini" @click="auditOrder">审核</el-button>
+              <el-button type="primary" v-if="!scope.row.audit" size="mini" @click="auditOrder(scope.row)">审核</el-button>
+              <el-button type="info" v-else size="mini" disabled>审核</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -320,6 +321,19 @@ export default {
 
       });
     },
+    auditcheduling(row){
+      let postData = {
+        id: row.id,
+        audit:'True'
+      }
+      this.$$http('auditcheduling',postData).then(results => {
+        if (results.data.code === 0) {
+          this.getList();
+        }
+      }).catch(error => {
+
+      });
+    },
     tonnageList(num){
       for(let i=0;i<=num;i++){
         if(i!==0){
@@ -337,12 +351,13 @@ export default {
       }
       console.log(this.selectData.minTonnage,this.selectData.maxTonnage)
     },
-    auditOrder(){
+    auditOrder(row){
       this.$confirm("是否确定审核？", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
+        this.auditcheduling(row)
         // this.isDeletdStaff(row, isDeleted);
       }).catch(() => {
         this.$message({

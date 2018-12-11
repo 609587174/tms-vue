@@ -115,18 +115,28 @@
           <el-table-column v-for="(item,key) in thTableList" :key="key"  align="center" :label="item.title" :width="item.width">
             <template slot-scope="props">
               <el-tooltip class="item" effect="light" :open-delay="2000" :content="props.row[item.param]" placement="top-start" v-if="item.showHidden&&props.row[item.param]">
-               <el-row v-if="item.splitTip">
-                <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
-               </el-row>
-               <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
-               <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
+                <el-row v-if="item.splitTip">
+                  <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
+                </el-row>
+                 <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
+                 <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
               </el-tooltip>
+              <div v-else-if="item.isHover&&props.row[item.hoverParam].length">
+                <el-popover trigger="hover" placement="bottom">
+                  <el-table :data="props.row[item.hoverParam]" stripe style="width: 100%" size="mini">
+                    <el-table-column v-for="(hoverItem,i) in hoverThTableList" :key="i" :prop="hoverItem.param" align="center" :label="hoverItem.title" :width="140"></el-table-column>
+                  </el-table>
+                  <div slot="reference" class="name-wrapper">
+                    {{props.row[item.param]}}
+                  </div>
+                </el-popover>
+              </div>
               <div v-else>
-              <el-row v-if="item.splitTip">
-                <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
-               </el-row>
-               <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
-               <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
+                <el-row v-if="item.splitTip">
+                  <el-col v-for="(someItem,someIndex) in props.row[item.param].split(item.splitTip)">{{someItem}}</el-col>
+                </el-row>
+                <span v-if="item.dictionaries">{{item.dictionaries[props.row[item.param].key]}}</span>
+                <span v-if="!item.dictionaries&&!item.splitTip" v-bind:class="{whiteSpan:item.showHidden}">{{props.row[item.param]}}</span>
              </div>
             </template>
           </el-table-column>
@@ -200,6 +210,16 @@ export default {
         minTonnage:[],
         maxTonnage:[],
       },
+      hoverThTableList: [{
+        title: '费用类型',
+        param: 'fee_type',
+      }, {
+        title: '金额',
+        param: 'money'
+      }, {
+        title: '交易地点',
+        param: 'trading_places'
+      }],
       thTableList: [
         {
           param:"plate_number",
@@ -270,6 +290,12 @@ export default {
           param:"actual_mile",
           title:"实际里程",
           width:"100"
+        },{
+          param:"high_cost",
+          title:"高速费",
+          width:"100",
+          isHover:true,
+          hoverParam:"high_cost_hover"
         },{
           param:"type",
           title:"运单类型",

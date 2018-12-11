@@ -183,6 +183,9 @@ export default {
       }, {
         title: '金额',
         param: 'money'
+      }, {
+        title: '交易地点',
+        param: 'trading_places'
       }],
       totalTableList: [{
         title: '现金费用合计',
@@ -310,13 +313,13 @@ export default {
           param: 'com_nums',
           width: ''
         }, {
-          title: '高速费',
+          title: '高速消费金额',
           param: 'high_cost',
           width: '',
           isHover: true,
           hoverParam: 'high_cost_hover'
         }, {
-          title: '服务费',
+          title: '高速服务费',
           param: 'service_charge',
           width: ''
         }, {

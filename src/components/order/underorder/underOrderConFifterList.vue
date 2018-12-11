@@ -143,14 +143,14 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4">
-                  车号: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
+                  车号: <span v-if="props.row.capacity_info && props.row.capacity_info.tractor">{{props.row.capacity_info.tractor.plate_number}}</span>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4">
-                  主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span>
+                  主驾: <span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.name">{{props.row.capacity_info.master_driver.name}}</span>
                 </el-col>
                 <el-col :span="4">
-                  主驾电话: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
+                  主驾电话: <span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.mobile_phone">{{props.row.capacity_info.master_driver.mobile_phone}}</span>
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;">
@@ -170,11 +170,11 @@
                   <span v-else>预匹配卸货地:无</span>
                 </el-col>
                 <el-col :span="4">
-                  挂车号: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.semitrailer">{{props.row.transPowerInfo.semitrailer.plate_number}}</span>
+                  挂车号: <span v-if="props.row.capacity_info && props.row.capacity_info.semitrailer">{{props.row.capacity_info.semitrailer.plate_number}}</span>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4">
-                  车队: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
+                  车队: <span v-if="props.row.capacity_info && props.row.capacity_info.group&&props.row.capacity_info.group.group_name">{{props.row.capacity_info.group.group_name}}</span>
                 </el-col>
               </el-row>
             </div>
@@ -269,14 +269,14 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4">
-                  车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
+                  车号:<span v-if="props.row.capacity_info && props.row.capacity_info.tractor">{{props.row.capacity_info.tractor.plate_number}}</span>
                   <span v-else>无</span>
                 </el-col>
                 <el-col :span="4">
-                  主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
+                  主驾: <span v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.name">{{props.row.capacity_info.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.capacity_info && props.row.capacity_info.master_driver&&props.row.capacity_info.master_driver.mobile_phone">{{props.row.capacity_info.master_driver.mobile_phone}}</span>
                 </el-col>
                 <el-col :span="4">
-                  车队: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.group&&props.row.transPowerInfo.group.group_name">{{props.row.transPowerInfo.group.group_name}}</span>
+                  车队: <span v-if="props.row.capacity_info && props.row.capacity_info.group&&props.row.capacity_info.group.group_name">{{props.row.capacity_info.group.group_name}}</span>
                 </el-col>
               </el-row>
               <el-row style="margin-top:20px;" :gutter="20">
@@ -490,7 +490,7 @@
       <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
           <el-tooltip class="item" effect="light" placement="right">
-            <div slot="content" style="width:130px;">
+            <div slot="content" style="width:140px;">
               <el-row>
                 <el-col>车号:<span v-if="props.row.transPowerInfo && props.row.transPowerInfo.tractor">{{props.row.transPowerInfo.tractor.plate_number}}</span>
                   <span v-else>无</span></el-col>

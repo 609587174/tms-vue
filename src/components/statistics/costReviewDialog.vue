@@ -121,7 +121,8 @@ export default {
       formRules: {
         nums: '', //数量
         pre_tax_amount: '', //税前金额
-        waybill:''
+        waybill:'',
+        waybill_id:'',
       },
       refuseFormRules: {
         refuse_note: '', //拒绝理由
@@ -181,10 +182,8 @@ export default {
     selectWaybill(waybill) {
       for (let i in this.waybillList) {
         if (this.waybillList[i].waybill_number === waybill) {
-          this.editMsgForm.work_end_time = this.waybillList[i].work_end_time;
-          this.editMsgForm.fluid = this.waybillList[i].fluid;
-          this.editMsgForm.loading_quantity = this.waybillList[i].loading_quantity;
-        }
+          this.formRules.waybill_id = this.waybillList[i].id;
+         }
       }
     },
     getWaybillData(row) {
@@ -279,6 +278,7 @@ export default {
           let postData = this.refuseFormRules;
           postData.id = this.row.id;
           postData.verify = 'refused';
+
           // postData = this.pbFunc.fifterObjIsNull(postData);
           this.cashExpenseEeview(postData,'确认',this.refuseSubmitBtn)
 
@@ -293,7 +293,8 @@ export default {
       this.formRules = {
         nums: this.row.nums,
         pre_tax_amount: this.row.pre_tax_amount,
-        waybill:this.row.waybill
+        waybill:this.row.waybill,
+        waybill_id:this.row.waybill_id
       };　
       this.refuseFormRules={
         refuse_note: '', //拒绝理由

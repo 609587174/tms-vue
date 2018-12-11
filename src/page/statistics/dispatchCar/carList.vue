@@ -143,7 +143,7 @@
           <el-table-column label="操作" align="center" width="100" fixed="right">
             <template slot-scope="scope">
               <el-button type="primary" v-if="!scope.row.audit" size="mini" @click="auditOrder(scope.row)">审核</el-button>
-              <el-button type="info" v-else size="mini" disabled>审核</el-button>
+              <el-button type="info" v-else size="mini" disabled>已审核</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -353,6 +353,8 @@ export default {
 
       });
     },
+
+
     auditcheduling(row){
       let postData = {
         id: row.id,
@@ -381,7 +383,7 @@ export default {
           })
         }
       }
-      console.log(this.selectData.minTonnage,this.selectData.maxTonnage)
+      // console.log(this.selectData.minTonnage,this.selectData.maxTonnage)
     },
     auditOrder(row){
       this.$confirm("是否确定审核？", "提示", {
@@ -465,11 +467,22 @@ export default {
       }
       this.getList();
     },
+    // func(obj) {
+    //   obj.a = 1
+    //   console.log('test1',obj.a)
+    //   obj = {}
+    //   console.log('test2',obj)
+    //   obj.a = 2
+    //   console.log('test3',obj.a)
+    // },
   },
   created() {
     this.tonnageList(30),
     this.getGroups();
     this.startSearch();
+    // let test = {}
+    // this.func(test)
+    // console.log('xxxxx',test.a)
 
   }
 

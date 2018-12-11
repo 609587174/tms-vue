@@ -104,7 +104,7 @@
               <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
             </div> -->
                 <div v-if="scope.row.is_reconciliation.key==='finished'&&scope.row.is_invoice.key==='no'">
-                  <el-button type="success" size="mini" plain v-if="scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
+                  <el-button type="success" size="mini" plain v-if="scope.row.is_adjust&&scope.row.is_adjust.key==='no'" @click="accountAdjust(scope.row)">调账</el-button>
                   <el-button type="success" size="mini" v-if="scope.row.is_invoice.key==='no'" @click="reconciliations(false,scope.row.id,'','invoice')">开票</el-button>
                 </div>
                 <div v-if="scope.row.is_reconciliation.key==='unfinished'">
@@ -190,18 +190,14 @@ export default {
           param: 'waybill',
           width: ''
         },
-        //  {
-        //   title: '业务单号',
-        //   param: 'order',
-        //   width: ''
-        // },
         {
           title: '托运方',
           param: 'company',
           width: '200',
           isAdjust: true,
           adjustParam: 'company_adjust'
-        }, {
+        },
+         {
           title: '车号',
           param: 'plate_number',
           width: ''
@@ -599,7 +595,11 @@ export default {
     },
     handleMenuClick(tpye, row) {
       if (tpye === 'waybill') {
-        window.open(`#/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}`, '_blank')
+        if (row.waybill.indexOf("T+") != -1) {
+
+        } else if (row.waybill.indexOf("T") != -1) {
+          window.open(`#/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}`, '_blank')
+        }
         //this.$router.push({ path: `/statistics/business/logistics/logisticsWaybillDetail/${row.waybill_id}` });
       } else if (tpye === 'edit') {
         window.open(`#/statistics/business/logistics/editLogistics?id=${row.id }`, '_blank')
@@ -613,6 +613,7 @@ export default {
 
     },
     getList() {
+      console.log('post',this.searchPostData);
       let postData = {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
@@ -627,7 +628,7 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
-      postData[this.searchPostData.field] = this.searchPostData.keyword;
+      postData[this.searchPostData.field] = (this.searchPostData.keyword?this.searchPostData.keyword.toString():'');
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
@@ -652,11 +653,12 @@ export default {
             this.tableData.data.results[i].station = (this.tableData.data.results[i].station.join(',')).replace(',', '<br/>');
             // this.tableData.data.results[i].station = this.tableData.data.results[i].station.replace(/,/g, '<br/>');
           }
+
           this.tableDataObj = {
               len: this.tableData.data.results.length, //长度
-              data: this.tableData.data.results, //内容
-              waybill: this.tableData.data.waybill, //物流单数
-              waiting_charg: this.tableData.data.waiting_charg, //运费合计
+              data: this.tableData.data&&this.tableData.data.results?this.tableData.data.results:[], //内容
+              waybill: this.tableData.data&&this.tableData.data.waybill?this.tableData.data.waybill:0, //物流单数
+              waiting_charg: this.tableData.data&&this.tableData.data.waiting_charg?this.tableData.data.waiting_charg:0, //运费合计
             },
             this.pageData.totalCount = results.data.data.count;
         }

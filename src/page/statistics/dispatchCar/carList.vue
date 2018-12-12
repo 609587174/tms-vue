@@ -103,7 +103,7 @@
     <div class="operation-btn">
       <el-row>
       <el-col :span="18" class="total-data">
-          一共{{summary.total}}单，总里程 {{summary.totalMile}} 公里，装车吨位{{summary.loading_quantity_sum}}吨，卸车吨位{{summary.actual_quantity}}吨，实际里程{{summary.total_actual_mile}}公里
+          一共{{summary.total}}单，装车吨位 {{summary.loading_quantity_sum}} 吨，卸车吨位 {{summary.actual_quantity}} 吨，标准里程 {{summary.stand_mile_sum}} 公里，实际里程 {{summary.total_actual_mile}} 公里
         </el-col>
         <!-- <el-col :span="6" class="text-right" >
           <el-button type="primary" plain>导出</el-button>
@@ -317,7 +317,7 @@ export default {
       saveSendData:{},
       summary:{
         total:0,//多少单
-        totalMile:0,//总公里数
+        stand_mile_sum:0,//标准里程
         loading_quantity_sum:0,//装车吨位
         actual_quantity:0,//卸车吨位
         total_actual_mile:0//实际里程
@@ -437,7 +437,7 @@ export default {
           this.pageData.totalCount = results.data.data.count;
           this.summary={
             total:results.data.data&&results.data.data.total_count,//多少单
-            totalMile:results.data.data&&results.data.data.total_actual_mile,//总公里数
+            stand_mile_sum:results.data.data&&results.data.data.stand_mile_sum,//标准里程
             loading_quantity_sum:results.data.data&&results.data.data.loading_quantity_sum,//装车吨位
             actual_quantity:results.data.data&&results.data.data.actual_quantity,//卸车吨位
             total_actual_mile:results.data.data&&results.data.data.total_actual_mile,//实际里程

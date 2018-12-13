@@ -26,11 +26,11 @@
       <el-row v-if="setpTipInfo.length>0">
         <el-col :span="20" :offset="2" style="text-align:center;color:#F56C6C">
           请注意，该单与
-            <span v-for="(item,index) in setpTipInfo">
+          <span v-for="(item,index) in setpTipInfo">
               {{item.order_number}}({{item.station}})
               <span v-if="index!=setpTipInfo.length-1">/</span>
-            </span>
-            合为分卸单,请注意卸车信息填写！
+          </span>
+          合为分卸单,请注意卸车信息填写！
         </el-col>
       </el-row>
       <el-row v-if="!isUpload" style="margin-top:10px;">
@@ -169,6 +169,13 @@ export default {
     qiniuImgUpload,
   },
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value >= 0.1 && value < 31) {
+        callback();
+      } else {
+        callback(new Error("请注意单位为吨"));
+      }
+    };
     return {
       buttonLoading: false,
       imgList: [],
@@ -180,7 +187,7 @@ export default {
         limit: 1,
       },
       poundReturnId: '',
-      setpTipInfo:[],
+      setpTipInfo: [],
       rules: {
         active_time: [
           { required: true, message: '请选择实际到厂时间', trigger: 'change' },
@@ -200,7 +207,8 @@ export default {
         ],
         net_weight: [
           { required: true, message: '请输入卸车净重', trigger: 'blur' },
-          { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
+          //{ pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
         ]
       },
       checked: false,
@@ -214,7 +222,7 @@ export default {
     isEdit: Boolean,
     isUpload: Boolean,
     isShowAccountCheck: Boolean,
-    checkStep:String
+    checkStep: String
   },
   computed: {
     imgReviewSrc: function() {
@@ -339,7 +347,7 @@ export default {
         if (this.isUpload) {
           this.uploadPoundImg().then(results => {
             this.sendReAjax();
-          }).catch(()=>{
+          }).catch(() => {
             this.buttonLoading = false;
           });
         } else {
@@ -350,11 +358,11 @@ export default {
 
     },
     getCheckStep() {
-      var sendData={};
-      sendData.id=this.surePoundData.id;
-      this.$$http('getCheckStep',sendData).then(results=>{
-        if(results.data.code==0){
-          this.setpTipInfo=results.data.data;
+      var sendData = {};
+      sendData.id = this.surePoundData.id;
+      this.$$http('getCheckStep', sendData).then(results => {
+        if (results.data.code == 0) {
+          this.setpTipInfo = results.data.data;
         }
       });
     }
@@ -365,14 +373,14 @@ export default {
     this.surePound = Object.assign({}, this.surePoundData);
 
     !this.isUpload && this.getImg();
-    this.isedit&&this.getCheckStep();
+    this.isedit && this.getCheckStep();
   },
   watch: {
     surePoundData: {
       handler(val, oldVal) {
         this.surePound = Object.assign({}, this.surePoundData);
         !this.isUpload && this.getImg();
-        this.isedit&&this.getCheckStep();
+        this.isedit && this.getCheckStep();
         this.poundUpload = {
           fileList: [],
           uploadTitle: '上传磅单',

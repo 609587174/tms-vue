@@ -23,7 +23,7 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      height:25px;
+      height:40px;
       padding:0;
     }
     .listDetalis {
@@ -88,10 +88,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  font-size:12px;
+  font-size:13px;
 }
 .fontContro{
-  font-size:12px;
+  font-size:13px;
 }
 .buttonContent .el-row{
   margin-top:10px;
@@ -109,7 +109,7 @@
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus"  :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
+          <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
                 实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>

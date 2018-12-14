@@ -165,11 +165,11 @@ export default {
           param: 'com_nums',
           width: ''
         }, {
-          title: '高速费',
+          title: '高速消费金额',
           param: 'high_cost',
           width: ''
         }, {
-          title: '服务费',
+          title: '高速服务费',
           param: 'service_charge',
           width: ''
         }, {

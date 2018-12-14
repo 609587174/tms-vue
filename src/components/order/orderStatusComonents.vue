@@ -118,7 +118,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="8" v-if="status!='first'&&status!='second'&&status!='fifth'">
+          <el-col :span="8" v-if="status!='first'&&status!='second'">
             <el-form-item label="实际卸货时间:" label-width="105px">
               <el-date-picker @change="searchList" :editable="editable" align="right" :picker-options="pickerOptions" v-model="timeParam.unload_work_end_time" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
               </el-date-picker>

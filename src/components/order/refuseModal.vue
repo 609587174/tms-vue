@@ -40,7 +40,12 @@ export default {
           }, {
             key: "吨位信息错误",
             text: "吨位信息错误"
-          }, {
+          }, 
+          {
+            key: "运单错误",
+            text: "运单错误"
+          },
+          {
             key: "other",
             text: "其他原因"
           }

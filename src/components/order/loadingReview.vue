@@ -6,7 +6,7 @@
   3:可以审核并能上传装车榜单图片isedit = ture ; isUpload = ture;
  -->
 <style scoped lang="less">
-.loading-review-container {
+  .loading-review-container {
   /deep/ .el-date-editor.el-input {
     width: 100%;
   }
@@ -134,6 +134,13 @@ import qiniuImgUpload from '@/components/qiniuImgUpload'; //引入骑牛图片�
 export default {
   name: 'loadingReview',
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value >= 0.1 && value < 31) {
+        callback();
+      } else {
+        callback(new Error("请注意单位为吨"));
+      }
+    };
     return {
       buttonLoading: false,
       imgList: [],
@@ -167,7 +174,8 @@ export default {
         ],
         net_weight: [
           { required: true, message: '请输入装车净重', trigger: 'blur' },
-          { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
+          { validator: validatePass, trigger: 'blur' }
+          //{ pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
         ]
       }
 
@@ -336,7 +344,7 @@ export default {
           this.uploadSealImg();
           this.uploadPoundImg().then(results => {
             this.sendReAjax();
-          }).catch(()=>{
+          }).catch(() => {
             this.buttonLoading = false;
           });
         } else {
@@ -376,7 +384,7 @@ export default {
           limit: 2,
         }
       },
-      deep: true　
+      deep: true
     },
   }
 };

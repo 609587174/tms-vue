@@ -23,7 +23,7 @@
     }
     td {
       border-bottom: 0px solid #ebeef5;
-      height:25px;
+      height:40px;
       padding:0;
     }
     .listDetalis {
@@ -88,10 +88,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
-  font-size:12px;
+  font-size:13px;
 }
 .fontContro{
-  font-size:12px;
+  font-size:13px;
 }
 .buttonContent .el-row{
   margin-top:10px;
@@ -109,7 +109,7 @@
     <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus"  :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
-          <div style="width:90%;float:left;padding-left:45px;font-size:12px;">
+          <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
                 实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
@@ -205,19 +205,19 @@
           <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="液厂" prop="" min-width="150">
+      <el-table-column label="实际液厂" prop="" min-width="150">
         <template slot-scope="props">
-          <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
+          <span class="fontContro">{{props.row.actual_fluid_address}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.actual_fluid_id)"></i>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" prop="" min-width="150">
+      <!-- <el-table-column label="供应商" prop="" min-width="150">
         <template slot-scope="props">
               <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" v-if="props.row.supplier_name.length<8"><span>{{props.row.supplier_name}}</span></el-button>
           <el-tooltip v-else class="item" effect="light" :content="props.row.supplier_name" placement="top-start">
               <el-button class="fontContro whiteSpan" type="text" style="line-height:0px;padding:0" ><span>{{props.row.supplier_name.slice(0,6)}}....</span></el-button>
           </el-tooltip>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
           <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">

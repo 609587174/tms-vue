@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.trans-fee {
+  .trans-fee {
   .table-list {
     margin-bottom: 20px;
   }
@@ -43,7 +43,7 @@
                 <el-row :gutter="10">
                   <el-col :span="8">
                     <div class="label-list">
-                      <label>实际液厂:</label>
+                      <label>液厂:</label>
                       <div class="detail-form-item" v-html="pbFunc.dealNullData(detailData.fluid_factory&&detailData.fluid_factory.fluid_name)"></div>
                     </div>
                   </el-col>
@@ -92,10 +92,8 @@
                       </div>
                     </div>
                   </el-col>
-
                 </el-row>
                 <el-row :gutter="10">
-
                 </el-row>
               </div>
             </el-main>

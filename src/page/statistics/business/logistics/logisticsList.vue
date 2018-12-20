@@ -254,7 +254,7 @@ export default {
           param: 'plate_number',
           width: ''
         }, {
-          title: '实际液厂',
+          title: '液厂',
           param: 'fluid',
           width: ''
         }, {
@@ -376,7 +376,7 @@ export default {
         title: '车牌号',
         id: 94
       }, {
-        title: '实际液厂',
+        title: '液厂',
         id: 95
       }, {
         title: '站点名称',

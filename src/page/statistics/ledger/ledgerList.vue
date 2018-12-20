@@ -83,19 +83,18 @@
             <!-- ===={{totalTableList.length}} -->
           </template>
         </el-table-column>
-
-        <el-table-column v-for="(totalItem,key) in totalTableList"  :prop="totalItem.param" align="center" fixed="right" :label="totalItem.title" :width="totalItem.width?totalItem.width:140">
+        <el-table-column v-for="(totalItem,key) in totalTableList" :prop="totalItem.param" align="center" fixed="right" :label="totalItem.title" :width="totalItem.width?totalItem.width:140">
           <template slot-scope="scope">
             <div v-if="totalItem.isHover&&scope.row[totalItem.hoverParam].length" class="cursor-pointer">
-                  <el-popover trigger="hover" placement="top">
-                    <el-table :data="scope.row[totalItem.hoverParam]" stripe style="width: 100%" size="mini">
-                      <el-table-column v-for="(hoverItem,i) in hoverThTableList" :key="i" :prop="hoverItem.param" align="center" :label="hoverItem.title" :width="140"></el-table-column>
-                    </el-table>
-                    <div slot="reference" class="name-wrapper">
-                      {{scope.row[totalItem.param]}}
-                    </div>
-                  </el-popover>
+              <el-popover trigger="hover" placement="top">
+                <el-table :data="scope.row[totalItem.hoverParam]" stripe style="width: 100%" size="mini">
+                  <el-table-column v-for="(hoverItem,i) in hoverThTableList" :key="i" :prop="hoverItem.param" align="center" :label="hoverItem.title" :width="140"></el-table-column>
+                </el-table>
+                <div slot="reference" class="name-wrapper">
+                  {{scope.row[totalItem.param]}}
                 </div>
+              </el-popover>
+            </div>
             <div v-else>{{scope.row[totalItem.param]}}</div>
           </template>
         </el-table-column>
@@ -227,7 +226,7 @@ export default {
           param: 'plate_number',
           width: ''
         }, {
-          title: '实际液厂',
+          title: '液厂',
           param: 'fluid',
           width: ''
         }, {
@@ -415,7 +414,7 @@ export default {
         title: '车牌号',
         id: 140
       }, {
-        title: '实际液厂',
+        title: '液厂',
         id: 141
       }, {
         title: '站点名称',
@@ -464,8 +463,8 @@ export default {
         id: 162
       }, {
         title: '服务费',
-        id:207
-      },{
+        id: 207
+      }, {
         title: '外油/气量',
         id: 178
       }, {

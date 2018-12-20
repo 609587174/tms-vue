@@ -30,7 +30,7 @@
               </el-row>
               <el-row :gutter="40">
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:" prop="fluid">
+                  <el-form-item label="液厂:" prop="fluid">
                     <el-select :loading="searchFluidLoading" filterable v-model="userForm.fluid" :disabled="mileEdit" placeholder="请输入选择" @change="chooseFluid">
                       <el-option v-for="(item,key) in fluidFactorySelect" :key="key" :label="item.fluid_name" :value="item.id">
                         <div>

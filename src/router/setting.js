@@ -8,6 +8,14 @@ export default {
   },
   component: (resolve) => require(['../page/setting/setting'], resolve),
   children: [{
+      path: 'personalSettings',
+      name: "personalSettings",
+      meta: {
+        title: '个人设置',
+        isVerificationL: true
+      },
+      component: (resolve) => require(['../page/setting/personalSettings'], resolve)
+    },{
       path: 'company',
       name: "company",
       redirect: '/setting/company/pages',

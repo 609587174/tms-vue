@@ -28,18 +28,24 @@
           <div class="operation-btn text-right">
             <!-- <el-button type="primary" plain @click="importList">导入</el-button> -->
             <!-- <el-button type="primary">导出</el-button> -->
-            <el-button type="success" @click="addUnloading">新增卸货单</el-button>
+            <el-button type="success" @click="editUnloading('add')">新增卸货单</el-button>
             <el-button type="primary" @click="subUnloadBillBtn">提交卸货单</el-button>
           </div>
           <div class="table-list">
             <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
               <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
               </el-table-column>
-              <el-table-column label="操作" align="center" width="100">
+              <el-table-column label="操作" align="center" width="160">
                 <template slot-scope="scope">
-                  <el-button type="text" size="mini" class="match-btn" v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'" @click="isCancelBusiness(scope.row)">匹配</el-button>
-                  <el-button type="text" size="mini" class="match-btn" v-if="scope.row.is_show&&(isMatch(scope.row.status))" @click="isCancelBusiness(scope.row)">取消匹配</el-button>
-                  <!-- <el-button v-if="!scope.row.is_matched" type="danger" size="mini" @click="">删除</el-button> -->
+                  <div v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'||scope.row.status==='noDelete'">
+                    <el-button type="text" size="mini" class="match-btn" @click="deleteUnloadBill(scope.row)">删除</el-button>
+                    <el-button type="text" size="mini" class="match-btn" @click="editUnloading('update',scope.row)">编辑</el-button>
+                    <el-button type="text" size="mini" class="match-btn" @click="isCancelBusiness(scope.row)">匹配</el-button>
+                  </div>
+                  <div v-if="scope.row.is_show&&(isMatch(scope.row.status))">
+                    <el-button type="text" size="mini" class="match-btn"  @click="isCancelBusiness(scope.row)">取消匹配</el-button>
+                  </div>
+
                 </template>
               </el-table-column>
             </el-table>
@@ -49,7 +55,7 @@
             <el-pagination background layout="prev, pager, next, jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
             </el-pagination>
           </div>
-          <unloading-place-dialog :unloading-place-is-show="unloadingPlaceIsShow" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog>
+          <unloading-place-dialog :unload-bill-dialog="unloadBillDialog" :row="unloadBillRow" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -78,6 +84,7 @@ export default {
         totalCount: '',
         pageSize: 10,
       },
+
       activeName: 'userManage',
       searchFilters: {
         employmentType: '',
@@ -135,12 +142,76 @@ export default {
         // }
       ],
       tableData: [],
-      unloadingPlaceIsShow: false, //新增卸货单弹窗
+      unloadBillDialog:{
+        isShow:false,
+        type:'add'
+      }, //新增卸货单弹窗
+      unloadBillRow:{},//编辑的卸货单
       matchUnloadId: [], //匹配卸货单ID
       cancelMatchUnloadId: [] //取消匹配卸货单ID
     }
   },
   methods: {
+    deleteUnloadBill(row){
+      // console.log('row',row)
+      if(row.status !== 'noDelete'){
+        this.$msgbox({
+          title: '提示',
+          message: '是否删除该卸货站？',
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          showCancelButton: true,
+          type: "warning",
+          beforeClose: (action, instance, done) => {
+            if (action === 'confirm') {
+              instance.confirmButtonLoading = true;
+              instance.confirmButtonText = '提交中...';
+              let postData = {
+                id:row.id
+              }
+              this.$$http('deleteOrder', postData).then((results) => {
+                setTimeout(() => {
+                    instance.confirmButtonText = '确定';
+                    instance.confirmButtonLoading = false;
+                  }, 300);
+                if (results.data && results.data.code == 0) {
+                  done();
+                  this.$message({
+                    type: 'success',
+                    message: '删除成功'
+                  });
+                  this.pageData.currentPage = 1;
+                  this.getList();
+                }else{
+                  this.$message({
+                    type: 'error',
+                    message: '删除失败'
+                  });
+                }
+              }).catch((err) => {
+                setTimeout(() => {
+                  instance.confirmButtonText = '确定';
+                  instance.confirmButtonLoading = false;
+                }, 300);
+              })
+
+            } else {
+              done();
+            }
+          }
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消提交'
+          });
+        });
+      }else{
+        this.$message({
+          type: 'warning',
+          message: '关联状态不能删除'
+        });
+      }
+    },
     isCancelBusiness(row){
       let postData = {
         section_trip_id: this.tripId,
@@ -206,16 +277,15 @@ export default {
           for (let i in this.tableData) {
             this.tableData[i].is_show = this.tableData[i].is_matched;
             for (let j in this.matchUnloadId) {
-
               if (this.tableData[i].id === this.matchUnloadId[j]) {
                 this.tableData[i].is_show = true;
-                this.tableData[i].status = 'waiting_confirm';
+                // this.tableData[i].status = 'waiting_confirm';
               }
             }
             for (let z in this.cancelMatchUnloadId) {
               if (this.tableData[i].id === this.cancelMatchUnloadId[z]) {
                 this.tableData[i].is_show = false;
-                this.tableData[i].status = 'waiting_related';
+                // this.tableData[i].status = 'waiting_related';
               }
             }
           }
@@ -307,7 +377,7 @@ export default {
       if (row.is_show) {
         row.status = 'waiting_confirm';
       } else {
-        row.status = 'waiting_related';
+        row.status = 'noDelete';
       }
       this.matchUnloadId = Array.from(new Set(this.matchUnloadId));
       this.cancelMatchUnloadId = Array.from(new Set(this.cancelMatchUnloadId))
@@ -329,12 +399,26 @@ export default {
     handleMenuClick: function(command) {
       this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: command.id } });
     },
-    addUnloading: function() {
-      this.unloadingPlaceIsShow = true;
-
+    editUnloading: function(type,row) {
+      if(row.status === 'noDelete'){
+        this.$message({
+          type: 'warning',
+          message: '关联状态不能编辑'
+        });
+      }else{
+        this.unloadBillDialog = {
+          isShow: true,
+          type: type
+        }
+        if(type === 'update'){
+          this.unloadBillRow = row;
+        }else{
+          this.unloadBillRow = {};
+        }
+      }
     },
     closeDialog: function(isSave, unloadId) {
-      this.unloadingPlaceIsShow = false;
+      this.unloadBillDialog.isShow = false;
 
       if (isSave) {
         this.getList();
@@ -365,6 +449,10 @@ export default {
 .match-btn {
   font-size: 13px;
   line-height: 29px;
+  padding: 0 5px;
+}
+.match-btn+.el-button{
+  margin-left: 5px;
 }
 
 </style>

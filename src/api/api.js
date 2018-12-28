@@ -9,6 +9,46 @@
  */
 
 const api = {
+  updateUserInfo:{
+    url: '/user/users/:id/modify/',
+    method: 'patch',
+    desc: '修改个人信息',
+    param: {
+
+    }
+  },
+  updateLogisticStatisticsList:{
+    url: '/statistic/logistic/manual_update/',
+    method: 'get',
+    desc: '物流数据手动更新',
+    param: {
+
+    }
+  },
+  updateUnloadBill:{
+    url: '/api/v1/users/:id/modify/',
+    method: 'patch',
+    desc: '修改个人设置',
+    param: {
+
+    }
+  },
+  updateUnloadBill:{
+    url: '/order/business_order/:id/',
+    method: 'put',
+    desc: '修改业务单',
+    param: {
+
+    }
+  },
+  deleteOrder:{
+    url: '/order/business_order/:id/',
+    method: 'delete',
+    desc: '删除业务单',
+    param: {
+
+    }
+  },
   auditcheduling:{
     url: '/statistic/dispatch/:id/',
     method: 'patch',

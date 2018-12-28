@@ -45,11 +45,11 @@ export default {
         param: 'nums',
         width: ''
       }, {
-        title: '税前金额',
+        title: '含税金额',
         param: 'pre_tax_amount',
         width: ''
       }, {
-        title: '税后金额',
+        title: '无税金额',
         param: 'at_amount',
         width: ''
       }, {

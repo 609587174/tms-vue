@@ -110,17 +110,17 @@
             <div class="basic-data">
               <div class="basic-data-list">
                 <el-form-item label="原密码:" prop="old_pwd">
-                  <el-input v-model.trim="passwordForm.old_pwd" type="text" placeholder="请输入原密码"></el-input>
+                  <el-input v-model.trim="passwordForm.old_pwd" type="password" placeholder="请输入原密码"></el-input>
                 </el-form-item>
               </div>
               <div class="basic-data-list">
                 <el-form-item label="新密码:" prop="new_pwd">
-                  <el-input v-model.trim="passwordForm.new_pwd" type="text" placeholder="请输入新密码"></el-input>
+                  <el-input v-model.trim="passwordForm.new_pwd" type="password" placeholder="请输入新密码"></el-input>
                 </el-form-item>
               </div>
               <div class="basic-data-list">
                 <el-form-item label="再次输入密码:" prop="confirm_pwd">
-                  <el-input v-model.trim="passwordForm.confirm_pwd" type="text" placeholder="请再次输入密码"></el-input>
+                  <el-input v-model.trim="passwordForm.confirm_pwd" type="password" placeholder="请再次输入密码"></el-input>
                 </el-form-item>
               </div>
               <div class="basic-data-list">
@@ -199,8 +199,8 @@
           old_pwd: [
             { required: true, message: '请输入密码', trigger: 'blur' },
             // { pattern: /(?!^[0-9]+$)(?!^[A-z]+$)(?!^[^A-z0-9]+$)^.{6,16}$/, message: '密码长度6-16位，支持数字、字母、字符(除空格),至少包含2种', trigger: 'blur' },
-            { pattern: this.$store.state.common.regular.password.match, message: this.$store.state.common.regular.password.tips, trigger: 'blur' },
-            { validator: isSpace, trigger: 'blur' },
+            // { pattern: this.$store.state.common.regular.password.match, message: this.$store.state.common.regular.password.tips, trigger: 'blur' },
+            // { validator: isSpace, trigger: 'blur' },
           ],
           new_pwd: [
             { required: true, message: '请设置新登录密码', trigger: 'blur' },
@@ -269,13 +269,13 @@
           new_pwd: '',
           confirm_pwd:'',
         }
-        console.log('this.editMsgForm',this.editMsgForm)
+        // console.log('this.editMsgForm',this.editMsgForm)
         if(type==='basicData'){
           this.editStatus.basicData = status;
-          // if(this.users.is_leader&&!status){
-          //   this.getDepartmentList();
-          //   this.getPositionList(this.users.department.id);
-          // }
+          if(this.users.is_leader&&!status){
+            this.getDepartmentList();
+            this.getPositionList(this.users.department.id);
+          }
         }else if(type==='password'){
           this.editStatus.password = status;
         }
@@ -310,6 +310,21 @@
           this.$message.error('获取职位列表失败');
         })
       },
+      getMunusList() {
+        this.$$http('getMenusList').then((results) => {
+          if (results.data && results.data.code === 0) {
+            if (results.data.data.length) {
+              this.pbFunc.setLocalData('menuList', results.data.data, true);
+              // this.$emit('login');
+            } else {
+              this.$alert('该职位还没有设置权限！请联系管理员', '请注意', {
+                confirmButtonText: '关闭',
+              });
+            }
+          }
+        }).catch((err) => {})
+
+      },
       updateUser(postData,submitBtn,type){
         submitBtn = {
           btnText:'提交中',
@@ -327,8 +342,12 @@
               // results.data.data.user.user_info = results.data.data.user_info;
               // this.pbFunc.setLocalData('user', results.data.data.user, true);
               // this.users = results.data.data.user;
+              if(this.users.is_leader){
+                this.getMunusList();
+              }
               this.editStatus.basicData = true;
               this.getUser();
+
               // if (results.data.data.user && results.data.data.user.menus && results.data.data.user.menus.length) {
               //   this.pbFunc.setLocalData('menuList', results.data.data.user.menus, true);
               // }

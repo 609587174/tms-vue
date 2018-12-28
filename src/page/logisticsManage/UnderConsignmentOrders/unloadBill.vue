@@ -37,9 +37,7 @@
               </el-table-column>
               <el-table-column label="操作" align="center" width="160">
                 <template slot-scope="scope">
-                {{scope.row.is_show}}
-                <!--    -->
-                  <div v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'">
+                  <div v-if="(!scope.row.is_show)&&scope.row.status==='waiting_related'||scope.row.status==='noDelete'">
                     <el-button type="text" size="mini" class="match-btn" @click="deleteUnloadBill(scope.row)">删除</el-button>
                     <el-button type="text" size="mini" class="match-btn" @click="editUnloading('update',scope.row)">编辑</el-button>
                     <el-button type="text" size="mini" class="match-btn" @click="isCancelBusiness(scope.row)">匹配</el-button>
@@ -155,8 +153,8 @@ export default {
   },
   methods: {
     deleteUnloadBill(row){
-      console.log('row',row)
-      if(!row.is_matched){
+      // console.log('row',row)
+      if(row.status !== 'noDelete'){
         this.$msgbox({
           title: '提示',
           message: '是否删除该卸货站？',
@@ -213,7 +211,6 @@ export default {
           message: '关联状态不能删除'
         });
       }
-
     },
     isCancelBusiness(row){
       let postData = {
@@ -380,7 +377,7 @@ export default {
       if (row.is_show) {
         row.status = 'waiting_confirm';
       } else {
-        row.status = 'waiting_related';
+        row.status = 'noDelete';
       }
       this.matchUnloadId = Array.from(new Set(this.matchUnloadId));
       this.cancelMatchUnloadId = Array.from(new Set(this.cancelMatchUnloadId))
@@ -403,16 +400,22 @@ export default {
       this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: command.id } });
     },
     editUnloading: function(type,row) {
-      this.unloadBillDialog = {
-        isShow: true,
-        type: type
-      }
-      if(type === 'update'){
-        this.unloadBillRow = row;
+      if(row.status === 'noDelete'){
+        this.$message({
+          type: 'warning',
+          message: '关联状态不能编辑'
+        });
       }else{
-        this.unloadBillRow = {};
+        this.unloadBillDialog = {
+          isShow: true,
+          type: type
+        }
+        if(type === 'update'){
+          this.unloadBillRow = row;
+        }else{
+          this.unloadBillRow = {};
+        }
       }
-
     },
     closeDialog: function(isSave, unloadId) {
       this.unloadBillDialog.isShow = false;

@@ -14,7 +14,7 @@
               <el-col :span="12">
                 <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
                   <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-option v-for="(item,key) in filterParam.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
                   </el-select>
                   <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                 </el-input>
@@ -33,32 +33,38 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <el-form-item label="是否对账:">
-                  <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.isReconciliationsSelect" :key="key" :label="item.value" :value="item.id"></el-option>
-                  </el-select>
+              <el-col :span="8">
+                <el-form-item label="计划装车时间:" label-width="105px">
+                  <el-date-picker v-model="planTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                  </el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :gutter="10">
               <el-col :span="6">
+                <el-form-item label="是否对账:">
+                  <el-select v-model="searchFilters.is_reconciliation" @change="startSearch" placeholder="请选择">
+                    <el-option v-for="(item,key) in filterParam.isReconciliationsSelect.data" :key="key" :label="item.value" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
                 <el-form-item label="是否开票:">
                   <el-select v-model="searchFilters.is_invoice" filterable @change="startSearch" placeholder="请选择">
-                    <el-option v-for="(item,key) in selectData.isInvoiceSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-option v-for="(item,key) in filterParam.isInvoiceSelect.data" :key="key" :label="item.value" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
-          </el-form>
         </div>
         <div class="operation-btn">
           <el-row>
-            <el-col :span="18" class="total-data">
+            <el-col :span="15" class="total-data">
               一共{{tableDataObj.waybill?tableDataObj.waybill:0}}单，运费总计{{tableDataObj.waiting_charg?tableDataObj.waiting_charg:0}}元
             </el-col>
-            <el-col :span="6" class="text-right">
+            <el-col :span="9" class="text-right">
+              <el-button type="success" plain @click="updatePostData">获取最新数据</el-button>
               <el-button type="primary" plain @click="batchReconciliation('reconciliation')">批量对账</el-button>
               <el-button type="success" @click="batchReconciliation('invoice')">批量开票</el-button>
               <!-- <export-button :export-type="exportType" :export-post-data="exportPostData" :export-api-name="'exportLogisticData'"></export-button> -->
@@ -121,6 +127,7 @@
           </el-pagination>
         </div>
         <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
+        <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'物流数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
       </el-tab-pane>
       <!-- <el-tab-pane label="车辆数据" name="carList">
       </el-tab-pane> -->
@@ -129,13 +136,15 @@
 </template>
 <script>
 import logisticsAdjustmentDialog from '@/components/statistics/logisticsAdjustmentDialog';
+import updateNewDataDialog from '@/components/statistics/updateNewDataDialog';
 export default {
   name: 'logisticsList',
   computed: {
 
   },
   components: {
-    logisticsAdjustmentDialog: logisticsAdjustmentDialog
+    logisticsAdjustmentDialog: logisticsAdjustmentDialog,
+    updateNewDataDialog:updateNewDataDialog
   },
   activated: function() {
     this.activeName = 'logistics';
@@ -161,6 +170,7 @@ export default {
       activeName: 'logistics',
       leaveTime: [], //实际离站时间
       activeTime: [], //实际到厂时间
+      planTime:[],//计划装车时间
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: '',
@@ -168,23 +178,63 @@ export default {
         keyword: '',
         field: 'plate_number',
       },
-      selectData: {
-        isReconciliationsSelect: [
-          { id: '', value: '全部' },
-          { id: 'unfinished', value: '未对账' },
-          { id: 'finished', value: '已对账' }
-        ],
-        isInvoiceSelect: [
-          { id: '', value: '全部' },
-          { id: 'yes', value: '已开票' },
-          { id: 'no', value: '未开票' }
-        ],
+      filterParam: {
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
           { id: 'company', value: '托运方' },
           { id: 'plate_number', value: '车号' }
-        ]
+        ],
+        isReconciliationsSelect: {
+          id: 'is_reconciliation',
+          value: '是否对账',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'unfinished', value: '未对账' },
+            { id: 'finished', value: '已对账' }
+          ],
+        },
+        isInvoiceSelect: {
+          id: 'is_invoice',
+          value: '是否开票',
+          data: [
+            { id: '', value: '全部' },
+            { id: 'yes', value: '已开票' },
+            { id: 'no', value: '未开票' }
+          ],
+        },
+        times:[
+          {
+            id: 'active_time_start',
+            timeEnd:'active_time_end',
+            value: '实际到厂时间'
+          }, {
+            id: 'leave_time_start',
+            timeEnd:'leave_time_end',
+            value: '实际离站时间'
+          }, {
+            id: 'plan_time_start',
+            timeEnd:'plan_time_end',
+            value: '计划装车时间'
+          }
+        ],
       },
+      // selectData: {
+      //   isReconciliationsSelect: [
+      //     { id: '', value: '全部' },
+      //     { id: 'unfinished', value: '未对账' },
+      //     { id: 'finished', value: '已对账' }
+      //   ],
+      //   isInvoiceSelect: [
+      //     { id: '', value: '全部' },
+      //     { id: 'yes', value: '已开票' },
+      //     { id: 'no', value: '未开票' }
+      //   ],
+      //   fieldSelect: [
+      //     { id: 'waybill', value: '运单号' },
+      //     { id: 'company', value: '托运方' },
+      //     { id: 'plate_number', value: '车号' }
+      //   ]
+      // },
       thTableList: [{
           title: '运单号',
           param: 'waybill',
@@ -424,6 +474,9 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
+      updateData:{},//筛选条件
+      updateDataIsShow:false,//获取最新数据弹窗
+      getNewDataIds:[]//获取最新数据的ID
     }
   },
   methods: {
@@ -434,6 +487,28 @@ export default {
         }
       }
       return postData;
+    },
+    updateCloseDialog(isSave){
+      this.updateDataIsShow = false;
+      if (isSave) {
+        this.getList();
+      }
+    },
+    // 更新数据
+    updatePostData(){
+      this.updateData = this.postDataFilter(this.updateData);
+      this.getNewDataIds = [];
+      for(let i in this.multipleSelection){
+        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+          this.getNewDataIds.push(this.multipleSelection[i].id);
+        }
+      }
+      console.log(this.multipleSelection,this.getNewDataIds)
+      if(this.getNewDataIds.length){
+        this.updateDataIsShow = true;
+      }else{
+        this.$message.warning('没有勾选未对账运单数据或筛选条件');
+      }
     },
     exportTableData(type) {
       let postData = {
@@ -628,10 +703,15 @@ export default {
         postData.active_time_start = this.activeTime[0];
         postData.active_time_end = this.activeTime[1];
       }
+      if (this.planTime instanceof Array && this.planTime.length > 0) {
+        postData.plan_time_start = this.planTime[0];
+        postData.plan_time_end = this.planTime[1];
+      }
       postData[this.searchPostData.field] = (this.searchPostData.keyword ? this.searchPostData.keyword.toString() : '');
       postData = this.pbFunc.fifterObjIsNull(postData);
       this.pageLoading = true;
       this.exportPostData = postData;
+      this.updateData = postData;
       this.$$http('getLogisticStatisticList', postData).then((results) => {
         this.pageLoading = false;
         if (results.data && results.data.code == 0) {

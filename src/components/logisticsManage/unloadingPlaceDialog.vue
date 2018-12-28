@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-dialog :title="title" :visible="unloadingPlaceIsShow" width="40%" center :before-close="closeBtn" :close-on-click-modal="false">
+    <el-dialog :title="title" :visible="unloadBillDialog.isShow" width="40%" center :before-close="closeBtn" :close-on-click-modal="false">
       <div class="tms-dialog-form">
         <el-form class="tms-dialog-content" label-width="130px" :rules="rules" :model="formRules" status-icon ref="formRules">
           <el-form-item label="卸货站点名称:" prop="tms_station_name">
             <el-input :autofocus="true" placeholder="请输入" v-model="formRules.tms_station_name">
             </el-input>
           </el-form-item>
-          <el-form-item label="实际站点名称:" prop="station_id">
-            <el-select v-model="formRules.station_id" :loading="siteLoading" filterable remote clearable @change="selectStation" :remote-method="getSiteList" placeholder="请输入选择">
+          <el-form-item label="实际站点名称:" prop="station">
+            <el-select v-model="formRules.station" :loading="siteLoading" filterable remote clearable @change="selectStation" :remote-method="getSiteList" placeholder="请输入选择">
               <el-option v-for="(item,key) in fluidSiteSelect" :key="key" :label="item.position_name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -35,19 +35,21 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeBtn">取消</el-button>
-        <el-button type="primary" @click="addUnloadBill" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+        <el-button type="primary" v-if="unloadBillDialog.type==='add'" @click="addUnloadBill" :loading="submitBtn.isLoading" :disabled="submitBtn.isDisabled">{{submitBtn.btnText}}</el-button>
+        <el-button type="primary" v-else @click="updateUnloadBill" :loading="updateBtn.isLoading" :disabled="updateBtn.isDisabled">{{updateBtn.btnText}}</el-button>
       </span>
     </el-dialog>
   </div>
 </template>
 <script>
 export default {
-  name: 'unloadingPlaceDialog',
+  name: 'unloadBillDialog',
   props: {
-    unloadingPlaceIsShow: {
-      type: Boolean,
+    unloadBillDialog: {
+      type: Object,
       required: true
     },
+    row:Object,
     closeDialogBtn: Function,
   },
 
@@ -57,6 +59,7 @@ export default {
       formRules: {
         tms_station_name: '', //卸货地名称
         station_id: '', //实际站点名称id,
+        station: '',
         consignee: '', //收货人
         consignee_phone: '', //收货人联系电话
         plan_arrive_time: '', //计划到站时间
@@ -68,7 +71,7 @@ export default {
           // { min: 1, max: 20, message: '部门名称字数为1-20字', trigger: 'blur' }
           // { pattern: /^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$/gi, message: '企业名称为中文、英文，不能输入数字、标点符号', trigger: 'blur' },
         ],
-        station_id: [
+        station: [
           { required: true, message: '请选择实际站点名称', trigger: 'change' },
         ],
         consignee: [
@@ -85,12 +88,16 @@ export default {
         ],
         plan_tonnage: [
           { required: true, message: '请输入计划需求吨位', trigger: 'blur' },
-          { pattern: /^([1-9])+(.[0-9]{0,3})?$/, message: '请输入1-99且最多三位小数的数值', trigger: 'blur' },
-
+          { pattern: /^([0-9]{1,2})+(.[0-9]{1,3})?$/, message: '请输入1-99且最多三位小数的数值', trigger: 'blur' },
         ],
       },
       submitBtn: {
         btnText: '确认并匹配',
+        isDisabled: false,
+        isLoading: false
+      },
+      updateBtn: {
+        btnText: '确认修改',
         isDisabled: false,
         isLoading: false
       },
@@ -118,11 +125,13 @@ export default {
       this.$emit('closeDialogBtn', false);
     },
     selectStation(select) {
+      console.log('站点',select)
       if (select) {
         for (let i in this.fluidSiteSelect) {
           if (select === this.fluidSiteSelect[i].id) {
             this.addData.station = this.fluidSiteSelect[i].position_name;
             this.addData.station_address = this.fluidSiteSelect[i].address;
+            this.formRules.station_id = this.fluidSiteSelect[i].id;
             this.formRules.consignee = this.fluidSiteSelect[i].contacts;
             this.formRules.consignee_phone = this.fluidSiteSelect[i].tel;
             break;
@@ -132,6 +141,7 @@ export default {
         this.addData.station = '';
         this.addData.station_address = '';
         this.formRules.consignee = '';
+        this.formRules.station_id = '';
         this.formRules.consignee_phone = '';
       }
 
@@ -140,6 +150,7 @@ export default {
     },
     getSiteList: function(site) {
       let postData = {
+        // pagination:false,
         page: 1,
         page_size: 100,
         position_type: 'DELIVER_POSITION',
@@ -189,6 +200,38 @@ export default {
         }
       });
     },
+    updateUnloadBill: function() {
+      this.$refs['formRules'].validate((valid) => {
+        if (valid) {
+          this.updateBtn.isDisabled = true;
+          this.updateBtn.btnText = '确认修改中';
+          this.updateBtn.isLoading = true;
+          let postData = Object.assign(this.formRules, this.addData);
+          postData.id = this.row.id;
+          this.$$http('updateUnloadBill', postData).then((results) => {
+            this.updateBtn.btnText = '确认修改';
+            this.updateBtn.isLoading = false;
+            this.updateBtn.isDisabled = false;
+            if (results.data && results.data.code == 0) {
+              this.$message({
+                message: '修改卸货单成功',
+                type: 'success'
+              });
+              this.$emit('closeDialogBtn', true);
+            }
+
+          }).catch((err) => {
+            this.updateBtn.btnText = '确认修改';
+            this.updateBtn.isLoading = false;
+            this.updateBtn.isDisabled = false;
+            this.$message.error('修改卸货单失败');
+          })
+
+        } else {
+          this.updateBtn.isDisabled = false;
+        }
+      });
+    },
     matchingUnload(id) {
       let postData = {
         waybill_id: this.waybillId,
@@ -208,20 +251,41 @@ export default {
     },
   },
   watch: {
-    unloadingPlaceIsShow(curVal, oldVal) {　
-      this.formRules = {
-        tms_station_name: '', //卸货地名称
-        station_id: '', //实际站点名称id,
-        consignee: '', //收货人
-        consignee_phone: '', //收货人联系电话
-        plan_arrive_time: '', //计划到站时间
-        plan_tonnage: '', //计划需求吨位
-      };　　　　　　　　
-      if (this.$refs['formRules']) {
-        this.$refs['formRules'].clearValidate();　　　　
-      }　　
-      this.addData.station_address = '';
-    },
+    unloadBillDialog: {
+      handler(newVal, oldVal) {　　　　　　
+          this.formRules = {
+            tms_station_name: '', //卸货地名称
+            station_id: '', //实际站点名称id,
+            station:'',
+            consignee: '', //收货人
+            consignee_phone: '', //收货人联系电话
+            plan_arrive_time: '', //计划到站时间
+            plan_tonnage: '', //计划需求吨位
+          };　
+          this.getSiteList();
+          this.addData.station_address = '';
+          if(newVal.type === 'update'){
+            this.formRules = {
+              tms_station_name: this.row.tms_station_name, //卸货地名称
+              station_id: this.row.station_id, //实际站点名称id,
+              station: this.row.station,
+              consignee: this.row.consignee, //收货人
+              consignee_phone: this.row.consignee_phone, //收货人联系电话
+              plan_arrive_time: this.row.plan_arrive_time, //计划到站时间
+              plan_tonnage: this.row.plan_tonnage, //计划需求吨位
+            };　
+            this.addData.station_address = this.row.station_address;
+          }
+          if (this.$refs['formRules']) {
+            setTimeout(() => {
+             this.$refs['formRules'].clearValidate();　　
+            }, 10);
+          }　　　　　　
+
+      },
+      　　　　deep: true
+
+    }
   },
   created: function() {
     let currentUrl = document.location.href.toString();

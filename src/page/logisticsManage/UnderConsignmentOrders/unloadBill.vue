@@ -400,22 +400,28 @@ export default {
       this.$router.push({ path: "/clientManage/clientManageSecond/clientDetail", query: { id: command.id } });
     },
     editUnloading: function(type,row) {
-      if(row.status === 'noDelete'){
-        this.$message({
-          type: 'warning',
-          message: '关联状态不能编辑'
-        });
-      }else{
-        this.unloadBillDialog = {
-          isShow: true,
-          type: type
-        }
+
+
         if(type === 'update'){
-          this.unloadBillRow = row;
+          if(row.status === 'noDelete'){
+            this.$message({
+              type: 'warning',
+              message: '关联状态不能编辑'
+            });
+          }else{
+            this.unloadBillRow = row;
+            this.unloadBillDialog = {
+              isShow: true,
+              type: type
+            }
+          }
         }else{
+          this.unloadBillDialog = {
+            isShow: true,
+            type: type
+          }
           this.unloadBillRow = {};
         }
-      }
     },
     closeDialog: function(isSave, unloadId) {
       this.unloadBillDialog.isShow = false;

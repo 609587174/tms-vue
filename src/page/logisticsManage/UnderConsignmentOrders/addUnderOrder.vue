@@ -139,7 +139,7 @@
                   预匹配卸货地:
                   <span v-if="aitem.unloadInfo.length==0" class="waitMatch" @click="changeUnload(aitem.id)">匹配卸货地</span>
                   <el-tooltip placement="right-end" v-else>
-                    <div slot="content" style="width:250px;"> 
+                    <div slot="content" style="width:250px;">
                       <el-row v-for="(unloadItem,unloadIndex) in aitem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
                         <el-col >业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
@@ -158,7 +158,7 @@
                 </el-col>
                 <el-col :span="5" style="font-size:14px;line-height:40px;" v-if="aitem.id">
                   <el-tooltip placement="right-end">
-                    <div slot="content" style="width:250px;"> 
+                    <div slot="content" style="width:250px;">
                       <el-row style="margin-bottom:15px;">
                         <el-col style="margin-top:10px;">挂车号:{{aitem.semitrailer.plate_number}}</el-col>
                         <el-col style="margin-top:10px;">主驾:<span>{{aitem.master_driver.name}}</span><span style="margin-left:10px;">{{aitem.master_driver.mobile_phone}}</span></el-col>
@@ -176,7 +176,7 @@
                   </el-tooltip>
                 </el-col>
 
-                
+
               </el-row>
               <el-row style="position:relative;margin-top:20px;" v-if="addCarList.length<50">
                 <el-col :span="1" class="cancleCarBtn" style="font-size:22px;">
@@ -263,7 +263,8 @@
        <el-button type="primary" @click="sureUnloadMatch">确认匹配</el-button>
       </span>
     </el-dialog>
-    <unloading-place-dialog :unloading-place-is-show="unloadingPlaceIsShow" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog>
+    <!-- <unloading-place-dialog :unloading-place-is-show="unloadingPlaceIsShow" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog> -->
+    <unloading-place-dialog :unload-bill-dialog="unloadBillDialog" v-on:closeDialogBtn="closeDialog"></unloading-place-dialog>
   </div>
 </template>
 <script>
@@ -305,7 +306,12 @@ export default {
       lockFalg: false,
       sureAdd: false,
       unloadMatchDiago:false,
-      unloadingPlaceIsShow:false,
+      // unloadingPlaceIsShow:false,
+      unloadBillDialog:{
+        isShow:false,
+        type:'add'
+      }, //新增卸货单弹窗
+      unloadBillRow:{},//编辑的卸货单
       loadingArr: {
         supplierLoading: false,
         carloading: false,
@@ -330,13 +336,13 @@ export default {
       renderUnloadArr:[],
       aCarMatchId:[],
       thTableList: [
-        {title: '卸货单编号',param: 'order_number',width: ''}, 
-        {title: '卸货单状态',param: 'status_display',width: ''}, 
-        {title: '站点',param: 'station',width: ''}, 
-        {title: '站点地址',param: 'station_address',width: ''}, 
-        {title: '计划到站时间',param: 'plan_arrive_time',width: '180'}, 
-        {title: '计划吨位',param: 'plan_tonnage',width: ''}, 
-        {title: '收货人',param: 'consignee', width: ''}, 
+        {title: '卸货单编号',param: 'order_number',width: ''},
+        {title: '卸货单状态',param: 'status_display',width: ''},
+        {title: '站点',param: 'station',width: ''},
+        {title: '站点地址',param: 'station_address',width: ''},
+        {title: '计划到站时间',param: 'plan_arrive_time',width: '180'},
+        {title: '计划吨位',param: 'plan_tonnage',width: ''},
+        {title: '收货人',param: 'consignee', width: ''},
         {title: '收货电话',param: 'consignee_phone',width: ''},
       ],
       pickOrderParam: {
@@ -390,7 +396,7 @@ export default {
 
   methods: {
     addUnloading:function(){
-      this.unloadingPlaceIsShow = true;
+      this.unloadBillDialog.isShow = true;
     },
     matchUnload:function(unloadData,status){
       let thisCar={};
@@ -451,11 +457,11 @@ export default {
         this.$alert('请先选择车辆', {
             confirmButtonText: '确定',
             callback: action => {
-              
+
             }
         });
       }
-      
+
     },
     fifterRnderUnload:function(bindId){
       var middleArr=[];
@@ -516,7 +522,7 @@ export default {
               }else{
                 unloadIdString+=item.id
               }
-              
+
             });
           }
           capacities[this.addCarList[i].id]=unloadIdString;
@@ -604,7 +610,7 @@ export default {
       }
     },
     closeDialog: function(isSave, unloadId,unloadData) {
-      this.unloadingPlaceIsShow = false;
+      this.unloadBillDialog.isShow = false;
 
       if (isSave) {
         this.getAllUnloadOrder(unloadId);

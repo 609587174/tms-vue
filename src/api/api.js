@@ -9,7 +9,7 @@
  */
 
 const api = {
-  updateUserInfo:{
+  updateUserInfo: {
     url: '/user/users/:id/modify/',
     method: 'patch',
     desc: '修改个人信息',
@@ -17,7 +17,7 @@ const api = {
 
     }
   },
-  updateLogisticStatisticsList:{
+  updateLogisticStatisticsList: {
     url: '/statistic/logistic/manual_update/',
     method: 'get',
     desc: '物流数据手动更新',
@@ -25,7 +25,7 @@ const api = {
 
     }
   },
-  updateUnloadBill:{
+  updateUnloadBill: {
     url: '/api/v1/users/:id/modify/',
     method: 'patch',
     desc: '修改个人设置',
@@ -33,7 +33,7 @@ const api = {
 
     }
   },
-  updateUnloadBill:{
+  updateUnloadBill: {
     url: '/order/business_order/:id/',
     method: 'put',
     desc: '修改业务单',
@@ -41,7 +41,7 @@ const api = {
 
     }
   },
-  deleteOrder:{
+  deleteOrder: {
     url: '/order/business_order/:id/',
     method: 'delete',
     desc: '删除业务单',
@@ -49,7 +49,7 @@ const api = {
 
     }
   },
-  auditcheduling:{
+  auditcheduling: {
     url: '/statistic/dispatch/:id/',
     method: 'patch',
     desc: '审核调度统计',
@@ -57,7 +57,7 @@ const api = {
 
     }
   },
-  isCancelBusiness:{
+  isCancelBusiness: {
     url: '/order/section-trips/check-order-cancel/',
     method: 'post',
     desc: '判断该卸货单是否可以被取消',
@@ -65,7 +65,7 @@ const api = {
 
     }
   },
-  exportCashAudit:{
+  exportCashAudit: {
     url: '/exports/cash/',
     method: 'get',
     desc: '导出现金费用审核',
@@ -73,7 +73,7 @@ const api = {
 
     }
   },
-  cashExpenseEeview:{
+  cashExpenseEeview: {
     url: '/statistic/cash-cost/:id/',
     method: 'PATCH',
     desc: '现金费用审核',
@@ -81,7 +81,7 @@ const api = {
 
     }
   },
-  deleteFreight:{
+  deleteFreight: {
     url: '/carrier/trans_fee/:trans_fee_id/',
     method: 'delete',
     desc: '运费约定新增',
@@ -89,7 +89,7 @@ const api = {
 
     }
   },
-  deleteFreight:{
+  deleteFreight: {
     url: '/carrier/trans_fee/:trans_fee_id/',
     method: 'delete',
     desc: '运费约定新增',
@@ -97,7 +97,7 @@ const api = {
 
     }
   },
-  updateFreight:{
+  updateFreight: {
     url: '/carrier/trans_fee/:id/',
     method: 'put',
     desc: '运费约定新增',
@@ -105,7 +105,7 @@ const api = {
 
     }
   },
-  addFreight:{
+  addFreight: {
     url: '/carrier/trans_fee/',
     method: 'POST',
     desc: '运费约定新增',
@@ -113,7 +113,7 @@ const api = {
 
     }
   },
-  relationThreePartyCapacity:{
+  relationThreePartyCapacity: {
     url: '/truck/third_tractor_semitrailers/connect/',
     method: 'POST',
     desc: '三方运力关联',
@@ -121,7 +121,7 @@ const api = {
 
     }
   },
-  threeDetectionCapacity:{
+  threeDetectionCapacity: {
     url: '/truck/third_tractor_semitrailers/params_checking/',
     method: 'POST',
     desc: '三方运力检测',
@@ -177,7 +177,7 @@ const api = {
 
     }
   },
-  addCarrierMsg:{
+  addCarrierMsg: {
     url: '/carrier/coop_carriers/',
     method: 'post',
     desc: '承运商管理创建',
@@ -1696,6 +1696,14 @@ const api = {
 
     }
   },
+  fixPickOrder: {
+    url: '/order/delivery-order/:id/',
+    method: 'PATCH',
+    desc: '修改托运单',
+    param: {
+
+    }
+  },
 
   getCarriers: {
     url: '/order/trader/carriers/',
@@ -2450,14 +2458,26 @@ const api = {
 
     }
   },
-  getCheckStep:{
+  getCheckStep: {
     url: '/order/section-trips/:id/check-order/',
     method: 'GET',
     desc: "分段获取业务单",
     param: {
 
     }
-  }
+  },
+
+  exportsDispatch: {
+    url: '/exports/dispatch/',
+    method: 'GET',
+    desc: "到处调度统计",
+    param: {
+
+    }
+  },
+
+
+
 }
 
 

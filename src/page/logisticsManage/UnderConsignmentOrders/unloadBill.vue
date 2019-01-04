@@ -96,7 +96,8 @@ export default {
       selectData: {
 
         fieldSelect: [
-          { id: 'station', value: '站点名称' },
+          { id: 'station', value: '站点' },
+          { id: 'station_address', value: '站点地址' },
           { id: 'consignee', value: '收货人' },
           // { id: 'sale_man', value: '业务员' },
         ]

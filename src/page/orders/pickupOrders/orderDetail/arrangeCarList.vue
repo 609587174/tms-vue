@@ -231,7 +231,7 @@ export default {
         title: '挂车',
         param: 'semitrailer.plate_number',
         width: '250'
-      }, 
+      },
       {
         title: '车辆所属',
         param: 'tractor.carrier.name',
@@ -370,7 +370,7 @@ export default {
             let postData3 = {
               transport_id: row.id,
               delivery_order_id:this.id
-            }; 
+            };
             this.$$http('searchNoUse', postData3).then((results) => {
 
               if (results.data && results.data.code == 0) {
@@ -491,7 +491,7 @@ export default {
                   });
               })
           }
-          
+
         } else {
           //如果是取消勾选,判断当前车辆是否能取消勾选
           if (row.waybill.waybill) {
@@ -932,6 +932,7 @@ export default {
             fifterArr.push(operationArr[i]);
           }
         }
+        console.log('one',this.now_capacities);
         fifterArr.forEach((item) => {
           if (!item.waybill) {
             item.waybill = {};
@@ -955,6 +956,7 @@ export default {
             fifterArr4.push(fifterArr[findex1]);
           }
         }
+        console.log('two',this.now_capacities);
         //筛选出最近三天没有使用过的运力
         var fifterArr2 = [];
         for (var findex = 0; findex < fifterArr4.length; findex++) {

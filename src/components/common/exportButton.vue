@@ -1,6 +1,4 @@
 <style scoped lang="less">
-
-
 </style>
 <template>
   <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportTableData(exportType)">{{exportBtn.text}}</el-button>
@@ -11,7 +9,8 @@ export default {
   props: {
     exportType: Object,
     exportPostData: Object,
-    exportApiName: String
+    exportApiName: String,
+    ids: Array,
   },
   data() {
     return {
@@ -116,11 +115,15 @@ export default {
     },
     //导出数据
     exportTableData(exportType) {
-      this.exportTableTitle(exportType).then((results) => {
-        if (results.data && results.data.code == 0) {
-          this.exportData(exportType, this.tableIds)
-        }
-      });
+      if (this.ids) {
+        this.exportData(exportType, this.ids)
+      } else {
+        this.exportTableTitle(exportType).then((results) => {
+          if (results.data && results.data.code == 0) {
+            this.exportData(exportType, this.tableIds)
+          }
+        });
+      }
     },
   },
   created() {

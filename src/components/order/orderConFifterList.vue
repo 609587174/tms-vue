@@ -157,9 +157,9 @@
               <el-row style="margin-top:20px;">
                 <el-col :span="4" class="whiteSpan">
                   <el-tooltip class="item" effect="light" placement="right" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
-                    <div slot="content" style="width:250px;"> 
+                    <div slot="content" style="width:250px;">
                       <el-row v-for="(unloadItem,unloadIndex) in props.row.pre_business_order_list" v-bind:class="{unloadList:unloadIndex!=0}">
-                        <el-col >业务单号:{{unloadItem.order_number}}</el-col>
+                        <el-col>业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
                         <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                         <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
@@ -176,6 +176,9 @@
                 </el-col>
                 <el-col :span="4">
                   车队: <span v-if="props.row.capacity_info && props.row.capacity_info.group&&props.row.capacity_info.group.group_name">{{props.row.capacity_info.group.group_name}}</span>
+                </el-col>
+                <el-col :span="4">
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
                 </el-col>
               </el-row>
             </div>
@@ -227,6 +230,9 @@
                 </el-col>
                 <el-col :span="4">
                   主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
+                </el-col>
+                <el-col :span="4">
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
                 </el-col>
               </el-row>
               <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" style="position:relative;margin:10px 0 0 0;" :gutter="20">
@@ -387,18 +393,23 @@
                   下单人电话: {{props.row.business_order.sale_man_phone}}
                 </el-col>
               </el-row>
+              <el-row style="margin-top:20px;" :gutter="20">
+                <el-col :span="4">
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
+                </el-col>
+              </el-row>
             </div>
             <div style="clear:both"></div>
           </div>
           <div style="width:100px;float:right;padding-left:10px;">
-            <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
+            <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'" style="margin-top:10px;">
               <el-col>
                 <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
                 <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
                 <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
             </el-row>
-            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]"  style="margin-top:10px;">
+            <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" style="margin-top:10px;">
               <el-col>
                 <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               </el-col>
@@ -536,14 +547,14 @@
       </el-table-column>
       <el-table-column label="操作" prop="" width="100" fixed="right">
         <template slot-scope="props">
-          <el-row v-for="(item,key) in buttonAll[props.row.status.key]"  v-if="props.row.interrupt_status.key=='normal'">
+          <el-row v-for="(item,key) in buttonAll[props.row.status.key]" v-if="props.row.interrupt_status.key=='normal'">
             <el-col v-if="key==0">
               <el-button v-if="props.row.waybill.change_status.key=='canceled'" :type="item.type" :plan="item.attrPlan" disabled size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
               <el-button v-if="props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10'" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)" disabled>需司机确认</el-button>
               <el-button v-if="props.row.waybill.change_status.key!='canceled'&&!(props.row.status.key=='unload_driver_pending_confirmation'&&props.row.waybill.status.key!='y10')" :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
           </el-row>
-          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]" >
+          <el-row v-if="props.row.interrupt_status.key!='normal'" v-for="(item,key) in buttonModyfiyAll[props.row.interrupt_status.key]">
             <el-col v-if="key==0">
               <el-button :type="item.type" :plan="item.attrPlan" size="mini" @click="operation(item.methods_type,props.row)">{{item.text}}</el-button>
             </el-col>
@@ -555,7 +566,7 @@
       <el-form class="change_Status" label-width="80px" ref="changeStatusForm" style="width:80%;margin-left:10%">
         <el-form-item label="变更类型:" label-width="80px">
           <el-select v-model="changeStatusParam.changeStatusType" placeholder="请选择变更类型">
-            <el-option v-for="(item,key) in changeSatusTypeSelect"  :label="item.verbose" :value="item.key"></el-option>
+            <el-option v-for="(item,key) in changeSatusTypeSelect" :label="item.verbose" :value="item.key"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="变更内容:" label-width="80px">
@@ -585,7 +596,8 @@
       <refuseModal :weightId="weightId" @close="cancleLoadEx= false" @successCallback="refuseSuccess"></refuseModal>
     </el-dialog>
     <el-dialog title="提交结算" center :visible.sync="isUpSettlement" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <!--  --><!-- <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'" label-width="100px" :rules="rules">
+      <!--  -->
+      <!-- <el-form ref="isUpSettlementForm" :model="UpSettlementForm" status-icon :label-position="'right'" label-width="100px" :rules="rules">
         <el-row style="margin-top:15px;">
           <el-col :span="10" :offset="2">
             <el-form-item label="实际到站时间:" prop="">
@@ -609,8 +621,10 @@
           <el-button @click="isUpSettlement = false">取 消</el-button>
           <el-button type="primary" @click="upSettlementTrue()" :loading="upSettlementLoading">确 定</el-button>
         </span> -->
-        
-        <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck" :checkStep="'check'"></upSettlementReview>
+      <upSettlementReview :isEdit="isEditSureDownPound" :isUpload="isUploadUnloadPound" :surePoundData="choosedListData" @close="isUpSettlement = false" @successCallback="upSettlementReviewSuccess" :isShowAccountCheck="isShowAccountCheck" :checkStep="'check'"></upSettlementReview>
+    </el-dialog>
+    <el-dialog title="编辑备注" center :visible.sync="editMarkModalVisibel" width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
+      <editMark :deliveryOrderId="deliveryOrderId" :markText="markText" @close="editMarkModalVisibel= false" @successCallback="editSuccess"></editMark>
     </el-dialog>
   </div>
 </template>
@@ -622,6 +636,7 @@ import loadingReview from '@/components/order/loadingReview';
 import unloadingReview from '@/components/order/unloadingReview';
 import upSettlementReview from '@/components/order/upSettlementReview';
 import refuseModal from '@/components/order/refuseModal';
+import editMark from '@/components/order/editMark'
 export default {
   name: 'orderFifterList',
   components: {
@@ -630,6 +645,7 @@ export default {
     unloadingReview,
     refuseModal,
     upSettlementReview,
+    editMark
   },
   data() {
     var onlyNum = (rule, value, callback) => {
@@ -671,8 +687,8 @@ export default {
       tableHeadConfig: {
         'first': [{ key: 'all', value: 'loadHead' }, { key: 'driver_pending_confirmation', value: 'loadHead' }, { key: 'to_fluid', value: 'loadHead' }, { key: 'reach_fluid', value: 'loadHead' }, { key: 'loading_waiting_audit', value: 'loadHead' }, { key: 'loading_audit_failed', value: 'loadHead' }],
         'second': [{ key: 'all', value: 'matchHead' }, { key: 'waiting_match', value: 'matchHead' }, { key: 'confirm_match', value: "matchHead" }, { key: 'already_match', value: 'matchHead' }],
-        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' },{ key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' },{ key: 'finished', value: 'unloadHead' }],
-        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'unloadHead' }, { key: 'modifying', value: 'unloadHead' }, { key: 'abnormal', value: 'unloadHead' },{ key: 'canceled', value: 'unloadHead' }],
+        'third': [{ key: 'all', value: 'unloadHead' }, { key: 'unload_driver_pending_confirmation', value: 'unloadHead' }, { key: 'to_site', value: 'unloadHead' }, { key: 'reach_site', value: 'unloadHead' }, { key: 'unloading_waiting_audit', value: 'unloadHead' }, { key: 'unloading_audit_failed', value: 'unloadHead' }, { key: 'waiting_settlement', value: 'unloadHead' }, { key: 'in_settlement', value: 'unloadHead' }, { key: 'finished', value: 'unloadHead' }],
+        'fourth': [{ key: 'all', value: 'unloadHead' }, { key: 'canceing', value: 'unloadHead' }, { key: 'modifying', value: 'unloadHead' }, { key: 'abnormal', value: 'unloadHead' }, { key: 'canceled', value: 'unloadHead' }],
         'fifth': [{ key: 'all', value: 'unloadHead' }]
       },
       expendShowConfig: {
@@ -832,6 +848,10 @@ export default {
       cancleLoadEx: false,
       weightId: '',
 
+      editMarkModalVisibel: false,
+      deliveryOrderId: '',
+      markText: ''
+
 
 
     };
@@ -840,28 +860,29 @@ export default {
   computed: {
     nowHead: function() {
       var returnHead = "";
-      if(this.firstMenu=='first'){
-        returnHead="loadHead";
-      }else if(this.firstMenu=='second'){
-        returnHead="matchHead";
-      }else{
-        returnHead="unloadHead";
+      if (this.firstMenu == 'first') {
+        returnHead = "loadHead";
+      } else if (this.firstMenu == 'second') {
+        returnHead = "matchHead";
+      } else {
+        returnHead = "unloadHead";
       }
       return returnHead;
-    }
+    },
   },
   mounted: function() {
-    /*生成地图*/
-    // var vm=this;
 
-    // this.getDetail().then((results) => {
-    //   let lnglat = [results.data.data.location.longitude, results.data.data.location.latitude];
-
-    //   landmarkMap.setCenter(lnglat);
-    //   positionMark.setPosition(lnglat);
-    // });
   },
   methods: {
+    editMark(row) {
+      this.deliveryOrderId = row.waybill.id;
+      this.markText = row.waybill.mark;
+      this.editMarkModalVisibel = true;
+
+    },
+    editSuccess() {
+      this.$emit('searchList');
+    },
     upSettlementTrue: function() {
       // var vm = this;
       // this.$refs['isUpSettlementForm'].validate((valid) => {
@@ -889,11 +910,11 @@ export default {
     expandArr: function() {
       if (this.expandStatus) {
         //this.returnId = [];
-        let middleArr=[];
+        let middleArr = [];
         this.ListData.forEach((item) => {
           middleArr.push(item.id);
         });
-        this.$set(this,'returnId',middleArr);
+        this.$set(this, 'returnId', middleArr);
         this.changeExpand();
       } else {
         this.returnId = [];
@@ -1009,21 +1030,7 @@ export default {
       return row.id;
     },
     changeExpand: function(row, expandedRows) {
-      // console.log('row', row);
-      // console.log('expandedRows', expandedRows);
-      // var vm = this;
-      // if (row.transPowerInfo) {} else {
-      //   var sendData = {};
-      //   sendData.id = row.capacity;
-      //   vm.$$http("getTransPowerInfo", sendData).then((transPowerInfo) => {
-      //     if (transPowerInfo.data.code == 0) {
-      //       row.transPowerInfo = transPowerInfo.data.data;
-      //     }
-      //   }).catch(() => {
 
-      //   });
-      // }
-      console.log("asas");
     },
     downExFun(type, rowData) {
 
@@ -1060,10 +1067,10 @@ export default {
               }
             }
 
-            if(item.type === 'waiting_match'&&item.auto_audit){
-              dataObject={
+            if (item.type === 'waiting_match' && item.auto_audit) {
+              dataObject = {
                 ...dataObject,
-                isHideUpSettle:true,
+                isHideUpSettle: true,
               }
             }
 
@@ -1182,13 +1189,13 @@ export default {
       //     active_mile: rowData.weight_active_mile || "",
       //     id: rowData.id
       //   },
-        
-        this.choosedListData = rowData;
-        this.sureDownPoundTitle = '提交结算'
-        this.isEditSureDownPound = true;
-        this.isUploadUnloadPound = true;
-        this.isShowAccountCheck = true;
-        this.isUpSettlement = true;
+
+      this.choosedListData = rowData;
+      this.sureDownPoundTitle = '提交结算'
+      this.isEditSureDownPound = true;
+      this.isUploadUnloadPound = true;
+      this.isShowAccountCheck = true;
+      this.isUpSettlement = true;
       //this.upSettlementTrue();
     },
     changeSatusBox: function(rowData) {
@@ -1204,17 +1211,17 @@ export default {
     refuseSuccess: function() {
       this.$emit('searchList');
     },
-    upSettlementReviewSuccess:function(){
+    upSettlementReviewSuccess: function() {
       this.$emit('searchList');
     }
   },
   created() {
     if (this.expandStatus) {
-      var middleArr=[];
+      var middleArr = [];
       this.ListData.forEach((item) => {
         middleArr.push(item.id)
       });
-      this.$set(this,'returnId',middleArr);
+      this.$set(this, 'returnId', middleArr);
     }
   },
   watch: {

@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.label-list {
+  .label-list {
   margin-bottom: 0px;
 }
 
@@ -93,8 +93,8 @@
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
-                                <label>生成运单号:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.waybill)"></div>
+                                <label>操作人:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
                               </div>
                             </el-col>
                             <el-col :span="8">
@@ -105,8 +105,8 @@
                             </el-col>
                             <el-col :span="8">
                               <div class="label-list">
-                                <label>操作人:</label>
-                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
+                                <label>生成运单号:</label>
+                                <div class="detail-form-item" v-html="pbFunc.dealNullData(item.waybill)"></div>
                               </div>
                             </el-col>
                           </el-row>
@@ -485,7 +485,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -506,7 +505,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -596,7 +594,7 @@
                         </div>
                         <div v-if="item.type === 'in_settlement'">
                           <el-row :gutter="40">
-                           <el-col :span="8">
+                            <el-col :span="8">
                               <div class="label-list">
                                 <label>操作人:</label>
                                 <div class="detail-form-item" v-html="pbFunc.dealNullData(item.operator)"></div>
@@ -609,7 +607,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -630,7 +627,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -651,7 +647,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -790,7 +785,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -811,7 +805,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -832,7 +825,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -873,7 +865,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -894,7 +885,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -915,7 +905,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -925,7 +914,6 @@
                             </el-col>
                           </el-row>
                         </div>
-
                         <div v-if="item.type === 'finished2'">
                           <el-row :gutter="40">
                             <el-col :span="8">
@@ -941,7 +929,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -962,7 +949,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -983,7 +969,6 @@
                               </div>
                             </el-col>
                           </el-row>
-
                           <el-row :gutter="40">
                             <el-col :span="8">
                               <div class="label-list">
@@ -1033,7 +1018,6 @@
                             </el-col>
                           </el-row>
                         </div>
-
                         <div v-if="item.type === 'abnormal'">
                           <el-row :gutter="40">
                             <el-col :span="8">

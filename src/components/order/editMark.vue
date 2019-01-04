@@ -45,9 +45,9 @@ export default {
 
   },
   watch: {
-    markText: {
+    deliveryOrderId: {
       handler(val, oldVal) {
-        this.ruleForm.mark = val || '';
+        this.ruleForm.mark = this.markText || '';
         this.$refs['ruleForm'].clearValidate();
       },
     }

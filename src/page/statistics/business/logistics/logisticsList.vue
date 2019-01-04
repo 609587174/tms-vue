@@ -127,7 +127,7 @@
           </el-pagination>
         </div>
         <logistics-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></logistics-adjustment-dialog>
-        <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'物流数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds"></update-new-data-dialog>
+        <update-new-data-dialog :is-show="updateDataIsShow" v-on:closeDialogBtn="updateCloseDialog" :api-name="'updateLogisticStatisticsList'" :type-str="'物流数据'" :filter-param="filterParam" :update-data="updateData" :ids="getNewDataIds" :all-num="pageData.totalCount"></update-new-data-dialog>
       </el-tab-pane>
       <!-- <el-tab-pane label="车辆数据" name="carList">
       </el-tab-pane> -->
@@ -154,7 +154,7 @@ export default {
       pageLoading: false,
       pageData: {
         currentPage: 1,
-        totalCount: '',
+        totalCount: 0,
         pageSize: 10,
       },
       tableDataObj: {
@@ -182,7 +182,9 @@ export default {
         fieldSelect: [
           { id: 'waybill', value: '运单号' },
           { id: 'company', value: '托运方' },
-          { id: 'plate_number', value: '车号' }
+          { id: 'plate_number', value: '车号' },
+          { id: 'fluid', value: '实际液厂' },
+          { id: 'station', value: '卸货站' }
         ],
         isReconciliationsSelect: {
           id: 'is_reconciliation',
@@ -503,8 +505,8 @@ export default {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
-      console.log(this.multipleSelection,this.getNewDataIds)
-      if(this.getNewDataIds.length){
+      // console.log(this.multipleSelection,this.getNewDataIds)
+      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
         this.updateDataIsShow = true;
       }else{
         this.$message.warning('没有勾选未对账运单数据或筛选条件');

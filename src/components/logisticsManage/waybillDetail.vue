@@ -165,7 +165,7 @@
                 <div class="label-list">
                   <label>备注:</label>
                   <div class="detail-form-item">
-                    <span v-if="detailData.delivery_order.mark" class="no-wrap">{{detailData.delivery_order.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark()"></i>
+                    <span v-if="detailData.mark" class="no-wrap">{{detailData.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark()"></i>
                   </div>
                 </div>
               </el-col>
@@ -514,7 +514,7 @@
     <img-review :imgObject.sync='imgObject'>
     </img-review>
     <el-dialog title="编辑备注" center :visible.sync="editMarkModalVisibel" width="40%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg">
-      <editMark :deliveryOrderId="deliveryOrderId" :markText="markText" @close="editMarkModalVisibel= false" @successCallback="editSuccess"></editMark>
+      <editMark :deliveryOrderId="willId" :markText="markText" @close="editMarkModalVisibel= false" @successCallback="editSuccess"></editMark>
     </el-dialog>
   </div>
   <!-- </el-tab-pane>
@@ -573,7 +573,8 @@ export default {
       unloadInfo: {}, //卸车榜单
 
       editMarkModalVisibel: false,
-      deliveryOrderId: '',
+      markText: '',
+      lockFalg: false,
     }
   },
   methods: {
@@ -621,8 +622,7 @@ export default {
         this.pageLoading = false;
         if (results.data && results.data.code == 0 && results.data.data) {
           this.detailData = results.data.data;
-          this.deliveryOrderId = this.detailData.delivery_order.id;
-          this.markText = this.detailData.delivery_order.mark;
+          this.markText = this.detailData.mark;
           /* 获取运力 */
           var unloadArr = [],
             loadArr = [];

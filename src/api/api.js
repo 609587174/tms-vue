@@ -1790,6 +1790,15 @@ const api = {
 
     }
   },
+  fixOrderMark: {
+    url: '/order/waybill/:id/',
+    method: 'patch',
+    desc: '修改订单备注',
+    param: {
+
+
+    }
+  },
   getTransPowerInfo: {
     url: '/truck/tractor_semitrailers/:id/',
     method: 'get',

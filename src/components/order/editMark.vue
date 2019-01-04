@@ -61,7 +61,7 @@ export default {
             mark: this.ruleForm.mark,
           };
           this.isLoading = true;
-          this.$$http("fixPickOrder", sendData).then(results => {
+          this.$$http("fixOrderMark", sendData).then(results => {
             this.isLoading = false;
             if (results.data.code == 0) {
               this.$emit('successCallback');

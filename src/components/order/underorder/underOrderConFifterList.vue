@@ -177,7 +177,7 @@
                   车队: <span v-if="props.row.capacity_info && props.row.capacity_info.group&&props.row.capacity_info.group.group_name">{{props.row.capacity_info.group.group_name}}</span>
                 </el-col>
                 <el-col :span="4">
-                  备注: <span v-if="props.row.delivery_order && props.row.delivery_order.mark" class="no-wrap">{{props.row.delivery_order.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
                 </el-col>
               </el-row>
             </div>
@@ -228,7 +228,7 @@
                   主驾: <span v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.name">{{props.row.transPowerInfo.master_driver.name}}</span> <span style="margin-left:5px;" v-if="props.row.transPowerInfo && props.row.transPowerInfo.master_driver&&props.row.transPowerInfo.master_driver.mobile_phone">{{props.row.transPowerInfo.master_driver.mobile_phone}}</span>
                 </el-col>
                 <el-col :span="4">
-                  备注: <span v-if="props.row.delivery_order && props.row.delivery_order.mark" class="no-wrap">{{props.row.delivery_order.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
                 </el-col>
               </el-row>
               <el-row v-for="(Uitem,Uindex) in props.row.unload_trips" style="position:relative;margin:10px 0 0 0;" :gutter="20">
@@ -381,7 +381,7 @@
               </el-row>
               <el-row style="margin-top:20px;">
                 <el-col :span="4">
-                  备注: <span v-if="props.row.delivery_order && props.row.delivery_order.mark" class="no-wrap">{{props.row.delivery_order.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
+                  备注: <span v-if="props.row.waybill && props.row.waybill.mark" class="no-wrap">{{props.row.waybill.mark}}</span><span v-else>无</span><i class="el-icon-edit ml-5 cursor-pointer" v-on:click="editMark(props.row)"></i>
                 </el-col>
               </el-row>
             </div>
@@ -521,7 +521,7 @@
       </el-table-column>
       <el-table-column label="备注" prop="" min-width="180">
         <template slot-scope="props">
-          <el-tooltip :content="props.row.delivery_order.mark" placement="top-start" effect="light" v-if='props.row.delivery_order.mark!=""&&props.row.delivery_order.mark'>
+          <el-tooltip :content="props.row.delivery_order.mark" placement="top-start" effect="light" v-if="props.row.delivery_order && props.row.delivery_order.mark">
             <span class="el-icon-document" style="font-size:16px;color:blue;cursor:pointer"></span>
           </el-tooltip>
         </template>
@@ -926,9 +926,8 @@ export default {
   },
   methods: {
     editMark(row) {
-      this.deliveryOrderId = row.delivery_order.id;
-      this.markText = row.delivery_order.mark;
-      console.log('markText', this.markText);
+      this.deliveryOrderId = row.waybill.id;
+      this.markText = row.waybill.mark;
       this.editMarkModalVisibel = true;
 
     },

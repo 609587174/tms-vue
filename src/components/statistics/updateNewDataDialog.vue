@@ -105,7 +105,7 @@ export default {
       }
       let postData = this.updateData;
       if(this.ids.length){
-        postData.ids = this.ids.join(',');
+        postData.source_ids = this.ids.join(',');
       }
       this.$$http(this.apiName, postData).then((results) => {
         this.submitBtn = {

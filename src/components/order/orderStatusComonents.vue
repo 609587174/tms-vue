@@ -67,6 +67,11 @@
   color:#409EFF;
   background-color:white;
 }
+/deep/ .tab-select{
+  .el-input{
+    width:90%;
+  }
+}
 </style>
 <template>
   <div>
@@ -135,7 +140,7 @@
         <el-tab-pane :name="status" v-loading="pageLoading">
           <div slot="label" style="height:36px">
             <span>状态:</span>
-            <el-select v-model="fifterNameArr" placeholder="请选择" size="small" @change="secondMenuChange" multiple collapse-tags>
+            <el-select v-model="fifterNameArr" class="tab-select" placeholder="请选择" size="small" @change="secondMenuChange" multiple collapse-tags>
               <el-option v-for="item in statusList[status]" :label="item.value" :value="item.key">
               </el-option>
             </el-select>

@@ -1,5 +1,5 @@
 <style scoped lang="less">
-/deep/ .code {
+  /deep/ .code {
   input {
     border-color: #dcdfe6!important;
   }
@@ -42,7 +42,7 @@
                 <el-col :span="8">
                   <el-form-item label="托运方:" prop="company">
                     <!-- <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.company"></el-input> -->
-                    <el-select v-model="editMsgForm.company" :loading="shipperLoading" filterable remote clearable  @change="getShipperList" @blur="selectId('shipper')" :remote-method="getShipperList" placeholder="请输入选择">
+                    <el-select v-model="editMsgForm.company" :loading="shipperLoading" filterable remote clearable @change="getShipperList" @blur="selectId('shipper')" :remote-method="getShipperList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.shipperSelect" :key="item.id" :label="item.name" :value="item.name"></el-option>
                     </el-select>
                   </el-form-item>
@@ -50,13 +50,13 @@
                 <el-col :span="8">
                   <el-form-item label="车号:">
                     <el-input placeholder="暂无" type="text" v-model.trim="editMsgForm.plate_number" :disabled="isDisabled"></el-input>
-                   <!--  <el-select v-model="editMsgForm.plate_number" :loading="tractorLoading" filterable remote clearable  @change="getTractorList" @blur="selectId('tractor')" :remote-method="getTractorList" placeholder="请输入选择">
+                    <!--  <el-select v-model="editMsgForm.plate_number" :loading="tractorLoading" filterable remote clearable  @change="getTractorList" @blur="selectId('tractor')" :remote-method="getTractorList" placeholder="请输入选择">
                       <el-option v-for="(item,key) in selectData.tractorSelect" :key="item.id" :label="item.plate_number" :value="item.plate_number"></el-option>
                     </el-select> -->
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:">
+                  <el-form-item label="液厂:">
                     <el-input placeholder="暂无" :disabled="isDisabled" type="text" v-model.trim="editMsgForm.fluid"></el-input>
                   </el-form-item>
                 </el-col>
@@ -234,7 +234,7 @@ export default {
       editMsgForm: {
         fluid: '', //实际液厂
         company: '', //托运方
-        company_id:'',
+        company_id: '',
         waybill: '', //运单号
         order: '', //业务单号
         plan_time: '', //计划装车时间
@@ -268,7 +268,7 @@ export default {
       },
 
       rules: {
-        company:[
+        company: [
           { required: true, message: '请选择托运方', trigger: 'change' },
         ],
         check_quantity: [
@@ -317,9 +317,9 @@ export default {
       },
       detail: {},
       customerList: [],
-      shipperLoading:false,
-      selectData:{
-        shipperSelect:[],//托运方
+      shipperLoading: false,
+      selectData: {
+        shipperSelect: [], //托运方
       }
     }
   },
@@ -338,33 +338,33 @@ export default {
       this.$router.push({ path: "/statistics/business/logistics/logisticsList" });
       // }
     },
-    selectId(type){
-      setTimeout(()=>{
-        if(type==='shipper'){
-          for(let i in this.selectData.shipperSelect){
-            if(this.selectData.shipperSelect[i].name == this.editMsgForm.company){
+    selectId(type) {
+      setTimeout(() => {
+        if (type === 'shipper') {
+          for (let i in this.selectData.shipperSelect) {
+            if (this.selectData.shipperSelect[i].name == this.editMsgForm.company) {
               this.editMsgForm.company_id = this.selectData.shipperSelect[i].id;
               break;
             }
           }
-        }else if(type==='tractor'){
-          for(let i in this.selectData.tractorSelect){
-            if(this.selectData.tractorSelect[i].plate_number == this.editMsgForm.plate_number){
+        } else if (type === 'tractor') {
+          for (let i in this.selectData.tractorSelect) {
+            if (this.selectData.tractorSelect[i].plate_number == this.editMsgForm.plate_number) {
               this.editMsgForm.plate_number_id = this.selectData.tractorSelect[i].id;
               break;
             }
           }
         }
-        console.log('id',this.editMsgForm.plate_number_id)
-      },200)
+        console.log('id', this.editMsgForm.plate_number_id)
+      }, 200)
 
     },
     getShipperList: function(query) {
       let postData = {
         page: 1,
-        page_size:100
+        page_size: 100
       };
-      if(query){
+      if (query) {
         postData.name = query;
       }
       this.shipperLoading = true;
@@ -475,7 +475,7 @@ export default {
     editBasics(btn, btnType) {
       let formName = 'addFormSetpOne';
       let btnObject = btn;
-      let keyArray = ['company_id','company','plan_time','loading_quantity','actual_quantity','check_quantity','stand_mile','actual_mile','label_price','freight_value','stand_freight','difference_value','lcl_cost','waiting_price','change_value', 'remark']
+      let keyArray = ['company_id', 'company', 'plan_time', 'loading_quantity', 'actual_quantity', 'check_quantity', 'stand_mile', 'actual_mile', 'label_price', 'freight_value', 'stand_freight', 'difference_value', 'lcl_cost', 'waiting_price', 'change_value', 'remark']
       let postData = this.pbFunc.fifterbyArr(this.editMsgForm, keyArray, true);
       if (btnType === 'out') {
         this.editAjax(postData, formName, btnObject, null, true);

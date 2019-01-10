@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.stepTitle {
+  .stepTitle {
   background-color: rgb(235, 238, 245);
   height: 40px;
   text-align: center;
@@ -80,7 +80,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="实际液厂:" prop="fluid">
+                  <el-form-item label="液厂:" prop="fluid">
                     <el-select v-model="pickOrderParam.fluid" filterable placeholder="请选择" v-loading="loadingArr.fluidLoading" @change="bindTextFunc('fluid')">
                       <el-option v-for="(item,key) in selectData.fluidList" :key="item.id" :label="item.fluid_name" :value="item.id">
                         <span>{{ item.fluid_name }}</span>
@@ -129,19 +129,19 @@
                   </el-select>
                 </el-col>
                 <el-col :span="5" style="font-size:14px;line-height:40px;" :offset="1">
-                <el-tooltip placment="right-end">
-                  <div slot="content" style="width:250px;">
-                    <div>可预先匹配卸货地，司机、调度等角色可在装车阶段查看卸货地信息。</div>
-                    <div>装车审核通过后，系统自动匹配卸货地，也可在此时变更卸货地。</div>
-                  </div>
-                  <span><img style="margin-left:5px;vertical-align:middle" src="@/assets/img/tipGroup_4.png" alt="" ></span>
-                </el-tooltip>
+                  <el-tooltip placment="right-end">
+                    <div slot="content" style="width:250px;">
+                      <div>可预先匹配卸货地，司机、调度等角色可在装车阶段查看卸货地信息。</div>
+                      <div>装车审核通过后，系统自动匹配卸货地，也可在此时变更卸货地。</div>
+                    </div>
+                    <span><img style="margin-left:5px;vertical-align:middle" src="@/assets/img/tipGroup_4.png" alt="" ></span>
+                  </el-tooltip>
                   预匹配卸货地:
                   <span v-if="aitem.unloadInfo.length==0" class="waitMatch" @click="changeUnload(aitem.id)">匹配卸货地</span>
                   <el-tooltip placement="right-end" v-else>
                     <div slot="content" style="width:250px;">
                       <el-row v-for="(unloadItem,unloadIndex) in aitem.unloadInfo" v-bind:class="{unloadList:unloadIndex!=0}">
-                        <el-col >业务单号:{{unloadItem.order_number}}</el-col>
+                        <el-col>业务单号:{{unloadItem.order_number}}</el-col>
                         <el-col style="margin-top:10px;">站点:{{unloadItem.station}}</el-col>
                         <el-col style="margin-top:10px;">需求液厂:{{unloadItem.actual_fluid_name}}</el-col>
                         <el-col style="margin-top:10px;">计划吨位:{{unloadItem.plan_tonnage}}吨</el-col>
@@ -151,7 +151,7 @@
                     <span  class="alreayMatch" @click="changeUnload(aitem.id)">已选卸货地</span>
                   </el-tooltip>
                 </el-col>
-                <el-col :span="5" class="linh40 whiteSpan" >
+                <el-col :span="5" class="linh40 whiteSpan">
                   车辆所属:<el-tooltip class="item" effect="light" :open-delay="1000" :content="aitem.tractor.carrier.name" placement="top-start" v-if="aitem.tractor.carrier">
                     <span >{{aitem.tractor.carrier.name}}</span>
                   </el-tooltip>
@@ -164,10 +164,10 @@
                         <el-col style="margin-top:10px;">主驾:<span>{{aitem.master_driver.name}}</span><span style="margin-left:10px;">{{aitem.master_driver.mobile_phone}}</span></el-col>
                         <el-col style="margin-top:10px;">副驾/押运:
                           <span v-if="aitem.vice_driver"><span>{{aitem.vice_driver.name}}</span>
-                            <span style="margin-left:10px;">{{aitem.vice_driver.mobile_phone}}</span>
+                          <span style="margin-left:10px;">{{aitem.vice_driver.mobile_phone}}</span>
                           </span>
                           <span v-if="!aitem.vice_driver&&aitem.escort_staff"><span>{{aitem.escort_staff.name}}</span>
-                            <span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span>
+                          <span style="margin-left:10px;">{{aitem.escort_staff.mobile_phone}}</span>
                           </span>
                         </el-col>
                       </el-row>
@@ -175,8 +175,6 @@
                     <span  style="color:#409EFF;cursor:pointer">车辆信息</span>
                   </el-tooltip>
                 </el-col>
-
-
               </el-row>
               <el-row style="position:relative;margin-top:20px;" v-if="addCarList.length<50">
                 <el-col :span="1" class="cancleCarBtn" style="font-size:22px;">
@@ -185,7 +183,7 @@
               </el-row>
             </div>
             <el-row>
-              <el-col :span="24" style="text-align:center" >
+              <el-col :span="24" style="text-align:center">
                 <el-button type="success" @click="goOrderList">取消</el-button>
                 <el-button type="primary" @click="upOrder" style="margin-left:20px;">提交</el-button>
               </el-col>
@@ -242,21 +240,23 @@
        <el-button type="primary" @click="sendRe">确认</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="匹配卸货单" :visible.sync="unloadMatchDiago" center width="80%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;"  :close-on-click-modal="lockFalg"  :close-on-press-escape="lockFalg" :show-close="lockFalg">
+    <el-dialog title="匹配卸货单" :visible.sync="unloadMatchDiago" center width="80%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" style="-webkit-backface-visibility: hidden;" :close-on-click-modal="lockFalg" :close-on-press-escape="lockFalg" :show-close="lockFalg">
       <div class="table-list">
         <el-table :data="renderUnloadArr" stripe style="width: 100%" size="mini" max-height="350">
           <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:''">
           </el-table-column>
           <el-table-column label="操作" align="center" width="100">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" class="match-btn"  v-if="!(aCarMatchId.indexOf(scope.row.id)>-1)" @click="matchUnload(scope.row,'match')">匹配</el-button>
-              <el-button type="text" size="mini" class="match-btn"  v-if="aCarMatchId.indexOf(scope.row.id)>-1" @click="matchUnload(scope.row,'cancle')">取消匹配</el-button>
+              <el-button type="text" size="mini" class="match-btn" v-if="!(aCarMatchId.indexOf(scope.row.id)>-1)" @click="matchUnload(scope.row,'match')">匹配</el-button>
+              <el-button type="text" size="mini" class="match-btn" v-if="aCarMatchId.indexOf(scope.row.id)>-1" @click="matchUnload(scope.row,'cancle')">取消匹配</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
       <el-row style="margin-top:25px;">
-        <el-col :span="4"><el-button type="success" @click="addUnloading">新增卸货单</el-button></el-col>
+        <el-col :span="4">
+          <el-button type="success" @click="addUnloading">新增卸货单</el-button>
+        </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer" style="text-align: center;">
        <el-button @click="closeUnloadMatch">取  消</el-button>
@@ -271,7 +271,7 @@
 import unloadingPlaceDialog from '@/components/logisticsManage/unloadingPlaceDialog';
 export default {
   name: 'addUnderOrder',
-   components: {
+  components: {
     unloadingPlaceDialog: unloadingPlaceDialog
   },
   data() {
@@ -305,20 +305,20 @@ export default {
     return {
       lockFalg: false,
       sureAdd: false,
-      unloadMatchDiago:false,
+      unloadMatchDiago: false,
       // unloadingPlaceIsShow:false,
-      unloadBillDialog:{
-        isShow:false,
-        type:'add'
+      unloadBillDialog: {
+        isShow: false,
+        type: 'add'
       }, //新增卸货单弹窗
-      unloadBillRow:{},//编辑的卸货单
+      unloadBillRow: {}, //编辑的卸货单
       loadingArr: {
         supplierLoading: false,
         carloading: false,
         fluidLoading: false,
         customerLoading: false,
         createdLoading: false,
-        unloadLoading:false
+        unloadLoading: false
       },
       bindText: {
         fluidName: "",
@@ -329,21 +329,21 @@ export default {
         master_driver: {},
         vice_driver: {},
         semitrailer: {},
-        unloadInfo:[],
-        tractor:{carrier:{}}
+        unloadInfo: [],
+        tractor: { carrier: {} }
       }],
-      allUnloadArr:[],
-      renderUnloadArr:[],
-      aCarMatchId:[],
+      allUnloadArr: [],
+      renderUnloadArr: [],
+      aCarMatchId: [],
       thTableList: [
-        {title: '卸货单编号',param: 'order_number',width: ''},
-        {title: '卸货单状态',param: 'status_display',width: ''},
-        {title: '站点',param: 'station',width: ''},
-        {title: '站点地址',param: 'station_address',width: ''},
-        {title: '计划到站时间',param: 'plan_arrive_time',width: '180'},
-        {title: '计划吨位',param: 'plan_tonnage',width: ''},
-        {title: '收货人',param: 'consignee', width: ''},
-        {title: '收货电话',param: 'consignee_phone',width: ''},
+        { title: '卸货单编号', param: 'order_number', width: '' },
+        { title: '卸货单状态', param: 'status_display', width: '' },
+        { title: '站点', param: 'station', width: '' },
+        { title: '站点地址', param: 'station_address', width: '' },
+        { title: '计划到站时间', param: 'plan_arrive_time', width: '180' },
+        { title: '计划吨位', param: 'plan_tonnage', width: '' },
+        { title: '收货人', param: 'consignee', width: '' },
+        { title: '收货电话', param: 'consignee_phone', width: '' },
       ],
       pickOrderParam: {
         customer_id: "",
@@ -351,10 +351,10 @@ export default {
         plan_time: '',
         require_car_number: '',
         plan_tonnage: '',
-        type:'three',
-        consignment_type:'external',
-        carriers:'',
-        mark:''
+        type: 'three',
+        consignment_type: 'external',
+        carriers: '',
+        mark: ''
       },
       capacitiesNum: 0,
       rules: {
@@ -383,9 +383,9 @@ export default {
         fluidList: [],
         customerList: []
       },
-      opearId:"",
-      saveInfo:[],
-      saveInfoID:[]
+      opearId: "",
+      saveInfo: [],
+      saveInfoID: []
     };
   },
   computed: {
@@ -395,98 +395,98 @@ export default {
   },
 
   methods: {
-    addUnloading:function(){
+    addUnloading: function() {
       this.unloadBillDialog.isShow = true;
     },
-    matchUnload:function(unloadData,status){
-      let thisCar={};
-      for(let caritem in this.addCarList){
-          if(this.addCarList[caritem].id==this.opearId){
-          thisCar=this.addCarList[caritem];
+    matchUnload: function(unloadData, status) {
+      let thisCar = {};
+      for (let caritem in this.addCarList) {
+        if (this.addCarList[caritem].id == this.opearId) {
+          thisCar = this.addCarList[caritem];
         }
       }
-      if(status==='match'){
+      if (status === 'match') {
         this.aCarMatchId.push(unloadData.id);
         thisCar.unloadInfo.push(unloadData);
-      }else if(status==='cancle'){
-        var middleArr=[];
-        var middleIDarr=[];
-          thisCar.unloadInfo.forEach((item,index)=>{
-            if(!(item.id===unloadData.id)){
-              middleArr.push(item);
-            }
-          });
-          this.aCarMatchId.forEach((idItem,idIndex)=>{
-            if(!(idItem==unloadData.id)){
-              middleIDarr.push(idItem);
-            }
-          });
-          thisCar.unloadInfo=middleArr;
-          this.aCarMatchId=middleIDarr;
-        }
+      } else if (status === 'cancle') {
+        var middleArr = [];
+        var middleIDarr = [];
+        thisCar.unloadInfo.forEach((item, index) => {
+          if (!(item.id === unloadData.id)) {
+            middleArr.push(item);
+          }
+        });
+        this.aCarMatchId.forEach((idItem, idIndex) => {
+          if (!(idItem == unloadData.id)) {
+            middleIDarr.push(idItem);
+          }
+        });
+        thisCar.unloadInfo = middleArr;
+        this.aCarMatchId = middleIDarr;
+      }
     },
-    sureUnloadMatch:function(){
+    sureUnloadMatch: function() {
       //this.aCarMatchId=[];
-      this.unloadMatchDiago=false;
+      this.unloadMatchDiago = false;
     },
-    closeUnloadMatch:function(){
+    closeUnloadMatch: function() {
       //this.aCarMatchId=[];
-      this.unloadMatchDiago=false;
-      if(this.opearId){
-        for(let caritem in this.addCarList){
-          if(this.addCarList[caritem].id==this.opearId){
-            this.addCarList[caritem].unloadInfo=this.saveInfo;
-            this.aCarMatchId=this.saveInfoID
+      this.unloadMatchDiago = false;
+      if (this.opearId) {
+        for (let caritem in this.addCarList) {
+          if (this.addCarList[caritem].id == this.opearId) {
+            this.addCarList[caritem].unloadInfo = this.saveInfo;
+            this.aCarMatchId = this.saveInfoID
           }
         }
       }
     },
-    changeUnload:function(bindId){
-      if(bindId){
-        this.renderUnloadArr=[];
+    changeUnload: function(bindId) {
+      if (bindId) {
+        this.renderUnloadArr = [];
         this.fifterRnderUnload(bindId);
-        this.opearId=bindId;
-        for(let i in this.addCarList){
-          if(this.addCarList[i].id===bindId){
-            this.saveInfo=this.pbFunc.deepcopy(this.addCarList[i].unloadInfo);
-            this.saveInfoID=this.pbFunc.deepcopy(this.aCarMatchId);
+        this.opearId = bindId;
+        for (let i in this.addCarList) {
+          if (this.addCarList[i].id === bindId) {
+            this.saveInfo = this.pbFunc.deepcopy(this.addCarList[i].unloadInfo);
+            this.saveInfoID = this.pbFunc.deepcopy(this.aCarMatchId);
           }
         }
-        this.unloadMatchDiago=true;
-      }else{
+        this.unloadMatchDiago = true;
+      } else {
         this.$alert('请先选择车辆', {
-            confirmButtonText: '确定',
-            callback: action => {
+          confirmButtonText: '确定',
+          callback: action => {
 
-            }
+          }
         });
       }
 
     },
-    fifterRnderUnload:function(bindId){
-      var middleArr=[];
-        // this.addCarList.forEach((aloneCarUnload)=>{
-        //   if(bindId!=aloneCarUnload.id){
-        //     aloneCarUnload.unloadInfo.forEach((alone)=>{
-        //       middleArr.push(alone.id);
-        //     });
-        //   }
-        // });
-        this.renderUnloadArr=[];
-        this.allUnloadArr.forEach((unloadItem)=>{
-          var addFalge=true;
-          if(this.aCarMatchId.indexOf(unloadItem.id)>-1){
-            addFalge=false;
-          }
-          if(addFalge){
-            this.renderUnloadArr.push(unloadItem);
-          }
-        });
-        this.addCarList.forEach((caritem)=>{
-          if(caritem.id==bindId){
-            this.renderUnloadArr=caritem.unloadInfo.concat(this.renderUnloadArr);
-          }
-        });
+    fifterRnderUnload: function(bindId) {
+      var middleArr = [];
+      // this.addCarList.forEach((aloneCarUnload)=>{
+      //   if(bindId!=aloneCarUnload.id){
+      //     aloneCarUnload.unloadInfo.forEach((alone)=>{
+      //       middleArr.push(alone.id);
+      //     });
+      //   }
+      // });
+      this.renderUnloadArr = [];
+      this.allUnloadArr.forEach((unloadItem) => {
+        var addFalge = true;
+        if (this.aCarMatchId.indexOf(unloadItem.id) > -1) {
+          addFalge = false;
+        }
+        if (addFalge) {
+          this.renderUnloadArr.push(unloadItem);
+        }
+      });
+      this.addCarList.forEach((caritem) => {
+        if (caritem.id == bindId) {
+          this.renderUnloadArr = caritem.unloadInfo.concat(this.renderUnloadArr);
+        }
+      });
     },
     bindTextFunc: function(type) {
       if (type == 'fluid') {
@@ -514,18 +514,18 @@ export default {
       let capacities = {};
       for (let i in this.addCarList) {
         if (this.addCarList[i].id != "") {
-          var unloadIdString="";
-          if(this.addCarList[i].unloadInfo.length>0){
-            this.addCarList[i].unloadInfo.forEach((item,index)=>{
-              if(this.addCarList[i].unloadInfo.length>1&&index!=this.addCarList[i].unloadInfo.length-1){
-                unloadIdString+=(item.id+",");
-              }else{
-                unloadIdString+=item.id
+          var unloadIdString = "";
+          if (this.addCarList[i].unloadInfo.length > 0) {
+            this.addCarList[i].unloadInfo.forEach((item, index) => {
+              if (this.addCarList[i].unloadInfo.length > 1 && index != this.addCarList[i].unloadInfo.length - 1) {
+                unloadIdString += (item.id + ",");
+              } else {
+                unloadIdString += item.id
               }
 
             });
           }
-          capacities[this.addCarList[i].id]=unloadIdString;
+          capacities[this.addCarList[i].id] = unloadIdString;
         }
       }
       sendData.capacities = capacities;
@@ -552,20 +552,20 @@ export default {
       });
     },
     addACar: function() {
-      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
+      this.addCarList.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {}, unloadInfo: [], tractor: { carrier: {} } });
     },
     carListChange: function(index) {
       var thisId = this.addCarList[index].id;
       for (let carIndex in this.selectData.carList) {
         if (this.addCarList[index].id == this.selectData.carList[carIndex].id) {
-          let thisUnload=this.addCarList[index].unloadInfo;
+          let thisUnload = this.addCarList[index].unloadInfo;
           this.$set(this.addCarList, index, this.pbFunc.deepcopy(this.selectData.carList[carIndex]));
-          this.$set(this.addCarList[index],'unloadInfo',thisUnload);
+          this.$set(this.addCarList[index], 'unloadInfo', thisUnload);
         }
       }
       for (let i in this.addCarList) {
         if (this.addCarList[i].id == thisId && i != index) {
-          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
+          this.$set(this.addCarList, i, { id: "", master_driver: {}, vice_driver: {}, semitrailer: {}, unloadInfo: [], tractor: { carrier: {} } });
           break;
         }
       }
@@ -591,7 +591,7 @@ export default {
         if (require > this.addCarList.length) {
           var middleArr = [];
           for (var i = 0; i < require - this.addCarList.length; i++) {
-            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {},unloadInfo:[],tractor:{carrier:{}} });
+            middleArr.push({ id: "", master_driver: {}, vice_driver: {}, semitrailer: {}, unloadInfo: [], tractor: { carrier: {} } });
           }
           this.addCarList = this.addCarList.concat(middleArr);
         } else if (require < this.addCarList.length) {
@@ -609,9 +609,8 @@ export default {
         }
       }
     },
-    closeDialog: function(isSave, unloadId,unloadData) {
+    closeDialog: function(isSave, unloadId, unloadData) {
       this.unloadBillDialog.isShow = false;
-
       if (isSave) {
         this.getAllUnloadOrder(unloadId);
       }
@@ -683,21 +682,21 @@ export default {
 
       });
     },
-    getAllUnloadOrder:function(id){
-      let postData={
-        status:'waiting_related',
-        need_all:true,
+    getAllUnloadOrder: function(id) {
+      let postData = {
+        status: 'waiting_related',
+        need_all: true,
       };
       this.loadingArr.unloadLoading = true;
       this.$$http('getUnloadBillList', postData).then((results) => {
         this.loadingArr.unloadLoading = false;
-        if(results.data.code==0){
-          this.allUnloadArr=results.data.data.data.data;
-          if(id){
-            this.allUnloadArr.forEach((uItem,uIndex)=>{
-              if(uItem.id==id){
-                for(let caritem in this.addCarList){
-                  if(this.addCarList[caritem].id==this.opearId){
+        if (results.data.code == 0) {
+          this.allUnloadArr = results.data.data.data.data;
+          if (id) {
+            this.allUnloadArr.forEach((uItem, uIndex) => {
+              if (uItem.id == id) {
+                for (let caritem in this.addCarList) {
+                  if (this.addCarList[caritem].id == this.opearId) {
                     this.addCarList[caritem].unloadInfo.push(uItem);
                   }
                 }
@@ -705,10 +704,10 @@ export default {
             });
             this.fifterRnderUnload(this.opearId);
           }
-        }else{
+        } else {
           this.$message.error('获取卸货单失败');
         }
-      }).catch(()=>{
+      }).catch(() => {
         this.loadingArr.unloadLoading = false;
         this.$message.error('获取卸货单失败');
       });

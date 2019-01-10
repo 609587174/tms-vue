@@ -222,7 +222,7 @@ export default {
       selectData: {
         fieldSelect: [
           { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '实际液厂' },
+          { id: 'fluid', value: '液厂' },
           { id: 'station', value: '卸货地' }
         ],
         waybillSelect: [
@@ -268,7 +268,7 @@ export default {
         id: 233,
       }, {
         param: "fluid",
-        title: "实际液厂",
+        title: "液厂",
         width: "150",
         showHidden: true,
         id: 234,

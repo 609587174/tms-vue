@@ -1,5 +1,5 @@
 <style scoped lang="less">
-/deep/ .el-table {
+  /deep/ .el-table {
   &:before {
     height: 0;
   }
@@ -35,7 +35,7 @@
               <el-row :gutter="20">
                 <el-col :span="10">
                   <el-form-item label="计划装货时间:" prop="buyInsuranceDate" label-width="105px">
-                      <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
+                    <el-date-picker :editable="editable" :picker-options="pickerOptions" v-model="timeParam" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束时间" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
@@ -44,8 +44,8 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
-        <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500"  @click="changeExtendsStatus"  v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="expandStatus">收起<i class="el-icon-arrow-up el-icon--right"></i></el-button>
+      <el-button type="primary" style="position:absolute;right:0;bottom:-53px;z-index:500" @click="changeExtendsStatus" v-if="!expandStatus">展开<i class="el-icon-arrow-down el-icon--right"></i></el-button>
     </div>
     <div class="nav-tab-setting mt-25" v-loading="pageLoading">
       <el-tabs v-model="thisFifterName" @tab-click="clickFifter">
@@ -77,8 +77,8 @@
             </keep-alive>
           </div>
         </el-tab-pane>
-        <el-tab-pane  name="history">
-        <span slot="label">
+        <el-tab-pane name="history">
+          <span slot="label">
         <el-popover 
           placement="right-start"
           width="100"
@@ -111,51 +111,51 @@ export default {
   name: 'ordersList',
   components: {
     orderFifterList: () =>
-      import ("../../../components/order/orderFifterList.vue")
+      import("../../../components/order/orderFifterList.vue")
   },
   data() {
     return {
-      editable:false,
-      seachExtend:false,
+      editable: false,
+      seachExtend: false,
       pickerOptions: {
         shortcuts: [{
-          text: '最近一周',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-            picker.$emit('pick', [start, end]);
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '今天',
+            onClick(picker) {
+              const end = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 23:59:59";
+              const start = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00";
+              picker.$emit('pick', [start, end]);
+            }
+          },
+          {
+            text: '今明两天',
+            onClick(picker) {
+              const start = new Date(new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00");
+              const end = new Date(new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate() + " 00:00:00");
+              end.setTime(end.getTime() + 3600 * 1000 * 24 * 2 - 1000);
+              picker.$emit('pick', [start, end]);
+            }
           }
-        }, {
-          text: '最近一个月',
-          onClick(picker) {
-            const end = new Date();
-            const start = new Date();
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-            picker.$emit('pick', [start, end]);
-          }
-        },{
-          text: '今天',
-          onClick(picker) {
-            const end = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 23:59:59";
-            const start = new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00";
-            picker.$emit('pick', [start, end]);
-          }
-        },
-        {
-          text: '今明两天',
-          onClick(picker) {
-            const start = new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00");
-            const end=new Date(new Date().getFullYear()+'-'+(new Date().getMonth()+1)+'-'+new Date().getDate()+" 00:00:00");
-            end.setTime(end.getTime()+3600 * 1000 * 24*2-1000);
-            picker.$emit('pick', [start, end]);
-          }
-        }
         ]
       },
       searchStatus: false,
       pageLoading: false,
-      historyStatus:'',
+      historyStatus: '',
       fifterParam: {
         keyword: "",
         field: "trader_name",
@@ -165,8 +165,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
-        loaded_count:'已完成',
-        canceled_count:'已取消',
+        loaded_count: '已完成',
+        canceled_count: '已取消',
         history_count: '历史'
       },
       allStatusName: {
@@ -174,8 +174,8 @@ export default {
         appoint_count: '待指派',
         determine_count: '待确认',
         confirmed_count: '已确认',
-        loaded_count:'已完成',
-        canceled_count:'已取消',
+        loaded_count: '已完成',
+        canceled_count: '已取消',
         history_count: '历史'
       },
 
@@ -183,7 +183,7 @@ export default {
       rules: {},
       activeName: 'first',
       expandStatus: false,
-      timeParam:[
+      timeParam: [
 
       ],
       pageData: {
@@ -198,10 +198,10 @@ export default {
         fieldSelect: [
           { id: 'trader_name', value: '托运商' },
           { id: 'order_number', value: '订单号' },
-          { id: 'fluid_name', value: '液厂名' },
+          { id: 'fluid_name', value: '供方液厂名称' },
           { id: 'waybill_number', value: '运单号' },
-          { id: 'truck_no', value:'车号'}
-          
+          { id: 'truck_no', value: '车号' }
+
         ]
       },
     };
@@ -222,16 +222,16 @@ export default {
     goAddNewOder: function() {
       this.$router.push({ path: "/orders/pickupOrders/addNewPickUpOrder" });
     },
-    changeExtendsStatus:function(){
-      this.expandStatus=!this.expandStatus;
+    changeExtendsStatus: function() {
+      this.expandStatus = !this.expandStatus;
     },
-    changeF:function(type){
+    changeF: function(type) {
       this.pageData.currentPage = 1;
-      this.seachExtend=false;
-      this.thisFifterName='history';
-      if(type!='history'){
-        this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName +"&st="+type});
-      }else{
+      this.seachExtend = false;
+      this.thisFifterName = 'history';
+      if (type != 'history') {
+        this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName + "&st=" + type });
+      } else {
         this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName });
       }
     },
@@ -250,20 +250,20 @@ export default {
         sendData.status = this.thisFifterName;
       }
       if (this.thisFifterName == 'history') {
-        if(this.historyStatus=='history'||this.historyStatus==''){
+        if (this.historyStatus == 'history' || this.historyStatus == '') {
           sendData.history = true;
           delete sendData.status;
-        }else{
+        } else {
           sendData.status = this.historyStatus;
         }
       }
-      sendData.type='online';
+      sendData.type = 'online';
       sendData.page_size = this.pageData.pageSize;
       if (this.searchStatus) {
         sendData = this.saveSendData;
         sendData.page = this.pageData.currentPage;
-      }else{
-        this.pageData.currentPage=1;
+      } else {
+        this.pageData.currentPage = 1;
         sendData.page = this.pageData.currentPage;
       }
       this.pageLoading = true;
@@ -287,7 +287,7 @@ export default {
       this.pageData.currentPage = 1;
       //重新查询一次数据
       //this.searchList();
-      this.historyStatus="";
+      this.historyStatus = "";
       this.$router.push({ path: "/orders/pickupOrders/ordersList?goTo=" + this.thisFifterName });
     },
     pageChange: function() {
@@ -326,10 +326,10 @@ export default {
 
   },
   watch: {
-    '$route' (to, from) {
+    '$route'(to, from) {
       //刷新参数放到这里里面去触发就可以刷新相同界面了
       this.thisFifterName = this.$route.query.goTo || "all";
-      this.historyStatus=this.$route.query.st || "";
+      this.historyStatus = this.$route.query.st || "";
       this.searchList();
     }
   }

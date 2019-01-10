@@ -5,6 +5,7 @@
 
 .nav-tab-setting {
   position: relative;
+
   .public-btn {
     position: absolute;
     top: -15px;
@@ -12,6 +13,7 @@
     z-index: 1;
     display: inline-block;
   }
+
   .el-tabs__header {
     .el-tabs__nav .el-tabs__item {
       /deep/ &.is-active {
@@ -228,7 +230,7 @@ export default {
         param: 'work_end_time',
         width: '180'
       }, {
-        title: '实际液厂',
+        title: '液厂',
         param: 'fluid',
         width: ''
       }, {

@@ -122,6 +122,13 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row v-if="isEdit">
+        <el-col :span="24">
+          <el-form-item label="备注:" prop="mark">
+            <el-input type="textarea" :rows="4" v-model="surePound.mark" style="width:90%;"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer" style="text-align: center;" v-if="isEdit">
       <el-button @click="$emit('close')">取 消</el-button>
@@ -291,6 +298,15 @@ export default {
         })
       }
     },
+    confrimEdit() {
+      if (this.surePound.mark !== this.surePoundData.mark) {
+        let sendData = {
+          id: this.surePound.deliveryOrderId,
+          mark: this.surePound.mark,
+        };
+        this.$$http("fixOrderMark", sendData)
+      }
+    },
     //审核通过ajax
     sendReAjax() {
 
@@ -340,6 +356,7 @@ export default {
 
         this.buttonLoading = true;
 
+        this.confrimEdit();
         if (this.isUpload) {
           this.uploadSealImg();
           this.uploadPoundImg().then(results => {

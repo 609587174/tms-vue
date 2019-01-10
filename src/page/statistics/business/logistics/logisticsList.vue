@@ -144,7 +144,7 @@ export default {
   },
   components: {
     logisticsAdjustmentDialog: logisticsAdjustmentDialog,
-    updateNewDataDialog:updateNewDataDialog
+    updateNewDataDialog: updateNewDataDialog
   },
   activated: function() {
     this.activeName = 'logistics';
@@ -170,7 +170,7 @@ export default {
       activeName: 'logistics',
       leaveTime: [], //实际离站时间
       activeTime: [], //实际到厂时间
-      planTime:[],//计划装车时间
+      planTime: [], //计划装车时间
       searchPostData: {}, //搜索参数
       searchFilters: {
         is_reconciliation: '',
@@ -183,7 +183,7 @@ export default {
           { id: 'waybill', value: '运单号' },
           { id: 'company', value: '托运方' },
           { id: 'plate_number', value: '车号' },
-          { id: 'fluid', value: '实际液厂' },
+          { id: 'fluid', value: '液厂' },
           { id: 'station', value: '卸货站' }
         ],
         isReconciliationsSelect: {
@@ -204,21 +204,19 @@ export default {
             { id: 'no', value: '未开票' }
           ],
         },
-        times:[
-          {
-            id: 'active_time_start',
-            timeEnd:'active_time_end',
-            value: '实际到厂时间'
-          }, {
-            id: 'leave_time_start',
-            timeEnd:'leave_time_end',
-            value: '实际离站时间'
-          }, {
-            id: 'plan_time_start',
-            timeEnd:'plan_time_end',
-            value: '计划装车时间'
-          }
-        ],
+        times: [{
+          id: 'active_time_start',
+          timeEnd: 'active_time_end',
+          value: '实际到厂时间'
+        }, {
+          id: 'leave_time_start',
+          timeEnd: 'leave_time_end',
+          value: '实际离站时间'
+        }, {
+          id: 'plan_time_start',
+          timeEnd: 'plan_time_end',
+          value: '计划装车时间'
+        }],
       },
       // selectData: {
       //   isReconciliationsSelect: [
@@ -254,7 +252,7 @@ export default {
           param: 'plate_number',
           width: ''
         }, {
-          title: '实际液厂',
+          title: '液厂',
           param: 'fluid',
           width: ''
         }, {
@@ -376,7 +374,7 @@ export default {
         title: '车牌号',
         id: 94
       }, {
-        title: '实际液厂',
+        title: '液厂',
         id: 95
       }, {
         title: '站点名称',
@@ -476,9 +474,9 @@ export default {
         isLoading: false,
         isDisabled: false,
       },
-      updateData:{},//筛选条件
-      updateDataIsShow:false,//获取最新数据弹窗
-      getNewDataIds:[]//获取最新数据的ID
+      updateData: {}, //筛选条件
+      updateDataIsShow: false, //获取最新数据弹窗
+      getNewDataIds: [] //获取最新数据的ID
     }
   },
   methods: {
@@ -490,25 +488,25 @@ export default {
       }
       return postData;
     },
-    updateCloseDialog(isSave){
+    updateCloseDialog(isSave) {
       this.updateDataIsShow = false;
       if (isSave) {
         this.getList();
       }
     },
     // 更新数据
-    updatePostData(){
+    updatePostData() {
       this.updateData = this.postDataFilter(this.updateData);
       this.getNewDataIds = [];
-      for(let i in this.multipleSelection){
-        if(this.multipleSelection[i].is_reconciliation.key ==='unfinished'){
+      for (let i in this.multipleSelection) {
+        if (this.multipleSelection[i].is_reconciliation.key === 'unfinished') {
           this.getNewDataIds.push(this.multipleSelection[i].id);
         }
       }
       // console.log(this.multipleSelection,this.getNewDataIds)
-      if(this.getNewDataIds.length||this.pbFunc.objSize(this.updateData)){
+      if (this.getNewDataIds.length || this.pbFunc.objSize(this.updateData)) {
         this.updateDataIsShow = true;
-      }else{
+      } else {
         this.$message.warning('没有勾选未对账运单数据或筛选条件');
       }
     },

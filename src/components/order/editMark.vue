@@ -50,7 +50,13 @@ export default {
         this.ruleForm.mark = this.markText || '';
         this.$refs['ruleForm'].clearValidate();
       },
-    }
+    },
+    markText: {
+      handler(val, oldVal) {
+        this.ruleForm.mark = val || '';
+        this.$refs['ruleForm'].clearValidate();
+      },
+    },
   },
   methods: {
     confrimEdit() {

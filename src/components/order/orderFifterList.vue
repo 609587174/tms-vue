@@ -1,6 +1,5 @@
 <style scoped lang="less">
-
-.el-table {
+  .el-table {
   th{
       background-color: transparent;
     }
@@ -106,16 +105,16 @@
 <template>
   <div style="position:relative;">
     <noData v-if="ListData.length==0"></noData>
-    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus"  :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
+    <el-table claas="listTableAll" :data="ListData" style="width: 100%" :span-method="SpanMethod" :default-expand-all="expandStatus" :expand-row-keys="returnId" :row-key="getRowKeys" v-loading="pageLoading" size="mini" height="550" :row-click="rowClick" :cell-click="rowClick">
       <el-table-column type="expand">
         <template slot-scope="props">
           <div style="width:90%;float:left;padding-left:45px;font-size:13px;">
             <el-row style="margin-top:5px;">
               <el-col :span="4">
-                实际液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
+                液厂:<span v-if="props.row.actual_fluid_address.length<10">{{props.row.actual_fluid_address}}</span>
                 <el-tooltip v-else class="item" effect="light" :content="props.row.actual_fluid_address" placement="top-start">
                   <span>{{props.row.actual_fluid_address.slice(0,8)}}....</span>
-                  </el-tooltip>
+                </el-tooltip>
               </el-col>
               <el-col :span="4">
                 托运方:<span v-if="props.row.trader.length<10">{{props.row.trader}}</span>
@@ -150,10 +149,10 @@
               </el-col>
               <el-col :span="4">
                 下计划时间:
-                <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
-                    <span >{{props.row.created_at}}</span>
-                 </el-tooltip>
-                 <span v-else>无</span>
+                <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.created_at" placement="top-start" v-if="props.row.created_at">
+                  <span >{{props.row.created_at}}</span>
+                </el-tooltip>
+                <span v-else>无</span>
               </el-col>
               <el-col :span="4">
                 提交车数:{{props.row.submit_car_number}}
@@ -177,25 +176,25 @@
               </el-col>
             </el-row> -->
             <el-row v-if="props.row.status.key=='appoint'">
-            <el-col>
-              <el-button type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
-            </el-col>
-          </el-row>
-          <el-row v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
-            <el-col >
-              <el-button type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
-            </el-col>
-          </el-row>
-          <el-row v-if="props.row.status.key=='appoint'">
-            <el-col>
-              <el-button type="primary" size="mini" @click="operation('upPlan',props.row)">提交计划</el-button>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col >
-              <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
-            </el-col>
-          </el-row>
+              <el-col>
+                <el-button type="primary" size="mini" plain @click="operation('addCar',props.row)">添加车辆</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.status.key=='determine'||props.row.status.key=='confirmed'">
+              <el-col>
+                <el-button type="success" size="mini" plain @click="operation('changePlan',props.row)">修改计划</el-button>
+              </el-col>
+            </el-row>
+            <el-row v-if="props.row.status.key=='appoint'">
+              <el-col>
+                <el-button type="primary" size="mini" @click="operation('upPlan',props.row)">提交计划</el-button>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-button type="primary" size="mini" @click="operation('showDetalis',props.row)">查看详情</el-button>
+              </el-col>
+            </el-row>
           </div>
           <div style="clear:both"></div>
         </template>
@@ -205,7 +204,7 @@
           <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="液厂名称" prop="" min-width="150">
+      <el-table-column label="供方液厂名称" prop="" min-width="150">
         <template slot-scope="props">
           <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.fluid)"></i>
         </template>
@@ -220,34 +219,33 @@
       </el-table-column> -->
       <el-table-column label="计划时间" prop="" min-width="150">
         <template slot-scope="props">
-          <el-tooltip  class="item" effect="light" :open-delay="1000"  :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
-                 <span >{{props.row.plan_time.split(" ")[0]}}</span>
-             </el-tooltip>
-           <span v-else>无</span>
+          <el-tooltip class="item" effect="light" :open-delay="1000" :content="props.row.plan_time" placement="top-start" v-if="props.row.plan_time">
+            <span >{{props.row.plan_time.split(" ")[0]}}</span>
+          </el-tooltip>
+          <span v-else>无</span>
         </template>
       </el-table-column>
-
       <el-table-column label="计划吨位" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.plan_tonnage}}</span>
+          <span class="fontContro">{{props.row.plan_tonnage}}</span>
         </template>
       </el-table-column>
       <el-table-column label="车辆信息" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.sure_car_number}}/{{props.row.require_car_number}}</span>
+          <span class="fontContro">{{props.row.sure_car_number}}/{{props.row.require_car_number}}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" prop="" min-width="150">
         <template slot-scope="props">
-           <span class="fontContro">{{props.row.status.verbose}}</span>
+          <span class="fontContro">{{props.row.status.verbose}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="卸车信息" prop="" min-width="150" >
+      <el-table-column label="卸车信息" prop="" min-width="150">
         <template slot-scope="props">
           <el-tooltip class="item" effect="light" placement="bottom-start" v-if="props.row.pre_business_order_list&&props.row.pre_business_order_list.length>0">
             <div slot="content" style="width:250px;">
-              <el-row v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}"  >
-                <el-col >业务单号:{{Uitem.order_number}}</el-col>
+              <el-row v-for="(Uitem,Uindex) in props.row.pre_business_order_list" v-bind:class="{unloadList:Uindex!=0}">
+                <el-col>业务单号:{{Uitem.order_number}}</el-col>
                 <el-col style="margin-top:10px;">站点:{{Uitem.station}}</el-col>
                 <el-col style="margin-top:10px;">需求液厂:{{Uitem.actual_fluid_name}}</el-col>
                 <el-col style="margin-top:10px;">计划吨位:<span v-if="Uitem.plan_tonnage">{{Uitem.plan_tonnage}}吨</span></el-col>
@@ -265,7 +263,7 @@
           <span v-else>无</span>
         </template>
       </el-table-column>
-       <el-table-column label="操作" prop="" fixed="right" width="130">
+      <el-table-column label="操作1" prop="" fixed="right" width="130">
         <template slot-scope="props">
           <div class="listDetalis opButton" style="width:100%">
             <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" plain @click="operation('addCar',props.row)">添加</el-button>
@@ -275,33 +273,33 @@
         </template>
       </el-table-column>
     </el-table>
-   <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
+    <el-dialog title="详细地址" :visible.sync="showMap" width="50%" :lock-scroll="lockFalg" :modal-append-to-body="lockFalg" @open="openDigo">
       <div id="map-container" v-if="showMap"></div>
     </el-dialog>
-</div>
+  </div>
 </template>
 <script>
 let landmarkMap;
-  let positionMark;
-  import noData from '@/components/common/noData';
+let positionMark;
+import noData from '@/components/common/noData';
 export default {
   name: 'orderFifterList',
   data() {
     return {
-      noDataObj:{},
+      noDataObj: {},
       delayTime: 500,
-      showMap:false,
-      lockFalg:false,
+      showMap: false,
+      lockFalg: false,
       pageLoading: false,
       expandFalg: false,
-      loadPosition:{},
-      returnId:[]
+      loadPosition: {},
+      returnId: []
     };
   },
   components: {
     noData: noData
   },
-  props:['expandStatus','ListData'],
+  props: ['expandStatus', 'ListData'],
   computed: {
 
   },
@@ -309,56 +307,56 @@ export default {
     SpanMethod: function({ row, column, rowIndex, columnIndex }) {
 
     },
-    rowClick:function(row, event, column){
+    rowClick: function(row, event, column) {
 
     },
     getRowKeys: function(row) {
       return row.id;
     },
     expandArr: function() {
-      if(this.expandStatus){
-        this.ListData.forEach((item)=>{
+      if (this.expandStatus) {
+        this.ListData.forEach((item) => {
           this.returnId.push(item.id);
         });
-      }else{
-        this.returnId=[];
+      } else {
+        this.returnId = [];
       }
     },
-    showMapDetalis:function(type,id){
-     var vm=this;
-     if(type=="load"){
-        this.$$http('getFulidDetalis',{id:id}).then((results)=>{
-          if(results.data.code==0){
-            vm.showMap=true;
-            var pointObj=results.data.data;
-            vm.loadPosition.longitude=pointObj.coordinate.longitude;
-            vm.loadPosition.latitude=pointObj.coordinate.latitude;
-            vm.loadPosition.position=pointObj.coordinate.address;
+    showMapDetalis: function(type, id) {
+      var vm = this;
+      if (type == "load") {
+        this.$$http('getFulidDetalis', { id: id }).then((results) => {
+          if (results.data.code == 0) {
+            vm.showMap = true;
+            var pointObj = results.data.data;
+            vm.loadPosition.longitude = pointObj.coordinate.longitude;
+            vm.loadPosition.latitude = pointObj.coordinate.latitude;
+            vm.loadPosition.position = pointObj.coordinate.address;
             //vm.openDigo(pointObj.coordinate);
           }
-        }).catch(()=>{
+        }).catch(() => {
 
         });
       }
     },
-    openDigo:function(obj){
-      var vm=this;
-      setTimeout(()=>{
+    openDigo: function(obj) {
+      var vm = this;
+      setTimeout(() => {
         landmarkMap = new AMap.Map('map-container', {
           zoom: 10,
         });
-      // /*创建点标记*/
+        // /*创建点标记*/
         positionMark = new AMap.Marker({
-            map:landmarkMap,
-          });
-         positionMark.setLabel({
-            content: vm.loadPosition.position,
-            offset: new AMap.Pixel(30, 0)
-         });
+          map: landmarkMap,
+        });
+        positionMark.setLabel({
+          content: vm.loadPosition.position,
+          offset: new AMap.Pixel(30, 0)
+        });
         let lnglat = [vm.loadPosition.longitude, vm.loadPosition.latitude];
         landmarkMap.setCenter(lnglat);
         positionMark.setPosition(lnglat);
-      },100);
+      }, 100);
     },
     gotoOrderDetalis: function(row) {
       var type = "";
@@ -429,23 +427,23 @@ export default {
     }
   },
   created() {
-    if(this.expandStatus){
-      this.ListData.forEach((item)=>{
+    if (this.expandStatus) {
+      this.ListData.forEach((item) => {
         this.returnId.push(item.id)
       });
     }
   },
   watch: {
-    ListData:{
+    ListData: {
       handler(val, oldVal) {
         this.expandArr();
       },
-      deep:true
+      deep: true
     },
-    expandStatus:{
+    expandStatus: {
       handler(val, oldVal) {
-        var vm=this;
-        setTimeout(()=>{
+        var vm = this;
+        setTimeout(() => {
           vm.expandArr();
         })
       },

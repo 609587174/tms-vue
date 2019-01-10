@@ -204,7 +204,7 @@
           <el-button class="fontContro" type="text" style="height:0px;line-height:0px;padding:0" @click="gotoOrderDetalis(props.row)">{{props.row.order_number}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="标准液厂" prop="" min-width="150">
+      <el-table-column label="供方液厂名称" prop="" min-width="150">
         <template slot-scope="props">
           <span class="fontContro">{{props.row.fluid_name}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.fluid)"></i>
         </template>
@@ -263,7 +263,7 @@
           <span v-else>无</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" prop="" fixed="right" width="130">
+      <el-table-column label="操作1" prop="" fixed="right" width="130">
         <template slot-scope="props">
           <div class="listDetalis opButton" style="width:100%">
             <el-button class="fontContro" v-if="props.row.status.key=='appoint'" type="primary" size="mini" plain @click="operation('addCar',props.row)">添加</el-button>

@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.trans-fee {
+  .trans-fee {
   .table-list {
     margin-bottom: 20px;
   }
@@ -56,7 +56,7 @@
                   <el-row :gutter="10" v-if="detailData.agreements">
                     <el-col :span="8">
                       <div class="label-list">
-                        <label>对应液厂:</label>
+                        <label>生效液厂:</label>
                         <!--  v-html="pbFunc.dealNullData(detailData.agreements.length?detailData.agreements[0].fluid_name:'')" -->
                         <div class="detail-form-item">
                           <span v-for="(row,index) in detailData.agreements">{{row.fluid_name}}<span v-if="index!=detailData.agreements.length-1">，</span></span>

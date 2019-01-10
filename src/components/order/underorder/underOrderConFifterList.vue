@@ -137,7 +137,7 @@
                   </el-tooltip>
                 </el-col>
                 <el-col :span="4">
-                  实际液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
+                  液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
                   <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.actual_fluid_name" placement="top-start">
                     <span>{{props.row.delivery_order.actual_fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
@@ -184,9 +184,9 @@
             <div v-if="expendShowConfig[props.row.status.key]=='matchExtend'">
               <el-row style="margin:5px 0;" :gutter="20">
                 <el-col :span="4">
-                  液厂: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
-                  <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.fluid" placement="top-start">
-                    <span>{{props.row.delivery_order.fluid.slice(0,8)}}....</span>
+                  液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
+                  <el-tooltip v-else class="item" effect="light" :content="props.row.delivery_order.actual_fluid_name" placement="top-start">
+                    <span>{{props.row.delivery_order.actual_fluid_name.slice(0,8)}}....</span>
                   </el-tooltip>
                 </el-col>
                 <!--  <el-col :span="4" class="whiteSpan">
@@ -247,7 +247,7 @@
             <div v-if="expendShowConfig[props.row.status.key]=='unloadExtend'">
               <el-row style="margin-top:5px;" :gutter="20">
                 <el-col :span="4">
-                  液厂: <span v-if="props.row.delivery_order.fluid&&props.row.delivery_order.fluid.length<10">{{props.row.delivery_order.fluid}}</span>
+                  液厂: <span v-if="props.row.delivery_order.actual_fluid_name&&props.row.delivery_order.actual_fluid_name.length<10">{{props.row.delivery_order.actual_fluid_name}}</span>
                 </el-col>
                 <el-col :span="4" class="whiteSpan">
                   实际到厂时间:
@@ -418,9 +418,9 @@
           <span v-else>无</span>
         </template>
       </el-table-column>
-      <el-table-column label="装车液厂" prop="" min-width="150">
+      <el-table-column label="液厂" prop="" min-width="150">
         <template slot-scope="props">
-          <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.fluid.split("-")[0]}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
+          <span style="color:rgb(97,126,253);font-weight:bold;font-size:13px;">{{props.row.delivery_order.actual_fluid_name.split("-")[0]}}</span><i class="el-icon-location primary" @click="showMapDetalis('load',props.row.delivery_order.actual_fluid_id)"></i>
         </template>
       </el-table-column>
       <el-table-column label="卸货站" prop="" min-width="180" v-if="this.nowHead=='unloadHead'">
@@ -1107,7 +1107,10 @@ export default {
 
         if (results.data.code == 0) {
           let orderProcessData = results.data.data;
-          let dataObject = {};
+          let dataObject = {
+            mark: rowData.waybill.mark,
+            deliveryOrderId: rowData.waybill.id
+          };
 
           orderProcessData.map((item, i) => {
 
@@ -1157,7 +1160,10 @@ export default {
 
         if (results.data.code == 0) {
           let orderProcessData = results.data.data;
-          let dataObject = {};
+          let dataObject = {
+            mark: rowData.waybill.mark,
+            deliveryOrderId: rowData.waybill.id
+          };
 
           orderProcessData.map((item, i) => {
 
@@ -1209,6 +1215,8 @@ export default {
         //上传卸车磅单
         this.isShowSureDownPound = true;
         this.choosedListData = rowData;
+        this.choosedListData.mark = rowData.waybill.mark;
+        this.choosedListData.deliveryOrderId = rowData.waybill.id;
         this.sureDownPoundTitle = '上传卸车磅单'
         this.isEditSureDownPound = true;
         this.isUploadUnloadPound = true;
@@ -1240,17 +1248,13 @@ export default {
         });
       } else if (type == 'upLoadPound') {
         //上传装车磅单
-
         this.isShowSurePound = true;
-
         this.choosedListData = rowData;
-
+        this.choosedListData.mark = rowData.waybill.mark;
+        this.choosedListData.deliveryOrderId = rowData.waybill.id;
         this.surePoundTitle = '上传装车磅单'
-
         this.isEditSurePound = true;
-
         this.isUploadPound = true;
-
 
       } else if (type == 'showDetalis') { //查看详情
         window.open(`#/logisticsManage/UnderConsignmentOrders/underOrderDetailTab/${rowData.id}/${rowData.waybill.id}`)

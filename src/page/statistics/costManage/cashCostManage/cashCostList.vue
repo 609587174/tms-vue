@@ -43,10 +43,8 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-
               </el-row>
               <el-row :gutter="10">
-
                 <el-col :span="6">
                   <el-form-item label="行程内费用:" label-width="100px">
                     <el-select v-model="searchFilters.is_travel" filterable @change="startSearch" placeholder="请选择">
@@ -97,33 +95,32 @@
                   <div v-if="item.param==='remark_adjust'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
                   <span v-else v-html="scope.row[item.param]"></span>
                   </span>
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" align="center" width="140" fixed="right">
-                <template slot-scope="scope">
-                  <el-button type="success" v-if="scope.row.verify.key==='wait_verify'" size="mini" @click="costReview(scope.row)">审核</el-button>
-                  <div v-else-if="scope.row.verify.key==='passed'">
-                    <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
-                    <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
-                  </div>
-
-                </template>
-              </el-table-column>
-            </el-table>
-            <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
-          <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-            </el-pagination>
-          </div>
-        </el-tab-pane>
-        <!-- <el-tab-pane label="挂车管理" name="second"></el-tab-pane> -->
-        <cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
-        <cost-review-dialog v-on:closeDialogBtn="toExamineCloseDialog" :row="toExamineRow" :is-show="toExamineIsShow"></cost-review-dialog>
-      </el-tabs>
+</template>
+</el-table-column>
+<el-table-column label="操作" align="center" width="140" fixed="right">
+  <template slot-scope="scope">
+    <el-button type="success" v-if="scope.row.verify.key==='wait_verify'" size="mini" @click="costReview(scope.row)">审核</el-button>
+    <div v-else-if="scope.row.verify.key==='passed'">
+      <el-button v-if="scope.row.is_adjust.key==='no'" type="primary" size="mini" plain @click="accountAdjust(scope.row)">调账</el-button>
+      <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
     </div>
-  </div>
+  </template>
+</el-table-column>
+</el-table>
+<no-data v-if="!pageLoading && !tableData.length"></no-data>
+</div>
+<div class="page-list text-center">
+  <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
+  </el-pagination>
+</div>
+</el-tab-pane>
+<!-- <el-tab-pane label="挂车管理" name="second"></el-tab-pane> -->
+<cash-cost-adjustment-dialog :account-adjust-is-show="accountAdjustIsShow" v-on:closeDialogBtn="closeDialog" :adjust-row="adjustRow"></cash-cost-adjustment-dialog>
+<cost-review-dialog v-on:closeDialogBtn="toExamineCloseDialog" :row="toExamineRow" :is-show="toExamineIsShow"></cost-review-dialog>
+</el-tabs>
+</div>
+</div>
 </template>
 <script>
 import cashCostAdjustmentDialog from '@/components/statistics/cashCostAdjustmentDialog';
@@ -135,7 +132,7 @@ export default {
   },
   components: {
     cashCostAdjustmentDialog: cashCostAdjustmentDialog,
-    costReviewDialog:costReviewDialog
+    costReviewDialog: costReviewDialog
   },
   activated: function() {
     this.activeName = 'cashCost';
@@ -143,13 +140,13 @@ export default {
   data() {
     return {
       pageLoading: false,
-      toExamineIsShow:false,
+      toExamineIsShow: false,
       pageData: {
         currentPage: 1,
         totalCount: '',
         pageSize: 10,
       },
-      toExamineName:'no',
+      toExamineName: 'no',
       exportBtn: {
         text: '导出',
         isLoading: false,
@@ -157,22 +154,22 @@ export default {
       },
       costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
       activeName: 'cashCost',
-      verifyTime:[],
+      verifyTime: [],
       searchPostData: {}, //搜索参数
       searchFilters: {
         cost_type: '',
         is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
         is_travel: '',
         keyword: '',
-        verify:'',
+        verify: '',
         field: 'plate_number',
       },
-      toExamineTabList:[{
-        title:'待审核',
-        name:'no'
-      },{
-        title:'全部',
-        name:'all'
+      toExamineTabList: [{
+        title: '待审核',
+        name: 'no'
+      }, {
+        title: '全部',
+        name: 'all'
       }],
       selectData: {
         isMatchSelect: [
@@ -210,89 +207,90 @@ export default {
         ]
       },
       thTableList: [{
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '费用时间',
-        param: 'cost_date',
-        width: '180',
-        isAdjust: true,
-        adjustParam: 'cost_date_adjust'
-      }, {
-        title: '费用类型',
-        param: 'cost_type',
-        width: ''
-      }, {
-        title: '数量',
-        param: 'nums',
-        width: ''
-      }, {
-        title: '含税金额',
-        param: 'pre_tax_amount',
-        width: ''
-      }, {
-        title: '无税金额',
-        param: 'at_amount',
-        width: ''
-      }, {
-        title: '税额',
-        param: 'tax_amount',
-        width: ''
-      },
-      {
-        title: '行程内费用',
-        param: 'is_travel',
-        width: ''
-      }, {
-        title: '批次',
-        param: 'lot',
-        width: ''
-      }, {
-        title: '匹配状态',
-        param: 'is_matching',
-        width: ''
-      }, {
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '装车完成时间',
-        param: 'work_end_time',
-        width: '180'
-      },{
-        title: '实际液厂',
-        param: 'fluid',
-        width: ''
-      },{
-        title: '装车吨位',
-        param: 'loading_quantity',
-        width: ''
-      },{
-        title: '添加时间',
-        param: 'created_at',
-        width: '180'
-      }, {
-        title: '调账备注',
-        param: 'remark_adjust',
-        width: '180'
-      }, {
-        title: '调账时间',
-        param: 'adjust_time',
-        width: '180'
-      }, {
-        title: '审核状态',
-        param: 'verify',
-        width: ''
-      }, {
-        title: '审核通过时间',
-        param: 'verify_time',
-        width: ''
-      }],
+          title: '车号',
+          param: 'plate_number',
+          width: ''
+        }, {
+          title: '费用时间',
+          param: 'cost_date',
+          width: '180',
+          isAdjust: true,
+          adjustParam: 'cost_date_adjust'
+        }, {
+          title: '费用类型',
+          param: 'cost_type',
+          width: ''
+        }, {
+          title: '数量',
+          param: 'nums',
+          width: ''
+        }, {
+          title: '含税金额',
+          param: 'pre_tax_amount',
+          width: ''
+        }, {
+          title: '无税金额',
+          param: 'at_amount',
+          width: ''
+        }, {
+          title: '税额',
+          param: 'tax_amount',
+          width: ''
+        },
+        {
+          title: '行程内费用',
+          param: 'is_travel',
+          width: ''
+        }, {
+          title: '批次',
+          param: 'lot',
+          width: ''
+        }, {
+          title: '匹配状态',
+          param: 'is_matching',
+          width: ''
+        }, {
+          title: '运单号',
+          param: 'waybill',
+          width: ''
+        }, {
+          title: '装车完成时间',
+          param: 'work_end_time',
+          width: '180'
+        }, {
+          title: '液厂',
+          param: 'fluid',
+          width: ''
+        }, {
+          title: '装车吨位',
+          param: 'loading_quantity',
+          width: ''
+        }, {
+          title: '添加时间',
+          param: 'created_at',
+          width: '180'
+        }, {
+          title: '调账备注',
+          param: 'remark_adjust',
+          width: '180'
+        }, {
+          title: '调账时间',
+          param: 'adjust_time',
+          width: '180'
+        }, {
+          title: '审核状态',
+          param: 'verify',
+          width: ''
+        }, {
+          title: '审核通过时间',
+          param: 'verify_time',
+          width: ''
+        }
+      ],
       tableData: [],
       accountAdjustIsShow: false, //调账弹窗
       adjustRow: {}, //调账信息
-      toExamineRow:{},//审核信息
+      toExamineRow: {}, //审核信息
       // exportType: {
       //   type: 'cash',
       //   filename: '客户回款'
@@ -301,61 +299,61 @@ export default {
       exportTable: [{
         title: '车号',
         id: 208
-      },{
+      }, {
         title: '费用时间',
         id: 210
-      },{
+      }, {
         title: '费用类型',
         id: 209
-      },{
+      }, {
         title: '数量',
         id: 212
-      },{
+      }, {
         title: '含税金额',
         id: 213
-      },{
+      }, {
         title: '无税金额',
         id: 214
-      },{
+      }, {
         title: '税额',
         id: 215
-      },{
+      }, {
         title: '是否为行程内费用',
         id: 218
-      },{
+      }, {
         title: '批次',
         id: 221
-      },{
+      }, {
         title: '匹配状态',
         id: 216
-      },{
+      }, {
         title: '运单号',
         id: 217
-      },{
+      }, {
         title: '装车完成时间',
         id: 226
-      },{
-        title: '实际液厂',
+      }, {
+        title: '液厂',
         id: 227
-      },{
+      }, {
         title: '装车吨位',
         id: 228
-      },{
+      }, {
         title: '添加时间',
         id: 229
-      },{
+      }, {
         title: '调账备注',
         id: 220
-      },{
+      }, {
         title: '调账时间',
         id: 219
-      },{
+      }, {
         title: '审核状态',
         id: 224
-      },{
+      }, {
         title: '审核通过时间',
         id: 225
-      },],
+      }, ],
       exportBtn: {
         text: '导出',
         isLoading: false,
@@ -412,13 +410,13 @@ export default {
         }
       })
     },
-    toExamineTab(tabs){
-      this.searchFilters={
+    toExamineTab(tabs) {
+      this.searchFilters = {
         cost_type: '',
         is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
         is_travel: '',
         keyword: '',
-        verify:'',
+        verify: '',
         field: 'plate_number',
       }
       this.startSearch();
@@ -428,7 +426,7 @@ export default {
         this.getList();
       })
     },
-    toExamineCloseDialog(isSave){
+    toExamineCloseDialog(isSave) {
       this.toExamineIsShow = false;
       if (isSave) {
         this.getList();
@@ -488,16 +486,16 @@ export default {
         cost_type: this.searchPostData.cost_type,
         is_matching: this.searchPostData.is_matching,
         is_travel: this.searchPostData.is_travel,
-        verify:this.searchPostData.verify
+        verify: this.searchPostData.verify
       };
-      if(this.toExamineName === 'no'){
+      if (this.toExamineName === 'no') {
         postData.verify = 'wait_verify';
       }
       if (this.costTime instanceof Array && this.costTime.length > 0) {
         postData.cost_date_start = this.costTime[0];
         postData.cost_date_end = this.costTime[1];
       }
-      if(this.verifyTime instanceof Array && this.verifyTime.length > 0){
+      if (this.verifyTime instanceof Array && this.verifyTime.length > 0) {
         postData.verify_time_start = this.verifyTime[0];
         postData.verify_time_end = this.verifyTime[1];
       }

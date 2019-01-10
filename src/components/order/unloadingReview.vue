@@ -7,8 +7,11 @@
  -->
 <style scoped lang="less">
   .loading-review-container {
+     max-height:720px;
+     overflow:auto;
   /deep/ .el-date-editor.el-input {
     width: 100%;
+   
   }
 }
 
@@ -152,10 +155,16 @@
           </el-form-item>
         </el-col>
       </el-row>
+      <el-row v-if="isEdit">
+        <el-col :span="24">
+          <el-form-item label="备注:" prop="mark">
+            <el-input type="textarea" :rows="4" v-model="surePound.mark" style="width:90%;"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
     <div slot="footer" class="dialog-footer" style="text-align: center; position: relative;" v-if="isEdit">
-      <el-checkbox v-model="checked" class="checked-box" v-if="isShowAccountCheck&&(!surePound.isHideUpSettle)
-">同时提交结算</el-checkbox>
+      <el-checkbox v-model="checked" class="checked-box" v-if="isShowAccountCheck&&(!surePound.isHideUpSettle)">同时提交结算</el-checkbox>
       <el-button @click="$emit('close')">取 消</el-button>
       <el-button type="primary" @click="sendRe()" :loading="buttonLoading">确 定</el-button>
     </div>
@@ -179,7 +188,9 @@ export default {
     return {
       buttonLoading: false,
       imgList: [],
-      surePound: {},
+      surePound: {
+
+      },
 
       poundUpload: {
         fileList: [],
@@ -209,6 +220,9 @@ export default {
           { required: true, message: '请输入卸车净重', trigger: 'blur' },
           { validator: validatePass, trigger: 'blur' }
           //{ pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
+        ],
+        mark: [
+          { min: 1, max: 100, message: '备注不超过100字符', trigger: 'blur' }
         ]
       },
       checked: false,
@@ -271,6 +285,15 @@ export default {
 
       })
 
+    },
+    confrimEdit() {
+      if (this.surePound.mark !== this.surePoundData.mark) {
+        let sendData = {
+          id: this.surePound.deliveryOrderId,
+          mark: this.surePound.mark,
+        };
+        this.$$http("fixOrderMark", sendData)
+      }
     },
     sendReAjax() {
 
@@ -344,6 +367,8 @@ export default {
 
         this.buttonLoading = true;
 
+        this.confrimEdit();
+
         if (this.isUpload) {
           this.uploadPoundImg().then(results => {
             this.sendReAjax();
@@ -378,6 +403,7 @@ export default {
   watch: {
     surePoundData: {
       handler(val, oldVal) {
+        console.log('val', val);
         this.surePound = Object.assign({}, this.surePoundData);
         !this.isUpload && this.getImg();
         this.isedit && this.getCheckStep();

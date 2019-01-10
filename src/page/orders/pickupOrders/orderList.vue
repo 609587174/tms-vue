@@ -198,7 +198,7 @@ export default {
         fieldSelect: [
           { id: 'trader_name', value: '托运商' },
           { id: 'order_number', value: '订单号' },
-          { id: 'fluid_name', value: '标准液厂' },
+          { id: 'fluid_name', value: '供方液厂名称' },
           { id: 'waybill_number', value: '运单号' },
           { id: 'truck_no', value: '车号' }
 

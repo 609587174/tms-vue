@@ -1733,17 +1733,6 @@ const api = {
     }
   },
 
-  getLandmarkDetail: {
-    url: '/position/base_position/',
-    method: 'get',
-    desc: '坐标详情',
-    param: {
-      id: {
-        desc: '资源id',
-      },
-    }
-  },
-
   getFulid: {
     // url: '/order/fluid/',
     url: '/map/standard_mileages/all_fluid_factories/',
@@ -2475,7 +2464,6 @@ const api = {
 
     }
   },
-
   exportsDispatch: {
     url: '/exports/dispatch/',
     method: 'GET',
@@ -2484,9 +2472,14 @@ const api = {
 
     }
   },
+  getLandmarkOverview: {
+    url: '/map/fluid_sites/overview/',
+    method: 'GET',
+    desc: "获取所有省份的地标概览数据",
+    param: {
 
-
-
+    }
+  }
 }
 
 

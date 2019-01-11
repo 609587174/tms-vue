@@ -13,9 +13,13 @@
                     <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
                       <el-option v-for="(item,key) in fieldSelect" :key="key" :label="item.label" :value="item.id"></el-option>
                     </el-select>
-                    <!-- <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
- -->
+                    <!-- <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>-->
                   </el-input>
+                </el-col>
+                <el-col :span="2">
+                  <el-form-item>
+                    <el-button type="primary" @click="startSearch" :isDisabled="searchBtn.isDisabled" :loading="searchBtn.isLoading" class="float-right">{{searchBtn.text}}</el-button>
+                  </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
@@ -48,18 +52,19 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row>
-                <el-col :span="8">
+              <!-- <el-row>
+                <el-col :span="8" v-if="false">
                   <el-form-item label="地标区域:" class="map-choose-address">
-                    <choose-address :address.sync="address" v-on:chooseProvince="chooseProvince" :addressName.sync="addressName"></choose-address>
+                    <choose-address :address.sync="address" :addressName.sync="addressName"></choose-address>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6" :offset="10">
+                 
+                <el-col :span="6" :offset="18">
                   <el-form-item>
                     <el-button type="primary" @click="startSearch" :isDisabled="searchBtn.isDisabled" :loading="searchBtn.isLoading" class="float-right">{{searchBtn.text}}</el-button>
                   </el-form-item>
                 </el-col>
-              </el-row>
+              </el-row>-->
             </el-form>
           </div>
           <div class="map-out-container mt-25">
@@ -98,6 +103,29 @@
                 <span class="float-left">审核失败</span>
               </div>
             </div>
+            <transition name="fade">
+              <div class="search-filters-contain" v-show="showLeftWindow" v-loading="getDetailLoading">
+                <div class="md-10">地标名称：{{landmarkDetail.position_name || '无'}}</div>
+                <div class="md-10">地标类型：{{landmarkDetail.position_type && landmarkDetail.position_type.verbose || '无'}}</div>
+                <div class="md-10">地标位置：{{landmarkDetail.address || '无'}}</div>
+                <div class="md-10">审核状态：{{landmarkDetail.confirm_status && landmarkDetail.confirm_status.verbose || '无'}}</div>
+                <div class="md-10">上传来源：{{landmarkDetail.source_type && landmarkDetail.source_type.verbose || '无'}}</div>
+                <div class="md-10">是否同步：{{landmarkDetail.async_status && landmarkDetail.async_status.verbose || '无'}}</div>
+                <div class="md-10">联系人：{{landmarkDetail.contacts || '无'}}</div>
+                <div class="md-10">联系电话：{{landmarkDetail.tel || '无'}}</div>
+                </br>
+                <div class="text-right">
+                  <el-button type="primary" class="float-right" @click="goLandmarkDetail(landmarkDetail.id)">查看</el-button>
+                </div>
+              </div>
+            </transition>
+            <transition name="fade">
+              <div class="side-alert-traggle side-alert-traggle-right" v-show="showLeftWindow" v-on:click="triggerAlert"><span>收起</span></div>
+            </transition>
+            <transition name="fade">
+              <div class="side-alert-traggle side-alert-traggle-left" v-show="!showLeftWindow && landmarkDetail" v-on:click="triggerAlert">
+                <span>展开</span></div>
+            </transition>
             <div id="map-container"></div>
           </div>
         </el-tab-pane>
@@ -107,8 +135,6 @@
 </template>
 <script>
 import chooseAddress from '@/components/chooseAddress';
-//创建地图
-let map, markerList, allMakers, cluster;
 export default {
   name: 'landMarkMap',
   components: {
@@ -154,6 +180,7 @@ export default {
         confirm_status: 'SUCCESS',
         async_status: '',
         field: 'position_name',
+        province: '',
       },
       fieldSelect: [{
         label: '地标名称',
@@ -168,12 +195,23 @@ export default {
         label: '上传人姓名',
         id: 'upload_user_nick_name',
       }],
-      landmarkDetail: {},
+      landmarkDetail: '',
       searchBtn: {
         isDisabled: false,
         isLoading: false,
         text: '搜索'
-      }
+      },
+      overviewData: [],
+      overviewMarkerList: '',
+      districtSearch: '',
+
+      zoomstartNum: '',
+      zoomendNum: '',
+      zoomBoundary: 9,
+      postDataCopy: '',
+      keywordCopy: '',
+      showLeftWindow: false,
+      getDetailLoading: false,
     }
   },
   methods: {
@@ -182,98 +220,275 @@ export default {
         this.$router.push({ path: '/mapManage/landmark/landmarkList' });
       }
     },
-    getList: function() {
+    init: function() {
+      this.initMap(); //初始化地图
+      this.getLandmarkOverviewAndRenderMarker(); //获取概览数据
+    },
+    //获取所有省份概览数据后，获取省份中心点经纬度信息，并生成标注列表。
+    getLandmarkOverviewAndRenderMarker: function() {
+      this.getLandmarkOverviewAjax()
+        .then(() => {
+          AMap.plugin('AMap.DistrictSearch', () => {
+            this.districtSearch = new AMap.DistrictSearch({
+              // 关键字对应的行政区级别，country表示国家
+              level: 'country',
+              //  显示下级行政区级数，1表示返回下一级行政区
+              subdistrict: 1,
+            })
+            //因为后端没有返回经纬度信息，只能通过高德地图获取各省份中心点的经纬度信息
+            this.districtSearch.search('中国', (status, result) => {
+              if (status === 'complete') {
+                let districtList = result.districtList[0].districtList;
+                let newOverviewData = [];
+                for (let i = 0, overviewDataLength = this.overviewData.length; i < overviewDataLength; i++) {
+                  for (let j = 0, overviewDataLength = districtList.length; j < overviewDataLength; j++) {
+                    if (this.overviewData[i].area_name === districtList[j].name) {
+                      this.overviewData[i].location = [districtList[j].center.lng, districtList[j].center.lat];
+                      this.overviewData[i].area_code = districtList[j].adcode;
+                      newOverviewData.push(this.overviewData[i]);
+                      break;
+                    }
+                  }
+                }
+                this.overviewData = newOverviewData;
+                if (this.markerList && this.landmarkList.length) {
+                  this.cluster.clearMarkers();
+                }
+                this.isInitMarkerList('overviewMarkerList').then(() => {
+                  this.overviewMarkerList.render(this.overviewData);
+                })
+
+              }
+              // 查询成功时，result即为对应的行政区信息
+            })
+          })
+        })
+    },
+    //获取所有省份概览数据
+    getLandmarkOverviewAjax: function() {
       return new Promise((resolve, reject) => {
         let postData = {
-          pagination: false,
           source_type: this.searchFilters.landmarkFrom,
+          position_type: this.searchFilters.position_type,
           confirm_status: this.searchFilters.confirm_status,
           async_status: this.searchFilters.async_status,
-          position_type: this.searchFilters.position_type,
-          simplify: true,
         };
-
-        if (this.searchFilters.keyword.length) {
-          postData[this.searchFilters.field] = this.searchFilters.keyword;
-        }
-        if (this.addressName.province) {
-          postData.province = this.addressName.province;
-        }
-        if (this.addressName.city) {
-          postData.city = this.addressName.city;
-        }
-        if (this.addressName.area) {
-          postData.county = this.addressName.area;
-        }
-
         postData = this.pbFunc.fifterObjIsNull(postData);
-
         this.pageLoading = true;
-
-        this.$$http('getLandMarkList', postData).then((results) => {
+        this.$$http('getLandmarkOverview', postData).then((results) => {
           this.pageLoading = false;
           if (results.data && results.data.code == 0) {
-            this.landmarkList = results.data.data.results;
-            if (!this.landmarkList.length) {
-              this.$message({
-                message: '无数据',
-                type: 'success'
-              });
+            this.overviewData = results.data.data;
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          this.pageLoading = false;
+          reject(err);
+        })
+      })
+    },
+    //初始化地图
+    initMap: function() {
+      this.map = new AMap.Map('map-container', {
+        zoom: 5,
+        resizeEnable: true,
+      });
+      //初始化概览和地标列表标注列表
+      this.initMarkList();
+      //引起地图视图变化的有三种情况1、地图放大缩小。2、地图平移。3、浏览器窗口大小调整。
+      this.watchZoomChange();
+      this.watchMapmove();
+      //this.watchMapResize();
+    },
+    //监测地图放大缩小
+    watchZoomChange: function() {
+      this.map.on('zoomstart', () => {
+        //记录zoom改变开始时的zoom值
+        this.zoomstartNum = this.map.getZoom();
+      })
+      this.map.on('zoomend', () => {
+        //记录zoom改变结束时的zoom值
+        this.zoomendNum = this.map.getZoom();
+        this.zoomeChangeCallback();
+      })
+    },
+    zoomeChangeCallback: function() {
+      if (this.zoomstartNum < this.zoomendNum) {
+        //如果是定位搜索
+        if (this.keywordCopy === '') {
+          if (this.zoomstartNum < this.zoomBoundary && this.zoomendNum >= this.zoomBoundary) {
+            this.mapChangeSearch();
+          }
+        }
+      } else if (this.zoomstartNum > this.zoomendNum) {
+        if (this.keywordCopy === '') {
+          if (this.zoomendNum >= this.zoomBoundary) {
+            this.mapChangeSearch();
+          } else {
+            if (this.zoomstartNum >= this.zoomBoundary) {
+              this.searchFilters.province = '';
+              this.getLandmarkOverviewAndRenderMarker();
             }
-            resolve(results)
-          } else {
-            reject(results);
           }
-        }).catch((err) => {
+        }
+      }
 
-          this.pageLoading = false;
-          reject(err);
-        })
-
+    },
+    //监测地图中心点移动
+    watchMapmove: function() {
+      this.map.on('moveend', () => {
+        this.zoomendNum = this.map.getZoom();
+        if (this.keywordCopy === '' && this.zoomendNum >= this.zoomBoundary) {
+          this.mapChangeSearch();
+        }
       })
     },
-    startSearch: function() {
-      this.searchBtn.isDisabled = true;
-      this.searchBtn.loading = true;
-      this.searchBtn.text = '搜索中';
-      this.getList().then((data) => { //展示该数据
-        this.renderMarker();
-        this.searchBtn.isDisabled = false;
-        this.searchBtn.loading = false;
-        this.searchBtn.text = '搜索';
+    //监测用于浏览器改变大小引起的地图容器尺寸改变
+    watchMapResize: function() {
+      this.map.on('resize', () => {
+        this.zoomendNum = this.map.getZoom();
       })
     },
-    chooseProvince: function() {
-      //this.getList();
+    //初始化概览和地标列表标注列表
+    initMarkList: function() {
+
+      AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
+        (MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) => {
+
+          this.map.addControl(new BasicControl.Zoom({
+            position: 'rt', //left top，左上角
+            showZoomNum: true //显示zoom值
+          }));
+
+          this.initOverviewMarkList(MarkerList, SimpleMarker, SimpleInfoWindow);
+
+          this.initLandmarkMarkList(MarkerList, SimpleMarker, SimpleInfoWindow);
+
+        });
     },
-    getLandmarkDetail: function(id) {
-      return new Promise((resolve, reject) => {
-        let postData = {
-          id: id
-        };
-        this.$$http('getLandMarkDetail', postData).then((results) => {
-          this.pageLoading = false;
-          if (results.data && results.data.code == 0) {
-            this.landmarkDetail = results.data.data;
-            resolve(results)
+    //初始化概览标注列表
+    initOverviewMarkList: function(MarkerList, SimpleMarker, SimpleInfoWindow) {
+
+      /* 概览标注列表 */
+      this.overviewMarkerList = new MarkerList({
+        map: this.map,
+        //从数据中读取位置, 返回lngLat
+        getPosition: (item) => {
+          return item.location;
+        },
+        //数据ID，如果不提供，默认使用数组索引，即index
+        getDataId: (item, index) => {
+          return index;
+        },
+        getInfoWindow: (data, context, recycledInfoWindow) => {
+
+        },
+        //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
+        getMarker: (dataItem, context, recycledMarker) => {
+          let htmlStr = '<div style="width: 70px;height:70px;font-size: 12px;border-radius: 50%;background-color: rgba(74,155,248, 0.7); text-align:center;" class="province-wraper"><div style="color:#fff;height:20px;line-height:20px;padding-top:18px;overflow:hidden;">' + dataItem.area_name + '</div><div style="color:#fff;height:20px;overflow:hidden;">' + dataItem.count + '</div></div>';
+          return new SimpleMarker({
+            containerClassNames: 'my-marker',
+            iconStyle: htmlStr,
+            offset: new AMap.Pixel(-34, -37),
+          });
+        },
+        //marker上监听的事件
+        markerEvents: ['click', 'mouseover', 'mouseout'],
+        selectedClassNames: 'selected',
+        autoSetFitView: false
+
+      });
+
+      this.overviewMarkerList.on('selectedChanged', (event, info) => {
+        if (info.selected) {
+          /*通过setZoom来修改zoom值，触发zoomchange事件，从而获取数据（watchZoomChange）。
+           **值得注意：使用settimeout,因为点击marker后，高德默认会把点击的marker置在地图中心，这会触发centerchange事件，也会获取数据（watchMapmove）
+           **这样就执行了两次获取数据的操作。地图渲染两次。页面会卡顿，
+           **因此，这里使用settimeout，等marker被置入地图中心的动画结束后，即centerchange事件触发结束后（不会触发数据请求），
+           **再执行this.map.setZoom(this.zoomBoundary)，就只会触发一次数据请求。这里的逻辑请查看watchZoomChange，watchMapmove
+           */
+          const itemData = info.selected.data;
+          this.searchFilters.province = info.selected.data.area_name;
+
+          let timeoutObject = null;
+          timeoutObject = setTimeout(() => {
+            this.map.setZoom(this.zoomBoundary);
+            clearTimeout(timeoutObject);
+          }, 300)
+
+        }
+      });
+
+    },
+    //初始化地标列表标注列表
+    initLandmarkMarkList: function(MarkerList, SimpleMarker, SimpleInfoWindow) {
+      this.markerList = new MarkerList({
+        map: this.map,
+        //从数据中读取位置, 返回lngLat
+        getPosition: (item) => {
+          return [item.location.longitude, item.location.latitude];
+        },
+        //数据ID，如果不提供，默认使用数组索引，即index
+        getDataId: (item, index) => {
+          return item.id;
+        },
+        getInfoWindow: (data, context, recycledInfoWindow) => {
+
+        },
+        //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
+        getMarker: (dataItem, context, recycledMarker) => {
+          let src = '';
+          src = this.getIconSrc(dataItem);
+          if (recycledMarker) {
+            recycledMarker.setIconStyle({
+              src: require('../../../assets/img/' + src),
+              style: {
+                width: '20px',
+                height: '20px',
+              }
+            });
+            recycledMarker.setLabel({
+              content: dataItem.position_name,
+              offset: new AMap.Pixel(30, 0)
+            })
+
+            return recycledMarker
           } else {
-            reject(results);
+            return new SimpleMarker({
+              containerClassNames: 'my-marker',
+              iconStyle: {
+                src: require('../../../assets/img/' + src),
+                style: {
+                  width: '20px',
+                  height: '20px',
+                }
+              },
+              label: {
+                content: dataItem.position_name,
+                offset: new AMap.Pixel(30, 0)
+              }
+            });
           }
-        }).catch((err) => {
-          reject(err);
-        })
+        },
+        //marker上监听的事件
+        markerEvents: ['click', 'mouseover', 'mouseout'],
+        selectedClassNames: 'selected',
+        autoSetFitView: false
 
-      })
-    },
-    getInfoWindowDom: function(data) {
-      let infoBodyStr = '<div class="fs-13 md-5">地标类型：' + data.position_type.verbose +
-        '</div><div class="fs-13 md-5">地标位置：' + data.address +
-        '</div><div class="fs-13 md-5">审核状态：' + data.confirm_status.verbose +
-        '</div><div class="fs-13 md-5">上传来源：' + data.source_type.verbose +
-        '</div><div class="fs-13">是否同步：' + data.async_status.verbose +
-        '</div></br><div class="fs-13 text-right"><a class="el-button el-button--primary el-button--mini" href="/#/mapManage/landMark/landmarkDetail/' + data.id + '" target="_blank">查看</a></div>';
+      });
+      //点击地标icon动态获取地标详情
+      this.markerList.on('selectedChanged', (event, info) => {
+        if (info.selected) {
+          let id = info.selected.data.id;
 
-      return infoBodyStr;
+          this.getLandmarkDetail(id).then((results) => {
+            this.showLeftWindow = true;
+          })
+        }
+      });
+
     },
     getIconSrc: function(item) {
       let src = ''
@@ -348,177 +563,181 @@ export default {
       return src;
 
     },
-    initMarkList: function() {
+    startSearch: function() {
+      if (this.searchFilters.keyword.length) { //如果选择了省份或者在输入框内定向搜索则直接过去真实数据
+        let postData = {
+          pagination: false,
+          source_type: this.searchFilters.landmarkFrom,
+          confirm_status: this.searchFilters.confirm_status,
+          async_status: this.searchFilters.async_status,
+          position_type: this.searchFilters.position_type,
+          simplify: true,
+        };
+        postData[this.searchFilters.field] = this.searchFilters.keyword;
 
-      let _this = this;
-      AMapUI.loadUI(['misc/MarkerList', 'overlay/SimpleMarker', 'overlay/SimpleInfoWindow', 'control/BasicControl'],
-        function(MarkerList, SimpleMarker, SimpleInfoWindow, BasicControl) {
+        this.postDataCopy = Object.assign({}, postData);
+        this.keywordCopy = this.searchFilters.keyword.toString();
 
-          _this.map.addControl(new BasicControl.Zoom({
-            position: 'lt', //left top，左上角
-            showZoomNum: true //显示zoom值
-          }));
+        postData = this.pbFunc.fifterObjIsNull(postData);
 
-          let $ = MarkerList.utils.$; //即jQuery/Zepto
-
-          _this.markerList = new MarkerList({
-
-            map: _this.map,
-
-            //从数据中读取位置, 返回lngLat
-            getPosition: function(item) {
-              return [item.location.longitude, item.location.latitude];
-            },
-
-            //数据ID，如果不提供，默认使用数组索引，即index
-            getDataId: function(item, index) {
-              return index;
-            },
-
-            getInfoWindow: function(data, context, recycledInfoWindow) {
-              let infoTitleStr = '<div class="marker-info-window"><span class="fs-13">' + data.position_name + '</span>';
-              let infoBodyStr = '<br><div class="fs-13 text-center">数据加载中...</div><br>';
-              if (recycledInfoWindow) {
-                recycledInfoWindow.setInfoTitle(infoTitleStr);
-                recycledInfoWindow.setInfoBody(infoBodyStr);
-                return recycledInfoWindow;
-              } else {
-                return new SimpleInfoWindow({
-                  infoTitle: infoTitleStr,
-                  infoBody: infoBodyStr,
-                  offset: new AMap.Pixel(0, -37)
-                });
-              }
-            },
-
-            //构造marker用的options对象, content和title支持模板，也可以是函数，返回marker实例，或者返回options对象
-            getMarker: function(dataItem, context, recycledMarker) {
-              let src = '';
-              src = _this.getIconSrc(dataItem);
-              if (recycledMarker) {
-                recycledMarker.setIconStyle({
-                  src: require('../../../assets/img/' + src),
-                  style: {
-                    width: '20px',
-                    height: '20px',
-                  }
-                });
-                recycledMarker.setLabel({
-                  content: dataItem.position_name,
-                  offset: new AMap.Pixel(30, 0)
-                })
-
-                return recycledMarker
-              } else {
-                return new SimpleMarker({
-                  containerClassNames: 'my-marker',
-                  iconStyle: {
-                    src: require('../../../assets/img/' + src),
-                    style: {
-                      width: '20px',
-                      height: '20px',
-                    }
-                  },
-                  label: {
-                    content: dataItem.position_name,
-                    offset: new AMap.Pixel(30, 0)
-                  }
-                });
-              }
-            },
-
-            //marker上监听的事件
-            markerEvents: ['click', 'mouseover', 'mouseout'],
-
-            selectedClassNames: 'selected',
-
-            autoSetFitView: false
-
-          });
-
-          _this.markerList.on('selectedChanged', function(event, info) {
-            if (info.selected) {
-              let infoWindow = _this.markerList.getInfoWindow();
-              let id = info.selected.data.id;
-              _this.getLandmarkDetail(id).then((results) => {
-                let infoBodyStr = _this.getInfoWindowDom(_this.landmarkDetail);
-                infoWindow.setInfoBody(infoBodyStr);
-
-              }).catch(() => {
-                let infoBodyStr = '<br><div class="fs-13 text-center">数据加载失败</div><br>';
-                infoWindow.setInfoBody(infoBodyStr);
-              })
-              //选中并非由列表节点上的事件触发，将关联的列表节点移动到视野内
-              if (!info.sourceEventInfo.isListElementEvent) {
-
-                if (info.selected.listElement) {
-                  scrollListElementIntoView($(info.selected.listElement));
-                }
-
-              }
-            }
-          });
-
-        });
-    },
-    renderMarker: function() {
-      let _this = this;
-      if (_this.markerList) {
-        _this.markerList.render(_this.landmarkList);
-        _this.map.plugin(["AMap.MarkerClusterer"], function() {
-          _this.allMakers = _this.markerList.getAllMarkers();
-          if (_this.cluster) {
-            //_this.cluster.clearMarkers();
-            _this.cluster.setMarkers(_this.allMakers);
-          } else {
-            _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-              minClusterSize: 4,
-              maxZoom: 17,
-            });
-          }
-
-        });
+        this.searchBtn.isDisabled = true;
+        this.searchBtn.loading = true;
+        this.searchBtn.text = '搜索中';
+        this.pageLoading = true;
+        this.getLandmarkListAjax(postData).then((data) => { //展示该数据
+          this.renderMarker();
+          this.searchBtn.isDisabled = false;
+          this.searchBtn.loading = false;
+          this.searchBtn.text = '搜索';
+        })
       } else {
+        this.getLandmarkOverviewAndRenderMarker();
+      }
+    },
+    mapChangeSearch: function() {
+      //引起地图视图变化的有三种情况1、地图放大缩小。2、地图平移。3、浏览器窗口大小调整。
+      let postData = {};
+      if (this.postDataCopy) {
+        postData = Object.assign({}, this.postDataCopy);
+      } else {
+        postData = {
+          pagination: false,
+          source_type: this.searchFilters.landmarkFrom,
+          confirm_status: this.searchFilters.confirm_status,
+          async_status: this.searchFilters.async_status,
+          position_type: this.searchFilters.position_type,
+          simplify: true,
+          province: this.searchFilters.province,
+        }
+      }
+      let mapCenter = this.map.getCenter();
+      let bounds = this.map.getBounds();
+      let lnglat1 = new AMap.LngLat(bounds.northeast.lng, bounds.northeast.lat);
+      let lnglat2 = new AMap.LngLat(bounds.northeast.lng, bounds.southwest.lat);
+      let distance = Math.floor(lnglat1.distance(lnglat2));
 
-        setTimeout(() => {
-          _this.markerList.render(_this.landmarkList);
-          _this.map.plugin(["AMap.MarkerClusterer"], function() {
-            _this.allMakers = _this.markerList.getAllMarkers();
-            if (_this.cluster) {
-              // _this.cluster.clearMarkers();
-              _this.cluster.setMarkers(_this.allMakers);
-            } else {
-              _this.cluster = new AMap.MarkerClusterer(_this.map, _this.allMakers, {
-                minClusterSize: 4,
-                maxZoom: 17,
+      postData.longitude = mapCenter.lng;
+      postData.latitude = mapCenter.lat;
+      postData.distance = distance;
+
+      postData = this.pbFunc.fifterObjIsNull(postData);
+
+      this.getLandmarkListAjax(postData).then(() => {
+        this.renderMarker();
+      });
+    },
+    //获取地标列表
+    getLandmarkListAjax: function(postData) {
+      return new Promise((resolve, reject) => {
+        this.$$http('getLandMarkList', postData).then((results) => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkList = results.data.data.results;
+            if (!this.landmarkList.length) {
+              this.$message({
+                message: '无数据',
+                type: 'success'
               });
             }
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
 
-          });
-        }, 1000)
+          this.pageLoading = false;
+          reject(err);
+        })
 
+      })
+    },
+    //在地图上渲染MarkerList
+    renderMarker: function() {
+      if (this.overviewMarkerList) {
+        this.overviewMarkerList.clearData();
       }
 
-      _this.map.setFitView(_this.allMakers);
+      this.markerList.render(this.landmarkList);
+      this.map.plugin(["AMap.MarkerClusterer"], () => {
+        this.allMakers = this.markerList.getAllMarkers();
+        if (this.cluster) {
+          //this.cluster.clearMarkers();
+          this.cluster.setMarkers(this.allMakers);
+        } else {
+          this.cluster = new AMap.MarkerClusterer(this.map, this.allMakers, {
+            minClusterSize: 3,
+            maxZoom: 17,
+          });
+        }
+      });
+    },
+    /* 判断markerlist是否已经初始化，经常遇到markerlist还未初始化完毕，直接调用报错 */
+    isInitMarkerList: function(markerList) {
+      return new Promise((resolve, reject) => {
+        let limitCount = 10; //limitCount设置重复调用的限制次数，防止无限调用。
+        let timeoutObject = null;
+        let isInitOverviewMarkerListFnc = () => {
+          if (this[markerList]) {
+            if (timeoutObject) {
+              clearTimeout(timeoutObject);
+            }
+            return resolve();
+          } else {
+            if (limitCount > 0) {
+              limitCount--;
+              timeoutObject = setTimeout(() => {
+                isInitOverviewMarkerListFnc();
+              }, 500)
+            } else {
+              clearTimeout(timeoutObject);
+              return resolve();
+            }
+          }
+        }
+        isInitOverviewMarkerListFnc();
+      })
+    },
+    //获取地标详情
+    getLandmarkDetail: function(id) {
+      return new Promise((resolve, reject) => {
+        let postData = {
+          id: id
+        };
+        this.getDetailLoading = true;
+        this.$$http('getLandMarkDetail', postData).then((results) => {
+          this.getDetailLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.landmarkDetail = results.data.data;
+            resolve(results)
+          } else {
+            reject(results);
+          }
+        }).catch((err) => {
+          reject(err);
+        })
 
-    }
+      })
+    },
+    triggerAlert: function() {
+      this.showLeftWindow = !this.showLeftWindow;
+    },
+    goLandmarkDetail: function(id) {
+      this.$router.push({
+        path: `/mapManage/landMark/landmarkDetail/${id}`,
+      })
+    },
   },
   mounted: function() {
-    let _this = this;
-    this.map = new AMap.Map('map-container', {
-      zoom: 5
-    });
-    this.initMarkList();
-    _this.getList().then((data) => { //展示该数据
-      _this.renderMarker();
-    })
-
+    //初始化，需要在mounted里面执行，因为地图的挂载需要dom结构已经建立
+    this.init();
+  },
+  beforeDestroy: function() {
+    //注销地图对象，内存释放，清空地图容器。
+    this.map.destroy();
   },
   activated: function() {
     this.activeName = 'second';
   },
-
-
 }
 
 </script>
@@ -527,20 +746,23 @@ export default {
   width: 100%;
   height: 700px;
   position: relative;
+
   .map-loading {
     position: absolute;
     height: 50px;
     width: 100%;
     left: 0;
     top: 0;
+
     /deep/ .el-loading-mask {
       background-color: rgba(250, 250, 250, 0);
     }
   }
+
   .icon-description {
     padding: 10px;
     position: absolute;
-    left: 0px;
+    right: 0px;
     bottom: 10px;
     border-bottom: 300px;
     height: 220px;
@@ -552,17 +774,21 @@ export default {
       &:nth-child(2) {
         margin-left: 1px;
       }
+
       line-height: 24px;
       margin-bottom: 4px;
+
       img {
         width: 20px;
         height: 20px;
         margin-right: 5px;
       }
+
       span {
         line-height: 24px;
         font-size: 13px;
       }
+
       i {
         height: 18px;
         width: 18px;
@@ -570,15 +796,19 @@ export default {
         margin: 1px 6px 0 1px;
         font-size: 13px;
       }
+
       .bg-1 {
         background-color: #47d2d0;
       }
+
       .bg-2 {
         background-color: #4a9bf8;
       }
+
       .bg-3 {
         background-color: #f56c6c;
       }
+
       .bg-4 {
         background-color: #7c8fa0;
       }
@@ -595,6 +825,59 @@ export default {
   /deep/ .el-row {
     padding: 0 !important;
   }
+}
+
+.search-filters-contain {
+  padding: 20px 10px 0 10px;
+  background-color: #fff;
+  height: 700px;
+  width: 380px;
+  position: absolute;
+  left: 0;
+  top: 0px;
+  z-index: 999;
+}
+
+.side-alert-traggle {
+  position: absolute;
+  top: 340px;
+
+  width: 26px;
+  height: 50px;
+
+
+  line-height: 24px;
+
+  cursor: pointer;
+  text-align: center;
+
+  border: 1px solid #4a9bf8;
+  border-left: 0 none;
+  background-color: #fff;
+  color: #4a9bf8;
+  z-index: 999;
+
+  span {
+    font-size: 16px;
+  }
+}
+
+.side-alert-traggle-right {
+  left: 400px;
+}
+
+.side-alert-traggle-left {
+  left: 0px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 
 </style>

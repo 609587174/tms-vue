@@ -207,7 +207,7 @@ export default {
 
       zoomstartNum: '',
       zoomendNum: '',
-      zoomBoundary: 9,
+      zoomBoundary: 8,
       postDataCopy: '',
       keywordCopy: '',
       showLeftWindow: false,

@@ -58,8 +58,9 @@ export default {
         width: ''
       }, {
         title: '是否为行程内费用',
-        param: 'is_travel.verbose',
-        width: ''
+        param: 'is_travel',
+        width: '',
+        isSecondLevel: true
       }, {
         title: '批次',
         param: 'lot',

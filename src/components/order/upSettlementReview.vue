@@ -6,7 +6,7 @@
   3:可以审核并能上传装车榜单图片isedit = ture ; isUpload = ture;
  -->
 <style scoped lang="less">
-.loading-review-container {
+  .loading-review-container {
   /deep/ .el-date-editor.el-input {
     width: 100%;
   }
@@ -35,28 +35,26 @@
       <el-row v-if="setpTipInfo.length>0">
         <el-col :span="20" :offset="2" style="text-align:center;color:#F56C6C">
           请注意，该单与
-            <span v-for="(item,index) in setpTipInfo">
+          <span v-for="(item,index) in setpTipInfo">
               {{item.order_number}}({{item.station}})
               <span v-if="index!=setpTipInfo.length-1">/</span>
-            </span>
-            合为分卸单,请注意填写卸车信息！
+          </span>
+          合为分卸单,请注意填写卸车信息！
         </el-col>
       </el-row>
       <el-row v-if="isUpload" justify="space-around" type="flex" style="margin-top:10px;">
-        <el-col :span="4" >
-          <upSettlementImg :fileList.sync="poundUpload.fileList" :hideUpimg="false":Title="poundUpload.Title" :limit="poundUpload.limit"  :imgView="imgReviewSrc" :imgInfo="imgList.length>0?imgList[0]:{}"
-            @imgChange="imgChange" :type="'load'"></upSettlementImg>
+        <el-col :span="4">
+          <upSettlementImg :fileList.sync="poundUpload.fileList" :hideUpimg="false" :Title="poundUpload.Title" :limit="poundUpload.limit" :imgView="imgReviewSrc" :imgInfo="imgList.length>0?imgList[0]:{}" @imgChange="imgChange" :type="'load'"></upSettlementImg>
         </el-col>
         <el-col :span="4" v-for="(item,index) in sealImgList">
-          <upSettlementImg :fileList.sync="sealUpload.fileList" :hideUpimg="true" :Title="sealUpload.Title" :limit="sealUpload.limit"  :imgView="sealImgReviewSrc" :imgInfo="item"></upSettlementImg>
+          <upSettlementImg :fileList.sync="sealUpload.fileList" :hideUpimg="true" :Title="sealUpload.Title" :limit="sealUpload.limit" :imgView="sealImgReviewSrc" :imgInfo="item"></upSettlementImg>
         </el-col>
-        <el-col :span="4" >
-          <upSettlementImg :fileList.sync="unPoundUpload.fileList" :hideUpimg="false" :Title="unPoundUpload.Title" :limit="unPoundUpload.limit"  :imgView="unImgReviewSrc" :imgInfo="unImgList.length>0?unImgList[0]:{}" @imgChange="imgChange" :type="'unload'"></upSettlementImg>
+        <el-col :span="4">
+          <upSettlementImg :fileList.sync="unPoundUpload.fileList" :hideUpimg="false" :Title="unPoundUpload.Title" :limit="unPoundUpload.limit" :imgView="unImgReviewSrc" :imgInfo="unImgList.length>0?unImgList[0]:{}" @imgChange="imgChange" :type="'unload'"></upSettlementImg>
         </el-col>
-
       </el-row>
       <el-row style="margin-top:20px;" justify="space-around" type="flex">
-        <el-col :span="10" >
+        <el-col :span="10">
           <el-row>
             <el-col>
               <el-form-item label="实际到厂时间:" label-width="120px" prop="pickup_active_time">
@@ -90,7 +88,7 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="10" >
+        <el-col :span="10">
           <el-row>
             <el-col>
               <el-form-item label="实际到站时间:" label-width="120px" prop="active_time">
@@ -131,7 +129,6 @@
         </el-col>
       </el-row>
       </el-row>
-       
       <!-- <el-row>
         <el-col :span="10" :offset="2">
           <el-form-item label="计划装车液厂:">
@@ -182,32 +179,39 @@ import upSettlementImg from '@/components/upSettlementImg'; //引入骑牛图片
 export default {
   name: 'loadingReview',
   data() {
+    const validatePass = (rule, value, callback) => {
+      if (value >= 0.1 && value < 31) {
+        callback();
+      } else {
+        callback(new Error("请注意单位为吨"));
+      }
+    };
     return {
       buttonLoading: false,
       imgList: [],
-      unImgList:[],
-      sealImgList:[],
+      unImgList: [],
+      sealImgList: [],
       upSettleForm: {
-        pickup_active_time:"",
-        pickup_work_start_time:"",
-        pickup_work_end_time:"",
-        pickup_gross_weight:"",
-        pickup_tare_weight:"",
-        pickup_net_weight:"",
-        active_time:"",
-        leave_time:"",
-        work_end_time:"",
-        gross_weight:"",
-        tare_weight:"",
-        net_weight:"",
-        active_mile:"",
+        pickup_active_time: "",
+        pickup_work_start_time: "",
+        pickup_work_end_time: "",
+        pickup_gross_weight: "",
+        pickup_tare_weight: "",
+        pickup_net_weight: "",
+        active_time: "",
+        leave_time: "",
+        work_end_time: "",
+        gross_weight: "",
+        tare_weight: "",
+        net_weight: "",
+        active_mile: "",
       },
-      setpTipInfo:[],
+      setpTipInfo: [],
       poundUpload: {
         fileList: [],
         Title: '装车磅单',
         limit: 1,
-        change:false,
+        change: false,
       },
       sealUpload: {
         fileList: [],
@@ -218,7 +222,7 @@ export default {
         fileList: [],
         Title: '卸车磅单',
         limit: 1,
-        change:false,
+        change: false,
       },
 
       rules: {
@@ -236,7 +240,7 @@ export default {
         ],
         net_weight: [
           { required: true, message: '请输入装车净重', trigger: 'blur' },
-          { pattern: /^[1-9][0-9]?(\.\d{1,3})?$/, message: '请注意单位为吨', trigger: 'blur' },
+          { pattern: validatePass, trigger: 'blur' },
         ],
         pickup_gross_weight: [
           { pattern: /^\d+(\.\d{1,3})?$/, message: '不超过三位小数', trigger: 'blur' },
@@ -260,7 +264,7 @@ export default {
     cancel: Function,
     isEdit: Boolean,
     isUpload: Boolean,
-    checkStep:String
+    checkStep: String
   },
   computed: {
     imgReviewSrc: function() {
@@ -270,14 +274,14 @@ export default {
       }
       return `/imgReview?imgList=${imgListArray.join(',')}`;
     },
-    unImgReviewSrc:function() {
+    unImgReviewSrc: function() {
       let imgListArray = [];
       for (let i in this.unImgList) {
         imgListArray.push(this.unImgList[i].url);
       }
       return `/imgReview?imgList=${imgListArray.join(',')}`;
     },
-    sealImgReviewSrc:function() {
+    sealImgReviewSrc: function() {
       let imgListArray = [];
       for (let i in this.sealImgList) {
         imgListArray.push(this.sealImgList[i].url);
@@ -286,13 +290,13 @@ export default {
     },
   },
   methods: {
-    imgChange:function(changeInfo){
-      if(changeInfo.type=='load'){
-        this.poundUpload.change=true;
-        this.poundUpload.fileList=changeInfo.fileList;
-      }else if(changeInfo.type=='unload'){
-        this.unPoundUpload.change=true;
-        this.unPoundUpload.fileList=changeInfo.fileList;
+    imgChange: function(changeInfo) {
+      if (changeInfo.type == 'load') {
+        this.poundUpload.change = true;
+        this.poundUpload.fileList = changeInfo.fileList;
+      } else if (changeInfo.type == 'unload') {
+        this.unPoundUpload.change = true;
+        this.unPoundUpload.fileList = changeInfo.fileList;
       }
     },
     getImg() { //获取榜单和铅封图片
@@ -317,7 +321,7 @@ export default {
       if (this.surePound.pickup_carseal) {
         this.$$http('getSeal', { id: this.surePound.pickup_carseal }).then((results) => {
           let imageUrlArray = results.data.data.data;
-          this.sealImgList=[];
+          this.sealImgList = [];
           imageUrlArray.map((item, j) => {
             if (item.image_url_list) {
               let imageList = item.image_url_list;
@@ -335,21 +339,21 @@ export default {
       }
 
       //获取卸车榜单
-        if (this.surePound.weight_note) {
-          let qustArray = [];
-          this.unImgList = [];
-          this.$$http("getPundList", { id: this.surePound.weight_note }).then(results => {
-            if (results.data.code == 0) {
-              let imageUrlArray = results.data.data.data;
-              imageUrlArray.map((img, i) => {
-                this.unImgList.push({
-                  url: img.image_url,
-                  title: '卸车磅单'
-                });
-              })
-            }
-          });
-        }
+      if (this.surePound.weight_note) {
+        let qustArray = [];
+        this.unImgList = [];
+        this.$$http("getPundList", { id: this.surePound.weight_note }).then(results => {
+          if (results.data.code == 0) {
+            let imageUrlArray = results.data.data.data;
+            imageUrlArray.map((img, i) => {
+              this.unImgList.push({
+                url: img.image_url,
+                title: '卸车磅单'
+              });
+            })
+          }
+        });
+      }
     },
     //上传装车榜单
     uploadPoundImg() {
@@ -403,16 +407,16 @@ export default {
       })
 
     },
-     cancle(){
+    cancle() {
       this.$emit('close');
-      this.unPoundUpload.fileList=[];
-      this.poundUpload.fileList=[];
+      this.unPoundUpload.fileList = [];
+      this.poundUpload.fileList = [];
     },
     //审核通过ajax
     sendReAjax() {
       let sendData = this.upSettleForm;
-      sendData.id=this.surePound.id;
-      sendData.status='in_settlement';
+      sendData.id = this.surePound.id;
+      sendData.status = 'in_settlement';
       this.$$http("changeOrderStatus", sendData).then(results => {
         this.buttonLoading = false;
         if (results.data.code == 0) {
@@ -433,46 +437,46 @@ export default {
       this.$refs['examinePoundForm'].validate(valid => {
         if (!valid) return;
         this.buttonLoading = true;
-          if(this.poundUpload.change){
-            this.uploadPoundImg();
-          }
-          if(this.unPoundUpload.change){
-            this.upUnloadPoundImg();
-          }
-          this.sendReAjax();
+        if (this.poundUpload.change) {
+          this.uploadPoundImg();
+        }
+        if (this.unPoundUpload.change) {
+          this.upUnloadPoundImg();
+        }
+        this.sendReAjax();
       })
     },
     getCheckStep() {
-      var sendData={};
-      sendData.id=this.surePoundData.id;
-      this.$$http('getCheckStep',sendData).then(results=>{
-        if(results.data.code==0){
-          this.setpTipInfo=results.data.data;
+      var sendData = {};
+      sendData.id = this.surePoundData.id;
+      this.$$http('getCheckStep', sendData).then(results => {
+        if (results.data.code == 0) {
+          this.setpTipInfo = results.data.data;
         }
       });
     },
-    initUpSettleForm(){
-      this.upSettleForm={
-        pickup_active_time:this.surePound.pickup_trip.active_time||null,
-        pickup_work_start_time:this.surePound.pickup_trip.work_start_time||null,
-        pickup_work_end_time:this.surePound.pickup_trip.work_end_time||null,
-        pickup_gross_weight:this.surePound.pickup_trip.gross_weight||null,
-        pickup_tare_weight:this.surePound.pickup_trip.tare_weight||null,
-        pickup_net_weight:this.surePound.pickup_trip.net_weight||null,
-        active_time:this.surePound.active_time||null,
-        leave_time:this.surePound.weight_audit_time||null,
-        work_end_time:this.surePound.work_end_time||null,
-        gross_weight:this.surePound.gross_weight||null,
-        tare_weight:this.surePound.tare_weight||null,
-        net_weight:this.surePound.net_weight||null,
-        active_mile:this.surePound.weight_active_mile||null,
+    initUpSettleForm() {
+      this.upSettleForm = {
+        pickup_active_time: this.surePound.pickup_trip.active_time || null,
+        pickup_work_start_time: this.surePound.pickup_trip.work_start_time || null,
+        pickup_work_end_time: this.surePound.pickup_trip.work_end_time || null,
+        pickup_gross_weight: this.surePound.pickup_trip.gross_weight || null,
+        pickup_tare_weight: this.surePound.pickup_trip.tare_weight || null,
+        pickup_net_weight: this.surePound.pickup_trip.net_weight || null,
+        active_time: this.surePound.active_time || null,
+        leave_time: this.surePound.weight_audit_time || null,
+        work_end_time: this.surePound.work_end_time || null,
+        gross_weight: this.surePound.gross_weight || null,
+        tare_weight: this.surePound.tare_weight || null,
+        net_weight: this.surePound.net_weight || null,
+        active_mile: this.surePound.weight_active_mile || null,
       }
     }
   },
   created() {
     this.surePound = Object.assign({}, this.surePoundData);
     this.getImg();
-    this.checkStep=='check'&&this.getCheckStep();
+    this.checkStep == 'check' && this.getCheckStep();
     this.initUpSettleForm();
   },
   watch: {
@@ -483,7 +487,7 @@ export default {
         this.surePound = Object.assign({}, val);
         this.initUpSettleForm();
         this.getImg();
-        this.checkStep=='check'&&this.getCheckStep();
+        this.checkStep == 'check' && this.getCheckStep();
         this.poundUpload = {
           fileList: [],
           Title: '装车磅单',
@@ -501,7 +505,7 @@ export default {
           limit: 1,
         };
       },
-      deep: true　
+      deep: true
     },
   }
 };

@@ -296,13 +296,13 @@ export default {
         id: 238,
       }, {
         param: "plan_time",
-        title: "计划装车时间",
+        title: "计划到站时间",
         width: "160",
         showHidden: true,
         id: 239,
       }, {
         param: "activate_start",
-        title: "实际到厂时间",
+        title: "实际到站时间",
         width: "160",
         showHidden: true,
         id: 240,

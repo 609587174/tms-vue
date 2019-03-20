@@ -1,5 +1,5 @@
 <style scoped lang="less">
-.el-container {
+  .el-container {
   background: #fff;
 }
 
@@ -291,19 +291,19 @@ a {
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap1.png">
                   </div>
-                </div>
+                  </div>
               </el-col>
               <el-col :span="6">
                 <div class="advantage-list">
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap2.png">
                   </div>
-                  <div class="advantage-list-msg">
-                    <img src="@/assets/img/data.png">
-                    <span>数据精细管理</span>
-                    <div>驾驶员/销售/统计/财务数据实 时同步、精确统计</div>
+                    <div class="advantage-list-msg">
+                      <img src="@/assets/img/data.png">
+                      <span>数据精细管理</span>
+                      <div>驾驶员/销售/统计/财务数据实 时同步、精确统计</div>
+                    </div>
                   </div>
-                </div>
               </el-col>
               <el-col :span="6">
                 <div class="advantage-list">
@@ -315,19 +315,19 @@ a {
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap3.png">
                   </div>
-                </div>
+                  </div>
               </el-col>
               <el-col :span="6">
                 <div class="advantage-list">
                   <div class="advantage-list-img">
                     <img src="@/assets/img/Bitmap4.png">
                   </div>
-                  <div class="advantage-list-msg">
-                    <img src="@/assets/img/for.png">
-                    <span>业务协同推进</span>
-                    <div>从获取销售需求到物流运输、 财务管理实现全站多角色高效 协同与跟踪记录</div>
+                    <div class="advantage-list-msg">
+                      <img src="@/assets/img/for.png">
+                      <span>业务协同推进</span>
+                      <div>从获取销售需求到物流运输、 财务管理实现全站多角色高效 协同与跟踪记录</div>
+                    </div>
                   </div>
-                </div>
               </el-col>
             </el-row>
           </div>
@@ -388,7 +388,7 @@ a {
       <el-footer>
         <div class="bpm-footer">
           <div>Copyright © {{newYear}} 成都浩海通达科技有限公司 - 蜀ICP备17041791号-1
-            <br> QQ：1373724944(联系客服) - 邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
+            <br>邮箱：fangyuan@hhtdlng.com(合作洽谈)</div>
         </div>
       </el-footer>
     </el-container>

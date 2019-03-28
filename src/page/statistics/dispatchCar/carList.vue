@@ -313,6 +313,18 @@ export default {
         showHidden: true,
         id: 241,
       }, {
+        param: "driver_waiting",
+        title: "驾驶员待时",
+        width: "160",
+        showHidden: true,
+        id: 249,
+      }, {
+        param: "account_waiting",
+        title: "业务员待时",
+        width: "160",
+        showHidden: true,
+        id: 250,
+      }, {
         param: "remark",
         title: "备注",
         width: "150",

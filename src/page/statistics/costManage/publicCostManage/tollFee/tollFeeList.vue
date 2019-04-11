@@ -22,7 +22,6 @@
     }
   }
 }
-
 </style>
 <template>
   <div>
@@ -32,35 +31,94 @@
         <el-tab-pane label="现金费用管理" name="cashCost"></el-tab-pane>
         <el-tab-pane label="对公费用管理" name="publicCost">
           <div class="tab-screen">
-            <el-form class="search-filters-form" label-width="80px" :model="searchFilters" status-icon>
+            <el-form
+              class="search-filters-form"
+              label-width="80px"
+              :model="searchFilters"
+              status-icon
+            >
               <el-row :gutter="0">
                 <el-col :span="12">
-                  <el-input placeholder="请输入" v-model="searchFilters.keyword" @keyup.native.13="startSearch" class="search-filters-screen">
+                  <el-input
+                    placeholder="请输入"
+                    v-model="searchFilters.keyword"
+                    @keyup.native.13="startSearch"
+                    class="search-filters-screen"
+                  >
                     <el-select v-model="searchFilters.field" slot="prepend" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.fieldSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                      <el-option
+                        v-for="(item,key) in selectData.fieldSelect"
+                        :key="key"
+                        :label="item.value"
+                        :value="item.id"
+                      ></el-option>
                     </el-select>
                     <el-button slot="append" icon="el-icon-search" @click="startSearch"></el-button>
                   </el-input>
                 </el-col>
               </el-row>
               <el-row :gutter="10">
-                <el-col :span="8">
+                <el-col :span="10">
                   <el-form-item label="费用时间:" label-width="105px">
-                    <el-date-picker v-model="costTime" type="datetimerange" @change="startSearch" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :default-time="['00:00:00', '23:59:59']">
-                    </el-date-picker>
+                    <el-date-picker
+                      v-model="costTime"
+                      type="datetimerange"
+                      @change="startSearch"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      :default-time="['00:00:00', '23:59:59']"
+                    ></el-date-picker>
                   </el-form-item>
                 </el-col>
+                <el-col :span="10">
+                  <el-form-item label="装车完成时间:" label-width="105px">
+                    <el-date-picker
+                      v-model="loadTime"
+                      type="datetimerange"
+                      @change="startSearch"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd HH:mm:ss"
+                      :default-time="['00:00:00', '23:59:59']"
+                    ></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="10">
                 <el-col :span="6">
                   <el-form-item label="匹配状态:">
-                    <el-select v-model="searchFilters.is_matching" filterable @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.isMatchSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-select
+                      v-model="searchFilters.is_matching"
+                      filterable
+                      @change="startSearch"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="(item,key) in selectData.isMatchSelect"
+                        :key="key"
+                        :label="item.value"
+                        :value="item.id"
+                      ></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
                   <el-form-item label="行程内费用:" label-width="100px">
-                    <el-select v-model="searchFilters.is_travel" filterable @change="startSearch" placeholder="请选择">
-                      <el-option v-for="(item,key) in selectData.isTravelSelect" :key="key" :label="item.value" :value="item.id"></el-option>
+                    <el-select
+                      v-model="searchFilters.is_travel"
+                      filterable
+                      @change="startSearch"
+                      placeholder="请选择"
+                    >
+                      <el-option
+                        v-for="(item,key) in selectData.isTravelSelect"
+                        :key="key"
+                        :label="item.value"
+                        :value="item.id"
+                      ></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -73,37 +131,74 @@
     <div class="nav-tab-setting mt-25">
       <div class="public-btn">
         <el-button type="primary" plain @click="importData">导入</el-button>
-        <!-- <el-button type="primary" :disabled="exportBtn.isDisabled" :loading="exportBtn.isLoading" @click="exportData">{{exportBtn.text}}</el-button> -->
+        <el-button
+          type="primary"
+          :disabled="exportBtn.isDisabled"
+          :loading="exportBtn.isLoading"
+          @click="exportData"
+        >{{exportBtn.text}}</el-button>
       </div>
       <el-tabs v-model="costActive" @tab-click="publicTabs">
         <el-tab-pane label="高速费管理" name="tollFee">
           <div class="table-list">
-            <el-table :data="tableData" stripe style="width: 100%" size="mini" v-loading="pageLoading" :class="{'tabal-height-500':!tableData.length}">
-              <el-table-column v-for="(item,key) in thTableList" :key="key" :prop="item.param" align="center" :label="item.title" :width="item.width?item.width:140">
+            <el-table
+              :data="tableData"
+              stripe
+              style="width: 100%"
+              size="mini"
+              v-loading="pageLoading"
+              :class="{'tabal-height-500':!tableData.length}"
+            >
+              <el-table-column
+                v-for="(item,key) in thTableList"
+                :key="key"
+                :prop="item.param"
+                align="center"
+                :label="item.title"
+                :width="item.width?item.width:140"
+              >
                 <template slot-scope="scope">
                   <div v-if="item.param === 'waybill'">
-                    <span class="text-blue cursor-pointer" v-on:click="handleMenuClick(item.param,scope.row)">{{scope.row[item.param]}}</span>
+                    <span
+                      class="text-blue cursor-pointer"
+                      v-on:click="handleMenuClick(item.param,scope.row)"
+                    >{{scope.row[item.param]}}</span>
                   </div>
                   <div v-else>
-                    <span v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'">{{scope.row[item.param].verbose}}</span>
-                    <div v-else-if="item.param==='comment'" class='td-hover' :title="scope.row[item.param]">{{scope.row[item.param]}}</div>
-                    <div v-else>
-                      {{scope.row[item.param]}}
-                    </div>
+                    <span
+                      v-if="item.param ==='cost_type'||item.param ==='is_matching'||item.param ==='is_travel'"
+                    >{{scope.row[item.param].verbose}}</span>
+                    <div
+                      v-else-if="item.param==='comment'"
+                      class="td-hover"
+                      :title="scope.row[item.param]"
+                    >{{scope.row[item.param]}}</div>
+                    <div v-else>{{scope.row[item.param]}}</div>
                   </div>
                 </template>
               </el-table-column>
               <el-table-column label="操作" align="center" width="100" fixed="right">
                 <template slot-scope="scope">
-                  <el-button type="primary" size="mini" @click="handleMenuClick('edit',scope.row)">编辑</el-button>
+                  <el-button
+                    type="primary"
+                    size="mini"
+                    @click="handleMenuClick('edit',scope.row)"
+                  >编辑</el-button>
                 </template>
               </el-table-column>
             </el-table>
             <no-data v-if="!pageLoading && !tableData.length"></no-data>
           </div>
           <div class="page-list text-center">
-            <el-pagination background layout="prev, pager, next ,jumper" :total="pageData.totalCount" :page-size="pageData.pageSize" :current-page.sync="pageData.currentPage" @current-change="pageChange" v-if="!pageLoading && pageData.totalCount>10">
-            </el-pagination>
+            <el-pagination
+              background
+              layout="prev, pager, next ,jumper"
+              :total="pageData.totalCount"
+              :page-size="pageData.pageSize"
+              :current-page.sync="pageData.currentPage"
+              @current-change="pageChange"
+              v-if="!pageLoading && pageData.totalCount>10"
+            ></el-pagination>
           </div>
         </el-tab-pane>
         <el-tab-pane label="油/气费管理" name="oilGas"></el-tab-pane>
@@ -113,47 +208,50 @@
 </template>
 <script>
 export default {
-  name: 'tollFeeList',
-  computed: {
-
-  },
+  name: "tollFeeList",
+  computed: {},
   activated: function() {
-    this.activeName = 'publicCost';
-    this.costActive = 'tollFee';
+    this.activeName = "publicCost";
+    this.costActive = "tollFee";
   },
   data() {
     return {
       pageLoading: false,
       pageData: {
         currentPage: 1,
-        totalCount: '',
-        pageSize: 10,
+        totalCount: "",
+        pageSize: 10
       },
       exportBtn: {
-        text: '导出',
+        text: "导出",
         isLoading: false,
-        isDisabled: false,
+        isDisabled: false
       },
-      costTime: this.$route.query.costTime ? (this.$route.query.costTime).split(',') : [], //费用时间
-      activeName: 'publicCost',
-      costActive: 'tollFee',
+      loadTime: [],
+      costTime: this.$route.query.costTime
+        ? this.$route.query.costTime.split(",")
+        : [], //费用时间
+      activeName: "publicCost",
+      costActive: "tollFee",
       searchPostData: {}, //搜索参数
       searchFilters: {
-        is_matching: this.$route.query.is_matching ? this.$route.query.is_matching : '',
-        is_travel: '',
-        keyword: '',
-        field: 'plate_number',
+        is_matching: this.$route.query.is_matching
+          ? this.$route.query.is_matching
+          : "",
+        is_travel: "",
+        keyword: "",
+        field: "plate_number"
       },
       selectData: {
         isMatchSelect: [
-          { id: '', value: '全部' },
-          { id: 'yes', value: '已匹配' },
-          { id: 'no', value: '未匹配' }
+          { id: "", value: "全部" },
+          { id: "yes", value: "已匹配" },
+          { id: "no", value: "未匹配" }
         ],
         isTravelSelect: [
-          { id: '', value: '全部' },
-          { id: 'yes', value: '是' },
-          { id: 'no', value: '否' }
+          { id: "", value: "全部" },
+          { id: "yes", value: "是" },
+          { id: "no", value: "否" }
         ],
         // costSelect: [
         //   { id: '', value: '全部' },
@@ -168,117 +266,211 @@ export default {
         //   { id: 'unfinished', value: '其它费用' },
         // ],
         fieldSelect: [
-          { id: 'plate_number', value: '车号' },
-          { id: 'high_company', value: '公司名称' },
-          { id: 'waybill', value: '运单号' },
+          { id: "plate_number", value: "车号" },
+          { id: "high_company", value: "公司名称" },
+          { id: "waybill", value: "运单号" }
         ]
       },
-      thTableList: [{
-        title: '高速公司',
-        param: 'high_company',
-        width: '200'
-      }, {
-        title: '车号',
-        param: 'plate_number',
-        width: ''
-      }, {
-        title: '卡号类别',
-        param: 'cost_type',
-        width: '100'
-      }, {
-        title: '卡号',
-        param: 'card_number',
-        width: '160'
-      }, {
-        title: '费用时间',
-        param: 'cost_date',
-        width: '180'
-      }, {
-        title: '消费金额',
-        param: 'consume_price',
-        width: ''
-      }, {
-        title: '服务费',
-        param: 'service_charge',
-        width: ''
-      }, {
-        title: '共计金额',
-        param: 'total_money',
-        width: ''
-      }, {
-        title: '行程内费用',
-        param: 'is_travel',
-        width: ''
-      }, {
-        title: '交易地点',
-        param: 'trading_places',
-        width: ''
-      }, {
-        title: '备注',
-        param: 'comment',
-        width: '170'
-      }, {
-        title: '匹配状态',
-        param: 'is_matching',
-        width: ''
-      }, {
-        title: '运单号',
-        param: 'waybill',
-        width: ''
-      }, {
-        title: '装车完成时间',
-        param: 'work_end_time',
-        width: '180'
-      }, {
-        title: '液厂',
-        param: 'fluid',
-        width: ''
-      }, {
-        title: '装车吨位',
-        param: 'loading_quantity',
-        width: ''
-      }, {
-        title: '添加时间',
-        param: 'created_at',
-        width: '180'
-      }],
-      tableData: []
-    }
+      thTableList: [
+        {
+          title: "高速公司",
+          param: "high_company",
+          width: "200"
+        },
+        {
+          title: "车号",
+          param: "plate_number",
+          width: ""
+        },
+        {
+          title: "卡号类别",
+          param: "cost_type",
+          width: "100"
+        },
+        {
+          title: "卡号",
+          param: "card_number",
+          width: "160"
+        },
+        {
+          title: "费用时间",
+          param: "cost_date",
+          width: "180"
+        },
+        {
+          title: "消费金额",
+          param: "consume_price",
+          width: ""
+        },
+        {
+          title: "服务费",
+          param: "service_charge",
+          width: ""
+        },
+        {
+          title: "共计金额",
+          param: "total_money",
+          width: ""
+        },
+        {
+          title: "行程内费用",
+          param: "is_travel",
+          width: ""
+        },
+        {
+          title: "交易地点",
+          param: "trading_places",
+          width: ""
+        },
+        {
+          title: "备注",
+          param: "comment",
+          width: "170"
+        },
+        {
+          title: "匹配状态",
+          param: "is_matching",
+          width: ""
+        },
+        {
+          title: "运单号",
+          param: "waybill",
+          width: ""
+        },
+        {
+          title: "装车完成时间",
+          param: "work_end_time",
+          width: "180"
+        },
+        {
+          title: "液厂",
+          param: "fluid",
+          width: ""
+        },
+        {
+          title: "装车吨位",
+          param: "loading_quantity",
+          width: ""
+        },
+        {
+          title: "添加时间",
+          param: "created_at",
+          width: "180"
+        }
+      ],
+      tableData: [],
+      postDataCopy: ""
+    };
   },
   methods: {
     pageChange() {
       setTimeout(() => {
         this.getList();
-      })
+      });
     },
     importData() {
-      this.$router.push({ path: `/imports/importData/${'tollFee'}` });
+      this.$router.push({ path: `/imports/importData/${"tollFee"}` });
     },
-    exportData() {
+    exportData(type) {
+      let postData = {
+        ...this.postDataCopy,
+        filename: "高速费管理",
+        page_arg: "highway",
+        ids: [
+          251,
+          252,
+          253,
+          254,
+          255,
+          256,
+          257,
+          258,
+          259,
+          260,
+          261,
+          262,
+          263,
+          264,
+          265,
+          266
+        ]
+      };
+      delete postData.page;
+      delete postData.page_size;
 
+      this.exportBtn = {
+        text: "导出中",
+        isLoading: true,
+        isDisabled: true
+      };
+      this.$$http("exportHighway", postData)
+        .then(results => {
+          this.exportBtn = {
+            text: "导出",
+            isLoading: false,
+            isDisabled: false
+          };
+          if (results.data && results.data.code == 0) {
+            window.open(results.data.data.filename);
+            this.$message({
+              message: "导出成功",
+              type: "success"
+            });
+          } else {
+            this.$message.error("导出失败");
+          }
+        })
+        .catch(err => {
+          this.$message.error("导出失败");
+          this.exportBtn = {
+            text: "导出",
+            isLoading: false,
+            isDisabled: false
+          };
+        });
     },
     clicktabs: function(targetName) {
-      if (targetName.name === 'costImport') {
-        this.$router.push({ path: `/statistics/costManage/costImport/costImportList` });
-      } else if (targetName.name === 'cashCost') {
-        this.$router.push({ path: `/statistics/costManage/cashCostManage/cashCostList` });
-      } else if (targetName.name === 'publicCost') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList` });
+      if (targetName.name === "costImport") {
+        this.$router.push({
+          path: `/statistics/costManage/costImport/costImportList`
+        });
+      } else if (targetName.name === "cashCost") {
+        this.$router.push({
+          path: `/statistics/costManage/cashCostManage/cashCostList`
+        });
+      } else if (targetName.name === "publicCost") {
+        this.$router.push({
+          path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList`
+        });
       }
     },
     publicTabs(targetName) {
-      if (targetName.name === 'tollFee') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList` });
-      } else if (targetName.name === 'oilGas') {
-        this.$router.push({ path: `/statistics/costManage/publicCostManage/oilGas/oilGasList` });
+      if (targetName.name === "tollFee") {
+        this.$router.push({
+          path: `/statistics/costManage/publicCostManage/tollFee/tollFeeList`
+        });
+      } else if (targetName.name === "oilGas") {
+        this.$router.push({
+          path: `/statistics/costManage/publicCostManage/oilGas/oilGasList`
+        });
       }
     },
     handleMenuClick(tpye, row) {
-      if (tpye === 'waybill') {
-        window.open(`#/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}`, '_blank')
+      if (tpye === "waybill") {
+        window.open(
+          `#/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${
+            row.waybill_id
+          }`,
+          "_blank"
+        );
         //this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/tollFeeWaybillDetail/${row.waybill_id}` });
-      } else if (tpye === 'edit') {
-        window.open(`#/statistics/costManage/publicCostManage/tollFee/editTollFee?id=${row.id}`, '_blank')
+      } else if (tpye === "edit") {
+        window.open(
+          `#/statistics/costManage/publicCostManage/tollFee/editTollFee?id=${
+            row.id
+          }`,
+          "_blank"
+        );
         //this.$router.push({ path: `/statistics/costManage/publicCostManage/tollFee/editTollFee`, query: { id: row.id } });
       }
     },
@@ -287,7 +479,7 @@ export default {
       this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
       this.getList();
       if (this.pbFunc.objSize(this.$route.query)) {
-        this.$router.push({ path: this.$route.path })
+        this.$router.push({ path: this.$route.path });
       }
     },
     getList() {
@@ -295,33 +487,39 @@ export default {
         page: this.pageData.currentPage,
         page_size: this.pageData.pageSize,
         is_matching: this.searchPostData.is_matching,
-        is_travel: this.searchPostData.is_travel,
+        is_travel: this.searchPostData.is_travel
       };
       if (this.costTime instanceof Array && this.costTime.length > 0) {
         postData.cost_date_start = this.costTime[0];
         postData.cost_date_end = this.costTime[1];
       }
+
+      if (this.loadTime instanceof Array && this.loadTime.length > 0) {
+        postData.work_end_time_start = this.loadTime[0];
+        postData.work_end_time_end = this.loadTime[1];
+      }
+
       postData[this.searchPostData.field] = this.searchPostData.keyword;
       postData = this.pbFunc.fifterObjIsNull(postData);
+      this.postDataCopy = Object.assign({}, postData);
       this.pageLoading = true;
 
-      this.$$http('getTollFeeStatisticList', postData).then((results) => {
-        this.pageLoading = false;
-        if (results.data && results.data.code == 0) {
-          this.tableData = results.data.data.results;
-          this.pageData.totalCount = results.data.data.count;
-        }
-      }).catch((err) => {
-        this.pageLoading = false;
-      })
-
+      this.$$http("getTollFeeStatisticList", postData)
+        .then(results => {
+          this.pageLoading = false;
+          if (results.data && results.data.code == 0) {
+            this.tableData = results.data.data.results;
+            this.pageData.totalCount = results.data.data.count;
+          }
+        })
+        .catch(err => {
+          this.pageLoading = false;
+        });
     }
   },
   created() {
     this.searchPostData = this.pbFunc.deepcopy(this.searchFilters);
     this.getList(this.statusActive);
   }
-
-}
-
+};
 </script>

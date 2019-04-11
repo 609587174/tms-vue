@@ -13,305 +13,229 @@ const api = {
     url: '/user/users/:id/modify/',
     method: 'patch',
     desc: '修改个人信息',
-    param: {
-
-    }
+    param: {}
   },
   updateLogisticStatisticsList: {
     url: '/statistic/logistic/manual_update/',
     method: 'get',
     desc: '物流数据手动更新',
-    param: {
-
-    }
+    param: {}
   },
   updateUnloadBill: {
     url: '/api/v1/users/:id/modify/',
     method: 'patch',
     desc: '修改个人设置',
-    param: {
-
-    }
+    param: {}
   },
   updateUnloadBill: {
     url: '/order/business_order/:id/',
     method: 'put',
     desc: '修改业务单',
-    param: {
-
-    }
+    param: {}
   },
   deleteOrder: {
     url: '/order/business_order/:id/',
     method: 'delete',
     desc: '删除业务单',
-    param: {
-
-    }
+    param: {}
   },
   auditcheduling: {
     url: '/statistic/dispatch/:id/',
     method: 'patch',
     desc: '审核调度统计',
-    param: {
-
-    }
+    param: {}
   },
   isCancelBusiness: {
     url: '/order/section-trips/check-order-cancel/',
     method: 'post',
     desc: '判断该卸货单是否可以被取消',
-    param: {
-
-    }
+    param: {}
   },
   exportCashAudit: {
     url: '/exports/cash/',
     method: 'get',
     desc: '导出现金费用审核',
-    param: {
-
-    }
+    param: {}
   },
   cashExpenseEeview: {
     url: '/statistic/cash-cost/:id/',
     method: 'PATCH',
     desc: '现金费用审核',
-    param: {
-
-    }
+    param: {}
   },
   deleteFreight: {
     url: '/carrier/trans_fee/:trans_fee_id/',
     method: 'delete',
     desc: '运费约定新增',
-    param: {
-
-    }
+    param: {}
   },
   deleteFreight: {
     url: '/carrier/trans_fee/:trans_fee_id/',
     method: 'delete',
     desc: '运费约定新增',
-    param: {
-
-    }
+    param: {}
   },
   updateFreight: {
     url: '/carrier/trans_fee/:id/',
     method: 'put',
     desc: '运费约定新增',
-    param: {
-
-    }
+    param: {}
   },
   addFreight: {
     url: '/carrier/trans_fee/',
     method: 'POST',
     desc: '运费约定新增',
-    param: {
-
-    }
+    param: {}
   },
   relationThreePartyCapacity: {
     url: '/truck/third_tractor_semitrailers/connect/',
     method: 'POST',
     desc: '三方运力关联',
-    param: {
-
-    }
+    param: {}
   },
   threeDetectionCapacity: {
     url: '/truck/third_tractor_semitrailers/params_checking/',
     method: 'POST',
     desc: '三方运力检测',
-    param: {
-
-    }
+    param: {}
   },
   threePartyCapacityDetail: {
     url: '/truck/third_tractor_semitrailers/:tractor_semitrailer_id/',
     method: 'get',
     desc: '三方运力详情',
-    param: {
-
-    }
+    param: {}
   },
   updateThreePartyCapacity: {
     url: '/truck/third_tractor_semitrailers/:id/',
     method: 'PATCH',
     desc: '三方运力更新',
-    param: {
-
-    }
+    param: {}
   },
   addThreePartyCapacity: {
     url: '/truck/third_tractor_semitrailers/',
     method: 'post',
     desc: '三方运力新增',
-    param: {
-
-    }
+    param: {}
   },
   getThreePartyCapacityList: {
     url: '/truck/third_tractor_semitrailers/',
     method: 'get',
     desc: '三方运力列表',
-    param: {
-
-    }
+    param: {}
   },
   establishCarrierRelation: {
     url: '/carrier/coop_carriers/coop_carriers_connect/',
     method: 'post',
     desc: '创建承运商关联',
-    param: {
-
-    }
+    param: {}
   },
   updateCarrier: {
     url: '/carrier/coop_carriers/:id/',
     method: 'PATCH',
     desc: '更新承运商详情',
-    param: {
-
-    }
+    param: {}
   },
   addCarrierMsg: {
     url: '/carrier/coop_carriers/',
     method: 'post',
     desc: '承运商管理创建',
-    param: {
-
-    }
+    param: {}
   },
   getCarrierDetail: {
     url: '/carrier/coop_carriers/:carrier_id/',
     method: 'get',
     desc: '承运商详情',
-    param: {
-
-    }
+    param: {}
   },
   getCarrierList: {
     url: '/carrier/coop_carriers/',
     method: 'get',
     desc: '承运商管理列表',
-    param: {
-
-    }
+    param: {}
   },
   getFreightTradersList: {
     url: '/carrier/trans_fee/freight_traders/',
     method: 'get',
     desc: '获取运费约定所有贸易商',
-    param: {
-
-    }
+    param: {}
   },
   batchLogisticStatisticsStatus: {
     url: '/statistic/batch-update-logistic/',
     method: 'post',
     desc: '单个、批量开票对账',
-    param: {
-
-    }
+    param: {}
   },
   updateHighSpeedPayment: {
     url: '/statistic/highspeed-pay-m/:id/',
     method: 'patch',
     desc: '更新高速公司付款',
-    param: {
-
-    }
+    param: {}
   },
   addHighSpeedPayment: {
     url: '/statistic/highspeed-pay-m/',
     method: 'post',
     desc: '新增高速公司付款',
-    param: {
-
-    }
+    param: {}
   },
   getHighSpeedPaymentList: {
     url: '/statistic/highspeed-pay-m/',
     method: 'get',
     desc: '高速公司付款管理',
-    param: {
-
-    }
+    param: {}
   },
   updateOilGasPayment: {
     url: '/statistic/oilgas-pay-m/:id/',
     method: 'patch',
     desc: '更新加油气付款',
-    param: {
-
-    }
+    param: {}
   },
   addOilGasPayment: {
     url: '/statistic/oilgas-pay-m/',
     method: 'post',
     desc: '新增加油气付款',
-    param: {
-
-    }
+    param: {}
   },
   getOilGasPaymentList: {
     url: '/statistic/oilgas-pay-m/',
     method: 'get',
     desc: '加油气付款管理',
-    param: {
-
-    }
+    param: {}
   },
   getHighSpeedMeetList: {
     url: '/statistic/inout-highspeed-pay/',
     method: 'get',
     desc: '高速公司应付列表',
-    param: {
-
-    }
+    param: {}
   },
   getOilGasMeetList: {
     url: '/statistic/inout-oilgas-pay/',
     method: 'get',
     desc: '加油气应付列表',
-    param: {
-
-    }
+    param: {}
   },
   updateShipperReceivableManage: {
     url: '/statistic/carrier-back-m/:id/',
     method: 'patch',
     desc: '更新托运方回款',
-    param: {
-
-    }
+    param: {}
   },
   addShipperReceivableManage: {
     url: '/statistic/carrier-back-m/',
     method: 'post',
     desc: '托运方回款新增',
-    param: {
-
-    }
+    param: {}
   },
   getShipperReceivableManageList: {
     url: '/statistic/carrier-back-m/',
     method: 'get',
     desc: '托运方回款列表',
-    param: {
-
-    }
+    param: {}
   },
   getShipperReceivableList: {
     url: '/statistic/inout-customer-pay/',
     method: 'get',
     desc: '托运方应收列表',
-    param: {
-
-    }
+    param: {}
   },
   unloadBillMatch: {
     url: '/order/section-trips/match-business-order/',
@@ -326,16 +250,14 @@ const api = {
       },
       cancel_order_list: {
         desc: '取消卸车单ID列表'
-      },
+      }
     }
   },
   getUnloadBillList: {
     url: '/order/business_order/',
     method: 'get',
     desc: '业务台账列表',
-    param: {
-
-    }
+    param: {}
   },
   addUnloadBill: {
     url: '/order/business_order/',
@@ -390,9 +312,7 @@ const api = {
     url: '/statistic/ledger/',
     method: 'get',
     desc: '业务台账列表',
-    param: {
-
-    }
+    param: {}
   },
   exportLedgerData: {
     url: '/exports/ledger/',
@@ -447,9 +367,7 @@ const api = {
     url: '/imports/bulk_driver_destroy/',
     method: 'delete',
     desc: '清除人员临时表',
-    param: {
-
-    }
+    param: {}
   },
   exportIncomeData: {
     url: '/exports/income/',
@@ -484,9 +402,7 @@ const api = {
     url: '/notifications/web_messages/unread_count/',
     method: 'get',
     desc: '未读信息的条数',
-    param: {
-
-    }
+    param: {}
   },
   batchReadMessages: {
     url: '/notifications/web_messages/bulk_read/',
@@ -515,33 +431,25 @@ const api = {
     url: '/exports/cost/template/',
     method: 'post',
     desc: '下载模板',
-    param: {
-
-    }
+    param: {}
   },
   deleteOilGasTemporaryData: {
     url: '/imports/bulk_corporate_destroy/',
     method: 'delete',
     desc: '清除油/气费临时表',
-    param: {
-
-    }
+    param: {}
   },
   deleteOilGasTemporaryData: {
     url: '/imports/bulk_corporate_destroy/',
     method: 'delete',
     desc: '清除油/气费临时表',
-    param: {
-
-    }
+    param: {}
   },
   deleteTollFeeTemporaryData: {
     url: '/imports/bulk_high_destroy/',
     method: 'delete',
     desc: '清除高速费临时表',
-    param: {
-
-    }
+    param: {}
   },
   deleteCashCostTemporaryData: {
     url: '/imports/bulk_cash_destroy/',
@@ -609,17 +517,13 @@ const api = {
     url: '/statistic/corporate/:id/',
     method: 'patch',
     desc: '油气费详情',
-    param: {
-
-    }
+    param: {}
   },
   getOilGasStatisticDetail: {
     url: '/statistic/corporate/:id/',
     method: 'get',
     desc: '油气费详情',
-    param: {
-
-    }
+    param: {}
   },
   getOilGasStatisticList: {
     url: '/statistic/corporate/',
@@ -664,17 +568,13 @@ const api = {
     url: '/statistic/highway-fee/:id/',
     method: 'patch',
     desc: '更新高速费',
-    param: {
-
-    }
+    param: {}
   },
   getTollFeeStatisticDetail: {
     url: '/statistic/highway-fee/:id/',
     method: 'get',
     desc: '高速费详情',
-    param: {
-
-    }
+    param: {}
   },
   getTollFeeStatisticList: {
     url: '/statistic/highway-fee/',
@@ -696,17 +596,13 @@ const api = {
     url: '/statistic/cash-cost/:id/',
     method: 'get',
     desc: '现金费用详情',
-    param: {
-
-    }
+    param: {}
   },
   updateCashCostStatistic: {
     url: '/statistic/cash-cost/:id/',
     method: 'patch',
     desc: '更新现金费用',
-    param: {
-
-    }
+    param: {}
   },
   getCashCostStatisticList: {
     url: '/statistic/cash-cost/',
@@ -852,7 +748,7 @@ const api = {
       },
       remark: {
         desc: '备注'
-      },
+      }
     }
   },
   getIncomeStatisticDetail: {
@@ -862,7 +758,7 @@ const api = {
     param: {
       id: {
         desc: '收入统计ID'
-      },
+      }
     }
   },
   getIncomeStatisticList: {
@@ -890,16 +786,14 @@ const api = {
       },
       leave_time_start: {
         desc: '实际离站时间 开始'
-      },
+      }
     }
   },
   getFreightDetail: {
     url: '/carrier/trans_fee/:id/',
     method: 'get',
     desc: '运费详情',
-    param: {
-
-    }
+    param: {}
   },
   updateLogisticStatistic: {
     url: '/statistic/logistic/:id/',
@@ -932,7 +826,7 @@ const api = {
       },
       remark: {
         desc: '备注'
-      },
+      }
     }
   },
   getLogisticStatisticDetail: {
@@ -942,7 +836,7 @@ const api = {
     param: {
       id: {
         desc: '物流费用ID'
-      },
+      }
     }
   },
   getLogisticStatisticList: {
@@ -970,24 +864,20 @@ const api = {
       },
       leave_time_start: {
         desc: '实际离站时间 开始'
-      },
+      }
     }
   },
   getFreightDetail: {
     url: '/carrier/trans_fee/:id/',
     method: 'get',
     desc: '运费详情',
-    param: {
-
-    }
+    param: {}
   },
   getShipperList: {
     url: '/map/standard_mileages/all_traders/',
     method: 'get',
     desc: '托运方列表',
-    param: {
-
-    }
+    param: {}
   },
   getFreightList: {
     url: '/carrier/trans_fee/',
@@ -999,7 +889,7 @@ const api = {
       },
       agreements__fluid: {
         desc: '液厂id'
-      },
+      }
     }
   },
   updateCompany: {
@@ -1043,7 +933,8 @@ const api = {
         desc: '亏吨标准'
       },
       customer_type: {
-        desc: '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
+        desc:
+          '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
       },
       free_hour: {
         desc: '免费等待时长(小时)'
@@ -1083,7 +974,8 @@ const api = {
         desc: '亏吨标准'
       },
       customer_type: {
-        desc: '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
+        desc:
+          '客户基础资料是否可修改，OWN为自己添加的客户，可以修改，PLAT为拉取的平台客户数据，不可修改'
       },
       free_hour: {
         desc: '免费等待时长(小时)'
@@ -1132,9 +1024,7 @@ const api = {
     url: '/permissions/menus/',
     method: 'get',
     desc: '系统可分配菜单 权限列表',
-    param: {
-
-    }
+    param: {}
   },
   getPositionDetail: {
     url: '/carrier/roles/:id/',
@@ -1316,10 +1206,10 @@ const api = {
     desc: '登录',
     param: {
       username: {
-        desc: '用户名',
+        desc: '用户名'
       },
       password: {
-        desc: '密码',
+        desc: '密码'
       },
       verify_key: {
         desc: '验证码key值'
@@ -1333,9 +1223,7 @@ const api = {
     url: '/auth/logout/',
     method: 'post',
     desc: '退出登录',
-    param: {
-
-    }
+    param: {}
   },
   register: {
     url: '/user/users/register/',
@@ -1344,19 +1232,19 @@ const api = {
     desc: '注册',
     param: {
       nick_name: {
-        desc: '用户名',
+        desc: '用户名'
       },
       password: {
-        desc: '密码',
+        desc: '密码'
       },
       confirm_password: {
-        desc: '确认密码',
+        desc: '确认密码'
       },
       phone: {
-        desc: '手机号码',
+        desc: '手机号码'
       },
       verify_key: {
-        desc: '图形验证码key值',
+        desc: '图形验证码key值'
       },
       message_verify_code: {
         desc: '手机验证码'
@@ -1370,16 +1258,16 @@ const api = {
     desc: '找回密码',
     param: {
       phone: {
-        desc: '手机号码',
+        desc: '手机号码'
       },
       message_verify_code: {
-        desc: '手机号码',
+        desc: '手机号码'
       },
       password: {
-        desc: '新密码',
+        desc: '新密码'
       },
       confirm_password: {
-        desc: '重复密码',
+        desc: '重复密码'
       }
     }
   },
@@ -1389,19 +1277,19 @@ const api = {
     desc: '创建承运商',
     param: {
       user_id: {
-        desc: 'user_id',
+        desc: 'user_id'
       },
       name: {
-        desc: '企业名称',
+        desc: '企业名称'
       },
       contact_name: {
-        desc: '联系姓名',
+        desc: '联系姓名'
       },
       contact_phone: {
-        desc: '联系电话',
+        desc: '联系电话'
       },
       area: {
-        desc: '所在区域',
+        desc: '所在区域'
       },
       detail_address: {
         desc: '详细地址'
@@ -1416,9 +1304,7 @@ const api = {
     method: 'get',
     notNeedToken: true,
     desc: '图形验证码',
-    param: {
-
-    }
+    param: {}
   },
   messageVerifyCode: {
     url: '/common/message_verify_code/',
@@ -1427,7 +1313,7 @@ const api = {
     desc: '图形验证码',
     param: {
       phone: {
-        desc: '手机号码',
+        desc: '手机号码'
       }
     }
   },
@@ -1436,17 +1322,13 @@ const api = {
     method: 'get',
     notNeedToken: true,
     desc: '全局数据',
-    param: {
-
-    }
+    param: {}
   },
   getUser: {
     url: '/user/users/profile/',
     method: 'get',
     desc: '获取用户个人信息',
-    param: {
-
-    }
+    param: {}
   },
   getCapacityLog: {
     url: '/truck/tractor_semitrailers/:id/operate_records/',
@@ -1512,91 +1394,69 @@ const api = {
     url: '/truck/tractors/',
     method: 'get',
     desc: '查询牵引车列表',
-    param: {
-
-    }
+    param: {}
   },
   getSelectData: {
     url: '/common/global_enums/',
     method: 'get',
     desc: '获取全部下拉数据',
-    param: {
-
-    }
+    param: {}
   },
   creatHeadFrom: {
     url: '/truck/tractors/',
     method: 'post',
     desc: '创建牵引车',
-    param: {
-
-    }
+    param: {}
   },
   upadteHeadFrom: {
     url: '/truck/tractors/:id/',
     method: 'PATCH',
     desc: '更新牵引车',
-    param: {
-
-    }
+    param: {}
   },
   deleteInsuranceFrom: {
     url: '/truck/tractors/:id/tractor_insurances/',
     method: 'delete',
     desc: '删除保险',
-    param: {
-
-    }
+    param: {}
   },
   deleteInsuranceFromTail: {
     url: '/truck/semitrailers/:id/semitrailer_insurances/',
     method: 'delete',
     desc: '删除保险',
-    param: {
-
-    }
+    param: {}
   },
   getHeadDetalis: {
     url: '/truck/tractors/:id/',
     method: 'get',
     desc: '获取牵引车详细信息',
-    param: {
-
-    }
+    param: {}
   },
   searchTailCarList: {
     url: '/truck/semitrailers/',
     method: 'get',
     desc: '获取挂车列表',
-    param: {
-
-    }
+    param: {}
   },
   creatTailFrom: {
     url: '/truck/semitrailers/',
     method: 'post',
     desc: '创建挂车',
-    param: {
-
-    }
+    param: {}
   },
 
   getTailDetalis: {
     url: '/truck/semitrailers/:id/',
     method: 'get',
     desc: '获取挂车详细信息',
-    param: {
-
-    }
+    param: {}
   },
 
   upadteTailFrom: {
     url: '/truck/semitrailers/:id/',
     method: 'PATCH',
     desc: '更新挂车',
-    param: {
-
-    }
+    param: {}
   },
   getDriversList: {
     url: '/carrier/carrier_drivers/',
@@ -1604,22 +1464,22 @@ const api = {
     desc: '获取承运商司机列表',
     param: {
       id: {
-        desc: '资源id',
+        desc: '资源id'
       },
       name: {
-        desc: '司机名称',
+        desc: '司机名称'
       },
       work_type: {
-        desc: '从业类型',
+        desc: '从业类型'
       },
       mobile_phone: {
-        desc: '手机号码',
+        desc: '手机号码'
       },
       on_job_status: {
-        desc: '在离职状态',
+        desc: '在离职状态'
       },
       bind_tractors: {
-        desc: '绑定车辆',
+        desc: '绑定车辆'
       }
     }
   },
@@ -1629,8 +1489,8 @@ const api = {
     desc: '获取承运商司机详情',
     param: {
       id: {
-        desc: '资源id',
-      },
+        desc: '资源id'
+      }
     }
   },
   addDrivers: {
@@ -1639,8 +1499,8 @@ const api = {
     desc: '承运商司机创建',
     param: {
       id: {
-        desc: '资源id',
-      },
+        desc: '资源id'
+      }
     }
   },
   patchDrivers: {
@@ -1649,8 +1509,8 @@ const api = {
     desc: '承运商司机更新',
     param: {
       id: {
-        desc: '资源id',
-      },
+        desc: '资源id'
+      }
     }
   },
   getProvince: {
@@ -1658,69 +1518,53 @@ const api = {
     method: 'get',
     notNeedToken: true,
     desc: '获取省列表',
-    param: {
-
-    }
+    param: {}
   },
   getCity: {
     url: '/common/area/provinces/:province_id/',
     method: 'get',
     notNeedToken: true,
     desc: '获取市列表',
-    param: {
-
-    }
+    param: {}
   },
   getArea: {
     url: '/common/area/cities/:city_id/',
     method: 'get',
     notNeedToken: true,
     desc: '获取区域列表',
-    param: {
-
-    }
+    param: {}
   },
   deleteDriverTraining: {
     url: '/carrier/carrier_drivers/:id/carrier_driver_training/',
     method: 'delete',
     desc: '承运商司机培训记录删除',
-    param: {
-
-    }
+    param: {}
   },
   getPickOrderDetail: {
     url: '/order/delivery-order/:id/',
     method: 'get',
     desc: '托运单详情',
-    param: {
-
-    }
+    param: {}
   },
   fixPickOrder: {
     url: '/order/delivery-order/:id/',
     method: 'PATCH',
     desc: '修改托运单',
-    param: {
-
-    }
+    param: {}
   },
 
   getCarriers: {
     url: '/order/trader/carriers/',
     method: 'get',
     desc: '获取承运商',
-    param: {
-
-    }
+    param: {}
   },
 
   getUnload: {
     url: '/order/trader/unload-area/',
     method: 'get',
     desc: '获取卸货区域',
-    param: {
-
-    }
+    param: {}
   },
 
   getSupplier: {
@@ -1728,9 +1572,7 @@ const api = {
     method: 'get',
     desc: '获取供应商',
 
-    param: {
-
-    }
+    param: {}
   },
 
   getFulid: {
@@ -1738,99 +1580,69 @@ const api = {
     url: '/map/standard_mileages/all_fluid_factories/',
     method: 'get',
     desc: '获取液厂',
-    param: {
-
-    }
+    param: {}
   },
 
   cratePickUpOrder: {
     url: '/order/delivery-order/',
     method: 'POST',
     desc: '创建提货订单',
-    param: {
-
-    }
+    param: {}
   },
 
   searchPickOrderList: {
     url: '/order/delivery-order/',
     method: 'get',
     desc: '获取提货单列表',
-    param: {
-
-
-    }
+    param: {}
   },
   searchConOrderList: {
     url: '/order/section-trips/',
     method: 'get',
     desc: '获取运单列表',
-    param: {
-
-
-    }
+    param: {}
   },
   getConOrderDetail: {
     url: '/order/waybill/:id/',
     method: 'get',
     desc: '获取运单详情',
-    param: {
-
-
-    }
+    param: {}
   },
   fixOrderMark: {
     url: '/order/waybill/:id/',
     method: 'patch',
     desc: '修改订单备注',
-    param: {
-
-
-    }
+    param: {}
   },
   getTransPowerInfo: {
     url: '/truck/tractor_semitrailers/:id/',
     method: 'get',
     desc: '获取运力详情',
-    param: {
-
-
-    }
+    param: {}
   },
   getTransPowerInfoList: {
     url: '/truck/tractor_semitrailers/',
     method: 'get',
     desc: '获取运力详情列表',
-    param: {
-
-
-    }
+    param: {}
   },
   searchNoUse: {
     url: '/order/delivery-order/check-capacity/',
     method: 'get',
     desc: '获取3天没用的运力id',
-    param: {
-
-
-    }
+    param: {}
   },
   checkHasOrder: {
     url: '/order/delivery-order/check-trip-driver-unconfirm/',
     method: 'get',
     desc: '运力判断是否有司机未确认的运单',
-    param: {
-
-
-    }
+    param: {}
   },
   searchDeliveryOrder: {
     url: '/order/delivery-order/list-capacity/',
     method: 'get',
     desc: '获取托运单数据',
-    param: {
-
-    }
+    param: {}
   },
   getSiteList: {
     // url: '/map/fluid_sites/',
@@ -1839,32 +1651,28 @@ const api = {
     desc: '获取LNG站点列表',
     param: {
       position_name: {
-        desc: '站点名称',
+        desc: '站点名称'
       },
       page: {
-        desc: '当前页数',
+        desc: '当前页数'
       },
       page_size: {
-        desc: '每页数量',
-      },
+        desc: '每页数量'
+      }
     }
   },
   getSiteDetail: {
     url: '/map/fuild_sites/:id/',
     method: 'get',
     desc: '获取LNG站点详情',
-    param: {
-
-    }
+    param: {}
   },
   getStandardMileList: {
     // url: '/map/standard_mileages/',
     url: '/map/standard_mileages/',
     method: 'get',
     desc: '获取标准里程列表',
-    param: {
-
-    }
+    param: {}
   },
   addStandardMileList: {
     url: '/map/standard_mileages/',
@@ -1872,16 +1680,16 @@ const api = {
     desc: '新增标准里程',
     param: {
       fluid_site_id: {
-        desc: '站点资源id',
+        desc: '站点资源id'
       },
       fluid_factory_id: {
-        desc: '液厂资源id',
+        desc: '液厂资源id'
       },
       standard_mileage: {
-        desc: '标准里程',
+        desc: '标准里程'
       },
       is_active: {
-        desc: '是否启用',
+        desc: '是否启用'
       }
     }
   },
@@ -1890,9 +1698,7 @@ const api = {
     url: '/map/standard_mileages/:id/',
     method: 'get',
     desc: '标准里程详情',
-    param: {
-
-    }
+    param: {}
   },
   patchStandardMileDetail: {
     url: '/map/standard_mileages/:id/',
@@ -1900,78 +1706,62 @@ const api = {
     desc: '标准里程更新',
     param: {
       fluid_site_id: {
-        desc: '站点资源id',
+        desc: '站点资源id'
       },
       fluid_factory_id: {
-        desc: '液厂资源id',
+        desc: '液厂资源id'
       },
       standard_mileage: {
-        desc: '标准里程',
-      },
+        desc: '标准里程'
+      }
     }
   },
   delStandardMile: {
     url: '/map/standard_mileages/:id/',
     method: 'DELETE',
     desc: '删除标准里程',
-    param: {
-
-
-    }
+    param: {}
   },
   getMenusList: {
     url: '/permissions/menus/user_menus/',
     method: 'get',
     desc: '获取当前登录用户可访问菜单',
-    param: {
-
-    }
+    param: {}
   },
   getLandMarkList: {
     url: '/map/land_marks/',
     method: 'get',
     desc: '地标列表',
-    param: {
-
-    }
+    param: {}
   },
   getLandMarkDetail: {
     url: '/map/land_marks/:id/',
     method: 'get',
     desc: '地标详情',
-    param: {
-
-    }
+    param: {}
   },
   editCarPower: {
     url: '/order/delivery-order/:yid/patch-capacity/',
     method: 'PATCH',
     desc: '修改运力',
-    param: {
-
-    }
-
+    param: {}
   },
   addCarPower: {
     url: '/order/delivery-order/add-capacity/',
     method: 'POST',
     desc: '添加运力',
-    param: {
-
-    }
+    param: {}
   },
   patchLandMarkDetail: {
     url: '/map/land_marks/:id/',
     method: 'patch',
     desc: '地标详情',
-    param: {
-
-    }
+    param: {}
   },
   addLandmark: {
     url: '/map/land_marks/',
     method: 'post',
-    desc: "站点信息上传",
+    desc: '站点信息上传',
     param: {
       position_name: {
         desc: '站点名称'
@@ -2018,469 +1808,390 @@ const api = {
     url: '/order/delivery-order/record/',
     method: 'get',
     desc: '获取订单记录列表',
-    param: {
-
-    }
+    param: {}
   },
   upOrderPlan: {
     url: '/order/delivery-order/status/',
     method: 'PUT',
-    desc: "提交修改计划",
-    param: {
-
-    }
+    desc: '提交修改计划',
+    param: {}
   },
   judgeCanCancle: {
     url: '/order/waybill/cancel/',
     method: 'post',
-    desc: "判断运单是否可以被取消勾选",
-    param: {
-
-    }
+    desc: '判断运单是否可以被取消勾选',
+    param: {}
   },
   upStatus: {
     url: '/order/interrupt-record/',
     method: 'post',
-    desc: "运单变更",
-    param: {
-
-    }
+    desc: '运单变更',
+    param: {}
   },
   realTimeMonitor: {
     url: '/map/vehicle_monitors/map_init/',
     method: 'get',
-    desc: "实时监控",
-    param: {
-
-    }
+    desc: '实时监控',
+    param: {}
   },
   changeOrderStatus: {
     url: '/order/section-trips/:id/change-status/',
     method: 'PUT',
-    desc: "变更运单状态",
-    param: {
-
-    }
+    desc: '变更运单状态',
+    param: {}
   },
   searchOrderHasPower: {
     url: '/order/delivery-order/list-capacity/',
     method: 'get',
-    desc: "提货订单所拥有的运力列表",
-    param: {
-
-    }
+    desc: '提货订单所拥有的运力列表',
+    param: {}
   },
   getDeviceDetail: {
     url: '/map/vehicle_monitors/:id/',
     method: 'get',
-    desc: "获取设备详细信息",
-    param: {
-
-    }
+    desc: '获取设备详细信息',
+    param: {}
   },
   getTripRecords: {
     url: '/map/vehicle_monitors/:id/trip_records/',
     method: 'get',
-    desc: "车辆轨迹查询",
+    desc: '车辆轨迹查询',
     param: {
       start_time: {
-        desc: '开始时间',
+        desc: '开始时间'
       },
       end_time: {
-        desc: '结束时间，不填则默认当前时间',
+        desc: '结束时间，不填则默认当前时间'
       },
       page: {
-        desc: '当前页数',
+        desc: '当前页数'
       },
       page_size: {
-        desc: '当前每页条数，默认为1000条每页',
-      },
+        desc: '当前每页条数，默认为1000条每页'
+      }
     }
   },
   getOfflineAndStopRecords: {
     url: '/map/vehicle_monitors/:id/stopping_offline_info/',
     method: 'get',
-    desc: "轨迹停留点，离线点",
+    desc: '轨迹停留点，离线点',
     param: {
       start_time: {
-        desc: '开始时间',
+        desc: '开始时间'
       },
       end_time: {
-        desc: '结束时间，不填则默认当前时间',
+        desc: '结束时间，不填则默认当前时间'
       },
       page: {
-        desc: '当前页数',
+        desc: '当前页数'
       },
       page_size: {
-        desc: '当前每页条数，默认为1000条每页',
-      },
+        desc: '当前每页条数，默认为1000条每页'
+      }
     }
   },
   getCarList: {
     url: '/map/vehicle_monitors/',
     method: 'get',
-    desc: "车辆相关信息列表",
+    desc: '车辆相关信息列表',
     param: {
       plate_number: {
-        desc: '车牌号',
+        desc: '车牌号'
       },
       waybill_vehicle_status: {
-        desc: '车辆运单状态',
-      },
+        desc: '车辆运单状态'
+      }
     }
   },
   orderProcess: {
     url: '/order/section-trips/record/',
     method: 'get',
-    desc: "获取分段进程",
-    param: {
-
-    }
+    desc: '获取分段进程',
+    param: {}
   },
   examineLoad: {
     url: '/order/section-trips/:id/weight-note/',
     method: 'put',
-    desc: "运单分段修改状态",
-    param: {
-
-    }
+    desc: '运单分段修改状态',
+    param: {}
   },
   getPundList: {
     url: '/order/section-trips/weight-note/',
     method: 'GET',
-    desc: "获取磅单数据",
-    param: {
-
-    }
+    desc: '获取磅单数据',
+    param: {}
   },
   postPundList: {
     url: '/order/section-trips/weight-note/',
     method: 'post',
-    desc: "上传磅单数据",
-    param: {
-
-    }
+    desc: '上传磅单数据',
+    param: {}
   },
   sureMatch: {
     url: '/order/section-trips/confirm/',
     method: 'PUT',
-    desc: "确认卸货单",
-    param: {
-
-    }
+    desc: '确认卸货单',
+    param: {}
   },
   getSeal: {
     url: '/order/section-trips/car-seal/',
     method: 'GET',
-    desc: "获取铅封数据",
-    param: {
-
-    }
+    desc: '获取铅封数据',
+    param: {}
   },
   postSeal: {
     url: '/order/section-trips/car-seal/',
     method: 'POST',
-    desc: "上传铅封数据",
-    param: {
-
-    }
+    desc: '上传铅封数据',
+    param: {}
   },
   getCount: {
     url: '/order/delivery-order/count/',
     method: 'GET',
-    desc: "获取订单数目",
-    param: {
-
-    }
+    desc: '获取订单数目',
+    param: {}
   },
   getConCount: {
     url: '/order/section-trips/count/',
     method: 'GET',
-    desc: "获取运单数目",
-    param: {
-
-    }
+    desc: '获取运单数目',
+    param: {}
   },
   getSectionTrips: {
     url: '/order/section-trips/:id/',
     method: 'GET',
-    desc: "获取运单分段详情",
-    param: {
-
-    }
+    desc: '获取运单分段详情',
+    param: {}
   },
   getFulidDetalis: {
     url: '/order/actual-fluid/:id/',
     method: 'GET',
-    desc: "获取液厂详情",
-    param: {
-
-    }
+    desc: '获取液厂详情',
+    param: {}
   },
   getStationDetalis: {
     url: '/order/fluid-site/:id/',
     method: 'GET',
-    desc: "获取站点详情",
-    param: {
-
-    }
+    desc: '获取站点详情',
+    param: {}
   },
   searchCapacityFreeList: {
     url: '/truck/tractor_semitrailers/free_tractor_semitrailers/',
     method: 'get',
-    desc: "获取空闲且已完善的运力",
-    param: {
-
-    }
+    desc: '获取空闲且已完善的运力',
+    param: {}
   },
   getDashboard: {
     url: '/order/section-trips/dashborad/',
     method: 'get',
-    desc: "获取概览数据",
-    param: {
-
-    }
+    desc: '获取概览数据',
+    param: {}
   },
   getTmsDashboard: {
     url: '/statistic/dashborad/',
     method: 'get',
-    desc: "获取概览数据2",
-    param: {
-
-    }
+    desc: '获取概览数据2',
+    param: {}
   },
   getFluidsFormAdd: {
     url: '/map/land_marks/mixin_fluids/',
     method: 'get',
-    desc: "获取bpm，tms所有的液厂数据",
-    param: {
-
-    }
+    desc: '获取bpm，tms所有的液厂数据',
+    param: {}
   },
   getCustomerFormAdd: {
     url: '/carrier/customer/',
     method: 'GET',
-    desc: "获取承运商客户列表的接口",
-    param: {
-
-    }
+    desc: '获取承运商客户列表的接口',
+    param: {}
   },
   changeStatusSection: {
     url: '/order/section-trips/:id/change-status/',
     method: 'put',
-    desc: "修改运单分段状态",
-    param: {
-
-    }
+    desc: '修改运单分段状态',
+    param: {}
   },
   cratePickUpOrder: {
     url: '/order/delivery-order/three-delivery/',
     method: 'POST',
-    desc: "新增线下承运单",
-    param: {
-
-    }
+    desc: '新增线下承运单',
+    param: {}
   },
   getCarriesId: {
     url: '/order/trader/carriers/',
     method: 'GET',
-    desc: "获取承运商列表",
-    param: {
-
-    }
+    desc: '获取承运商列表',
+    param: {}
   },
   getQiniuKey: {
     url: '/order/section-trips/qiniu-callback/',
     method: 'GET',
-    desc: "获取骑牛上传key",
-    param: {
-
-    }
+    desc: '获取骑牛上传key',
+    param: {}
   },
   loadWayBillOfTruck: {
     url: '/api/v1/loadCoordinateOfDay',
     method: 'GET',
-    desc: "单个车下所有运单",
-    param: {
-
-    }
+    desc: '单个车下所有运单',
+    param: {}
   },
   loadWayBillOfTruck: {
     url: '/bigdata/api/v1/loadWayBillOfTruck',
     method: 'GET',
-    desc: "加载车辆下的所有运单",
-    param: {
-
-    }
+    desc: '加载车辆下的所有运单',
+    param: {}
   },
   loadCoordinateOfWaybill: {
     url: '/bigdata/api/v1/loadCoordinateOfWaybill',
     method: 'GET',
-    desc: "加载运单的轨迹",
-    param: {
-
-    }
+    desc: '加载运单的轨迹',
+    param: {}
   },
   loadCoordinateOfInterval: {
     url: '/bigdata/api/v1/loadCoordinateOfInterval',
     method: 'GET',
-    desc: "按时间加载轨迹",
-    param: {
-
-    }
+    desc: '按时间加载轨迹',
+    param: {}
   },
   loadTripOfPlanId: {
     url: '/bigdata/api/v1/loadTripOfPlanId',
     method: 'GET',
-    desc: "加载液厂到站点轨迹",
-    param: {
-
-    }
+    desc: '加载液厂到站点轨迹',
+    param: {}
   },
   loadAllTrip: {
     url: '/bigdata/api/v1/loadAllTrip',
     method: 'GET',
-    desc: "加载",
-    param: {
-
-    }
+    desc: '加载',
+    param: {}
   },
 
   loadlist: {
     url: '/bigdata/api/v1/loadlist',
     method: 'GET',
-    desc: "加载所有液厂和站点",
-    param: {
-
-    }
+    desc: '加载所有液厂和站点',
+    param: {}
   },
   searchEnergyList: {
     url: '/carrier/oilgas/',
     method: 'GET',
-    desc: "加油气公司列表",
-    param: {
-
-    }
+    desc: '加油气公司列表',
+    param: {}
   },
   highSpeedList: {
     url: '/carrier/high_speed/',
     method: 'GET',
-    desc: "高速费公司列表",
+    desc: '高速费公司列表',
     param: {
       name: {
-        desc: '油气公司名称',
-      },
+        desc: '油气公司名称'
+      }
     }
   },
   highSpeedDetail: {
     url: '/carrier/high_speed/:id/',
     method: 'GET',
-    desc: "高速费公司详情",
-    param: {
-
-    }
+    desc: '高速费公司详情',
+    param: {}
   },
   creatEnergy: {
     url: '/carrier/oilgas/',
     method: 'POST',
-    desc: "新增油气费",
-    param: {
-
-    }
+    desc: '新增油气费',
+    param: {}
   },
   updateEnergy: {
     url: '/carrier/oilgas/:id/',
     method: 'PUT',
-    desc: "修改油气费",
-    param: {
-
-    }
+    desc: '修改油气费',
+    param: {}
   },
   energyDetalis: {
     url: '/carrier/oilgas/:id/',
     method: 'GET',
-    desc: "油气费详情",
-    param: {
-
-    }
+    desc: '油气费详情',
+    param: {}
   },
   fixHighSpeed: {
     url: '/carrier/high_speed/:id/',
     method: 'PUT',
-    desc: "修改高速费公司",
+    desc: '修改高速费公司',
     param: {
       name: {
-        desc: '供应商名称',
+        desc: '供应商名称'
       },
       type: {
-        desc: '供应商类型',
+        desc: '供应商类型'
       },
       contact_name: {
-        desc: '联系人',
+        desc: '联系人'
       },
       contact_phone: {
-        desc: '联系人电话',
+        desc: '联系人电话'
       },
       detail_address: {
-        desc: '地址',
-      },
+        desc: '地址'
+      }
     }
   },
   addHighSpeed: {
     url: '/carrier/high_speed/',
     method: 'POST',
-    desc: "修改高速费公司",
+    desc: '修改高速费公司',
     param: {
       name: {
-        desc: '供应商名称',
+        desc: '供应商名称'
       },
       type: {
-        desc: '供应商类型',
+        desc: '供应商类型'
       },
       contact_name: {
-        desc: '联系人',
+        desc: '联系人'
       },
       contact_phone: {
-        desc: '联系人电话',
+        desc: '联系人电话'
       },
       detail_address: {
-        desc: '地址',
-      },
+        desc: '地址'
+      }
     }
   },
   statisticDispatchList: {
     url: '/statistic/dispatch/',
     method: 'GET',
-    desc: "调度统计列表页",
-    param: {
-
-    }
+    desc: '调度统计列表页',
+    param: {}
   },
   getCheckStep: {
     url: '/order/section-trips/:id/check-order/',
     method: 'GET',
-    desc: "分段获取业务单",
-    param: {
-
-    }
+    desc: '分段获取业务单',
+    param: {}
   },
   exportsDispatch: {
     url: '/exports/dispatch/',
     method: 'GET',
-    desc: "到处调度统计",
-    param: {
-
-    }
+    desc: '到处调度统计',
+    param: {}
   },
   getLandmarkOverview: {
     url: '/map/fluid_sites/overview/',
     method: 'GET',
-    desc: "获取所有省份的地标概览数据",
-    param: {
-
-    }
+    desc: '获取所有省份的地标概览数据',
+    param: {}
+  },
+  exportHighway: {
+    url: '/exports/highway/',
+    method: 'GET',
+    desc: '导出高速费',
+    param: {}
+  },
+  exportCorporate: {
+    url: '/exports/corporate/',
+    method: 'GET',
+    desc: '导出油气费',
+    param: {}
   }
-}
-
+};
 
 export default api;

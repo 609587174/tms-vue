@@ -1,6 +1,6 @@
 <!-- clientDetail.vue -->
 <style scoped lang="less">
-.trans-fee {
+  .trans-fee {
   .table-list {
     margin-bottom: 20px;
   }
@@ -235,7 +235,7 @@ export default {
 
     },
     goEditDetail: function(number) {
-      this.$router.push({ path: "/basicDataManage/shipperManage/editShipper?activeStep=" + number, query: { id: this.clientData.id, activeStep: number } });
+      this.$router.push({ path: "/basicDataManage/shipperManage/editShipper", query: { id: this.clientData.id } });
     },
 
   }
